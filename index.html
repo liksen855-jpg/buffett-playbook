@@ -3,1302 +3,638 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Oil Paradox — Full Breakdown</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=JetBrains+Mono:wght@400;600&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
-
+<title>5 Investment Frameworks — Iran Conflict</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=IBM+Plex+Mono:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ── RESET & BASE ── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bg:       #080808;
-  --surface:  #111111;
-  --surface2: #181818;
-  --border:   #232323;
-  --border2:  #2e2e2e;
-  --text:     #e8e2d9;
-  --muted:    #7a7470;
-  --faint:    #333;
-  --red:      #d63031;
-  --red-dim:  #8b1e1e;
-  --red-glow: rgba(214,48,49,0.15);
-  --blue:     #2563eb;
-  --blue-dim: #1a3d8a;
-  --blue-glow:rgba(37,99,235,0.15);
-  --gold:     #c9a84c;
-  --gold-dim: rgba(201,168,76,0.1);
-  --green:    #20bf6b;
-  --amber:    #f0a500;
-  --serif:    'Playfair Display', Georgia, serif;
-  --mono:     'JetBrains Mono', monospace;
-  --sans:     'Sora', sans-serif;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f1eb;
+  --surface:#ede9e2;
+  --surface2:#e4dfd7;
+  --ink:#1a1714;
+  --ink2:#3d3833;
+  --muted:#8a847c;
+  --faint:#ccc8c0;
+  --black:#0d0b09;
+  --white:#faf8f4;
+  --gold:#9a6f2e;
+  --gold-lt:#f0e6d3;
+  --red:#8b1a1a;
+  --red-lt:#f5e8e8;
+  --blue:#1a3a6b;
+  --blue-lt:#e8edf5;
+  --green:#1a4a2e;
+  --green-lt:#e8f2ec;
+  --amber:#7a4a10;
+  --amber-lt:#f5ead8;
+  --sans:'DM Sans',sans-serif;
+  --serif:'Cormorant Garamond',serif;
+  --mono:'IBM Plex Mono',monospace;
 }
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.7;overflow-x:hidden}
 
-html { scroll-behavior: smooth; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--sans);
-  font-size: 16px;
-  line-height: 1.7;
-  overflow-x: hidden;
-}
+/* PASSWORD GATE */
+#gate{position:fixed;inset:0;background:var(--black);z-index:9999;display:flex;align-items:center;justify-content:center;padding:1.5rem}
+#gate.hidden{display:none}
+.gate-box{width:100%;max-width:380px;text-align:center}
+.gate-logo{font-family:var(--mono);font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:2rem}
+.gate-title{font-family:var(--serif);font-size:clamp(1.8rem,6vw,2.6rem);font-weight:700;color:var(--white);line-height:1;letter-spacing:-.02em;margin-bottom:.4rem}
+.gate-sub{font-size:.85rem;color:#6a6560;margin-bottom:2rem;line-height:1.6}
+.gate-input-wrap{position:relative;margin-bottom:1rem}
+#gate-input{width:100%;background:#161210;border:1px solid #2a2520;color:var(--white);font-family:var(--mono);font-size:.95rem;letter-spacing:.2em;padding:.9rem 3rem .9rem 1.1rem;outline:none;text-align:center;transition:border-color .2s}
+#gate-input:focus{border-color:var(--gold)}
+#gate-input::placeholder{color:#3a3530;letter-spacing:.15em;font-size:.8rem}
+.gate-toggle{position:absolute;right:.85rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#4a4540;font-size:.85rem;padding:.2rem;line-height:1}
+.gate-toggle:hover{color:var(--gold)}
+#gate-btn{width:100%;background:var(--gold);color:var(--black);border:none;font-family:var(--mono);font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;padding:.9rem;cursor:pointer;font-weight:600;transition:background .2s,transform .1s}
+#gate-btn:hover{background:#b8952a}
+#gate-btn:active{transform:scale(.98)}
+#gate-error{font-family:var(--mono);font-size:.65rem;color:var(--red);letter-spacing:.1em;margin-top:.75rem;opacity:0;transition:opacity .2s;min-height:1rem}
+#gate-error.show{opacity:1}
+.gate-divider{height:1px;background:#1a1714;margin:1.75rem 0}
+.gate-footer{font-family:var(--mono);font-size:.52rem;color:#2a2520;letter-spacing:.12em;text-transform:uppercase}
 
-/* ── SCROLLBAR ── */
-::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--border2); }
+/* PROGRESS */
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--gold);width:0;z-index:200;transition:width .1s linear}
 
-/* ── PROGRESS BAR ── */
-#progress {
-  position: fixed; top: 0; left: 0; height: 2px;
-  background: var(--gold); width: 0%; z-index: 100;
-  transition: width 0.1s linear;
-}
+/* NAV */
+nav{position:sticky;top:0;z-index:90;background:var(--black);padding:.85rem 1.25rem;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{font-family:var(--mono);font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.nav-right{font-family:var(--mono);font-size:.55rem;color:#6a6560;letter-spacing:.1em}
 
-/* ── NAV ── */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 90;
-  background: rgba(8,8,8,0.92);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-  padding: 0 clamp(1.5rem, 5vw, 4rem);
-  height: 56px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.nav-brand {
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.2em;
-  color: var(--gold);
-  text-transform: uppercase;
-}
-.nav-links {
-  display: flex; gap: 2rem; list-style: none;
-}
-.nav-links a {
-  font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--muted); text-decoration: none;
-  transition: color 0.2s;
-}
-.nav-links a:hover { color: var(--text); }
+/* HERO */
+.hero{padding:2.5rem 1.25rem 2rem;background:var(--black);color:var(--white);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 100% 80% at 80% 110%,rgba(154,111,46,.18) 0%,transparent 70%)}
+.hero-label{font-family:var(--mono);font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem}
+.hero-num{font-family:var(--serif);font-size:clamp(5rem,20vw,9rem);font-weight:700;line-height:.85;letter-spacing:-.03em;color:rgba(154,111,46,.25);position:absolute;right:1rem;top:1.5rem;user-select:none}
+.hero-title{font-family:var(--serif);font-size:clamp(2rem,7vw,3.2rem);font-weight:700;line-height:1;letter-spacing:-.02em;margin-bottom:.5rem;position:relative}
+.hero-title em{font-style:italic;color:var(--gold)}
+.hero-sub{font-size:.88rem;color:#a09890;max-width:340px;margin-bottom:1.5rem;position:relative}
+.hero-disclaimer{font-family:var(--mono);font-size:.58rem;color:#5a5450;border-left:2px solid #3a3530;padding-left:.75rem;line-height:1.6;position:relative}
 
-/* ── WRAPPER ── */
-.wrap {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 clamp(1.5rem, 5vw, 3rem);
-}
-.wrap-wide {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 clamp(1.5rem, 5vw, 3rem);
-}
+/* FRAMEWORK CARDS */
+.framework{margin:0;padding:2rem 1.25rem;border-bottom:1px solid var(--faint);position:relative}
+.framework:nth-child(odd){background:var(--bg)}
+.framework:nth-child(even){background:var(--surface)}
 
-/* ── HERO ── */
-.hero {
-  min-height: 100vh;
-  display: flex; flex-direction: column; justify-content: flex-end;
-  padding-bottom: 6rem;
-  padding-top: 6rem;
-  position: relative;
-  overflow: hidden;
-}
-.hero-bg {
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 100%, rgba(214,48,49,0.06) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(37,99,235,0.05) 0%, transparent 60%);
-}
-.hero-grid {
-  position: absolute; inset: 0; opacity: 0.03;
-  background-image:
-    linear-gradient(var(--border2) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border2) 1px, transparent 1px);
-  background-size: 60px 60px;
-}
-.hero-eyebrow {
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.25em;
-  color: var(--gold);
-  text-transform: uppercase;
-  margin-bottom: 1.5rem;
-  opacity: 0;
-  animation: fadeUp 0.8s 0.2s forwards;
-}
-.hero-title {
-  font-family: var(--serif);
-  font-size: clamp(3.5rem, 9vw, 7.5rem);
-  font-weight: 900;
-  line-height: 0.95;
-  letter-spacing: -0.02em;
-  margin-bottom: 0.5rem;
-  opacity: 0;
-  animation: fadeUp 0.8s 0.35s forwards;
-}
-.hero-title em {
-  font-style: italic;
-  color: var(--gold);
-  display: block;
-}
-.hero-sub {
-  font-size: clamp(1rem, 2.5vw, 1.25rem);
-  color: var(--muted);
-  font-weight: 300;
-  max-width: 560px;
-  margin: 1.5rem 0 3rem;
-  opacity: 0;
-  animation: fadeUp 0.8s 0.5s forwards;
-}
-.hero-meta {
-  display: flex; gap: 2.5rem; align-items: center; flex-wrap: wrap;
-  opacity: 0;
-  animation: fadeUp 0.8s 0.65s forwards;
-}
-.hero-meta-item {
-  display: flex; flex-direction: column; gap: 0.2rem;
-}
-.hero-meta-label {
-  font-family: var(--mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.hero-meta-value {
-  font-family: var(--mono);
-  font-size: 0.82rem;
-  color: var(--text);
-}
-.hero-divider {
-  width: 1px; height: 40px;
-  background: var(--border2);
-}
-.hero-scroll {
-  position: absolute; bottom: 2.5rem; left: 50%;
-  transform: translateX(-50%);
-  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
-  opacity: 0;
-  animation: fadeIn 1s 1.2s forwards;
-}
-.hero-scroll span {
-  font-family: var(--mono); font-size: 0.6rem;
-  letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted);
-}
-.scroll-line {
-  width: 1px; height: 40px;
-  background: linear-gradient(to bottom, var(--border2), transparent);
-  animation: scrollPulse 2s ease-in-out infinite;
-}
+.f-eyebrow{display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem}
+.f-num{font-family:var(--serif);font-size:3.5rem;font-weight:700;line-height:1;letter-spacing:-.03em;opacity:.12;position:absolute;right:1.25rem;top:1.75rem}
+.f-tag{font-family:var(--mono);font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;padding:.25rem .6rem;border:1px solid}
+.tag-red{color:var(--red);border-color:var(--red);background:var(--red-lt)}
+.tag-blue{color:var(--blue);border-color:var(--blue);background:var(--blue-lt)}
+.tag-green{color:var(--green);border-color:var(--green);background:var(--green-lt)}
+.tag-gold{color:var(--gold);border-color:var(--gold);background:var(--gold-lt)}
+.tag-amber{color:var(--amber);border-color:var(--amber);background:var(--amber-lt)}
+.tag-dark{color:var(--white);border-color:var(--ink);background:var(--ink2)}
 
-/* ── SECTION STRUCTURE ── */
-section { padding: 6rem 0; }
-section + section { border-top: 1px solid var(--border); }
+.f-complexity{font-family:var(--mono);font-size:.55rem;color:var(--muted);letter-spacing:.1em}
 
-.section-label {
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 1rem;
-  display: flex; align-items: center; gap: 0.75rem;
-}
-.section-label::before {
-  content: '';
-  display: inline-block;
-  width: 20px; height: 1px;
-  background: var(--gold);
-}
-.section-title {
-  font-family: var(--serif);
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  margin-bottom: 1.5rem;
-}
-.section-intro {
-  font-size: 1.1rem;
-  color: var(--muted);
-  max-width: 640px;
-  line-height: 1.8;
-  margin-bottom: 3rem;
-}
+.f-title{font-family:var(--serif);font-size:clamp(1.6rem,5vw,2.2rem);font-weight:700;line-height:1.05;letter-spacing:-.02em;margin-bottom:.5rem}
+.f-subtitle{font-size:.85rem;color:var(--muted);font-style:italic;margin-bottom:1.1rem}
 
-/* ── HORMUZ SECTION ── */
-.stat-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  margin: 3rem 0;
-}
-.stat-box {
-  background: var(--surface);
-  padding: 2rem 1.5rem;
-  position: relative;
-  overflow: hidden;
-}
-.stat-box::after {
-  content: '';
-  position: absolute; bottom: 0; left: 0; right: 0;
-  height: 2px;
-  background: var(--gold);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.4s ease;
-}
-.stat-box:hover::after { transform: scaleX(1); }
-.stat-num {
-  font-family: var(--mono);
-  font-size: clamp(1.8rem, 4vw, 2.8rem);
-  font-weight: 600;
-  color: var(--gold);
-  display: block;
-  margin-bottom: 0.4rem;
-  line-height: 1;
-}
-.stat-desc {
-  font-size: 0.82rem;
-  color: var(--muted);
-  line-height: 1.4;
-}
+.f-thesis{background:var(--white);border-left:3px solid;padding:.9rem 1rem;margin-bottom:1.1rem;font-size:.9rem;line-height:1.7;color:var(--ink2)}
+.thesis-red{border-color:var(--red)}
+.thesis-blue{border-color:var(--blue)}
+.thesis-green{border-color:var(--green)}
+.thesis-gold{border-color:var(--gold)}
+.thesis-amber{border-color:var(--amber)}
 
-/* ── PARADOX SPLIT ── */
-.paradox-split {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  margin: 3rem 0;
-}
-@media (max-width: 640px) { .paradox-split { grid-template-columns: 1fr; } }
+/* INSTRUMENT LIST */
+.instruments{margin-bottom:1.1rem}
+.inst-header{font-family:var(--mono);font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.inst-item{display:flex;align-items:flex-start;gap:.65rem;padding:.45rem 0;border-bottom:1px solid var(--faint)}
+.inst-item:last-child{border-bottom:none}
+.inst-ticker{font-family:var(--mono);font-size:.75rem;font-weight:600;min-width:72px;flex-shrink:0}
+.inst-desc{font-size:.8rem;color:var(--ink2);line-height:1.5}
+.tc-red .inst-ticker{color:var(--red)}
+.tc-blue .inst-ticker{color:var(--blue)}
+.tc-green .inst-ticker{color:var(--green)}
+.tc-gold .inst-ticker{color:var(--gold)}
+.tc-dark .inst-ticker{color:var(--ink2)}
 
-.scenario-card {
-  padding: 3rem 2.5rem;
-  position: relative;
-  overflow: hidden;
-  transition: background 0.3s;
-}
-.scenario-card::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 3px;
-}
-.scenario-spike { background: rgba(214,48,49,0.04); }
-.scenario-spike::before { background: var(--red); }
-.scenario-spike:hover { background: rgba(214,48,49,0.07); }
-.scenario-collapse { background: rgba(37,99,235,0.04); }
-.scenario-collapse::before { background: var(--blue); }
-.scenario-collapse:hover { background: rgba(37,99,235,0.07); }
+/* TRIGGER + EXIT */
+.te-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem}
+.te-box{padding:.75rem;border:1px solid var(--faint);background:var(--white)}
+.te-label{font-family:var(--mono);font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.4rem}
+.te-label.enter{color:var(--green)}
+.te-label.exit{color:var(--red)}
+.te-text{font-size:.78rem;color:var(--ink2);line-height:1.55}
 
-.scenario-badge {
-  font-family: var(--mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  padding: 0.3rem 0.7rem;
-  border: 1px solid;
-  display: inline-block;
-  margin-bottom: 1.5rem;
-}
-.badge-red { color: var(--red); border-color: var(--red-dim); }
-.badge-blue { color: var(--blue); border-color: var(--blue-dim); }
+/* RISK METER */
+.risk-row{display:flex;align-items:center;gap:.75rem;margin-bottom:1.1rem}
+.risk-label{font-family:var(--mono);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);min-width:52px}
+.risk-bar{flex:1;height:4px;background:var(--faint);border-radius:2px;overflow:hidden}
+.risk-fill{height:100%;border-radius:2px;transition:width .6s ease}
+.risk-val{font-family:var(--mono);font-size:.65rem;color:var(--muted);min-width:36px;text-align:right}
 
-.scenario-price {
-  font-family: var(--serif);
-  font-size: clamp(3.5rem, 8vw, 5.5rem);
-  font-weight: 900;
-  line-height: 0.9;
-  margin-bottom: 0.5rem;
-}
-.price-red { color: var(--red); }
-.price-blue { color: var(--blue); }
+/* INSIGHT BOX */
+.insight{background:var(--black);color:var(--white);padding:1rem 1.1rem;margin-bottom:.5rem}
+.insight-eye{font-family:var(--mono);font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem}
+.insight-text{font-family:var(--serif);font-size:1rem;font-style:italic;line-height:1.5}
 
-.scenario-trigger {
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  color: var(--muted);
-  margin-bottom: 1.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-.scenario-body {
-  font-size: 0.95rem;
-  color: #c0b8b0;
-  line-height: 1.75;
-  border-top: 1px solid var(--border);
-  padding-top: 1.5rem;
-  margin-top: 1.5rem;
-}
-.scenario-items {
-  list-style: none; margin-top: 1rem;
-}
-.scenario-items li {
-  padding: 0.5rem 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 0.88rem;
-  display: flex; gap: 0.75rem; align-items: flex-start;
-}
-.scenario-items li::before {
-  content: '→';
-  font-family: var(--mono);
-  flex-shrink: 0;
-  margin-top: 0.05rem;
-}
-.spike-li::before { color: var(--red); }
-.collapse-li::before { color: var(--blue); }
+/* DIVIDER */
+.divider{height:1px;background:var(--faint);margin:0}
 
-/* ── PULL QUOTE ── */
-.pull-quote {
-  border-left: 3px solid var(--gold);
-  padding: 1.5rem 0 1.5rem 2rem;
-  margin: 3rem 0;
-}
-.pull-quote p {
-  font-family: var(--serif);
-  font-size: clamp(1.2rem, 3vw, 1.6rem);
-  font-style: italic;
-  font-weight: 700;
-  line-height: 1.4;
-  color: var(--text);
-}
-.pull-quote cite {
-  display: block;
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-top: 0.75rem;
-  font-style: normal;
-}
+/* OVERVIEW GRID */
+.overview{padding:2rem 1.25rem;background:var(--black);color:var(--white)}
+.ov-title{font-family:var(--serif);font-size:1.6rem;font-weight:700;color:var(--white);margin-bottom:1.25rem}
+.ov-item{display:flex;gap:.85rem;padding:.75rem 0;border-bottom:1px solid #2a2520;align-items:flex-start}
+.ov-item:last-child{border-bottom:none}
+.ov-num{font-family:var(--serif);font-size:2rem;font-weight:700;color:var(--gold);line-height:1;min-width:32px}
+.ov-content{}
+.ov-name{font-weight:600;font-size:.88rem;color:var(--white);margin-bottom:.15rem}
+.ov-risk{font-family:var(--mono);font-size:.6rem;color:#6a6560}
 
-/* ── BODY TEXT ── */
-.body-text {
-  font-size: 1rem;
-  line-height: 1.85;
-  color: #c8c0b8;
-  margin-bottom: 1.5rem;
-  max-width: 680px;
-}
-.body-text strong { color: var(--text); font-weight: 600; }
-.body-text em { color: var(--gold); font-style: normal; }
+/* MASTER DISCLAIMER */
+.master-disc{padding:1.5rem 1.25rem;background:var(--surface2)}
+.disc-title{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.disc-text{font-size:.78rem;color:var(--muted);line-height:1.7}
 
-/* ── PIPELINE VISUAL ── */
-.pipeline {
-  display: flex; gap: 0;
-  background: var(--border);
-  border: 1px solid var(--border);
-  margin: 2.5rem 0;
-  overflow: hidden;
-}
-.pipeline-item {
-  flex: 1;
-  padding: 1.5rem 1rem;
-  background: var(--surface);
-  text-align: center;
-  position: relative;
-}
-.pipeline-item:not(:last-child)::after {
-  content: '→';
-  position: absolute;
-  right: -0.8rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-family: var(--mono);
-  font-size: 0.9rem;
-  color: var(--border2);
-  z-index: 1;
-}
-.pipeline-pct {
-  font-family: var(--mono);
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--red);
-  display: block;
-}
-.pipeline-label {
-  font-size: 0.72rem;
-  color: var(--muted);
-  margin-top: 0.3rem;
-  line-height: 1.3;
-}
+/* FOOTER */
+footer{padding:1.25rem;text-align:center;font-family:var(--mono);font-size:.55rem;color:var(--muted);letter-spacing:.15em;border-top:1px solid var(--faint);text-transform:uppercase}
 
-/* ── SIGNALS ── */
-.signals-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  margin: 3rem 0;
-}
-.signal-card {
-  background: var(--surface);
-  padding: 2rem;
-  cursor: pointer;
-  transition: background 0.25s;
-}
-.signal-card:hover { background: var(--surface2); }
-.signal-num {
-  font-family: var(--mono);
-  font-size: 2.5rem;
-  font-weight: 600;
-  color: var(--border2);
-  display: block;
-  margin-bottom: 0.75rem;
-  line-height: 1;
-  transition: color 0.25s;
-}
-.signal-card:hover .signal-num { color: var(--gold); }
-.signal-name {
-  font-weight: 600;
-  font-size: 0.95rem;
-  margin-bottom: 0.5rem;
-  color: var(--text);
-}
-.signal-desc {
-  font-size: 0.82rem;
-  color: var(--muted);
-  line-height: 1.5;
-}
-.signal-trigger {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border);
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-.trigger-up { color: var(--red); }
-.trigger-down { color: var(--blue); }
-.trigger-warn { color: var(--amber); }
+/* SCENARIO BADGE INLINE */
+.sc{display:inline-block;font-family:var(--mono);font-size:.6rem;padding:.15rem .45rem;letter-spacing:.08em;vertical-align:middle;margin:0 .1rem}
+.sc-both{background:var(--green-lt);color:var(--green);border:1px solid var(--green)}
+.sc-spike{background:var(--red-lt);color:var(--red);border:1px solid var(--red)}
+.sc-collapse{background:var(--blue-lt);color:var(--blue);border:1px solid var(--blue)}
 
-/* ── PLAYS TABLE ── */
-.plays-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 2.5rem 0;
-  font-size: 0.88rem;
-}
-.plays-table th {
-  font-family: var(--mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--muted);
-  padding: 0.75rem 1rem;
-  text-align: left;
-  border-bottom: 1px solid var(--border);
-}
-.plays-table td {
-  padding: 1rem;
-  border-bottom: 1px solid var(--border);
-  vertical-align: top;
-}
-.plays-table tr:last-child td { border-bottom: none; }
-.plays-table tr:hover td { background: var(--surface2); }
-.plays-table .asset { color: var(--text); font-weight: 500; }
-.plays-table .ticker {
-  font-family: var(--mono);
-  font-size: 0.78rem;
-  color: var(--gold);
-}
-.plays-table .scenario-tag {
-  font-family: var(--mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 0.2rem 0.5rem;
-  border: 1px solid;
-}
-.tag-all { color: var(--green); border-color: rgba(32,191,107,0.3); }
-.tag-spike { color: var(--red); border-color: var(--red-dim); }
-.tag-collapse { color: var(--blue); border-color: var(--blue-dim); }
-.plays-table .conviction {
-  font-family: var(--mono);
-  font-size: 0.75rem;
-}
-.conv-high { color: var(--green); }
-.conv-med { color: var(--amber); }
+/* TIMELINE */
+.timeline{padding-left:1.25rem;border-left:2px solid var(--faint);margin:.75rem 0}
+.tl-item{padding-bottom:.85rem;position:relative}
+.tl-item::before{content:'';position:absolute;left:-1.38rem;top:.4rem;width:8px;height:8px;border-radius:50%;background:var(--gold)}
+.tl-when{font-family:var(--mono);font-size:.6rem;color:var(--gold);letter-spacing:.08em;margin-bottom:.2rem}
+.tl-what{font-size:.83rem;color:var(--ink2);line-height:1.5}
 
-/* ── DISCLAIMER ── */
-.disclaimer {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--amber);
-  padding: 1.5rem 2rem;
-  margin: 3rem 0;
-  font-size: 0.82rem;
-  color: var(--muted);
-  line-height: 1.6;
-}
-.disclaimer strong { color: var(--amber); }
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal.vis{opacity:1;transform:translateY(0)}
 
-/* ── SERIES NAV ── */
-.series-nav {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  margin: 3rem 0;
+@media(min-width:600px){
+  .te-grid{grid-template-columns:1fr 1fr}
 }
-.series-card {
-  background: var(--surface);
-  padding: 2rem;
-  text-decoration: none;
-  color: inherit;
-  transition: background 0.2s;
-  cursor: pointer;
-}
-.series-card:hover { background: var(--surface2); }
-.series-card.active { background: var(--gold-dim); }
-.series-num {
-  font-family: var(--mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 0.75rem;
-}
-.series-card.active .series-num { color: var(--gold); }
-.series-title {
-  font-weight: 600;
-  font-size: 0.95rem;
-  line-height: 1.3;
-  margin-bottom: 0.5rem;
-}
-.series-card.active .series-title { color: var(--gold); }
-.series-status {
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.series-card.active .series-status { color: var(--gold); }
-
-/* ── FOOTER ── */
-footer {
-  border-top: 1px solid var(--border);
-  padding: 3rem 0;
-  color: var(--muted);
-  font-size: 0.8rem;
-}
-.footer-inner {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 2rem;
-}
-.footer-brand {
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 0.5rem;
-}
-.footer-disclaimer { max-width: 500px; line-height: 1.6; }
-
-/* ── INTRO HIGHLIGHT ── */
-.highlight-box {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--gold);
-  padding: 2rem;
-  margin: 2.5rem 0;
-}
-.highlight-box p {
-  font-size: 1.05rem;
-  line-height: 1.8;
-  color: var(--text);
-}
-
-/* ── ANIMATIONS ── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes fadeIn {
-  from { opacity: 0; } to { opacity: 1; }
-}
-@keyframes scrollPulse {
-  0%, 100% { opacity: 0.4; } 50% { opacity: 1; }
-}
-@keyframes countUp {
-  from { opacity: 0; } to { opacity: 1; }
-}
-
-.reveal {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ── CHART VISUAL ── */
-.price-chart {
-  height: 120px;
-  display: flex;
-  align-items: flex-end;
-  gap: 4px;
-  margin: 2rem 0;
-  position: relative;
-}
-.chart-bar {
-  flex: 1;
-  border-radius: 2px 2px 0 0;
-  position: relative;
-  transition: opacity 0.3s;
-}
-.chart-bar:hover { opacity: 0.8; }
-.chart-labels {
-  display: flex;
-  justify-content: space-between;
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  color: var(--muted);
-  margin-top: 0.5rem;
-}
-
-/* ── TIMELINE ── */
-.timeline {
-  position: relative;
-  padding-left: 2rem;
-  margin: 2.5rem 0;
-}
-.timeline::before {
-  content: '';
-  position: absolute; left: 0; top: 0; bottom: 0;
-  width: 1px;
-  background: var(--border2);
-}
-.timeline-item {
-  position: relative;
-  padding-bottom: 2rem;
-}
-.timeline-item::before {
-  content: '';
-  position: absolute;
-  left: -2rem;
-  top: 0.4rem;
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: var(--gold);
-  margin-left: -3px;
-}
-.timeline-time {
-  font-family: var(--mono);
-  font-size: 0.68rem;
-  color: var(--gold);
-  letter-spacing: 0.1em;
-  margin-bottom: 0.4rem;
-}
-.timeline-text {
-  font-size: 0.95rem;
-  color: var(--text);
-  font-weight: 500;
-  margin-bottom: 0.3rem;
-}
-.timeline-detail {
-  font-size: 0.85rem;
-  color: var(--muted);
-  line-height: 1.6;
-}
-
-/* ── MOBILE ── */
-@media (max-width: 768px) {
-  nav { display: none; }
-  .paradox-split { grid-template-columns: 1fr; }
-  .series-nav { grid-template-columns: 1fr; }
-  .pipeline { flex-direction: column; }
-  .pipeline-item:not(:last-child)::after { display: none; }
-  .plays-table { font-size: 0.78rem; }
-  .plays-table th, .plays-table td { padding: 0.6rem 0.5rem; }
-  .footer-inner { flex-direction: column; }
-}
-/* ── PATREON BUTTON HOVER ── */
-a[href*="patreon"]:hover { opacity: 0.88; transform: translateY(-2px); }
 </style>
 </head>
 <body>
-
-<div id="progress"></div>
-
-<nav>
-  <div class="nav-brand">Operation Epic Fury — Series</div>
-  <ul class="nav-links">
-    <li><a href="#hormuz">Hormuz</a></li>
-    <li><a href="#scenarios">Scenarios</a></li>
-    <li><a href="#plays">The Plays</a></li>
-    <li><a href="#signals">Signals</a></li>
-  </ul>
-</nav>
-
-<!-- ═══════════════════════ HERO ═══════════════════════ -->
-<div class="hero wrap">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <p class="hero-eyebrow">Video 1 of 3 — Full Written Breakdown — March 2026</p>
-  <h1 class="hero-title">
-    The Oil<br>
-    <em>Paradox</em>
-  </h1>
-  <p class="hero-sub">Why the same war could send oil to $150 — or crash it to $50. The scenario zero mainstream outlets are explaining clearly.</p>
-  <div class="hero-meta">
-    <div class="hero-meta-item">
-      <span class="hero-meta-label">Published</span>
-      <span class="hero-meta-value">March 1, 2026</span>
+<!-- PASSWORD GATE -->
+<div id="gate">
+  <div class="gate-box">
+    <div class="gate-logo">Insight Invest · Restricted Access</div>
+    <h1 class="gate-title">Investment<br>Frameworks</h1>
+    <p class="gate-sub">Iran Conflict · Five Strategies<br>Enter password to access</p>
+    <div class="gate-input-wrap">
+      <input id="gate-input" type="password" placeholder="Enter password" autocomplete="off" autocapitalize="none" spellcheck="false" />
+      <button class="gate-toggle" id="gate-toggle" tabindex="-1" aria-label="Toggle visibility">👁</button>
     </div>
-    <div class="hero-divider"></div>
-    <div class="hero-meta-item">
-      <span class="hero-meta-label">Series</span>
-      <span class="hero-meta-value">Operation Epic Fury</span>
-    </div>
-    <div class="hero-divider"></div>
-    <div class="hero-meta-item">
-      <span class="hero-meta-label">Read time</span>
-      <span class="hero-meta-value">12 minutes</span>
-    </div>
-    <div class="hero-divider"></div>
-    <div class="hero-meta-item">
-      <span class="hero-meta-label">Category</span>
-      <span class="hero-meta-value">Geopolitical Investing</span>
-    </div>
-  </div>
-  <div class="hero-scroll">
-    <span>Scroll</span>
-    <div class="scroll-line"></div>
+    <button id="gate-btn" onclick="checkPass()">Access →</button>
+    <p id="gate-error">Incorrect password. Try again.</p>
+    <div class="gate-divider"></div>
+    <div class="gate-footer">Insight Invest · March 2026 · Not Financial Advice</div>
   </div>
 </div>
 
-<!-- ═══════════════════════ SETUP ═══════════════════════ -->
-<section id="setup">
-  <div class="wrap">
-    <p class="section-label">01 — The Setup</p>
-    <h2 class="section-title reveal">What just happened — and why it matters to your money</h2>
+<div id="prog"></div>
 
-    <div class="highlight-box reveal">
-      <p>On February 28, 2026, Iranian Supreme Leader Ali Khamenei was killed in a joint U.S.-Israeli military operation codenamed Operation Epic Fury. Multiple senior Iranian military officials died in simultaneous strikes. The Islamic Republic, which has run Iran for 46 years, is now in a leadership vacuum with no historical precedent.</p>
+<nav>
+  <div class="nav-brand">Insight Invest · Iran Strategy</div>
+  <div class="nav-right">March 2026 · Not Financial Advice</div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-label">Operation Epic Fury — Investment Playbook</p>
+  <div class="hero-num">5</div>
+  <h1 class="hero-title">Five<br><em>Frameworks</em><br>for Chaos</h1>
+  <p class="hero-sub">Built from the oil paradox, the IRGC empire, and China's $400B exposure. Each framework is actionable today.</p>
+  <p class="hero-disclaimer">Not financial advice. Educational analysis only. All investments carry risk of total loss. Consult a licensed financial advisor before acting on anything here.</p>
+</div>
+
+<!-- OVERVIEW STRIP -->
+<div class="overview reveal">
+  <p class="ov-title">The Five Frameworks</p>
+  <div class="ov-item">
+    <span class="ov-num">01</span>
+    <div class="ov-content">
+      <div class="ov-name">The Bimodal Straddle</div>
+      <div class="ov-risk">Works in BOTH scenarios · Low complexity</div>
     </div>
-
-    <p class="body-text reveal">Every news outlet is telling you the same thing: <strong>oil goes up, buy defense stocks, fill your tank.</strong> They're not wrong about the direction. They're wrong about the certainty. The situation you're actually looking at is far more complex — and far more interesting.</p>
-
-    <p class="body-text reveal">The same conflict, depending entirely on how the next 30 days unfold, produces <em>radically opposite outcomes</em> for energy markets. In one scenario, $100 to $150 a barrel and a potential global recession. In the other, a price collapse toward $50 and the largest expansion of oil supply since the U.S. shale revolution.</p>
-
-    <div class="pull-quote reveal">
-      <p>"The market is currently pricing Scenario A. It is not pricing Scenario B at all. That gap is the trade."</p>
-      <cite>The core thesis</cite>
-    </div>
-
-    <p class="body-text reveal">Standard financial coverage is only telling you about one of these outcomes. This breakdown covers both — and, more importantly, what to do about the uncertainty between them.</p>
   </div>
-</section>
-
-<!-- ═══════════════════════ HORMUZ ═══════════════════════ -->
-<section id="hormuz">
-  <div class="wrap">
-    <p class="section-label reveal">02 — The Geography</p>
-    <h2 class="section-title reveal">The Strait of Hormuz:<br>Why 33 kilometers rules the world</h2>
-    <p class="section-intro reveal">Before the economics make sense, you need to understand one piece of geography that controls more of the global economy than almost any other physical location on earth.</p>
-
-    <p class="body-text reveal">The Strait of Hormuz is a strip of water — <strong>33 kilometres wide at its narrowest point</strong> — that sits between Iran to the north and Oman to the south. Iran's coastline directly borders it. Every day, an enormous volume of the world's oil exits through this single chokepoint.</p>
-
-    <div class="stat-grid reveal">
-      <div class="stat-box">
-        <span class="stat-num" data-count="20">0</span>
-        <span class="stat-desc">million barrels of oil pass through per day</span>
-      </div>
-      <div class="stat-box">
-        <span class="stat-num">20%</span>
-        <span class="stat-desc">of everything the world burns in oil daily</span>
-      </div>
-      <div class="stat-box">
-        <span class="stat-num">27%</span>
-        <span class="stat-desc">of global seaborne crude oil trade</span>
-      </div>
-      <div class="stat-box">
-        <span class="stat-num">22%</span>
-        <span class="stat-desc">of global LNG supply — mostly Qatari</span>
-      </div>
-      <div class="stat-box">
-        <span class="stat-num">33<span style="font-size:1.2rem">km</span></span>
-        <span class="stat-desc">narrowest width of the strait — Iran's coast borders it</span>
-      </div>
+  <div class="ov-item">
+    <span class="ov-num">02</span>
+    <div class="ov-content">
+      <div class="ov-name">The Signal-Triggered Rotation</div>
+      <div class="ov-risk">Wait for confirmation · Medium complexity</div>
     </div>
-
-    <p class="body-text reveal">Saudi Arabia's oil. Iraq's oil. Kuwait, UAE, Qatar — all of it exits through Hormuz. The pipeline alternatives that bypass it are limited. Saudi Arabia has a Red Sea pipeline; the UAE has a Fujairah pipeline. Together, they can reroute about <strong>2.6 million barrels per day</strong>. Against 20 million at risk: that's 13%.</p>
-
-    <p class="body-text reveal">Who uses Hormuz oil most? The answer reveals exactly who gets hurt most if it closes:</p>
-
-    <div class="pipeline reveal">
-      <div class="pipeline-item">
-        <span class="pipeline-pct">50%</span>
-        <div class="pipeline-label">China's crude imports</div>
-      </div>
-      <div class="pipeline-item">
-        <span class="pipeline-pct">47%</span>
-        <div class="pipeline-label">India's crude imports</div>
-      </div>
-      <div class="pipeline-item">
-        <span class="pipeline-pct">84%</span>
-        <div class="pipeline-label">of Hormuz exports go to Asia</div>
-      </div>
-      <div class="pipeline-item">
-        <span class="pipeline-pct">69%</span>
-        <div class="pipeline-label">absorbed by China, India, Japan & S. Korea combined</div>
-      </div>
-    </div>
-
-    <p class="body-text reveal">The West talks about Hormuz as an American problem. The numbers show it's primarily an Asian problem — which creates its own set of geopolitical complications, especially regarding China's response to any disruption.</p>
   </div>
-</section>
+  <div class="ov-item">
+    <span class="ov-num">03</span>
+    <div class="ov-content">
+      <div class="ov-name">The Reconstruction Early Entry</div>
+      <div class="ov-risk">Scenario B only · High asymmetric upside</div>
+    </div>
+  </div>
+  <div class="ov-item">
+    <span class="ov-num">04</span>
+    <div class="ov-content">
+      <div class="ov-name">The China Squeeze</div>
+      <div class="ov-risk">Works in BOTH scenarios · Medium complexity</div>
+    </div>
+  </div>
+  <div class="ov-item">
+    <span class="ov-num">05</span>
+    <div class="ov-content">
+      <div class="ov-name">The Asymmetric Options Play</div>
+      <div class="ov-risk">Advanced · Maximum leverage on uncertainty</div>
+    </div>
+  </div>
+</div>
 
-<!-- ═══════════════════════ PARADOX ═══════════════════════ -->
-<section id="scenarios">
-  <div class="wrap">
-    <p class="section-label reveal">03 — The Paradox</p>
-    <h2 class="section-title reveal">Two extreme outcomes.<br>One conflict.</h2>
-    <p class="section-intro reveal">Here is the core of what no one is explaining. Both of these scenarios are real possibilities from the same event. The investment implications are completely opposite.</p>
+<!-- ═══════════ FRAMEWORK 1 ═══════════ -->
+<div class="framework reveal">
+  <div class="f-num">01</div>
+  <div class="f-eyebrow">
+    <span class="f-tag tag-green">All Scenarios</span>
+    <span class="f-complexity">Complexity: Low</span>
+  </div>
+  <h2 class="f-title">The Bimodal<br>Straddle</h2>
+  <p class="f-subtitle">Own what wins regardless of which extreme arrives</p>
+
+  <div class="f-thesis thesis-green">
+    The market cannot properly price an outcome that is simultaneously $150 oil AND $50 oil. The standard response is to pick a side. The sophisticated response is to own assets that have historically performed across geopolitical crises regardless of direction — then layer scenario-specific positions on top once a signal fires. This is your base layer. It goes on first, before anything else.
   </div>
 
-  <div class="wrap-wide">
-    <div class="paradox-split reveal">
+  <div class="insight">
+    <div class="insight-eye">The Core Insight</div>
+    <div class="insight-text">"Uncertainty itself has a price. You're not betting on the scenario — you're betting that uncertainty will persist longer than the market expects. Gold and cybersecurity don't care which way oil goes."</div>
+  </div>
 
-      <!-- SPIKE -->
-      <div class="scenario-card scenario-spike">
-        <span class="scenario-badge badge-red">Scenario A — Retaliation</span>
-        <div class="scenario-price price-red">$150</div>
-        <div class="scenario-trigger">Trigger: Iran closes or disrupts Hormuz</div>
-        <div class="scenario-body">
-          <p>Iran's IRGC — even in a leaderless state — has the military capability to mine Hormuz, fire on tankers, or make the strait too dangerous for commercial transit. This requires no central command decision. Local commanders can act.</p>
-          <ul class="scenario-items">
-            <li class="spike-li">20 million barrels per day disappears from global supply overnight</li>
-            <li class="spike-li">Spare capacity is trapped behind the blockade — it can't reach markets</li>
-            <li class="spike-li">The Strategic Petroleum Reserve releases ~1M bbl/day — covers 5% of the gap</li>
-            <li class="spike-li">Pipeline alternatives cover 13% at best</li>
-            <li class="spike-li">"Mother of all bidding wars" — prices must rise until demand collapses</li>
-            <li class="spike-li">China faces energy crisis. Europe faces LNG squeeze. Global recession risk rises sharply</li>
-          </ul>
-          <p style="margin-top:1.25rem; font-size:0.82rem; color:var(--muted);">Analyst consensus: Lombard Odier estimates $100+ per barrel. Kpler and CNBC sources suggest $150 is plausible in a full closure scenario. One analyst quoted directly: <em style="color:var(--red)">"A prolonged closure is a guaranteed global recession."</em></p>
-        </div>
-      </div>
+  <div class="instruments tc-green">
+    <div class="inst-header">Instruments</div>
+    <div class="inst-item"><span class="inst-ticker">GLD / IAU</span><span class="inst-desc">Gold ETFs. BofA data: median +6% in 3 months after geopolitical shocks. Performs in crisis AND in collapse-driven risk-off. This is your anchor position.</span></div>
+    <div class="inst-item"><span class="inst-ticker">HACK / CIBR</span><span class="inst-desc">Cybersecurity ETFs. Iran is a top-3 state cyber actor globally. Military losses historically trigger intensified cyber operations. Demand rises in every scenario.</span></div>
+    <div class="inst-item"><span class="inst-ticker">ITA / PPA</span><span class="inst-desc">US Defense ETFs. $1T+ FY2026 defense budget. Multi-year contracts. Backlog grows regardless of conflict duration or outcome.</span></div>
+    <div class="inst-item"><span class="inst-ticker">TLT / IEF</span><span class="inst-desc">US Treasuries. Classic geopolitical flight-to-safety. Works in a spike (recession fear) and in collapse (risk-off). Medium conviction.</span></div>
+  </div>
 
-      <!-- COLLAPSE -->
-      <div class="scenario-card scenario-collapse">
-        <span class="scenario-badge badge-blue">Scenario B — Regime Change</span>
-        <div class="scenario-price price-blue">$50</div>
-        <div class="scenario-trigger">Trigger: Regime falls, sanctions lift</div>
-        <div class="scenario-body">
-          <p>If the regime collapses and a transitional government emerges — whether through popular uprising, IRGC negotiation, or U.S.-backed installation — sanctions get lifted. This is the scenario that zero mainstream financial media is currently modelling.</p>
-          <ul class="scenario-items">
-            <li class="collapse-li">Iran's pre-1979 production capacity: 6 million barrels/day</li>
-            <li class="collapse-li">Current output: ~3 million barrels/day (capped by 45 years of sanctions and underinvestment)</li>
-            <li class="collapse-li">Realistic post-sanctions potential: 3.8M+ barrels/day within 12–18 months</li>
-            <li class="collapse-li">Net addition to global supply: ~1.9 million new barrels per day</li>
-            <li class="collapse-li">The world was already oversupplied before this conflict began</li>
-            <li class="collapse-li">Western oil majors re-enter: Chevron, Shell, TotalEnergies bring capital and technology</li>
-          </ul>
-          <p style="margin-top:1.25rem; font-size:0.82rem; color:var(--muted);">For context: <em style="color:var(--blue)">1.9 million barrels</em> is larger than Kuwait's entire production. It's more than the output gain that crashed oil prices in 2014 when U.S. shale ramped up. In an oversupplied market, this is deflationary for energy prices.</p>
-        </div>
-      </div>
-
+  <div class="te-grid">
+    <div class="te-box">
+      <div class="te-label enter">Enter When</div>
+      <div class="te-text">Now. This framework requires no signal. Maximum uncertainty = maximum value for safe haven assets. The window for best entry is the first 72 hours of a crisis.</div>
+    </div>
+    <div class="te-box">
+      <div class="te-label exit">Exit When</div>
+      <div class="te-text">Scenario crystallises clearly at Day 15–30. Rotate capital into scenario-specific positions once the signal fires. Keep gold as a permanent partial hold.</div>
     </div>
   </div>
 
-  <div class="wrap">
-    <div class="pull-quote reveal">
-      <p>"Options markets cannot properly price a bimodal outcome of this magnitude. That's not a problem. That's an opportunity."</p>
-    </div>
+  <div class="risk-row"><span class="risk-label">Risk</span><div class="risk-bar"><div class="risk-fill" style="width:28%;background:var(--green)"></div></div><span class="risk-val">Low</span></div>
+  <div class="risk-row"><span class="risk-label">Upside</span><div class="risk-bar"><div class="risk-fill" style="width:55%;background:var(--green)"></div></div><span class="risk-val">Moderate</span></div>
+  <div class="risk-row"><span class="risk-label">Urgency</span><div class="risk-bar"><div class="risk-fill" style="width:90%;background:var(--red)"></div></div><span class="risk-val">Now</span></div>
 
-    <p class="body-text reveal">The sophisticated response to a bimodal distribution isn't to pick a side. It's to either <strong>position for maximum uncertainty</strong> — assets that pay off in both scenarios — or to construct a straddle where you capture upside from whichever extreme materialises.</p>
+  <div class="instruments tc-dark" style="margin-top:1rem">
+    <div class="inst-header">Suggested Weighting (illustrative only)</div>
+    <div class="inst-item"><span class="inst-ticker">Gold</span><span class="inst-desc">40% of this framework allocation — it is the bedrock hedge that works across every scenario</span></div>
+    <div class="inst-item"><span class="inst-ticker">Cyber</span><span class="inst-desc">30% — the one sector where Iran conflict is structurally bullish regardless of oil direction</span></div>
+    <div class="inst-item"><span class="inst-ticker">Defense</span><span class="inst-desc">20% — multi-year tailwind, less volatile than energy</span></div>
+    <div class="inst-item"><span class="inst-ticker">Treasuries</span><span class="inst-desc">10% — pure crisis hedge, rotate out first when scenario firms up</span></div>
   </div>
-</section>
+</div>
 
-<!-- ═══════════════════════ THE PLAYS ═══════════════════════ -->
-<section id="plays">
-  <div class="wrap">
-    <p class="section-label reveal">04 — The Investment Framework</p>
-    <h2 class="section-title reveal">What actually works —<br>and in which scenario</h2>
-    <p class="section-intro reveal">Not financial advice. This is the analytical framework for how professional investors are thinking about positioning across the scenario space. Always do your own research and consult a licensed advisor.</p>
-
-    <div class="disclaimer reveal">
-      <strong>Important:</strong> Nothing below constitutes investment advice. This is educational analysis of market dynamics. All investments carry risk including loss of principal. The situation is evolving rapidly — verify all information before acting.
-    </div>
-
-    <h3 style="font-family:var(--serif);font-size:1.4rem;margin-bottom:1.5rem;margin-top:2.5rem;" class="reveal">Cross-Scenario Plays — Work Regardless of Outcome</h3>
-    <p class="body-text reveal">These assets have historical precedent for performing across geopolitical crises regardless of the specific direction energy prices move.</p>
-
-    <div class="plays-table-wrap reveal" style="overflow-x:auto;">
-      <table class="plays-table">
-        <thead>
-          <tr>
-            <th>Asset / Thesis</th>
-            <th>Instrument(s)</th>
-            <th>Scenario</th>
-            <th>Conviction</th>
-            <th>Why it Works</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="asset">Gold — Safe Haven</td>
-            <td class="ticker">GLD / IAU / SGOL</td>
-            <td><span class="scenario-tag tag-all">All Scenarios</span></td>
-            <td class="conviction conv-high">HIGH</td>
-            <td style="color:var(--muted);font-size:0.82rem;">Historically +6% median in 3 months after geopolitical shocks (BofA data). Works in a spike AND a market crash.</td>
-          </tr>
-          <tr>
-            <td class="asset">U.S. Defense — Broad</td>
-            <td class="ticker">ITA / PPA ETFs<br>RTX, LMT, NOC, LHX</td>
-            <td><span class="scenario-tag tag-all">All Scenarios</span></td>
-            <td class="conviction conv-high">HIGH</td>
-            <td style="color:var(--muted);font-size:0.82rem;">$924.7B U.S. defense budget baseline. Multi-year contracts. Conflict duration irrelevant — backlog grows.</td>
-          </tr>
-          <tr>
-            <td class="asset">Cybersecurity</td>
-            <td class="ticker">HACK / CIBR ETFs<br>CRWD, PANW, FTNT</td>
-            <td><span class="scenario-tag tag-all">All Scenarios</span></td>
-            <td class="conviction conv-high">HIGH</td>
-            <td style="color:var(--muted);font-size:0.82rem;">Iran is a top-3 global state cyber actor. Military losses historically trigger intensified cyber operations. Demand rises regardless of regime outcome.</td>
-          </tr>
-          <tr>
-            <td class="asset">U.S. Treasuries</td>
-            <td class="ticker">TLT / IEF</td>
-            <td><span class="scenario-tag tag-all">All Scenarios</span></td>
-            <td class="conviction conv-med">MED-HIGH</td>
-            <td style="color:var(--muted);font-size:0.82rem;">Flight to safety drives bond prices up, yields down. Classic geopolitical hedge.</td>
-          </tr>
-
-          <tr style="border-top:2px solid var(--border2);">
-            <td colspan="5" style="padding:1rem;font-family:var(--mono);font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);">Scenario A Specific — Retaliation / Spike</td>
-          </tr>
-
-          <tr>
-            <td class="asset">Crude Oil — Long</td>
-            <td class="ticker">USO / BNO / UCO<br>XLE ETF, XOM, CVX</td>
-            <td><span class="scenario-tag tag-spike">Spike Only</span></td>
-            <td class="conviction conv-high">HIGH</td>
-            <td style="color:var(--muted);font-size:0.82rem;">Direct Hormuz disruption play. Median +18% in 3 months after geopolitical events (BofA historical data).</td>
-          </tr>
-          <tr>
-            <td class="asset">U.S. Shale Producers</td>
-            <td class="ticker">XOP ETF<br>DVN, FANG, PXD</td>
-            <td><span class="scenario-tag tag-spike">Spike Only</span></td>
-            <td class="conviction conv-high">HIGH</td>
-            <td style="color:var(--muted);font-size:0.82rem;">Breakeven ~$45–60/bbl. At $85+ oil: enormous margin expansion. Protected from Hormuz risk.</td>
-          </tr>
-          <tr>
-            <td class="asset">Tanker Shipping</td>
-            <td class="ticker">FRO, DHT, INSW</td>
-            <td><span class="scenario-tag tag-spike">Spike Only</span></td>
-            <td class="conviction conv-med">MEDIUM</td>
-            <td style="color:var(--muted);font-size:0.82rem;">War risk premiums and route diversions spike tanker day rates 300-500% in severe disruption scenarios.</td>
-          </tr>
-          <tr>
-            <td class="asset">U.S. Dollar — Long</td>
-            <td class="ticker">UUP ETF</td>
-            <td><span class="scenario-tag tag-spike">Spike Only</span></td>
-            <td class="conviction conv-med">MED-HIGH</td>
-            <td style="color:var(--muted);font-size:0.82rem;">Classic reserve currency flight. EM currencies weaken, capital flows to USD safety.</td>
-          </tr>
-          <tr>
-            <td class="asset">Short: Airlines</td>
-            <td class="ticker">JETS ETF short<br>IAG, DAL, Lufthansa</td>
-            <td><span class="scenario-tag tag-spike">Spike Only</span></td>
-            <td class="conviction conv-med">MEDIUM</td>
-            <td style="color:var(--muted);font-size:0.82rem;">Fuel cost spike + airspace closures = double compression on margins.</td>
-          </tr>
-
-          <tr style="border-top:2px solid var(--border2);">
-            <td colspan="5" style="padding:1rem;font-family:var(--mono);font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);">Scenario B Specific — Regime Change / Normalisation</td>
-          </tr>
-
-          <tr>
-            <td class="asset">Turkey Equities</td>
-            <td class="ticker">TUR ETF</td>
-            <td><span class="scenario-tag tag-collapse">Collapse Only</span></td>
-            <td class="conviction conv-med">MEDIUM</td>
-            <td style="color:var(--muted);font-size:0.82rem;">Primary short-term commercial beneficiary of Iranian normalisation. $10B existing bilateral trade, geographic proximity, established corridors. Turkey moves fastest.</td>
-          </tr>
-          <tr>
-            <td class="asset">Gulf State Equities</td>
-            <td class="ticker">KSA ETF (Saudi)<br>UAE-focused funds</td>
-            <td><span class="scenario-tag tag-collapse">Collapse Only</span></td>
-            <td class="conviction conv-med">MEDIUM</td>
-            <td style="color:var(--muted);font-size:0.82rem;">Geopolitical rival eliminated. Vision 2030 becomes more credible. Geopolitical risk premium compresses on Gulf equities.</td>
-          </tr>
-          <tr>
-            <td class="asset">Israeli Equities</td>
-            <td class="ticker">EIS ETF</td>
-            <td><span class="scenario-tag tag-collapse">Collapse Only</span></td>
-            <td class="conviction conv-med">MEDIUM</td>
-            <td style="color:var(--muted);font-size:0.82rem;">Structural removal of Iran nuclear threat and proxy network. Long-term security premium compression.</td>
-          </tr>
-          <tr>
-            <td class="asset">U.S. LNG Exporters</td>
-            <td class="ticker">LNG (Cheniere)<br>NFE, FLNG</td>
-            <td><span class="scenario-tag tag-collapse">Both</span></td>
-            <td class="conviction conv-med">MED-HIGH</td>
-            <td style="color:var(--muted);font-size:0.82rem;">Europe and Asia accelerate LNG import infrastructure regardless of scenario. Spike: replaces Hormuz LNG. Collapse: long-term supply diversification demand.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
+<!-- ═══════════ FRAMEWORK 2 ═══════════ -->
+<div class="framework reveal">
+  <div class="f-num">02</div>
+  <div class="f-eyebrow">
+    <span class="f-tag tag-amber">Signal-Dependent</span>
+    <span class="f-complexity">Complexity: Medium</span>
   </div>
-</section>
+  <h2 class="f-title">The Signal-Triggered<br>Rotation</h2>
+  <p class="f-subtitle">Don't pick a side. Let the market tell you which scenario is winning.</p>
 
-<!-- ═══════════════════════ SIGNALS ═══════════════════════ -->
-<section id="signals">
-  <div class="wrap">
-    <p class="section-label reveal">05 — The Signals</p>
-    <h2 class="section-title reveal">What to watch.<br>What it means.</h2>
-    <p class="section-intro reveal">The situation evolves by the hour. These four signals tell you which scenario is actually playing out — and should trigger portfolio reallocation when they fire.</p>
-
-    <div class="signals-grid reveal">
-      <div class="signal-card">
-        <span class="signal-num">01</span>
-        <div class="signal-name">The Hormuz Signal</div>
-        <div class="signal-desc">Watch for Iranian naval activity — mines, missile threats near tanker lanes, or confirmed vessel seizures. Even threat alone spikes insurance premiums and diverts traffic.</div>
-        <div class="signal-trigger trigger-up">↑ Fires → Maximize energy long, add tankers, short Asian ETFs</div>
-      </div>
-      <div class="signal-card">
-        <span class="signal-num">02</span>
-        <div class="signal-name">IRGC Posture Signal</div>
-        <div class="signal-desc">The Revolutionary Guard controls ~30-40% of Iran's economy. If IRGC leadership announces ceasefire, begins negotiating with U.S. or Israeli representatives, or places itself under civilian authority — Scenario B is activating.</div>
-        <div class="signal-trigger trigger-down">↓ Fires → Begin rotating to Turkey (TUR), Gulf ETFs, reconstruction plays</div>
-      </div>
-      <div class="signal-card">
-        <span class="signal-num">03</span>
-        <div class="signal-name">Oil Price Level</div>
-        <div class="signal-desc">The market itself is telling you which scenario it believes. This is your single most actionable real-time indicator and requires no intelligence or geopolitical expertise to read.</div>
-        <div class="signal-trigger trigger-warn">
-          Crude &gt;$95 and holds → Spike confirmed, energy long thesis works<br>
-          <span style="margin-top:0.3rem;display:block">Crude &lt;$75 → De-escalation priced, rotate to growth equities</span>
-        </div>
-      </div>
-      <div class="signal-card">
-        <span class="signal-num">04</span>
-        <div class="signal-name">China Response Signal</div>
-        <div class="signal-desc">China loses its 15-25% discounted Iranian oil in a regime-change scenario and has $400B in Belt and Road investments at risk. Watch for PLA military activity elsewhere — South China Sea, Taiwan Strait — as a distraction tactic or pressure escalation.</div>
-        <div class="signal-trigger trigger-up">↑ Fires → Maximum risk-off. Gold, USD, Treasuries. Reduce all equity exposure.</div>
-      </div>
-    </div>
-
-    <h3 style="font-family:var(--serif);font-size:1.4rem;margin:2.5rem 0 1.5rem;" class="reveal">How the situation is likely to unfold — timeline framework</h3>
-
-    <div class="timeline reveal">
-      <div class="timeline-item">
-        <div class="timeline-time">Days 1–3 (Now)</div>
-        <div class="timeline-text">Initial market reaction — maximum uncertainty</div>
-        <div class="timeline-detail">Asian markets open Sunday evening for the first price discovery. Expect 1-3% equity sell-off globally, gold rally, oil spike on risk premium. Safe haven positioning dominates. Do not make directional energy bets until Hormuz situation clarifies.</div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-time">Days 4–14</div>
-        <div class="timeline-text">IRGC posture becomes clear — first scenario signal</div>
-        <div class="timeline-detail">The Revolutionary Guard will either escalate (proxy attacks, Hormuz harassment) or begin negotiating. This is your first major signal window. Watch for named IRGC commanders making statements or meeting with U.S./Israeli intermediaries.</div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-time">Days 15–30</div>
-        <div class="timeline-text">Scenario crystallises — adjust positioning</div>
-        <div class="timeline-detail">By day 15, you'll know which scenario is dominant. Either Hormuz is disrupted and the spike thesis is confirmed, or regime negotiation is underway and the normalisation thesis begins. This is the window to build conviction positions.</div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-time">Months 2–6</div>
-        <div class="timeline-text">Either reconstruction begins or protracted conflict</div>
-        <div class="timeline-detail">Scenario A: prolonged energy disruption, inflation spiral risk, recession pricing. Scenario B: sanctions frameworks begin, Iranian diaspora capital starts mobilising, reconstruction contract discussions begin. Turkish and Gulf equity thesis activates.</div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-time">Months 12–24</div>
-        <div class="timeline-text">The Iranian oil market re-entry (Scenario B only)</div>
-        <div class="timeline-detail">If regime change succeeds, Iranian production begins recovering. Watch for the first Iranian sovereign bond issuance — the institutional signal that normalisation is real. This is when the largest money moves. You want to be positioned early, not at this moment.</div>
-      </div>
-    </div>
-
+  <div class="f-thesis thesis-amber">
+    The biggest mistake in geopolitical investing is forcing a directional bet before the scenario is confirmed. This framework says: hold the bimodal straddle (Framework 1) as your base, watch four specific signals, and rotate aggressively into scenario-specific positions the moment a signal fires. You give up the first 10–15% of the move. You avoid the 40% losses from picking the wrong scenario early.
   </div>
-</section>
 
-<!-- ═══════════════════════ THE HIDDEN ANGLE ═══════════════════════ -->
-<section id="hidden">
-  <div class="wrap">
-    <p class="section-label reveal">06 — The Hidden Variable</p>
-    <h2 class="section-title reveal">The story mainstream<br>media isn't covering</h2>
-
-    <p class="body-text reveal">Beyond the oil price question, there is one economic variable in this situation that is almost entirely absent from financial media coverage. It is potentially the most significant wealth-transfer event connected to this conflict.</p>
-
-    <div class="highlight-box reveal">
-      <p><strong style="color:var(--gold);">The IRGC controls an estimated 30–40% of Iran's formal GDP.</strong> It runs the country's largest mobile operator (55M+ subscribers), its biggest construction conglomerate, significant oil infrastructure, and a network of financial institutions. It is not just a military — it is a state within a state, with an economic empire estimated at $400 billion or more. And as of this week, it has no supreme leader. For the first time in 46 years.</p>
-    </div>
-
-    <p class="body-text reveal">What happens to that empire — whether it gets privatised in a rapid transition, fragmented in prolonged conflict, or consolidated by the Guard itself — is the question that will define who captures the most value from post-war Iran. It is the subject of Video 2 in this series.</p>
-
-    <p class="body-text reveal">Separately: <strong>China's position is catastrophically underreported.</strong> China receives 80%+ of Iran's oil exports at a 15-25% discount to market price — a discount that exists only because sanctions made Iran desperate to sell to whoever would buy. A regime change scenario eliminates this discount overnight. China also has a $400 billion, 25-year Belt and Road cooperation deal with Iran that is now in jeopardy. This is the subject of Video 3.</p>
+  <div class="insight">
+    <div class="insight-eye">The Core Insight</div>
+    <div class="insight-text">"The oil price level is the only real-time signal that requires no intelligence access, no geopolitical expertise, and no interpretation. The market is always smarter than any analyst. Let it tell you."</div>
   </div>
-</section>
 
-<!-- ═══════════════════════ SERIES NAV ═══════════════════════ -->
-<section id="series">
-  <div class="wrap">
-    <p class="section-label reveal">Series Navigation</p>
-    <h2 class="section-title reveal">Operation Epic Fury —<br>Full Series</h2>
+  <div class="inst-header" style="padding:0 0 .5rem">The Four Signals — In Priority Order</div>
 
-    <div class="series-nav reveal">
-      <div class="series-card active">
-        <div class="series-num">Video 01 — You are here</div>
-        <div class="series-title">The Oil Paradox: Why This War Could Crash Oil Prices</div>
-        <div class="series-status">✓ Published — Full Breakdown</div>
+  <div style="margin-bottom:1rem">
+    <div style="background:var(--white);border:1px solid var(--faint);padding:.85rem;margin-bottom:.6rem">
+      <div style="font-family:var(--mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem">Signal 1 · Oil Price Level · HIGHEST PRIORITY</div>
+      <div style="font-size:.85rem;color:var(--ink2);line-height:1.6;margin-bottom:.6rem">The single most actionable indicator. No intelligence required.</div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <span style="background:var(--red-lt);color:var(--red);font-family:var(--mono);font-size:.65rem;padding:.25rem .6rem;border:1px solid var(--red)">Crude >$95 sustained → Spike confirmed → Load energy longs</span>
       </div>
-      <div class="series-card">
-        <div class="series-num">Video 02 — Coming next</div>
-        <div class="series-title">Who Gets Iran's $400 Billion When the Regime Falls?</div>
-        <div class="series-status">→ Publishing soon</div>
-      </div>
-      <div class="series-card">
-        <div class="series-num">Video 03 — Coming soon</div>
-        <div class="series-title">China Just Lost Everything (And Doesn't Know It Yet)</div>
-        <div class="series-status">→ In production</div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.4rem">
+        <span style="background:var(--blue-lt);color:var(--blue);font-family:var(--mono);font-size:.65rem;padding:.25rem .6rem;border:1px solid var(--blue)">Crude <$75 → De-escalation priced → Rotate to reconstruction</span>
       </div>
     </div>
 
-    <div class="disclaimer reveal">
-      <strong>Sources:</strong> NPR, CNBC, Bloomberg, Al Jazeera, Axios, Brookings Institution, Chatham House, Atlantic Council, Congressional Research Service, Lombard Odier, Bank of America Strategy (Michael Hartnett), Kpler energy analytics, Eurasia Group. All statistics cited as of March 1, 2026. This analysis is for educational purposes only and does not constitute financial, investment, legal, or trading advice. All investments carry risk. Consult a licensed financial advisor before making investment decisions.
+    <div style="background:var(--white);border:1px solid var(--faint);padding:.85rem;margin-bottom:.6rem">
+      <div style="font-family:var(--mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem">Signal 2 · IRGC Public Statement</div>
+      <div style="font-size:.85rem;color:var(--ink2);line-height:1.6">If IRGC leadership announces ceasefire or civilian authority submission → Scenario B (reconstruction) activating. Begin TUR, Gulf ETFs, diaspora plays. If silence or proxy escalation → Scenario A (spike) still live.</div>
+    </div>
+
+    <div style="background:var(--white);border:1px solid var(--faint);padding:.85rem;margin-bottom:.6rem">
+      <div style="font-family:var(--mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem">Signal 3 · Hormuz Naval Activity</div>
+      <div style="font-size:.85rem;color:var(--ink2);line-height:1.6">Any confirmed Iranian naval harassment, mining activity, or vessel seizures near Hormuz → maximum energy long, add tankers, short Asian export ETFs immediately. This signal overrides everything else.</div>
+    </div>
+
+    <div style="background:var(--white);border:1px solid var(--faint);padding:.85rem">
+      <div style="font-family:var(--mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem">Signal 4 · US Treasury Sanctions Language</div>
+      <div style="font-size:.85rem;color:var(--ink2);line-height:1.6">Watch Treasury.gov press releases — not the news. Conditional sanctions relief language signals reconstruction thesis is real. This typically fires 3–6 weeks after a regime negotiation begins. It's the institutional money signal.</div>
     </div>
   </div>
-</section>
 
-<!-- ═══════════════════════ PATREON ═══════════════════════ -->
-<section id="patreon" style="border-top:1px solid var(--border);padding:6rem 0;background:var(--surface);">
-  <div class="wrap">
-    <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:1.5rem;">
-      <p style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);">Support the Work</p>
-      <h2 style="font-family:var(--serif);font-size:clamp(2.2rem,5vw,3.8rem);font-weight:900;line-height:1.05;letter-spacing:-0.02em;max-width:620px;">
-        This analysis takes<br><em style="color:var(--gold);font-style:italic;">days to produce.</em>
-      </h2>
-      <p style="font-size:1.05rem;color:var(--muted);max-width:520px;line-height:1.8;">
-        No ads. No sponsored content. No watered-down takes to keep advertisers happy. 
-        If this breakdown gave you an edge, consider supporting directly on Patreon — 
-        it's what keeps deep-dive analysis like this free and independent.
-      </p>
-      <div style="display:flex;flex-direction:column;align-items:center;gap:0.75rem;margin-top:0.5rem;">
-        <a href="https://www.patreon.com/cw/Insightinvest" target="_blank" rel="noopener noreferrer"
-          style="display:inline-flex;align-items:center;gap:0.75rem;
-            background:var(--gold);color:#000;
-            font-family:var(--mono);font-size:0.82rem;font-weight:600;
-            letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;
-            padding:1rem 2.5rem;
-            transition:opacity 0.2s, transform 0.2s;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="14.5" cy="9.5" r="6.5"/>
-            <rect x="3" y="2" width="4" height="20"/>
-          </svg>
-          Join on Patreon
-        </a>
-        <span style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;">patreon.com/cw/Insightinvest</span>
-      </div>
-      <div style="display:flex;gap:3rem;margin-top:2rem;flex-wrap:wrap;justify-content:center;">
-        <div style="display:flex;flex-direction:column;align-items:center;gap:0.4rem;">
-          <span style="font-family:var(--mono);font-size:1.4rem;font-weight:600;color:var(--text);">Early</span>
-          <span style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);">Access to breakdowns</span>
-        </div>
-        <div style="width:1px;background:var(--border2);"></div>
-        <div style="display:flex;flex-direction:column;align-items:center;gap:0.4rem;">
-          <span style="font-family:var(--mono);font-size:1.4rem;font-weight:600;color:var(--text);">Deeper</span>
-          <span style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);">Members-only analysis</span>
-        </div>
-        <div style="width:1px;background:var(--border2);"></div>
-        <div style="display:flex;flex-direction:column;align-items:center;gap:0.4rem;">
-          <span style="font-family:var(--mono);font-size:1.4rem;font-weight:600;color:var(--text);">Direct</span>
-          <span style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);">Q&A and signal alerts</span>
-        </div>
-      </div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-when">Days 1–3</div>
+      <div class="tl-what">Hold Framework 1 only. No directional energy bets. Watch all four signals passively.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-when">Days 4–14</div>
+      <div class="tl-what">First signal fires → begin rotating 30% of capital into scenario-specific position. Don't go all-in yet.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-when">Days 15–30</div>
+      <div class="tl-what">Scenario crystallising → rotate remaining 70%. This is your conviction window.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-when">Month 2–6</div>
+      <div class="tl-what">Full scenario positioning. Monitor for scenario reversal signals — the situation can shift.</div>
     </div>
   </div>
-</section>
 
-<!-- ═══════════════════════ FOOTER ═══════════════════════ -->
-<footer>
-  <div class="wrap">
-    <div class="footer-inner">
-      <div>
-        <div class="footer-brand">Operation Epic Fury — Series</div>
-        <div style="font-size:0.78rem;color:var(--muted);margin-top:0.25rem;">Geopolitical Investing Analysis</div>
-      </div>
-      <div class="footer-disclaimer">
-        Not financial advice. Educational analysis only. Published March 1, 2026. The situation described is rapidly evolving — verify all information before acting on any analysis presented here.
-      </div>
+  <div class="risk-row"><span class="risk-label">Risk</span><div class="risk-bar"><div class="risk-fill" style="width:40%;background:var(--amber)"></div></div><span class="risk-val">Medium</span></div>
+  <div class="risk-row"><span class="risk-label">Upside</span><div class="risk-bar"><div class="risk-fill" style="width:75%;background:var(--green)"></div></div><span class="risk-val">High</span></div>
+  <div class="risk-row"><span class="risk-label">Urgency</span><div class="risk-bar"><div class="risk-fill" style="width:45%;background:var(--amber)"></div></div><span class="risk-val">Watch</span></div>
+</div>
+
+<!-- ═══════════ FRAMEWORK 3 ═══════════ -->
+<div class="framework reveal">
+  <div class="f-num">03</div>
+  <div class="f-eyebrow">
+    <span class="f-tag tag-blue">Scenario B Only</span>
+    <span class="f-complexity">Complexity: Low-Medium</span>
+  </div>
+  <h2 class="f-title">The Reconstruction<br>Early Entry</h2>
+  <p class="f-subtitle">Get in before institutional money prices normalisation</p>
+
+  <div class="f-thesis thesis-blue">
+    The reconstruction thesis is the most asymmetric opportunity in this situation — and the most completely unpriced by markets right now. Every institutional investor is modeling Scenario A (spike). Nobody has a Scenario B position on. If the regime falls and sanctions lift, you want to already be in Turkey, Gulf equities, and reconstruction adjacents before the first Western oil major signs a contract. That first contract is when the institutional money moves. By then, the easy money is gone.
+  </div>
+
+  <div class="insight">
+    <div class="insight-eye">The Core Insight</div>
+    <div class="insight-text">"The Soviet Union comparison isn't hyperbole. Iran has 90 million people, the highest education rates in the Middle East, and an economy running at 30% of potential after 45 years of isolation. The opportunity isn't oil — it's everything else."</div>
+  </div>
+
+  <div class="instruments tc-blue">
+    <div class="inst-header">Phase 1 — Positioning Now (Publicly Traded)</div>
+    <div class="inst-item"><span class="inst-ticker">TUR</span><span class="inst-desc">Turkey ETF. Most direct short-term beneficiary. Shares border, $10B bilateral trade, can enter Iranian consumer market faster than any country. Currently underpriced relative to the thesis.</span></div>
+    <div class="inst-item"><span class="inst-ticker">KSA</span><span class="inst-desc">Saudi Arabia ETF. Geopolitical rival eliminated. Vision 2030 credibility increases. Risk premium on Gulf equities compresses. Regional stability dividend.</span></div>
+    <div class="inst-item"><span class="inst-ticker">EIS</span><span class="inst-desc">Israel ETF. Structural removal of Iran nuclear threat and IRGC proxy network. Long-term security premium compression. Only works in Scenario B.</span></div>
+    <div class="inst-item"><span class="inst-ticker">LNG (Cheniere)</span><span class="inst-desc">US LNG exporters. Demand for LNG infrastructure accelerates regardless of scenario as Asia and Europe diversify supply. The long-duration energy play.</span></div>
+  </div>
+
+  <div class="instruments tc-blue" style="margin-top:.75rem">
+    <div class="inst-header">Phase 2 — When Institutional Signal Fires</div>
+    <div class="inst-item"><span class="inst-ticker">First sovereign bond</span><span class="inst-desc">The moment Iran issues its first sovereign bond, institutional investors get access. That's when the largest capital flows begin. Position in Turkey and Gulf equities long before this happens.</span></div>
+    <div class="inst-item"><span class="inst-ticker">First Western oil contract</span><span class="inst-desc">Watch for Chevron, Shell, or TotalEnergies announcing Iranian re-entry. This is the reconstruction thesis confirmation signal. XOM and CVX begin re-rating immediately.</span></div>
+    <div class="inst-item"><span class="inst-ticker">Infrastructure ETFs</span><span class="inst-desc">IFRA, PAVE — reconstruction demand. Bechtel and Fluor are private, but their public competitors benefit. Watch for contract announcements.</span></div>
+  </div>
+
+  <div class="te-grid">
+    <div class="te-box">
+      <div class="te-label enter">Enter When</div>
+      <div class="te-text">IRGC posture signal fires (Signal 2) OR oil falls below $75 (Signal 1 — collapse). Begin with 50% position. Add on IRGC statement confirmation.</div>
+    </div>
+    <div class="te-box">
+      <div class="te-label exit">Exit When</div>
+      <div class="te-text">First Western oil contract signed — take profits on early positions. Rotate into longer-duration infrastructure plays. Or exit if Scenario A re-emerges.</div>
     </div>
   </div>
-</footer>
+
+  <div style="background:var(--red-lt);border:1px solid var(--red);padding:.85rem;margin-bottom:1rem">
+    <div style="font-family:var(--mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--red);margin-bottom:.3rem">⚠ Key Risk</div>
+    <div style="font-size:.82rem;color:var(--red);line-height:1.6">This framework is worthless in Scenario A. If Hormuz is disrupted, TUR and KSA sell off hard. Use tight stops or keep position small until the signal confirms. Never run this framework without Framework 1 as a hedge.</div>
+  </div>
+
+  <div class="risk-row"><span class="risk-label">Risk</span><div class="risk-bar"><div class="risk-fill" style="width:60%;background:var(--amber)"></div></div><span class="risk-val">Med-High</span></div>
+  <div class="risk-row"><span class="risk-label">Upside</span><div class="risk-bar"><div class="risk-fill" style="width:90%;background:var(--green)"></div></div><span class="risk-val">Very High</span></div>
+  <div class="risk-row"><span class="risk-label">Urgency</span><div class="risk-bar"><div class="risk-fill" style="width:50%;background:var(--amber)"></div></div><span class="risk-val">Signal-dep.</span></div>
+</div>
+
+<!-- ═══════════ FRAMEWORK 4 ═══════════ -->
+<div class="framework reveal">
+  <div class="f-num">04</div>
+  <div class="f-eyebrow">
+    <span class="f-tag tag-red">Both Scenarios</span>
+    <span class="f-complexity">Complexity: Medium</span>
+  </div>
+  <h2 class="f-title">The China<br>Squeeze</h2>
+  <p class="f-subtitle">The story nobody is covering — and the most durable trade</p>
+
+  <div class="f-thesis thesis-red">
+    China is the hidden loser in this situation regardless of which scenario plays out. In Scenario A (spike): China's 5M bbl/day Hormuz dependence is strangled and it faces an energy crisis. In Scenario B (regime change): China loses its $7–12/barrel discount on Iranian oil — 13–14% of its total crude imports — overnight. The discount disappears because sanctions lift and Iran can sell to the highest global bidder. China is also the biggest Belt and Road loser, with a $400B, 25-year cooperation deal now in jeopardy. This is the one framework that works in both scenarios.
+  </div>
+
+  <div class="insight">
+    <div class="insight-eye">The Core Insight</div>
+    <div class="insight-text">"China saves billions annually buying sanctioned Iranian oil at an $8–12 discount. The moment sanctions lift, that discount vanishes. China didn't just lose a cheap supplier — it lost the strategic leverage that came with Iran's isolation."</div>
+  </div>
+
+  <div class="instruments tc-red">
+    <div class="inst-header">Long Positions — US Energy Independence Beneficiaries</div>
+    <div class="inst-item"><span class="inst-ticker">LNG (Cheniere)</span><span class="inst-desc">As China scrambles to replace discounted Iranian oil, it accelerates LNG infrastructure buildout. US LNG exporters are the structural winner.</span></div>
+    <div class="inst-item"><span class="inst-ticker">XOP ETF</span><span class="inst-desc">US shale producers. Breakeven $45–60/bbl. Any spike scenario drives enormous margin expansion. Protected from Hormuz risk entirely.</span></div>
+    <div class="inst-item"><span class="inst-ticker">XLE ETF</span><span class="inst-desc">Broad US energy. Benefits from either scenario: spike drives margins; normalisation drives Iranian asset reentry for majors like XOM, CVX.</span></div>
+  </div>
+
+  <div class="instruments tc-red" style="margin-top:.75rem">
+    <div class="inst-header">Short / Hedge Positions — China Energy Sensitivity</div>
+    <div class="inst-item"><span class="inst-ticker">FXI / MCHI</span><span class="inst-desc">China broad equity ETFs. Energy cost spike hits manufacturing margins directly. China's property market already in multi-year collapse. An energy shock is the additional pressure the market hasn't priced.</span></div>
+    <div class="inst-item"><span class="inst-ticker">JETS ETF</span><span class="inst-desc">Global airlines. Fuel cost spike + potential airspace closures. Particularly Asian carriers exposed to Hormuz region. Short in Scenario A.</span></div>
+    <div class="inst-item"><span class="inst-ticker">EEM (selective)</span><span class="inst-desc">Energy-importing EM countries (India, South Korea, Japan) face oil cost pressure in Scenario A. Consider tactical underweight vs energy-exporting EMs.</span></div>
+  </div>
+
+  <div style="background:var(--gold-lt);border:1px solid var(--gold);padding:.85rem;margin-bottom:1rem">
+    <div style="font-family:var(--mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem">The Belt and Road Wildcard</div>
+    <div style="font-size:.82rem;color:var(--ink2);line-height:1.6">China's $400B, 25-year cooperation deal with Iran is now jeopardised. In practice most of this was never deployed — but the pipeline, port, and infrastructure concessions China was building toward in Iran's Makran coast are now uncertain. Watch for China to accelerate alternative BRI routes through Pakistan and Central Asia as a replacement strategy. That's a second-order trade.</div>
+  </div>
+
+  <div class="te-grid">
+    <div class="te-box">
+      <div class="te-label enter">Enter When</div>
+      <div class="te-text">Long US energy and LNG: now (spike risk already present). Short China ETFs: wait for Hormuz confirmation signal or evidence of large-scale energy cost pass-through.</div>
+    </div>
+    <div class="te-box">
+      <div class="te-label exit">Exit When</div>
+      <div class="te-text">China announces alternative oil supply agreements at scale. Or geopolitical situation fully de-escalates and Iranian oil reaches global market normally.</div>
+    </div>
+  </div>
+
+  <div class="risk-row"><span class="risk-label">Risk</span><div class="risk-bar"><div class="risk-fill" style="width:50%;background:var(--amber)"></div></div><span class="risk-val">Medium</span></div>
+  <div class="risk-row"><span class="risk-label">Upside</span><div class="risk-bar"><div class="risk-fill" style="width:70%;background:var(--green)"></div></div><span class="risk-val">High</span></div>
+  <div class="risk-row"><span class="risk-label">Urgency</span><div class="risk-bar"><div class="risk-fill" style="width:70%;background:var(--amber)"></div></div><span class="risk-val">Soon</span></div>
+</div>
+
+<!-- ═══════════ FRAMEWORK 5 ═══════════ -->
+<div class="framework reveal">
+  <div class="f-num">05</div>
+  <div class="f-eyebrow">
+    <span class="f-tag tag-dark">Advanced</span>
+    <span class="f-complexity">Complexity: High · Options required</span>
+  </div>
+  <h2 class="f-title">The Asymmetric<br>Options Play</h2>
+  <p class="f-subtitle">Maximum leverage on uncertainty. Profit from the gap between priced and actual risk.</p>
+
+  <div class="f-thesis thesis-gold">
+    Standard options pricing uses implied volatility — essentially the market's estimate of how uncertain the future is. In bimodal situations like this, the market systematically underprices the tails — both the spike scenario and the collapse scenario — because options models assume normal distributions. The strategy here is to buy the tails cheaply before the market reprices them, using a structure that limits your maximum loss to the premium paid while giving you unlimited upside from whichever extreme materialises.
+  </div>
+
+  <div class="insight">
+    <div class="insight-eye">The Core Insight</div>
+    <div class="insight-text">"Implied volatility on oil options will spike the moment Hormuz activity is confirmed. The cheapest time to buy protection is before the event is in the headlines — which is now."</div>
+  </div>
+
+  <div class="instruments tc-gold">
+    <div class="inst-header">Structure 1 — The Oil Straddle (Scenario Agnostic)</div>
+    <div class="inst-item"><span class="inst-ticker">Buy USO call</span><span class="inst-desc">Out-of-the-money call on oil ETF (USO) targeting $150+ scenario. Strike 20–30% above current price. 3–6 month expiry. Maximum loss = premium paid.</span></div>
+    <div class="inst-item"><span class="inst-ticker">Buy USO put</span><span class="inst-desc">Out-of-the-money put on same ETF targeting $50 collapse scenario. Same expiry. Together, this structure profits from a large move in either direction.</span></div>
+    <div class="inst-item"><span class="inst-ticker">Cost/Risk</span><span class="inst-desc">You lose the combined premium if oil stays range-bound (~$70–85). This is the defined maximum loss. The position needs a large move to be profitable — which is exactly what a bimodal distribution delivers.</span></div>
+  </div>
+
+  <div class="instruments tc-gold" style="margin-top:.75rem">
+    <div class="inst-header">Structure 2 — The Reconstruction Leap (Scenario B Only)</div>
+    <div class="inst-item"><span class="inst-ticker">TUR call options</span><span class="inst-desc">Deep out-of-the-money calls on TUR ETF. If reconstruction plays out, Turkey equities could rally 40–80% in 12–18 months. Options give you leveraged exposure for small premium outlay.</span></div>
+    <div class="inst-item"><span class="inst-ticker">GLD call options</span><span class="inst-desc">Upside calls on gold ETF. Geopolitical uncertainty drives gold regardless of scenario. Lower risk because gold baseline trend is already bullish. Can be funded by selling covered calls on existing gold position.</span></div>
+  </div>
+
+  <div class="instruments tc-gold" style="margin-top:.75rem">
+    <div class="inst-header">Structure 3 — The Volatility Play (Pure Uncertainty)</div>
+    <div class="inst-item"><span class="inst-ticker">VIX calls</span><span class="inst-desc">If global equity volatility spikes from Hormuz disruption or China escalation response, VIX calls pay off dramatically. Short-dated (30–60 days) OTM calls are inexpensive when VIX is low.</span></div>
+    <div class="inst-item"><span class="inst-ticker">UVXY (short-term)</span><span class="inst-desc">Leveraged volatility ETF. Extremely high risk — only for very short-term positioning around a specific catalyst (e.g. week of IRGC statement). Not a hold.</span></div>
+  </div>
+
+  <div style="background:var(--red-lt);border:1px solid var(--red);padding:.85rem;margin-bottom:1rem">
+    <div style="font-family:var(--mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--red);margin-bottom:.3rem">⚠ Critical Warnings</div>
+    <div style="font-size:.82rem;color:var(--red);line-height:1.7">Options can expire worthless — your entire premium is at risk. Implied volatility has already risen since the conflict began, making options more expensive. This is the most complex framework here and requires understanding of options mechanics. Do not attempt without prior experience or professional guidance. Size positions so that total premium spent is money you can afford to lose entirely.</div>
+  </div>
+
+  <div class="te-grid">
+    <div class="te-box">
+      <div class="te-label enter">Entry Logic</div>
+      <div class="te-text">Buy before IV spikes further. Monitor IV percentile on oil options — if it's still below 70th percentile historically, the straddle is still attractively priced.</div>
+    </div>
+    <div class="te-box">
+      <div class="te-label exit">Exit Logic</div>
+      <div class="te-text">Take profits when either leg is up 100%+ and convert to directional position. Don't hold straddle all the way to expiry — sell the profitable leg early.</div>
+    </div>
+  </div>
+
+  <div class="risk-row"><span class="risk-label">Risk</span><div class="risk-bar"><div class="risk-fill" style="width:80%;background:var(--red)"></div></div><span class="risk-val">High</span></div>
+  <div class="risk-row"><span class="risk-label">Upside</span><div class="risk-bar"><div class="risk-fill" style="width:95%;background:var(--green)"></div></div><span class="risk-val">Extreme</span></div>
+  <div class="risk-row"><span class="risk-label">Urgency</span><div class="risk-bar"><div class="risk-fill" style="width:85%;background:var(--red)"></div></div><span class="risk-val">Now / Soon</span></div>
+</div>
+
+<!-- MASTER SUMMARY -->
+<div style="padding:2rem 1.25rem;background:var(--black);color:var(--white)" class="reveal">
+  <p style="font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem">How To Use These Together</p>
+  <h2 style="font-family:var(--serif);font-size:1.8rem;font-weight:700;color:var(--white);margin-bottom:1.25rem;line-height:1.1">The Layered Approach</h2>
+
+  <div style="border-left:2px solid #2a2520;padding-left:1.25rem;margin-bottom:1.25rem">
+    <div style="margin-bottom:1rem">
+      <div style="font-family:var(--mono);font-size:.62rem;color:var(--gold);margin-bottom:.3rem">LAYER 1 — NOW — NO SIGNAL REQUIRED</div>
+      <div style="font-size:.85rem;color:#a09890;line-height:1.6">Framework 1 (Bimodal Straddle) as your base. Framework 4 long leg (US energy, LNG). Framework 5 if experienced with options.</div>
+    </div>
+    <div style="margin-bottom:1rem">
+      <div style="font-family:var(--mono);font-size:.62rem;color:var(--gold);margin-bottom:.3rem">LAYER 2 — SIGNAL FIRES (DAY 4–14)</div>
+      <div style="font-size:.85rem;color:#a09890;line-height:1.6">Framework 2 rotation begins. 30% into confirmed scenario. Keep Framework 1 running as hedge.</div>
+    </div>
+    <div style="margin-bottom:1rem">
+      <div style="font-family:var(--mono);font-size:.62rem;color:var(--gold);margin-bottom:.3rem">LAYER 3 — SCENARIO CONFIRMED (DAY 15–30)</div>
+      <div style="font-size:.85rem;color:#a09890;line-height:1.6">Full rotation. If Scenario B: activate Framework 3 (Reconstruction). If Scenario A: maximize Framework 4 short leg. Trim Framework 5 profitable options leg.</div>
+    </div>
+    <div>
+      <div style="font-family:var(--mono);font-size:.62rem;color:var(--gold);margin-bottom:.3rem">LAYER 4 — MONTHS 2–6</div>
+      <div style="font-size:.85rem;color:#a09890;line-height:1.6">Framework 3 Phase 2 plays activate. Watch for first sovereign bond issuance and first Western oil contract — these are your institutional validation signals to add to reconstruction positions.</div>
+    </div>
+  </div>
+
+  <div style="background:#1a1512;border:1px solid #2a2520;padding:1rem;border-left:3px solid var(--gold)">
+    <div style="font-family:var(--mono);font-size:.58rem;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.4rem">The Overarching Principle</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-style:italic;color:#d0c8c0;line-height:1.6">"The market is pricing a binary event. The reality is a probability distribution with two heavy tails and enormous uncertainty in between. Your edge is not knowing which scenario wins — your edge is knowing that the market hasn't properly priced either of them yet."</div>
+  </div>
+</div>
+
+<!-- DISCLAIMER -->
+<div class="master-disc">
+  <div class="disc-title">Important Disclaimer</div>
+  <div class="disc-text">This document is for educational and content creation purposes only. Nothing here constitutes financial, investment, legal, or trading advice. All frameworks, instruments, tickers, and price targets mentioned are illustrative only and based on publicly available analysis. All investments carry risk including total loss of principal. Options strategies carry additional risks including complete loss of premium. Past performance of asset classes in geopolitical scenarios does not guarantee future results. The situation described is evolving rapidly and all analysis may become outdated. Always conduct independent research and consult a licensed financial advisor, investment professional, or broker before making any investment decisions. The author does not hold positions in any securities mentioned.</div>
+</div>
+
+<footer>Insight Invest · Iran Investment Framework · March 2026 · Not Financial Advice</footer>
 
 <script>
-// ── PROGRESS BAR
-const progressBar = document.getElementById('progress');
+// PASSWORD GATE
+function checkPass() {
+  const input = document.getElementById('gate-input');
+  const error = document.getElementById('gate-error');
+  if (input.value.toLowerCase().trim() === 'invest') {
+    document.getElementById('gate').classList.add('hidden');
+    document.body.style.overflow = '';
+  } else {
+    error.classList.add('show');
+    input.value = '';
+    input.focus();
+    input.style.borderColor = 'var(--red)';
+    setTimeout(() => { input.style.borderColor = ''; error.classList.remove('show'); }, 2000);
+  }
+}
+document.getElementById('gate-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') checkPass();
+});
+document.getElementById('gate-toggle').addEventListener('click', function() {
+  const inp = document.getElementById('gate-input');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+});
+document.body.style.overflow = 'hidden';
+
+// Progress bar
+const prog = document.getElementById('prog');
 window.addEventListener('scroll', () => {
-  const scrolled = window.scrollY;
-  const total = document.documentElement.scrollHeight - window.innerHeight;
-  progressBar.style.width = (scrolled / total * 100) + '%';
+  const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100;
+  prog.style.width = pct + '%';
 });
 
-// ── REVEAL ON SCROLL
-const revealEls = document.querySelectorAll('.reveal');
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry, i) => {
-    if (entry.isIntersecting) {
-      setTimeout(() => entry.target.classList.add('visible'), i * 60);
-      observer.unobserve(entry.target);
+// Reveal on scroll
+const reveals = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('vis'), i * 80);
+      obs.unobserve(e.target);
     }
   });
-}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
-revealEls.forEach(el => observer.observe(el));
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(r => obs.observe(r));
 
-// ── COUNT UP ANIMATION
-function animateCount(el, target, suffix = '') {
-  let start = 0;
-  const duration = 1500;
-  const startTime = performance.now();
-  const update = (currentTime) => {
-    const elapsed = currentTime - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    el.textContent = Math.round(start + (target - start) * eased) + suffix;
-    if (progress < 1) requestAnimationFrame(update);
-  };
-  requestAnimationFrame(update);
-}
-
-const countEls = document.querySelectorAll('[data-count]');
-const countObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const target = parseInt(entry.target.dataset.count);
-      animateCount(entry.target, target);
-      countObserver.unobserve(entry.target);
+// Risk bar animations
+const bars = document.querySelectorAll('.risk-fill');
+const barObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.width = e.target.style.width;
+      barObs.unobserve(e.target);
     }
   });
 }, { threshold: 0.5 });
-countEls.forEach(el => countObserver.observe(el));
-
-// ── SMOOTH SCROLL NAV
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    e.preventDefault();
-    const target = document.querySelector(a.getAttribute('href'));
-    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-});
+bars.forEach(b => { const w = b.style.width; b.style.width = '0'; setTimeout(() => b.style.width = w, 300); barObs.observe(b); });
 </script>
 </body>
 </html>
