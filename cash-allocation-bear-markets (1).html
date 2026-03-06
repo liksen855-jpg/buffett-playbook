@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cash Allocation in Bear Markets — Insight Invest</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0f0f;
+    --paper: #f5f0e8;
+    --cream: #ede8dc;
+    --accent: #c0392b;
+    --accent-muted: #922b21;
+    --gold: #b8960c;
+    --steel: #2c3e50;
+    --mid: #6b6b5f;
+    --rule: #c8c0b0;
+    --highlight: #fff9e6;
+    --green: #1a6b3c;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.75;
+    font-size: 16px;
+  }
+
+  /* MASTHEAD */
+  .masthead {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 60px 0 50px;
+    position: relative;
+    overflow: hidden;
+  }
+  .masthead::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 80px,
+      rgba(255,255,255,0.02) 80px,
+      rgba(255,255,255,0.02) 81px
+    );
+  }
+  .masthead-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 40px;
+    position: relative;
+  }
+  .kicker {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+  .main-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 900;
+    line-height: 1.05;
+    margin-bottom: 24px;
+    letter-spacing: -1px;
+  }
+  .main-title em {
+    font-style: italic;
+    color: #d4a843;
+  }
+  .subtitle {
+    font-size: 17px;
+    color: rgba(245,240,232,0.65);
+    max-width: 640px;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+  .meta-bar {
+    margin-top: 36px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .meta-item {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.4);
+  }
+  .meta-item span {
+    display: block;
+    color: rgba(245,240,232,0.8);
+    font-size: 12px;
+    margin-top: 3px;
+  }
+
+  /* LAYOUT */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* TABLE OF CONTENTS */
+  .toc {
+    background: var(--cream);
+    border-left: 4px solid var(--accent);
+    padding: 32px 36px;
+    margin: 48px 0;
+  }
+  .toc-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 16px;
+  }
+  .toc ol {
+    list-style: none;
+    counter-reset: toc-counter;
+  }
+  .toc li {
+    counter-increment: toc-counter;
+    padding: 5px 0;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .toc li::before {
+    content: counter(toc-counter, decimal-leading-zero);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .toc a {
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+    border-bottom: 1px dotted var(--rule);
+  }
+  .toc a:hover { color: var(--accent); }
+
+  /* SECTION STRUCTURE */
+  .section {
+    padding: 56px 0 0;
+  }
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(24px, 3.5vw, 36px);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 24px;
+    color: var(--ink);
+  }
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 36px;
+    margin-bottom: 14px;
+    color: var(--steel);
+  }
+  p {
+    margin-bottom: 18px;
+    color: #1a1a16;
+  }
+
+  /* DIVIDER */
+  .rule {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 48px 0;
+  }
+
+  /* PULL QUOTE */
+  .pull-quote {
+    border-left: 3px solid var(--gold);
+    padding: 20px 28px;
+    margin: 36px 0;
+    background: var(--highlight);
+  }
+  .pull-quote p {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--steel);
+    margin: 0;
+  }
+  .pull-quote cite {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-top: 10px;
+    font-style: normal;
+  }
+
+  /* DATA TABLE */
+  .data-table-wrap {
+    overflow-x: auto;
+    margin: 32px 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  thead {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  thead th {
+    padding: 12px 16px;
+    text-align: left;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  tbody tr {
+    border-bottom: 1px solid var(--rule);
+  }
+  tbody tr:nth-child(even) {
+    background: var(--cream);
+  }
+  tbody td {
+    padding: 12px 16px;
+    vertical-align: top;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+  tbody td:first-child {
+    font-weight: 500;
+  }
+  td.neg { color: var(--accent); font-weight: 500; }
+  td.pos { color: var(--green); font-weight: 500; }
+  td.neutral { color: var(--gold); font-weight: 500; }
+
+  /* CALLOUT BOXES */
+  .callout {
+    padding: 28px 32px;
+    margin: 36px 0;
+    border-radius: 2px;
+  }
+  .callout-warning {
+    background: #fdf0ef;
+    border: 1px solid #e8a9a4;
+  }
+  .callout-insight {
+    background: #eef7f1;
+    border: 1px solid #9dcfb0;
+  }
+  .callout-data {
+    background: #eef2f7;
+    border: 1px solid #9ab3d0;
+  }
+  .callout-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  .callout-warning .callout-label { color: var(--accent); }
+  .callout-insight .callout-label { color: var(--green); }
+  .callout-data .callout-label { color: #2471a3; }
+  .callout p { margin-bottom: 8px; font-size: 15px; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  /* FRAMEWORK GRID */
+  .framework-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 32px 0;
+  }
+  @media (max-width: 600px) {
+    .framework-grid { grid-template-columns: 1fr; }
+  }
+  .framework-card {
+    background: var(--cream);
+    padding: 24px;
+    border-top: 3px solid var(--accent);
+  }
+  .framework-card.alt {
+    border-top-color: var(--gold);
+  }
+  .framework-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .framework-card p {
+    font-size: 14px;
+    margin: 0;
+    color: var(--mid);
+  }
+
+  /* SIGNAL LIST */
+  .signal-list {
+    list-style: none;
+    margin: 20px 0;
+  }
+  .signal-list li {
+    padding: 14px 16px 14px 48px;
+    position: relative;
+    border-bottom: 1px solid var(--rule);
+    font-size: 15px;
+  }
+  .signal-list li::before {
+    position: absolute;
+    left: 14px;
+    top: 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+  }
+  .signal-list.raise li::before {
+    content: '↑';
+    color: var(--accent);
+  }
+  .signal-list.reduce li::before {
+    content: '↓';
+    color: var(--green);
+  }
+
+  /* INVESTOR MATRIX */
+  .matrix {
+    margin: 32px 0;
+  }
+  .matrix-row {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .matrix-row:first-child {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .matrix-cell {
+    padding: 14px 18px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .matrix-row:first-child .matrix-cell {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .matrix-label {
+    font-weight: 500;
+    background: var(--cream);
+    font-size: 13px;
+  }
+  .matrix-row:nth-child(even) .matrix-cell:last-child {
+    background: rgba(0,0,0,0.02);
+  }
+
+  /* SYNTHESIS BOX */
+  .synthesis {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 48px;
+    margin: 48px 0 0;
+  }
+  .synthesis h2 {
+    color: #d4a843;
+    margin-bottom: 30px;
+  }
+  .synthesis p {
+    color: rgba(245,240,232,0.82);
+    margin-bottom: 18px;
+    font-size: 15.5px;
+  }
+  .synthesis h3 {
+    color: var(--paper);
+    margin-top: 30px;
+  }
+
+  /* VERDICT ITEMS */
+  .verdict-list {
+    list-style: none;
+    margin: 24px 0;
+  }
+  .verdict-list li {
+    padding: 16px 0 16px 36px;
+    position: relative;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    color: rgba(245,240,232,0.82);
+    font-size: 15px;
+  }
+  .verdict-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: #d4a843;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* FOOTNOTE */
+  .footnote {
+    padding: 40px 0;
+    border-top: 1px solid var(--rule);
+    margin-top: 48px;
+    font-size: 13px;
+    color: var(--mid);
+  }
+
+  /* PRINT / UTILITY */
+  strong { font-weight: 500; }
+  .mono { font-family: 'IBM Plex Mono', monospace; font-size: 13px; }
+  .accent { color: var(--accent); }
+  .gold { color: var(--gold); }
+
+  @media (max-width: 600px) {
+    .masthead-inner, .container { padding: 0 20px; }
+    .synthesis { padding: 32px 24px; }
+    .matrix-row { grid-template-columns: 120px 1fr; }
+  }
+</style>
+</head>
+<body>
+<!-- ═══ SITE-WIDE NAV ═══ -->
+<div id="siteNav" style="position:fixed;top:0;left:0;right:0;z-index:9998;background:rgba(15,15,15,0.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.06);padding:0 32px;font-family:'DM Sans',sans-serif;">
+  <div style="max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:48px;">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      <span style="font-size:12px;font-weight:600;color:#c0392b;letter-spacing:0.1em;text-transform:uppercase;">Insight Invest</span>
+    </a>
+    <div style="display:flex;gap:4px;">
+      <a href="/buffett-playbook" style="font-size:11px;font-weight:500;color:#71717a;text-decoration:none;padding:5px 12px;border-radius:6px;">Buffett Playbook</a>
+      <a href="/iran-conflict" style="font-size:11px;font-weight:500;color:#71717a;text-decoration:none;padding:5px 12px;border-radius:6px;">Iran Playbook</a>
+      <a href="/cash-allocation-bear-markets" style="font-size:11px;font-weight:500;color:#c0392b;background:rgba(192,57,43,0.1);text-decoration:none;padding:5px 12px;border-radius:6px;">Cash Strategy</a>
+      <a href="/iran-bursa-playbook" style="font-size:11px;font-weight:500;color:#71717a;text-decoration:none;padding:5px 12px;border-radius:6px;">Bursa Playbook</a>
+    </div>
+  </div>
+</div>
+<div style="height:48px;"></div>
+<!-- ═══ END SITE NAV ═══ -->
+
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-inner">
+    <div class="kicker">Portfolio Strategy · Bear Market Research</div>
+    <h1 class="main-title">The Case for <em>Strategic</em><br>Cash Allocation</h1>
+    <p class="subtitle">A comprehensive evidence-based analysis of how investors should size, time, and deploy cash positions during bear markets — and where conventional wisdom fails them.</p>
+    <div class="meta-bar">
+      <div class="meta-item">Coverage Period<span>2000 – 2024</span></div>
+      <div class="meta-item">Bear Markets Studied<span>2000–02 · 2008–09 · 2020 · 2022</span></div>
+      <div class="meta-item">Focus<span>Allocation Sizing & Deployment</span></div>
+      <div class="meta-item">Audience<span>Intermediate to Advanced Investors</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="container">
+  <div class="toc">
+    <div class="toc-title">Contents</div>
+    <ol>
+      <li><a href="#s1">The Dual-Function Framework: Hedge vs. Dry Powder</a></li>
+      <li><a href="#s2">Historical Evidence Across Major Bear Markets</a></li>
+      <li><a href="#s3">Investor Profile & the Cash Allocation Matrix</a></li>
+      <li><a href="#s4">Rules of Thumb — Validated, Refuted, Nuanced</a></li>
+      <li><a href="#s5">Signals & Triggers: When to Raise or Reduce Cash</a></li>
+      <li><a href="#s6">Institutional vs. Wealth Manager vs. Retail Investor</a></li>
+      <li><a href="#s7">The Opportunity Cost Calculus</a></li>
+      <li><a href="#s8">Synthesis: Actionable Conclusions & Where Consensus Is Wrong</a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 1: DUAL FUNCTION FRAMEWORK -->
+<!-- ============================================================ -->
+<div class="container">
+  <div class="section" id="s1">
+    <div class="section-label">Section 01</div>
+    <h2>The Dual-Function Framework:<br>Hedge vs. Dry Powder</h2>
+
+    <p>The most fundamental mistake investors make when discussing cash allocation is treating cash as a single-purpose instrument. In reality, cash serves two structurally distinct roles during a bear market — roles that often pull in opposite directions and demand different sizing logic.</p>
+
+    <div class="framework-grid">
+      <div class="framework-card">
+        <h4>Cash as Defensive Hedge</h4>
+        <p>Capital preservation. The goal is to reduce portfolio drawdown, protect purchasing power, and avoid forced selling during a liquidity crunch. This is <em>reactionary</em> cash — raised because risk assets are deteriorating. Success is measured by how much loss it prevents, not by returns it generates.</p>
+      </div>
+      <div class="framework-card alt">
+        <h4>Cash as Dry Powder</h4>
+        <p>Opportunistic redeployment. The goal is to have deployable capital ready to purchase assets at distressed prices. This is <em>anticipatory</em> cash — raised before or early in a downturn. Success is measured by the quality of reentry and the returns generated post-deployment.</p>
+      </div>
+    </div>
+
+    <p>These two functions create a tension that is rarely acknowledged in popular personal finance advice. A defensive hedge is most valuable at the <em>depths</em> of a bear market — precisely when dry powder should be deployed. If you conflate the two, you risk sitting on cash indefinitely because the emotional need for "safety" persists even after valuations become compelling.</p>
+
+    <h3>The Sequencing Problem</h3>
+    <p>Portfolio theory from Markowitz onward treats asset allocation as a static optimization problem. But bear markets are a <em>temporal</em> problem. Cash raised at the wrong point in the cycle — too late, after major losses are realized — serves neither function well. It becomes a byproduct of panic rather than a purposeful strategy.</p>
+
+    <p>The practical implication: investors should decide <em>which function</em> they are primarily serving before sizing their cash position. A 20% cash allocation means something very different if you raised it before the S&P 500 dropped 35% (dry powder, well-timed) versus after a 35% decline (defensive, late). The number is the same; the strategic reality is completely different.</p>
+
+    <div class="pull-quote">
+      <p>"Cash is never really 'safe.' It is simply a position with a different risk profile — one where purchasing power erodes slowly and predictably rather than quickly and violently."</p>
+      <cite>Implied by Howard Marks, Oaktree Capital — on the illusion of cash safety</cite>
+    </div>
+
+    <h3>A Third Dimension: Liquidity Buffer</h3>
+    <p>Beyond the hedge/dry-powder duality, a third cash function exists: the personal liquidity buffer. This is 3–12 months of living expenses held outside the investment portfolio entirely. It is not investment cash — it is household risk management. Conflating the liquidity buffer with investment-level cash allocation is one of the most common errors retail investors make, leading them to massively over-hold cash when they feel financially precarious. The liquidity buffer should be sized independently, held in a HYSA or money market, and treated as permanently off-limits to portfolio logic.</p>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ============================================================ -->
+  <!-- SECTION 2: HISTORICAL EVIDENCE -->
+  <!-- ============================================================ -->
+  <div class="section" id="s2">
+    <div class="section-label">Section 02</div>
+    <h2>Historical Evidence Across<br>Major Bear Markets</h2>
+
+    <p>Four distinct bear markets since 2000 offer materially different lessons about cash allocation — because each had a different causal structure, duration, and recovery profile.</p>
+
+    <div class="data-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Bear Market</th>
+            <th>Peak-to-Trough</th>
+            <th>Duration</th>
+            <th>Recovery to New High</th>
+            <th>Primary Driver</th>
+            <th>Cash Utility</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Dot-Com Bust<br><span class="mono">2000–2002</span></td>
+            <td class="neg">−49.1% (S&P 500)</td>
+            <td>~30 months</td>
+            <td>~7 years</td>
+            <td>Valuation collapse; tech sector implosion</td>
+            <td class="pos">Very High</td>
+          </tr>
+          <tr>
+            <td>Global Financial Crisis<br><span class="mono">2008–2009</span></td>
+            <td class="neg">−56.8% (S&P 500)</td>
+            <td>~17 months</td>
+            <td>~5.5 years</td>
+            <td>Systemic credit crisis; bank insolvency</td>
+            <td class="pos">Extremely High</td>
+          </tr>
+          <tr>
+            <td>COVID Crash<br><span class="mono">2020</span></td>
+            <td class="neg">−33.9% (S&P 500)</td>
+            <td>~1.5 months</td>
+            <td>~5 months</td>
+            <td>External shock; forced economic shutdown</td>
+            <td class="neutral">Mixed</td>
+          </tr>
+          <tr>
+            <td>Rate Shock<br><span class="mono">2022</span></td>
+            <td class="neg">−25.4% (S&P 500)<br>−33% (Nasdaq)</td>
+            <td>~12 months</td>
+            <td>~2 years</td>
+            <td>Inflation / aggressive Fed tightening</td>
+            <td class="pos">High (unique)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>2000–2002: The Case for Early Cash Accumulation</h3>
+    <p>The Dot-Com bust was the clearest historical vindication of pre-emptive cash raising. By early 2000, Shiller CAPE ratios had reached 44× — roughly double their historical average. Value-oriented investors including Buffett (Berkshire's cash hoard grew throughout 1999–2001) and Jeremy Grantham's GMO had been raising cash for 18–24 months before the peak. The S&P 500 wouldn't recover its year-2000 highs until 2007 — a 7-year dead zone. Cash in this environment wasn't just defensive; it preserved the ability to compound at all.</p>
+
+    <p>The key lesson: when valuations are structurally elevated and the market is priced for perfection, cash is asymmetrically powerful because the range of bad outcomes is wide. Investors who held 15–25% cash in 1999 and deployed it through 2001–2002 outperformed by substantial margins over the subsequent 5 years.</p>
+
+    <h3>2008–2009: The Dual Test — Protection AND Courage to Deploy</h3>
+    <p>The GFC tested both functions simultaneously. Cash raised pre-crisis (2007) was highly protective. But the bear market also required investors to deploy that cash into what felt like a collapsing financial system — Lehman bankrupt, AIG nationalized, money market funds "breaking the buck." Investors who held cash and had the psychological fortitude to buy in March 2009 (when S&P 500 PE was ~10×) achieved extraordinary returns over the next decade.</p>
+
+    <div class="callout callout-data">
+      <div class="callout-label">Data Point</div>
+      <p>An investor who held 20% cash through early 2009 and deployed it fully at the S&P 500's March 2009 trough (approximately 666) would have turned that 20% cash allocation into roughly 4.5× their cost basis by 2012 — generating portfolio-level alpha of 12–15% over a hold-through-the-crash peer.</p>
+      <p>The problem: fewer than 10% of retail investors actually bought during the trough window. Most continued reducing equity exposure as prices fell.</p>
+    </div>
+
+    <h3>2020: The Liquidity Trap of Hoarding Cash</h3>
+    <p>COVID is the counterexample that bears study. The crash was violent (-34% in 33 days) but recovered completely within 5 months — the fastest recovery in modern market history. Investors who raised cash in March 2020 (the most common behavioral response) missed the entire recovery. The S&P 500 was back at all-time highs by August 2020.</p>
+
+    <p>The 2020 experience illustrates a structural difference: externally-caused shocks with clear policy response mechanisms tend to resolve faster than internally-generated financial system distress. Cash hoarding in response to COVID was behaviorally understandable but financially costly for anyone who didn't redeploy within weeks.</p>
+
+    <h3>2022: Cash Itself Became a Viable Return Vehicle</h3>
+    <p>2022 was historically unusual: for the first time since 2006–2007, cash offered a competitive nominal return. By mid-2022, 6-month T-bills yielded over 3%, reaching 5%+ by 2023. This fundamentally altered the opportunity cost equation. Cash allocation was not simply "dead money" — it was generating 4–5% with zero credit risk while equities fell and high-duration bonds collapsed simultaneously.</p>
+
+    <div class="callout callout-insight">
+      <div class="callout-label">Key Insight</div>
+      <p>2022 was the only modern bear market where a 100% cash allocation (in T-bills) would have <em>outperformed</em> a 60/40 portfolio on an absolute basis. The 60/40 lost approximately 16% in 2022; 6-month T-bills returned ~2–3% (rising through the year). This was a structural inflection — the zero-rate era distorted cash's role for over a decade, and 2022 was a correction to normalcy.</p>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ============================================================ -->
+  <!-- SECTION 3: INVESTOR PROFILE MATRIX -->
+  <!-- ============================================================ -->
+  <div class="section" id="s3">
+    <div class="section-label">Section 03</div>
+    <h2>Investor Profile & the<br>Cash Allocation Matrix</h2>
+
+    <p>There is no universal optimal cash allocation. The appropriate range varies enormously based on four interconnected investor attributes — and getting this wrong in either direction (too much or too little) has meaningful long-term consequences.</p>
+
+    <div class="matrix">
+      <div class="matrix-row">
+        <div class="matrix-cell">Variable</div>
+        <div class="matrix-cell">Impact on Cash Allocation During Bear Markets</div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-cell matrix-label">Age / Time Horizon</div>
+        <div class="matrix-cell">A 30-year-old with 35 years to retirement has geometric time to recover from drawdowns. Cash allocation should remain minimal (5–10%) because the opportunity cost of under-investing compounds massively. A 65-year-old in sequence-of-returns risk territory has materially different calculus — a 40% drawdown early in retirement can permanently impair a portfolio even if markets recover. Cash buffers of 10–20% become structurally justified, not as a market call, but as sequence risk mitigation.</div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-cell matrix-label">Income Stability</div>
+        <div class="matrix-cell">An investor with secure, recession-resistant income (tenured professor, government employee, utility-sector worker) can tolerate higher equity exposure during bear markets because they are not a forced seller. An entrepreneur, commission-based worker, or anyone with cyclical income is effectively long the economic cycle twice: their human capital and their portfolio are correlated. For this group, higher cash allocation (15–25%) is genuinely rational risk management, not conservatism.</div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-cell matrix-label">Risk Tolerance (Behavioral)</div>
+        <div class="matrix-cell">Academic finance treats risk tolerance as an input. Behavioral finance recognizes it as unreliable. Investors consistently overstate their risk tolerance in bull markets and capitulate at bear market troughs — the worst possible time to sell. If an investor has a demonstrated history of panic-selling, a higher structural cash allocation is actually optimal, not because it maximizes theoretical returns, but because it prevents catastrophic behavioral errors. A 15% cash allocation that allows an investor to hold through a crash is better than a 5% cash allocation that triggers panic selling at the trough.</div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-cell matrix-label">Portfolio Size</div>
+        <div class="matrix-cell">The marginal utility of dollar returns declines at very high wealth levels. An investor with a $20M portfolio maintaining 20% cash ($4M) can live comfortably on the returns of the 80% invested — cash is not an opportunity cost but a psychological and liquidity stabilizer. For a $100K portfolio, 20% cash ($20K) is expensive in opportunity cost terms and unlikely to provide meaningful "dry powder" impact relative to the portfolio. Scale changes the cash calculus significantly.</div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-cell matrix-label">Tax Status</div>
+        <div class="matrix-cell">In taxable accounts, raising cash by selling appreciated positions triggers capital gains. This raises the real cost of "going defensive." In tax-advantaged accounts (401k, IRA), reallocating to cash is frictionless. Institutional investors and wealth managers frequently hold cash in the form of short-duration Treasuries precisely to avoid the behavioral complexity of triggering gains in client accounts. Retail investors in taxable accounts should factor this asymmetry into their cash allocation decisions.</div>
+      </div>
+    </div>
+
+    <h3>The Sequence-of-Returns Risk: Why Age Dominates</h3>
+    <p>Research by Wade Pfau and others has quantified the devastating impact of sequence-of-returns risk for retirees. Two investors who experience identical average annual returns can have wildly different outcomes depending on <em>when</em> the bad years occur. A retiree who experiences a -40% bear market in year 1 of retirement and then 8% returns for 20 years will run out of money significantly earlier than one who experiences 8% for 20 years and then a -40% crash.</p>
+    <p>This is the one context where higher cash allocation (10–20% in the first decade of retirement, used as a "cash bucket" to fund withdrawals during downturns) has strong empirical support as a superior strategy to pure equity exposure, even though it reduces long-run compound returns.</p>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ============================================================ -->
+  <!-- SECTION 4: RULES OF THUMB -->
+  <!-- ============================================================ -->
+  <div class="section" id="s4">
+    <div class="section-label">Section 04</div>
+    <h2>Rules of Thumb — Validated,<br>Refuted, Nuanced</h2>
+
+    <p>Popular investing discourse is littered with cash allocation heuristics. Here is an evidence-based assessment of each.</p>
+
+    <div class="data-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Rule of Thumb</th>
+            <th>Claim</th>
+            <th>Evidence Assessment</th>
+            <th>Verdict</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>"Keep 5–10% cash always"</td>
+            <td>Maintain a small standing cash buffer for rebalancing and opportunities</td>
+            <td>Directionally reasonable for long-horizon equity investors. At 5%, opportunity cost is modest; provides optionality without meaningful drag. Supported by institutional practice for tactical flexibility.</td>
+            <td class="pos">Valid baseline</td>
+          </tr>
+          <tr>
+            <td>"Raise to 20% during bear markets"</td>
+            <td>20% cash in a bear market balances downside protection with exposure</td>
+            <td>Depends entirely on timing. Raised before a -40% drawdown: highly effective. Raised after -30% drawdown: locks in losses and foregoes recovery. The number is less important than the timing logic behind it.</td>
+            <td class="neutral">Context-dependent</td>
+          </tr>
+          <tr>
+            <td>"3–6 months expenses in cash"</td>
+            <td>Emergency fund sizing rule</td>
+            <td>Correct as a liquidity buffer, but irrelevant to investment portfolio sizing. These are different pools of capital with different purposes. Conflating them leads to massive over-holding of uninvested cash.</td>
+            <td class="neutral">Right rule, wrong context</td>
+          </tr>
+          <tr>
+            <td>"100 minus your age in equities"</td>
+            <td>Age-based equity/bond/cash allocation</td>
+            <td>Originated in an era of 5% bond yields. In a low-yield environment, it causes underperformance by systematically under-weighting equities in mid-life. Now adjusted to "110 minus age" or "120 minus age" by many advisors.</td>
+            <td class="neg">Outdated; use adjusted version</td>
+          </tr>
+          <tr>
+            <td>"Never hold more than 20% cash"</td>
+            <td>High cash drag over long periods destroys wealth</td>
+            <td>True in low-rate environments. In 2023, holding 25% in T-bills at 5% was rational for many investors. The zero-bound era created an anomalous condition where this rule was universally true; normalized rate environments complicate it.</td>
+            <td class="neutral">Rate-environment dependent</td>
+          </tr>
+          <tr>
+            <td>"Time in the market beats timing the market"</td>
+            <td>Stay fully invested; cash allocation reduces returns</td>
+            <td>True over very long horizons (30+ years) for average investors without informational edge. But ignores valuation cycles. CAPE-adjusted studies show that tactically raising cash at extreme valuations (CAPE 30+) has historically added value — particularly by avoiding the first 18–24 months of secular bear markets.</td>
+            <td class="neg">Oversimplified for valuation-aware investors</td>
+          </tr>
+          <tr>
+            <td>"Deploy cash in tranches"</td>
+            <td>Dollar-cost average dry powder over time rather than lump-sum</td>
+            <td>Psychologically sound but financially suboptimal on average. Research consistently shows lump-sum investing outperforms DCA ~2/3 of the time in rising markets. During bear markets, the optimal strategy is deployment at recognized valuation extremes — but these are only identifiable in hindsight, making tranching a practical second-best.</td>
+            <td class="pos">Behaviorally rational second-best</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-warning">
+      <div class="callout-label">Conventional Wisdom Failure</div>
+      <p><strong>The biggest flaw in standard cash allocation advice</strong> is that it treats bear markets as temporally symmetric — as though raising cash in month 1 of a bear is equivalent to raising cash in month 15. It is not. The decision to raise cash is a market timing call, and the timing of that call determines whether cash serves as a tool or a trap.</p>
+      <p>Rules of thumb that specify a target percentage (10%, 20%) without addressing <em>when</em> to build and <em>when</em> to deploy that cash are incomplete to the point of being misleading.</p>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ============================================================ -->
+  <!-- SECTION 5: SIGNALS & TRIGGERS -->
+  <!-- ============================================================ -->
+  <div class="section" id="s5">
+    <div class="section-label">Section 05</div>
+    <h2>Signals & Triggers: When to<br>Raise or Reduce Cash</h2>
+
+    <p>The most practically important question is not <em>how much</em> cash to hold, but <em>what signals justify building or reducing a cash position</em>. Below is a framework grounded in practitioner experience and academic research.</p>
+
+    <h3>Signals to Raise Cash</h3>
+    <ul class="signal-list raise">
+      <li><strong>Valuation extremes:</strong> Shiller CAPE above 30–35× has historically preceded below-average 10-year equity returns. At CAPE 35+, the forward return distribution shifts unfavorably enough that holding cash over 12–24 months carries positive expected value on a risk-adjusted basis.</li>
+      <li><strong>Yield curve inversion:</strong> An inverted 2s/10s curve (2-year yields exceeding 10-year) has preceded every U.S. recession since 1955 with a lag of 12–24 months. This is one of the most reliable leading indicators for raising defensive cash allocations, not because the inversion causes the recession, but because it signals the tightening conditions that will generate one.</li>
+      <li><strong>Credit spread widening:</strong> HY (high yield) credit spreads above 500–600bps indicate systemic stress. Equity bear markets historically deepen significantly when credit spreads spike — because credit markets often lead equity markets in pricing systemic risk.</li>
+      <li><strong>Personal income vulnerability:</strong> Before or during a recession, any material increase in job or income risk justifies building cash irrespective of market conditions — the personal liquidity buffer should expand to 9–12 months during periods of income uncertainty.</li>
+      <li><strong>Liquidity needs within 3–5 years:</strong> Any capital needed for a major expenditure (home purchase, college tuition, retirement start) within 3–5 years should be progressively shifted to cash/short-duration instruments regardless of market conditions. This is not market timing; it is liability matching.</li>
+      <li><strong>Excessive correlation across asset classes:</strong> During severe market dislocations, correlations between equities, credit, and sometimes even gold spike toward 1.0. When your "diversified" portfolio is moving in lockstep, cash becomes the only true diversifier.</li>
+    </ul>
+
+    <h3>Signals to Reduce Cash (Deploy)</h3>
+    <ul class="signal-list reduce">
+      <li><strong>Earnings yield vs. cash yield spread:</strong> When the S&P 500 earnings yield (inverse of PE) materially exceeds the T-bill yield, equities are more attractively valued relative to cash. By late 2022 / early 2023, this relationship had shifted significantly toward equities for the first time since the zero-rate era began.</li>
+      <li><strong>Market drawdown thresholds:</strong> Historically, deploying dry powder when the S&P 500 is down 20%, 30%, and 40% from highs has generated superior 5-year forward returns. Each 10% tranche lower represents compressing multiples and higher prospective returns, regardless of where the bottom ultimately is.</li>
+      <li><strong>Sentiment extremes (contrarian signal):</strong> AAII sentiment surveys showing bear sentiment above 50–55% have historically occurred near market troughs. Similarly, VIX spikes above 40–50 (as seen in March 2020 and March 2009) represent capitulation events that historically precede recoveries.</li>
+      <li><strong>Insider buying acceleration:</strong> Corporate insiders are among the most reliable signals of bottom proximity. Aggregate insider buy-to-sell ratios spiking above 2:1 (well above the typical 0.3–0.5 range) have historically indicated that those with the deepest company knowledge are becoming buyers, not sellers.</li>
+      <li><strong>Fed policy pivot signals:</strong> History shows markets often trough within 6–12 months of the first rate cut. The challenge is identifying credible pivot signals before they're universally priced in — watching for Fed language shifts ("watching carefully," "data-dependent," "two-sided risks") and labor market deterioration as leading indicators.</li>
+      <li><strong>Credit market stabilization:</strong> Just as credit spread widening is a raise-cash signal, credit spread compression from a peak is a deploy signal. Credit market stabilization has historically preceded equity recovery — a key signal was seen in late 2009 and mid-2020.</li>
+    </ul>
+
+    <div class="callout callout-warning">
+      <div class="callout-label">Critical Warning</div>
+      <p>No single signal should be acted upon in isolation. The danger of signal-based cash allocation is that each signal has false positives — the yield curve inverted in 2019 and the recession arrived in 2020 from a completely unpredicted source. A framework requiring 2–3 converging signals before making material cash allocation changes is more robust than acting on any one indicator.</p>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ============================================================ -->
+  <!-- SECTION 6: INSTITUTIONAL VS RETAIL -->
+  <!-- ============================================================ -->
+  <div class="section" id="s6">
+    <div class="section-label">Section 06</div>
+    <h2>Institutional vs. Wealth Manager<br>vs. Retail Investor</h2>
+
+    <p>The cash allocation strategies of different investor types diverge significantly — and retail investors often make the mistake of applying institutional frameworks to personal portfolios, or ignoring institutional wisdom entirely.</p>
+
+    <h3>Institutional Investors (Endowments, Pension Funds)</h3>
+    <p>Large institutions like the Yale Endowment (David Swensen's model) historically maintained very low cash allocations — often 0–5%. Their rationale is structural: they have permanent capital, no forced selling, long time horizons, and diversification through illiquid alternatives (private equity, real assets, hedge funds). For institutions with these characteristics, cash is genuinely a drag on long-term returns.</p>
+    <p>However, pension funds with defined near-term liabilities operate differently. They maintain liquidity ladders — cascading short-duration instruments matched to expected liability payments. This is liability-driven investing (LDI), and the "cash" component is not an investment decision but a liability management one. The LDI crisis in the UK (2022), triggered by leveraged gilt positions collapsing, illustrated catastrophically what happens when institutional investors confuse long-term return optimization with short-term liability management.</p>
+
+    <h3>Wealth Managers & RIAs</h3>
+    <p>Registered Investment Advisors managing client portfolios face a different set of constraints. They are often evaluated on relative performance (versus benchmarks), meaning holding 20% cash during a bull market — even if risk-adjusted correct — creates career risk if markets continue rising. This incentive distortion means professional money managers are systematically biased toward under-holding cash relative to what pure risk analysis would suggest.</p>
+    <p>The professional constraint is real: fund managers who held 15–20% cash in 1998–1999 while the Nasdaq tripled were fired before the crash that validated their thesis. Institutional cash allocation often reflects political and career dynamics as much as investment analysis.</p>
+
+    <h3>Retail Investors</h3>
+    <p>Retail investors face the opposite behavioral problem: they tend to <em>over-hold</em> cash out of fear and <em>over-deploy</em> at the wrong moments. Dalbar's annual Quantitative Analysis of Investor Behavior consistently shows that the average equity fund investor underperforms the S&P 500 by 3–4% annually — primarily due to cash decisions: selling after market falls and buying after market rises.</p>
+
+    <div class="callout callout-data">
+      <div class="callout-label">Behavioral Data</div>
+      <p>During the March 2020 crash, Fidelity data showed that retail investors increased cash allocations by an average of 8% of portfolio value — primarily by selling equity funds — between February 24 and March 20. The S&P 500 bottomed on March 23. Those investors locked in losses at the worst possible moment and subsequently missed one of the fastest recoveries in market history.</p>
+    </div>
+
+    <p>The practical insight for retail investors: your cash allocation decisions are likely to be made with worse timing than institutional investors (who have dedicated analysts, real-time data, and valuation frameworks), which suggests that <em>pre-committing</em> to a cash allocation framework before bear markets arrive — rather than responding reactively to price action — is materially more important for you than for institutional investors.</p>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ============================================================ -->
+  <!-- SECTION 7: OPPORTUNITY COST CALCULUS -->
+  <!-- ============================================================ -->
+  <div class="section" id="s7">
+    <div class="section-label">Section 07</div>
+    <h2>The Opportunity Cost Calculus:<br>Too Much vs. Too Little Cash</h2>
+
+    <p>Every cash allocation decision embeds a trade-off between the cost of holding cash (opportunity cost) and the cost of not holding enough (downside risk, forced selling, loss of purchasing power at the trough).</p>
+
+    <h3>The Cost of Holding Too Much Cash</h3>
+    <p>The compound return differential between equity and cash is the dominant force in long-run wealth creation. Historically, U.S. equities have compounded at approximately 7% real per annum versus cash at roughly 0.5% real (and negative in many low-rate periods). The compounding gap is not linear — it is exponential.</p>
+
+    <div class="callout callout-data">
+      <div class="callout-label">Compounding Impact</div>
+      <p>A $100,000 portfolio with 30% structurally allocated to cash versus 10% cash over a 25-year period, assuming 7% equity returns and 1% cash returns, produces a terminal value approximately 18–22% lower for the high-cash portfolio. In absolute terms on a $500K portfolio, the over-holding of cash costs hundreds of thousands of dollars in terminal wealth.</p>
+      <p>This math is why the default position should always be low cash — and why the burden of proof for raising cash should be high.</p>
+    </div>
+
+    <h3>The Cost of Holding Too Little Cash</h3>
+    <p>The costs manifest in three distinct ways during bear markets:</p>
+    <p><strong>Forced selling:</strong> Investors who hold no cash buffer and face unexpected expenses (job loss, medical costs, major repairs) during a bear market must sell equities at depressed prices. This converts paper losses into permanent losses. The research on sequence-of-returns risk quantifies this as potentially devastating — early-retirement portfolios subject to forced selling during bear markets can fail even with conservative withdrawal rates.</p>
+    <p><strong>Missed redeployment opportunity:</strong> Holding no dry powder means watching a multi-decade valuation opportunity (March 2009 PE of ~10×, March 2020 S&P 2200) pass without being able to act. This is the cost of being "fully invested when the fire sale starts."</p>
+    <p><strong>Psychological capitulation:</strong> Fully-invested investors who have no cash cushion are more likely to panic-sell during drawdowns precisely because the portfolio pain is unrelenting. Cash acts as psychological insulation — it reduces the emotional intensity of watching a 100% equity portfolio fall, which in turn reduces the probability of making catastrophic selling decisions.</p>
+
+    <div class="pull-quote">
+      <p>"The goal of holding cash is not to earn a return on the cash. The goal is to preserve the ability to act rationally when everyone else is panicking."</p>
+      <cite>Portfolio risk management principle — widely cited in practitioner literature</cite>
+    </div>
+  </div>
+
+  <hr class="rule">
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 8: SYNTHESIS -->
+<!-- ============================================================ -->
+<div class="synthesis" id="s8">
+  <div class="container">
+    <div class="section-label" style="color:#d4a843">Section 08 — Final Analysis</div>
+    <h2>Synthesis: Actionable Conclusions &amp; Where Consensus Is Wrong</h2>
+
+    <p>Pulling the evidence together, here are the core conclusions — stated as sharply as the data permits.</p>
+
+    <h3>The Actionable Framework</h3>
+    <ul class="verdict-list">
+      <li><strong>Separate your liquidity buffer from your investment cash entirely.</strong> 3–12 months of expenses in a HYSA or money market fund is household risk management, not investment strategy. Never let this pool influence your portfolio cash allocation decisions.</li>
+      <li><strong>Establish your baseline cash allocation before the bear market arrives.</strong> The single most damaging pattern in retail investor behavior is reactive cash building — selling after significant declines. If you plan to hold 10–15% cash during a bear market, that cash should already be there before the drawdown begins. Build it during extended bull market periods when valuations become stretched.</li>
+      <li><strong>Size the allocation to its primary function.</strong> If cash is primarily defensive (capital preservation, behavior management), 5–15% is typically sufficient and should be permanent. If cash is primarily dry powder (opportunistic redeployment), it should be sized relative to the specific deployment opportunity you anticipate — and must come with a pre-committed deployment trigger, not an open-ended "when I feel comfortable" timeline.</li>
+      <li><strong>Use a drawdown-tranche deployment model for dry powder.</strong> Rather than trying to call the exact bottom, pre-commit to deploying a defined percentage of dry powder at −20%, −30%, −40% from market highs. This transforms market timing (inherently unreliable) into a disciplined rules-based process.</li>
+      <li><strong>Adjust cash allocation to the rate environment.</strong> In high-rate environments (T-bills >4%), the opportunity cost of holding 15–20% cash is dramatically lower than in zero-rate environments. The 2022–2024 period was the first in over a decade where cash was a genuinely competitive asset — this context matters when sizing.</li>
+      <li><strong>Let personal financial vulnerability override market analysis.</strong> If your income is cyclical or at risk, raise cash regardless of valuation. The value of your human capital is correlated with the market — holding more cash is partial hedge against this correlation, not speculative market timing.</li>
+    </ul>
+
+    <h3>Where Conventional Wisdom Is Flat-Out Wrong</h3>
+    <ul class="verdict-list">
+      <li><strong>"Time in the market always beats timing the market"</strong> — True for average investors with no analytical framework. False for investors who use valuation-based, signal-driven cash allocation with pre-committed deployment triggers. The research on CAPE-adjusted forward returns clearly supports tactical underweighting of equities at extreme valuations. The problem is that most investors who try to time the market do it emotionally, not analytically — which is why the blanket rule exists. Don't let it substitute for actual analysis.</li>
+      <li><strong>Cash is "safe"</strong> — In real terms, cash loses purchasing power in inflationary environments. In 2022, CPI running at 8–9% meant that "safe" cash was losing 4–5% annually in real purchasing power even with 4% T-bill yields. The relevant comparison is not cash vs. a falling portfolio — it's cash vs. inflation-protected assets over the holding period.</li>
+      <li><strong>A target percentage fully defines a cash allocation strategy</strong> — "I hold 15% cash" is not a strategy. It's a position. A strategy requires: (1) the function being served, (2) the signals that caused it to be built, (3) pre-committed triggers for reduction, and (4) a time horizon for the allocation. Without these, a cash position becomes permanent through inertia.</li>
+      <li><strong>All bear markets are opportunities to deploy cash identically</strong> — As the historical evidence shows, bear markets differ dramatically in duration, depth, recovery speed, and macroeconomic cause. A COVID-style external shock has a different cash deployment logic than a GFC-style credit crisis or a Dot-Com-style valuation reset. The deployment pace and sizing should vary accordingly.</li>
+    </ul>
+
+    <h3>The Honest Trade-Off: Humility Over Precision</h3>
+    <p style="color:rgba(245,240,232,0.82)">The most honest conclusion from this analysis is that optimal cash allocation during bear markets is irreducibly uncertain — because bear markets themselves are heterogeneous, investor circumstances vary enormously, and behavioral factors often dominate rational analysis in the heat of a downturn. No formula produces the "right" answer.</p>
+    <p style="color:rgba(245,240,232,0.82)">What the evidence does support is a <em>process</em>: pre-committed rules, separated cash functions, signal-based (not emotion-based) triggers, and humility about bottom-calling. The investors who have performed best across multiple market cycles — Buffett, Grantham, Klarman — share not a specific cash percentage but a framework: they hold cash when others are euphoric, deploy it when others are terrified, and never confuse activity with wisdom.</p>
+    <p style="color:rgba(245,240,232,0.82)">The permanent insight is this: <strong style="color:#d4a843">cash is not a retreat from investing — it is a position. And like every position, it should be sized with a thesis, held with conviction, and exited with discipline.</strong></p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="container">
+  <div class="footnote">
+    <p><strong>Sources & Frameworks Referenced:</strong> Shiller CAPE data (Yale), DALBAR Quantitative Analysis of Investor Behavior (annual), Pfau research on sequence-of-returns risk, Howard Marks (Oaktree Capital) memos on market cycles, GMO/Jeremy Grantham valuation frameworks, AAII Sentiment Survey data, Federal Reserve H.15 release (T-bill historical yields), Bloomberg/S&P 500 historical return data, Vanguard research on lump-sum vs. DCA investing, Fidelity client data (2020 COVID period).</p>
+    <p style="margin-top:12px"><strong>Disclaimer:</strong> This analysis is for educational purposes only and does not constitute personalized investment advice. Past market performance does not guarantee future results. All asset allocation decisions should account for individual circumstances and, where appropriate, professional financial advice.</p>
+  </div>
+</div>
+
+<footer style="text-align:center;padding:24px 40px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6b6b5f;letter-spacing:0.15em;text-transform:uppercase;border-top:1px solid #c8c0b0;"><a href="/" style="color:#c0392b;text-decoration:none;">← Back to Insight Invest</a></footer>
+
+</body>
+</html>
