@@ -1136,6 +1136,105 @@
     This is educational research, not financial advice. Do your own due diligence. Prices, analyst targets, and geopolitical situations change rapidly. <strong>Not financial advice.</strong>
   </div>
 
+  // ═══ WAITLIST (FORMSPREE) ═══
+// ⚠️ REPLACE these with your actual Formspree form IDs:
+// Create TWO forms in Formspree:
+//   1. "Waitlist Signup" → for initial email capture
+//   2. "Waitlist Priority" → for phone number follow-up
+const FORMSPREE_WAITLIST = 'xjgabnak';
+const FORMSPREE_PRIORITY = 'xykngrlp';
+
+let signupEmail = '';
+
+// Step 1: Initial email signup
+const wlForm = document.getElementById('wlForm');
+wlForm.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('wlBtn');
+  const email = document.getElementById('wlEmail').value.trim();
+  if (!email) return;
+
+  signupEmail = email;
+  btn.textContent = 'Joining...';
+  btn.style.opacity = '0.7';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(`https://formspree.io/f/${FORMSPREE_WAITLIST}`, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email,
+        source: 'leiholding.com waitlist',
+        step: 'initial_signup',
+        _subject: 'New Waitlist Signup — 1-on-1 Strategy Session'
+      })
+    });
+    if (res.ok) {
+      document.getElementById('wlFormWrap').style.display = 'none';
+      document.getElementById('wlSuccess').classList.add('show');
+    } else {
+      btn.textContent = 'Error — try again';
+      btn.style.background = 'var(--red)';
+      setTimeout(() => { btn.textContent = 'Join Waitlist'; btn.style.background = 'var(--gold)'; btn.style.opacity = '1'; btn.disabled = false; }, 3000);
+    }
+  } catch (err) {
+    btn.textContent = 'Connection error';
+    setTimeout(() => { btn.textContent = 'Join Waitlist'; btn.style.background = 'var(--gold)'; btn.style.opacity = '1'; btn.disabled = false; }, 3000);
+  }
+});
+
+// Step 2: Show phone form for priority
+function showPhoneForm() {
+  document.getElementById('wlPriority').style.display = 'none';
+  document.getElementById('wlPhoneWrap').style.display = 'block';
+  document.getElementById('wlPhoneEmail').value = signupEmail;
+  document.getElementById('wlPhone').focus();
+}
+
+// Step 3: Submit phone number
+const wlPhoneForm = document.getElementById('wlPhoneForm');
+wlPhoneForm.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('wlPhoneBtn');
+  const phone = document.getElementById('wlPhone').value.trim();
+  if (!phone) return;
+
+  btn.textContent = 'Saving...';
+  btn.style.opacity = '0.7';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(`https://formspree.io/f/${FORMSPREE_PRIORITY}`, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: signupEmail,
+        phone: phone,
+        source: 'leiholding.com waitlist — priority',
+        step: 'priority_phone',
+        _subject: 'PRIORITY — Waitlist Phone Number: ' + phone
+      })
+    });
+    if (res.ok) {
+      document.getElementById('wlPhoneWrap').style.display = 'none';
+      document.getElementById('wlDone').style.display = 'block';
+    } else {
+      btn.textContent = 'Error — try again';
+      setTimeout(() => { btn.textContent = 'Submit'; btn.style.opacity = '1'; btn.disabled = false; }, 3000);
+    }
+  } catch (err) {
+    btn.textContent = 'Connection error';
+    setTimeout(() => { btn.textContent = 'Submit'; btn.style.opacity = '1'; btn.disabled = false; }, 3000);
+  }
+});
+  </script>
+ </body>
+</html>
+
+
+
+  
 </main>
 
 <footer class="foot" style="padding-bottom:32px;">
