@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pre-Session Questionnaire — Insight Invest</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Syne:wght@400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #08090c;
+    --bg2: #0e1016;
+    --surface: #1a1d28;
+    --border: #252838;
+    --text: #9ca3b8;
+    --text-bright: #e8ecf4;
+    --text-dim: #555c72;
+    --gold: #c9a84c;
+    --gold-light: #e4cc7a;
+    --gold-dim: #8a7234;
+    --green: #3dd68c;
+    --red: #ff5c5c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9999;
+  }
+
+  /* Site nav */
+  .site-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(8,9,12,0.92); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+  }
+  .site-nav-inner {
+    max-width: 680px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between; height: 48px;
+  }
+  .site-nav a { text-decoration: none; }
+  .site-nav-brand {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 12px; font-weight: 600; color: var(--gold);
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .site-nav-step {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--text-dim); letter-spacing: 0.1em;
+  }
+
+  /* Main container */
+  .container {
+    max-width: 680px; margin: 0 auto;
+    padding: 120px 32px 80px;
+  }
+
+  /* Progress bar */
+  .progress-wrap {
+    margin-bottom: 48px;
+  }
+  .progress-steps {
+    display: flex; gap: 4px; margin-bottom: 12px;
+  }
+  .progress-step {
+    flex: 1; height: 3px; background: var(--border); border-radius: 2px;
+    transition: background 0.5s;
+  }
+  .progress-step.active { background: var(--gold); }
+  .progress-step.done { background: var(--green); }
+  .progress-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--text-dim); letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* Header */
+  .q-header { margin-bottom: 48px; }
+  .q-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--gold);
+    letter-spacing: 0.2em; text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .q-tag-dot {
+    width: 6px; height: 6px; background: var(--gold); border-radius: 50%;
+  }
+  .q-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 5vw, 42px); font-weight: 400;
+    color: var(--text-bright); line-height: 1.15;
+    letter-spacing: -0.02em; margin-bottom: 16px;
+  }
+  .q-title em { font-style: italic; color: var(--gold); }
+  .q-sub {
+    font-size: 15px; color: var(--text); line-height: 1.7; max-width: 520px;
+  }
+
+  /* Form elements */
+  .q-section {
+    margin-bottom: 36px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid var(--border);
+  }
+  .q-section:last-of-type { border-bottom: none; }
+  .q-label {
+    font-size: 14px; font-weight: 600; color: var(--text-bright);
+    margin-bottom: 6px;
+  }
+  .q-hint {
+    font-size: 12px; color: var(--text-dim); margin-bottom: 14px; line-height: 1.5;
+  }
+  .q-input, .q-textarea, .q-select {
+    width: 100%;
+    padding: 14px 18px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--text-bright);
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .q-input:focus, .q-textarea:focus, .q-select:focus { border-color: var(--gold-dim); }
+  .q-input::placeholder, .q-textarea::placeholder { color: var(--text-dim); }
+  .q-textarea { min-height: 100px; resize: vertical; line-height: 1.6; }
+  .q-select {
+    appearance: none; cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23555c72' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+  }
+  .q-select option { background: var(--bg); color: var(--text); }
+
+  /* Radio group */
+  .q-radio-group { display: flex; flex-direction: column; gap: 8px; }
+  .q-radio {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 18px;
+    border: 1px solid var(--border);
+    cursor: pointer; transition: all 0.3s;
+  }
+  .q-radio:hover { border-color: var(--gold-dim); background: var(--bg2); }
+  .q-radio input[type="radio"] { display: none; }
+  .q-radio-dot {
+    width: 18px; height: 18px; border-radius: 50%;
+    border: 2px solid var(--border); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s;
+  }
+  .q-radio input:checked ~ .q-radio-dot {
+    border-color: var(--gold);
+  }
+  .q-radio input:checked ~ .q-radio-dot::after {
+    content: ''; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--gold);
+  }
+  .q-radio input:checked ~ .q-radio-text { color: var(--text-bright); }
+  .q-radio-text { font-size: 14px; color: var(--text); }
+
+  /* Checkbox group */
+  .q-check-group { display: flex; flex-wrap: wrap; gap: 8px; }
+  .q-check {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 16px; border: 1px solid var(--border);
+    cursor: pointer; transition: all 0.3s;
+  }
+  .q-check:hover { border-color: var(--gold-dim); }
+  .q-check input[type="checkbox"] { display: none; }
+  .q-check-box {
+    width: 16px; height: 16px; border: 1.5px solid var(--border);
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s; font-size: 10px; color: var(--bg);
+  }
+  .q-check input:checked ~ .q-check-box {
+    background: var(--gold); border-color: var(--gold);
+  }
+  .q-check input:checked ~ .q-check-box::after { content: '✓'; }
+  .q-check input:checked ~ .q-check-text { color: var(--text-bright); }
+  .q-check-text {
+    font-size: 13px; color: var(--text-dim); white-space: nowrap;
+  }
+
+  /* Submit */
+  .q-submit-area {
+    margin-top: 48px; padding-top: 36px; border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .q-submit-note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--text-dim); letter-spacing: 0.08em;
+  }
+  .q-submit-btn {
+    padding: 16px 40px; background: var(--gold); color: var(--bg);
+    font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; border: none;
+    cursor: pointer; transition: all 0.3s;
+  }
+  .q-submit-btn:hover { background: var(--gold-light); }
+
+  /* Success */
+  .q-success {
+    display: none; text-align: center; padding: 80px 20px;
+  }
+  .q-success.show { display: block; }
+  .q-success-icon { font-size: 36px; margin-bottom: 16px; }
+  .q-success-h {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; color: var(--text-bright); margin-bottom: 10px;
+  }
+  .q-success-p {
+    font-size: 15px; color: var(--text); line-height: 1.7;
+    max-width: 420px; margin: 0 auto 24px;
+  }
+  .q-success-link {
+    display: inline-block; padding: 14px 32px;
+    border: 1px solid var(--gold-dim); color: var(--gold);
+    font-size: 12px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; text-decoration: none; transition: all 0.3s;
+  }
+  .q-success-link:hover { background: var(--gold); color: var(--bg); }
+
+  /* Footer */
+  .q-footer {
+    text-align: center; padding: 40px 32px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--text-dim); letter-spacing: 0.12em;
+    text-transform: uppercase; border-top: 1px solid var(--border);
+    max-width: 680px; margin: 0 auto;
+  }
+
+  @media (max-width: 640px) {
+    .container { padding: 100px 20px 60px; }
+    .q-check-group { flex-direction: column; }
+    .q-submit-area { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="site-nav">
+  <div class="site-nav-inner">
+    <a href="/" class="site-nav-brand">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Insight Invest
+    </a>
+    <div class="site-nav-step">Step 2 of 3 · Questionnaire</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-steps">
+      <div class="progress-step done"></div>
+      <div class="progress-step active"></div>
+      <div class="progress-step"></div>
+    </div>
+    <div class="progress-label">Waitlist → Questionnaire → Discovery Call</div>
+  </div>
+
+  <!-- Header -->
+  <div class="q-header">
+    <div class="q-tag"><span class="q-tag-dot"></span> Pre-Session Questionnaire</div>
+    <h1 class="q-title">Help us make<br>the most of <em>your time</em></h1>
+    <p class="q-sub">Takes 3 minutes. Everything here stays between us — it just means we can skip the basics and go straight to what matters for your portfolio.</p>
+  </div>
+
+  <!-- Form -->
+  <form id="questionnaireForm">
+
+    <div class="q-section">
+      <div class="q-label">Your name</div>
+      <div class="q-hint">So we know who we're talking to.</div>
+      <input type="text" class="q-input" name="name" placeholder="Full name" required />
+    </div>
+
+    <div class="q-section">
+      <div class="q-label">Email</div>
+      <div class="q-hint">Same one you signed up with, or a new one if you prefer.</div>
+      <input type="email" class="q-input" name="email" placeholder="you@example.com" required />
+    </div>
+
+    <div class="q-section">
+      <div class="q-label">How would you describe your investing experience?</div>
+      <div class="q-radio-group">
+        <label class="q-radio"><input type="radio" name="experience" value="beginner" /><span class="q-radio-dot"></span><span class="q-radio-text">Just getting started (< 2 years)</span></label>
+        <label class="q-radio"><input type="radio" name="experience" value="intermediate" /><span class="q-radio-dot"></span><span class="q-radio-text">Intermediate — I manage my own portfolio (2–5 years)</span></label>
+        <label class="q-radio"><input type="radio" name="experience" value="advanced" /><span class="q-radio-dot"></span><span class="q-radio-text">Advanced — comfortable with options, macro, position sizing</span></label>
+        <label class="q-radio"><input type="radio" name="experience" value="professional" /><span class="q-radio-dot"></span><span class="q-radio-text">Professional / institutional background</span></label>
+      </div>
+    </div>
+
+    <div class="q-section">
+      <div class="q-label">Approximate portfolio size</div>
+      <div class="q-hint">This helps us tailor position sizing and risk advice. Totally optional.</div>
+      <select class="q-select" name="portfolio_size">
+        <option value="" disabled selected>Select range</option>
+        <option value="under_10k">Under $10K</option>
+        <option value="10k_50k">$10K – $50K</option>
+        <option value="50k_200k">$50K – $200K</option>
+        <option value="200k_1m">$200K – $1M</option>
+        <option value="over_1m">$1M+</option>
+        <option value="prefer_not">Prefer not to say</option>
+      </select>
+    </div>
+
+    <div class="q-section">
+      <div class="q-label">What are you currently invested in?</div>
+      <div class="q-hint">Select all that apply.</div>
+      <div class="q-check-group">
+        <label class="q-check"><input type="checkbox" name="assets" value="us_equities" /><span class="q-check-box"></span><span class="q-check-text">US Equities</span></label>
+        <label class="q-check"><input type="checkbox" name="assets" value="global_equities" /><span class="q-check-box"></span><span class="q-check-text">Global Equities</span></label>
+        <label class="q-check"><input type="checkbox" name="assets" value="my_equities" /><span class="q-check-box"></span><span class="q-check-text">Malaysia / Bursa</span></label>
+        <label class="q-check"><input type="checkbox" name="assets" value="etfs" /><span class="q-check-box"></span><span class="q-check-text">ETFs / Index Funds</span></label>
+        <label class="q-check"><input type="checkbox" name="assets" value="options" /><span class="q-check-box"></span><span class="q-check-text">Options</span></label>
+        <label class="q-check"><input type="checkbox" name="assets" value="crypto" /><span class="q-check-box"></span><span class="q-check-text">Crypto</span></label>
+        <label class="q-check"><input type="checkbox" name="assets" value="reits" /><span class="q-check-box"></span><span class="q-check-text">REITs / Property</span></label>
+        <label class="q-check"><input type="checkbox" name="assets" value="commodities" /><span class="q-check-box"></span><span class="q-check-text">Commodities / Gold</span></label>
+        <label class="q-check"><input type="checkbox" name="assets" value="bonds" /><span class="q-check-box"></span><span class="q-check-text">Bonds / Fixed Income</span></label>
+        <label class="q-check"><input type="checkbox" name="assets" value="nothing_yet" /><span class="q-check-box"></span><span class="q-check-text">Not yet invested</span></label>
+      </div>
+    </div>
+
+    <div class="q-section">
+      <div class="q-label">What's the #1 thing you want to get out of this session?</div>
+      <div class="q-hint">Be specific. "Am I too concentrated in tech?" is better than "help me invest."</div>
+      <textarea class="q-textarea" name="goal" placeholder="E.g. I want to understand if my current portfolio can survive a bear market, and what I should change..." required></textarea>
+    </div>
+
+    <div class="q-section">
+      <div class="q-label">Anything you want us to look at specifically?</div>
+      <div class="q-hint">A stock you're unsure about, a macro concern, a sector you're curious about — anything goes. Optional.</div>
+      <textarea class="q-textarea" name="specific_questions" placeholder="E.g. Should I hold Broadcom at these levels? Is Bursa energy still a play if oil drops to $70?"></textarea>
+    </div>
+
+    <div class="q-section">
+      <div class="q-label">How did you find Insight Invest?</div>
+      <select class="q-select" name="referral">
+        <option value="" disabled selected>Select one</option>
+        <option value="youtube">YouTube</option>
+        <option value="instagram">Instagram</option>
+        <option value="tiktok">TikTok</option>
+        <option value="google">Google search</option>
+        <option value="friend">Friend / word of mouth</option>
+        <option value="patreon">Patreon</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+
+    <input type="hidden" name="_subject" value="Questionnaire Submitted — 1-on-1 Session" />
+    <input type="hidden" name="step" value="questionnaire_complete" />
+    <input type="text" name="_gotcha" style="display:none" />
+
+    <div class="q-submit-area">
+      <div class="q-submit-note">Takes ~3 minutes · Your answers stay private</div>
+      <button type="submit" class="q-submit-btn" id="qSubmitBtn">Submit Questionnaire</button>
+    </div>
+
+  </form>
+
+  <!-- Success state -->
+  <div class="q-success" id="qSuccess">
+    <div class="q-success-icon">✓</div>
+    <div class="q-success-h">Questionnaire received</div>
+    <div class="q-success-p">We'll review your answers and send you a link to book a short 15-minute discovery call. No prep needed — just a conversation to see if a full session makes sense for your situation.</div>
+    <a href="/" class="q-success-link">Back to Insight Invest →</a>
+  </div>
+
+</div>
+
+<div class="q-footer">Insight Invest · 1-on-1 Strategy Sessions · Not Financial Advice</div>
+
+<script>
+// ⚠️ REPLACE with your Formspree form ID for the questionnaire
+const FORMSPREE_QUESTIONNAIRE = 'YOUR_QUESTIONNAIRE_FORM_ID';
+
+const form = document.getElementById('questionnaireForm');
+form.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('qSubmitBtn');
+  btn.textContent = 'Submitting...';
+  btn.style.opacity = '0.7';
+  btn.disabled = true;
+
+  // Collect form data
+  const formData = new FormData(form);
+  const data = {};
+  formData.forEach((value, key) => {
+    if (data[key]) {
+      // Handle multiple checkboxes with same name
+      data[key] = Array.isArray(data[key]) ? [...data[key], value] : [data[key], value];
+    } else {
+      data[key] = value;
+    }
+  });
+  // Convert arrays to comma-separated strings for Formspree
+  Object.keys(data).forEach(key => {
+    if (Array.isArray(data[key])) data[key] = data[key].join(', ');
+  });
+
+  try {
+    const res = await fetch(`https://formspree.io/f/${FORMSPREE_QUESTIONNAIRE}`, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (res.ok) {
+      form.style.display = 'none';
+      document.querySelector('.q-header').style.display = 'none';
+      document.querySelector('.progress-wrap').querySelector('.progress-step:nth-child(2)').classList.remove('active');
+      document.querySelector('.progress-wrap').querySelector('.progress-step:nth-child(2)').classList.add('done');
+      document.querySelector('.progress-wrap').querySelector('.progress-step:nth-child(3)').classList.add('active');
+      document.querySelector('.progress-label').textContent = 'Waitlist → Questionnaire → Book Session';
+      document.getElementById('qSuccess').classList.add('show');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      btn.textContent = 'Error — please try again';
+      btn.style.background = '#ff5c5c';
+      setTimeout(() => { btn.textContent = 'Submit Questionnaire'; btn.style.background = ''; btn.style.opacity = '1'; btn.disabled = false; }, 3000);
+    }
+  } catch (err) {
+    btn.textContent = 'Connection error';
+    setTimeout(() => { btn.textContent = 'Submit Questionnaire'; btn.style.background = ''; btn.style.opacity = '1'; btn.disabled = false; }, 3000);
+  }
+});
+</script>
+
+</body>
+</html>
