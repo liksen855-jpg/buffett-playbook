@@ -889,6 +889,50 @@
   </div>
 </div>
 
+
+<!-- ═══ 1-ON-1 CTA ═══ -->
+<div id="ii-cta" style="padding:60px 24px;background:#0a0a0f;border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06);position:relative;overflow:hidden;">
+  <div style="position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:400px;height:400px;background:radial-gradient(circle,rgba(201,168,76,0.05),transparent 70%);pointer-events:none;"></div>
+  <div style="max-width:600px;margin:0 auto;position:relative;z-index:2;text-align:center;">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#c9a84c;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:8px;">
+      <span style="width:5px;height:5px;background:#c9a84c;border-radius:50%;display:inline-block;"></span>
+      Limited Availability
+    </div>
+    <h3 style="font-family:Georgia,'Times New Roman',serif;font-size:clamp(22px,3.5vw,32px);font-weight:400;color:#e8ecf4;line-height:1.2;margin-bottom:12px;letter-spacing:-0.01em;">Want to talk through <em style="font-style:italic;color:#c9a84c;">your</em> portfolio?</h3>
+    <p style="font-size:14px;color:#9ca3b8;line-height:1.7;margin-bottom:28px;max-width:480px;margin-left:auto;margin-right:auto;">We're opening a small number of 1-on-1 strategy sessions. Leave your email and we'll take you through a quick questionnaire — then set up a discovery call if it's a fit.</p>
+    <form id="iicForm" style="display:flex;gap:0;max-width:440px;margin:0 auto 12px;">
+      <input type="email" id="iicEmail" name="email" placeholder="Your email address" required style="flex:1;padding:14px 18px;background:#12121a;border:1px solid rgba(255,255,255,0.06);border-right:none;color:#e8ecf4;font-family:inherit;font-size:14px;outline:none;" />
+      <button type="submit" id="iicBtn" style="padding:14px 28px;background:#c9a84c;color:#0a0a0f;font-family:inherit;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;border:none;cursor:pointer;white-space:nowrap;">Join Waitlist</button>
+    </form>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#555c72;letter-spacing:0.08em;">No spam · Questionnaire first · Discovery call · Then we decide together</div>
+  </div>
+</div>
+<script>
+(function(){
+  const FORMSPREE_ID = 'xjgabnak';
+  const f = document.getElementById('iicForm');
+  if (!f) return;
+  f.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('iicBtn');
+    const email = document.getElementById('iicEmail').value.trim();
+    if (!email) return;
+    btn.textContent = 'Joining...';
+    btn.style.opacity = '0.7';
+    btn.disabled = true;
+    try {
+      const res = await fetch('https://formspree.io/f/' + FORMSPREE_ID, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, source: window.location.pathname, step: 'playbook_cta', _subject: 'Waitlist from ' + window.location.pathname })
+      });
+      if (res.ok) { window.location.href = '/questionnaire?email=' + encodeURIComponent(email); }
+      else { btn.textContent = 'Error — try again'; setTimeout(function(){ btn.textContent = 'Join Waitlist'; btn.style.background = '#c9a84c'; btn.style.opacity = '1'; btn.disabled = false; }, 3000); }
+    } catch (err) { btn.textContent = 'Error'; setTimeout(function(){ btn.textContent = 'Join Waitlist'; btn.style.opacity = '1'; btn.disabled = false; }, 3000); }
+  });
+})();
+</script>
+
 <footer style="text-align:center;padding:24px 40px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6b6b5f;letter-spacing:0.15em;text-transform:uppercase;border-top:1px solid #c8c0b0;"><a href="/" style="color:#c0392b;text-decoration:none;">← Back to Insight Invest</a></footer>
 
 </body>
