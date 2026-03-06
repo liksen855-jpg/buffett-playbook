@@ -811,6 +811,202 @@
   /* ═══════════════════════════════════════
      RESPONSIVE
   ═══════════════════════════════════════ */
+  /* ═══════════════════════════════════════
+     WAITLIST
+  ═══════════════════════════════════════ */
+  #waitlist {
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+    padding: 120px 48px;
+  }
+  #waitlist::before {
+    content: '';
+    position: absolute;
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, var(--gold)06, transparent 70%);
+    pointer-events: none;
+  }
+  .wl-layout {
+    max-width: 680px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  .wl-proof {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+  .wl-avatars {
+    display: flex;
+  }
+  .wl-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--bg);
+    margin-left: -8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: var(--bg);
+    font-weight: 600;
+  }
+  .wl-avatar:first-child { margin-left: 0; }
+  .wl-proof-text {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+  .wl-proof-text strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+  .wl-h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 400;
+    color: var(--text-bright);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .wl-h2 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .wl-desc {
+    font-size: 16px;
+    color: var(--text);
+    line-height: 1.75;
+    margin-bottom: 40px;
+    max-width: 560px;
+  }
+  .wl-what {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 40px;
+    border: 1px solid var(--border);
+  }
+  .wl-what-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+  .wl-what-item:last-child { border-bottom: none; }
+  .wl-what-item:hover { background: var(--bg2); }
+  .wl-what-icon {
+    width: 36px; height: 36px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: border-color 0.3s;
+  }
+  .wl-what-item:hover .wl-what-icon { border-color: var(--gold-dim); }
+  .wl-what-icon svg { width: 16px; height: 16px; stroke: var(--text-dim); }
+  .wl-what-item:hover .wl-what-icon svg { stroke: var(--gold); }
+  .wl-what-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 2px;
+  }
+  .wl-what-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+  .wl-form {
+    display: flex;
+    gap: 0;
+    margin-bottom: 16px;
+  }
+  .wl-input {
+    flex: 1;
+    padding: 16px 20px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-right: none;
+    color: var(--text-bright);
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .wl-input:focus { border-color: var(--gold-dim); }
+  .wl-input::placeholder { color: var(--text-dim); }
+  .wl-btn {
+    padding: 16px 32px;
+    background: var(--gold);
+    color: var(--bg);
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+  }
+  .wl-btn:hover { background: var(--gold-light); }
+  .wl-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .wl-meta-left {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+  .wl-spots {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .wl-spots-dot {
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: dotPulse 2s ease-in-out infinite;
+  }
+  .wl-success {
+    display: none;
+    text-align: center;
+    padding: 32px 0;
+  }
+  .wl-success.show { display: block; }
+  .wl-success-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+  .wl-success-h {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    color: var(--text-bright);
+    margin-bottom: 6px;
+  }
+  .wl-success-p {
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
   @media (max-width: 1100px) {
     .pillars-grid { grid-template-columns: 1fr; }
     .equities-grid { grid-template-columns: repeat(2, 1fr); }
@@ -819,6 +1015,10 @@
     .nav-links { display: none; }
     section { padding: 80px 24px; }
     .hero { padding: 120px 24px 80px; }
+    #waitlist { padding: 80px 24px; }
+    .wl-form { flex-direction: column; }
+    .wl-input { border-right: 1px solid var(--border); border-bottom: none; }
+    .wl-btn { padding: 16px; }
   }
   @media (max-width: 640px) {
     .equities-grid { grid-template-columns: 1fr; }
@@ -842,9 +1042,6 @@
     </a>
     <a href="#macro">
      Macro
-    </a>
-    <a href="#equities">
-     Equities
     </a>
     <a href="#learning">
      Learn
@@ -999,7 +1196,7 @@
        Thematic
       </span>
      </div>
-     <a class="pillar-link" href="#equities">
+     <a class="pillar-link" href="#reports">
       Equity coverage
       <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
        <path d="M5 12h14M12 5l7 7-7 7">
@@ -1144,26 +1341,6 @@
     — Benjamin Graham
    </span>
   </div>
-  <!-- ═══ EQUITIES SECTION ═══ -->
-  <section id="equities">
-   <div class="reveal">
-    <div class="section-tag">
-     <span class="section-tag-dot">
-     </span>
-     Equity Research
-    </div>
-    <h2 class="section-h2">
-     Markets we
-     <br/>
-     watch daily
-    </h2>
-    <p class="section-sub">
-     US and global equity coverage with a focus on what's structurally mispriced — not what's trending on Twitter.
-    </p>
-   </div>
-   <div class="equities-grid reveal" id="equitiesGrid">
-   </div>
-  </section>
   <!-- ═══ LEARNING SECTION ═══ -->
   <section id="learning">
    <div class="learning-layout">
@@ -1436,6 +1613,91 @@
     </a>
    </div>
   </section>
+
+<!-- ═══ WAITLIST / 1-ON-1 ═══ -->
+<section id="waitlist">
+  <div class="wl-layout reveal">
+
+    <!-- Social proof strip -->
+    <div class="wl-proof">
+      <div class="wl-avatars">
+        <div class="wl-avatar" style="background:#4a7cff;">A</div>
+        <div class="wl-avatar" style="background:#3dd68c;">R</div>
+        <div class="wl-avatar" style="background:#c9a84c;">M</div>
+        <div class="wl-avatar" style="background:#38d9d9;">K</div>
+        <div class="wl-avatar" style="background:#ff5c5c;">S</div>
+      </div>
+      <div class="wl-proof-text">
+        <strong>47 investors</strong> on the waitlist
+      </div>
+    </div>
+
+    <!-- Heading — identity-framing, not selling -->
+    <h2 class="wl-h2">Some questions don't<br>have a <em>general</em> answer</h2>
+
+    <p class="wl-desc">
+      The research on this site is built for everyone. But your portfolio, your risk tolerance, your timeline — those are yours alone. We're opening a small number of one-on-one strategy sessions for investors who want thinking partners, not product pitches.
+    </p>
+
+    <!-- What it is — clean, no hype -->
+    <div class="wl-what">
+      <div class="wl-what-item">
+        <div class="wl-what-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div>
+          <div class="wl-what-title">60-minute deep dive</div>
+          <div class="wl-what-desc">Your portfolio, your questions. We walk through positioning, risk exposures, and blind spots — not a scripted presentation.</div>
+        </div>
+      </div>
+      <div class="wl-what-item">
+        <div class="wl-what-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+        </div>
+        <div>
+          <div class="wl-what-title">Written follow-up</div>
+          <div class="wl-what-desc">You leave with a document — the frameworks discussed, the action items, the specific things to watch. Not just a call.</div>
+        </div>
+      </div>
+      <div class="wl-what-item">
+        <div class="wl-what-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <div class="wl-what-title">No conflicts</div>
+          <div class="wl-what-desc">We don't manage money, sell products, or take commissions. The only incentive is giving you a clearer picture.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form -->
+    <div id="wlFormWrap">
+      <form id="wlForm" class="wl-form">
+        <input type="email" class="wl-input" id="wlEmail" name="email" placeholder="Your email address" required />
+        <input type="hidden" name="_subject" value="New Waitlist Signup — 1-on-1 Strategy Session" />
+        <input type="hidden" name="source" value="leiholding.com waitlist" />
+        <input type="text" name="_gotcha" style="display:none" />
+        <button type="submit" class="wl-btn" id="wlBtn">Join Waitlist</button>
+      </form>
+      <div class="wl-meta">
+        <div class="wl-meta-left">No spam · No auto-sequences · We'll reach out when a spot opens</div>
+        <div class="wl-spots">
+          <span class="wl-spots-dot"></span>
+          Limited spots per month
+        </div>
+      </div>
+    </div>
+
+    <!-- Success state -->
+    <div class="wl-success" id="wlSuccess">
+      <div class="wl-success-icon">✓</div>
+      <div class="wl-success-h">You're on the list</div>
+      <div class="wl-success-p">We'll reach out when the next slot opens. In the meantime, explore the research.</div>
+    </div>
+
+  </div>
+</section>
+
   <!-- ═══ FOOTER ═══ -->
   <footer>
    <div class="footer-grid">
@@ -1454,10 +1716,10 @@
      <a href="#macro">
       Macro Updates
      </a>
-     <a href="#equities">
+     <a href="#reports">
       US Equities
      </a>
-     <a href="#equities">
+     <a href="#reports">
       Global Equities
      </a>
      <a href="/iran-conflict">
@@ -1550,38 +1812,6 @@ barData.forEach((val, i) => {
 });
 
 // ═══ EQUITIES GRID ═══
-const equities = [
-  { region: 'United States', name: 'S&P 500', value: '5,842', change: '+0.47%', up: true },
-  { region: 'United States', name: 'Nasdaq 100', value: '20,891', change: '+0.63%', up: true },
-  { region: 'Europe', name: 'STOXX 600', value: '542.3', change: '+0.28%', up: true },
-  { region: 'Asia Pacific', name: 'Nikkei 225', value: '38,912', change: '-0.32%', up: false },
-  { region: 'Emerging', name: 'MSCI EM', value: '1,087', change: '+0.91%', up: true },
-  { region: 'China', name: 'CSI 300', value: '3,842', change: '+1.34%', up: true },
-  { region: 'United Kingdom', name: 'FTSE 100', value: '8,342', change: '-0.18%', up: false },
-  { region: 'Middle East', name: 'Tadawul', value: '12,156', change: '+0.45%', up: true },
-];
-
-const equitiesGrid = document.getElementById('equitiesGrid');
-equitiesGrid.innerHTML = equities.map((eq, i) => {
-  // Generate sparkline SVG
-  const points = Array.from({length: 20}, () => Math.random() * 30 + 5);
-  const svgPoints = points.map((p, j) => `${j * (100/19)},${40 - p}`).join(' ');
-  const color = eq.up ? 'var(--green)' : 'var(--red)';
-  return `
-    <div class="equity-card">
-      <div class="equity-card-region">${eq.region}</div>
-      <div class="equity-card-name">${eq.name}</div>
-      <div class="equity-card-value">${eq.value}</div>
-      <div class="equity-card-change" style="color:${color}">${eq.change}</div>
-      <div class="equity-card-sparkline">
-        <svg width="100%" height="40" viewBox="0 0 100 40" preserveAspectRatio="none">
-          <polyline points="${svgPoints}" fill="none" stroke="${color}" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
-        </svg>
-      </div>
-    </div>
-  `;
-}).join('');
-
 // ═══ SCROLL REVEAL ═══
 const revealEls = document.querySelectorAll('.reveal');
 const observer = new IntersectionObserver((entries) => {
@@ -1597,6 +1827,61 @@ revealEls.forEach(el => observer.observe(el));
 // ═══ NAV SCROLL ═══
 window.addEventListener('scroll', () => {
   document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ═══ WAITLIST (FORMSPREE) ═══
+// ⚠️ REPLACE 'YOUR_FORM_ID' below with your actual Formspree form ID
+// Example: if your endpoint is https://formspree.io/f/xpwzgrka → use 'xpwzgrka'
+const FORMSPREE_ID = 'xjgabnak';
+
+const wlForm = document.getElementById('wlForm');
+const wlBtn = document.getElementById('wlBtn');
+const wlEmail = document.getElementById('wlEmail');
+
+wlForm.addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const email = wlEmail.value.trim();
+  if (!email) return;
+
+  // Loading state
+  wlBtn.textContent = 'Joining...';
+  wlBtn.style.opacity = '0.7';
+  wlBtn.disabled = true;
+
+  try {
+    const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email,
+        source: 'leiholding.com waitlist',
+        _subject: 'New Waitlist Signup — 1-on-1 Strategy Session'
+      })
+    });
+
+    if (res.ok) {
+      document.getElementById('wlFormWrap').style.display = 'none';
+      document.getElementById('wlSuccess').classList.add('show');
+    } else {
+      wlBtn.textContent = 'Something went wrong — try again';
+      wlBtn.style.background = 'var(--red)';
+      setTimeout(() => {
+        wlBtn.textContent = 'Join Waitlist';
+        wlBtn.style.background = 'var(--gold)';
+        wlBtn.style.opacity = '1';
+        wlBtn.disabled = false;
+      }, 3000);
+    }
+  } catch (err) {
+    wlBtn.textContent = 'Connection error — try again';
+    setTimeout(() => {
+      wlBtn.textContent = 'Join Waitlist';
+      wlBtn.style.background = 'var(--gold)';
+      wlBtn.style.opacity = '1';
+      wlBtn.disabled = false;
+    }, 3000);
+  }
 });
   </script>
  </body>
