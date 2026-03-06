@@ -1691,50 +1691,6 @@
       </div>
     </div>
 
-    <!-- Success → Priority choice -->
-    <div class="wl-success" id="wlSuccess">
-      <div class="wl-success-icon">✓</div>
-      <div class="wl-success-h">You're on the list</div>
-      <div class="wl-success-p" style="margin-bottom:28px;">We'll reach out when the next slot opens. Want to move up the queue?</div>
-
-      <div id="wlPriority" style="border:1px solid var(--border);max-width:440px;margin:0 auto;">
-        <div style="padding:24px 28px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.3s;" onmouseover="this.style.background='var(--bg2)'" onmouseout="this.style.background='transparent'" onclick="showPhoneForm()">
-          <div style="display:flex;align-items:center;justify-content:space-between;">
-            <div>
-              <div style="font-size:14px;font-weight:600;color:var(--text-bright);margin-bottom:4px;">Get priority access</div>
-              <div style="font-size:12px;color:var(--text-dim);line-height:1.5;">Leave your number — we'll reach out directly when the next spot opens. No waiting for email.</div>
-            </div>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-left:16px;"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </div>
-        </div>
-        <div style="padding:24px 28px;cursor:pointer;transition:background 0.3s;color:var(--text-dim);font-size:13px;" onmouseover="this.style.background='var(--bg2)'" onmouseout="this.style.background='transparent'" onclick="document.getElementById('wlPriority').style.display='none';document.getElementById('wlDone').style.display='block';">
-          I'm happy to wait for email — no rush
-        </div>
-      </div>
-
-      <!-- Phone form (hidden initially) -->
-      <div id="wlPhoneWrap" style="display:none;max-width:440px;margin:0 auto;">
-        <form id="wlPhoneForm">
-          <div class="wl-form" style="margin-top:0;">
-            <input type="tel" class="wl-input" id="wlPhone" name="phone" placeholder="+60 12 345 6789" required style="font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:0.05em;" />
-            <button type="submit" class="wl-btn" id="wlPhoneBtn">Submit</button>
-          </div>
-          <input type="hidden" name="email" id="wlPhoneEmail" />
-          <input type="hidden" name="_subject" value="PRIORITY — Waitlist Phone Number" />
-          <input type="hidden" name="source" value="leiholding.com waitlist — priority" />
-          <input type="hidden" name="step" value="priority_phone" />
-          <input type="text" name="_gotcha" style="display:none" />
-        </form>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-dim);margin-top:10px;text-align:center;letter-spacing:0.05em;">WhatsApp or direct call · We'll only use it to schedule your session</div>
-      </div>
-
-      <!-- Final done state -->
-      <div id="wlDone" style="display:none;text-align:center;padding:20px 0;">
-        <div style="font-size:15px;color:var(--text-bright);margin-bottom:6px;">Perfect — check your inbox</div>
-        <div style="font-size:13px;color:var(--text-dim);">We'll send you a short questionnaire, then set up a 15-minute discovery call to see if a full session makes sense.</div>
-      </div>
-    </div>
-
   </div>
 </section>
 
@@ -1870,16 +1826,12 @@ window.addEventListener('scroll', () => {
 });
 
 // ═══ WAITLIST (FORMSPREE) ═══
-// ⚠️ REPLACE these with your actual Formspree form IDs:
-// Create TWO forms in Formspree:
-//   1. "Waitlist Signup" → for initial email capture
-//   2. "Waitlist Priority" → for phone number follow-up
-const FORMSPREE_WAITLIST = 'xjgabnak';
-const FORMSPREE_PRIORITY = 'xykngrlp';
+// ⚠️ REPLACE with your actual Formspree form ID:
+const FORMSPREE_WAITLIST = 'YOUR_WAITLIST_FORM_ID';
 
 let signupEmail = '';
 
-// Step 1: Initial email signup
+// Email signup → redirect to questionnaire
 const wlForm = document.getElementById('wlForm');
 wlForm.addEventListener('submit', async function(e) {
   e.preventDefault();
@@ -1904,8 +1856,8 @@ wlForm.addEventListener('submit', async function(e) {
       })
     });
     if (res.ok) {
-      document.getElementById('wlFormWrap').style.display = 'none';
-      document.getElementById('wlSuccess').classList.add('show');
+      // Redirect straight to questionnaire
+      window.location.href = '/questionnaire?email=' + encodeURIComponent(email);
     } else {
       btn.textContent = 'Error — try again';
       btn.style.background = 'var(--red)';
@@ -1914,51 +1866,6 @@ wlForm.addEventListener('submit', async function(e) {
   } catch (err) {
     btn.textContent = 'Connection error';
     setTimeout(() => { btn.textContent = 'Join Waitlist'; btn.style.background = 'var(--gold)'; btn.style.opacity = '1'; btn.disabled = false; }, 3000);
-  }
-});
-
-// Step 2: Show phone form for priority
-function showPhoneForm() {
-  document.getElementById('wlPriority').style.display = 'none';
-  document.getElementById('wlPhoneWrap').style.display = 'block';
-  document.getElementById('wlPhoneEmail').value = signupEmail;
-  document.getElementById('wlPhone').focus();
-}
-
-// Step 3: Submit phone number
-const wlPhoneForm = document.getElementById('wlPhoneForm');
-wlPhoneForm.addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const btn = document.getElementById('wlPhoneBtn');
-  const phone = document.getElementById('wlPhone').value.trim();
-  if (!phone) return;
-
-  btn.textContent = 'Saving...';
-  btn.style.opacity = '0.7';
-  btn.disabled = true;
-
-  try {
-    const res = await fetch(`https://formspree.io/f/${FORMSPREE_PRIORITY}`, {
-      method: 'POST',
-      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: signupEmail,
-        phone: phone,
-        source: 'leiholding.com waitlist — priority',
-        step: 'priority_phone',
-        _subject: 'PRIORITY — Waitlist Phone Number: ' + phone
-      })
-    });
-    if (res.ok) {
-      document.getElementById('wlPhoneWrap').style.display = 'none';
-      document.getElementById('wlDone').style.display = 'block';
-    } else {
-      btn.textContent = 'Error — try again';
-      setTimeout(() => { btn.textContent = 'Submit'; btn.style.opacity = '1'; btn.disabled = false; }, 3000);
-    }
-  } catch (err) {
-    btn.textContent = 'Connection error';
-    setTimeout(() => { btn.textContent = 'Submit'; btn.style.opacity = '1'; btn.disabled = false; }, 3000);
   }
 });
   </script>
