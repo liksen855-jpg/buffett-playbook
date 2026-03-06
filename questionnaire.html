@@ -387,6 +387,15 @@
 // ⚠️ REPLACE with your Formspree form ID for the questionnaire
 const FORMSPREE_QUESTIONNAIRE = 'YOUR_QUESTIONNAIRE_FORM_ID';
 
+// Auto-fill email from URL param (passed from homepage signup)
+const urlParams = new URLSearchParams(window.location.search);
+const prefillEmail = urlParams.get('email');
+if (prefillEmail) {
+  const emailField = document.querySelector('input[name="email"]');
+  emailField.value = prefillEmail;
+  emailField.style.color = 'var(--gold)';
+}
+
 const form = document.getElementById('questionnaireForm');
 form.addEventListener('submit', async function(e) {
   e.preventDefault();
