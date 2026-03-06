@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InsightInvest — Iran × Stagflation · Investment Thesis Framework</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Newsreader:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07080a;
+  --s1: #0c0e11;
+  --s2: #111417;
+  --s3: #161a1f;
+  --b1: #1c2028;
+  --b2: #252c36;
+  --b3: #303844;
+  --fire: #e8450a;
+  --fire2: #f06030;
+  --amber: #d4a020;
+  --amber2: #e8bb44;
+  --ice: #3a7fd4;
+  --ice2: #5a9fe8;
+  --green: #2a7a3a;
+  --green2: #3a9a4e;
+  --text: #8a9ab0;
+  --strong: #c8d8e8;
+  --cream: #e4eef8;
+  --muted: #404858;
+  --display: 'Bebas Neue', sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+  --serif: 'Newsreader', serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* scanline effect */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.08) 2px,
+    rgba(0,0,0,0.08) 4px
+  );
+  pointer-events: none;
+  z-index: 998;
+}
+
+/* noise */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 997;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  background: var(--fire);
+  padding: 5px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.9);
+}
+.topbar-pulse {
+  display: flex; align-items: center; gap: 8px;
+}
+.pulse-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: white;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+/* ── MAST ── */
+.mast {
+  padding: 16px 48px;
+  border-bottom: 1px solid var(--b1);
+  display: flex; justify-content: space-between; align-items: center;
+  background: rgba(7,8,10,0.98);
+  backdrop-filter: blur(12px);
+  position: sticky; top: 0; z-index: 100;
+}
+.mast-brand { font-family: var(--mono); font-size: 10px; letter-spacing: 0.25em; color: var(--muted); text-transform: uppercase; }
+.mast-brand b { color: var(--amber); font-weight: 400; }
+.mast-right { font-size: 9px; color: var(--muted); text-align: right; letter-spacing: 0.12em; line-height: 2; }
+.mast-right span { color: var(--fire); }
+
+/* ── HERO ── */
+.hero {
+  max-width: 1200px; margin: 0 auto;
+  padding: 72px 48px 56px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--b1);
+}
+
+.hero-watermark {
+  position: absolute;
+  right: -20px; top: -20px;
+  font-family: var(--display);
+  font-size: clamp(120px, 18vw, 240px);
+  color: rgba(232,69,10,0.04);
+  line-height: 1;
+  pointer-events: none;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.hero-classification {
+  font-size: 9px; letter-spacing: 0.4em; color: var(--fire);
+  text-transform: uppercase;
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 28px;
+}
+.hero-classification::before { content:''; width:36px; height:1px; background:var(--fire); }
+
+.hero-title {
+  font-family: var(--display);
+  font-size: clamp(52px, 7.5vw, 100px);
+  line-height: 0.88;
+  color: var(--cream);
+  letter-spacing: 0.03em;
+  margin-bottom: 32px;
+}
+.hero-title .t-fire { color: var(--fire); }
+.hero-title .t-amber { color: var(--amber); }
+.hero-title .t-ice { color: var(--ice2); }
+
+.hero-bottom {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 40px;
+  align-items: end;
+}
+
+.hero-thesis {
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.9;
+  color: var(--text);
+  border-left: 2px solid var(--b2);
+  padding-left: 20px;
+}
+.hero-thesis strong { color: var(--strong); font-weight: 600; }
+.hero-thesis em { color: var(--amber2); font-style: italic; }
+
+.hero-verdicts {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+}
+.hv {
+  background: var(--s1);
+  border: 1px solid var(--b1);
+  padding: 12px 16px;
+}
+.hv-label { font-size: 8px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; margin-bottom: 4px; }
+.hv-val { font-family: var(--display); font-size: 18px; letter-spacing: 0.06em; }
+.c-fire { color: var(--fire); }
+.c-amber { color: var(--amber); }
+.c-ice { color: var(--ice2); }
+.c-green { color: var(--green2); }
+.c-muted { color: var(--muted); }
+.c-cream { color: var(--cream); }
+
+/* ── MAIN CHAIN — THE CENTREPIECE ── */
+.chain-section {
+  max-width: 1200px; margin: 0 auto;
+  padding: 56px 48px 48px;
+  border-bottom: 1px solid var(--b1);
+}
+
+.chain-header {
+  display: flex; align-items: baseline; gap: 20px;
+  margin-bottom: 36px;
+}
+.ch-n { font-family: var(--display); font-size: 72px; color: var(--b2); line-height: 1; min-width: 60px; }
+.ch-meta {}
+.ch-tag { font-size: 8px; letter-spacing: 0.28em; color: var(--muted); text-transform: uppercase; margin-bottom: 3px; }
+.ch-title { font-family: var(--display); font-size: 28px; color: var(--cream); letter-spacing: 0.06em; }
+
+/* THE CHAIN NODES */
+.chain-flow {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  position: relative;
+}
+
+.chain-node {
+  flex: 1;
+  background: var(--s1);
+  border: 1px solid var(--b1);
+  border-top: 3px solid transparent;
+  padding: 20px 18px 22px;
+  position: relative;
+  transition: border-color 0.2s;
+  min-width: 0;
+}
+.chain-node:hover { border-top-color: var(--b3); }
+
+.cn-trigger { border-top-color: var(--fire) !important; }
+.cn-hormuz  { border-top-color: var(--fire2) !important; }
+.cn-oil     { border-top-color: var(--amber) !important; }
+.cn-macro   { border-top-color: var(--amber2) !important; }
+.cn-fed     { border-top-color: var(--ice) !important; }
+.cn-market  { border-top-color: var(--ice2) !important; }
+.cn-play    { border-top-color: var(--green2) !important; }
+
+.cn-step { font-size: 8px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; margin-bottom: 6px; }
+.cn-title { font-family: var(--display); font-size: 16px; letter-spacing: 0.06em; color: var(--cream); line-height: 1.2; margin-bottom: 8px; }
+.cn-stat { font-family: var(--display); font-size: 24px; letter-spacing: 0.04em; line-height: 1; margin-bottom: 6px; }
+.cn-desc { font-size: 11px; color: var(--text); line-height: 1.6; }
+
+.chain-arrow {
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; flex-shrink: 0;
+  background: var(--bg);
+  border-top: 1px solid var(--b1);
+  border-bottom: 1px solid var(--b1);
+  color: var(--b3);
+  font-size: 14px;
+}
+
+/* sub-chains */
+.sub-chain {
+  display: flex; align-items: center; gap: 0;
+  margin: 20px 0 0;
+  background: var(--s2);
+  border: 1px solid var(--b1);
+  overflow: hidden;
+}
+.sc-node {
+  flex: 1; padding: 10px 14px;
+  border-right: 1px solid var(--b1);
+  font-size: 11px; color: var(--text);
+}
+.sc-node:last-child { border-right: none; }
+.sc-label { font-size: 8px; letter-spacing: 0.18em; color: var(--muted); text-transform: uppercase; margin-bottom: 3px; }
+.sc-val { font-family: var(--display); font-size: 15px; letter-spacing: 0.04em; }
+
+/* ── WRAP ── */
+.wrap { max-width: 1200px; margin: 0 auto; padding: 0 48px 120px; }
+
+/* ── SECTION ── */
+.sh {
+  display: flex; align-items: baseline; gap: 20px;
+  margin: 60px 0 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--b2);
+}
+.sn { font-family: var(--display); font-size: 72px; color: var(--b2); line-height: 1; min-width: 60px; }
+.st-tag { font-size: 8px; letter-spacing: 0.28em; color: var(--muted); text-transform: uppercase; margin-bottom: 3px; }
+.st { font-family: var(--display); font-size: 28px; color: var(--cream); letter-spacing: 0.06em; }
+
+/* ── CALLOUT ── */
+.callout {
+  border: 1px solid var(--b2);
+  border-left: 3px solid var(--amber);
+  background: var(--s1);
+  padding: 18px 22px;
+  margin: 16px 0;
+  font-size: 13px; color: var(--strong); line-height: 1.85;
+}
+.callout strong { color: var(--amber2); }
+.callout.fire { border-left-color: var(--fire); }
+.callout.fire strong { color: var(--fire2); }
+.callout.ice { border-left-color: var(--ice); }
+.callout.ice strong { color: var(--ice2); }
+.callout.green { border-left-color: var(--green2); }
+.callout.green strong { color: var(--green2); }
+
+/* ── OIL SCENARIOS ── */
+.scenarios {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 2px; margin: 16px 0;
+}
+.sc-card {
+  background: var(--s1); border: 1px solid var(--b1);
+  overflow: hidden;
+}
+.sc-head {
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--b1);
+}
+.sc-tier { font-size: 8px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; margin-bottom: 5px; }
+.sc-name { font-family: var(--display); font-size: 20px; color: var(--cream); letter-spacing: 0.05em; margin-bottom: 4px; }
+.sc-price { font-family: var(--display); font-size: 36px; letter-spacing: 0.04em; line-height: 1; }
+.sc-body { padding: 14px 20px 18px; }
+.sc-trigger { font-size: 11px; color: var(--muted); margin-bottom: 10px; font-style: italic; font-family: var(--serif); }
+.sc-points { display: flex; flex-direction: column; gap: 4px; }
+.sc-pt {
+  display: grid; grid-template-columns: 14px 1fr;
+  gap: 8px; font-size: 11.5px; color: var(--text); line-height: 1.5;
+  padding: 5px 0; border-bottom: 1px solid var(--b1);
+}
+.sc-pt:last-child { border-bottom: none; }
+.sc-pt-dot { color: var(--b3); margin-top: 3px; }
+
+/* ── BROKEN 60/40 ── */
+.port-grid {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 2px; margin: 16px 0;
+}
+.port-card {
+  background: var(--s1); border: 1px solid var(--b1);
+  padding: 20px 22px;
+}
+.pc-regime { font-size: 8px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
+.pc-title { font-family: var(--display); font-size: 17px; color: var(--cream); letter-spacing: 0.05em; margin-bottom: 14px; line-height: 1.2; }
+.pc-pair { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid var(--b1); align-items: center; }
+.pc-pair:last-child { border-bottom: none; }
+.pc-asset { font-size: 11px; color: var(--text); }
+.pc-move { font-family: var(--display); font-size: 16px; letter-spacing: 0.04em; }
+.up { color: var(--green2); }
+.dn { color: var(--fire); }
+.flat { color: var(--muted); }
+
+/* ── FED TRAP VISUAL ── */
+.fed-matrix {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 2px; margin: 16px 0;
+}
+.fm-card {
+  background: var(--s1); border: 1px solid var(--b1);
+  padding: 18px 22px;
+}
+.fm-card.disabled { opacity: 0.45; }
+.fm-card.highlight { background: rgba(232,69,10,0.06); border-color: rgba(232,69,10,0.3); }
+.fm-action { font-family: var(--display); font-size: 22px; color: var(--cream); letter-spacing: 0.05em; margin-bottom: 8px; }
+.fm-result { font-size: 12.5px; color: var(--text); line-height: 1.75; margin-bottom: 10px; }
+.fm-verdict {
+  font-family: var(--mono); font-size: 8px; letter-spacing: 0.15em;
+  padding: 4px 10px; border: 1px solid currentColor;
+  text-transform: uppercase; display: inline-block;
+}
+.fmv-blocked { color: var(--fire); }
+.fmv-trap { color: var(--amber); }
+
+/* ── MAG 7 COMPRESSION TABLE ── */
+.mag7-table {
+  width: 100%; border-collapse: collapse;
+  margin: 16px 0; font-size: 12.5px;
+}
+.mag7-table th {
+  text-align: left; padding: 9px 16px;
+  border-bottom: 1px solid var(--amber);
+  font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--amber); font-weight: 400;
+}
+.mag7-table td {
+  padding: 11px 16px; border-bottom: 1px solid var(--b1); vertical-align: top;
+}
+.mag7-table tr:last-child td { border-bottom: none; }
+.mag7-table td:first-child { color: var(--strong); font-size: 13px; }
+.mag7-table tr:hover td { background: var(--s2); }
+.big-num { font-family: var(--display); font-size: 22px; letter-spacing: 0.04em; }
+
+/* ── GAPS GRID ── */
+.gaps-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 2px; margin: 16px 0;
+}
+.gap-card {
+  background: var(--s1); border: 1px solid var(--b1);
+  border-left: 3px solid var(--b3);
+  overflow: hidden;
+}
+.gap-card.g-critical { border-left-color: var(--fire); }
+.gap-card.g-high { border-left-color: var(--amber); }
+.gap-card.g-med { border-left-color: var(--ice); }
+
+.gap-head {
+  padding: 14px 18px 10px;
+  border-bottom: 1px solid var(--b1);
+  display: flex; justify-content: space-between; align-items: flex-start;
+}
+.gap-n { font-family: var(--display); font-size: 42px; color: var(--b2); line-height: 1; }
+.gap-meta {}
+.gap-label { font-size: 8px; letter-spacing: 0.18em; color: var(--muted); text-transform: uppercase; margin-bottom: 3px; }
+.gap-title { font-family: var(--display); font-size: 16px; color: var(--cream); letter-spacing: 0.04em; line-height: 1.2; }
+.gap-severity {
+  font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 3px 8px; border: 1px solid currentColor;
+}
+.gap-body { padding: 12px 18px 16px; font-size: 12px; color: var(--text); line-height: 1.75; }
+.gap-body strong { color: var(--strong); font-weight: 500; }
+
+/* ── WINNERS TABLE ── */
+.winners {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 2px; margin: 16px 0;
+}
+.win-card {
+  background: var(--s1); border: 1px solid var(--b1);
+  padding: 0;
+  overflow: hidden;
+}
+.win-head {
+  padding: 14px 18px 10px;
+  border-bottom: 1px solid var(--b1);
+  background: var(--s2);
+}
+.win-category { font-size: 8px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; margin-bottom: 4px; }
+.win-title { font-family: var(--display); font-size: 18px; color: var(--cream); letter-spacing: 0.05em; }
+.win-body { padding: 12px 18px 16px; }
+.win-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 7px 0; border-bottom: 1px solid var(--b1);
+}
+.win-row:last-child { border-bottom: none; }
+.wr-name { font-size: 12px; color: var(--text); }
+.wr-signal { font-family: var(--display); font-size: 14px; letter-spacing: 0.04em; }
+
+/* ── LOSER TABLE ── */
+.losers {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 2px; margin: 16px 0;
+}
+.lose-card {
+  background: var(--s1); border: 1px solid var(--b1);
+  padding: 16px 20px;
+}
+.lc-label { font-size: 8px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
+.lc-title { font-family: var(--display); font-size: 18px; color: var(--cream); letter-spacing: 0.05em; margin-bottom: 8px; }
+.lc-body { font-size: 12px; color: var(--text); line-height: 1.7; }
+.lc-body strong { color: var(--fire2); font-weight: 500; }
+
+/* ── THESIS VERDICT ── */
+.verdict-card {
+  background: var(--s1); border: 1px solid var(--b2);
+  margin: 16px 0; overflow: hidden;
+}
+.vc-head {
+  background: var(--s2);
+  padding: 18px 28px;
+  border-bottom: 1px solid var(--b2);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.vc-title { font-family: var(--display); font-size: 22px; color: var(--cream); letter-spacing: 0.06em; }
+.vc-grade { font-family: var(--display); font-size: 52px; color: var(--amber); line-height: 1; }
+.vc-body {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+.vc-col { padding: 22px 28px; }
+.vc-col:first-child { border-right: 1px solid var(--b2); }
+.vc-col-label { font-size: 8px; letter-spacing: 0.22em; color: var(--muted); text-transform: uppercase; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+.vc-col-label::after { content:''; flex: 1; height: 1px; background: var(--b2); }
+.vc-point { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--b1); }
+.vc-point:last-child { border-bottom: none; }
+.vc-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.vd-right { background: var(--green2); }
+.vd-wrong { background: var(--fire); }
+.vc-text { font-size: 12.5px; color: var(--text); line-height: 1.65; }
+.vc-text strong { color: var(--strong); font-weight: 500; }
+
+/* ── MONITOR STRIP ── */
+.monitor-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 2px; margin: 16px 0;
+}
+.mon-card {
+  background: var(--s1); border: 1px solid var(--b1);
+  padding: 14px 16px;
+}
+.mon-label { font-size: 8px; letter-spacing: 0.18em; color: var(--muted); text-transform: uppercase; margin-bottom: 5px; }
+.mon-signal { font-family: var(--display); font-size: 20px; letter-spacing: 0.05em; color: var(--cream); margin-bottom: 3px; }
+.mon-desc { font-size: 11px; color: var(--text); line-height: 1.6; }
+.mon-level { font-size: 10px; font-family: var(--mono); margin-top: 6px; padding: 3px 8px; border: 1px solid var(--b2); display: inline-block; }
+
+/* ── SMALL CAP CHAIN ── */
+.sc-flow {
+  display: flex; flex-wrap: wrap;
+  gap: 0; margin: 16px 0;
+}
+.scf-node {
+  flex: 1; min-width: 120px;
+  background: var(--s2); border: 1px solid var(--b1);
+  padding: 12px 14px;
+}
+.scf-node.hot { background: rgba(232,69,10,0.06); border-color: rgba(232,69,10,0.25); }
+.scf-n-label { font-size: 8px; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; margin-bottom: 4px; }
+.scf-n-val { font-family: var(--display); font-size: 16px; color: var(--cream); letter-spacing: 0.04em; margin-bottom: 2px; }
+.scf-n-sub { font-size: 10px; color: var(--text); }
+.scf-arr { display: flex; align-items: center; padding: 0 6px; color: var(--b3); background: var(--bg); border-top: 1px solid var(--b1); border-bottom: 1px solid var(--b1); font-size: 13px; }
+
+/* ── FOOT ── */
+.foot {
+  padding: 18px 48px; border-top: 1px solid var(--b1);
+  display: flex; justify-content: space-between;
+  font-size: 9px; color: var(--muted); letter-spacing: 0.1em;
+  max-width: 1200px; margin: 0 auto;
+}
+
+/* ── ANIM ── */
+@keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+.hero { animation: fadeUp 0.5s ease forwards; }
+.chain-node { opacity: 0; animation: fadeUp 0.35s ease forwards; }
+.chain-node:nth-child(1){animation-delay:.04s}
+.chain-node:nth-child(2){animation-delay:.06s}
+.chain-node:nth-child(3){animation-delay:.10s}
+.chain-node:nth-child(4){animation-delay:.14s}
+.chain-node:nth-child(5){animation-delay:.18s}
+.chain-node:nth-child(6){animation-delay:.22s}
+.chain-node:nth-child(7){animation-delay:.26s}
+.chain-arrow { opacity: 0; animation: fadeUp 0.35s ease forwards; animation-delay:.30s; }
+.sc-card { opacity: 0; animation: fadeUp 0.35s ease forwards; }
+.sc-card:nth-child(1){animation-delay:.05s}
+.sc-card:nth-child(2){animation-delay:.10s}
+.sc-card:nth-child(3){animation-delay:.15s}
+
+@media(max-width:960px){
+  .topbar,.mast,.hero,.chain-section,.wrap,.foot{padding-left:20px;padding-right:20px}
+  .hero-bottom{grid-template-columns:1fr}
+  .hero-verdicts{grid-template-columns:1fr 1fr}
+  .chain-flow{flex-direction:column}
+  .chain-arrow{transform:rotate(90deg);height:28px;width:auto;border:none;border-left:1px solid var(--b1);border-right:1px solid var(--b1)}
+  .scenarios,.port-grid,.fed-matrix,.gaps-grid,.winners,.losers,.monitor-grid{grid-template-columns:1fr}
+  .vc-body{grid-template-columns:1fr}
+  .vc-col:first-child{border-right:none;border-bottom:1px solid var(--b2)}
+}
+</style>
+</head>
+<body>
+<!-- ═══ SITE-WIDE NAV ═══ -->
+<div id="siteNav" style="position:fixed;top:0;left:0;right:0;z-index:9998;background:rgba(7,8,10,0.92);backdrop-filter:blur(16px);border-bottom:1px solid #1c2028;padding:0 32px;font-family:'IBM Plex Mono',monospace;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:44px;">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e8450a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      <span style="font-size:11px;font-weight:500;color:#e8450a;letter-spacing:0.1em;text-transform:uppercase;">Insight Invest</span>
+    </a>
+    <div style="display:flex;gap:4px;">
+      <a href="/buffett-playbook" style="font-size:10px;font-weight:400;color:#404858;text-decoration:none;padding:4px 10px;border-radius:4px;">Buffett</a>
+      <a href="/iran-conflict" style="font-size:10px;font-weight:400;color:#404858;text-decoration:none;padding:4px 10px;border-radius:4px;">Iran Frameworks</a>
+      <a href="/cash-allocation-bear-markets" style="font-size:10px;font-weight:400;color:#404858;text-decoration:none;padding:4px 10px;border-radius:4px;">Cash Strategy</a>
+      <a href="/iran-bursa-playbook" style="font-size:10px;font-weight:400;color:#404858;text-decoration:none;padding:4px 10px;border-radius:4px;">Bursa</a>
+      <a href="/iran-thesis-framework" style="font-size:10px;font-weight:400;color:#e8450a;background:rgba(232,69,10,0.1);text-decoration:none;padding:4px 10px;border-radius:4px;">Thesis Framework</a>
+    </div>
+  </div>
+</div>
+<div style="height:44px;"></div>
+<!-- ═══ END SITE NAV ═══ -->
+
+
+<div class="topbar">
+  <div class="topbar-pulse">
+    <div class="pulse-dot"></div>
+    LIVE SITUATION · MARCH 2026 · HORMUZ CONTESTED
+  </div>
+  <div>INSIGHTINVEST RESEARCH · IRAN × STAGFLATION MATRIX</div>
+</div>
+
+<header class="mast">
+  <div class="mast-brand">Insight<b>Invest</b> · Research</div>
+  <div class="mast-right"><span>CLASSIFIED</span> · Investment Thesis Framework<br>March 2026 · Internal Use Only</div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-watermark">IRAN</div>
+  <div class="hero-classification">Geopolitical × Macro Investment Thesis · Full Framework</div>
+  <h1 class="hero-title">
+    <span class="t-fire">IRAN</span><br>
+    <span class="t-amber">FIRES.</span><br>
+    <span class="t-ice">MARKETS</span><br>BREAK.
+  </h1>
+  <div class="hero-bottom">
+    <div class="hero-thesis">
+      The Iran conflict is not an oil story. It's a <strong>policy trap story.</strong><br><br>
+      Hormuz closes → oil spikes → inflation stays high → the Fed cannot cut, cannot hike → every traditional portfolio hedge breaks simultaneously. <em>Stocks fall. Bonds fall. The 60/40 is dead.</em><br><br>
+      The investors who understand this chain before it fully prices in will be positioned. The rest will be managing drawdowns.
+    </div>
+    <div class="hero-verdicts">
+      <div class="hv"><div class="hv-label">Oil Thesis</div><div class="hv-val c-green">STRONG</div></div>
+      <div class="hv"><div class="hv-label">Macro Chain</div><div class="hv-val c-green">SOLID</div></div>
+      <div class="hv"><div class="hv-label">Geo Layer</div><div class="hv-val c-amber">PARTIAL</div></div>
+      <div class="hv"><div class="hv-label">China Angle</div><div class="hv-val c-fire">OVERSTATED</div></div>
+      <div class="hv"><div class="hv-label">Hormuz Flow</div><div class="hv-val c-fire">~21M bbl/d</div></div>
+      <div class="hv"><div class="hv-label">Overall Grade</div><div class="hv-val c-amber">B+</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 1: THE CHAIN -->
+<section class="chain-section">
+  <div class="chain-header">
+    <div class="ch-n">01</div>
+    <div class="ch-meta">
+      <div class="ch-tag">The Core Mechanism</div>
+      <div class="ch-title">THE FULL TRANSMISSION CHAIN</div>
+    </div>
+  </div>
+
+  <div class="chain-flow">
+    <div class="chain-node cn-trigger">
+      <div class="cn-step">Trigger</div>
+      <div class="cn-title">IRAN CONFLICT</div>
+      <div class="cn-stat c-fire">Mar 1</div>
+      <div class="cn-desc">Military escalation. Supreme Leader reportedly killed. Strait of Hormuz contested. Retaliatory strikes.</div>
+    </div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node cn-hormuz">
+      <div class="cn-step">Chokepoint</div>
+      <div class="cn-title">HORMUZ CLOSES</div>
+      <div class="cn-stat c-fire">20%</div>
+      <div class="cn-desc">Of world oil + 25% of LNG trade. No viable bypass at scale. Insurance premiums spike immediately — before any supply disruption occurs.</div>
+    </div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node cn-oil">
+      <div class="cn-step">Commodity</div>
+      <div class="cn-title">OIL SPIKES</div>
+      <div class="cn-stat c-amber">$120–200</div>
+      <div class="cn-desc">Scenario-dependent. Historical precedent: 1973 OPEC +240%, 1990 Gulf War +135%. Both triggered recessions within 12–18 months.</div>
+    </div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node cn-macro">
+      <div class="cn-step">Inflation</div>
+      <div class="cn-title">CPI RE-ACCELERATES</div>
+      <div class="cn-stat c-amber">Cost-Push</div>
+      <div class="cn-desc">Energy → food → transport → wage pressure. This is cost-push inflation — not fixable by rate hikes. Food CPI follows oil with 3–6 month lag.</div>
+    </div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node cn-fed">
+      <div class="cn-step">Policy</div>
+      <div class="cn-title">FED PARALYSED</div>
+      <div class="cn-stat c-ice">TRAPPED</div>
+      <div class="cn-desc">Cannot cut — inflation too high. Cannot hike — growth too weak. Doing nothing is the worst outcome. Credibility at stake.</div>
+    </div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node cn-market">
+      <div class="cn-step">Market Signal</div>
+      <div class="cn-title">60/40 BREAKS</div>
+      <div class="cn-stat c-fire">Both ↓</div>
+      <div class="cn-desc">Stocks fall on growth fears. Bonds fall on inflation fears. The safe-haven bid overwhelmed. Only happened twice in 50 years: 1973 and 2022.</div>
+    </div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node cn-play">
+      <div class="cn-step">The Play</div>
+      <div class="cn-title">REAL ASSETS WIN</div>
+      <div class="cn-stat c-green">ROTATE</div>
+      <div class="cn-desc">Commodities, energy equities, TIPS, gold. 1970s playbook. The only assets that held value when the same regime appeared.</div>
+    </div>
+  </div>
+
+  <!-- second order sub-chain -->
+  <div class="sub-chain">
+    <div class="sc-node">
+      <div class="sc-label">2nd Order · Food</div>
+      <div class="sc-val c-amber">CPI +3–6mo lag</div>
+    </div>
+    <div class="sc-node">
+      <div class="sc-label">2nd Order · USD</div>
+      <div class="sc-val c-ice">Strengthens</div>
+    </div>
+    <div class="sc-node">
+      <div class="sc-label">2nd Order · EM</div>
+      <div class="sc-val c-fire">Twin Shock</div>
+    </div>
+    <div class="sc-node">
+      <div class="sc-label">2nd Order · Mag 7</div>
+      <div class="sc-val c-fire">Double Compress</div>
+    </div>
+    <div class="sc-node">
+      <div class="sc-label">2nd Order · Nitrogen</div>
+      <div class="sc-val c-fire">Food Supply Shock</div>
+    </div>
+    <div class="sc-node">
+      <div class="sc-label">2nd Order · Small Cap</div>
+      <div class="sc-val c-fire">Debt Destruction</div>
+    </div>
+  </div>
+</section>
+
+<main class="wrap">
+
+  <!-- SECTION 2: OIL SCENARIOS -->
+  <div class="sh">
+    <div class="sn">02</div>
+    <div>
+      <div class="st-tag">Oil Price Pathways</div>
+      <div class="st">THREE SCENARIOS — BRENT TRAJECTORIES</div>
+    </div>
+  </div>
+
+  <div class="callout fire">
+    Saudi Arabia's role is ambiguous — <strong>not a simple offset.</strong> At $100+ oil, Vision 2030 budget targets are easily met. MBS has shown willingness to extend OPEC+ cuts even when it hurts market share. Don't assume Saudi automatically caps the spike. Their incentive to let prices run may be equal to their incentive to add supply.
+  </div>
+
+  <div class="scenarios">
+    <div class="sc-card">
+      <div class="sc-head">
+        <div class="sc-tier">Scenario 01 · Base Case</div>
+        <div class="sc-name">SKIRMISH</div>
+        <div class="sc-price c-amber">$90–105</div>
+      </div>
+      <div class="sc-body">
+        <div class="sc-trigger">Limited strikes, no sustained closure. Insurance premiums spike. 2–6 week duration.</div>
+        <div class="sc-points">
+          <div class="sc-pt"><div class="sc-pt-dot">·</div><div>Markets partially price in risk then stabilise as diplomacy begins</div></div>
+          <div class="sc-pt"><div class="sc-pt-dot">·</div><div>Fed still paralysed but cut narrative survives</div></div>
+          <div class="sc-pt"><div class="sc-pt-dot">·</div><div>Energy equities re-rate up 15–25%, broader market holds</div></div>
+          <div class="sc-pt"><div class="sc-pt-dot">·</div><div>Wheat/nitrogen story still live — ships rerouting adds weeks</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="sc-card">
+      <div class="sc-head">
+        <div class="sc-tier">Scenario 02 · Base-Bear</div>
+        <div class="sc-name">BLOCKADE</div>
+        <div class="sc-price c-fire">$120–150</div>
+      </div>
+      <div class="sc-body">
+        <div class="sc-trigger">Iran mines Hormuz, partial closure for weeks. Tanker re-routing via Cape of Good Hope. 2–4 month duration.</div>
+        <div class="sc-points">
+          <div class="sc-pt"><div class="sc-pt-dot">·</div><div>Stagflation regime confirmed. 60/40 breakage accelerates</div></div>
+          <div class="sc-pt"><div class="sc-pt-dot">·</div><div>Food CPI spikes follow — nitrogen supply chain severed through planting window</div></div>
+          <div class="sc-pt"><div class="sc-pt-dot">·</div><div>Mag 7 re-rates to 20–22x — 20%+ compression before earnings revisions</div></div>
+          <div class="sc-pt"><div class="sc-pt-dot">·</div><div>Small cap solvency stress materialises — leveraged debt refinancing wall hits</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="sc-card">
+      <div class="sc-head">
+        <div class="sc-tier">Scenario 03 · Tail Risk</div>
+        <div class="sc-name">REGIONAL WAR</div>
+        <div class="sc-price c-fire">$160–200+</div>
+      </div>
+      <div class="sc-body">
+        <div class="sc-trigger">Full Hormuz closure + Saudi infrastructure targeted. 6–18 month duration. Global recession within 12–18 months.</div>
+        <div class="sc-points">
+          <div class="sc-pt"><div class="sc-pt-dot">·</div><div>1973-style supply shock. Demand destruction follows. US recession near-certain</div></div>
+          <div class="sc-pt"><div class="sc-pt-dot">·</div><div>EM blowups: India, South Korea, Turkey face 1997-style contagion risk</div></div>
+          <div class="sc-pt"><div class="sc-pt-dot">·</div><div>De-dollarisation accelerates — Saudi-China yuan oil deal becomes the new normal</div></div>
+          <div class="sc-pt"><div class="sc-pt-dot">·</div><div>Gold, TIPS, short-duration bonds, commodity equity — the 1970s portfolio wins</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: THE FED TRAP -->
+  <div class="sh">
+    <div class="sn">03</div>
+    <div>
+      <div class="st-tag">Policy Paralysis</div>
+      <div class="st">THE FED TRAP — ALL OPTIONS FAIL</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    The framework correctly identifies the policy bind but <strong>misses the critical distinction:</strong> oil shock inflation is cost-push, not demand-pull. Rate hikes don't lower oil prices. They destroy demand on top of a supply shock — which is exactly why 1970s Fed policy failed. The 1979-style error was cutting too early under political pressure, flooding commodity markets with liquidity.
+  </div>
+
+  <div class="fed-matrix">
+    <div class="fm-card disabled">
+      <div class="fm-action">CUT RATES</div>
+      <div class="fm-result">Inflation is already elevated. Cutting adds liquidity to a supply-shocked market. Risk of unanchoring inflation expectations — the 1979 policy error. Fed cannot justify cutting with CPI above target.</div>
+      <div class="fm-verdict fmv-blocked">BLOCKED · INFLATION TOO HIGH</div>
+    </div>
+    <div class="fm-card disabled">
+      <div class="fm-action">HIKE RATES</div>
+      <div class="fm-result">Growth is already slowing. Hiking into a supply shock destroys demand on top of the shock — deepening recession risk without fixing inflation (which is supply-driven, not demand-driven). Worsens small cap debt burden.</div>
+      <div class="fm-verdict fmv-blocked">BLOCKED · GROWTH TOO WEAK</div>
+    </div>
+    <div class="fm-card highlight" style="grid-column:span 2">
+      <div class="fm-action">DO NOTHING — THE ACTUAL OUTCOME</div>
+      <div class="fm-result" style="max-width:700px">This is the worst option by process of elimination. Inflation stays elevated but unaddressed. Growth slows unimpeded. Markets lose confidence that the Fed has a response. <strong>Inflation expectations risk becoming unanchored</strong> — the wage-price spiral mechanism that defined the 1970s. Political pressure to cut too early creates the 1979-style error. The Fed is not just trapped by stagflation logic — it is trapped by <strong>fiscal dominance</strong>: at $35T federal debt, hiking further triggers a US debt service crisis. The bond market is the ultimate forcing function, not Fed judgment.</div>
+      <div class="fm-verdict fmv-trap" style="margin-top:12px">POLICY PARALYSIS · CREDIBILITY AT RISK · FISCAL DOMINANCE BINDING</div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: BROKEN 60/40 -->
+  <div class="sh">
+    <div class="sn">04</div>
+    <div>
+      <div class="st-tag">Portfolio Structure</div>
+      <div class="st">THE BROKEN 60/40 — WHAT ACTUALLY HAPPENS</div>
+    </div>
+  </div>
+
+  <div class="callout ice">
+    Stocks and bonds falling simultaneously has only occurred twice with duration in 50 years: <strong>1973–74 stagflation</strong> and briefly in <strong>2022 post-COVID.</strong> Both produced 30–45% equity drawdowns concurrent with bond losses. When both legs fall, pension funds hit mandatory rebalancing triggers — forced selling mechanically amplifies the drawdown.
+  </div>
+
+  <div class="port-grid">
+    <div class="port-card">
+      <div class="pc-regime">Normal Recession</div>
+      <div class="pc-title">TYPICAL RISK-OFF</div>
+      <div class="pc-pair"><div class="pc-asset">Equities</div><div class="pc-move dn">↓ Falls</div></div>
+      <div class="pc-pair"><div class="pc-asset">Bonds</div><div class="pc-move up">↑ Rises</div></div>
+      <div class="pc-pair"><div class="pc-asset">60/40</div><div class="pc-move up">Hedge Works</div></div>
+      <div class="pc-pair"><div class="pc-asset">Fed Response</div><div class="pc-move up">Cuts Rates</div></div>
+    </div>
+    <div class="port-card" style="border-top:3px solid var(--fire)">
+      <div class="pc-regime">Stagflation Regime · NOW</div>
+      <div class="pc-title">THE BROKEN SIGNAL</div>
+      <div class="pc-pair"><div class="pc-asset">Equities</div><div class="pc-move dn">↓ Falls</div></div>
+      <div class="pc-pair"><div class="pc-asset">Bonds</div><div class="pc-move dn">↓ Falls</div></div>
+      <div class="pc-pair"><div class="pc-asset">60/40</div><div class="pc-move dn c-fire">Both Legs Bleed</div></div>
+      <div class="pc-pair"><div class="pc-asset">Fed Response</div><div class="pc-move flat">Paralysed</div></div>
+    </div>
+    <div class="port-card" style="border-top:3px solid var(--green2)">
+      <div class="pc-regime">Stagflation Winners</div>
+      <div class="pc-title">1970s PLAYBOOK</div>
+      <div class="pc-pair"><div class="pc-asset">Commodities</div><div class="pc-move up">↑ Outperforms</div></div>
+      <div class="pc-pair"><div class="pc-asset">Energy Equities</div><div class="pc-move up">↑ Outperforms</div></div>
+      <div class="pc-pair"><div class="pc-asset">Gold / TIPS</div><div class="pc-move up">↑ Outperforms</div></div>
+      <div class="pc-pair"><div class="pc-asset">Real Assets</div><div class="pc-move up">↑ Outperforms</div></div>
+    </div>
+  </div>
+
+  <!-- MAG 7 COMPRESSION -->
+  <div class="sh">
+    <div class="sn">05</div>
+    <div>
+      <div class="st-tag">Equity Valuation</div>
+      <div class="st">MAG 7 COMPRESSION MATH</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    PE in isolation misses the real mechanism. The correct framework is the <strong>Equity Risk Premium (ERP)</strong> — excess return above the risk-free rate. At 26x forward PE, earnings yield is ~3.85%. With the 10-year at 4.5%, ERP is a thin 85bps. In the stagflation scenario, 10-year moves to 5.0–5.5%. <strong>Mag 7 needs to re-rate to 18–20x just to maintain a normal ERP.</strong> That's 25–30% compression before earnings revisions — the "wait for 5% more" target is too conservative.
+  </div>
+
+  <table class="mag7-table">
+    <tr><th>Scenario</th><th>10Y Yield</th><th>Implied Fair PE</th><th>Compression from 26x</th><th>Earnings Revision Risk</th><th>Total Downside Est.</th></tr>
+    <tr>
+      <td>Base Case (no escalation)</td>
+      <td>4.3%</td>
+      <td><span class="big-num c-amber">24–26x</span></td>
+      <td class="c-amber">~0–8%</td>
+      <td>Minimal</td>
+      <td class="c-amber">~5–10%</td>
+    </tr>
+    <tr>
+      <td>Oil Shock (Scenario 01–02)</td>
+      <td>4.8–5.0%</td>
+      <td><span class="big-num c-fire">20–22x</span></td>
+      <td class="c-fire">~15–20%</td>
+      <td>USD strengthens → earnings headwind for multinationals</td>
+      <td class="c-fire">~20–30%</td>
+    </tr>
+    <tr>
+      <td>Stagflation (Scenario 02–03)</td>
+      <td>5.2–5.5%</td>
+      <td><span class="big-num c-fire">18–19x</span></td>
+      <td class="c-fire">~25–30%</td>
+      <td>Growth slows + USD compresses reported earnings (double hit)</td>
+      <td class="c-fire">~35–45%</td>
+    </tr>
+  </table>
+
+  <!-- SECTION 6: CRITICAL GAPS -->
+  <div class="sh">
+    <div class="sn">06</div>
+    <div>
+      <div class="st-tag">Framework Stress-Test</div>
+      <div class="st">FIVE CRITICAL GAPS THE THESIS MISSES</div>
+    </div>
+  </div>
+
+  <div class="callout fire">
+    The core thesis is <strong>directionally correct with A-grade instincts.</strong> These gaps are primarily in depth, not direction. Incorporating them makes the thesis significantly more robust and the investment positioning more precise.
+  </div>
+
+  <div class="gaps-grid">
+    <div class="gap-card g-critical">
+      <div class="gap-head">
+        <div><div class="gap-label">Gap 01 · Completely Missing</div><div class="gap-title">FISCAL DOMINANCE — THE BINDING CONSTRAINT</div></div>
+        <div class="gap-severity c-fire">CRITICAL</div>
+      </div>
+      <div class="gap-body">The 1970s comparison is apt — but there's a crucial difference. The US in 2025 carries <strong>$35+ trillion in federal debt at rising rates.</strong> Higher rates → higher debt service → wider deficit → more Treasury issuance → upward pressure on yields. Self-reinforcing spiral. This is fiscal dominance: the fiscal situation constrains monetary policy. The Fed may be trapped not just by stagflation logic — but by the reality that hiking further causes a US debt service crisis. The bond market is the ultimate forcing function.</div>
+    </div>
+    <div class="gap-card g-critical">
+      <div class="gap-head">
+        <div><div class="gap-label">Gap 02 · Completely Missing</div><div class="gap-title">DOLLAR WEAPONISATION & DE-DOLLARISATION FEEDBACK</div></div>
+        <div class="gap-severity c-fire">CRITICAL</div>
+      </div>
+      <div class="gap-body">Each SWIFT/sanctions use <strong>accelerates de-dollarisation efforts</strong> by China, Russia, and increasingly India. The Saudi-China yuan oil deal (2023) was a direct response. A new Iran conflict triggering more aggressive sanctions could accelerate the shift away from petrodollar settlement — a structural long-term negative for USD dominance compounding near-term macro stress. This is not a 20-year risk. It's an active feedback loop already in motion.</div>
+    </div>
+    <div class="gap-card g-high">
+      <div class="gap-head">
+        <div><div class="gap-label">Gap 03 · Often Overlooked</div><div class="gap-title">INSURANCE & SHIPPING COST CASCADES</div></div>
+        <div class="gap-severity c-amber">HIGH</div>
+      </div>
+      <div class="gap-body">Houthi attacks on Red Sea shipping in 2024 demonstrated this: <strong>war risk insurance premiums spike immediately</strong> when a major shipping route becomes contested — before any actual supply disruption. Container rates, LNG tanker rates, bulk cargo all spike on insurance alone. This is a stealth inflation channel hitting consumer goods, not just fuel. The nitrogen/fertilizer shipping disruption — adding weeks via Cape of Good Hope — is the direct application of this mechanism.</div>
+    </div>
+    <div class="gap-card g-high">
+      <div class="gap-head">
+        <div><div class="gap-label">Gap 04 · Mischaracterised</div><div class="gap-title">SMALL CAP DEBT DESTRUCTION — THE HIDDEN CASUALTY</div></div>
+        <div class="gap-severity c-amber">HIGH</div>
+      </div>
+      <div class="gap-body">The thesis focuses on Mag 7 compression and misses the more immediate casualty. <strong>~40–45% of Russell 2000 carries floating-rate debt</strong> repricing against SOFR in near real-time. Every month the Fed holds steady is another month of full elevated debt service. Large caps locked in 2–3% fixed-rate debt in 2020–21. Small caps have no duration buffer. The leveraged debt refinancing wall hits 2025–2027. Stagflation doubles the squeeze: elevated financing costs AND weakening consumer demand simultaneously. Asymmetric short opportunity: IWM vs SPY.</div>
+    </div>
+    <div class="gap-card g-med" style="grid-column:span 2">
+      <div class="gap-head">
+        <div><div class="gap-label">Gap 05 · Partially Addressed</div><div class="gap-title">SUPPLY ELASTICITY — SHALE RESPONSE WEAKER THAN IMPLIED + NITROGEN SHOCK (THE WHEAT PLAY)</div></div>
+        <div class="gap-severity c-ice">MEDIUM + BONUS THESIS</div>
+      </div>
+      <div class="gap-body">US shale is in a <strong>capital discipline cycle</strong> post-2020. E&P companies made explicit commitments to return cash to shareholders rather than chase production. At $100 oil, shale response may be slower and more modest than 2014. The supply elasticity argument is weaker than implied. <strong>BONUS — The Nitrogen/Wheat Thesis:</strong> 45% of global nitrogen fertilizer transits Hormuz alongside oil. Zero strategic stockpiles exist for fertilizer (unlike oil). March–April is the biological window for winter wheat nitrogen application — miss it and yield loss is permanent, non-recoverable. CBOT wheat at $5.82 (+8%) vs urea at +$100/week. Classic market inefficiency: input screaming, output asleep. CBOT/KCBT July–September 2026 contracts are the trade.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: WINNERS & LOSERS -->
+  <div class="sh">
+    <div class="sn">07</div>
+    <div>
+      <div class="st-tag">Positioning Guide</div>
+      <div class="st">WINNERS · LOSERS · MONITORS</div>
+    </div>
+  </div>
+
+  <div class="winners">
+    <div class="win-card">
+      <div class="win-head">
+        <div class="win-category">Long — High Conviction</div>
+        <div class="win-title">REAL ASSETS & ENERGY</div>
+      </div>
+      <div class="win-body">
+        <div class="win-row"><div class="wr-name">Energy Equities (E&P)</div><div class="wr-signal c-green">STRONG BUY</div></div>
+        <div class="win-row"><div class="wr-name">LNG Infrastructure</div><div class="wr-signal c-green">STRONG BUY</div></div>
+        <div class="win-row"><div class="wr-name">Gold / Gold Miners</div><div class="wr-signal c-green">BUY</div></div>
+        <div class="win-row"><div class="wr-name">TIPS (Inflation-Protected)</div><div class="wr-signal c-green">BUY</div></div>
+        <div class="win-row"><div class="wr-name">Commodity Producers</div><div class="wr-signal c-amber">OVERWEIGHT</div></div>
+      </div>
+    </div>
+    <div class="win-card">
+      <div class="win-head">
+        <div class="win-category">Long — Tactical</div>
+        <div class="win-title">COMMODITY FUTURES</div>
+      </div>
+      <div class="win-body">
+        <div class="win-row"><div class="wr-name">Brent Crude Futures</div><div class="wr-signal c-amber">LONG</div></div>
+        <div class="win-row"><div class="wr-name">CBOT Wheat Jul/Sep 2026</div><div class="wr-signal c-green">STRONG BUY</div></div>
+        <div class="win-row"><div class="wr-name">KCBT Wheat (vs CBOT spread)</div><div class="wr-signal c-green">LONG SPREAD</div></div>
+        <div class="win-row"><div class="wr-name">WEAT ETF</div><div class="wr-signal c-amber">BUY</div></div>
+        <div class="win-row"><div class="wr-name">Urea / Fertilizer Exposure</div><div class="wr-signal c-amber">MONITOR</div></div>
+      </div>
+    </div>
+    <div class="win-card">
+      <div class="win-head">
+        <div class="win-category">Positioning Shift</div>
+        <div class="win-title">ROTATE WITHIN EQUITY</div>
+      </div>
+      <div class="win-body">
+        <div class="win-row"><div class="wr-name">Large Cap Quality (SPX)</div><div class="wr-signal c-amber">OVERWEIGHT</div></div>
+        <div class="win-row"><div class="wr-name">Energy Sector (XLE)</div><div class="wr-signal c-green">STRONG OW</div></div>
+        <div class="win-row"><div class="wr-name">Financials (selectve)</div><div class="wr-signal c-amber">NEUTRAL+</div></div>
+        <div class="win-row"><div class="wr-name">Short Duration Bonds</div><div class="wr-signal c-amber">OVERWEIGHT</div></div>
+        <div class="win-row"><div class="wr-name">Cash (USD)</div><div class="wr-signal c-amber">HOLD</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="losers">
+    <div class="lose-card">
+      <div class="lc-label">Avoid — Valuation Risk</div>
+      <div class="lc-title">LONG-DURATION GROWTH</div>
+      <div class="lc-body">Magnificent 7 at 26x forward PE facing <strong>25–30% compression risk</strong> as 10-year moves to 5.5% in stagflation scenario. Double hit: higher discount rates AND lower reported earnings from USD strength. Tech, pharma, consumer discretionary all at risk. Wait for genuine capitulation — the "5% more" target is likely too conservative.</div>
+    </div>
+    <div class="lose-card">
+      <div class="lc-label">Avoid / Short — Mechanical Risk</div>
+      <div class="lc-title">SMALL CAP FLOATING-RATE DEBT</div>
+      <div class="lc-body"><strong>40–45% of Russell 2000 carries floating-rate debt</strong> repricing against SOFR daily. No duration buffer. Every month Fed holds steady is full elevated debt service. Leveraged debt refinancing wall hits 2025–27. Stagflation squeezes both ends simultaneously: financing costs up, revenues down. IWM vs SPY short or underweight. Sectors most exposed: regional retail, small cap industrials, consumer discretionary, 2019–21 PE buyout targets.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 8: MONITORING FRAMEWORK -->
+  <div class="sh">
+    <div class="sn">08</div>
+    <div>
+      <div class="st-tag">Risk Dashboard</div>
+      <div class="st">WHAT TO MONITOR — THESIS TRIGGERS & BREAKS</div>
+    </div>
+  </div>
+
+  <div class="monitor-grid">
+    <div class="mon-card">
+      <div class="mon-label">Hormuz Status</div>
+      <div class="mon-signal c-fire">CONTESTED</div>
+      <div class="mon-desc">Primary thesis driver. Monitor: Lloyd's war risk insurance premiums for Hormuz transits. If premiums fall = perceived reopening = thesis weakens.</div>
+      <div class="mon-level c-fire">If premiums fall → exit oil/wheat longs</div>
+    </div>
+    <div class="mon-card">
+      <div class="mon-label">Wheat Futures</div>
+      <div class="mon-signal c-amber">$5.82 ASLEEP</div>
+      <div class="mon-desc">CBOT wheat +8% only despite urea +$100/week. Catalyst: April/May USDA crop condition reports confirming nitrogen deprivation stunted growth.</div>
+      <div class="mon-level c-green">Apr WASDE → violent reprice</div>
+    </div>
+    <div class="mon-card">
+      <div class="mon-label">IWM vs SPY</div>
+      <div class="mon-signal c-fire">WATCH SPREAD</div>
+      <div class="mon-desc">Russell 2000 underperformance vs S&P 500 is the real-time gauge of higher-for-longer pricing. Widening spread = market believes cuts are off the table.</div>
+      <div class="mon-level c-amber">Widening spread confirms Gap 04</div>
+    </div>
+    <div class="mon-card">
+      <div class="mon-label">DXY Dollar Index</div>
+      <div class="mon-signal c-ice">WATCH 126</div>
+      <div class="mon-desc">Above 126 = commodity upside capped in dollar terms. EM contagion accelerates. Monitor alongside SOFR for fiscal dominance signals in bond market.</div>
+      <div class="mon-level c-amber">DXY > 126 → scale commodity longs</div>
+    </div>
+    <div class="mon-card">
+      <div class="mon-label">NDVI Crop Data</div>
+      <div class="mon-signal c-amber">MARCH CRITICAL</div>
+      <div class="mon-desc">Normalized Difference Vegetation Index for US Great Plains and Black Sea. Decline in late March = confirms physiological nitrogen deprivation in winter wheat.</div>
+      <div class="mon-level c-green">NDVI decline → wheat futures explode</div>
+    </div>
+    <div class="mon-card">
+      <div class="mon-label">China Policy Signal</div>
+      <div class="mon-signal c-ice">WILDCARD</div>
+      <div class="mon-desc">China has strong incentive to de-escalate — Iran is its largest BRI partner. Chinese urea reserve release or diplomatic pressure = partial supply gap mitigation.</div>
+      <div class="mon-level c-muted">NDRC announcement → thesis review</div>
+    </div>
+    <div class="mon-card">
+      <div class="mon-label">Fed Credibility</div>
+      <div class="mon-signal c-fire">WATCH</div>
+      <div class="mon-desc">5-year breakeven inflation rate. Above 2.7% signals unanchoring expectations. Watch for political pressure to cut — that's the 1979 error signal.</div>
+      <div class="mon-level c-fire">Breakevens > 2.7% → gold surge</div>
+    </div>
+    <div class="mon-card">
+      <div class="mon-label">Thesis Break</div>
+      <div class="mon-signal c-amber">DIPLOMACY</div>
+      <div class="mon-desc">Rapid de-escalation is primary risk. If Hormuz reopens by mid-March, oil premium collapses. Wheat thesis also weakens if rerouted ships arrive in time for late nitrogen application.</div>
+      <div class="mon-level c-muted">Hormuz reopens → full exit</div>
+    </div>
+  </div>
+
+  <!-- SMALL CAP CHAIN -->
+  <div class="sh">
+    <div class="sn">09</div>
+    <div>
+      <div class="st-tag">The Hidden Casualty · Gap 04 Expanded</div>
+      <div class="st">SMALL CAP DEBT DESTRUCTION MECHANISM</div>
+    </div>
+  </div>
+
+  <div class="sc-flow">
+    <div class="scf-node hot">
+      <div class="scf-n-label">Fed Holds</div>
+      <div class="scf-n-val c-fire">Rates Flat</div>
+      <div class="scf-n-sub">Cannot cut. Cannot hike. Does nothing.</div>
+    </div>
+    <div class="scf-arr">→</div>
+    <div class="scf-node hot">
+      <div class="scf-n-label">SOFR Impact</div>
+      <div class="scf-n-val c-fire">Stays Elevated</div>
+      <div class="scf-n-sub">Floating rate debt reprices 1:1 with SOFR. Instant P&L hit.</div>
+    </div>
+    <div class="scf-arr">→</div>
+    <div class="scf-node">
+      <div class="scf-n-label">Russell 2000</div>
+      <div class="scf-n-val c-amber">40–45%</div>
+      <div class="scf-n-sub">Of constituents on floating-rate debt. No duration buffer.</div>
+    </div>
+    <div class="scf-arr">→</div>
+    <div class="scf-node">
+      <div class="scf-n-label">Refinancing Wall</div>
+      <div class="scf-n-val c-amber">2025–27</div>
+      <div class="scf-n-sub">LBO-era debt matures into a high-rate environment.</div>
+    </div>
+    <div class="scf-arr">→</div>
+    <div class="scf-node hot">
+      <div class="scf-n-label">Stagflation</div>
+      <div class="scf-n-val c-fire">Double Squeeze</div>
+      <div class="scf-n-sub">Cost up on liabilities + revenue down on top line. No offset.</div>
+    </div>
+    <div class="scf-arr">→</div>
+    <div class="scf-node hot">
+      <div class="scf-n-label">Outcome</div>
+      <div class="scf-n-val c-fire">Solvency Risk</div>
+      <div class="scf-n-sub">Covenant breaches, equity dilution, defaults in leveraged names.</div>
+    </div>
+    <div class="scf-arr">→</div>
+    <div class="scf-node" style="background:rgba(58,154,78,0.07);border-color:rgba(58,154,78,0.3)">
+      <div class="scf-n-label">The Trade</div>
+      <div class="scf-n-val c-green">IWM Short</div>
+      <div class="scf-n-sub">IWM vs SPY. Or large-cap quality tilt away from small cap value.</div>
+    </div>
+  </div>
+
+  <!-- FINAL VERDICT -->
+  <div class="sh">
+    <div class="sn">10</div>
+    <div>
+      <div class="st-tag">Final Assessment</div>
+      <div class="st">THESIS VERDICT</div>
+    </div>
+  </div>
+
+  <div class="verdict-card">
+    <div class="vc-head">
+      <div class="vc-title">IRAN × STAGFLATION — FRAMEWORK FINAL VERDICT</div>
+      <div class="vc-grade">B+</div>
+    </div>
+    <div class="vc-body">
+      <div class="vc-col">
+        <div class="vc-col-label">What The Framework Gets Right</div>
+        <div class="vc-point"><div class="vc-dot vd-right"></div><div class="vc-text"><strong>Fed paralysis in cost-push inflation</strong> — analytically sound and correctly framed</div></div>
+        <div class="vc-point"><div class="vc-dot vd-right"></div><div class="vc-text"><strong>Hormuz as critical chokepoint</strong> — the strongest and most rigorously evidenced section</div></div>
+        <div class="vc-point"><div class="vc-dot vd-right"></div><div class="vc-text"><strong>Stocks/bonds simultaneous breakdown</strong> — correctly identified as a rare stagflation diagnostic signal</div></div>
+        <div class="vc-point"><div class="vc-dot vd-right"></div><div class="vc-text"><strong>Disciplined equity entry</strong> — waiting for deeper correction is strategically correct given ERP analysis</div></div>
+        <div class="vc-point"><div class="vc-dot vd-right"></div><div class="vc-text"><strong>Regional power balance</strong> as the real geopolitical driver — correct meta-level read beyond the nuclear narrative</div></div>
+      </div>
+      <div class="vc-col">
+        <div class="vc-col-label">Where The Framework Needs Upgrading</div>
+        <div class="vc-point"><div class="vc-dot vd-wrong"></div><div class="vc-text"><strong>Fiscal dominance entirely absent</strong> — the $35T debt constraint on monetary policy is the binding structural factor</div></div>
+        <div class="vc-point"><div class="vc-dot vd-wrong"></div><div class="vc-text"><strong>Dollar weaponisation feedback loop missing</strong> — de-dollarisation acceleration is an active consequence of sanctions use</div></div>
+        <div class="vc-point"><div class="vc-dot vd-wrong"></div><div class="vc-text"><strong>Saudi Arabia's ambiguous incentives oversimplified</strong> — MBS has reasons to let prices run, not just cap them</div></div>
+        <div class="vc-point"><div class="vc-dot vd-wrong"></div><div class="vc-text"><strong>ERP more useful than PE alone</strong> — 25–30% compression implied under 5.5% 10-year, not 5%</div></div>
+        <div class="vc-point"><div class="vc-dot vd-wrong"></div><div class="vc-text"><strong>Small cap floating-rate debt destruction entirely absent</strong> — the most immediate and mechanical casualty of Fed paralysis</div></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+
+<!-- ═══ 1-ON-1 CTA ═══ -->
+<div id="ii-cta" style="padding:60px 24px;background:#0a0a0f;border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06);position:relative;overflow:hidden;">
+  <div style="position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:400px;height:400px;background:radial-gradient(circle,rgba(201,168,76,0.05),transparent 70%);pointer-events:none;"></div>
+  <div style="max-width:600px;margin:0 auto;position:relative;z-index:2;text-align:center;">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#c9a84c;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:8px;">
+      <span style="width:5px;height:5px;background:#c9a84c;border-radius:50%;display:inline-block;"></span>
+      Limited Availability
+    </div>
+    <h3 style="font-family:Georgia,'Times New Roman',serif;font-size:clamp(22px,3.5vw,32px);font-weight:400;color:#e8ecf4;line-height:1.2;margin-bottom:12px;letter-spacing:-0.01em;">Want to talk through <em style="font-style:italic;color:#c9a84c;">your</em> portfolio?</h3>
+    <p style="font-size:14px;color:#9ca3b8;line-height:1.7;margin-bottom:28px;max-width:480px;margin-left:auto;margin-right:auto;">We're opening a small number of 1-on-1 strategy sessions. Leave your email and we'll take you through a quick questionnaire — then set up a discovery call if it's a fit.</p>
+    <form id="iicForm" style="display:flex;gap:0;max-width:440px;margin:0 auto 12px;">
+      <input type="email" id="iicEmail" name="email" placeholder="Your email address" required style="flex:1;padding:14px 18px;background:#12121a;border:1px solid rgba(255,255,255,0.06);border-right:none;color:#e8ecf4;font-family:inherit;font-size:14px;outline:none;" />
+      <button type="submit" id="iicBtn" style="padding:14px 28px;background:#c9a84c;color:#0a0a0f;font-family:inherit;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;border:none;cursor:pointer;white-space:nowrap;">Join Waitlist</button>
+    </form>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#555c72;letter-spacing:0.08em;">No spam · Questionnaire first · Discovery call · Then we decide together</div>
+  </div>
+</div>
+<script>
+(function(){
+  var FORMSPREE_ID = 'YOUR_WAITLIST_FORM_ID';
+  var f = document.getElementById('iicForm');
+  if (!f) return;
+  f.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    var btn = document.getElementById('iicBtn');
+    var email = document.getElementById('iicEmail').value.trim();
+    if (!email) return;
+    btn.textContent = 'Joining...';
+    btn.style.opacity = '0.7';
+    btn.disabled = true;
+    try {
+      var res = await fetch('https://formspree.io/f/' + FORMSPREE_ID, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, source: window.location.pathname, step: 'playbook_cta', _subject: 'Waitlist from ' + window.location.pathname })
+      });
+      if (res.ok) { window.location.href = '/questionnaire?email=' + encodeURIComponent(email); }
+      else { btn.textContent = 'Error — try again'; setTimeout(function(){ btn.textContent = 'Join Waitlist'; btn.style.background = '#c9a84c'; btn.style.opacity = '1'; btn.disabled = false; }, 3000); }
+    } catch (err) { btn.textContent = 'Error'; setTimeout(function(){ btn.textContent = 'Join Waitlist'; btn.style.opacity = '1'; btn.disabled = false; }, 3000); }
+  });
+})();
+</script>
+
+<footer class="foot">
+  <div>InsightInvest · leiholding.com · @insightinvests</div>
+  <div>Iran × Stagflation · Full Investment Thesis Framework · March 2026</div>
+  <div>Educational research. Not financial advice.</div>
+  <div style="margin-top:12px;"><a href="/" style="color:#e8450a;text-decoration:none;">← Back to Insight Invest</a></div>
+</footer>
+
+</body>
+</html>
