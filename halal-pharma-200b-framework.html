@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The RM200 Billion Gold Mine — Full Framework · InsightInvest</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=IBM+Plex+Mono:wght@300;400;500&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #0d0c09;
+  --bg2:      #131209;
+  --bg3:      #1a1810;
+  --bg4:      #221f14;
+  --gold:     #c9a84c;
+  --gold2:    #e8c96a;
+  --gold-dim: #7a6228;
+  --gold-faint: rgba(201,168,76,0.08);
+  --gold-faint2: rgba(201,168,76,0.04);
+  --text:     #f0ead8;
+  --text2:    #c8bfa0;
+  --text3:    #8a7f62;
+  --text4:    #4a4430;
+  --red:      #c0392b;
+  --red-faint: rgba(192,57,43,0.1);
+  --green:    #2e7d52;
+  --green-faint: rgba(46,125,82,0.1);
+  --border:   rgba(201,168,76,0.15);
+  --border2:  rgba(201,168,76,0.07);
+  --border3:  rgba(240,234,216,0.06);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Barlow', sans-serif;
+  font-size: 14px;
+  line-height: 1.75;
+  overflow-x: hidden;
+}
+
+/* Noise + vignette */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background:
+    radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.55) 100%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:1000;
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:var(--bg); }
+::-webkit-scrollbar-thumb { background:var(--gold-dim); }
+
+/* ─── INLINE PAYWALL ─── */
+#locked-content.locked .locked-blur {
+  filter: blur(6px);
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.35;
+  max-height: 320px;
+  overflow: hidden;
+}
+.paywall-wall {
+  position: relative;
+  margin: 0;
+}
+.paywall-wall::before {
+  content: '';
+  position: absolute;
+  top: -120px; left: 0; right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, transparent, var(--bg));
+  pointer-events: none;
+  z-index: 1;
+}
+.paywall-box {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: 48px 40px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+.paywall-icon { font-size: 28px; margin-bottom: 16px; opacity: 0.6; }
+.paywall-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 14px;
+}
+.paywall-headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(22px, 3vw, 32px); font-weight: 700;
+  color: var(--text); line-height: 1.2; margin-bottom: 10px;
+}
+.paywall-headline em { font-style: italic; color: var(--gold); }
+.paywall-sub {
+  font-size: 13px; color: var(--text3); line-height: 1.7;
+  max-width: 420px; margin: 0 auto 28px;
+}
+.paywall-row { display: flex; gap: 0; justify-content: center; margin-bottom: 12px; }
+.paywall-row input {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-right: none; color: var(--text);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px; padding: 13px 22px; outline: none;
+  width: 200px; letter-spacing: 3px;
+}
+.paywall-row input::placeholder { color: var(--text4); }
+.paywall-row button {
+  background: var(--gold); border: 1px solid var(--gold);
+  color: var(--bg); font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px; font-weight: 700; letter-spacing: 3px;
+  padding: 13px 28px; cursor: pointer; text-transform: uppercase;
+  transition: background 0.2s;
+}
+.paywall-row button:hover { background: var(--gold2); }
+.paywall-err {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; color: var(--red); letter-spacing: 1px;
+  min-height: 14px; margin-bottom: 16px;
+}
+.paywall-sections {
+  display: flex; justify-content: center; gap: 8px;
+  flex-wrap: wrap; margin-top: 20px;
+}
+.paywall-sec-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--text4); border: 1px solid var(--border2);
+  padding: 4px 10px;
+}
+
+/* ─── COVER ─── */
+.cover {
+  min-height:100vh;
+  display:flex; flex-direction:column; justify-content:flex-end;
+  padding:80px 64px;
+  position:relative;
+  border-bottom:1px solid var(--border2);
+}
+
+.cover-bg-text {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(100px,18vw,220px); font-weight:700;
+  color:rgba(201,168,76,0.03);
+  white-space:nowrap; pointer-events:none;
+  letter-spacing:-4px; line-height:1;
+  user-select:none;
+}
+
+.cover-meta {
+  font-family:'IBM Plex Mono', monospace;
+  font-size:10px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--gold); margin-bottom:32px;
+  display:flex; align-items:center; gap:16px;
+}
+.cover-meta::after {
+  content:''; flex:1; height:1px; background:var(--border); max-width:160px;
+}
+
+.cover h1 {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(48px,8vw,96px); font-weight:700;
+  line-height:0.95; letter-spacing:-1px; color:var(--text);
+  margin-bottom:8px;
+}
+.cover h1 .gold { color:var(--gold); }
+.cover h1 .thin { font-weight:300; font-style:italic; }
+
+.cover-deck {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(16px,2vw,22px); font-style:italic; font-weight:300;
+  color:var(--text2); max-width:680px; line-height:1.55;
+  margin-top:24px; margin-bottom:48px;
+}
+
+.cover-stats {
+  display:flex; gap:0;
+  border-top:1px solid var(--border2);
+  border-bottom:1px solid var(--border2);
+}
+.cov-stat {
+  padding:24px 32px; border-right:1px solid var(--border2);
+  flex:1;
+}
+.cov-stat:last-child { border-right:none; }
+.cov-stat .cs-val {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(28px,4vw,44px); font-weight:700;
+  color:var(--gold); line-height:1; margin-bottom:6px;
+}
+.cov-stat .cs-label {
+  font-family:'IBM Plex Mono', monospace;
+  font-size:9px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--text3); line-height:1.5;
+}
+
+/* ─── NAV BAR ─── */
+.nav-bar {
+  position:sticky; top:0; z-index:100;
+  background:rgba(13,12,9,0.95);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border2);
+  padding:0 64px;
+  display:flex; align-items:center; gap:0;
+  overflow-x:auto;
+}
+.nav-bar a {
+  font-family:'IBM Plex Mono', monospace;
+  font-size:9px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--text3); text-decoration:none;
+  padding:14px 20px; white-space:nowrap;
+  border-bottom:2px solid transparent;
+  transition:color 0.2s, border-color 0.2s;
+}
+.nav-bar a:hover { color:var(--gold); border-bottom-color:var(--gold); }
+
+/* ─── PAGE LAYOUT ─── */
+.page { max-width:1000px; margin:0 auto; padding:0 64px; }
+
+/* ─── SECTION HEADERS ─── */
+.sec {
+  padding:80px 0 64px;
+  border-bottom:1px solid var(--border2);
+}
+.sec:last-of-type { border-bottom:none; }
+
+.sec-num {
+  font-family:'IBM Plex Mono', monospace;
+  font-size:9px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--text4); margin-bottom:6px;
+}
+.sec-label {
+  font-family:'IBM Plex Mono', monospace;
+  font-size:10px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--gold); margin-bottom:20px;
+  display:flex; align-items:center; gap:12px;
+}
+.sec-label::after {
+  content:''; flex:1; height:1px; background:var(--border); max-width:80px;
+}
+
+.sec h2 {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(34px,5vw,60px); font-weight:700;
+  line-height:0.97; letter-spacing:-0.5px; color:var(--text);
+  margin-bottom:40px;
+}
+.sec h2 em { font-style:italic; color:var(--gold); }
+.sec h2 .dim { color:var(--text3); }
+
+.sec h3 {
+  font-family:'Cormorant Garamond', serif;
+  font-size:24px; font-weight:600;
+  color:var(--text); margin-bottom:14px; margin-top:36px;
+}
+.sec h3 .gold { color:var(--gold); }
+
+/* ─── BODY TEXT ─── */
+.body { color:var(--text2); font-size:14px; line-height:1.85; margin-bottom:18px; }
+.body strong { color:var(--text); font-weight:600; }
+.body em { color:var(--gold); font-style:italic; }
+
+/* ─── PULL QUOTE ─── */
+.pull {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(20px,2.8vw,28px); font-style:italic; font-weight:400;
+  color:var(--text); line-height:1.4;
+  padding:32px 0 32px 28px;
+  border-left:2px solid var(--gold);
+  margin:36px 0;
+}
+.pull span { color:var(--gold); }
+
+/* ─── STAT GRID ─── */
+.stat-grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:1px; background:var(--border2);
+  border:1px solid var(--border2);
+  margin:36px 0;
+}
+@media(max-width:640px){ .stat-grid { grid-template-columns:1fr; } }
+
+.stat-block {
+  background:var(--bg2); padding:28px 24px;
+}
+.sb-label {
+  font-family:'IBM Plex Mono', monospace;
+  font-size:9px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--text3); margin-bottom:10px;
+}
+.sb-val {
+  font-family:'Cormorant Garamond', serif;
+  font-size:42px; font-weight:700; line-height:1; color:var(--gold);
+  margin-bottom:8px;
+}
+.sb-val.red { color:var(--red); }
+.sb-val.white { color:var(--text); }
+.sb-context { font-size:12px; color:var(--text3); line-height:1.55; }
+
+/* ─── TABLE ─── */
+.tbl {
+  width:100%; border-collapse:collapse;
+  margin:32px 0; font-size:12px;
+}
+.tbl th {
+  font-family:'IBM Plex Mono', monospace;
+  font-size:9px; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--gold); text-align:left;
+  padding:10px 16px;
+  border-top:1px solid var(--gold-dim);
+  border-bottom:1px solid var(--border);
+  background:var(--bg2);
+}
+.tbl td {
+  padding:11px 16px; border-bottom:1px solid var(--border2);
+  color:var(--text2); vertical-align:top; line-height:1.55;
+}
+.tbl tr:last-child td { border-bottom:1px solid var(--border); }
+.tbl td.bold { color:var(--text); font-weight:500; }
+.tbl td.gold { color:var(--gold); font-weight:500; }
+.tbl td.red { color:var(--red); }
+.tbl td.green { color:#4caf7d; }
+.tbl td.faint { color:var(--text3); font-style:italic; }
+
+/* ─── ANNOTATED BOX ─── */
+.ann-box {
+  background:var(--bg3); border:1px solid var(--border);
+  padding:28px 32px; margin:28px 0; position:relative;
+}
+.ann-box[data-label]::before {
+  content:attr(data-label);
+  position:absolute; top:-10px; left:20px;
+  background:var(--bg); padding:0 8px;
+  font-family:'IBM Plex Mono', monospace;
+  font-size:9px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--gold);
+}
+.ann-box p { font-size:13px; color:var(--text2); line-height:1.8; margin-bottom:10px; }
+.ann-box p:last-child { margin-bottom:0; }
+.ann-box strong { color:var(--text); }
+
+/* Red callout */
+.red-box {
+  border-left:3px solid var(--red); background:var(--red-faint);
+  padding:18px 22px; margin:22px 0;
+}
+.red-box p {
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px; color:#e06050; line-height:1.7;
+}
+.red-box strong { color:var(--text); }
+
+/* Gold callout */
+.gold-box {
+  border-left:3px solid var(--gold); background:var(--gold-faint);
+  padding:18px 22px; margin:22px 0;
+}
+.gold-box p { font-size:13px; color:var(--text2); line-height:1.7; }
+.gold-box strong { color:var(--text); }
+
+/* ─── GAP CARDS ─── */
+.gap-grid {
+  display:grid; grid-template-columns:1fr;
+  gap:2px; margin:32px 0;
+}
+.gap-card {
+  background:var(--bg2); border:1px solid var(--border2);
+  padding:0; overflow:hidden;
+  transition:border-color 0.2s;
+}
+.gap-card:hover { border-color:var(--gold-dim); }
+.gap-card-head {
+  display:grid; grid-template-columns:auto 1fr auto;
+  gap:20px; align-items:center;
+  padding:20px 28px;
+  border-bottom:1px solid var(--border2);
+  background:var(--bg3);
+}
+.gap-num {
+  font-family:'Cormorant Garamond', serif;
+  font-size:52px; font-weight:700; color:var(--text4);
+  line-height:1;
+}
+.gap-title {
+  font-family:'Cormorant Garamond', serif;
+  font-size:22px; font-weight:600; color:var(--text);
+  line-height:1.2;
+}
+.gap-subtitle { font-size:11px; color:var(--text3); margin-top:4px; }
+.gap-size {
+  font-family:'Cormorant Garamond', serif;
+  font-size:26px; font-weight:700; color:var(--gold);
+  text-align:right; line-height:1;
+}
+.gap-size-label {
+  font-family:'IBM Plex Mono', monospace;
+  font-size:8px; letter-spacing:1px; text-transform:uppercase;
+  color:var(--text3); text-align:right; margin-top:4px;
+}
+.gap-body { padding:22px 28px; }
+.gap-body .gb-row {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:24px; margin-bottom:16px;
+}
+@media(max-width:600px){ .gap-body .gb-row { grid-template-columns:1fr; } }
+.gb-col-label {
+  font-family:'IBM Plex Mono', monospace;
+  font-size:9px; letter-spacing:2px; text-transform:uppercase;
+  margin-bottom:8px;
+}
+.gb-col-label.problem { color:#c06050; }
+.gb-col-label.benefit { color:var(--gold); }
+.gb-col-body { font-size:12px; color:var(--text2); line-height:1.7; }
+.gap-verdict {
+  padding:14px 28px;
+  border-top:1px solid var(--border2);
+  background:var(--gold-faint2);
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px; color:var(--gold);
+  line-height:1.6;
+}
+
+/* ─── TIMELINE ─── */
+.timeline { position:relative; margin:32px 0; }
+.timeline::before {
+  content:''; position:absolute;
+  left:8px; top:16px; bottom:16px;
+  width:1px; background:var(--border2);
+}
+.tl-item { display:flex; gap:28px; padding:16px 0; position:relative; }
+.tl-dot {
+  width:17px; height:17px; border-radius:50%;
+  border:2px solid var(--text4); background:var(--bg);
+  min-width:17px; margin-top:3px; z-index:1;
+}
+.tl-dot.gold-dot { border-color:var(--gold); background:var(--gold); }
+.tl-dot.active { border-color:var(--gold2); background:var(--gold2); box-shadow:0 0 12px rgba(232,201,106,0.4); }
+.tl-dot.red-dot { border-color:var(--red); background:var(--red); }
+.tl-content { flex:1; }
+.tl-period {
+  font-family:'IBM Plex Mono', monospace;
+  font-size:9px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--text3); margin-bottom:4px;
+}
+.tl-title {
+  font-family:'Cormorant Garamond', serif;
+  font-size:17px; font-weight:600; color:var(--text); margin-bottom:5px;
+}
+.tl-body { font-size:12px; color:var(--text3); line-height:1.65; }
+.tl-body strong { color:var(--text2); }
+
+/* ─── COMPANY CARDS ─── */
+.co-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; margin:32px 0; }
+@media(max-width:640px){ .co-grid { grid-template-columns:1fr; } }
+
+.co-card { background:var(--bg2); border:1px solid var(--border2); overflow:hidden; }
+.co-card-head {
+  padding:24px 26px; background:var(--bg3);
+  border-bottom:1px solid var(--border2);
+}
+.co-ticker {
+  font-family:'Cormorant Garamond', serif;
+  font-size:38px; font-weight:700; color:var(--gold); line-height:1;
+}
+.co-name { font-size:11px; color:var(--text3); margin-top:4px; }
+.co-rank {
+  display:inline-block; margin-top:10px;
+  font-family:'IBM Plex Mono', monospace;
+  font-size:9px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--bg); background:var(--gold);
+  padding:3px 10px;
+}
+.co-body { padding:22px 26px; }
+.co-headline {
+  font-family:'Cormorant Garamond', serif;
+  font-size:16px; font-style:italic; color:var(--text);
+  margin-bottom:12px; line-height:1.4;
+}
+.co-metrics {
+  display:flex; flex-direction:column; gap:7px;
+  padding-top:14px; border-top:1px solid var(--border2);
+  margin-top:14px;
+}
+.co-metric {
+  display:flex; justify-content:space-between;
+  font-size:11px; line-height:1.4;
+}
+.co-metric-key { color:var(--text3); }
+.co-metric-val { color:var(--text); font-weight:500; }
+.co-metric-val.gold { color:var(--gold); }
+.co-metric-val.red { color:var(--red); }
+.co-body .co-text { font-size:12px; color:var(--text2); line-height:1.7; margin-bottom:10px; }
+
+/* ─── CATALYST STACK ─── */
+.catalyst-stack { display:flex; flex-direction:column; gap:2px; margin:32px 0; }
+.catalyst-row {
+  display:grid; grid-template-columns:48px 1fr auto;
+  gap:20px; align-items:start;
+  padding:22px 24px;
+  background:var(--bg2); border:1px solid var(--border2);
+  transition:border-color 0.2s;
+}
+.catalyst-row:hover { border-color:var(--gold-dim); }
+.cat-num {
+  font-family:'Cormorant Garamond', serif;
+  font-size:44px; font-weight:700; color:var(--text4); line-height:1;
+}
+.cat-content { flex:1; }
+.cat-title {
+  font-family:'Cormorant Garamond', serif;
+  font-size:19px; font-weight:600; color:var(--text);
+  margin-bottom:5px; line-height:1.2;
+}
+.cat-body { font-size:12px; color:var(--text2); line-height:1.7; }
+.cat-body strong { color:var(--text); }
+.cat-tag {
+  font-family:'IBM Plex Mono', monospace;
+  font-size:9px; letter-spacing:1.5px; text-transform:uppercase;
+  padding:4px 10px; white-space:nowrap; height:fit-content;
+}
+.cat-tag.live { border:1px solid var(--gold); color:var(--gold); }
+.cat-tag.imminent { border:1px solid #e06050; color:#e06050; }
+.cat-tag.building { border:1px solid var(--text3); color:var(--text3); }
+
+/* ─── UNDERPERFORMANCE AUDIT ─── */
+.audit-row {
+  display:grid; grid-template-columns:1fr 1fr 1fr;
+  gap:0; border-bottom:1px solid var(--border2);
+  padding:18px 0;
+}
+.audit-row:first-child { border-top:1px solid var(--border); padding-top:0; }
+.audit-row:last-child { border-bottom:1px solid var(--border); }
+@media(max-width:600px){ .audit-row { grid-template-columns:1fr; gap:8px; } }
+
+.audit-cell { padding:0 16px; }
+.audit-cell:first-child { padding-left:0; border-right:1px solid var(--border2); }
+.audit-cell:last-child { padding-right:0; }
+.audit-cell-label {
+  font-family:'IBM Plex Mono', monospace;
+  font-size:9px; letter-spacing:1.5px; text-transform:uppercase;
+  margin-bottom:6px;
+}
+.audit-cell-label.have { color:var(--gold); }
+.audit-cell-label.gap { color:var(--red); }
+.audit-cell-label.opp { color:#4caf7d; }
+.audit-cell-body { font-size:12px; color:var(--text2); line-height:1.6; }
+
+/* ─── INVESTMENT FRAMEWORK ─── */
+.inv-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; margin:32px 0; }
+@media(max-width:600px){ .inv-grid { grid-template-columns:1fr; } }
+
+.inv-col { background:var(--bg2); border:1px solid var(--border2); padding:26px; }
+.inv-col-head {
+  font-family:'IBM Plex Mono', monospace;
+  font-size:9px; letter-spacing:2px; text-transform:uppercase;
+  margin-bottom:14px; padding-bottom:12px;
+  border-bottom:1px solid var(--border2);
+}
+.inv-col-head.buy { color:var(--gold); border-bottom-color:var(--gold-dim); }
+.inv-col-head.watch { color:var(--text3); }
+.inv-col-head.avoid { color:var(--red); border-bottom-color:#7a2020; }
+.inv-col-head.track { color:#4caf7d; border-bottom-color:#1e5233; }
+
+.inv-item {
+  padding:10px 0; border-bottom:1px solid var(--border2);
+  font-size:12px;
+}
+.inv-item:last-child { border-bottom:none; padding-bottom:0; }
+.inv-item-name { color:var(--text); font-weight:500; margin-bottom:3px; }
+.inv-item-desc { color:var(--text3); font-size:11px; line-height:1.5; }
+
+/* ─── MASTER PLAN TABLE ─── */
+.kra-grid {
+  display:grid; grid-template-columns:repeat(2,1fr);
+  gap:2px; margin:32px 0;
+}
+@media(max-width:600px){ .kra-grid { grid-template-columns:1fr; } }
+
+.kra-cell {
+  background:var(--bg2); border:1px solid var(--border2);
+  padding:22px;
+}
+.kra-cell-label {
+  font-family:'IBM Plex Mono', monospace;
+  font-size:9px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--text3); margin-bottom:8px;
+}
+.kra-cell-target {
+  font-family:'Cormorant Garamond', serif;
+  font-size:26px; font-weight:700; color:var(--gold);
+  line-height:1; margin-bottom:6px;
+}
+.kra-cell-body { font-size:11px; color:var(--text3); line-height:1.6; }
+
+/* ─── VERDICT ─── */
+.verdict {
+  background:var(--bg3); border:1px solid var(--border);
+  padding:48px; margin:48px 0;
+  position:relative; overflow:hidden;
+}
+.verdict::before {
+  content:'VERDICT';
+  position:absolute; bottom:-24px; right:-12px;
+  font-family:'Cormorant Garamond', serif;
+  font-size:120px; font-weight:700; color:rgba(201,168,76,0.04);
+  pointer-events:none; line-height:1;
+}
+.verdict .v-label {
+  font-family:'IBM Plex Mono', monospace;
+  font-size:9px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--gold); margin-bottom:20px;
+}
+.verdict .v-head {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(24px,3.5vw,40px); font-weight:700;
+  line-height:1.1; color:var(--text); margin-bottom:28px;
+}
+.verdict .v-head em { font-style:italic; color:var(--gold); }
+.verdict p { font-size:13px; color:var(--text2); line-height:1.85; margin-bottom:14px; max-width:680px; }
+.verdict p strong { color:var(--text); }
+.verdict p:last-child { margin-bottom:0; }
+
+/* ─── DIVIDER ─── */
+.divider {
+  display:flex; align-items:center; gap:20px;
+  padding:0; margin:32px 0;
+}
+.divider::before, .divider::after {
+  content:''; flex:1; height:1px; background:var(--border2);
+}
+.divider span {
+  font-family:'IBM Plex Mono', monospace;
+  font-size:9px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--text4);
+}
+
+/* ─── FOOTER ─── */
+.doc-footer {
+  padding:40px 64px; max-width:1000px; margin:0 auto;
+  display:flex; justify-content:space-between; align-items:center;
+  border-top:1px solid var(--border2);
+  flex-wrap:wrap; gap:16px;
+}
+.footer-brand {
+  font-family:'Cormorant Garamond', serif;
+  font-size:22px; font-weight:700; letter-spacing:4px; color:var(--gold);
+}
+.footer-right {
+  font-family:'IBM Plex Mono', monospace;
+  font-size:10px; color:var(--text3); text-align:right; line-height:1.8;
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(24px); }
+  to { opacity:1; transform:translateY(0); }
+}
+.cover { animation:fadeUp 0.8s ease both; }
+.sec { animation:fadeUp 0.5s ease both; }
+</style>
+</head>
+<body>
+<!-- ═══ SITE-WIDE NAV ═══ -->
+<div id="siteNav" style="position:fixed;top:0;left:0;right:0;z-index:9998;background:rgba(13,12,9,0.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(201,168,76,0.12);padding:0 32px;font-family:'IBM Plex Mono',monospace;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:44px;">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      <span style="font-size:11px;font-weight:500;color:#c9a84c;letter-spacing:0.1em;text-transform:uppercase;">Insight Invest</span>
+    </a>
+    <div style="display:flex;gap:4px;">
+      <a href="/buffett-playbook" style="font-size:10px;font-weight:400;color:#4a4430;text-decoration:none;padding:4px 10px;border-radius:4px;">Buffett</a>
+      <a href="/iran-conflict" style="font-size:10px;font-weight:400;color:#4a4430;text-decoration:none;padding:4px 10px;border-radius:4px;">Iran Frameworks</a>
+      <a href="/iran-bursa-playbook" style="font-size:10px;font-weight:400;color:#4a4430;text-decoration:none;padding:4px 10px;border-radius:4px;">Bursa</a>
+      <a href="/iran-thesis-framework" style="font-size:10px;font-weight:400;color:#4a4430;text-decoration:none;padding:4px 10px;border-radius:4px;">Thesis</a>
+      <a href="/halal-pharma-200b-framework" style="font-size:10px;font-weight:400;color:#c9a84c;background:rgba(201,168,76,0.08);text-decoration:none;padding:4px 10px;border-radius:4px;">Halal Pharma</a>
+    </div>
+  </div>
+</div>
+<div style="height:44px;"></div>
+<!-- ═══ END SITE NAV ═══ -->
+
+
+
+<!-- ─── COVER ─── -->
+<div class="cover page">
+  <div class="cover-bg-text">RM200B</div>
+  <div class="cover-meta">InsightInvest · Patreon Research · March 2026</div>
+  <h1>
+    The <span class="gold">RM200 Billion</span><br>
+    <span class="thin">Gold Mine</span><br>
+    Malaysia Built<br>
+    <span class="thin">& Forgot to Mine</span>
+  </h1>
+  <p class="cover-deck">
+    A full investment framework on Malaysia's halal pharmaceutical sector — 
+    the world's fastest-growing healthcare segment, anchored by a regulatory 
+    monopoly 50 years in the making, and still being left on the table.
+  </p>
+  <div class="cover-stats">
+    <div class="cov-stat">
+      <div class="cs-val">USD 205B</div>
+      <div class="cs-label">Market size by 2034<br>(high-definition)</div>
+    </div>
+    <div class="cov-stat">
+      <div class="cs-val">24.39%</div>
+      <div class="cs-label">Annual growth rate —<br>3× faster than halal food</div>
+    </div>
+    <div class="cov-stat">
+      <div class="cs-val">1.9B</div>
+      <div class="cs-label">Muslims globally who<br>need compliant medicine</div>
+    </div>
+    <div class="cov-stat">
+      <div class="cs-val">3%</div>
+      <div class="cs-label">Of global gelatin that<br>is halal-certified today</div>
+    </div>
+    <div class="cov-stat">
+      <div class="cs-val">10 Yrs</div>
+      <div class="cs-label">Malaysia at #1 in<br>Global Islamic Economy</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── NAV ─── -->
+<nav class="nav-bar">
+  <a href="#thesis">Thesis</a>
+  <a href="#market">Market</a>
+  <a href="#gaps">Supply Gaps</a>
+  <a href="#moat">Moat</a>
+  <a href="#catalysts">Catalysts</a>
+  <a href="#champions">Champions</a>
+  <a href="#audit">Audit</a>
+  <a href="#masterplan">2030 Plan</a>
+  <a href="#framework">Framework</a>
+  <a href="#verdict">Verdict</a>
+</nav>
+
+<!-- ─── SECTION 01 · THESIS ─── -->
+<div class="page">
+<section class="sec" id="thesis">
+  <div class="sec-num">Section 01</div>
+  <div class="sec-label">The Core Argument</div>
+  <h2>The Gold Mine<br>We Built — And <em>Undermine</em></h2>
+
+  <p class="body">
+    Malaysia has spent 50 years constructing a regulatory architecture that the entire world now needs. JAKIM's halal pharmaceutical certification — formalised as <strong>MS 2424:2019</strong> — is recognised by over 80 certifying bodies across 45 countries. No other nation has built anything comparable. The world's 1.9 billion Muslims are increasingly insisting on faith-compliant medicine, and <strong>Malaysia holds the only globally accepted standard to certify it.</strong>
+  </p>
+  <p class="body">
+    This is not a future opportunity. It is a present structural position — one that is being underutilised relative to its full economic potential. Foreign companies have recognised this faster than domestic capital has: 59% of investment flowing into Malaysia's own halal industrial parks comes from multinational corporations, not Malaysian businesses. We built the infrastructure and are renting it to others.
+  </p>
+
+  <div class="pull">
+    "The halal pharmaceutical market is growing at <span>24% per year</span> — three times the pace of halal food. Pharmaceuticals hold the highest barriers to entry, the most defensible regulatory moats, and the longest competitive lead times. And it is the sector receiving the least attention from Malaysian investors and the Malaysian media."
+  </div>
+
+  <p class="body">
+    The RM200 billion figure is not a single number — it is a convergence of three separate valuations: the government's MSME GDP contribution target, the Malaysia-US trade corridor value, and the HIMP 2030 total domestic halal market aspiration of RM523.53 billion. Pharmaceuticals sit at the core of all three. The thesis of this document is simple: <strong>Malaysia's halal pharmaceutical position is the most underpriced national economic asset we hold, and the catalysts needed to unlock it are already arriving.</strong>
+  </p>
+
+  <div class="gold-box">
+    <p><strong>The central question this framework answers:</strong> Given that Malaysia has the certification monopoly, the industrial infrastructure, the national champions, the government masterplans, and the trade corridors — why is the sector still considered a niche story, and what needs to happen for the RM200 billion potential to be realised?</p>
+  </div>
+</section>
+
+<!-- ─── SECTION 02 · MARKET ─── -->
+<section class="sec" id="market">
+  <div class="sec-num">Section 02</div>
+  <div class="sec-label">Market Architecture</div>
+  <h2>Decoding the <em>RM200 Billion</em><br>Number</h2>
+
+  <p class="body">
+    The RM200 billion figure circulates widely but is rarely explained. It is not one market — it is three overlapping economic clusters that converge on Malaysia's halal pharmaceutical positioning. Understanding the architecture of this number is essential before analysing where the opportunity sits.
+  </p>
+
+  <div class="stat-grid">
+    <div class="stat-block">
+      <div class="sb-label">Global Halal Pharma — Conservative</div>
+      <div class="sb-val">USD 454M</div>
+      <div class="sb-context">2024 baseline. Certified finished products only. Understates true market by definition.</div>
+    </div>
+    <div class="stat-block">
+      <div class="sb-label">Global Halal Pharma — High Definition</div>
+      <div class="sb-val">USD 23B</div>
+      <div class="sb-context">2024. Includes all medicine consumed by Muslims insisting on faith-compliant sourcing. This is the real market.</div>
+    </div>
+    <div class="stat-block">
+      <div class="sb-label">High-Definition Market by 2034</div>
+      <div class="sb-val">USD 205B</div>
+      <div class="sb-context">24.39% CAGR. The migration of uncertified drugs into the certified premium bracket as JAKIM's standard globalises.</div>
+    </div>
+    <div class="stat-block">
+      <div class="sb-label">Malaysia Halal Export Growth 2022</div>
+      <div class="sb-val red">+156%</div>
+      <div class="sb-context">YoY halal pharma export value growth. Highest across all halal categories. Almost no mainstream coverage.</div>
+    </div>
+    <div class="stat-block">
+      <div class="sb-label">HIMP 2030 Total Domestic Halal Market</div>
+      <div class="sb-val">RM 523B</div>
+      <div class="sb-context">Total domestic halal economy target. Pharmaceuticals classified as a "core sector" alongside food and cosmetics.</div>
+    </div>
+    <div class="stat-block">
+      <div class="sb-label">Malaysia-US Trade Corridor Value</div>
+      <div class="sb-val">RM 200B</div>
+      <div class="sb-context">Annual bilateral trade. Pharma and semiconductors are zero-tariff protected categories under current agreement.</div>
+    </div>
+  </div>
+
+  <table class="tbl">
+    <thead>
+      <tr>
+        <th>Metric</th>
+        <th>2024/2025</th>
+        <th>2030/2035 Target</th>
+        <th>CAGR</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="bold">Global Halal Pharma (Conservative)</td>
+        <td>USD 454M</td>
+        <td class="gold">USD 2.11B (2035)</td>
+        <td class="gold">13.8%</td>
+        <td>Undercounts true demand</td>
+      </tr>
+      <tr>
+        <td class="bold">Global Halal Pharma (High-Def)</td>
+        <td>USD 23.28B</td>
+        <td class="gold">USD 205.30B (2034)</td>
+        <td class="gold">24.39%</td>
+        <td>The real market</td>
+      </tr>
+      <tr>
+        <td class="bold">Malaysia Total Halal Exports</td>
+        <td>RM 61.79B</td>
+        <td>RM 70.0B (2030)</td>
+        <td>~5.0%</td>
+        <td>Pharma underpinning growth</td>
+      </tr>
+      <tr>
+        <td class="bold">Malaysia Halal GDP Contribution</td>
+        <td>7.5%–10.0%</td>
+        <td class="gold">10.8%–11.0% (2030)</td>
+        <td>—</td>
+        <td>On track per HIMP</td>
+      </tr>
+      <tr>
+        <td class="bold">Halal Pharma CAGR vs Food</td>
+        <td>24.39% vs ~8%</td>
+        <td>—</td>
+        <td class="gold">3× faster</td>
+        <td class="red">Narrative gap here</td>
+      </tr>
+      <tr>
+        <td class="bold">SME GDP Contribution Target</td>
+        <td>RM 652.4B</td>
+        <td>RM 1.0T (2030)</td>
+        <td>~6.0%</td>
+        <td>Pharma SMEs underpenetrated</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="ann-box" data-label="The Valuation Gap Explained">
+    <p>The conservative market estimate counts only finished products with a halal logo physically stamped on the packaging. The high-definition estimate captures the full population of Muslims who are actively seeking compliant medicine — including drugs they currently consume without certification, because no certified alternative exists yet. <strong>Malaysia's strategy is to migrate products from the uncertified bracket into the certified premium bracket through MS 2424:2019.</strong> Every product that crosses that line represents incremental export revenue for Malaysian manufacturers.</p>
+    <p>The gap between USD 454 million and USD 23 billion is not a statistical discrepancy. It is the business opportunity.</p>
+  </div>
+</section>
+
+<!-- ─── INLINE PAYWALL ─── -->
+<div class="paywall-wall" id="paywall-wall">
+  <div class="paywall-box">
+    <div class="paywall-icon">⬡</div>
+    <div class="paywall-label">Patreon Research · Restricted Access</div>
+    <div class="paywall-headline">The remaining <em>8 sections</em><br>are Patreon-exclusive</div>
+    <p class="paywall-sub">
+      Supply chain gaps, Malaysia's structural moat, the catalyst stack, national champion deep-dives, the underperformance audit, HIMP 2030, the investment framework, and the final verdict — all behind the keyword.
+    </p>
+    <div class="paywall-row">
+      <input type="password" id="pw" placeholder="enter keyword" onkeydown="if(event.key==='Enter')unlockContent()">
+      <button onclick="unlockContent()">Unlock</button>
+    </div>
+    <div class="paywall-err" id="pw-err"></div>
+    <div class="paywall-sections">
+      <span class="paywall-sec-tag">03 · Supply Gaps</span>
+      <span class="paywall-sec-tag">04 · Structural Moat</span>
+      <span class="paywall-sec-tag">05 · Catalysts</span>
+      <span class="paywall-sec-tag">06 · National Champions</span>
+      <span class="paywall-sec-tag">07 · Audit</span>
+      <span class="paywall-sec-tag">08 · 2030 Plan</span>
+      <span class="paywall-sec-tag">09 · Framework</span>
+      <span class="paywall-sec-tag">10 · Verdict</span>
+    </div>
+  </div>
+</div>
+
+<div id="locked-content" style="display:none;">
+
+<!-- ─── SECTION 03 · SUPPLY GAPS ─── -->
+<section class="sec" id="gaps">
+  <div class="sec-num">Section 03</div>
+  <div class="sec-label">The Three Revenue Lines</div>
+  <h2>Supply Chain <em>Gaps</em><br>That Malaysia Owns</h2>
+
+  <p class="body">
+    Every structural failure in global pharmaceutical supply chains represents a direct revenue line for Malaysia — provided we move fast enough to capture it. There are three distinct gaps, each compounding the value of the others, each traceable to the same root cause: the global pharmaceutical industry was built around porcine-derived ingredients before the concept of halal compliance was commercially significant.
+  </p>
+
+  <div class="gap-grid">
+
+    <div class="gap-card">
+      <div class="gap-card-head">
+        <div class="gap-num">01</div>
+        <div>
+          <div class="gap-title">The Gelatin Gap</div>
+          <div class="gap-subtitle">Capsule shells · Tablet coatings · Vaccine stabilisers</div>
+        </div>
+        <div>
+          <div class="gap-size">97%</div>
+          <div class="gap-size-label">non-halal certified</div>
+        </div>
+      </div>
+      <div class="gap-body">
+        <div class="gb-row">
+          <div>
+            <div class="gb-col-label problem">The Problem</div>
+            <div class="gb-col-body">370,000 metric tonnes of pharmaceutical gelatin produced annually worldwide. 45% porcine-based. 78% manufactured in Europe, China, and the Americas — regions with zero Islamic certification infrastructure. The pharmaceutical industry standardised on pig-derived gelatin in the 1950s because it was inexpensive and chemically effective. Nobody built a halal alternative at commercial scale for decades.</div>
+          </div>
+          <div>
+            <div class="gb-col-label benefit">How Malaysia Benefits</div>
+            <div class="gb-col-body">Halagel — Malaysian-based, JAKIM-certified, producing bovine-origin pharmaceutical gelatin distributed across Southeast Asia and the Middle East. Every porcine capsule substituted by a halal bovine alternative is a Malaysian export. The ceiling: 97% of 370,000 MT is still uncertified. We are currently serving 3% of a problem we are uniquely positioned to solve.</div>
+          </div>
+        </div>
+      </div>
+      <div class="gap-verdict">⚑ Immediate revenue line. Infrastructure exists. Requires aggressive scale-up and international distribution partnerships to capture the ASEAN + Middle East substitution demand.</div>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-card-head">
+        <div class="gap-num">02</div>
+        <div>
+          <div class="gap-title">The Heparin Crisis</div>
+          <div class="gap-subtitle">Blood thinners · Surgical anticoagulants · Dialysis treatment</div>
+        </div>
+        <div>
+          <div class="gap-size">$2B+</div>
+          <div class="gap-size-label">global heparin market</div>
+        </div>
+      </div>
+      <div class="gap-body">
+        <div class="gb-row">
+          <div>
+            <div class="gb-col-label problem">The Problem</div>
+            <div class="gb-col-body">Heparin has been extracted from pig intestines since the 1930s. In 2008, contaminated Chinese porcine heparin caused more than 80 deaths in the United States. The FDA publicly encouraged the re-introduction of bovine-origin heparin to reduce dangerous single-source dependency on Chinese porcine supply chains. Despite this, the market remains dominated by porcine suppliers — creating both a safety risk and a religious compliance failure for 1.9 billion patients.</div>
+          </div>
+          <div>
+            <div class="gb-col-label benefit">How Malaysia Benefits</div>
+            <div class="gb-col-body">Bovine heparin can be halal-certified under MS 2424:2019. Malaysia has the regulatory architecture to produce and certify it — the only country with a globally recognised halal pharma standard that could meet both Shariah requirements and FDA import criteria simultaneously. This is a niche where Malaysia could lead the FDA-encouraged substitution narrative. We are not yet doing so at the required scale or visibility.</div>
+          </div>
+        </div>
+      </div>
+      <div class="gap-verdict">⚑ Strategic niche with asymmetric upside. FDA is the de facto marketing partner — they have already made the case for substitution. Malaysia needs to position as the lead certified bovine heparin supplier in international regulatory dialogue.</div>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-card-head">
+        <div class="gap-num">03</div>
+        <div>
+          <div class="gap-title">The Indonesia Mandate</div>
+          <div class="gap-subtitle">270M population · Mandatory halal labeling 2024–2026</div>
+        </div>
+        <div>
+          <div class="gap-size">270M</div>
+          <div class="gap-size-label">legal captive market</div>
+        </div>
+      </div>
+      <div class="gap-body">
+        <div class="gb-row">
+          <div>
+            <div class="gb-col-label problem">The Problem</div>
+            <div class="gb-col-body">Indonesia — the world's largest Muslim-majority country — has enacted mandatory halal certification for all pharmaceutical products sold within its borders, with a phased rollout running 2024 to 2026. Every drug currently on Indonesian pharmacy shelves without halal certification must be reformulated, recertified, or discontinued. The scale of this compliance requirement vastly exceeds local Indonesian certification capacity.</div>
+          </div>
+          <div>
+            <div class="gb-col-label benefit">How Malaysia Benefits</div>
+            <div class="gb-col-body">The only internationally recognised halal pharmaceutical standard in the region is JAKIM's. Pharmaniaga already operates manufacturing and logistics infrastructure inside Indonesia. Duopharma holds OIC rank #2 — the credibility mark that Indonesian regulators and procurement bodies recognise. The legal mandate has created demand that exceeds Indonesian supply. Malaysia is the natural, already-positioned primary supplier. The question is capacity, not capability.</div>
+          </div>
+        </div>
+      </div>
+      <div class="gap-verdict">⚑ Most urgent catalyst. Legally mandated demand is arriving now — 2024 to 2026 rollout window. Pharmaniaga's in-country position is the critical commercial advantage. Requires immediate scale investment to match incoming compliance demand.</div>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-card-head">
+        <div class="gap-num">04</div>
+        <div>
+          <div class="gap-title">The Oncology & Specialty Frontier</div>
+          <div class="gap-subtitle">Cancer treatment · Biosimilars · Biologics · Renal care</div>
+        </div>
+        <div>
+          <div class="gap-size">First</div>
+          <div class="gap-size-label">in world · Malaysia only</div>
+        </div>
+      </div>
+      <div class="gap-body">
+        <div class="gb-row">
+          <div>
+            <div class="gb-col-label problem">The Problem</div>
+            <div class="gb-col-body">Muslim patients with chronic conditions — cancer, kidney failure, diabetes — have historically faced a deeply uncomfortable choice: take medication of unknown or prohibited origin, or go without treatment. Specialty and biologic medicines involve complex manufacturing processes that made halal compliance technically challenging. The industry largely ignored the compliance dimension because Muslim patients had no alternative and therefore no commercial leverage.</div>
+          </div>
+          <div>
+            <div class="gb-col-label benefit">How Malaysia Benefits</div>
+            <div class="gb-col-body">Duopharma Biotech achieved the world's first halal certification for a cancer treatment in 2022 and the first halal biosimilar erythropoietin for renal care. These are not symbolic — they are first-mover commercial positions in a specialty segment where no other company on earth has regulatory precedent. Malaysia's first biologic pre-filled syringe line is operational. The R&D pipeline for halal biologics runs through Kuala Lumpur, not Geneva or Boston.</div>
+          </div>
+        </div>
+      </div>
+      <div class="gap-verdict">⚑ Longest-duration opportunity. Highest margin. Highest defensibility. Duopharma holds a genuine global first-mover advantage in halal oncology and renal biosimilars — and the competitive lead time is measured in years, not months.</div>
+    </div>
+
+  </div>
+
+  <div class="ann-box" data-label="The Compounding Logic">
+    <p>These four gaps do not compete with each other — they compound. Halal bovine gelatin from Gap 01 is the raw material that enables the halal capsule manufacturing required for Gap 03's Indonesia mandate. The MS 2424:2019 certification infrastructure from Gap 04's oncology work strengthens the credibility of JAKIM's standard globally, making Gap 02's heparin case more compelling to the FDA. <strong>Each gap reinforces the entire ecosystem.</strong> This is what a genuine structural moat looks like — not a single advantage, but a self-reinforcing system of advantages that becomes more valuable as each component is developed.</p>
+  </div>
+</section>
+
+<!-- ─── SECTION 04 · MOAT ─── -->
+<section class="sec" id="moat">
+  <div class="sec-num">Section 04</div>
+  <div class="sec-label">The Structural Moat</div>
+  <h2>What <em>50 Years</em><br>of Foresight Built</h2>
+
+  <p class="body">
+    Regulatory moats are among the most durable competitive advantages in any industry. They cannot be purchased overnight, cannot be replicated by capital alone, and compound in value as the markets they serve scale. Malaysia's halal pharmaceutical regulatory position is the product of institutional foresight that began in the 1970s — long before the commercial significance of Islamic economy was widely understood.
+  </p>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot gold-dot"></div>
+      <div class="tl-content">
+        <div class="tl-period">1970s — Foundation Layer</div>
+        <div class="tl-title">Malaysia Establishes Basic Halal Verification Systems</div>
+        <div class="tl-body">Initial halal framework constructed. Predates the global halal economy concept by decades. The institutional knowledge base and government commitment established here became the DNA of everything that followed.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot gold-dot"></div>
+      <div class="tl-content">
+        <div class="tl-period">JAKIM Formation — Credibility Layer</div>
+        <div class="tl-title">Department of Islamic Development Malaysia Formalised</div>
+        <div class="tl-body">JAKIM becomes the globally recognised competent authority. Its auditing rigour builds international credibility over 30+ years. <strong>Today recognised by 80 certifying bodies in 45 countries</strong> — a network effect that cannot be fast-tracked.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot gold-dot"></div>
+      <div class="tl-content">
+        <div class="tl-period">10 Consecutive Years — Market Leadership Layer</div>
+        <div class="tl-title">#1 Global Islamic Economy Indicator</div>
+        <div class="tl-body">Malaysia holds the top position for a decade straight. This is not a vanity ranking — it directly determines which country's certification standard gets adopted by international buyers, procurement bodies, and regulatory frameworks.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot active"></div>
+      <div class="tl-content">
+        <div class="tl-period">2019 — Technical Breakthrough Layer</div>
+        <div class="tl-title">MS 2424:2019 Expanded to Biologics, Vaccines & Biopharmaceuticals</div>
+        <div class="tl-body"><strong>World's first comprehensive halal vaccine product certification system.</strong> The 2019 revision is the most technically significant development in halal pharma history — it brought the world's fastest-growing drug categories (biologics, biosimilars, gene therapies) into the certifiable universe. This was done before COVID made it globally critical.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot active"></div>
+      <div class="tl-content">
+        <div class="tl-period">2021–2022 — Commercial Validation Layer</div>
+        <div class="tl-title">Sinovac Fill-and-Finish + World's First Halal Oncology Certification</div>
+        <div class="tl-body">Pharmaniaga executes the national COVID immunisation via halal fill-and-finish — the first proof-of-concept for halal vaccine manufacturing at national scale. Duopharma receives world's first halal certification for a cancer treatment. <strong>Both milestones in a 24-month window.</strong></div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot red-dot"></div>
+      <div class="tl-content">
+        <div class="tl-period">Now — The Underutilisation Problem</div>
+        <div class="tl-title">All Five Layers Exist. Commercial Extraction Lags the Potential.</div>
+        <div class="tl-body"><strong>The moat is built. The market is arriving. The gap is in scale, speed, and domestic capital commitment.</strong> Foreign MNCs have recognised this faster than Malaysian investors — 59% of halal park investment is foreign-sourced. This is the core problem this framework addresses.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"><span>Why Nobody Can Replicate This</span></div>
+
+  <table class="tbl">
+    <thead>
+      <tr>
+        <th>Would-Be Competitor</th>
+        <th>Apparent Advantage</th>
+        <th>Why They Cannot Replicate Malaysia's Position</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="bold">Indonesia</td>
+        <td>Largest Muslim market, domestic demand</td>
+        <td>Manufacturing capability without internationally recognised certification authority. Buys Malaysian certification to serve its own market.</td>
+      </tr>
+      <tr>
+        <td class="bold">Saudi Arabia / UAE</td>
+        <td>Capital, OIC political weight, proximity to Muslim consumers</td>
+        <td>Zero globally recognised pharmaceutical certification infrastructure. Standard-building takes decades of institutional credibility, not capital.</td>
+      </tr>
+      <tr>
+        <td class="bold">Western Pharma (Pfizer, Roche, etc.)</td>
+        <td>Scale, R&D, distribution, brand</td>
+        <td>Entire supply chains built around porcine/non-halal sourcing. Rebuilding from scratch would cost tens of billions and take 15+ years. Easier to partner with Malaysia's certified manufacturers.</td>
+      </tr>
+      <tr>
+        <td class="bold">China</td>
+        <td>Manufacturing cost, scale, proximity to global supply chains</td>
+        <td>Active credibility problem (2008 heparin contamination). No Islamic certification framework. Muslim countries actively seek supply chain independence from Chinese pharmaceutical dominance.</td>
+      </tr>
+      <tr>
+        <td class="bold">Pakistan / Bangladesh</td>
+        <td>Muslim-majority, lower cost base</td>
+        <td>Lack the regulatory history, GMP infrastructure, and international recognition that JAKIM has spent 50 years building.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ─── SECTION 05 · CATALYSTS ─── -->
+<section class="sec" id="catalysts">
+  <div class="sec-num">Section 05</div>
+  <div class="sec-label">The Catalyst Stack</div>
+  <h2>Four Forces<br><em>Converging</em> Now</h2>
+
+  <p class="body">
+    The halal pharmaceutical thesis is not dependent on a single catalyst. It is a stack — four independent forces, each sufficient to drive sector growth alone, which are currently arriving simultaneously. This convergence is what distinguishes the current moment from previous years when the structural advantage existed but the commercial triggers had not yet fired.
+  </p>
+
+  <div class="catalyst-stack">
+    <div class="catalyst-row">
+      <div class="cat-num">01</div>
+      <div class="cat-content">
+        <div class="cat-title">Indonesia's Mandatory Halal Pharmaceutical Labeling</div>
+        <div class="cat-body">270 million people. The world's largest Muslim-majority nation is legally mandating halal certification on all pharmaceuticals sold within its borders — phased rollout 2024 to 2026. Every uncertified drug on Indonesian shelves must be recertified or pulled. JAKIM is the only internationally recognised standard in the region. <strong>This is legally mandated demand arriving in real time.</strong></div>
+      </div>
+      <div class="cat-tag live">Live Now</div>
+    </div>
+    <div class="catalyst-row">
+      <div class="cat-num">02</div>
+      <div class="cat-content">
+        <div class="cat-title">US-Malaysia Zero-Tariff Pharmaceutical Corridor</div>
+        <div class="cat-body">Under the Agreement on Reciprocal Trade (ART), Malaysian pharmaceutical exports to the United States remain zero-tariff — a protected status even as tariff volatility disrupts virtually every other export sector. Annual Malaysia-US trade is valued at approximately RM200 billion. <strong>Pharmaceuticals hold a structurally privileged position in this corridor that competitors cannot access.</strong></div>
+      </div>
+      <div class="cat-tag live">Protected</div>
+    </div>
+    <div class="catalyst-row">
+      <div class="cat-num">03</div>
+      <div class="cat-content">
+        <div class="cat-title">OIC Trade Bloc Realignment & De-dollarisation</div>
+        <div class="cat-body">The geopolitical realignment accelerated by Iran conflict and broader US-China bifurcation is pushing OIC member states toward intra-bloc trade infrastructure. Saudi-China yuan oil deal is the headline, but the deeper shift is supply chain self-sufficiency across Muslim-majority economies — including pharmaceutical independence. <strong>Malaysia's halal certification standard becomes geopolitically strategic, not just commercially relevant, in this environment.</strong></div>
+      </div>
+      <div class="cat-tag imminent">Building</div>
+    </div>
+    <div class="catalyst-row">
+      <div class="cat-num">04</div>
+      <div class="cat-content">
+        <div class="cat-title">Halal-ESG Convergence: Beyond the Muslim Market</div>
+        <div class="cat-body">The Tayyiban principle — wholesome, pure, traceable, transparent — maps directly onto the criteria European and North American institutional investors apply under ESG frameworks. Halal pharmaceutical parks are increasingly attracting ESG-focused FDI from pension funds in Norway and the Netherlands. <strong>The addressable market has expanded beyond 1.9 billion Muslim consumers to every ethical investor and consumer on Earth.</strong> This broadening of demand is the most underappreciated long-term catalyst in the sector.</div>
+      </div>
+      <div class="cat-tag building">Emerging</div>
+    </div>
+  </div>
+
+  <div class="red-box">
+    <p><strong>The timing window:</strong> The Indonesia mandate is the most time-sensitive catalyst. The compliance rollout runs 2024–2026. Malaysian manufacturers who are positioned inside the Indonesian market before the enforcement deadline capture first-mover commercial relationships that will persist for years. Pharmaniaga's existing Indonesian manufacturing footprint is a genuine competitive advantage that depreciates if not leveraged aggressively in the current window.</p>
+  </div>
+</section>
+
+<!-- ─── SECTION 06 · NATIONAL CHAMPIONS ─── -->
+<section class="sec" id="champions">
+  <div class="sec-num">Section 06</div>
+  <div class="sec-label">National Champions</div>
+  <h2>The Companies<br><em>Proving</em> the Model Works</h2>
+
+  <p class="body">
+    Two publicly-listed Malaysian companies sit at the centre of the halal pharmaceutical thesis. They are not speculative plays on a future market — they are operational businesses with existing certifications, existing market positions, and existing revenue streams that expand directly as the catalyst stack above fires. The investment case for each is distinct; together they represent complementary exposure across the halal pharma value chain.
+  </p>
+
+  <div class="co-grid">
+    <div class="co-card">
+      <div class="co-card-head">
+        <div class="co-ticker">DUOPHARMA</div>
+        <div class="co-name">Duopharma Biotech Berhad · Bursa: 7148</div>
+        <div class="co-rank">OIC Rank #2 · Score 14.2 / 30</div>
+      </div>
+      <div class="co-body">
+        <div class="co-headline">"The company that proved halal compliance and cutting-edge medicine are not in conflict."</div>
+        <p class="co-text">Established as a trading company in 1978, Duopharma Biotech has executed one of the most consequential strategic transformations in Malaysian corporate history — from commodity trading to biopharmaceutical leadership. The 2015 acquisition of six pharmaceutical units from CCM for RM245.1 million, and the 2017 full demerger, created a focused, pure-play halal pharmaceutical manufacturer with the scale to bid for high-value contracts and the flexibility to invest in biologics R&D.</p>
+        <p class="co-text">The world's first halal certification for a cancer treatment (breast cancer, postmenopausal, 2022) and the first halal biosimilar erythropoietin for renal care are not marketing achievements — they are technical milestones that required Malaysia's first biologic pre-filled syringe line, extensive Phase 3 clinical trials, and international partnerships including Biocon for insulin supply security. The pipeline defensibility is measured in years, not months.</p>
+        <p class="co-text">Duopharma's "Halal Built-In, Not Tested For" philosophy represents the industry's highest standard of compliance — integrating religious requirements into the selection of technology, raw materials, packaging, logistics, and warehousing from inception, rather than as an end-product certification exercise. This philosophy, embedded in Universiti Kebangsaan Malaysia's Professional Certificate of Halal Pharmapreneur programme, is being institutionalised across the sector's talent pipeline.</p>
+        <div class="co-metrics">
+          <div class="co-metric"><span class="co-metric-key">Global Ranking</span><span class="co-metric-val gold">OIC #2 of 30 companies</span></div>
+          <div class="co-metric"><span class="co-metric-key">Key First</span><span class="co-metric-val">World's first halal oncology + renal biosimilar cert</span></div>
+          <div class="co-metric"><span class="co-metric-key">Infrastructure</span><span class="co-metric-val">First biologic pre-filled syringe line in SEA</span></div>
+          <div class="co-metric"><span class="co-metric-key">Primary Catalyst</span><span class="co-metric-val gold">Indonesia mandate + Qatar expansion + US corridor</span></div>
+          <div class="co-metric"><span class="co-metric-key">Key Risk</span><span class="co-metric-val red">R&D pipeline execution; regulatory approval timelines</span></div>
+          <div class="co-metric"><span class="co-metric-key">Strategic Moat</span><span class="co-metric-val">10+ year R&D head start in halal biologics; unreplicable</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="co-card">
+      <div class="co-card-head">
+        <div class="co-ticker">PHARMANIAGA</div>
+        <div class="co-name">Pharmaniaga Berhad · Bursa: 7081</div>
+        <div class="co-rank">OIC Rank #15 · Score 10.9 / 30</div>
+      </div>
+      <div class="co-body">
+        <div class="co-headline">"The ASEAN supply chain operator that is already inside the world's largest mandate."</div>
+        <p class="co-text">Pharmaniaga operates the most geographically strategic pharmaceutical supply chain in the ASEAN halal space. State-controlled and integrated across manufacturing, warehousing, and distribution, the company's most significant commercial asset is its manufacturing and logistics presence inside Indonesia — positioned ahead of the mandatory halal labeling rollout that will require certification of every pharmaceutical product sold in a 270 million person market.</p>
+        <p class="co-text">The Sinovac fill-and-finish contract during COVID established a national precedent: Pharmaniaga demonstrated that a halal-certified vaccine manufacturing process could be executed at scale, on time, under national emergency conditions. This track record is directly relevant to the commercial conversations now happening around Indonesia's compliance requirement — procurement bodies and hospital networks seeking certified supply partners have a proof point in Pharmaniaga's COVID execution.</p>
+        <p class="co-text">The company's state-controlled status creates both advantages (government contract access, national mandate positioning) and risks (margin pressure from government pricing, political capital dependency). The Indonesia thesis is the most near-term commercial catalyst — but the execution question is whether Pharmaniaga is investing aggressively enough in Indonesian manufacturing capacity to serve the demand the mandate will create.</p>
+        <div class="co-metrics">
+          <div class="co-metric"><span class="co-metric-key">Global Ranking</span><span class="co-metric-val gold">OIC #15 of 30 companies</span></div>
+          <div class="co-metric"><span class="co-metric-key">Key Asset</span><span class="co-metric-val">Manufacturing + logistics inside Indonesia</span></div>
+          <div class="co-metric"><span class="co-metric-key">Proof Point</span><span class="co-metric-val">Sinovac halal fill-and-finish — national benchmark</span></div>
+          <div class="co-metric"><span class="co-metric-key">Primary Catalyst</span><span class="co-metric-val gold">Indonesia mandatory halal labeling 2024–2026</span></div>
+          <div class="co-metric"><span class="co-metric-key">Key Risk</span><span class="co-metric-val red">Government contract dependency; margin compression</span></div>
+          <div class="co-metric"><span class="co-metric-key">Strategic Moat</span><span class="co-metric-val">In-country Indonesia position; JAKIM certification network</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ann-box" data-label="OIC Halal Pharma Rankings 2023 — Context">
+    <p>The full OIC Top 30 Halal Products Companies ranking places <strong>Duopharma at #2 (score 14.2)</strong> and <strong>Pharmaniaga at #15 (score 10.9)</strong>. Only Biofarma of Indonesia ranks higher than Duopharma, at #1 with a score of 15.0 — and Biofarma's advantage is primarily volume-based domestic vaccine production, not the R&D and certification depth that Duopharma holds in specialty and biologic segments. Malaysia has two companies in the global top 15 of a market projected to reach USD 205 billion. The narrative has not caught up with this positioning.</p>
+  </div>
+</section>
+
+<!-- ─── SECTION 07 · AUDIT ─── -->
+<section class="sec" id="audit">
+  <div class="sec-num">Section 07</div>
+  <div class="sec-label">The Underperformance Audit</div>
+  <h2>Where Malaysia Is<br><em>Leaving Money Behind</em></h2>
+
+  <p class="body">
+    A direct accounting of the gap between what Malaysia has built and what it is extracting from that infrastructure. This is not a critique of the regulatory framework or the national champions — it is an honest assessment of the commercial execution gap that the RM200 billion potential requires to close.
+  </p>
+
+  <div style="margin:32px 0;">
+    <div class="audit-row" style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding-bottom:12px;">
+      <div class="audit-cell"><span style="color:var(--gold)">What We Have</span></div>
+      <div class="audit-cell"><span style="color:var(--red)">The Gap</span></div>
+      <div class="audit-cell"><span style="color:#4caf7d">Missed Revenue Line</span></div>
+    </div>
+
+    <div class="audit-row">
+      <div class="audit-cell">
+        <div style="font-size:12px;color:var(--text);font-weight:500;margin-bottom:4px;">Gelatin Production (Halagel)</div>
+        <div style="font-size:11px;color:var(--text3);">JAKIM-certified bovine gelatin for pharmaceutical use, distributed across SEA and Middle East</div>
+      </div>
+      <div class="audit-cell">
+        <div style="font-size:12px;color:var(--red);margin-bottom:4px;">Serving 3% of global demand</div>
+        <div style="font-size:11px;color:var(--text3);">No strategic push to globalise production volumes. No international distribution partnerships at scale.</div>
+      </div>
+      <div class="audit-cell">
+        <div style="font-size:12px;color:#4caf7d;margin-bottom:4px;">97% of 370,000 MT remains non-halal</div>
+        <div style="font-size:11px;color:var(--text3);">Each percentage point of substitution = ~3,700 MT of new Malaysian export demand</div>
+      </div>
+    </div>
+
+    <div class="audit-row">
+      <div class="audit-cell">
+        <div style="font-size:12px;color:var(--text);font-weight:500;margin-bottom:4px;">Heparin Regulatory Framework</div>
+        <div style="font-size:11px;color:var(--text3);">MS 2424:2019 capable of certifying bovine heparin to both Shariah and FDA-compatible standards</div>
+      </div>
+      <div class="audit-cell">
+        <div style="font-size:12px;color:var(--red);margin-bottom:4px;">Not leading the FDA conversation</div>
+        <div style="font-size:11px;color:var(--text3);">Malaysia is absent from the international regulatory dialogue on bovine heparin re-entry despite being uniquely positioned to lead it</div>
+      </div>
+      <div class="audit-cell">
+        <div style="font-size:12px;color:#4caf7d;margin-bottom:4px;">$2B+ global heparin market</div>
+        <div style="font-size:11px;color:var(--text3);">FDA has already made the substitution case. Malaysia needs to position as the certified bovine supplier at the regulatory table.</div>
+      </div>
+    </div>
+
+    <div class="audit-row">
+      <div class="audit-cell">
+        <div style="font-size:12px;color:var(--text);font-weight:500;margin-bottom:4px;">Pharmaniaga Indonesia Footprint</div>
+        <div style="font-size:11px;color:var(--text3);">Manufacturing and logistics already operational inside Indonesia ahead of mandatory labeling rollout</div>
+      </div>
+      <div class="audit-cell">
+        <div style="font-size:12px;color:var(--red);margin-bottom:4px;">Capacity not scaled to mandate</div>
+        <div style="font-size:11px;color:var(--text3);">Indonesian compliance demand from 2024–2026 rollout exceeds current production capacity. Risk of losing first-mover advantage to foreign MNCs investing in Indonesian facilities.</div>
+      </div>
+      <div class="audit-cell">
+        <div style="font-size:12px;color:#4caf7d;margin-bottom:4px;">270M legally mandated market</div>
+        <div style="font-size:11px;color:var(--text3);">The demand is a legal certainty. The only variable is which certified supplier captures it. Pharmaniaga is positioned — but not yet scaled.</div>
+      </div>
+    </div>
+
+    <div class="audit-row">
+      <div class="audit-cell">
+        <div style="font-size:12px;color:var(--text);font-weight:500;margin-bottom:4px;">21 Halal Industrial Parks (14 HALMAS)</div>
+        <div style="font-size:11px;color:var(--text3);">RM16.1B cumulative investment. Purpose-built infrastructure with full MIDA incentives including 100% income tax exemption for 10 years</div>
+      </div>
+      <div class="audit-cell">
+        <div style="font-size:12px;color:var(--red);margin-bottom:4px;">59% of investment is foreign</div>
+        <div style="font-size:11px;color:var(--text3);">42 MNCs use Malaysia's halal parks as regional export hubs. Malaysian SMEs and domestic capital remain underrepresented in the ecosystem we built and fund.</div>
+      </div>
+      <div class="audit-cell">
+        <div style="font-size:12px;color:#4caf7d;margin-bottom:4px;">Domestic investment doubling opportunity</div>
+        <div style="font-size:11px;color:var(--text3);">If DDI reaches 50% parity with FDI, it represents an additional RM7B+ in Malaysian-owned manufacturing capacity using infrastructure already paid for.</div>
+      </div>
+    </div>
+
+    <div class="audit-row">
+      <div class="audit-cell">
+        <div style="font-size:12px;color:var(--text);font-weight:500;margin-bottom:4px;">Public Narrative + Media Coverage</div>
+        <div style="font-size:11px;color:var(--text3);">156% export growth in 2022. OIC #2 ranking for Duopharma. World-first oncology certification. All these events occurred.</div>
+      </div>
+      <div class="audit-cell">
+        <div style="font-size:12px;color:var(--red);margin-bottom:4px;">None of this is part of national conversation</div>
+        <div style="font-size:11px;color:var(--text3);">Halal pharma receives a fraction of the media and investor attention given to halal food, despite growing 3× faster and holding higher barriers to entry.</div>
+      </div>
+      <div class="audit-cell">
+        <div style="font-size:12px;color:#4caf7d;margin-bottom:4px;">Capital allocation follows narrative</div>
+        <div style="font-size:11px;color:var(--text3);">The sector is undervalued in part because it is underreported. Changing the narrative is itself an economic lever — it directs domestic capital toward the highest-potential sector in the halal economy.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SECTION 08 · MASTERPLAN ─── -->
+<section class="sec" id="masterplan">
+  <div class="sec-num">Section 08</div>
+  <div class="sec-label">Government Blueprint</div>
+  <h2>HIMP 2030 + NIMP 2030<br><em>The Plan That Exists</em></h2>
+
+  <p class="body">
+    Malaysia's government has not been passive. The Halal Industry Master Plan 2030 (HIMP 2030) and the New Industrial Master Plan 2030 (NIMP 2030) together represent the most comprehensive halal pharmaceutical development framework of any country on earth. The challenge is not the absence of a plan — it is the pace and cohesion of execution against it.
+  </p>
+
+  <div class="kra-grid">
+    <div class="kra-cell">
+      <div class="kra-cell-label">Revenue Target · Listed Pharma</div>
+      <div class="kra-cell-target">RM 1.62B</div>
+      <div class="kra-cell-body">Combined revenue target for listed halal pharmaceutical companies. Improvement in raw material market access is the key intervention.</div>
+    </div>
+    <div class="kra-cell">
+      <div class="kra-cell-label">New Export Value Target</div>
+      <div class="kra-cell-target">RM 430M</div>
+      <div class="kra-cell-body">New pharma exports by 2025 via strategic collaborations in Qatar, Saudi Arabia, and ASEAN markets. Qatar outreach by Duopharma already initiated.</div>
+    </div>
+    <div class="kra-cell">
+      <div class="kra-cell-label">Total Halal GDP Contribution</div>
+      <div class="kra-cell-target">10.8%</div>
+      <div class="kra-cell-body">Of national GDP by 2030, from 7.5%–10.0% currently. Pharmaceutical sector as core contributor alongside food and cosmetics.</div>
+    </div>
+    <div class="kra-cell">
+      <div class="kra-cell-label">Direct Pharma Investment Target</div>
+      <div class="kra-cell-target">RM 550M</div>
+      <div class="kra-cell-body">Expanding HALMAS incentives to include renewable energy and green technology solutions, attracting ESG-sensitive investors to halal parks.</div>
+    </div>
+    <div class="kra-cell">
+      <div class="kra-cell-label">Employment in Halal Economy</div>
+      <div class="kra-cell-target">700,000</div>
+      <div class="kra-cell-body">Total halal economy jobs, supported by expanded TVET programmes for Industry 4.0 and high-skilled STEM roles specifically in pharma manufacturing.</div>
+    </div>
+    <div class="kra-cell">
+      <div class="kra-cell-label">Smart Manufacturing Transition</div>
+      <div class="kra-cell-target">3,000</div>
+      <div class="kra-cell-body">Factories transitioning to smart hubs using AI and Big Data Analytics for end-to-end Shariah compliance verification and operational efficiency by 2030.</div>
+    </div>
+  </div>
+
+  <div class="divider"><span>NIMP 2030 Pharmaceutical Missions</span></div>
+
+  <p class="body">
+    The NIMP 2030 identifies pharmaceuticals as a high-impact sector targeting a <strong>61% increase in manufacturing value-added by 2030</strong>. The three pharmaceutical-specific missions are:
+  </p>
+
+  <div class="ann-box" data-label="Mission 1 · Advance Economic Complexity">
+    <p><strong>Target:</strong> Monoclonal antibodies, gene therapies, and advanced biologics. Move the sector from generic tablet manufacturing toward the highest-value pharmaceutical categories — where halal certification creates the greatest premium and the lowest number of global competitors.</p>
+  </div>
+  <div class="ann-box" data-label="Mission 2 · Tech Up for a Digitally Vibrant Nation">
+    <p><strong>Target:</strong> Blockchain for halal traceability at every supply chain node. AI-powered DNA testing for porcine contamination detection. These technological layers institutionalise the transparency that both Islamic compliance and ESG frameworks require — and make Malaysia's certification standard more difficult to challenge or replicate.</p>
+  </div>
+  <div class="ann-box" data-label="Mission 3 · Push for Net Zero">
+    <p><strong>Target:</strong> Integrate decarbonisation pathways into halal industrial parks. Net-zero halal manufacturing is the intersection of Islamic ethics (Tayyiban environmental stewardship) and ESG investment criteria — the dual mandate that broadens the investor base beyond Islamic finance into global sustainability-focused capital.</p>
+  </div>
+</section>
+
+<!-- ─── SECTION 09 · FRAMEWORK ─── -->
+<section class="sec" id="framework">
+  <div class="sec-num">Section 09</div>
+  <div class="sec-label">Investment Framework</div>
+  <h2>How to <em>Position</em><br>Around This Thesis</h2>
+
+  <p class="body">
+    The following framework is for educational purposes only and does not constitute financial advice. It represents a structured way to think about positioning relative to the halal pharmaceutical thesis, organised by conviction level, time horizon, and catalyst dependency.
+  </p>
+
+  <div class="gold-box">
+    <p><strong>Important:</strong> This is not financial advice. All investment decisions carry risk. Past performance is not indicative of future results. Conduct your own due diligence and consult a licensed financial advisor before making investment decisions. The analysis below is for educational and research purposes only.</p>
+  </div>
+
+  <div class="inv-grid">
+    <div class="inv-col">
+      <div class="inv-col-head buy">High Conviction — Bursa Listed</div>
+      <div class="inv-item">
+        <div class="inv-item-name">Duopharma Biotech (7148)</div>
+        <div class="inv-item-desc">World's first halal oncology + renal biosimilar certifications. OIC #2 ranking. Biologic pre-filled syringe line operational. 10+ year R&D head start. Primary beneficiary of Indonesia mandate's high-complexity segment and US zero-tariff corridor.</div>
+      </div>
+      <div class="inv-item">
+        <div class="inv-item-name">Pharmaniaga (7081)</div>
+        <div class="inv-item-desc">Manufacturing inside Indonesia ahead of the 2024–2026 mandatory halal labeling rollout. ASEAN supply chain operator with Sinovac fill-and-finish precedent. Most direct exposure to the Indonesia mandate — the most legally certain near-term catalyst.</div>
+      </div>
+    </div>
+    <div class="inv-col">
+      <div class="inv-col-head watch">Monitor — Private / Upstream</div>
+      <div class="inv-item">
+        <div class="inv-item-name">Halagel (Private)</div>
+        <div class="inv-item-desc">Direct gelatin gap play. Major halal bovine gelatin distributor across SEA and Middle East. Monitor for IPO, private placement, or parent company public exposure. The gelatin gap thesis requires a listed vehicle — watch for it.</div>
+      </div>
+      <div class="inv-item">
+        <div class="inv-item-name">Halal Park Operators / REITs</div>
+        <div class="inv-item-desc">21 Halal Parks with RM16.1B cumulative investment. As Indonesia mandate drives manufacturing scale-up, industrial park occupancy and rental income benefits. Identify listed REIT or industrial property exposure to HALMAS-accredited parks.</div>
+      </div>
+      <div class="inv-item">
+        <div class="inv-item-name">Regional ETF Exposure</div>
+        <div class="inv-item-desc">For investors seeking broad Islamic economy exposure without single-stock risk, track ETFs with halal pharmaceutical component weighting across OIC member state equities.</div>
+      </div>
+    </div>
+    <div class="inv-col">
+      <div class="inv-col-head track">Catalysts to Track</div>
+      <div class="inv-item">
+        <div class="inv-item-name">Indonesia BPJPH Enforcement Dates</div>
+        <div class="inv-item-desc">Specific compliance deadlines in the 2024–2026 rollout. Each enforcement milestone should trigger procurement decisions by Indonesian hospital networks and pharmacy chains — watch for Pharmaniaga contract announcements.</div>
+      </div>
+      <div class="inv-item">
+        <div class="inv-item-name">Duopharma Pipeline Milestones</div>
+        <div class="inv-item-desc">Next halal certification in oncology or biologics pipeline. Each world-first certification expands the addressable market and reinforces JAKIM's global standard value.</div>
+      </div>
+      <div class="inv-item">
+        <div class="inv-item-name">HIMP 2030 KRA Progress Reports</div>
+        <div class="inv-item-desc">HDC annual progress reports against the RM430M export target and RM550M direct investment target. Execution pace determines whether the 2030 aspirations remain credible.</div>
+      </div>
+      <div class="inv-item">
+        <div class="inv-item-name">FDA Bovine Heparin Guidance Updates</div>
+        <div class="inv-item-desc">Any FDA formal guidance on bovine heparin supply diversification is a direct catalyst for Malaysian certified bovine heparin producers. Monitor FDA pharmaceutical supply chain resilience publications.</div>
+      </div>
+    </div>
+    <div class="inv-col">
+      <div class="inv-col-head avoid">Thesis Risks to Monitor</div>
+      <div class="inv-item">
+        <div class="inv-item-name">Indonesia Mandate Enforcement Delay</div>
+        <div class="inv-item-desc">Political or administrative delays to the mandatory halal labeling rollout would push back the most near-term catalyst. Track BPJPH enforcement timeline closely.</div>
+      </div>
+      <div class="inv-item">
+        <div class="inv-item-name">Foreign MNC Capacity Pre-emption</div>
+        <div class="inv-item-desc">If Western pharmaceutical MNCs aggressively expand within Malaysia's halal parks ahead of domestic players, they capture the margin that should accrue to Malaysian-owned businesses. Monitor FDI vs DDI ratio in halal parks annually.</div>
+      </div>
+      <div class="inv-item">
+        <div class="inv-item-name">JAKIM Credibility Risk</div>
+        <div class="inv-item-desc">Any significant certification scandal or audit failure would damage the global trust underpinning JAKIM's 80-country recognition network. The moat is built on institutional credibility — it is not invulnerable.</div>
+      </div>
+      <div class="inv-item">
+        <div class="inv-item-name">R&D Pipeline Execution (Duopharma)</div>
+        <div class="inv-item-desc">Biologic and biosimilar development carries inherent clinical trial risk. Regulatory delays or Phase 3 failures in the specialty medicine pipeline would impair the long-duration thesis component.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SECTION 10 · VERDICT ─── -->
+<section class="sec" id="verdict">
+  <div class="sec-num">Section 10</div>
+  <div class="sec-label">The Verdict</div>
+  <h2>The Only Question<br>That <em>Remains</em></h2>
+
+  <div class="verdict">
+    <div class="v-label">InsightInvest · Final Assessment · March 2026</div>
+    <div class="v-head">
+      Malaysia holds the world's most defensible position<br>
+      in the world's fastest-growing healthcare segment.<br>
+      <em>The asset is real. The demand is arriving.<br>The question is urgency.</em>
+    </div>
+    <p>The halal pharmaceutical thesis is not speculative. It is structural. <strong>Malaysia built a regulatory monopoly over 50 years that 1.9 billion people now need access to.</strong> The certification infrastructure exists. The industrial parks exist. The national champions exist. The government masterplan exists. The trade corridors exist. And the catalysts — Indonesia's legal mandate, the US zero-tariff corridor, OIC trade realignment, and ESG convergence — are not hypothetical. They are firing right now.</p>
+    <p>The problem this framework was designed to name is not a lack of assets. It is a lack of urgency in commercialising them. <strong>59% of investment in Malaysia's own halal parks is foreign.</strong> The sector grew 156% in 2022 and received almost no mainstream coverage. Duopharma holds OIC rank #2 and achieved the world's first halal oncology certification — and most Malaysians have never heard of either fact. The narrative has not caught up to the structural reality.</p>
+    <p>What needs to happen is not complicated: <strong>domestic capital needs to redirect toward the highest-potential sector in the Malaysian economy; the government needs to accelerate execution against HIMP and NIMP targets; and Malaysian businesses need to use the infrastructure their taxes paid to build before foreign MNCs complete the occupation of what should be a Malaysian-dominated ecosystem.</strong></p>
+    <p>The gold mine is real. The shovels are built. The buyers are arriving. The only remaining question — and it is the question that will determine whether the RM200 billion potential becomes RM200 billion in reality — is whether Malaysia decides to mine it with the same 50-year commitment it used to build it.</p>
+  </div>
+</section>
+</div>
+
+</div><!-- end #locked-content -->
+
+<!-- ─── FOOTER ─── -->
+
+<!-- ═══ 1-ON-1 CTA ═══ -->
+<div id="ii-cta" style="padding:60px 24px;background:#0a0a0f;border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06);position:relative;overflow:hidden;">
+  <div style="position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:400px;height:400px;background:radial-gradient(circle,rgba(201,168,76,0.05),transparent 70%);pointer-events:none;"></div>
+  <div style="max-width:600px;margin:0 auto;position:relative;z-index:2;text-align:center;">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#c9a84c;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:8px;">
+      <span style="width:5px;height:5px;background:#c9a84c;border-radius:50%;display:inline-block;"></span>
+      Limited Availability
+    </div>
+    <h3 style="font-family:Georgia,'Times New Roman',serif;font-size:clamp(22px,3.5vw,32px);font-weight:400;color:#e8ecf4;line-height:1.2;margin-bottom:12px;letter-spacing:-0.01em;">Want to talk through <em style="font-style:italic;color:#c9a84c;">your</em> portfolio?</h3>
+    <p style="font-size:14px;color:#9ca3b8;line-height:1.7;margin-bottom:28px;max-width:480px;margin-left:auto;margin-right:auto;">We're opening a small number of 1-on-1 strategy sessions. Leave your email and we'll take you through a quick questionnaire — then set up a discovery call if it's a fit.</p>
+    <form id="iicForm" style="display:flex;gap:0;max-width:440px;margin:0 auto 12px;">
+      <input type="email" id="iicEmail" name="email" placeholder="Your email address" required style="flex:1;padding:14px 18px;background:#12121a;border:1px solid rgba(255,255,255,0.06);border-right:none;color:#e8ecf4;font-family:inherit;font-size:14px;outline:none;" />
+      <button type="submit" id="iicBtn" style="padding:14px 28px;background:#c9a84c;color:#0a0a0f;font-family:inherit;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;border:none;cursor:pointer;white-space:nowrap;">Join Waitlist</button>
+    </form>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#555c72;letter-spacing:0.08em;">No spam · Questionnaire first · Discovery call · Then we decide together</div>
+  </div>
+</div>
+<script>
+(function(){
+  var FORMSPREE_ID = 'YOUR_WAITLIST_FORM_ID';
+  var f = document.getElementById('iicForm');
+  if (!f) return;
+  f.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    var btn = document.getElementById('iicBtn');
+    var email = document.getElementById('iicEmail').value.trim();
+    if (!email) return;
+    btn.textContent = 'Joining...';
+    btn.style.opacity = '0.7';
+    btn.disabled = true;
+    try {
+      var res = await fetch('https://formspree.io/f/' + FORMSPREE_ID, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, source: window.location.pathname, step: 'playbook_cta', _subject: 'Waitlist from ' + window.location.pathname })
+      });
+      if (res.ok) { window.location.href = '/questionnaire?email=' + encodeURIComponent(email); }
+      else { btn.textContent = 'Error — try again'; setTimeout(function(){ btn.textContent = 'Join Waitlist'; btn.style.background = '#c9a84c'; btn.style.opacity = '1'; btn.disabled = false; }, 3000); }
+    } catch (err) { btn.textContent = 'Error'; setTimeout(function(){ btn.textContent = 'Join Waitlist'; btn.style.opacity = '1'; btn.disabled = false; }, 3000); }
+  });
+})();
+</script>
+
+<div class="doc-footer">
+  <div class="footer-brand">InsightInvest</div>
+  <div class="footer-right">
+    leiholding.com · @insightinvests<br>
+    March 2026 · Patreon Research<br>
+    Educational purposes only · Not financial advice
+  </div>
+  <div style="margin-top:12px;text-align:center;"><a href="/" style="color:#c9a84c;text-decoration:none;font-size:11px;">← Back to Insight Invest</a></div>
+</div>
+
+<script>
+function unlockContent(){
+  const v = document.getElementById('pw').value.toLowerCase().trim();
+  if(v === 'invest' || v === 'pharma' || v === 'halal'){
+    document.getElementById('paywall-wall').style.display = 'none';
+    const lc = document.getElementById('locked-content');
+    lc.style.display = 'block';
+    lc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else {
+    document.getElementById('pw-err').textContent = 'invalid keyword — try again';
+    document.getElementById('pw').value = '';
+    document.getElementById('pw').focus();
+  }
+}
+</script>
+
+</body>
+</html>
