@@ -692,7 +692,7 @@ body::before {
 <!-- ─── COVER ─── -->
 <div class="cover page">
   <div class="cover-bg-text">RM200B</div>
-  <div class="cover-meta">InsightInvest · · March 2026</div>
+  <div class="cover-meta">InsightInvest · Patreon Research · March 2026</div>
   <h1>
     The <span class="gold">RM200 Billion</span><br>
     <span class="thin">Gold Mine</span><br>
@@ -874,34 +874,8 @@ body::before {
   </div>
 </section>
 
-<!-- ─── INLINE PAYWALL ─── -->
-<div class="paywall-wall" id="paywall-wall">
-  <div class="paywall-box">
-    <div class="paywall-icon">⬡</div>
-    <div class="paywall-label">Patreon Research · Restricted Access</div>
-    <div class="paywall-headline">The remaining <em>8 sections</em><br>are Coming soon!</div>
-    <p class="paywall-sub">
-      Supply chain gaps, Malaysia's structural moat, the catalyst stack, national champion deep-dives, the underperformance audit, HIMP 2030, the investment framework, and the final verdict — all behind the keyword.
-    </p>
-    <div class="paywall-row">
-      <input type="password" id="pw" placeholder="enter keyword" onkeydown="if(event.key==='Enter')unlockContent()">
-      <button onclick="unlockContent()">Unlock</button>
-    </div>
-    <div class="paywall-err" id="pw-err"></div>
-    <div class="paywall-sections">
-      <span class="paywall-sec-tag">03 · Supply Gaps</span>
-      <span class="paywall-sec-tag">04 · Structural Moat</span>
-      <span class="paywall-sec-tag">05 · Catalysts</span>
-      <span class="paywall-sec-tag">06 · National Champions</span>
-      <span class="paywall-sec-tag">07 · Audit</span>
-      <span class="paywall-sec-tag">08 · 2030 Plan</span>
-      <span class="paywall-sec-tag">09 · Framework</span>
-      <span class="paywall-sec-tag">10 · Verdict</span>
-    </div>
-  </div>
-</div>
 
-<div id="locked-content" style="display:none;">
+<!-- Sections 03–10 -->
 
 <!-- ─── SECTION 03 · SUPPLY GAPS ─── -->
 <section class="sec" id="gaps">
@@ -1499,7 +1473,7 @@ body::before {
 </section>
 </div>
 
-</div><!-- end #locked-content -->
+<!-- end sections -->
 
 <!-- ─── FOOTER ─── -->
 
@@ -1556,21 +1530,7 @@ body::before {
   <div style="margin-top:12px;text-align:center;"><a href="/" style="color:#c9a84c;text-decoration:none;font-size:11px;">← Back to Insight Invest</a></div>
 </div>
 
-<script>
-function unlockContent(){
-  const v = document.getElementById('pw').value.toLowerCase().trim();
-  if(v === 'invest' || v === 'pharma' || v === 'halal'){
-    document.getElementById('paywall-wall').style.display = 'none';
-    const lc = document.getElementById('locked-content');
-    lc.style.display = 'block';
-    lc.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  } else {
-    document.getElementById('pw-err').textContent = 'invalid keyword — try again';
-    document.getElementById('pw').value = '';
-    document.getElementById('pw').focus();
-  }
-}
-</script>
+
 
 </body>
 </html>
