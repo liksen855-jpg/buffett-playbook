@@ -1264,13 +1264,50 @@ function renderResult(p) {
   const emailInput = el('input', { class: 'waitlist-input', type: 'email', placeholder: 'Email address', autocomplete: 'email' });
   const phoneInput = el('input', { class: 'waitlist-input', type: 'tel',   placeholder: 'WhatsApp / Phone (optional)', autocomplete: 'tel' });
   const successMsg = el('div', { class: 'waitlist-success' }, '✓ You\'re on the list. I\'ll be in touch personally.');
+  const errorMsg   = el('div', { class: 'waitlist-success', style: 'color:var(--red);display:none;' }, '✗ Something went wrong. Please try again.');
   const submitBtn  = el('button', { class: 'waitlist-submit' }, 'Join the Waitlist →');
-  submitBtn.addEventListener('click', () => {
-    const name = nameInput.value.trim(), email = emailInput.value.trim();
-    if (!name || !email) { emailInput.style.borderColor = 'var(--red)'; return; }
-    console.log('Submission:', { name, email, phone: phoneInput.value.trim(), archetype: p.archetype });
-    submitBtn.style.display = 'none';
-    successMsg.style.display = 'block';
+  submitBtn.addEventListener('click', async () => {
+    const name  = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    if (!name)  { nameInput.style.borderColor  = 'var(--red)'; nameInput.focus(); return; }
+    if (!email) { emailInput.style.borderColor = 'var(--red)'; emailInput.focus(); return; }
+
+    submitBtn.textContent = 'Submitting...';
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.6';
+    errorMsg.style.display = 'none';
+
+    try {
+      const res = await fetch('https://formspree.io/f/xykngrlp', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          email,
+          phone:     phoneInput.value.trim(),
+          archetype: p.archetype,
+          horizon:   p.horizon,
+          style:     p.investingStyle,
+          composite: Math.round(p.composite / 5 * 100),
+          _subject:  'New Investor Profile — ' + p.archetype + ' · ' + name,
+        }),
+      });
+      if (res.ok) {
+        submitBtn.style.display  = 'none';
+        successMsg.style.display = 'block';
+      } else {
+        const data = await res.json();
+        submitBtn.textContent = 'Join the Waitlist →';
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
+        errorMsg.style.display = 'block';
+      }
+    } catch (err) {
+      submitBtn.textContent = 'Join the Waitlist →';
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = '1';
+      errorMsg.style.display = 'block';
+    }
   });
 
   const result = el('div', null,
@@ -1422,7 +1459,7 @@ function renderResult(p) {
       el('p',   { class: 'waitlist-sub' },
         'I work with a small number of people directly. If you want a 1-on-1 session based on your calibration above — your specific archetype, biases, and starting territory — join the waitlist. I\'ll reach out personally.'
       ),
-      el('div', { class: 'waitlist-form' }, nameInput, emailInput, phoneInput, submitBtn, successMsg),
+      el('div', { class: 'waitlist-form' }, nameInput, emailInput, phoneInput, submitBtn, successMsg, errorMsg),
     ),
 
     // ── CTA ───────────────────────────────────────────
