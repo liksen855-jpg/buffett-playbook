@@ -1106,7 +1106,7 @@ function el(tag, attrs, ...children) {
   });
   children.flat().forEach(c => {
     if (c == null) return;
-    e.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+    if (c instanceof Node) { e.appendChild(c); } else { e.appendChild(document.createTextNode(String(c))); }
   });
   return e;
 }
@@ -1381,12 +1381,14 @@ function renderResult(p) {
     el('div', { class: 'section-label' }, 'Your Personal Framework'),
     el('div', { class: 'rules-box', style: `border-left:3px solid ${p.archetypeColor}` },
       el('div', { class: 'rules-eyebrow' }, 'Rules Calibrated to Your Profile'),
-      ...p.rules.map(r =>
-        el('div', { class: 'rule-row' },
+      ...p.rules.map(r => {
+        const ruleText = el('span', { class: 'rule-text' });
+        ruleText.innerHTML = r.text;
+        return el('div', { class: 'rule-row' },
           el('span', { class: 'rule-num', style: `color:${p.archetypeColor}` }, r.num),
-          el('span', { class: 'rule-text' }, ...parseHTML(r.text)),
-        )
-      ),
+          ruleText,
+        );
+      }),
     ),
 
     // ── Learning path ─────────────────────────────────
@@ -1435,12 +1437,7 @@ function renderResult(p) {
   return result;
 }
 
-// helper: parse inline HTML in rule text
-function parseHTML(html) {
-  const div = document.createElement('div');
-  div.innerHTML = html;
-  return Array.from(div.childNodes);
-}
+
 
 // ═══════════════════════════════════════════════════════
 // RADAR CHART
