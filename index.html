@@ -1,0 +1,1933 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Insight Invest — Markets. Intelligence. Edge.
+  </title>
+  <meta content="Macro updates, equity analysis, and financial learning — distilled for the informed investor." name="description"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+   :root {
+    --bg: #08090c;
+    --bg2: #0e1016;
+    --bg3: #14161e;
+    --surface: #1a1d28;
+    --border: #252838;
+    --text: #9ca3b8;
+    --text-bright: #e8ecf4;
+    --text-dim: #555c72;
+    --gold: #c9a84c;
+    --gold-light: #e4cc7a;
+    --gold-dim: #8a7234;
+    --blue: #4a7cff;
+    --green: #3dd68c;
+    --red: #ff5c5c;
+    --cyan: #38d9d9;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) var(--bg);
+  }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ═══════════════════════════════════════
+     NOISE OVERLAY
+  ═══════════════════════════════════════ */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ═══════════════════════════════════════
+     NAVIGATION
+  ═══════════════════════════════════════ */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    padding: 20px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    z-index: 100;
+    background: linear-gradient(180deg, var(--bg) 0%, transparent 100%);
+    transition: all 0.4s;
+  }
+  nav.scrolled {
+    background: var(--bg)ee;
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 48px;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 14px;
+    text-decoration: none;
+  }
+  .nav-logo-mark {
+    width: 38px; height: 38px;
+    border: 1.5px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .nav-logo-mark::before {
+    content: 'I';
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 600;
+    color: var(--gold);
+  }
+  .nav-logo-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px; font-weight: 600;
+    color: var(--text-bright);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .nav-links { display: flex; gap: 36px; align-items: center; }
+  .nav-links a {
+    font-size: 12px; font-weight: 500;
+    color: var(--text-dim);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-cta {
+    padding: 10px 24px !important;
+    border: 1px solid var(--gold-dim) !important;
+    color: var(--gold) !important;
+    font-size: 11px !important;
+    letter-spacing: 0.14em !important;
+    transition: all 0.3s !important;
+  }
+  .nav-cta:hover {
+    background: var(--gold) !important;
+    color: var(--bg) !important;
+  }
+
+  /* ═══════════════════════════════════════
+     HERO
+  ═══════════════════════════════════════ */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    padding: 140px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Animated grid background */
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--border)15 1px, transparent 1px),
+      linear-gradient(90deg, var(--border)15 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 20%, transparent 70%);
+    animation: gridPulse 8s ease-in-out infinite;
+  }
+  @keyframes gridPulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+  }
+
+  /* Floating orbs */
+  .hero-orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px);
+    animation: orbFloat 12s ease-in-out infinite;
+  }
+  .hero-orb-1 {
+    width: 500px; height: 500px;
+    background: var(--gold)12;
+    top: -10%; right: -5%;
+    animation-delay: 0s;
+  }
+  .hero-orb-2 {
+    width: 350px; height: 350px;
+    background: var(--blue)10;
+    bottom: 10%; left: -5%;
+    animation-delay: -4s;
+  }
+  .hero-orb-3 {
+    width: 200px; height: 200px;
+    background: var(--cyan)08;
+    top: 30%; left: 40%;
+    animation-delay: -8s;
+  }
+  @keyframes orbFloat {
+    0%, 100% { transform: translate(0, 0); }
+    33% { transform: translate(30px, -20px); }
+    66% { transform: translate(-20px, 15px); }
+  }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    max-width: 900px;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; font-weight: 400;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards;
+    animation-delay: 0.2s;
+  }
+  .hero-tag-line {
+    width: 40px; height: 1px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+  .hero-h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 7.5vw, 110px);
+    font-weight: 300;
+    color: var(--text-bright);
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards;
+    animation-delay: 0.4s;
+  }
+  .hero-h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .hero-h1 span.thin {
+    font-weight: 300;
+    color: var(--text-dim);
+  }
+  .hero-sub {
+    font-size: 17px; font-weight: 400;
+    color: var(--text);
+    max-width: 520px;
+    line-height: 1.75;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards;
+    animation-delay: 0.6s;
+  }
+  .hero-actions {
+    display: flex; gap: 16px; align-items: center;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards;
+    animation-delay: 0.8s;
+  }
+  .btn-primary {
+    padding: 16px 40px;
+    background: var(--gold);
+    color: var(--bg);
+    font-family: 'Syne', sans-serif;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none; cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent, #fff3);
+    transform: translateX(-100%);
+    transition: transform 0.5s;
+  }
+  .btn-primary:hover::before { transform: translateX(100%); }
+  .btn-primary:hover { box-shadow: 0 8px 32px var(--gold)30; }
+  .btn-ghost {
+    padding: 16px 32px;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 12px; font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .btn-ghost:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Scroll indicator */
+  .scroll-indicator {
+    position: absolute; bottom: 40px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards;
+    animation-delay: 1.2s;
+  }
+  .scroll-indicator span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--text-dim);
+    letter-spacing: 0.15em; text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(180deg, var(--gold-dim), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; height: 40px; }
+    50% { opacity: 1; height: 60px; }
+  }
+
+  /* ═══════════════════════════════════════
+     LIVE TICKER
+  ═══════════════════════════════════════ */
+  .ticker {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+    overflow: hidden;
+    background: var(--bg2);
+    position: relative;
+  }
+  .ticker::before, .ticker::after {
+    content: '';
+    position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2;
+  }
+  .ticker::before { left: 0; background: linear-gradient(90deg, var(--bg2), transparent); }
+  .ticker::after { right: 0; background: linear-gradient(270deg, var(--bg2), transparent); }
+  .ticker-track {
+    display: flex; gap: 48px;
+    animation: tickerScroll 30s linear infinite;
+    width: max-content;
+  }
+  @keyframes tickerScroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  .ticker-item {
+    display: flex; align-items: center; gap: 12px;
+    white-space: nowrap;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+  }
+  .ticker-symbol { color: var(--text-bright); font-weight: 500; }
+  .ticker-price { color: var(--text-dim); }
+  .ticker-change { font-weight: 500; }
+  .ticker-change.up { color: var(--green); }
+  .ticker-change.down { color: var(--red); }
+
+  /* ═══════════════════════════════════════
+     SECTION COMMON
+  ═══════════════════════════════════════ */
+  section {
+    padding: 120px 48px;
+    position: relative;
+  }
+  .section-tag {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; font-weight: 500;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .section-tag-dot {
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: dotPulse 2s ease-in-out infinite;
+  }
+  @keyframes dotPulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+  .section-h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 4.5vw, 64px);
+    font-weight: 400;
+    color: var(--text-bright);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .section-sub {
+    font-size: 16px; color: var(--text);
+    max-width: 560px; line-height: 1.7;
+    margin-bottom: 60px;
+  }
+
+  /* ═══════════════════════════════════════
+     PILLARS — THREE COLUMNS
+  ═══════════════════════════════════════ */
+  #pillars { background: var(--bg); }
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .pillar-card {
+    background: var(--bg2);
+    padding: 56px 44px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: default;
+    border: 1px solid transparent;
+  }
+  .pillar-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  .pillar-card:hover {
+    background: var(--bg3);
+    border-color: var(--border);
+    transform: translateY(-4px);
+  }
+  .pillar-card:hover::before { opacity: 1; }
+  .pillar-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 72px; font-weight: 300;
+    color: var(--border);
+    line-height: 1;
+    margin-bottom: 32px;
+    transition: color 0.5s;
+  }
+  .pillar-card:hover .pillar-number { color: var(--gold-dim); }
+  .pillar-icon {
+    width: 52px; height: 52px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 28px;
+    transition: all 0.5s;
+  }
+  .pillar-card:hover .pillar-icon { border-color: var(--gold-dim); }
+  .pillar-icon svg { width: 24px; height: 24px; stroke: var(--text-dim); transition: stroke 0.5s; }
+  .pillar-card:hover .pillar-icon svg { stroke: var(--gold); }
+  .pillar-h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px; font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .pillar-desc {
+    font-size: 14px; line-height: 1.8;
+    color: var(--text);
+    margin-bottom: 32px;
+  }
+  .pillar-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+  .pillar-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; font-weight: 500;
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+    transition: all 0.3s;
+  }
+  .pillar-card:hover .pillar-tag { border-color: var(--gold-dim); color: var(--gold); }
+  .pillar-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 600;
+    color: var(--gold-dim);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: all 0.3s;
+  }
+  .pillar-link:hover { color: var(--gold); gap: 14px; }
+  .pillar-link svg { width: 14px; height: 14px; stroke: currentColor; transition: inherit; }
+
+  /* ═══════════════════════════════════════
+     MACRO — DATA DASHBOARD FEEL
+  ═══════════════════════════════════════ */
+  #macro {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .macro-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 80px;
+    max-width: 1400px;
+    margin: 0 auto;
+    align-items: center;
+  }
+  .macro-visual {
+    position: relative;
+    height: 420px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    overflow: hidden;
+  }
+  .macro-visual-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: var(--text-dim);
+  }
+  .macro-live-dot {
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    display: inline-block;
+    animation: dotPulse 1.5s ease-in-out infinite;
+    margin-right: 6px;
+  }
+  .macro-chart {
+    padding: 20px;
+    height: calc(100% - 50px);
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+  }
+  .macro-bar {
+    flex: 1;
+    background: linear-gradient(180deg, var(--gold)60, var(--gold)10);
+    border-radius: 2px 2px 0 0;
+    min-height: 8px;
+    animation: barGrow 1.5s ease-out forwards;
+    transform-origin: bottom;
+    opacity: 0;
+  }
+  @keyframes barGrow {
+    from { transform: scaleY(0); opacity: 0; }
+    to { transform: scaleY(1); opacity: 1; }
+  }
+
+  .macro-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 40px;
+  }
+  .macro-stat {
+    padding: 24px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    transition: all 0.3s;
+  }
+  .macro-stat:hover { border-color: var(--gold-dim); }
+  .macro-stat-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--text-dim);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .macro-stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px; font-weight: 500;
+    color: var(--text-bright);
+  }
+  .macro-stat-change {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px; margin-top: 4px;
+  }
+
+  /* ═══════════════════════════════════════
+     EQUITIES
+  ═══════════════════════════════════════ */
+  #equities { background: var(--bg); }
+  .equities-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .equity-card {
+    background: var(--bg2);
+    padding: 32px 28px;
+    border: 1px solid transparent;
+    transition: all 0.4s;
+    cursor: default;
+    position: relative;
+  }
+  .equity-card:hover {
+    border-color: var(--border);
+    background: var(--bg3);
+  }
+  .equity-card-region {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--text-dim);
+    letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .equity-card-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px; font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 6px;
+  }
+  .equity-card-value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 24px; font-weight: 500;
+    color: var(--text-bright);
+    margin-bottom: 4px;
+  }
+  .equity-card-change {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px; font-weight: 500;
+  }
+  .equity-card-sparkline {
+    margin-top: 20px;
+    height: 40px;
+    opacity: 0.6;
+    transition: opacity 0.3s;
+  }
+  .equity-card:hover .equity-card-sparkline { opacity: 1; }
+
+  /* ═══════════════════════════════════════
+     LEARNING
+  ═══════════════════════════════════════ */
+  #learning {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+  }
+  .learning-layout {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 80px;
+    max-width: 1400px;
+    margin: 0 auto;
+    align-items: start;
+  }
+  .learning-tracks { display: flex; flex-direction: column; gap: 2px; }
+  .learning-track {
+    display: flex; align-items: center;
+    padding: 28px 32px;
+    background: var(--bg);
+    border: 1px solid transparent;
+    cursor: default;
+    transition: all 0.4s;
+    gap: 24px;
+  }
+  .learning-track:hover {
+    border-color: var(--border);
+    background: var(--bg3);
+    padding-left: 40px;
+  }
+  .track-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px; font-weight: 300;
+    color: var(--border);
+    min-width: 50px;
+    transition: color 0.4s;
+  }
+  .learning-track:hover .track-number { color: var(--gold-dim); }
+  .track-info { flex: 1; }
+  .track-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px; font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 4px;
+  }
+  .track-desc {
+    font-size: 13px; color: var(--text-dim); line-height: 1.5;
+  }
+  .track-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; padding: 5px 14px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    white-space: nowrap;
+    transition: all 0.3s;
+  }
+  .learning-track:hover .track-badge { border-color: var(--gold-dim); color: var(--gold); }
+
+  .learning-feature {
+    padding: 48px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+  }
+  .learning-feature::before {
+    content: '';
+    position: absolute; top: -50%; right: -50%;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, var(--gold)08, transparent);
+    border-radius: 50%;
+  }
+  .learning-feature-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--gold);
+    letter-spacing: 0.15em; text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .learning-feature-h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px; font-weight: 400;
+    color: var(--text-bright);
+    line-height: 1.3;
+    margin-bottom: 20px;
+  }
+  .learning-feature-text {
+    font-size: 14px; color: var(--text);
+    line-height: 1.8;
+    margin-bottom: 32px;
+  }
+  .learning-feature .btn-primary { font-size: 11px; padding: 14px 32px; }
+
+  /* ═══════════════════════════════════════
+     QUOTE DIVIDER
+  ═══════════════════════════════════════ */
+  .quote-section {
+    padding: 100px 48px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: relative;
+  }
+  .quote-section::before {
+    content: '"';
+    position: absolute;
+    top: 20px; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 200px; font-weight: 300;
+    color: var(--border);
+    line-height: 1;
+  }
+  .quote-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(24px, 3vw, 42px);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text-bright);
+    max-width: 800px;
+    margin: 0 auto 24px;
+    line-height: 1.5;
+    position: relative;
+  }
+  .quote-attr {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px; color: var(--gold-dim);
+    letter-spacing: 0.1em;
+  }
+
+  /* ═══════════════════════════════════════
+     FOOTER
+  ═══════════════════════════════════════ */
+  footer {
+    padding: 60px 48px 40px;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+  }
+  .footer-grid {
+    display: flex; justify-content: space-between;
+    max-width: 1400px; margin: 0 auto;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap; gap: 40px;
+  }
+  .footer-brand { max-width: 280px; }
+  .footer-brand-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px; font-weight: 600;
+    color: var(--text-bright);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .footer-brand-desc {
+    font-size: 13px; color: var(--text-dim); line-height: 1.7;
+  }
+  .footer-col-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; font-weight: 500;
+    color: var(--text-dim);
+    letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .footer-col a {
+    display: block; font-size: 13px;
+    color: var(--text); text-decoration: none;
+    padding: 4px 0; transition: color 0.3s;
+  }
+  .footer-col a:hover { color: var(--gold); }
+  .footer-bottom {
+    max-width: 1400px; margin: 24px auto 0;
+    display: flex; justify-content: space-between;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: var(--text-dim);
+    flex-wrap: wrap; gap: 12px;
+  }
+
+  /* ═══════════════════════════════════════
+     ANIMATIONS / SCROLL REVEAL
+  ═══════════════════════════════════════ */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ═══════════════════════════════════════
+     RESPONSIVE
+  ═══════════════════════════════════════ */
+  /* ═══════════════════════════════════════
+     WAITLIST
+  ═══════════════════════════════════════ */
+  #waitlist {
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+    padding: 120px 48px;
+  }
+  #waitlist::before {
+    content: '';
+    position: absolute;
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, var(--gold)06, transparent 70%);
+    pointer-events: none;
+  }
+  .wl-layout {
+    max-width: 680px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  .wl-proof {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+  .wl-avatars {
+    display: flex;
+  }
+  .wl-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--bg);
+    margin-left: -8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: var(--bg);
+    font-weight: 600;
+  }
+  .wl-avatar:first-child { margin-left: 0; }
+  .wl-proof-text {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+  .wl-proof-text strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+  .wl-h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 400;
+    color: var(--text-bright);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .wl-h2 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .wl-desc {
+    font-size: 16px;
+    color: var(--text);
+    line-height: 1.75;
+    margin-bottom: 40px;
+    max-width: 560px;
+  }
+  .wl-what {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 40px;
+    border: 1px solid var(--border);
+  }
+  .wl-what-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+  .wl-what-item:last-child { border-bottom: none; }
+  .wl-what-item:hover { background: var(--bg2); }
+  .wl-what-icon {
+    width: 36px; height: 36px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: border-color 0.3s;
+  }
+  .wl-what-item:hover .wl-what-icon { border-color: var(--gold-dim); }
+  .wl-what-icon svg { width: 16px; height: 16px; stroke: var(--text-dim); }
+  .wl-what-item:hover .wl-what-icon svg { stroke: var(--gold); }
+  .wl-what-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 2px;
+  }
+  .wl-what-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+  .wl-form {
+    display: flex;
+    gap: 0;
+    margin-bottom: 16px;
+  }
+  .wl-input {
+    flex: 1;
+    padding: 16px 20px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-right: none;
+    color: var(--text-bright);
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .wl-input:focus { border-color: var(--gold-dim); }
+  .wl-input::placeholder { color: var(--text-dim); }
+  .wl-btn {
+    padding: 16px 32px;
+    background: var(--gold);
+    color: var(--bg);
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+  }
+  .wl-btn:hover { background: var(--gold-light); }
+  .wl-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .wl-meta-left {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+  .wl-spots {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .wl-spots-dot {
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: dotPulse 2s ease-in-out infinite;
+  }
+  .wl-success {
+    display: none;
+    text-align: center;
+    padding: 32px 0;
+  }
+  .wl-success.show { display: block; }
+  .wl-success-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+  .wl-success-h {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    color: var(--text-bright);
+    margin-bottom: 6px;
+  }
+  .wl-success-p {
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  @media (max-width: 1100px) {
+    .pillars-grid { grid-template-columns: 1fr; }
+    .equities-grid { grid-template-columns: repeat(2, 1fr); }
+    .macro-layout, .learning-layout { grid-template-columns: 1fr; gap: 48px; }
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    section { padding: 80px 24px; }
+    .hero { padding: 120px 24px 80px; }
+    #waitlist { padding: 80px 24px; }
+    .wl-form { flex-direction: column; }
+    .wl-input { border-right: 1px solid var(--border); border-bottom: none; }
+    .wl-btn { padding: 16px; }
+  }
+  @media (max-width: 640px) {
+    .equities-grid { grid-template-columns: 1fr; }
+    .footer-grid { flex-direction: column; }
+  }
+  </style>
+ </head>
+ <body>
+  <!-- ═══ NAVIGATION ═══ -->
+  <nav id="navbar">
+   <a class="nav-logo" href="#">
+    <div class="nav-logo-mark">
+    </div>
+    <span class="nav-logo-text">
+     Insight Invest
+    </span>
+   </a>
+   <div class="nav-links">
+    <a href="#pillars">
+     What We Cover
+    </a>
+    <a href="#macro">
+     Macro
+    </a>
+    <a href="#learning">
+     Learn
+    </a>
+    <a class="nav-cta" href="#reports">
+     Access Reports
+    </a>
+   </div>
+  </nav>
+  <!-- ═══ HERO ═══ -->
+  <section class="hero">
+   <div class="hero-grid">
+   </div>
+   <div class="hero-orb hero-orb-1">
+   </div>
+   <div class="hero-orb hero-orb-2">
+   </div>
+   <div class="hero-orb hero-orb-3">
+   </div>
+   <div class="hero-content">
+    <div class="hero-tag">
+     <span class="hero-tag-line">
+     </span>
+     Markets · Intelligence · Edge
+    </div>
+    <h1 class="hero-h1">
+     See What
+     <br/>
+     Others
+     <em>
+      Miss
+     </em>
+    </h1>
+    <p class="hero-sub">
+     Macro intelligence, equity analysis across US &amp; global markets, and financial frameworks — distilled for investors who think in systems, not headlines.
+    </p>
+    <div class="hero-actions">
+     <a class="btn-primary" href="#reports">
+      Explore Reports
+     </a>
+     <a class="btn-ghost" href="#learning">
+      Start Learning
+     </a>
+    </div>
+   </div>
+   <div class="scroll-indicator">
+    <span>
+     Scroll
+    </span>
+    <div class="scroll-line">
+    </div>
+   </div>
+  </section>
+  <!-- ═══ TICKER ═══ -->
+  <div class="ticker">
+   <div class="ticker-track" id="tickerTrack">
+   </div>
+  </div>
+  <!-- ═══ THREE PILLARS ═══ -->
+  <section id="pillars">
+   <div class="reveal">
+    <div class="section-tag">
+     <span class="section-tag-dot">
+     </span>
+     What We Cover
+    </div>
+    <h2 class="section-h2">
+     Three pillars of
+     <br/>
+     market intelligence
+    </h2>
+    <p class="section-sub">
+     Every insight published through Insight Invest falls under one of three categories — each designed to give you a structural edge.
+    </p>
+   </div>
+   <div class="pillars-grid reveal">
+    <!-- Macro -->
+    <div class="pillar-card">
+     <div class="pillar-number">
+      01
+     </div>
+     <div class="pillar-icon">
+      <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24">
+       <circle cx="12" cy="12" r="10">
+       </circle>
+       <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z">
+       </path>
+      </svg>
+     </div>
+     <h3 class="pillar-h3">
+      Macro Updates
+     </h3>
+     <p class="pillar-desc">
+      Global macro intelligence — central bank policy, geopolitical risk, commodity cycles, and the cross-currents that move markets before the headlines land. We publish when the signal fires, not on a schedule.
+     </p>
+     <div class="pillar-tags">
+      <span class="pillar-tag">
+       Fed Policy
+      </span>
+      <span class="pillar-tag">
+       Geopolitics
+      </span>
+      <span class="pillar-tag">
+       Commodities
+      </span>
+      <span class="pillar-tag">
+       FX
+      </span>
+      <span class="pillar-tag">
+       Rates
+      </span>
+     </div>
+     <a class="pillar-link" href="/iran-conflict">
+      Latest macro report
+      <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+       <path d="M5 12h14M12 5l7 7-7 7">
+       </path>
+      </svg>
+     </a>
+    </div>
+    <!-- Equities -->
+    <div class="pillar-card">
+     <div class="pillar-number">
+      02
+     </div>
+     <div class="pillar-icon">
+      <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24">
+       <polyline points="22 12 18 12 15 21 9 3 6 12 2 12">
+       </polyline>
+      </svg>
+     </div>
+     <h3 class="pillar-h3">
+      US &amp; Global Equities
+     </h3>
+     <p class="pillar-desc">
+      Deep equity research spanning US large-cap, emerging markets, and overlooked global opportunities. Sector rotations, earnings analysis, and thematic trades — built on fundamentals, confirmed by technicals.
+     </p>
+     <div class="pillar-tags">
+      <span class="pillar-tag">
+       US Markets
+      </span>
+      <span class="pillar-tag">
+       Asia Pacific
+      </span>
+      <span class="pillar-tag">
+       EMEA
+      </span>
+      <span class="pillar-tag">
+       Sectors
+      </span>
+      <span class="pillar-tag">
+       Thematic
+      </span>
+     </div>
+     <a class="pillar-link" href="#reports">
+      Equity coverage
+      <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+       <path d="M5 12h14M12 5l7 7-7 7">
+       </path>
+      </svg>
+     </a>
+    </div>
+    <!-- Learning -->
+    <div class="pillar-card">
+     <div class="pillar-number">
+      03
+     </div>
+     <div class="pillar-icon">
+      <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24">
+       <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z">
+       </path>
+       <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z">
+       </path>
+      </svg>
+     </div>
+     <h3 class="pillar-h3">
+      Financial Learning
+     </h3>
+     <p class="pillar-desc">
+      Structured tracks from foundational investing to advanced derivatives and portfolio construction. Not textbook theory — real frameworks used by practitioners, explained so they actually stick.
+     </p>
+     <div class="pillar-tags">
+      <span class="pillar-tag">
+       Fundamentals
+      </span>
+      <span class="pillar-tag">
+       Options
+      </span>
+      <span class="pillar-tag">
+       Risk Mgmt
+      </span>
+      <span class="pillar-tag">
+       Portfolio
+      </span>
+      <span class="pillar-tag">
+       Macro 101
+      </span>
+     </div>
+     <a class="pillar-link" href="/buffett-playbook">
+      Start learning
+      <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+       <path d="M5 12h14M12 5l7 7-7 7">
+       </path>
+      </svg>
+     </a>
+    </div>
+   </div>
+  </section>
+  <!-- ═══ MACRO SECTION ═══ -->
+  <section id="macro">
+   <div class="macro-layout">
+    <div class="reveal">
+     <div class="section-tag">
+      <span class="section-tag-dot">
+      </span>
+      Macro Intelligence
+     </div>
+     <h2 class="section-h2">
+      The global
+      <br/>
+      picture, decoded
+     </h2>
+     <p class="section-sub">
+      Central banks, commodity shocks, geopolitical flashpoints — we track the forces that move trillions, and translate them into actionable frameworks.
+     </p>
+     <div class="macro-stats">
+      <div class="macro-stat">
+       <div class="macro-stat-label">
+        Fed Funds Rate
+       </div>
+       <div class="macro-stat-value">
+        4.50%
+       </div>
+       <div class="macro-stat-change" style="color:var(--gold)">
+        Holding steady
+       </div>
+      </div>
+      <div class="macro-stat">
+       <div class="macro-stat-label">
+        10Y Treasury
+       </div>
+       <div class="macro-stat-value">
+        4.28%
+       </div>
+       <div class="macro-stat-change" style="color:var(--red)">
+        +12bps this week
+       </div>
+      </div>
+      <div class="macro-stat">
+       <div class="macro-stat-label">
+        WTI Crude
+       </div>
+       <div class="macro-stat-value">
+        $78.40
+       </div>
+       <div class="macro-stat-change" style="color:var(--green)">
+        +3.2% MTD
+       </div>
+      </div>
+      <div class="macro-stat">
+       <div class="macro-stat-label">
+        DXY Index
+       </div>
+       <div class="macro-stat-value">
+        104.6
+       </div>
+       <div class="macro-stat-change" style="color:var(--red)">
+        -0.8% this week
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="reveal" style="transition-delay: 0.2s;">
+     <div class="macro-visual">
+      <div class="macro-visual-header">
+       <span>
+        <span class="macro-live-dot">
+        </span>
+        GLOBAL MACRO HEAT INDEX
+       </span>
+       <span>
+        12M Rolling
+       </span>
+      </div>
+      <div class="macro-chart" id="macroChart">
+      </div>
+     </div>
+    </div>
+   </div>
+  </section>
+  <!-- ═══ QUOTE ═══ -->
+  <div class="quote-section">
+   <p class="quote-text reveal">
+    The investor's chief problem — and even his worst enemy — is likely to be himself.
+   </p>
+   <span class="quote-attr reveal">
+    — Benjamin Graham
+   </span>
+  </div>
+  <!-- ═══ LEARNING SECTION ═══ -->
+  <section id="learning">
+   <div class="learning-layout">
+    <div>
+     <div class="reveal">
+      <div class="section-tag">
+       <span class="section-tag-dot">
+       </span>
+       Financial Education
+      </div>
+      <h2 class="section-h2">
+       Learn the
+       <br/>
+       frameworks that
+       <br/>
+       <em style="font-style:italic;color:var(--gold);">
+        actually work
+       </em>
+      </h2>
+      <p class="section-sub">
+       Structured learning tracks — from building blocks to advanced strategies. Each one designed by practitioners, not professors.
+      </p>
+     </div>
+     <div class="learning-tracks reveal">
+      <div class="learning-track">
+       <div class="track-number">
+        01
+       </div>
+       <div class="track-info">
+        <div class="track-title">
+         Investing Foundations
+        </div>
+        <div class="track-desc">
+         Asset classes, risk/return, portfolio basics, reading financials
+        </div>
+       </div>
+       <div class="track-badge">
+        12 Lessons
+       </div>
+      </div>
+      <div class="learning-track">
+       <div class="track-number">
+        02
+       </div>
+       <div class="track-info">
+        <div class="track-title">
+         Macro &amp; Geopolitics
+        </div>
+        <div class="track-desc">
+         How central banks, trade wars, and conflict shape markets
+        </div>
+       </div>
+       <div class="track-badge">
+        8 Lessons
+       </div>
+      </div>
+      <div class="learning-track">
+       <div class="track-number">
+        03
+       </div>
+       <div class="track-info">
+        <div class="track-title">
+         Options &amp; Derivatives
+        </div>
+        <div class="track-desc">
+         From calls and puts to straddles, Greeks, and volatility plays
+        </div>
+       </div>
+       <div class="track-badge">
+        10 Lessons
+       </div>
+      </div>
+      <div class="learning-track">
+       <div class="track-number">
+        04
+       </div>
+       <div class="track-info">
+        <div class="track-title">
+         Portfolio Construction
+        </div>
+        <div class="track-desc">
+         Position sizing, correlation, hedging, and rebalancing frameworks
+        </div>
+       </div>
+       <div class="track-badge">
+        6 Lessons
+       </div>
+      </div>
+      <div class="learning-track">
+       <div class="track-number">
+        05
+       </div>
+       <div class="track-info">
+        <div class="track-title">
+         Behavioral Finance
+        </div>
+        <div class="track-desc">
+         Why smart people make dumb trades — and how to stop
+        </div>
+       </div>
+       <div class="track-badge">
+        7 Lessons
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="reveal" style="transition-delay: 0.15s;">
+     <div class="learning-feature">
+      <div class="learning-feature-tag">
+       Featured Track
+      </div>
+      <h3 class="learning-feature-h3">
+       The Geopolitical
+       <br/>
+       Investor's Playbook
+      </h3>
+      <p class="learning-feature-text">
+       A deep-dive framework for turning geopolitical chaos into structured investment theses. Covers oil shocks, sanctions, regime change, and the signal-to-noise problem — with real historical case studies and actionable templates.
+      </p>
+      <a class="btn-primary" href="/iran-conflict">
+       Begin This Track →
+      </a>
+     </div>
+     <div class="macro-stats" style="margin-top:20px;">
+      <div class="macro-stat">
+       <div class="macro-stat-label">
+        Total Lessons
+       </div>
+       <div class="macro-stat-value">
+        43
+       </div>
+      </div>
+      <div class="macro-stat">
+       <div class="macro-stat-label">
+        Avg. Completion
+       </div>
+       <div class="macro-stat-value">
+        89%
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section>
+  <!-- ═══ REPORTS SECTION ═══ -->
+  <section id="reports" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+   <div class="reveal">
+    <div class="section-tag">
+     <span class="section-tag-dot">
+     </span>
+     Published Reports
+    </div>
+    <h2 class="section-h2">
+     Deep-dive
+     <br/>
+     playbooks
+    </h2>
+    <p class="section-sub">
+     Comprehensive, actionable research reports — each one a complete investment framework you can use immediately.
+    </p>
+   </div>
+   <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:20px;max-width:1400px;margin:0 auto;">
+    <!-- Buffett Playbook Card -->
+    <a href="/buffett-playbook" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='var(--gold-dim)';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(201,168,76,0.08)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
+     <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#c9a84c,#f0d078);">
+     </div>
+     <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;">
+      Financial Learning · 8 Plays
+     </div>
+     <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:14px;">
+      The Buffett
+      <br/>
+      Investor Playbook
+     </div>
+     <p style="font-size:14px;color:var(--text);line-height:1.7;margin-bottom:28px;">
+      Warren Buffett's entire investment strategy — decoded into 8 actionable plays. Owner mindset, circle of competence, margin of safety, the 4-filter system, and more.
+     </p>
+     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">
+       Value Investing
+      </span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">
+       Moats
+      </span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">
+       Psychology
+      </span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">
+       Portfolio
+      </span>
+     </div>
+     <div style="font-size:12px;font-weight:600;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;">
+      Read Playbook
+      <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14">
+       <path d="M5 12h14M12 5l7 7-7 7">
+       </path>
+      </svg>
+     </div>
+    </a>
+    <!-- Iran Conflict Card -->
+    <a href="/iran-conflict" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#ff6b6b40';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(255,107,107,0.06)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
+     <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#ff6b6b,#ffa07a);">
+     </div>
+     <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#ff6b6b;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;">
+      Macro · Geopolitics · 5 Frameworks
+     </div>
+     <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:14px;">
+      Iran Conflict
+      <br/>
+      Investment Frameworks
+     </div>
+     <p style="font-size:14px;color:var(--text);line-height:1.7;margin-bottom:28px;">
+      Five actionable frameworks for navigating the Iran crisis — from bimodal straddles to reconstruction plays and the China squeeze. Built for both scenarios.
+     </p>
+     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">
+       Oil
+      </span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">
+       Geopolitics
+      </span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">
+       Options
+      </span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">
+       Macro
+      </span>
+     </div>
+     <div style="font-size:12px;font-weight:600;color:#ff6b6b;letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;">
+      Read Report
+      <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14">
+       <path d="M5 12h14M12 5l7 7-7 7">
+       </path>
+      </svg>
+     </div>
+    </a>
+    <!-- Cash Allocation Card -->
+    <a href="/cash-allocation-bear-markets" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#c0392b40';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(192,57,43,0.06)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#c0392b,#e74c3c);"></div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#c0392b;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;">Portfolio Strategy · 8 Sections</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:14px;">Cash Allocation<br>in Bear Markets</div>
+      <p style="font-size:14px;color:var(--text);line-height:1.7;margin-bottom:28px;">Evidence-based analysis of how to size, time, and deploy cash during downturns. Covers the dual-function framework, historical bear market data, deployment triggers, and where conventional wisdom fails.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Bear Markets</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Cash Strategy</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Risk Mgmt</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Deployment</span>
+      </div>
+      <div style="font-size:12px;font-weight:600;color:#c0392b;letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;">
+        Read Analysis
+        <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+      </div>
+    </a>
+    <!-- Bursa Playbook Card -->
+    <a href="/iran-bursa-playbook" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#e84c1e40';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(232,76,30,0.06)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#e84c1e,#f0a500);"></div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#e84c1e;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;">Malaysia · Bursa · 8 Stocks · 3 Scenarios</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:14px;">Iran Oil Shock<br>Bursa Playbook</div>
+      <p style="font-size:14px;color:var(--text);line-height:1.7;margin-bottom:28px;">Three oil price scenarios mapped to 8 Bursa-listed stocks. Which ones win at $80, $120, and $160+ Brent — Malaysia's net exporter edge, CPO correlation, and the honest caveats.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Oil</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Bursa</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Malaysia</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Energy</span>
+      </div>
+      <div style="font-size:12px;font-weight:600;color:#e84c1e;letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;">
+        Read Playbook
+        <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+      </div>
+    </a>
+    <!-- Iran Thesis Framework Card -->
+    <a href="/iran-thesis-framework" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#e8450a40';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(232,69,10,0.06)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#e8450a,#d4a020);"></div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#e8450a;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;">Geopolitical × Macro · Thesis Grade: B+</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:14px;">Iran × Stagflation<br>Thesis Framework</div>
+      <p style="font-size:14px;color:var(--text);line-height:1.7;margin-bottom:28px;">The full investment thesis chain: Hormuz closes → oil spikes → Fed paralysis → stagflation → 60/40 breaks. Scenario mapping, portfolio positioning, causal chains, and where the thesis is wrong.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Stagflation</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Fed Policy</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Hormuz</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Positioning</span>
+      </div>
+      <div style="font-size:12px;font-weight:600;color:#e8450a;letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;">
+        Read Framework
+        <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+      </div>
+    </a>
+    <!-- Halal Pharma Card -->
+    <a href="/halal-pharma-200b-framework" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#c9a84c40';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(201,168,76,0.06)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#c9a84c,#e8c96a);"></div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#c9a84c;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;">Malaysia · Halal Pharma · RM200B Opportunity</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:14px;">The RM200 Billion<br>Gold Mine</div>
+      <p style="font-size:14px;color:var(--text);line-height:1.7;margin-bottom:28px;">Full framework on Malaysia's halal pharmaceutical opportunity — the gelatin gap, heparin crisis, Indonesia mandate, and the companies positioned to capture a $200B global market.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Halal</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Pharma</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Malaysia</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Thematic</span>
+      </div>
+      <div style="font-size:12px;font-weight:600;color:#c9a84c;letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;">
+        Read Framework
+        <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+      </div>
+    </a>
+    <!-- Investor Profile Card -->
+    <a href="/investor-profile" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#7b5ea740';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(123,94,167,0.06)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#7b5ea7,#c9a84c);"></div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#7b5ea7;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;">Interactive Tool · 3 Phases · Personalised Result</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:14px;">Investor Profile<br>Assessment</div>
+      <p style="font-size:14px;color:var(--text);line-height:1.7;margin-bottom:28px;">Discover your investor archetype through emotional calibration, analytical filtering, and framework alignment. Not a generic quiz — a diagnostic built on how you actually respond to risk, loss, and uncertainty.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Psychology</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Risk Profile</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Interactive</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Free</span>
+      </div>
+      <div style="font-size:12px;font-weight:600;color:#7b5ea7;letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;">
+        Take the Assessment
+        <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+      </div>
+    </a>
+   </div>
+  </section>
+
+<!-- ═══ WAITLIST / 1-ON-1 ═══ -->
+<section id="waitlist">
+  <div class="wl-layout reveal">
+
+    <!-- Social proof strip -->
+    <div class="wl-proof">
+      <div class="wl-avatars">
+        <div class="wl-avatar" style="background:#4a7cff;">A</div>
+        <div class="wl-avatar" style="background:#3dd68c;">R</div>
+        <div class="wl-avatar" style="background:#c9a84c;">M</div>
+        <div class="wl-avatar" style="background:#38d9d9;">K</div>
+        <div class="wl-avatar" style="background:#ff5c5c;">S</div>
+      </div>
+      <div class="wl-proof-text">
+        <strong>47 investors</strong> on the waitlist
+      </div>
+    </div>
+
+    <!-- Heading — identity-framing, not selling -->
+    <h2 class="wl-h2">Some questions don't<br>have a <em>general</em> answer</h2>
+
+    <p class="wl-desc">
+      The research on this site is built for everyone. But your portfolio, your risk tolerance, your timeline — those are yours alone. We're opening a small number of one-on-one strategy sessions for investors who want thinking partners, not product pitches.
+    </p>
+
+    <!-- What it is — clean, no hype -->
+    <div class="wl-what">
+      <div class="wl-what-item">
+        <div class="wl-what-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div>
+          <div class="wl-what-title">60-minute deep dive</div>
+          <div class="wl-what-desc">Your portfolio, your questions. We walk through positioning, risk exposures, and blind spots — not a scripted presentation.</div>
+        </div>
+      </div>
+      <div class="wl-what-item">
+        <div class="wl-what-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+        </div>
+        <div>
+          <div class="wl-what-title">Written follow-up</div>
+          <div class="wl-what-desc">You leave with a document — the frameworks discussed, the action items, the specific things to watch. Not just a call.</div>
+        </div>
+      </div>
+      <div class="wl-what-item">
+        <div class="wl-what-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <div class="wl-what-title">No conflicts</div>
+          <div class="wl-what-desc">We don't manage money, sell products, or take commissions. The only incentive is giving you a clearer picture.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form -->
+    <div id="wlFormWrap">
+      <form id="wlForm">
+        <div class="wl-form">
+          <input type="email" class="wl-input" id="wlEmail" name="email" placeholder="Your email address" required />
+          <button type="submit" class="wl-btn" id="wlBtn">Join Waitlist</button>
+        </div>
+        <input type="hidden" name="_subject" value="New Waitlist Signup — 1-on-1 Strategy Session" />
+        <input type="hidden" name="source" value="leiholding.com waitlist" />
+        <input type="hidden" name="step" value="initial_signup" />
+        <input type="text" name="_gotcha" style="display:none" />
+      </form>
+      <div class="wl-meta">
+        <div class="wl-meta-left">No spam · No auto-sequences · We'll reach out when a spot opens</div>
+        <div class="wl-spots">
+          <span class="wl-spots-dot"></span>
+          Limited spots per month
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+   <div class="footer-grid">
+    <div class="footer-brand">
+     <div class="footer-brand-name">
+      Insight Invest
+     </div>
+     <p class="footer-brand-desc">
+      Macro intelligence, equity analysis, and financial education for serious investors. Not financial advice.
+     </p>
+    </div>
+    <div class="footer-col">
+     <div class="footer-col-title">
+      Research
+     </div>
+     <a href="#macro">
+      Macro Updates
+     </a>
+     <a href="#reports">
+      US Equities
+     </a>
+     <a href="#reports">
+      Global Equities
+     </a>
+     <a href="/iran-conflict">
+      Iran Playbook
+     </a>
+     <a href="/cash-allocation-bear-markets">
+      Cash Strategy
+     </a>
+     <a href="/iran-bursa-playbook">
+      Bursa Playbook
+     </a>
+     <a href="/iran-thesis-framework">
+      Thesis Framework
+     </a>
+     <a href="/halal-pharma-200b-framework">
+      Halal Pharma
+     </a>
+     <a href="/investor-profile">
+      Investor Profile
+     </a>
+    </div>
+    <div class="footer-col">
+     <div class="footer-col-title">
+      Learn
+     </div>
+     <a href="#learning">
+      All Tracks
+     </a>
+     <a href="/buffett-playbook">
+      Buffett Playbook
+     </a>
+     <a href="#learning">
+      Options
+     </a>
+     <a href="#learning">
+      Portfolio
+     </a>
+    </div>
+    <div class="footer-col">
+     <div class="footer-col-title">
+      Company
+     </div>
+     <a href="#">
+      About
+     </a>
+     <a href="#">
+      Contact
+     </a>
+     <a href="#">
+      Disclaimer
+     </a>
+    </div>
+   </div>
+   <div class="footer-bottom">
+    <span>
+     © 2026 Insight Invest. All rights reserved.
+    </span>
+    <span>
+     Educational content only · Not financial advice
+    </span>
+   </div>
+  </footer>
+  <script>
+   // ═══ TICKER DATA ═══
+const tickerData = [
+  { symbol: 'SPX', price: '5,842.31', change: '+0.47%', up: true },
+  { symbol: 'NDX', price: '20,891.62', change: '+0.63%', up: true },
+  { symbol: 'DJI', price: '43,128.05', change: '+0.21%', up: true },
+  { symbol: 'FTSE', price: '8,342.91', change: '-0.18%', up: false },
+  { symbol: 'DAX', price: '22,456.78', change: '+1.12%', up: true },
+  { symbol: 'N225', price: '38,912.44', change: '-0.32%', up: false },
+  { symbol: 'HSI', price: '23,456.12', change: '+0.89%', up: true },
+  { symbol: 'WTI', price: '$78.40', change: '+1.21%', up: true },
+  { symbol: 'GOLD', price: '$2,934.50', change: '+0.34%', up: true },
+  { symbol: 'BTC', price: '$87,234', change: '-1.45%', up: false },
+  { symbol: 'EUR/USD', price: '1.0842', change: '+0.12%', up: true },
+  { symbol: 'VIX', price: '16.82', change: '-4.21%', up: false },
+];
+
+const tickerTrack = document.getElementById('tickerTrack');
+const tickerHTML = tickerData.map(t => `
+  <div class="ticker-item">
+    <span class="ticker-symbol">${t.symbol}</span>
+    <span class="ticker-price">${t.price}</span>
+    <span class="ticker-change ${t.up ? 'up' : 'down'}">${t.change}</span>
+  </div>
+`).join('');
+tickerTrack.innerHTML = tickerHTML + tickerHTML; // duplicate for seamless loop
+
+// ═══ MACRO CHART ═══
+const macroChart = document.getElementById('macroChart');
+const barData = [35,42,38,55,48,62,58,70,65,52,68,75,72,80,68,74,85,78,90,82,88,76,92,86,95,88,72,78,85,90,94,88,82,96,92,100,95,88,92,85,78,82,90,95,88,84];
+barData.forEach((val, i) => {
+  const bar = document.createElement('div');
+  bar.className = 'macro-bar';
+  bar.style.height = val + '%';
+  bar.style.animationDelay = (i * 0.02) + 's';
+  macroChart.appendChild(bar);
+});
+
+// ═══ EQUITIES GRID ═══
+// ═══ SCROLL REVEAL ═══
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+revealEls.forEach(el => observer.observe(el));
+
+// ═══ NAV SCROLL ═══
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ═══ WAITLIST (FORMSPREE) ═══
+// ⚠️ REPLACE with your actual Formspree form ID:
+const FORMSPREE_WAITLIST = 'YOUR_WAITLIST_FORM_ID';
+
+let signupEmail = '';
+
+// Email signup → redirect to questionnaire
+const wlForm = document.getElementById('wlForm');
+wlForm.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('wlBtn');
+  const email = document.getElementById('wlEmail').value.trim();
+  if (!email) return;
+
+  signupEmail = email;
+  btn.textContent = 'Joining...';
+  btn.style.opacity = '0.7';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(`https://formspree.io/f/${FORMSPREE_WAITLIST}`, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email,
+        source: 'leiholding.com waitlist',
+        step: 'initial_signup',
+        _subject: 'New Waitlist Signup — 1-on-1 Strategy Session'
+      })
+    });
+    if (res.ok) {
+      // Redirect straight to questionnaire
+      window.location.href = '/questionnaire?email=' + encodeURIComponent(email);
+    } else {
+      btn.textContent = 'Error — try again';
+      btn.style.background = 'var(--red)';
+      setTimeout(() => { btn.textContent = 'Join Waitlist'; btn.style.background = 'var(--gold)'; btn.style.opacity = '1'; btn.disabled = false; }, 3000);
+    }
+  } catch (err) {
+    btn.textContent = 'Connection error';
+    setTimeout(() => { btn.textContent = 'Join Waitlist'; btn.style.background = 'var(--gold)'; btn.style.opacity = '1'; btn.disabled = false; }, 3000);
+  }
+});
+  </script>
+ </body>
+</html>
