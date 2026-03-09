@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InsightInvest — Member Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0D0D14;
+    --paper: #F7F5F0;
+    --gold: #C9A84C;
+    --gold-dim: #8B6E2E;
+    --smoke: #1A1A2A;
+    --mist: #2A2A3E;
+    --silver: #9090A8;
+    --border: rgba(201,168,76,0.2);
+    --border-hover: rgba(201,168,76,0.6);
+    --glow: rgba(201,168,76,0.08);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    position: fixed;
+    top: 44px; left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+    width: 0%;
+    transition: width 0.4s ease;
+    z-index: 999;
+    box-shadow: 0 0 12px var(--gold);
+  }
+
+  .progress-counter {
+    position: fixed;
+    top: 20px; right: 28px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--gold-dim);
+    letter-spacing: 0.15em;
+    z-index: 998;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  /* Landing screen */
+  .landing {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 80px 10vw;
+    position: relative;
+  }
+
+  .landing::after {
+    content: '';
+    position: absolute;
+    right: -100px; top: 50%;
+    transform: translateY(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(201,168,76,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .brand-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.3s forwards;
+  }
+
+  .landing-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 7vw, 96px);
+    font-weight: 300;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.5s forwards;
+  }
+
+  .landing-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .landing-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--silver);
+    line-height: 1.8;
+    max-width: 480px;
+    margin-bottom: 56px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.7s forwards;
+  }
+
+  .landing-meta {
+    display: flex;
+    gap: 48px;
+    margin-bottom: 56px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.9s forwards;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .meta-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 300;
+    color: var(--gold);
+  }
+
+  .meta-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--silver);
+    text-transform: uppercase;
+  }
+
+  .start-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: var(--gold);
+    border: none;
+    padding: 18px 48px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1.1s forwards;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .start-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: white;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .start-btn:hover::before { transform: translateX(0); }
+  .start-btn:hover { color: var(--ink); }
+  .start-btn span { position: relative; z-index: 1; }
+
+  /* Form container */
+  .form-container {
+    display: none;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 80px 40px 120px;
+  }
+
+  .form-header {
+    margin-bottom: 80px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .form-header-tag {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .form-header-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--paper);
+    line-height: 1.2;
+  }
+
+  /* Question blocks */
+  .question-block {
+    margin-bottom: 64px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .question-block.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .q-number {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .q-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--paper);
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+
+  .q-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--silver);
+    line-height: 1.7;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  /* Input styles */
+  .q-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    color: var(--paper);
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    padding: 14px 0;
+    outline: none;
+    transition: border-color 0.3s ease;
+    letter-spacing: 0.02em;
+  }
+
+  .q-input:focus { border-bottom-color: var(--gold); }
+  .q-input::placeholder { color: var(--silver); opacity: 0.5; }
+
+  .q-textarea {
+    width: 100%;
+    background: var(--glow);
+    border: 1px solid var(--border);
+    color: var(--paper);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 20px;
+    outline: none;
+    resize: vertical;
+    min-height: 100px;
+    transition: border-color 0.3s ease;
+    line-height: 1.8;
+    letter-spacing: 0.02em;
+  }
+
+  .q-textarea:focus { border-color: var(--gold); }
+  .q-textarea::placeholder { color: var(--silver); opacity: 0.5; }
+
+  /* Radio / checkbox options */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .options-grid.single-col { grid-template-columns: 1fr; }
+
+  .option-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 18px 20px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    background: transparent;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .option-label::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--glow);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  .option-label:hover { border-color: var(--border-hover); }
+  .option-label:hover::before { opacity: 1; }
+
+  .option-label input[type="radio"],
+  .option-label input[type="checkbox"] {
+    display: none;
+  }
+
+  .option-label input:checked ~ .option-box { background: var(--gold); border-color: var(--gold); }
+  .option-label input:checked ~ .option-box::after { opacity: 1; }
+  .option-label:has(input:checked) { border-color: var(--gold); background: rgba(201,168,76,0.06); }
+
+  .option-box {
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--silver);
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: all 0.2s ease;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .option-box::after {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--ink);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .option-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--paper);
+    line-height: 1.5;
+    position: relative;
+    z-index: 1;
+  }
+
+  .option-sub {
+    font-size: 11px;
+    color: var(--silver);
+    margin-top: 3px;
+    display: block;
+  }
+
+  /* Scale/slider */
+  .scale-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .scale-btn {
+    flex: 1;
+    height: 48px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--silver);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .scale-btn:hover { border-color: var(--border-hover); color: var(--paper); }
+  .scale-btn.selected { background: var(--gold); border-color: var(--gold); color: var(--ink); font-weight: 600; }
+
+  .scale-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+
+  .scale-label-text {
+    font-size: 10px;
+    color: var(--silver);
+    letter-spacing: 0.1em;
+  }
+
+  /* Section dividers */
+  .section-divider {
+    margin: 80px 0 64px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .section-divider-line { flex: 1; height: 1px; background: var(--border); }
+
+  .section-divider-label {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* Submit */
+  .submit-section {
+    margin-top: 80px;
+    padding-top: 48px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .submit-note {
+    font-size: 12px;
+    color: var(--silver);
+    line-height: 1.8;
+    margin-bottom: 40px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .submit-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: var(--gold);
+    border: none;
+    padding: 20px 64px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .submit-btn:hover { background: var(--paper); }
+  .submit-btn span { position: relative; z-index: 1; }
+
+  /* Thank you screen */
+  .thankyou {
+    display: none;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 60px 40px;
+  }
+
+  .thankyou-icon {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 80px;
+    color: var(--gold);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .thankyou-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 300;
+    color: var(--paper);
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.4s forwards;
+  }
+
+  .thankyou-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--silver);
+    line-height: 1.8;
+    max-width: 420px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    .landing { padding: 60px 6vw; }
+    .options-grid { grid-template-columns: 1fr; }
+    .form-container { padding: 60px 24px 100px; }
+    .landing-meta { gap: 32px; }
+  }
+</style>
+</head>
+<body>
+<!-- ═══ SITE-WIDE NAV ═══ -->
+<div id="siteNav" style="position:fixed;top:0;left:0;right:0;z-index:9998;background:rgba(13,13,20,0.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(201,168,76,0.15);padding:0 32px;font-family:'DM Mono',monospace;">
+  <div style="max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:44px;">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      <span style="font-size:11px;font-weight:400;color:#C9A84C;letter-spacing:0.12em;text-transform:uppercase;">Insight Invest</span>
+    </a>
+    <a href="/member-profile" style="font-size:10px;color:#C9A84C;background:rgba(201,168,76,0.08);text-decoration:none;padding:4px 12px;border-radius:4px;letter-spacing:0.06em;">Member Profile</a>
+  </div>
+</div>
+<div style="height:44px;"></div>
+<!-- ═══ END SITE NAV ═══ -->
+
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="progress-counter" id="progressCounter">0 / 12</div>
+
+<!-- LANDING -->
+<section class="landing" id="landing">
+  <div class="brand-tag">InsightInvest — Private Member Profile</div>
+  <h1 class="landing-title">Tell us<br>where you<br><em>stand.</em></h1>
+  <p class="landing-sub">This is a short profile we ask every serious candidate to complete before we discuss next steps. There are no right answers — only honest ones.</p>
+  <div class="landing-meta">
+    <div class="meta-item">
+      <span class="meta-num">12</span>
+      <span class="meta-label">Questions</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-num">~6</span>
+      <span class="meta-label">Minutes</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-num">100%</span>
+      <span class="meta-label">Confidential</span>
+    </div>
+  </div>
+  <button class="start-btn" onclick="startForm()"><span>Begin Profile →</span></button>
+</section>
+
+<!-- FORM -->
+<div class="form-container" id="formContainer">
+
+  <div class="form-header">
+    <div class="form-header-tag">InsightInvest · Member Profile · Confidential</div>
+    <div class="form-header-title">Your investing journey,<br>in your own words.</div>
+  </div>
+
+  <!-- SECTION 1: CONTEXT -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <div class="section-divider-label">Part I — Where You Are</div>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="question-block" data-q="1">
+    <div class="q-number">Question 01</div>
+    <div class="q-text">How would you describe your current relationship with investing?</div>
+    <div class="q-sub">Not experience level — the feeling. Frustrated? Curious? Overwhelmed? Excited?</div>
+    <div class="options-grid single-col">
+      <label class="option-label">
+        <input type="radio" name="q1" value="curious_beginner">
+        <div class="option-box"></div>
+        <div class="option-text">Curious — I want to understand how this really works
+          <span class="option-sub">Still building foundational knowledge</span>
+        </div>
+      </label>
+      <label class="option-label">
+        <input type="radio" name="q1" value="active_learner">
+        <div class="option-box"></div>
+        <div class="option-text">Active — I'm already investing but want sharper conviction
+          <span class="option-sub">Reading, researching, but missing a framework</span>
+        </div>
+      </label>
+      <label class="option-label">
+        <input type="radio" name="q1" value="frustrated">
+        <div class="option-box"></div>
+        <div class="option-text">Frustrated — I've made moves but the results don't match my effort
+          <span class="option-sub">Something isn't clicking</span>
+        </div>
+      </label>
+      <label class="option-label">
+        <input type="radio" name="q1" value="ready_to_scale">
+        <div class="option-box"></div>
+        <div class="option-text">Serious — I have capital and a plan, I need expert guidance to execute
+          <span class="option-sub">Ready to move, want quality research alongside me</span>
+        </div>
+      </label>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="question-block" data-q="2">
+    <div class="q-number">Question 02</div>
+    <div class="q-text">What does your current portfolio look like?</div>
+    <div class="q-sub">Approximate size is fine — this helps us understand the context of our conversations.</div>
+    <div class="options-grid">
+      <label class="option-label">
+        <input type="radio" name="q2" value="starting">
+        <div class="option-box"></div>
+        <div class="option-text">Still building<br><span class="option-sub">Under RM 20,000</span></div>
+      </label>
+      <label class="option-label">
+        <input type="radio" name="q2" value="growing">
+        <div class="option-box"></div>
+        <div class="option-text">Growing<br><span class="option-sub">RM 20K – RM 100K</span></div>
+      </label>
+      <label class="option-label">
+        <input type="radio" name="q2" value="established">
+        <div class="option-box"></div>
+        <div class="option-text">Established<br><span class="option-sub">RM 100K – RM 500K</span></div>
+      </label>
+      <label class="option-label">
+        <input type="radio" name="q2" value="significant">
+        <div class="option-box"></div>
+        <div class="option-text">Significant<br><span class="option-sub">Above RM 500K</span></div>
+      </label>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="question-block" data-q="3">
+    <div class="q-number">Question 03</div>
+    <div class="q-text">How much time do you currently invest each week in market research and analysis?</div>
+    <div class="q-sub">Be honest — this tells us a lot about what kind of support would serve you most.</div>
+    <div class="options-grid">
+      <label class="option-label">
+        <input type="radio" name="q3" value="under1h">
+        <div class="option-box"></div>
+        <div class="option-text">Less than 1 hour</div>
+      </label>
+      <label class="option-label">
+        <input type="radio" name="q3" value="1to3h">
+        <div class="option-box"></div>
+        <div class="option-text">1 – 3 hours</div>
+      </label>
+      <label class="option-label">
+        <input type="radio" name="q3" value="3to7h">
+        <div class="option-box"></div>
+        <div class="option-text">3 – 7 hours</div>
+      </label>
+      <label class="option-label">
+        <input type="radio" name="q3" value="over7h">
+        <div class="option-box"></div>
+        <div class="option-text">7+ hours</div>
+      </label>
+    </div>
+  </div>
+
+  <!-- SECTION 2: WHAT THEY WANT TO LEARN -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <div class="section-divider-label">Part II — What You Want to Learn</div>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="question-block" data-q="4">
+    <div class="q-number">Question 04</div>
+    <div class="q-text">If you could master one thing about investing in the next 12 months, what would it be?</div>
+    <div class="q-sub">This could be a skill, a market, a framework — whatever feels most important to you right now.</div>
+    <textarea class="q-textarea" name="q4" placeholder="Write freely — there's no wrong answer here..."></textarea>
+  </div>
+
+  <!-- Q5 -->
+  <div class="question-block" data-q="5">
+    <div class="q-number">Question 05</div>
+    <div class="q-text">Which areas do you most want to develop? (Select all that apply)</div>
+    <div class="q-sub">This shapes what kind of research and analysis we'd focus on together.</div>
+    <div class="options-grid single-col">
+      <label class="option-label">
+        <input type="checkbox" name="q5" value="macro">
+        <div class="option-box"></div>
+        <div class="option-text">Global macro — geopolitics, interest rates, FX, commodity cycles</div>
+      </label>
+      <label class="option-label">
+        <input type="checkbox" name="q5" value="equity_research">
+        <div class="option-box"></div>
+        <div class="option-text">Equity research — reading financial statements, valuing businesses</div>
+      </label>
+      <label class="option-label">
+        <input type="checkbox" name="q5" value="asymmetric">
+        <div class="option-box"></div>
+        <div class="option-text">Asymmetric opportunities — finding high reward, controlled risk setups</div>
+      </label>
+      <label class="option-label">
+        <input type="checkbox" name="q5" value="portfolio">
+        <div class="option-box"></div>
+        <div class="option-text">Portfolio construction — allocation, risk management, position sizing</div>
+      </label>
+      <label class="option-label">
+        <input type="checkbox" name="q5" value="psychology">
+        <div class="option-box"></div>
+        <div class="option-text">Investor psychology — conviction, patience, handling drawdowns</div>
+      </label>
+      <label class="option-label">
+        <input type="checkbox" name="q5" value="southeast_asia">
+        <div class="option-box"></div>
+        <div class="option-text">Southeast Asian markets — Bursa, regional plays, local dynamics</div>
+      </label>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="question-block" data-q="6">
+    <div class="q-number">Question 06</div>
+    <div class="q-text">What kind of investor do you want to become in 3 years?</div>
+    <div class="q-sub">Not a goal — a vision. What does that version of you look like?</div>
+    <textarea class="q-textarea" name="q6" placeholder="Describe as specifically as you can..."></textarea>
+  </div>
+
+  <!-- SECTION 3: PSYCHOLOGY / PRICING -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <div class="section-divider-label">Part III — How You Think About Value</div>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <!-- Q7 — anchoring -->
+  <div class="question-block" data-q="7">
+    <div class="q-number">Question 07</div>
+    <div class="q-text">Think about the best investment you've ever made — or the best investing decision you've witnessed. Roughly, what was the return?</div>
+    <div class="q-sub">This is about calibration. We want to understand what kind of outcomes you're working toward.</div>
+    <div class="options-grid">
+      <label class="option-label">
+        <input type="radio" name="q7" value="under20">
+        <div class="option-box"></div>
+        <div class="option-text">Under 20%</div>
+      </label>
+      <label class="option-label">
+        <input type="radio" name="q7" value="20to50">
+        <div class="option-box"></div>
+        <div class="option-text">20% – 50%</div>
+      </label>
+      <label class="option-label">
+        <input type="radio" name="q7" value="50to200">
+        <div class="option-box"></div>
+        <div class="option-text">50% – 200%</div>
+      </label>
+      <label class="option-label">
+        <input type="radio" name="q7" value="over200">
+        <div class="option-box"></div>
+        <div class="option-text">200%+</div>
+      </label>
+    </div>
+  </div>
+
+  <!-- Q8 — loss aversion / value reference -->
+  <div class="question-block" data-q="8">
+    <div class="q-number">Question 08</div>
+    <div class="q-text">In the past, what's the most you've lost on a single investment — and how did that affect your thinking?</div>
+    <div class="q-sub">No judgment here. Losses shape investors more than wins.</div>
+    <textarea class="q-textarea" name="q8" placeholder="Be as candid as you like..."></textarea>
+  </div>
+
+  <!-- Q9 — perceived value / willingness to pay (disguised) -->
+  <div class="question-block" data-q="9">
+    <div class="q-number">Question 09</div>
+    <div class="q-text">When you invest in your own development — books, courses, coaching — how do you decide whether something is worth it?</div>
+    <div class="q-sub">What makes the difference between "this is too expensive" and "this is exactly what I need"?</div>
+    <div class="options-grid single-col">
+      <label class="option-label">
+        <input type="radio" name="q9" value="outcome">
+        <div class="option-box"></div>
+        <div class="option-text">Outcomes — if it can change my results, the price is secondary</div>
+      </label>
+      <label class="option-label">
+        <input type="radio" name="q9" value="trust">
+        <div class="option-box"></div>
+        <div class="option-text">Trust — if I believe in the person, I'll find the budget</div>
+      </label>
+      <label class="option-label">
+        <input type="radio" name="q9" value="specificity">
+        <div class="option-box"></div>
+        <div class="option-text">Specificity — I pay for things that match exactly where I am, not generic content</div>
+      </label>
+      <label class="option-label">
+        <input type="radio" name="q9" value="budget_first">
+        <div class="option-box"></div>
+        <div class="option-text">Budget — I have a ceiling and work within it regardless</div>
+      </label>
+    </div>
+  </div>
+
+  <!-- Q10 — opportunity cost frame -->
+  <div class="question-block" data-q="10">
+    <div class="q-number">Question 10</div>
+    <div class="q-text">What's one investing decision in the past 2 years you wish you'd had better information or guidance on — and roughly what did that cost you?</div>
+    <div class="q-sub">Could be a missed entry, an early exit, holding too long, or something you never pulled the trigger on.</div>
+    <textarea class="q-textarea" name="q10" placeholder="Be as specific as you can — even a rough number helps..."></textarea>
+  </div>
+
+  <!-- SECTION 4: COMMITMENT -->
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <div class="section-divider-label">Part IV — Commitment & Fit</div>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <!-- Q11 — urgency -->
+  <div class="question-block" data-q="11">
+    <div class="q-number">Question 11</div>
+    <div class="q-text">How would you rate your urgency to improve your investing right now — on a scale of 1 to 5?</div>
+    <div class="q-sub">1 = "I'm exploring casually" &nbsp;·&nbsp; 5 = "I need this to move forward"</div>
+    <div class="scale-row" id="scaleQ11">
+      <button type="button" class="scale-btn" data-scale="q11" data-val="1" onclick="selectScale(this)">1</button>
+      <button type="button" class="scale-btn" data-scale="q11" data-val="2" onclick="selectScale(this)">2</button>
+      <button type="button" class="scale-btn" data-scale="q11" data-val="3" onclick="selectScale(this)">3</button>
+      <button type="button" class="scale-btn" data-scale="q11" data-val="4" onclick="selectScale(this)">4</button>
+      <button type="button" class="scale-btn" data-scale="q11" data-val="5" onclick="selectScale(this)">5</button>
+    </div>
+    <div class="scale-labels">
+      <span class="scale-label-text">Exploring</span>
+      <span class="scale-label-text">Ready to move</span>
+    </div>
+  </div>
+    <!-- Q13 — direct honest pricing -->
+  <div class="question-block" data-q="13">
+    <div class="q-number">Question 13</div>
+    <div class="q-text">Last one — and we'll be straight with you. If something like this was the right fit, what would you genuinely be comfortable investing per month?</div>
+    <div class="q-sub">No wrong answer. This just helps us have an honest conversation from the start — no surprises on either side.</div>
+    <textarea class="q-textarea" name="q13" placeholder="e.g. RM 300 / month, or whatever feels right to you..."></textarea>
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="submit-section">
+    <p class="submit-note">Your responses are confidential and reviewed personally before our next conversation.</p>
+    <button class="submit-btn" onclick="submitForm()"><span>Submit Profile →</span></button>
+  </div>
+
+</div>
+
+<!-- THANK YOU -->
+<div class="thankyou" id="thankyou">
+  <div class="thankyou-icon">✦</div>
+  <div class="thankyou-title">Profile received.</div>
+  <p class="thankyou-sub">We'll review your responses before we speak. You'll hear from us within 24–48 hours to discuss next steps.</p>
+  <a href="/" style="display:inline-block;margin-top:28px;padding:12px 28px;border:1px solid rgba(201,168,76,0.3);color:#C9A84C;text-decoration:none;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;transition:all 0.3s;">← Back to Insight Invest</a>
+</div>
+
+<script>
+  const scaleValues = {};
+
+  function startForm() {
+    document.getElementById('landing').style.display = 'none';
+    const form = document.getElementById('formContainer');
+    form.style.display = 'block';
+    document.getElementById('progressCounter').style.opacity = '1';
+    updateProgress();
+
+    // Intersection observer for fade-in
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('visible');
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.question-block').forEach(el => observer.observe(el));
+    window.addEventListener('scroll', updateProgress);
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
+  function updateProgress() {
+    const answered = countAnswered();
+    const pct = (answered / 12) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('progressCounter').textContent = answered + ' / 12';
+  }
+
+  function countAnswered() {
+    let count = 0;
+    // radio
+    ['q1','q2','q3','q7','q9','q10'].forEach(n => {
+      if (document.querySelector(`input[name="${n}"]:checked`)) count++;
+    });
+    // checkboxes — count if at least one checked
+    if (document.querySelector(`input[name="q5"]:checked`)) count++;
+    // textareas
+    ['q4','q6','q8'].forEach(n => {
+      const el = document.querySelector(`textarea[name="${n}"]`);
+      if (el && el.value.trim().length > 3) count++;
+    });
+    // scale
+    if (scaleValues['q11']) count++;
+    // q12 optional — always count
+    count++;
+    return Math.min(count, 12);
+  }
+
+  function selectScale(btn) {
+    const scale = btn.dataset.scale;
+    scaleValues[scale] = btn.dataset.val;
+    document.querySelectorAll(`.scale-btn[data-scale="${scale}"]`).forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    updateProgress();
+  }
+
+  // Update progress on input
+  document.addEventListener('change', updateProgress);
+  document.addEventListener('input', updateProgress);
+
+  async function submitForm() {
+    const FORMSPREE_ID = 'YOUR_MEMBER_PROFILE_FORM_ID';
+    const btn = document.querySelector('.submit-btn');
+    btn.innerHTML = '<span>Submitting...</span>';
+    btn.style.opacity = '0.6';
+
+    // Collect all form data
+    const data = {};
+
+    // Radios
+    ['q1','q2','q3','q7','q9','q10'].forEach(name => {
+      const checked = document.querySelector(`input[name="${name}"]:checked`);
+      if (checked) data[name] = checked.value;
+    });
+
+    // Checkboxes (q5)
+    const checks = document.querySelectorAll('input[name="q5"]:checked');
+    if (checks.length) data['q5'] = Array.from(checks).map(c => c.value).join(', ');
+
+    // Textareas
+    ['q4','q6','q8','q12','q13'].forEach(name => {
+      const el = document.querySelector(`textarea[name="${name}"]`);
+      if (el && el.value.trim()) data[name] = el.value.trim();
+    });
+
+    // Scale values
+    Object.keys(scaleValues).forEach(k => { data[k] = scaleValues[k]; });
+
+    data['_subject'] = 'New Member Profile Submitted';
+    data['source'] = 'leiholding.com/member-profile';
+
+    try {
+      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (res.ok) {
+        document.getElementById('formContainer').style.display = 'none';
+        const ty = document.getElementById('thankyou');
+        ty.style.display = 'flex';
+        document.getElementById('progressBar').style.width = '100%';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        btn.innerHTML = '<span>Error — try again</span>';
+        btn.style.opacity = '1';
+        setTimeout(() => { btn.innerHTML = '<span>Submit Profile →</span>'; }, 3000);
+      }
+    } catch (err) {
+      btn.innerHTML = '<span>Connection error</span>';
+      btn.style.opacity = '1';
+      setTimeout(() => { btn.innerHTML = '<span>Submit Profile →</span>'; }, 3000);
+    }
+  }
+</script>
+</body>
+</html>
