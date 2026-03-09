@@ -1043,7 +1043,7 @@
     <a href="#macro">
      Macro
     </a>
-    <a href="/learn/">
+    <a href="#learning">
      Learn
     </a>
     <a class="nav-cta" href="#reports">
@@ -1082,7 +1082,7 @@
      <a class="btn-primary" href="#reports">
       Explore Reports
      </a>
-     <a class="btn-ghost" href="/learn/">
+     <a class="btn-ghost" href="#learning">
       Start Learning
      </a>
     </div>
@@ -1240,7 +1240,7 @@
        Macro 101
       </span>
      </div>
-     <a class="pillar-link" href="/learn/">
+     <a class="pillar-link" href="/buffett-playbook">
       Start learning
       <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
        <path d="M5 12h14M12 5l7 7-7 7">
@@ -1341,154 +1341,245 @@
     — Benjamin Graham
    </span>
   </div>
-  <!-- ═══ LEARNING SECTION ═══ -->
-  <section id="learning">
-   <div class="learning-layout">
-    <div>
-     <div class="reveal">
-      <div class="section-tag">
-       <span class="section-tag-dot">
-       </span>
-       Financial Education
+  <!-- ═══════════════════════════════════════
+       CURRICULUM STYLES (injected)
+  ═══════════════════════════════════════ -->
+  <style>
+  /* Tier filter tabs */
+  .curr-tabs {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+  .curr-tab {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 8px 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .curr-tab.active { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.06); }
+  .curr-tab:hover:not(.active) { border-color: var(--text-dim); color: var(--text); }
+
+  /* Tier header */
+  .curr-tier-header {
+    display: flex; align-items: center; gap: 16px;
+    padding: 20px 0 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+  .curr-tier-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px; font-weight: 300;
+    line-height: 1; min-width: 48px;
+  }
+  .curr-tier-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px; font-weight: 600;
+    color: var(--text-bright);
+  }
+  .curr-tier-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.1em;
+    color: var(--text-dim); margin-top: 2px;
+  }
+  .curr-tier-count {
+    margin-left: auto;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.1em;
+    color: var(--text-dim);
+  }
+
+  /* Module grid */
+  .curr-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-bottom: 48px;
+  }
+  .curr-module {
+    background: var(--bg);
+    border: 1px solid transparent;
+    padding: 28px 24px;
+    text-decoration: none;
+    display: block;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .curr-module::before {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .curr-module:hover { border-color: var(--border); transform: translateY(-3px); background: var(--bg3); }
+  .curr-module:hover::before { transform: scaleX(1); }
+  .curr-module.locked { opacity: 0.38; pointer-events: none; }
+  .curr-module-top {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  .curr-module-code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.14em;
+    color: var(--gold);
+  }
+  .curr-module-lock {
+    font-size: 11px; color: var(--text-dim); opacity: 0.5;
+  }
+  .curr-module-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px; font-weight: 500;
+    color: var(--text-bright);
+    line-height: 1.25;
+    margin-bottom: 8px;
+  }
+  .curr-module-desc {
+    font-size: 12px; color: var(--text-dim);
+    line-height: 1.65; margin-bottom: 14px;
+  }
+  .curr-module-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.08em;
+    color: var(--text-dim);
+  }
+  .curr-module-arrow { color: var(--gold); }
+
+  /* Formats */
+  .curr-formats { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 12px; }
+  .curr-fmt {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; letter-spacing: 0.08em;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    padding: 2px 7px;
+  }
+
+  /* Tier colour accents */
+  .t1 .curr-module-code { color: #4a7cff; }
+  .t1 .curr-module::before { background: linear-gradient(90deg, #4a7cff, transparent); }
+  .t2 .curr-module-code { color: #3dd68c; }
+  .t2 .curr-module::before { background: linear-gradient(90deg, #3dd68c, transparent); }
+  .t3 .curr-module-code { color: var(--red); }
+  .t3 .curr-module::before { background: linear-gradient(90deg, var(--red), transparent); }
+  .t4 .curr-module-code { color: var(--gold); }
+
+  /* Search */
+  .curr-search-wrap { position: relative; margin-bottom: 32px; }
+  .curr-search {
+    width: 100%; max-width: 400px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 12px 16px 12px 40px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px; color: var(--text-bright);
+    outline: none; transition: border-color 0.2s;
+  }
+  .curr-search:focus { border-color: var(--gold-dim); }
+  .curr-search::placeholder { color: var(--text-dim); }
+  .curr-search-icon {
+    position: absolute; left: 12px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-dim); font-size: 14px;
+    pointer-events: none;
+  }
+
+  /* Paths */
+  .curr-paths {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2px; margin-bottom: 56px;
+  }
+  .curr-path {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    padding: 24px 28px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .curr-path:nth-child(2) { border-left-color: #4a7cff; }
+  .curr-path:nth-child(3) { border-left-color: #3dd68c; }
+  .curr-path:hover { background: var(--bg3); border-color: var(--border); }
+  .curr-path-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 8px;
+  }
+  .curr-path:nth-child(2) .curr-path-label { color: #4a7cff; }
+  .curr-path:nth-child(3) .curr-path-label { color: #3dd68c; }
+  .curr-path-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px; font-weight: 600;
+    color: var(--text-bright); margin-bottom: 6px;
+  }
+  .curr-path-desc { font-size: 12px; color: var(--text-dim); line-height: 1.6; }
+
+  @media (max-width: 1100px) {
+    .curr-grid { grid-template-columns: repeat(2,1fr); }
+    .curr-paths { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .curr-grid { grid-template-columns: 1fr; }
+  }
+  </style>
+
+  <!-- ═══ CURRICULUM SECTION ═══ -->
+  <section id="learning" style="background:var(--bg2);border-top:1px solid var(--border);">
+    <div style="max-width:1400px;margin:0 auto;">
+
+      <!-- Header -->
+      <div class="reveal">
+        <div class="section-tag">
+          <span class="section-tag-dot"></span>
+          Investment Curriculum
+        </div>
+        <h2 class="section-h2">22 modules.<br>One complete <em style="font-style:italic;color:var(--gold);">investor.</em></h2>
+        <p class="section-sub">Four tiers of structured education — from zero financial knowledge to asymmetric, macro-aware investor. Built on Druckenmiller, Buffett, and second-order thinking.</p>
       </div>
-      <h2 class="section-h2">
-       Learn the
-       <br/>
-       frameworks that
-       <br/>
-       <em style="font-style:italic;color:var(--gold);">
-        actually work
-       </em>
-      </h2>
-      <p class="section-sub">
-       Structured learning tracks — from building blocks to advanced strategies. Each one designed by practitioners, not professors.
-      </p>
-     </div>
-     <div class="learning-tracks reveal">
-      <div class="learning-track">
-       <div class="track-number">
-        01
-       </div>
-       <div class="track-info">
-        <div class="track-title">
-         Investing Foundations
+
+      <!-- Learning Paths -->
+      <div class="curr-paths reveal">
+        <div class="curr-path" onclick="filterPath(['1-1','1-2','1-3','1-4','1-5','1-6','2-1','2-2','2-3','2-4','2-5','2-6','3-1','3-2','3-3','3-4','3-5','3-6','4-1','4-2','4-3','4-4'])">
+          <div class="curr-path-label">Complete Path</div>
+          <div class="curr-path-title">The Full Journey</div>
+          <div class="curr-path-desc">All 22 modules in sequence — the complete investor's education.</div>
         </div>
-        <div class="track-desc">
-         Asset classes, risk/return, portfolio basics, reading financials
+        <div class="curr-path" onclick="filterPath(['1-2','1-3','1-4','3-1','3-2','3-5'])">
+          <div class="curr-path-label">Fast Track</div>
+          <div class="curr-path-title">The Macro Investor</div>
+          <div class="curr-path-desc">Central banks, macro triangle, and the trade thesis framework.</div>
         </div>
-       </div>
-       <a href="/learn/?tier=1" class="track-badge" style="text-decoration:none;cursor:pointer;transition:border-color 0.3s,color 0.3s;" onmouseover="this.style.borderColor='var(--gold-dim)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='';this.style.color=''">
-        6 Modules →
-       </a>
+        <div class="curr-path" onclick="filterPath(['1-5','2-1','2-3','4-2','4-3'])">
+          <div class="curr-path-label">Specialist</div>
+          <div class="curr-path-title">The Stock Picker</div>
+          <div class="curr-path-desc">Valuation, portfolio construction, and the Buffett framework.</div>
+        </div>
       </div>
-      <div class="learning-track">
-       <div class="track-number">
-        02
-       </div>
-       <div class="track-info">
-        <div class="track-title">
-         Macro &amp; Geopolitics
+
+      <!-- Controls -->
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:32px;">
+        <div class="curr-tabs">
+          <button class="curr-tab active" onclick="filterTier('all',this)">All</button>
+          <button class="curr-tab" onclick="filterTier(1,this)">Tier 1 · Foundation</button>
+          <button class="curr-tab" onclick="filterTier(2,this)">Tier 2 · Investor</button>
+          <button class="curr-tab" onclick="filterTier(3,this)">Tier 3 · Operator</button>
+          <button class="curr-tab" onclick="filterTier(4,this)">Tier 4 · Strategist</button>
         </div>
-        <div class="track-desc">
-         How central banks, trade wars, and conflict shape markets
+        <div class="curr-search-wrap" style="margin-bottom:0;">
+          <span class="curr-search-icon">⌕</span>
+          <input class="curr-search" id="currSearch" type="text" placeholder="Search modules..." oninput="searchModules(this.value)">
         </div>
-       </div>
-       <a href="/learn/?tier=3" class="track-badge" style="text-decoration:none;cursor:pointer;transition:border-color 0.3s,color 0.3s;" onmouseover="this.style.borderColor='var(--gold-dim)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='';this.style.color=''">
-        6 Modules →
-       </a>
       </div>
-      <div class="learning-track">
-       <div class="track-number">
-        03
-       </div>
-       <div class="track-info">
-        <div class="track-title">
-         Options &amp; Derivatives
-        </div>
-        <div class="track-desc">
-         From calls and puts to straddles, Greeks, and volatility plays
-        </div>
-       </div>
-       <a href="/learn/module.html?id=2-6" class="track-badge" style="text-decoration:none;cursor:pointer;transition:border-color 0.3s,color 0.3s;" onmouseover="this.style.borderColor='var(--gold-dim)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='';this.style.color=''">
-        1 Module →
-       </a>
-      </div>
-      <div class="learning-track">
-       <div class="track-number">
-        04
-       </div>
-       <div class="track-info">
-        <div class="track-title">
-         Portfolio Construction
-        </div>
-        <div class="track-desc">
-         Position sizing, correlation, hedging, and rebalancing frameworks
-        </div>
-       </div>
-       <a href="/learn/module.html?id=2-3" class="track-badge" style="text-decoration:none;cursor:pointer;transition:border-color 0.3s,color 0.3s;" onmouseover="this.style.borderColor='var(--gold-dim)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='';this.style.color=''">
-        1 Module →
-       </a>
-      </div>
-      <div class="learning-track">
-       <div class="track-number">
-        05
-       </div>
-       <div class="track-info">
-        <div class="track-title">
-         Behavioral Finance
-        </div>
-        <div class="track-desc">
-         Why smart people make dumb trades — and how to stop
-        </div>
-       </div>
-       <a href="/learn/module.html?id=2-2" class="track-badge" style="text-decoration:none;cursor:pointer;transition:border-color 0.3s,color 0.3s;" onmouseover="this.style.borderColor='var(--gold-dim)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='';this.style.color=''">
-        1 Module →
-       </a>
-      </div>
-      <div style="margin-top:32px;">
-       <a class="btn-primary" href="/learn/" style="display:inline-flex;align-items:center;gap:10px;">
-        View Full Curriculum — 22 Modules →
-       </a>
-      </div>
-     </div>
+
+      <!-- Module list rendered by JS -->
+      <div id="curriculumContainer"></div>
+
     </div>
-    <div class="reveal" style="transition-delay: 0.15s;">
-     <div class="learning-feature">
-      <div class="learning-feature-tag">
-       Featured Track
-      </div>
-      <h3 class="learning-feature-h3">
-       The Geopolitical
-       <br/>
-       Investor's Playbook
-      </h3>
-      <p class="learning-feature-text">
-       A deep-dive framework for turning geopolitical chaos into structured investment theses. Covers oil shocks, sanctions, regime change, and the signal-to-noise problem — with real historical case studies and actionable templates.
-      </p>
-      <a class="btn-primary" href="/iran-conflict">
-       Begin This Track →
-      </a>
-     </div>
-     <div class="macro-stats" style="margin-top:20px;">
-      <div class="macro-stat">
-       <div class="macro-stat-label">
-        Total Lessons
-       </div>
-       <div class="macro-stat-value">
-        43
-       </div>
-      </div>
-      <div class="macro-stat">
-       <div class="macro-stat-label">
-        Avg. Completion
-       </div>
-       <div class="macro-stat-value">
-        89%
-       </div>
-      </div>
-     </div>
-    </div>
-   </div>
   </section>
   <!-- ═══ REPORTS SECTION ═══ -->
   <section id="reports" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
@@ -1797,26 +1888,17 @@
      <div class="footer-col-title">
       Learn
      </div>
-     <a href="/learn/">
-      All 22 Modules
-     </a>
-     <a href="/learn/?tier=1">
-      Tier 1 · Foundation
-     </a>
-     <a href="/learn/?tier=3">
-      Tier 3 · Macro Operator
-     </a>
-     <a href="/learn/?tier=4">
-      Tier 4 · Strategist
-     </a>
-     <a href="/learn/module.html?id=3-5">
-      Trade Thesis Framework
-     </a>
-     <a href="/learn/tools.html">
-      Interactive Tools
+     <a href="#learning">
+      All Tracks
      </a>
      <a href="/buffett-playbook">
       Buffett Playbook
+     </a>
+     <a href="#learning">
+      Options
+     </a>
+     <a href="#learning">
+      Portfolio
      </a>
     </div>
     <div class="footer-col">
@@ -1869,6 +1951,120 @@ const tickerHTML = tickerData.map(t => `
   </div>
 `).join('');
 tickerTrack.innerHTML = tickerHTML + tickerHTML; // duplicate for seamless loop
+
+// ═══ CURRICULUM DATA & RENDERER ═══
+const MODULES = [
+  { id:'1-1', code:'1.1', tier:1, title:'Money, Value & Time', desc:'What money really is, why inflation steals from you, and how compound growth is the only free lunch in finance.', time:'45 min', formats:['video','article','quiz'], locked:false },
+  { id:'1-2', code:'1.2', tier:1, title:'How Markets Work', desc:'The mechanical reality of how stocks are bought and sold — exchanges, participants, price discovery, and order types.', time:'55 min', formats:['video','article','quiz'], locked:false },
+  { id:'1-3', code:'1.3', tier:1, title:'Interest Rates: The Master Variable', desc:'The single most important variable in all of finance. Understanding rates unlocks everything else.', time:'60 min', formats:['video','case study','quiz'], locked:false },
+  { id:'1-4', code:'1.4', tier:1, title:'Inflation & Purchasing Power', desc:'How inflation is measured, what drives it, and how it distorts every investment decision you will ever make.', time:'50 min', formats:['video','article','quiz'], locked:false },
+  { id:'1-5', code:'1.5', tier:1, title:'Reading Financial Statements', desc:'The three financial statements every investor must read — and what to actually look for beyond the numbers.', time:'70 min', formats:['video','article','template'], locked:false },
+  { id:'1-6', code:'1.6', tier:1, title:'Asset Classes 101', desc:'A clean map of every major asset class — stocks, bonds, real estate, commodities, crypto, and ETFs.', time:'65 min', formats:['video','article','quiz'], locked:false },
+  { id:'2-1', code:'2.1', tier:2, title:'Equity Valuation Fundamentals', desc:"How to put a number on a company. P/E, EV/EBITDA, FCF yield, DCF, and Buffett's margin of safety.", time:'75 min', formats:['video','article','template'], locked:true },
+  { id:'2-2', code:'2.2', tier:2, title:'Behavioral Finance & Psychology', desc:'Why smart people make terrible investment decisions — loss aversion, recency bias, herd behavior, and how to stop.', time:'55 min', formats:['video','article','case study'], locked:true },
+  { id:'2-3', code:'2.3', tier:2, title:'Portfolio Construction & Risk', desc:'Asset allocation, position sizing, Kelly Criterion, stop losses, and cash as a strategic weapon.', time:'80 min', formats:['video','article','tool'], locked:true },
+  { id:'2-4', code:'2.4', tier:2, title:'Investing Strategies Compared', desc:'Value vs growth vs dividend vs momentum vs index. The honest trade-offs of each approach.', time:'65 min', formats:['video','article','quiz'], locked:true },
+  { id:'2-5', code:'2.5', tier:2, title:'Understanding ETFs & Index Funds', desc:'The most democratizing financial product of the last 30 years. How it works, how to use it, how to misuse it.', time:'50 min', formats:['video','article','tool'], locked:true },
+  { id:'2-6', code:'2.6', tier:2, title:'Options & Derivatives Basics', desc:'Not speculation tools — risk management instruments used by every institutional investor on the planet.', time:'70 min', formats:['video','article','quiz'], locked:true },
+  { id:'3-1', code:'3.1', tier:3, title:'Central Banks & Liquidity', desc:'Central banks control the liquidity that inflates and deflates every asset. This is the most important module.', time:'90 min', formats:['video','article','case study'], locked:true },
+  { id:'3-2', code:'3.2', tier:3, title:'The Macro Triangle', desc:'Rates, inflation, and growth — the three variables that drive everything else. Their interactions create opportunity.', time:'75 min', formats:['video','article','tool'], locked:true },
+  { id:'3-3', code:'3.3', tier:3, title:'Geopolitics & Markets', desc:'Every geopolitical shock creates dislocations. The question is: who quietly captures the asymmetric upside?', time:'80 min', formats:['video','article','case study'], locked:true },
+  { id:'3-4', code:'3.4', tier:3, title:'Currency Markets & FX Dynamics', desc:'Currency moves silently through every investment. Ignoring it is not an option for serious investors.', time:'65 min', formats:['video','article','case study'], locked:true },
+  { id:'3-5', code:'3.5', tier:3, title:'Building a Trade Thesis', desc:'The operational module. Setup → Catalyst → Edge → Timeline → Target → Invalidation. Become accountable to your ideas.', time:'100 min', formats:['video','template','case study'], locked:true },
+  { id:'3-6', code:'3.6', tier:3, title:'Sector Analysis & Rotation', desc:'Markets do not move as one block. Sectors lead and lag based on the macro regime — learn to read the rotation.', time:'70 min', formats:['video','article','tool'], locked:true },
+  { id:'4-1', code:'4.1', tier:4, title:'Investing Like Druckenmiller', desc:'Liquidity-first, macro-top-down, asymmetric conviction. The operating framework of the greatest macro investor alive.', time:'90 min', formats:['video','article','case study'], locked:true },
+  { id:'4-2', code:'4.2', tier:4, title:'Investing Like Buffett', desc:'Owner mindset, durable moats, capital allocation, and the patience to wait for the fat pitch. The full playbook.', time:'85 min', formats:['video','article','tool'], locked:true },
+  { id:'4-3', code:'4.3', tier:4, title:'Asymmetric Investing', desc:'Constructing positions where potential gain vastly outweighs potential loss. The core skill of elite investors.', time:'95 min', formats:['video','article','case study','template'], locked:true },
+  { id:'4-4', code:'4.4', tier:4, title:'Managing Through a Full Cycle', desc:'Bull market to mania to crash to bear to recovery. Bringing everything together to navigate with discipline.', time:'110 min', formats:['video','article','tool'], locked:true },
+];
+
+const TIER_META = {
+  1: { label:'Foundation', tag:'Complete beginner → Financially literate', color:'#4a7cff' },
+  2: { label:'Investor',   tag:'Literate → Structured investor',           color:'#3dd68c' },
+  3: { label:'Operator',   tag:'Investor → Macro-aware thinker',           color:'#ff5c5c' },
+  4: { label:'Strategist', tag:'Operator → Asymmetric elite',              color:'#c9a84c' },
+};
+
+let activeTier = 'all';
+let activePath = null;
+let searchQuery = '';
+
+function renderCurriculum() {
+  const container = document.getElementById('curriculumContainer');
+  if (!container) return;
+  let html = '';
+  [1,2,3,4].forEach(t => {
+    const tm = TIER_META[t];
+    const mods = MODULES.filter(m => {
+      if (m.tier !== t) return false;
+      if (activeTier !== 'all' && m.tier !== activeTier) return false;
+      if (activePath && !activePath.includes(m.id)) return false;
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        return m.title.toLowerCase().includes(q) || m.desc.toLowerCase().includes(q);
+      }
+      return true;
+    });
+    if (mods.length === 0) return;
+    html += `<div class="curr-tier-section t${t}">
+      <div class="curr-tier-header">
+        <div class="curr-tier-num" style="color:${tm.color}">${t}</div>
+        <div>
+          <div class="curr-tier-name">${tm.label}</div>
+          <div class="curr-tier-tag">${tm.tag}</div>
+        </div>
+        <div class="curr-tier-count">${mods.length} modules</div>
+      </div>
+      <div class="curr-grid">
+        ${mods.map(m => `
+        <div class="curr-module${m.locked?' locked':''}">
+          <div class="curr-module-top">
+            <span class="curr-module-code">MODULE ${m.code}</span>
+            ${m.locked ? '<span class="curr-module-lock">🔒</span>' : ''}
+          </div>
+          <div class="curr-module-title">${m.title}</div>
+          <div class="curr-module-desc">${m.desc}</div>
+          <div class="curr-formats">${m.formats.map(f=>`<span class="curr-fmt">${f}</span>`).join('')}</div>
+          <div class="curr-module-footer">
+            <span>${m.time}</span>
+            ${m.locked ? '<span style="color:#555c72;font-size:9px;">Complete prior modules</span>' : '<span class="curr-module-arrow">Coming Soon →</span>'}
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  });
+  if (!html) html = `<div style="text-align:center;padding:60px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-dim);">No modules match your search.</div>`;
+  container.innerHTML = html;
+}
+
+function filterTier(tier, btn) {
+  activeTier = tier;
+  activePath = null;
+  searchQuery = '';
+  const si = document.getElementById('currSearch');
+  if (si) si.value = '';
+  document.querySelectorAll('.curr-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCurriculum();
+}
+
+function filterPath(ids) {
+  activePath = ids;
+  activeTier = 'all';
+  searchQuery = '';
+  const si = document.getElementById('currSearch');
+  if (si) si.value = '';
+  document.querySelectorAll('.curr-tab').forEach(b => b.classList.remove('active'));
+  renderCurriculum();
+}
+
+function searchModules(q) {
+  searchQuery = q.trim();
+  activePath = null;
+  renderCurriculum();
+}
+
+renderCurriculum();
 
 // ═══ MACRO CHART ═══
 const macroChart = document.getElementById('macroChart');
