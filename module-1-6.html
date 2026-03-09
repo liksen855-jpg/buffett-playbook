@@ -1,0 +1,1984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Asset Classes 101 — Insight Invest</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+   :root {
+    --bg: #08090c;
+    --bg2: #0e1016;
+    --bg3: #14161e;
+    --surface: #1a1d28;
+    --border: #252838;
+    --text: #9ca3b8;
+    --text-bright: #e8ecf4;
+    --text-dim: #555c72;
+    --gold: #c9a84c;
+    --gold-light: #e4cc7a;
+    --gold-dim: #8a7234;
+    --blue: #4a7cff;
+    --green: #3dd68c;
+    --red: #ff5c5c;
+    --cyan: #38d9d9;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) var(--bg);
+  }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ═══════════════════════════════════════
+     NOISE OVERLAY
+  ═══════════════════════════════════════ */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ═══════════════════════════════════════
+     NAVIGATION
+  ═══════════════════════════════════════ */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    padding: 20px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    z-index: 100;
+    background: linear-gradient(180deg, var(--bg) 0%, transparent 100%);
+    transition: all 0.4s;
+  }
+  nav.scrolled {
+    background: var(--bg)ee;
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 48px;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 14px;
+    text-decoration: none;
+  }
+  .nav-logo-mark {
+    width: 38px; height: 38px;
+    border: 1.5px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .nav-logo-mark::before {
+    content: 'I';
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 600;
+    color: var(--gold);
+  }
+  .nav-logo-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px; font-weight: 600;
+    color: var(--text-bright);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .nav-links { display: flex; gap: 36px; align-items: center; }
+  .nav-links a {
+    font-size: 12px; font-weight: 500;
+    color: var(--text-dim);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-cta {
+    padding: 10px 24px !important;
+    border: 1px solid var(--gold-dim) !important;
+    color: var(--gold) !important;
+    font-size: 11px !important;
+    letter-spacing: 0.14em !important;
+    transition: all 0.3s !important;
+  }
+  .nav-cta:hover {
+    background: var(--gold) !important;
+    color: var(--bg) !important;
+  }
+
+  /* ═══════════════════════════════════════
+     HERO
+  ═══════════════════════════════════════ */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    padding: 140px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Animated grid background */
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--border)15 1px, transparent 1px),
+      linear-gradient(90deg, var(--border)15 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 20%, transparent 70%);
+    animation: gridPulse 8s ease-in-out infinite;
+  }
+  @keyframes gridPulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+  }
+
+  /* Floating orbs */
+  .hero-orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px);
+    animation: orbFloat 12s ease-in-out infinite;
+  }
+  .hero-orb-1 {
+    width: 500px; height: 500px;
+    background: var(--gold)12;
+    top: -10%; right: -5%;
+    animation-delay: 0s;
+  }
+  .hero-orb-2 {
+    width: 350px; height: 350px;
+    background: var(--blue)10;
+    bottom: 10%; left: -5%;
+    animation-delay: -4s;
+  }
+  .hero-orb-3 {
+    width: 200px; height: 200px;
+    background: var(--cyan)08;
+    top: 30%; left: 40%;
+    animation-delay: -8s;
+  }
+  @keyframes orbFloat {
+    0%, 100% { transform: translate(0, 0); }
+    33% { transform: translate(30px, -20px); }
+    66% { transform: translate(-20px, 15px); }
+  }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    max-width: 900px;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; font-weight: 400;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards;
+    animation-delay: 0.2s;
+  }
+  .hero-tag-line {
+    width: 40px; height: 1px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+  .hero-h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 7.5vw, 110px);
+    font-weight: 300;
+    color: var(--text-bright);
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards;
+    animation-delay: 0.4s;
+  }
+  .hero-h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .hero-h1 span.thin {
+    font-weight: 300;
+    color: var(--text-dim);
+  }
+  .hero-sub {
+    font-size: 17px; font-weight: 400;
+    color: var(--text);
+    max-width: 520px;
+    line-height: 1.75;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards;
+    animation-delay: 0.6s;
+  }
+  .hero-actions {
+    display: flex; gap: 16px; align-items: center;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards;
+    animation-delay: 0.8s;
+  }
+  .btn-primary {
+    padding: 16px 40px;
+    background: var(--gold);
+    color: var(--bg);
+    font-family: 'Syne', sans-serif;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none; cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent, #fff3);
+    transform: translateX(-100%);
+    transition: transform 0.5s;
+  }
+  .btn-primary:hover::before { transform: translateX(100%); }
+  .btn-primary:hover { box-shadow: 0 8px 32px var(--gold)30; }
+  .btn-ghost {
+    padding: 16px 32px;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 12px; font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .btn-ghost:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Scroll indicator */
+  .scroll-indicator {
+    position: absolute; bottom: 40px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards;
+    animation-delay: 1.2s;
+  }
+  .scroll-indicator span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--text-dim);
+    letter-spacing: 0.15em; text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(180deg, var(--gold-dim), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; height: 40px; }
+    50% { opacity: 1; height: 60px; }
+  }
+
+  /* ═══════════════════════════════════════
+     LIVE TICKER
+  ═══════════════════════════════════════ */
+  .ticker {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+    overflow: hidden;
+    background: var(--bg2);
+    position: relative;
+  }
+  .ticker::before, .ticker::after {
+    content: '';
+    position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2;
+  }
+  .ticker::before { left: 0; background: linear-gradient(90deg, var(--bg2), transparent); }
+  .ticker::after { right: 0; background: linear-gradient(270deg, var(--bg2), transparent); }
+  .ticker-track {
+    display: flex; gap: 48px;
+    animation: tickerScroll 30s linear infinite;
+    width: max-content;
+  }
+  @keyframes tickerScroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  .ticker-item {
+    display: flex; align-items: center; gap: 12px;
+    white-space: nowrap;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+  }
+  .ticker-symbol { color: var(--text-bright); font-weight: 500; }
+  .ticker-price { color: var(--text-dim); }
+  .ticker-change { font-weight: 500; }
+  .ticker-change.up { color: var(--green); }
+  .ticker-change.down { color: var(--red); }
+
+  /* ═══════════════════════════════════════
+     SECTION COMMON
+  ═══════════════════════════════════════ */
+  section {
+    padding: 120px 48px;
+    position: relative;
+  }
+  .section-tag {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; font-weight: 500;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .section-tag-dot {
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: dotPulse 2s ease-in-out infinite;
+  }
+  @keyframes dotPulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+  .section-h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 4.5vw, 64px);
+    font-weight: 400;
+    color: var(--text-bright);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .section-sub {
+    font-size: 16px; color: var(--text);
+    max-width: 560px; line-height: 1.7;
+    margin-bottom: 60px;
+  }
+
+  /* ═══════════════════════════════════════
+     PILLARS — THREE COLUMNS
+  ═══════════════════════════════════════ */
+  #pillars { background: var(--bg); }
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .pillar-card {
+    background: var(--bg2);
+    padding: 56px 44px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: default;
+    border: 1px solid transparent;
+  }
+  .pillar-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  .pillar-card:hover {
+    background: var(--bg3);
+    border-color: var(--border);
+    transform: translateY(-4px);
+  }
+  .pillar-card:hover::before { opacity: 1; }
+  .pillar-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 72px; font-weight: 300;
+    color: var(--border);
+    line-height: 1;
+    margin-bottom: 32px;
+    transition: color 0.5s;
+  }
+  .pillar-card:hover .pillar-number { color: var(--gold-dim); }
+  .pillar-icon {
+    width: 52px; height: 52px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 28px;
+    transition: all 0.5s;
+  }
+  .pillar-card:hover .pillar-icon { border-color: var(--gold-dim); }
+  .pillar-icon svg { width: 24px; height: 24px; stroke: var(--text-dim); transition: stroke 0.5s; }
+  .pillar-card:hover .pillar-icon svg { stroke: var(--gold); }
+  .pillar-h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px; font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .pillar-desc {
+    font-size: 14px; line-height: 1.8;
+    color: var(--text);
+    margin-bottom: 32px;
+  }
+  .pillar-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+  .pillar-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; font-weight: 500;
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+    transition: all 0.3s;
+  }
+  .pillar-card:hover .pillar-tag { border-color: var(--gold-dim); color: var(--gold); }
+  .pillar-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 600;
+    color: var(--gold-dim);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: all 0.3s;
+  }
+  .pillar-link:hover { color: var(--gold); gap: 14px; }
+  .pillar-link svg { width: 14px; height: 14px; stroke: currentColor; transition: inherit; }
+
+  /* ═══════════════════════════════════════
+     MACRO — DATA DASHBOARD FEEL
+  ═══════════════════════════════════════ */
+  #macro {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .macro-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 80px;
+    max-width: 1400px;
+    margin: 0 auto;
+    align-items: center;
+  }
+  .macro-visual {
+    position: relative;
+    height: 420px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    overflow: hidden;
+  }
+  .macro-visual-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: var(--text-dim);
+  }
+  .macro-live-dot {
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    display: inline-block;
+    animation: dotPulse 1.5s ease-in-out infinite;
+    margin-right: 6px;
+  }
+  .macro-chart {
+    padding: 20px;
+    height: calc(100% - 50px);
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+  }
+  .macro-bar {
+    flex: 1;
+    background: linear-gradient(180deg, var(--gold)60, var(--gold)10);
+    border-radius: 2px 2px 0 0;
+    min-height: 8px;
+    animation: barGrow 1.5s ease-out forwards;
+    transform-origin: bottom;
+    opacity: 0;
+  }
+  @keyframes barGrow {
+    from { transform: scaleY(0); opacity: 0; }
+    to { transform: scaleY(1); opacity: 1; }
+  }
+
+  .macro-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 40px;
+  }
+  .macro-stat {
+    padding: 24px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    transition: all 0.3s;
+  }
+  .macro-stat:hover { border-color: var(--gold-dim); }
+  .macro-stat-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--text-dim);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .macro-stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px; font-weight: 500;
+    color: var(--text-bright);
+  }
+  .macro-stat-change {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px; margin-top: 4px;
+  }
+
+  /* ═══════════════════════════════════════
+     EQUITIES
+  ═══════════════════════════════════════ */
+  #equities { background: var(--bg); }
+  .equities-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .equity-card {
+    background: var(--bg2);
+    padding: 32px 28px;
+    border: 1px solid transparent;
+    transition: all 0.4s;
+    cursor: default;
+    position: relative;
+  }
+  .equity-card:hover {
+    border-color: var(--border);
+    background: var(--bg3);
+  }
+  .equity-card-region {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--text-dim);
+    letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .equity-card-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px; font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 6px;
+  }
+  .equity-card-value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 24px; font-weight: 500;
+    color: var(--text-bright);
+    margin-bottom: 4px;
+  }
+  .equity-card-change {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px; font-weight: 500;
+  }
+  .equity-card-sparkline {
+    margin-top: 20px;
+    height: 40px;
+    opacity: 0.6;
+    transition: opacity 0.3s;
+  }
+  .equity-card:hover .equity-card-sparkline { opacity: 1; }
+
+  /* ═══════════════════════════════════════
+     LEARNING
+  ═══════════════════════════════════════ */
+  #learning {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+  }
+  .learning-layout {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 80px;
+    max-width: 1400px;
+    margin: 0 auto;
+    align-items: start;
+  }
+  .learning-tracks { display: flex; flex-direction: column; gap: 2px; }
+  .learning-track {
+    display: flex; align-items: center;
+    padding: 28px 32px;
+    background: var(--bg);
+    border: 1px solid transparent;
+    cursor: default;
+    transition: all 0.4s;
+    gap: 24px;
+  }
+  .learning-track:hover {
+    border-color: var(--border);
+    background: var(--bg3);
+    padding-left: 40px;
+  }
+  .track-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px; font-weight: 300;
+    color: var(--border);
+    min-width: 50px;
+    transition: color 0.4s;
+  }
+  .learning-track:hover .track-number { color: var(--gold-dim); }
+  .track-info { flex: 1; }
+  .track-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px; font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 4px;
+  }
+  .track-desc {
+    font-size: 13px; color: var(--text-dim); line-height: 1.5;
+  }
+  .track-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; padding: 5px 14px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    white-space: nowrap;
+    transition: all 0.3s;
+  }
+  .learning-track:hover .track-badge { border-color: var(--gold-dim); color: var(--gold); }
+
+  .learning-feature {
+    padding: 48px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+  }
+  .learning-feature::before {
+    content: '';
+    position: absolute; top: -50%; right: -50%;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, var(--gold)08, transparent);
+    border-radius: 50%;
+  }
+  .learning-feature-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--gold);
+    letter-spacing: 0.15em; text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .learning-feature-h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px; font-weight: 400;
+    color: var(--text-bright);
+    line-height: 1.3;
+    margin-bottom: 20px;
+  }
+  .learning-feature-text {
+    font-size: 14px; color: var(--text);
+    line-height: 1.8;
+    margin-bottom: 32px;
+  }
+  .learning-feature .btn-primary { font-size: 11px; padding: 14px 32px; }
+
+  /* ═══════════════════════════════════════
+     QUOTE DIVIDER
+  ═══════════════════════════════════════ */
+  .quote-section {
+    padding: 100px 48px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: relative;
+  }
+  .quote-section::before {
+    content: '"';
+    position: absolute;
+    top: 20px; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 200px; font-weight: 300;
+    color: var(--border);
+    line-height: 1;
+  }
+  .quote-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(24px, 3vw, 42px);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text-bright);
+    max-width: 800px;
+    margin: 0 auto 24px;
+    line-height: 1.5;
+    position: relative;
+  }
+  .quote-attr {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px; color: var(--gold-dim);
+    letter-spacing: 0.1em;
+  }
+
+  /* ═══════════════════════════════════════
+     FOOTER
+  ═══════════════════════════════════════ */
+  footer {
+    padding: 60px 48px 40px;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+  }
+  .footer-grid {
+    display: flex; justify-content: space-between;
+    max-width: 1400px; margin: 0 auto;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap; gap: 40px;
+  }
+  .footer-brand { max-width: 280px; }
+  .footer-brand-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px; font-weight: 600;
+    color: var(--text-bright);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .footer-brand-desc {
+    font-size: 13px; color: var(--text-dim); line-height: 1.7;
+  }
+  .footer-col-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; font-weight: 500;
+    color: var(--text-dim);
+    letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .footer-col a {
+    display: block; font-size: 13px;
+    color: var(--text); text-decoration: none;
+    padding: 4px 0; transition: color 0.3s;
+  }
+  .footer-col a:hover { color: var(--gold); }
+  .footer-bottom {
+    max-width: 1400px; margin: 24px auto 0;
+    display: flex; justify-content: space-between;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: var(--text-dim);
+    flex-wrap: wrap; gap: 12px;
+  }
+
+  /* ═══════════════════════════════════════
+     ANIMATIONS / SCROLL REVEAL
+  ═══════════════════════════════════════ */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ═══════════════════════════════════════
+     RESPONSIVE
+  ═══════════════════════════════════════ */
+  /* ═══════════════════════════════════════
+     WAITLIST
+  ═══════════════════════════════════════ */
+  #waitlist {
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+    padding: 120px 48px;
+  }
+  #waitlist::before {
+    content: '';
+    position: absolute;
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, var(--gold)06, transparent 70%);
+    pointer-events: none;
+  }
+  .wl-layout {
+    max-width: 680px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  .wl-proof {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+  .wl-avatars {
+    display: flex;
+  }
+  .wl-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--bg);
+    margin-left: -8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: var(--bg);
+    font-weight: 600;
+  }
+  .wl-avatar:first-child { margin-left: 0; }
+  .wl-proof-text {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+  .wl-proof-text strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+  .wl-h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 400;
+    color: var(--text-bright);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .wl-h2 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .wl-desc {
+    font-size: 16px;
+    color: var(--text);
+    line-height: 1.75;
+    margin-bottom: 40px;
+    max-width: 560px;
+  }
+  .wl-what {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 40px;
+    border: 1px solid var(--border);
+  }
+  .wl-what-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+  .wl-what-item:last-child { border-bottom: none; }
+  .wl-what-item:hover { background: var(--bg2); }
+  .wl-what-icon {
+    width: 36px; height: 36px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: border-color 0.3s;
+  }
+  .wl-what-item:hover .wl-what-icon { border-color: var(--gold-dim); }
+  .wl-what-icon svg { width: 16px; height: 16px; stroke: var(--text-dim); }
+  .wl-what-item:hover .wl-what-icon svg { stroke: var(--gold); }
+  .wl-what-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 2px;
+  }
+  .wl-what-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+  .wl-form {
+    display: flex;
+    gap: 0;
+    margin-bottom: 16px;
+  }
+  .wl-input {
+    flex: 1;
+    padding: 16px 20px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-right: none;
+    color: var(--text-bright);
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .wl-input:focus { border-color: var(--gold-dim); }
+  .wl-input::placeholder { color: var(--text-dim); }
+  .wl-btn {
+    padding: 16px 32px;
+    background: var(--gold);
+    color: var(--bg);
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+  }
+  .wl-btn:hover { background: var(--gold-light); }
+  .wl-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .wl-meta-left {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+  .wl-spots {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .wl-spots-dot {
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: dotPulse 2s ease-in-out infinite;
+  }
+  .wl-success {
+    display: none;
+    text-align: center;
+    padding: 32px 0;
+  }
+  .wl-success.show { display: block; }
+  .wl-success-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+  .wl-success-h {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    color: var(--text-bright);
+    margin-bottom: 6px;
+  }
+  .wl-success-p {
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  @media (max-width: 1100px) {
+    .pillars-grid { grid-template-columns: 1fr; }
+    .equities-grid { grid-template-columns: repeat(2, 1fr); }
+    .macro-layout, .learning-layout { grid-template-columns: 1fr; gap: 48px; }
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    section { padding: 80px 24px; }
+    .hero { padding: 120px 24px 80px; }
+    #waitlist { padding: 80px 24px; }
+    .wl-form { flex-direction: column; }
+    .wl-input { border-right: 1px solid var(--border); border-bottom: none; }
+    .wl-btn { padding: 16px; }
+  }
+  @media (max-width: 640px) {
+    .equities-grid { grid-template-columns: 1fr; }
+    .footer-grid { flex-direction: column; }
+  }
+  </style>
+  <style>
+  /* ═══ MODULE PAGE EXTRA STYLES ═══ */
+  .mod-breadcrumb {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-dim); padding: 100px 48px 0;
+  }
+  .mod-breadcrumb a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
+  .mod-breadcrumb a:hover { color: var(--gold); }
+  .mod-breadcrumb span { opacity: 0.4; }
+
+  /* Module hero */
+  .mod-hero {
+    padding: 36px 48px 64px; position: relative; overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .mod-hero::before {
+    content: attr(data-watermark);
+    position: absolute; right: 48px; top: 10px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 160px; font-weight: 300;
+    color: var(--border); opacity: 0.35;
+    line-height: 1; user-select: none; pointer-events: none;
+    white-space: nowrap;
+  }
+  .mod-code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 0.15em; color: var(--blue);
+    text-transform: uppercase; margin-bottom: 16px;
+  }
+  .mod-hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 4.5vw, 64px);
+    font-weight: 400; color: var(--text-bright);
+    line-height: 1.1; margin-bottom: 20px;
+  }
+  .mod-hero-meta {
+    display: flex; align-items: center; gap: 24px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+  .mod-hero-meta span { display: flex; align-items: center; gap: 6px; }
+  .mod-hero-meta svg { width: 13px; height: 13px; opacity: 0.6; }
+  .mod-desc {
+    max-width: 680px;
+    font-family: 'Syne', sans-serif;
+    font-size: 16px; color: var(--text);
+    line-height: 1.7; margin-bottom: 28px;
+  }
+
+  /* Progress bar */
+  .mod-progress-bar {
+    position: fixed; top: 0; left: 0; width: 0%;
+    height: 2px; background: var(--blue); z-index: 999;
+    transition: width 0.1s linear;
+  }
+
+  /* Content layout */
+  .mod-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 0;
+    max-width: 1400px; margin: 0 auto;
+    padding: 0 48px;
+    align-items: start;
+  }
+  .mod-content { padding: 64px 48px 64px 0; border-right: 1px solid var(--border); }
+  .mod-sidebar { padding: 64px 0 64px 40px; position: sticky; top: 80px; }
+
+  /* Section headers inside module */
+  .mod-section { margin-bottom: 64px; }
+  .mod-section-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--text-dim); margin-bottom: 16px;
+  }
+  .mod-section h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(24px, 2.5vw, 36px);
+    font-weight: 400; color: var(--text-bright);
+    line-height: 1.2; margin-bottom: 20px;
+  }
+  .mod-section p {
+    font-size: 15px; line-height: 1.75; color: var(--text);
+    margin-bottom: 16px; max-width: 700px;
+  }
+  .mod-section h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 500;
+    color: var(--text-bright); margin: 32px 0 12px;
+  }
+
+  /* Key concept box */
+  .key-concept {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-left: 3px solid var(--blue);
+    border-radius: 0 8px 8px 0;
+    padding: 24px 28px; margin: 32px 0;
+    max-width: 700px;
+  }
+  .key-concept-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em;
+    color: var(--blue); text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .key-concept p { margin-bottom: 0; font-size: 14px; }
+
+  /* Gold insight box */
+  .insight-box {
+    background: linear-gradient(135deg, rgba(201,168,76,0.06), rgba(201,168,76,0.02));
+    border: 1px solid var(--gold-dim); border-radius: 8px;
+    padding: 24px 28px; margin: 32px 0; max-width: 700px;
+  }
+  .insight-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em;
+    color: var(--gold); text-transform: uppercase; margin-bottom: 10px;
+  }
+  .insight-box p { margin-bottom: 0; font-size: 14px; }
+
+  /* Formula box */
+  .formula-box {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px 24px; margin: 24px 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px; color: var(--text-bright);
+    max-width: 700px;
+  }
+  .formula-label {
+    font-size: 10px; letter-spacing: 0.15em;
+    color: var(--text-dim); text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  /* Example list */
+  .example-list { list-style: none; padding: 0; margin: 20px 0; max-width: 700px; }
+  .example-list li {
+    padding: 10px 0 10px 20px; border-bottom: 1px solid var(--border);
+    font-size: 14px; color: var(--text); line-height: 1.6;
+    position: relative;
+  }
+  .example-list li::before {
+    content: '→'; position: absolute; left: 0;
+    color: var(--blue); font-family: 'IBM Plex Mono', monospace;
+  }
+  .example-list li:last-child { border-bottom: none; }
+
+  /* ═══ INTERACTIVE TOOLS ═══ */
+  .tool-container {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 32px; margin: 40px 0;
+    max-width: 700px;
+  }
+  .tool-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 500;
+    color: var(--text-bright); margin-bottom: 6px;
+  }
+  .tool-subtitle {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: var(--text-dim);
+    letter-spacing: 0.08em; margin-bottom: 28px;
+  }
+  .tool-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .tool-field { display: flex; flex-direction: column; gap: 8px; }
+  .tool-field label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em;
+    color: var(--text-dim); text-transform: uppercase;
+  }
+  .tool-field input, .tool-field select {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 6px; padding: 10px 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px; color: var(--text-bright);
+    outline: none; transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+  .tool-field input:focus, .tool-field select:focus { border-color: var(--blue); }
+  .tool-field input[type=range] {
+    padding: 0; background: none; border: none;
+    accent-color: var(--blue); cursor: pointer;
+  }
+  .tool-btn {
+    background: var(--blue); color: #fff;
+    border: none; border-radius: 6px;
+    padding: 12px 28px; cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px; font-weight: 600;
+    letter-spacing: 0.05em; transition: opacity 0.2s;
+    margin-top: 8px;
+  }
+  .tool-btn:hover { opacity: 0.85; }
+  .tool-result {
+    margin-top: 24px; padding: 20px 24px;
+    background: var(--bg3); border-radius: 8px;
+    border: 1px solid var(--border);
+    display: none;
+  }
+  .tool-result.visible { display: block; }
+  .tool-result-big {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px; font-weight: 400;
+    color: var(--text-bright); line-height: 1;
+    margin-bottom: 8px;
+  }
+  .tool-result-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: var(--text-dim);
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .tool-result-sub {
+    font-size: 13px; color: var(--text);
+    margin-top: 12px; line-height: 1.6;
+  }
+
+  /* ═══ CHART CANVAS ═══ */
+  .chart-wrap {
+    margin: 32px 0; max-width: 700px;
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px;
+  }
+  .chart-wrap canvas { width: 100% !important; }
+
+  /* ═══ QUIZ ═══ */
+  .quiz-container {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 32px; margin: 40px 0;
+    max-width: 700px;
+  }
+  .quiz-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 32px;
+  }
+  .quiz-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 500; color: var(--text-bright);
+  }
+  .quiz-progress {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: var(--text-dim);
+    letter-spacing: 0.1em;
+  }
+  .quiz-progress-track {
+    height: 2px; background: var(--border); border-radius: 2px;
+    margin-bottom: 28px;
+  }
+  .quiz-progress-fill {
+    height: 100%; background: var(--blue); border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+  .quiz-q {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 400;
+    color: var(--text-bright); line-height: 1.4; margin-bottom: 24px;
+  }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-opt {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 18px;
+    cursor: pointer; transition: all 0.2s;
+    font-size: 14px; color: var(--text); line-height: 1.5;
+    text-align: left;
+  }
+  .quiz-opt:hover:not(.answered) { border-color: var(--blue); color: var(--text-bright); }
+  .quiz-opt.correct { border-color: var(--green); background: rgba(61,214,140,0.08); color: var(--green); }
+  .quiz-opt.wrong { border-color: var(--red); background: rgba(255,92,92,0.08); color: var(--red); }
+  .quiz-feedback {
+    margin-top: 20px; padding: 16px 20px;
+    border-radius: 8px; font-size: 14px; line-height: 1.6;
+    display: none;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct-fb { background: rgba(61,214,140,0.08); border: 1px solid rgba(61,214,140,0.3); color: var(--green); }
+  .quiz-feedback.wrong-fb { background: rgba(255,92,92,0.08); border: 1px solid rgba(255,92,92,0.3); color: #ff8a8a; }
+  .quiz-next {
+    margin-top: 20px; background: none;
+    border: 1px solid var(--border); border-radius: 6px;
+    padding: 10px 24px; cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: var(--text); letter-spacing: 0.1em;
+    text-transform: uppercase; transition: all 0.2s;
+    display: none;
+  }
+  .quiz-next.show { display: inline-block; }
+  .quiz-next:hover { border-color: var(--blue); color: var(--blue); }
+  .quiz-score {
+    text-align: center; padding: 40px 0 20px;
+    display: none;
+  }
+  .quiz-score.show { display: block; }
+  .quiz-score-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 72px; font-weight: 300;
+    color: var(--text-bright); line-height: 1;
+  }
+  .quiz-score-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: var(--text-dim);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    margin-top: 8px; margin-bottom: 24px;
+  }
+  .quiz-score-msg {
+    font-size: 15px; color: var(--text); line-height: 1.6; margin-bottom: 28px;
+  }
+  .quiz-restart {
+    background: var(--blue); color: #fff;
+    border: none; border-radius: 6px;
+    padding: 12px 28px; cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px; font-weight: 600;
+    letter-spacing: 0.05em; transition: opacity 0.2s;
+  }
+  .quiz-restart:hover { opacity: 0.85; }
+
+  /* ═══ SIDEBAR ═══ */
+  .sidebar-toc {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px;
+    margin-bottom: 24px;
+  }
+  .sidebar-toc-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em;
+    color: var(--text-dim); text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .toc-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+    text-decoration: none; cursor: pointer;
+    font-size: 13px; color: var(--text); transition: color 0.2s;
+  }
+  .toc-item:last-child { border-bottom: none; }
+  .toc-item:hover { color: var(--text-bright); }
+  .toc-item.active { color: var(--blue); }
+  .toc-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--text-dim); min-width: 20px;
+  }
+  .sidebar-next {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px; margin-bottom: 24px;
+  }
+  .sidebar-next-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em;
+    color: var(--text-dim); text-transform: uppercase; margin-bottom: 12px;
+  }
+  .sidebar-next-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px; color: var(--text-bright); margin-bottom: 10px;
+  }
+  .sidebar-next a {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: var(--blue);
+    text-decoration: none; letter-spacing: 0.08em;
+    transition: gap 0.2s;
+  }
+  .sidebar-next a:hover { gap: 10px; }
+  .sidebar-key-stats {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px;
+  }
+  .sidebar-stat {
+    padding: 12px 0; border-bottom: 1px solid var(--border);
+  }
+  .sidebar-stat:last-child { border-bottom: none; }
+  .sidebar-stat-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--text-dim);
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .sidebar-stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px; color: var(--text-bright); font-weight: 400;
+  }
+
+  /* ═══ DIAGRAM ═══ */
+  .diagram-container {
+    max-width: 700px; margin: 40px 0;
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 32px;
+  }
+  .diagram-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em;
+    color: var(--text-dim); text-transform: uppercase; margin-bottom: 24px;
+  }
+  svg.diagram { width: 100%; overflow: visible; }
+
+  /* ═══ COMPARISON TABLE ═══ */
+  .compare-table { width: 100%; border-collapse: collapse; margin: 24px 0; max-width: 700px; }
+  .compare-table th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em;
+    color: var(--text-dim); text-transform: uppercase;
+    padding: 12px 16px; border-bottom: 1px solid var(--border);
+    text-align: left;
+  }
+  .compare-table td {
+    padding: 12px 16px; border-bottom: 1px solid var(--border);
+    font-size: 13px; color: var(--text); line-height: 1.5;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: var(--bg3); }
+  .compare-table .td-highlight { color: var(--text-bright); font-weight: 500; }
+
+  /* ═══ MODULE NAV (prev/next) ═══ */
+  .mod-nav-bar {
+    border-top: 1px solid var(--border);
+    padding: 40px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .mod-nav-btn {
+    display: flex; flex-direction: column; gap: 4px;
+    text-decoration: none; max-width: 240px;
+  }
+  .mod-nav-dir {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em;
+    color: var(--text-dim); text-transform: uppercase;
+  }
+  .mod-nav-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; color: var(--text-bright);
+    transition: color 0.2s;
+  }
+  .mod-nav-btn:hover .mod-nav-title { color: var(--blue); }
+
+  @media (max-width: 900px) {
+    .mod-layout { grid-template-columns: 1fr; padding: 0 24px; }
+    .mod-content { padding: 48px 0; border-right: none; border-bottom: 1px solid var(--border); }
+    .mod-sidebar { padding: 40px 0; position: static; }
+    .mod-hero { padding: 28px 24px 48px; }
+    .mod-hero::before { display: none; }
+    .mod-breadcrumb { padding: 90px 24px 0; }
+    .tool-row { grid-template-columns: 1fr; }
+    .mod-nav-bar { padding: 32px 24px; flex-direction: column; gap: 24px; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+  <div class="mod-progress-bar" id="readingProgress"></div>
+  <!-- ═══ NAVIGATION ═══ -->
+  <nav id="navbar">
+   <a class="nav-logo" href="/">
+    <div class="nav-logo-mark"></div>
+    <span class="nav-logo-text">Insight Invest</span>
+   </a>
+   <div class="nav-links">
+    <a href="/#pillars">What We Cover</a>
+    <a href="/#macro">Macro</a>
+    <a href="/curriculum">Learn</a>
+    <a class="nav-cta" href="/#reports">Access Reports</a>
+   </div>
+  </nav>
+  <div class="mod-breadcrumb">
+    <a href="/">Insight Invest</a>
+    <span>/</span>
+    <a href="/curriculum">Curriculum</a>
+    <span>/</span>
+    <a href="/tier-1">Tier 1 · Foundation</a>
+    <span>/</span>
+    <span style="color:var(--text);">1.6 · Asset Classes 101</span>
+  </div>
+  
+  <div class="mod-hero" data-watermark="1.6">
+    <div class="mod-code">Module 1.6 · Tier 1: Foundation · 65 min</div>
+    <h1>Asset Classes 101</h1>
+    <p class="mod-desc">A complete map of every major asset class — stocks, bonds, real estate, commodities, currencies, crypto, and ETFs. Their mechanics, their risk-return profiles, and how they interact with each other across market cycles.</p>
+    <div class="mod-hero-meta">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 65 min</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Video · Article · Quiz · Diagram</span>
+    </div>
+  </div>
+
+  <div class="mod-layout">
+    <div class="mod-content">
+
+      <div class="mod-section" id="s1">
+        <div class="mod-section-tag">Section 01</div>
+        <h2>Equities (Stocks)</h2>
+        <p>Equities represent ownership in a business. A share of stock is a fractional claim on the company's assets, earnings, and future cash flows. Shareholders are residual claimants — they get what is left after everyone else (creditors, employees, tax authorities) has been paid.</p>
+        <p>This creates the equity risk premium: stocks are riskier than bonds (equity holders are last in the capital structure), so they must offer higher expected returns over the long run to attract capital. Historically, global equities have returned approximately 7–10% annually in real terms.</p>
+
+        <table class="compare-table">
+          <thead><tr><th>Type</th><th>Characteristic</th><th>Return Driver</th><th>Risk Level</th></tr></thead>
+          <tbody>
+            <tr><td class="td-highlight">Large Cap</td><td>Established, stable, liquid</td><td>Earnings growth + dividends</td><td style="color:var(--gold)">Medium</td></tr>
+            <tr><td class="td-highlight">Small Cap</td><td>Higher growth potential, less liquid</td><td>Growth + re-rating</td><td style="color:var(--red)">Medium-High</td></tr>
+            <tr><td class="td-highlight">Emerging Markets</td><td>Higher growth, political/FX risk</td><td>GDP growth + currency</td><td style="color:var(--red)">High</td></tr>
+            <tr><td class="td-highlight">Dividends</td><td>Mature businesses, income focus</td><td>Yield + modest appreciation</td><td style="color:var(--green)">Lower</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mod-section" id="s2">
+        <div class="mod-section-tag">Section 02</div>
+        <h2>Fixed Income (Bonds)</h2>
+        <p>Bonds are debt instruments. When you buy a bond, you are lending money to the issuer (government or corporation) in exchange for regular interest payments (coupons) and the return of principal at maturity. Bond holders are senior to equity holders in the capital structure — they get paid first if the company fails.</p>
+
+        <div class="key-concept">
+          <div class="key-concept-label">The Key Relationship</div>
+          <p>Bond price and yield move inversely. When interest rates rise, existing bond prices fall (and vice versa). A bond's sensitivity to rate changes is measured by its duration — the weighted average time to receive cash flows. This is why the 2022 rate hike cycle produced the worst bond market in 100 years for long-duration holders.</p>
+        </div>
+
+        <table class="compare-table">
+          <thead><tr><th>Bond Type</th><th>Issuer</th><th>Yield</th><th>Credit Risk</th></tr></thead>
+          <tbody>
+            <tr><td class="td-highlight">Government (AAA)</td><td>US, Germany, Japan</td><td>Lowest (risk-free rate)</td><td style="color:var(--green)">Minimal</td></tr>
+            <tr><td class="td-highlight">Investment Grade Corp.</td><td>Apple, Microsoft</td><td>Risk-free + 50–150bps</td><td style="color:var(--green)">Low</td></tr>
+            <tr><td class="td-highlight">High Yield ("Junk")</td><td>Leveraged companies</td><td>Risk-free + 300–700bps</td><td style="color:var(--red)">High</td></tr>
+            <tr><td class="td-highlight">Emerging Market</td><td>Developing nations</td><td>Risk-free + 200–500bps</td><td style="color:var(--gold)">Medium-High</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mod-section" id="s3">
+        <div class="mod-section-tag">Section 03</div>
+        <h2>Real Estate</h2>
+        <p>Real estate provides two return streams simultaneously: income (rent yield) and capital appreciation. It is a real asset — its value tends to move with inflation over the long run. This combination of yield and inflation protection makes it a standard institutional portfolio allocation.</p>
+        <p>REITs (Real Estate Investment Trusts) allow investors to access real estate returns without buying physical property. They are required to distribute 90%+ of taxable income as dividends, creating high yield instruments with equity-like volatility.</p>
+
+        <div class="insight-box">
+          <div class="insight-label">The Malaysia Context</div>
+          <p>Malaysia's REIT sector (IGB REIT, Pavilion REIT, Sunway REIT) has historically offered 5–7% distribution yields with inflation protection from rental escalations. The sector's correlation with interest rates is the primary risk — rising rates compress REIT valuations by raising the discount rate on future distributions and competing with bond yields.</p>
+        </div>
+      </div>
+
+      <div class="mod-section" id="s4">
+        <div class="mod-section-tag">Section 04</div>
+        <h2>Commodities</h2>
+        <p>Commodities are raw materials — energy (oil, gas), metals (gold, silver, copper), and agricultural goods. They do not generate earnings or pay dividends; they derive value from supply-demand dynamics in physical markets.</p>
+        <p>Their primary investment function is twofold: inflation hedging (commodity prices often drive inflation) and portfolio diversification (low correlation with equities in most regimes).</p>
+
+        <h3>Gold: The Special Case</h3>
+        <p>Gold occupies a unique position in the asset class universe. It is neither a productive asset (like stocks) nor a yielding asset (like bonds). It is a monetary asset — a store of value with a 5,000-year track record. Its price is primarily driven by real interest rates (negative real rates are strongly bullish for gold) and central bank demand (especially from emerging market central banks seeking dollar diversification).</p>
+      </div>
+
+      <!-- Interactive: Asset Class Risk-Return Mapper -->
+      <div class="mod-section" id="s5">
+        <div class="mod-section-tag">Interactive Tool</div>
+        <h2>Asset Class Risk-Return Mapper</h2>
+        <p>Visualize where each major asset class sits on the risk-return spectrum, and explore how they correlate with each other across different market environments.</p>
+
+        <div class="tool-container">
+          <div class="tool-title">Risk-Return Map</div>
+          <div class="tool-subtitle">Historical approximate risk-return profiles across major asset classes</div>
+          <canvas id="rr_chart" height="340"></canvas>
+          <div id="rr_legend" style="margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;"></div>
+        </div>
+      </div>
+
+      <div class="mod-section" id="s6">
+        <div class="mod-section-tag">Section 05</div>
+        <h2>ETFs & Index Funds</h2>
+        <p>ETFs (Exchange Traded Funds) are pooled investment vehicles that trade on stock exchanges. They can track an index (S&P 500), a sector (technology), a commodity (gold), a bond market, or virtually any defined strategy. They have democratized institutional-grade diversification at near-zero cost.</p>
+
+        <table class="compare-table">
+          <thead><tr><th>ETF Type</th><th>Example</th><th>What It Gives You</th></tr></thead>
+          <tbody>
+            <tr><td class="td-highlight">Broad Market</td><td>VTI, SPY, IWDA</td><td>Entire US or global equity market</td></tr>
+            <tr><td class="td-highlight">Sector</td><td>XLK, SMH, XLE</td><td>Concentrated sector exposure</td></tr>
+            <tr><td class="td-highlight">Bond</td><td>AGG, TLT, BND</td><td>Bond market diversification</td></tr>
+            <tr><td class="td-highlight">Commodity</td><td>GLD, USO, DJP</td><td>Commodity/inflation exposure</td></tr>
+            <tr><td class="td-highlight">Leveraged</td><td>TQQQ (3x QQQ)</td><td>Amplified returns AND losses — extremely high risk</td></tr>
+          </tbody>
+        </table>
+
+        <div class="key-concept">
+          <div class="key-concept-label">The Cost Advantage</div>
+          <p>The Vanguard Total Stock Market ETF (VTI) charges 0.03% annually. The average actively managed US equity fund charges 0.7–1.5%. Over 30 years, this 1% annual fee difference compounds to roughly 26% of total portfolio value — a staggering amount of wealth quietly transferred to fund managers. Index funds win by default in efficient markets.</p>
+        </div>
+      </div>
+
+      <div class="mod-section" id="s7">
+        <div class="mod-section-tag">Section 06</div>
+        <h2>Crypto: The Speculative Asset Class</h2>
+        <p>Cryptocurrency is the newest and most speculative major asset class. Bitcoin has a fixed supply schedule (21 million coins maximum), making it a potential store of value and inflation hedge by design. Ethereum provides a programmable blockchain platform with genuine utility.</p>
+        <p>As an investment, crypto exhibits extreme volatility (Bitcoin has experienced multiple 70–90% drawdowns), very high correlation with speculative equities during risk-off periods, and significant regulatory uncertainty. It belongs at the speculative end of any portfolio — if at all — and only at allocations that would not impair the overall portfolio if lost entirely.</p>
+
+        <div class="insight-box">
+          <div class="insight-label">The Honest Assessment</div>
+          <p>Crypto is not an inflation hedge in the short to medium term — its correlation with the Nasdaq during the 2022 selloff demonstrated that it trades as a high-beta risk asset, not as digital gold. Its long-run store-of-value narrative may prove correct, but that thesis requires decades to validate. Position sizing accordingly.</p>
+        </div>
+      </div>
+
+      <div class="mod-section" id="s8">
+        <div class="mod-section-tag">Knowledge Check · Tier 1 Final Assessment</div>
+        <h2>Module 1.6 Quiz</h2>
+        <p>The final assessment for Tier 1. This quiz tests your complete understanding of the Foundation tier.</p>
+        <div class="quiz-container" id="quiz_1_6">
+          <div class="quiz-header">
+            <div class="quiz-title">Module 1.6 · Tier 1 Completion</div>
+            <div class="quiz-progress">1 / 10</div>
+          </div>
+          <div class="quiz-progress-track"><div class="quiz-progress-fill" style="width:0%"></div></div>
+          <div class="quiz-q-area">
+            <div class="quiz-q"></div>
+            <div class="quiz-options"></div>
+            <div class="quiz-feedback"></div>
+            <button class="quiz-next">Next Question →</button>
+          </div>
+          <div class="quiz-score">
+            <div class="quiz-score-num"></div>
+            <div class="quiz-score-label">Tier 1 Score</div>
+            <div class="quiz-score-msg"></div>
+            <div style="margin-top:24px;">
+              <a href="/tier-2" style="display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:white;padding:12px 24px;border-radius:6px;text-decoration:none;font-family:Syne;font-weight:600;font-size:13px;">Proceed to Tier 2: The Investor →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="mod-sidebar">
+      <div class="sidebar-toc">
+        <div class="sidebar-toc-title">Contents</div>
+        <div class="toc-item" data-target="s1"><span class="toc-num">01</span>Equities</div>
+        <div class="toc-item" data-target="s2"><span class="toc-num">02</span>Fixed Income / Bonds</div>
+        <div class="toc-item" data-target="s3"><span class="toc-num">03</span>Real Estate</div>
+        <div class="toc-item" data-target="s4"><span class="toc-num">04</span>Commodities</div>
+        <div class="toc-item" data-target="s5"><span class="toc-num">05</span>Risk-Return Map</div>
+        <div class="toc-item" data-target="s6"><span class="toc-num">06</span>ETFs & Index Funds</div>
+        <div class="toc-item" data-target="s7"><span class="toc-num">07</span>Crypto</div>
+        <div class="toc-item" data-target="s8"><span class="toc-num">08</span>Quiz</div>
+      </div>
+      <div class="sidebar-key-stats">
+        <div class="sidebar-stat">
+          <div class="sidebar-stat-label">Historical Equity Real Return</div>
+          <div class="sidebar-stat-value" style="color:var(--green);">7–10%</div>
+        </div>
+        <div class="sidebar-stat">
+          <div class="sidebar-stat-label">VTI Annual Fee</div>
+          <div class="sidebar-stat-value" style="color:var(--green);">0.03%</div>
+        </div>
+        <div class="sidebar-stat">
+          <div class="sidebar-stat-label">Bitcoin Max Supply</div>
+          <div class="sidebar-stat-value">21M</div>
+        </div>
+      </div>
+      <div class="sidebar-next">
+        <div class="sidebar-next-label">Tier 1 Complete</div>
+        <div class="sidebar-next-title">2.1 · Equity Valuation Fundamentals</div>
+        <a href="/tier-2/module-2-1">Begin Tier 2 →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="mod-nav-bar">
+    <a class='mod-nav-btn' href='/tier-1/module-1-5'><span class='mod-nav-dir'>← Previous</span><span class='mod-nav-title'>1.5 · Reading Financial Statements</span></a>
+    <div></div>
+  </div>
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+   <div class="footer-grid">
+    <div class="footer-brand">
+     <div class="footer-brand-name">
+      Insight Invest
+     </div>
+     <p class="footer-brand-desc">
+      Macro intelligence, equity analysis, and financial education for serious investors. Not financial advice.
+     </p>
+    </div>
+    <div class="footer-col">
+     <div class="footer-col-title">
+      Research
+     </div>
+     <a href="#macro">
+      Macro Updates
+     </a>
+     <a href="#reports">
+      US Equities
+     </a>
+     <a href="#reports">
+      Global Equities
+     </a>
+     <a href="/iran-conflict">
+      Iran Playbook
+     </a>
+     <a href="/cash-allocation-bear-markets">
+      Cash Strategy
+     </a>
+     <a href="/iran-bursa-playbook">
+      Bursa Playbook
+     </a>
+     <a href="/iran-thesis-framework">
+      Thesis Framework
+     </a>
+     <a href="/halal-pharma-200b-framework">
+      Halal Pharma
+     </a>
+     <a href="/investor-profile">
+      Investor Profile
+     </a>
+    </div>
+    <div class="footer-col">
+     <div class="footer-col-title">
+      Learn
+     </div>
+     <a href="#learning">
+      All Tracks
+     </a>
+     <a href="/buffett-playbook">
+      Buffett Playbook
+     </a>
+     <a href="#learning">
+      Options
+     </a>
+     <a href="#learning">
+      Portfolio
+     </a>
+    </div>
+    <div class="footer-col">
+     <div class="footer-col-title">
+      Company
+     </div>
+     <a href="#">
+      About
+     </a>
+     <a href="#">
+      Contact
+     </a>
+     <a href="#">
+      Disclaimer
+     </a>
+    </div>
+   </div>
+   <div class="footer-bottom">
+    <span>
+     © 2026 Insight Invest. All rights reserved.
+    </span>
+    <span>
+     Educational content only · Not financial advice
+    </span>
+   </div>
+  </footer>
+  <script>
+  // ═══ SCROLL REVEAL ═══
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+revealEls.forEach(el => observer.observe(el));
+
+// ═══ NAV SCROLL ═══
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+  window.addEventListener('scroll', () => {
+    const doc = document.documentElement;
+    const scrolled = doc.scrollTop / (doc.scrollHeight - doc.clientHeight);
+    document.getElementById('readingProgress').style.width = (scrolled * 100) + '%';
+  });
+  const sections = document.querySelectorAll('.mod-section[id]');
+  const tocItems = document.querySelectorAll('.toc-item[data-target]');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocItems.forEach(t => t.classList.remove('active'));
+        const active = document.querySelector('.toc-item[data-target="' + e.target.id + '"]');
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+  sections.forEach(s => observer.observe(s));
+  tocItems.forEach(t => {
+    t.addEventListener('click', () => {
+      const target = document.getElementById(t.dataset.target);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+  
+function initQuiz(containerId, questions) {
+  const c = document.getElementById(containerId);
+  if (!c) return;
+  let current = 0, score = 0, answered = false;
+
+  function render() {
+    if (current >= questions.length) {
+      showScore(); return;
+    }
+    const q = questions[current];
+    const pct = Math.round((current / questions.length) * 100);
+    c.querySelector('.quiz-progress').textContent = (current+1) + ' / ' + questions.length;
+    c.querySelector('.quiz-progress-fill').style.width = pct + '%';
+    c.querySelector('.quiz-q').textContent = q.q;
+    const opts = c.querySelector('.quiz-options');
+    opts.innerHTML = '';
+    q.opts.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'quiz-opt';
+      btn.textContent = opt;
+      btn.onclick = () => answer(i, q.correct, q.explanation);
+      opts.appendChild(btn);
+    });
+    c.querySelector('.quiz-feedback').className = 'quiz-feedback';
+    c.querySelector('.quiz-feedback').textContent = '';
+    c.querySelector('.quiz-next').className = 'quiz-next';
+    answered = false;
+  }
+
+  function answer(chosen, correct, explanation) {
+    if (answered) return;
+    answered = true;
+    const opts = c.querySelectorAll('.quiz-opt');
+    opts[chosen].classList.add(chosen === correct ? 'correct' : 'wrong');
+    opts[correct].classList.add('correct');
+    opts.forEach(o => o.classList.add('answered'));
+    if (chosen === correct) score++;
+    const fb = c.querySelector('.quiz-feedback');
+    fb.textContent = (chosen === correct ? '✓ Correct. ' : '✗ Incorrect. ') + explanation;
+    fb.className = 'quiz-feedback show ' + (chosen === correct ? 'correct-fb' : 'wrong-fb');
+    c.querySelector('.quiz-next').className = 'quiz-next show';
+  }
+
+  function showScore() {
+    const qArea = c.querySelector('.quiz-q-area');
+    if (qArea) qArea.style.display = 'none';
+    const sc = c.querySelector('.quiz-score');
+    sc.querySelector('.quiz-score-num').textContent = score + '/' + questions.length;
+    const pct = Math.round((score/questions.length)*100);
+    let msg = pct >= 80
+      ? 'Strong result. You have a solid grasp of the core concepts in this module. Move on to the next one.'
+      : pct >= 60
+      ? 'Good start. Review the sections where you got tripped up, then move on.'
+      : 'Review the module material before proceeding. The concepts here are foundational to everything that follows.';
+    sc.querySelector('.quiz-score-msg').textContent = msg;
+    sc.className = 'quiz-score show';
+  }
+
+  c.querySelector('.quiz-next').addEventListener('click', () => { current++; render(); });
+  c.querySelector('.quiz-restart').addEventListener('click', () => {
+    current = 0; score = 0;
+    const qArea = c.querySelector('.quiz-q-area');
+    if (qArea) qArea.style.display = '';
+    c.querySelector('.quiz-score').className = 'quiz-score';
+    render();
+  });
+
+  render();
+}
+
+  
+// Risk-Return scatter chart
+(function() {
+  const canvas = document.getElementById('rr_chart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = (canvas.offsetWidth||600)*window.devicePixelRatio;
+  canvas.height = 340*window.devicePixelRatio;
+  ctx.scale(window.devicePixelRatio||1,window.devicePixelRatio||1);
+  const W = canvas.offsetWidth||600, H = 300;
+  const pad = {l:50,r:20,t:20,b:40};
+
+  const assets = [
+    {label:'Cash', risk:0.5, ret:1.0, color:'#555c72', dot:6},
+    {label:'Govt Bonds (Short)', risk:2, ret:2.5, color:'#3dd68c', dot:7},
+    {label:'Govt Bonds (Long)', risk:8, ret:3.5, color:'#3dd68c', dot:8},
+    {label:'IG Corp Bonds', risk:6, ret:4.5, color:'#4a7cff', dot:8},
+    {label:'HY Bonds', risk:12, ret:6.5, color:'#4a7cff', dot:9},
+    {label:'Global REITs', risk:15, ret:8.0, color:'#c9a84c', dot:9},
+    {label:'Large Cap US', risk:15, ret:9.5, color:'#e8ecf4', dot:11},
+    {label:'Commodities', risk:18, ret:5.0, color:'#ff8a00', dot:9},
+    {label:'Gold', risk:14, ret:5.5, color:'#c9a84c', dot:9},
+    {label:'Emerging Markets', risk:22, ret:10.5, color:'#ff5c5c', dot:10},
+    {label:'Small Cap', risk:20, ret:11.0, color:'#9ca3b8', dot:9},
+    {label:'Bitcoin', risk:70, ret:50, color:'#f7931a', dot:10},
+  ];
+
+  const maxRisk = 80, maxRet = 60;
+  function toX(risk) { return pad.l + (risk/maxRisk)*(W-pad.l-pad.r); }
+  function toY(ret)  { return pad.t + H - (ret/maxRet)*H; }
+
+  // Grid
+  ctx.strokeStyle='#252838'; ctx.lineWidth=1;
+  [0,10,20,30,40,50,60,70,80].forEach(v=>{
+    const x=toX(v); ctx.beginPath();ctx.moveTo(x,pad.t);ctx.lineTo(x,pad.t+H);ctx.stroke();
+    ctx.fillStyle='#555c72';ctx.font='9px IBM Plex Mono';ctx.fillText(v+'%',x-8,pad.t+H+14);
+  });
+  [0,10,20,30,40,50,60].forEach(v=>{
+    const y=toY(v); ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();
+    ctx.fillStyle='#555c72';ctx.font='9px IBM Plex Mono';ctx.fillText(v+'%',2,y+4);
+  });
+
+  // Axis labels
+  ctx.fillStyle='#555c72';ctx.font='10px IBM Plex Mono';
+  ctx.fillText('Annual Volatility (Risk) →',pad.l,pad.t+H+32);
+  ctx.save();ctx.translate(14,pad.t+H/2);ctx.rotate(-Math.PI/2);
+  ctx.fillText('Expected Return →',0,0);ctx.restore();
+
+  // Efficient frontier curve (rough)
+  ctx.beginPath();
+  const frontier = [[2,2.5],[6,4.5],[12,6.5],[15,8],[18,9],[22,10.5],[35,18],[70,50]];
+  frontier.forEach(([r,ret],i)=>{
+    const x=toX(r),y=toY(ret);
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  });
+  ctx.strokeStyle='rgba(74,124,255,0.2)';ctx.lineWidth=2;ctx.setLineDash([4,4]);ctx.stroke();ctx.setLineDash([]);
+
+  // Dots
+  assets.forEach(a=>{
+    const x=toX(a.risk), y=toY(a.ret);
+    ctx.beginPath();ctx.arc(x,y,a.dot,0,2*Math.PI);
+    ctx.fillStyle=a.color+'33';ctx.fill();
+    ctx.strokeStyle=a.color;ctx.lineWidth=1.5;ctx.stroke();
+    // Label
+    ctx.fillStyle=a.color;ctx.font='9px IBM Plex Mono';
+    const lx = x + a.dot + 3, ly = y + 4;
+    ctx.fillText(a.label, lx > W-80 ? x-a.dot-ctx.measureText(a.label).width-2 : lx, ly);
+  });
+})();
+
+initQuiz('quiz_1_6', [
+  { q: "Equity holders are described as 'residual claimants.' This means:",
+    opts: ["They receive dividends before bondholders","They get paid last — after all creditors — if a company fails","They have preferential voting rights","They can claim assets at any time"],
+    correct: 1, explanation: "Equity holders are last in the capital structure. Creditors (bondholders, lenders) have senior claims on assets and cash flows. Equity receives what remains — hence 'residual.' This is why equities are riskier and demand higher expected returns." },
+  { q: "What is the primary difference between owning a bond vs owning a stock in the same company?",
+    opts: ["Bonds have higher return potential than stocks","Bond holders are creditors; stockholders are owners","Stocks are safer because they don't mature","Bonds pay dividends; stocks pay interest"],
+    correct: 1, explanation: "Bondholders lend money and are creditors — they receive fixed interest and have senior claims. Stockholders own equity and participate in the business's upside and downside with no guaranteed return." },
+  { q: "REITs (Real Estate Investment Trusts) are required by law to distribute what minimum percentage of taxable income as dividends?",
+    opts: ["50%","70%","90%","100%"],
+    correct: 2, explanation: "REITs must distribute at least 90% of taxable income to shareholders to maintain their special tax status. This is why they offer high dividend yields but typically reinvest limited capital." },
+  { q: "Gold's price is most strongly driven by:",
+    opts: ["Economic growth and corporate earnings","Industrial demand from manufacturing","Real interest rates and central bank reserve demand","Consumer sentiment and retail buying"],
+    correct: 2, explanation: "Gold has minimal industrial use. Its price is primarily driven by real interest rates (negative real rates make non-yielding gold relatively more attractive) and central bank demand for reserve diversification away from the dollar." },
+  { q: "The Vanguard Total Stock Market ETF (VTI) charges 0.03% annually vs 1.0% for an average active fund. Over 30 years at 8% returns on $100,000, roughly how much more would the low-cost ETF produce?",
+    opts: ["$20,000 more","$45,000 more","$100,000+ more","They produce the same result"],
+    correct: 2, explanation: "The 0.97% annual fee difference compounds dramatically over decades. $100,000 at 8% for 30 years = $1,006,266. At 7.03% (after 0.97% fee) = $766,200. That's $240,000 in lost wealth — transferred directly to fund managers." },
+  { q: "Bitcoin's correlation with the Nasdaq during the 2022 selloff demonstrated that:",
+    opts: ["It reliably works as an inflation hedge","It traded as a high-beta risk asset, not as digital gold","It was a safe haven during market stress","Central bank policy had no effect on crypto"],
+    correct: 1, explanation: "During 2022, Bitcoin fell ~65% alongside high-multiple tech stocks as the Fed raised rates. This showed that in short-medium terms, crypto behaves as a speculative risk asset, highly correlated with growth stocks — not the uncorrelated inflation hedge its narrative suggests." },
+  { q: "An 'investment grade' corporate bond differs from a 'high yield' (junk) bond primarily in terms of:",
+    opts: ["Whether it pays coupons or not","The creditworthiness of the issuer and therefore default risk","The maturity length of the bond","Whether it is listed on an exchange"],
+    correct: 1, explanation: "Investment grade bonds (BBB- or higher rated) are issued by financially strong companies with low default probability, hence lower yields. High yield / junk bonds are issued by more leveraged or uncertain companies, requiring higher yields to compensate for higher default risk." },
+  { q: "A leveraged ETF like TQQQ (3x QQQ) is most suitable for:",
+    opts: ["Long-term retirement savings as a supercharged index fund","Very short-term trading with strict risk management by experienced investors","Dollar-cost averaging over multiple years","Conservative income-seeking investors"],
+    correct: 1, explanation: "Leveraged ETFs suffer from 'volatility decay' over time — daily rebalancing in volatile markets causes the 3x leverage to erode. They are designed for single-day trading or very short-term exposure, not long-term holding. Over years, even correct directional calls can result in losses." },
+  { q: "The 'equity risk premium' refers to:",
+    opts: ["The tax premium paid on equity returns vs bond returns","The additional expected return equities must offer over risk-free bonds to attract investors","The premium paid to hedge equity positions","The fee charged by equity fund managers"],
+    correct: 1, explanation: "The equity risk premium compensates investors for taking on the additional risk of equity ownership (last in capital structure, no guaranteed return) versus safe government bonds. Historically, this premium has been approximately 5-6% annually." },
+  { q: "Commodities provide what primary investment benefit in a diversified portfolio?",
+    opts: ["Guaranteed income through commodity dividends","Long-term capital appreciation similar to equities","Inflation hedging and low correlation with stocks during inflationary periods","Safe haven characteristics during recessions"],
+    correct: 2, explanation: "Commodities are often the source of inflation (especially energy), making them a direct inflation hedge. Their returns are driven by supply-demand in physical markets, giving them low or negative correlation with equities in inflationary environments — making them valuable for portfolio diversification." }
+]);
+
+  </script>
+</body>
+</html>
