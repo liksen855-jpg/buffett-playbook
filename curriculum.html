@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Investment Curriculum — Insight Invest</title>
+  <meta content="22 modules. Four tiers. The complete investor education framework." name="description"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+   :root {
+    --bg: #08090c;
+    --bg2: #0e1016;
+    --bg3: #14161e;
+    --surface: #1a1d28;
+    --border: #252838;
+    --text: #9ca3b8;
+    --text-bright: #e8ecf4;
+    --text-dim: #555c72;
+    --gold: #c9a84c;
+    --gold-light: #e4cc7a;
+    --gold-dim: #8a7234;
+    --blue: #4a7cff;
+    --green: #3dd68c;
+    --red: #ff5c5c;
+    --cyan: #38d9d9;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) var(--bg);
+  }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ═══════════════════════════════════════
+     NOISE OVERLAY
+  ═══════════════════════════════════════ */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ═══════════════════════════════════════
+     NAVIGATION
+  ═══════════════════════════════════════ */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    padding: 20px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    z-index: 100;
+    background: linear-gradient(180deg, var(--bg) 0%, transparent 100%);
+    transition: all 0.4s;
+  }
+  nav.scrolled {
+    background: var(--bg)ee;
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 48px;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 14px;
+    text-decoration: none;
+  }
+  .nav-logo-mark {
+    width: 38px; height: 38px;
+    border: 1.5px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .nav-logo-mark::before {
+    content: 'I';
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 600;
+    color: var(--gold);
+  }
+  .nav-logo-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px; font-weight: 600;
+    color: var(--text-bright);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .nav-links { display: flex; gap: 36px; align-items: center; }
+  .nav-links a {
+    font-size: 12px; font-weight: 500;
+    color: var(--text-dim);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-cta {
+    padding: 10px 24px !important;
+    border: 1px solid var(--gold-dim) !important;
+    color: var(--gold) !important;
+    font-size: 11px !important;
+    letter-spacing: 0.14em !important;
+    transition: all 0.3s !important;
+  }
+  .nav-cta:hover {
+    background: var(--gold) !important;
+    color: var(--bg) !important;
+  }
+
+  /* ═══════════════════════════════════════
+     HERO
+  ═══════════════════════════════════════ */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    padding: 140px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Animated grid background */
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--border)15 1px, transparent 1px),
+      linear-gradient(90deg, var(--border)15 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 20%, transparent 70%);
+    animation: gridPulse 8s ease-in-out infinite;
+  }
+  @keyframes gridPulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+  }
+
+  /* Floating orbs */
+  .hero-orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px);
+    animation: orbFloat 12s ease-in-out infinite;
+  }
+  .hero-orb-1 {
+    width: 500px; height: 500px;
+    background: var(--gold)12;
+    top: -10%; right: -5%;
+    animation-delay: 0s;
+  }
+  .hero-orb-2 {
+    width: 350px; height: 350px;
+    background: var(--blue)10;
+    bottom: 10%; left: -5%;
+    animation-delay: -4s;
+  }
+  .hero-orb-3 {
+    width: 200px; height: 200px;
+    background: var(--cyan)08;
+    top: 30%; left: 40%;
+    animation-delay: -8s;
+  }
+  @keyframes orbFloat {
+    0%, 100% { transform: translate(0, 0); }
+    33% { transform: translate(30px, -20px); }
+    66% { transform: translate(-20px, 15px); }
+  }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    max-width: 900px;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; font-weight: 400;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards;
+    animation-delay: 0.2s;
+  }
+  .hero-tag-line {
+    width: 40px; height: 1px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+  .hero-h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 7.5vw, 110px);
+    font-weight: 300;
+    color: var(--text-bright);
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards;
+    animation-delay: 0.4s;
+  }
+  .hero-h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .hero-h1 span.thin {
+    font-weight: 300;
+    color: var(--text-dim);
+  }
+  .hero-sub {
+    font-size: 17px; font-weight: 400;
+    color: var(--text);
+    max-width: 520px;
+    line-height: 1.75;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards;
+    animation-delay: 0.6s;
+  }
+  .hero-actions {
+    display: flex; gap: 16px; align-items: center;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards;
+    animation-delay: 0.8s;
+  }
+  .btn-primary {
+    padding: 16px 40px;
+    background: var(--gold);
+    color: var(--bg);
+    font-family: 'Syne', sans-serif;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none; cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent, #fff3);
+    transform: translateX(-100%);
+    transition: transform 0.5s;
+  }
+  .btn-primary:hover::before { transform: translateX(100%); }
+  .btn-primary:hover { box-shadow: 0 8px 32px var(--gold)30; }
+  .btn-ghost {
+    padding: 16px 32px;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 12px; font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .btn-ghost:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Scroll indicator */
+  .scroll-indicator {
+    position: absolute; bottom: 40px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards;
+    animation-delay: 1.2s;
+  }
+  .scroll-indicator span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--text-dim);
+    letter-spacing: 0.15em; text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(180deg, var(--gold-dim), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; height: 40px; }
+    50% { opacity: 1; height: 60px; }
+  }
+
+  /* ═══════════════════════════════════════
+     LIVE TICKER
+  ═══════════════════════════════════════ */
+  .ticker {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+    overflow: hidden;
+    background: var(--bg2);
+    position: relative;
+  }
+  .ticker::before, .ticker::after {
+    content: '';
+    position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2;
+  }
+  .ticker::before { left: 0; background: linear-gradient(90deg, var(--bg2), transparent); }
+  .ticker::after { right: 0; background: linear-gradient(270deg, var(--bg2), transparent); }
+  .ticker-track {
+    display: flex; gap: 48px;
+    animation: tickerScroll 30s linear infinite;
+    width: max-content;
+  }
+  @keyframes tickerScroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  .ticker-item {
+    display: flex; align-items: center; gap: 12px;
+    white-space: nowrap;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+  }
+  .ticker-symbol { color: var(--text-bright); font-weight: 500; }
+  .ticker-price { color: var(--text-dim); }
+  .ticker-change { font-weight: 500; }
+  .ticker-change.up { color: var(--green); }
+  .ticker-change.down { color: var(--red); }
+
+  /* ═══════════════════════════════════════
+     SECTION COMMON
+  ═══════════════════════════════════════ */
+  section {
+    padding: 120px 48px;
+    position: relative;
+  }
+  .section-tag {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; font-weight: 500;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .section-tag-dot {
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: dotPulse 2s ease-in-out infinite;
+  }
+  @keyframes dotPulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+  .section-h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 4.5vw, 64px);
+    font-weight: 400;
+    color: var(--text-bright);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .section-sub {
+    font-size: 16px; color: var(--text);
+    max-width: 560px; line-height: 1.7;
+    margin-bottom: 60px;
+  }
+
+  /* ═══════════════════════════════════════
+     PILLARS — THREE COLUMNS
+  ═══════════════════════════════════════ */
+  #pillars { background: var(--bg); }
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .pillar-card {
+    background: var(--bg2);
+    padding: 56px 44px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: default;
+    border: 1px solid transparent;
+  }
+  .pillar-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  .pillar-card:hover {
+    background: var(--bg3);
+    border-color: var(--border);
+    transform: translateY(-4px);
+  }
+  .pillar-card:hover::before { opacity: 1; }
+  .pillar-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 72px; font-weight: 300;
+    color: var(--border);
+    line-height: 1;
+    margin-bottom: 32px;
+    transition: color 0.5s;
+  }
+  .pillar-card:hover .pillar-number { color: var(--gold-dim); }
+  .pillar-icon {
+    width: 52px; height: 52px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 28px;
+    transition: all 0.5s;
+  }
+  .pillar-card:hover .pillar-icon { border-color: var(--gold-dim); }
+  .pillar-icon svg { width: 24px; height: 24px; stroke: var(--text-dim); transition: stroke 0.5s; }
+  .pillar-card:hover .pillar-icon svg { stroke: var(--gold); }
+  .pillar-h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px; font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .pillar-desc {
+    font-size: 14px; line-height: 1.8;
+    color: var(--text);
+    margin-bottom: 32px;
+  }
+  .pillar-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+  .pillar-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; font-weight: 500;
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+    transition: all 0.3s;
+  }
+  .pillar-card:hover .pillar-tag { border-color: var(--gold-dim); color: var(--gold); }
+  .pillar-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 600;
+    color: var(--gold-dim);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: all 0.3s;
+  }
+  .pillar-link:hover { color: var(--gold); gap: 14px; }
+  .pillar-link svg { width: 14px; height: 14px; stroke: currentColor; transition: inherit; }
+
+  /* ═══════════════════════════════════════
+     MACRO — DATA DASHBOARD FEEL
+  ═══════════════════════════════════════ */
+  #macro {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .macro-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 80px;
+    max-width: 1400px;
+    margin: 0 auto;
+    align-items: center;
+  }
+  .macro-visual {
+    position: relative;
+    height: 420px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    overflow: hidden;
+  }
+  .macro-visual-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: var(--text-dim);
+  }
+  .macro-live-dot {
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    display: inline-block;
+    animation: dotPulse 1.5s ease-in-out infinite;
+    margin-right: 6px;
+  }
+  .macro-chart {
+    padding: 20px;
+    height: calc(100% - 50px);
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+  }
+  .macro-bar {
+    flex: 1;
+    background: linear-gradient(180deg, var(--gold)60, var(--gold)10);
+    border-radius: 2px 2px 0 0;
+    min-height: 8px;
+    animation: barGrow 1.5s ease-out forwards;
+    transform-origin: bottom;
+    opacity: 0;
+  }
+  @keyframes barGrow {
+    from { transform: scaleY(0); opacity: 0; }
+    to { transform: scaleY(1); opacity: 1; }
+  }
+
+  .macro-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 40px;
+  }
+  .macro-stat {
+    padding: 24px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    transition: all 0.3s;
+  }
+  .macro-stat:hover { border-color: var(--gold-dim); }
+  .macro-stat-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--text-dim);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .macro-stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px; font-weight: 500;
+    color: var(--text-bright);
+  }
+  .macro-stat-change {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px; margin-top: 4px;
+  }
+
+  /* ═══════════════════════════════════════
+     EQUITIES
+  ═══════════════════════════════════════ */
+  #equities { background: var(--bg); }
+  .equities-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .equity-card {
+    background: var(--bg2);
+    padding: 32px 28px;
+    border: 1px solid transparent;
+    transition: all 0.4s;
+    cursor: default;
+    position: relative;
+  }
+  .equity-card:hover {
+    border-color: var(--border);
+    background: var(--bg3);
+  }
+  .equity-card-region {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--text-dim);
+    letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .equity-card-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px; font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 6px;
+  }
+  .equity-card-value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 24px; font-weight: 500;
+    color: var(--text-bright);
+    margin-bottom: 4px;
+  }
+  .equity-card-change {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px; font-weight: 500;
+  }
+  .equity-card-sparkline {
+    margin-top: 20px;
+    height: 40px;
+    opacity: 0.6;
+    transition: opacity 0.3s;
+  }
+  .equity-card:hover .equity-card-sparkline { opacity: 1; }
+
+  /* ═══════════════════════════════════════
+     LEARNING
+  ═══════════════════════════════════════ */
+  #learning {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+  }
+  .learning-layout {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 80px;
+    max-width: 1400px;
+    margin: 0 auto;
+    align-items: start;
+  }
+  .learning-tracks { display: flex; flex-direction: column; gap: 2px; }
+  .learning-track {
+    display: flex; align-items: center;
+    padding: 28px 32px;
+    background: var(--bg);
+    border: 1px solid transparent;
+    cursor: default;
+    transition: all 0.4s;
+    gap: 24px;
+  }
+  .learning-track:hover {
+    border-color: var(--border);
+    background: var(--bg3);
+    padding-left: 40px;
+  }
+  .track-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px; font-weight: 300;
+    color: var(--border);
+    min-width: 50px;
+    transition: color 0.4s;
+  }
+  .learning-track:hover .track-number { color: var(--gold-dim); }
+  .track-info { flex: 1; }
+  .track-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px; font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 4px;
+  }
+  .track-desc {
+    font-size: 13px; color: var(--text-dim); line-height: 1.5;
+  }
+  .track-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; padding: 5px 14px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    white-space: nowrap;
+    transition: all 0.3s;
+  }
+  .learning-track:hover .track-badge { border-color: var(--gold-dim); color: var(--gold); }
+
+  .learning-feature {
+    padding: 48px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+  }
+  .learning-feature::before {
+    content: '';
+    position: absolute; top: -50%; right: -50%;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, var(--gold)08, transparent);
+    border-radius: 50%;
+  }
+  .learning-feature-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--gold);
+    letter-spacing: 0.15em; text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .learning-feature-h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px; font-weight: 400;
+    color: var(--text-bright);
+    line-height: 1.3;
+    margin-bottom: 20px;
+  }
+  .learning-feature-text {
+    font-size: 14px; color: var(--text);
+    line-height: 1.8;
+    margin-bottom: 32px;
+  }
+  .learning-feature .btn-primary { font-size: 11px; padding: 14px 32px; }
+
+  /* ═══════════════════════════════════════
+     QUOTE DIVIDER
+  ═══════════════════════════════════════ */
+  .quote-section {
+    padding: 100px 48px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: relative;
+  }
+  .quote-section::before {
+    content: '"';
+    position: absolute;
+    top: 20px; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 200px; font-weight: 300;
+    color: var(--border);
+    line-height: 1;
+  }
+  .quote-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(24px, 3vw, 42px);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text-bright);
+    max-width: 800px;
+    margin: 0 auto 24px;
+    line-height: 1.5;
+    position: relative;
+  }
+  .quote-attr {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px; color: var(--gold-dim);
+    letter-spacing: 0.1em;
+  }
+
+  /* ═══════════════════════════════════════
+     FOOTER
+  ═══════════════════════════════════════ */
+  footer {
+    padding: 60px 48px 40px;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+  }
+  .footer-grid {
+    display: flex; justify-content: space-between;
+    max-width: 1400px; margin: 0 auto;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap; gap: 40px;
+  }
+  .footer-brand { max-width: 280px; }
+  .footer-brand-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px; font-weight: 600;
+    color: var(--text-bright);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .footer-brand-desc {
+    font-size: 13px; color: var(--text-dim); line-height: 1.7;
+  }
+  .footer-col-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; font-weight: 500;
+    color: var(--text-dim);
+    letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .footer-col a {
+    display: block; font-size: 13px;
+    color: var(--text); text-decoration: none;
+    padding: 4px 0; transition: color 0.3s;
+  }
+  .footer-col a:hover { color: var(--gold); }
+  .footer-bottom {
+    max-width: 1400px; margin: 24px auto 0;
+    display: flex; justify-content: space-between;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: var(--text-dim);
+    flex-wrap: wrap; gap: 12px;
+  }
+
+  /* ═══════════════════════════════════════
+     ANIMATIONS / SCROLL REVEAL
+  ═══════════════════════════════════════ */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ═══════════════════════════════════════
+     RESPONSIVE
+  ═══════════════════════════════════════ */
+  /* ═══════════════════════════════════════
+     WAITLIST
+  ═══════════════════════════════════════ */
+  #waitlist {
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+    padding: 120px 48px;
+  }
+  #waitlist::before {
+    content: '';
+    position: absolute;
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, var(--gold)06, transparent 70%);
+    pointer-events: none;
+  }
+  .wl-layout {
+    max-width: 680px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  .wl-proof {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+  .wl-avatars {
+    display: flex;
+  }
+  .wl-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--bg);
+    margin-left: -8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    color: var(--bg);
+    font-weight: 600;
+  }
+  .wl-avatar:first-child { margin-left: 0; }
+  .wl-proof-text {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+  .wl-proof-text strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+  .wl-h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 400;
+    color: var(--text-bright);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .wl-h2 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .wl-desc {
+    font-size: 16px;
+    color: var(--text);
+    line-height: 1.75;
+    margin-bottom: 40px;
+    max-width: 560px;
+  }
+  .wl-what {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 40px;
+    border: 1px solid var(--border);
+  }
+  .wl-what-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+  .wl-what-item:last-child { border-bottom: none; }
+  .wl-what-item:hover { background: var(--bg2); }
+  .wl-what-icon {
+    width: 36px; height: 36px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: border-color 0.3s;
+  }
+  .wl-what-item:hover .wl-what-icon { border-color: var(--gold-dim); }
+  .wl-what-icon svg { width: 16px; height: 16px; stroke: var(--text-dim); }
+  .wl-what-item:hover .wl-what-icon svg { stroke: var(--gold); }
+  .wl-what-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 2px;
+  }
+  .wl-what-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+  .wl-form {
+    display: flex;
+    gap: 0;
+    margin-bottom: 16px;
+  }
+  .wl-input {
+    flex: 1;
+    padding: 16px 20px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-right: none;
+    color: var(--text-bright);
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .wl-input:focus { border-color: var(--gold-dim); }
+  .wl-input::placeholder { color: var(--text-dim); }
+  .wl-btn {
+    padding: 16px 32px;
+    background: var(--gold);
+    color: var(--bg);
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+  }
+  .wl-btn:hover { background: var(--gold-light); }
+  .wl-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .wl-meta-left {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+  .wl-spots {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .wl-spots-dot {
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: dotPulse 2s ease-in-out infinite;
+  }
+  .wl-success {
+    display: none;
+    text-align: center;
+    padding: 32px 0;
+  }
+  .wl-success.show { display: block; }
+  .wl-success-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+  .wl-success-h {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    color: var(--text-bright);
+    margin-bottom: 6px;
+  }
+  .wl-success-p {
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  @media (max-width: 1100px) {
+    .pillars-grid { grid-template-columns: 1fr; }
+    .equities-grid { grid-template-columns: repeat(2, 1fr); }
+    .macro-layout, .learning-layout { grid-template-columns: 1fr; gap: 48px; }
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    section { padding: 80px 24px; }
+    .hero { padding: 120px 24px 80px; }
+    #waitlist { padding: 80px 24px; }
+    .wl-form { flex-direction: column; }
+    .wl-input { border-right: 1px solid var(--border); border-bottom: none; }
+    .wl-btn { padding: 16px; }
+  }
+  @media (max-width: 640px) {
+    .equities-grid { grid-template-columns: 1fr; }
+    .footer-grid { flex-direction: column; }
+  }
+  </style>
+  <style>
+  /* ═══ CURRICULUM PAGE ═══ */
+  .breadcrumb {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 100px 48px 0;
+  }
+  .breadcrumb a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
+  .breadcrumb a:hover { color: var(--gold); }
+  .breadcrumb-sep { opacity: 0.4; }
+  .curr-page-hero {
+    padding: 40px 48px 80px;
+    position: relative; overflow: hidden;
+  }
+  .curr-page-hero::before {
+    content: 'LEARN';
+    position: absolute; right: 48px; top: 20px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 180px; font-weight: 300;
+    color: var(--border); opacity: 0.4;
+    line-height: 1; user-select: none; pointer-events: none;
+  }
+  @media (max-width: 640px) {
+    .breadcrumb { padding: 90px 24px 0; }
+    .curr-page-hero { padding: 32px 24px 60px; }
+    .curr-page-hero::before { display: none; }
+    .curr-paths { grid-template-columns: 1fr; }
+    #learning > div { padding: 0 24px 80px; }
+  }
+  </style>
+  <style>
+  /* Tier filter tabs */
+  .curr-tabs {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+  .curr-tab {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 8px 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .curr-tab.active { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.06); }
+  .curr-tab:hover:not(.active) { border-color: var(--text-dim); color: var(--text); }
+
+  /* Tier header */
+  .curr-tier-header {
+    display: flex; align-items: center; gap: 16px;
+    padding: 20px 0 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+  .curr-tier-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px; font-weight: 300;
+    line-height: 1; min-width: 48px;
+  }
+  .curr-tier-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px; font-weight: 600;
+    color: var(--text-bright);
+  }
+  .curr-tier-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.1em;
+    color: var(--text-dim); margin-top: 2px;
+  }
+  .curr-tier-count {
+    margin-left: auto;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.1em;
+    color: var(--text-dim);
+  }
+
+  /* Module grid */
+  .curr-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-bottom: 48px;
+  }
+  .curr-module {
+    background: var(--bg);
+    border: 1px solid transparent;
+    padding: 28px 24px;
+    text-decoration: none;
+    display: block;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .curr-module::before {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .curr-module:hover { border-color: var(--border); transform: translateY(-3px); background: var(--bg3); }
+  .curr-module:hover::before { transform: scaleX(1); }
+  .curr-module.locked { opacity: 0.38; pointer-events: none; }
+  .curr-module-top {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  .curr-module-code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.14em;
+    color: var(--gold);
+  }
+  .curr-module-lock {
+    font-size: 11px; color: var(--text-dim); opacity: 0.5;
+  }
+  .curr-module-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px; font-weight: 500;
+    color: var(--text-bright);
+    line-height: 1.25;
+    margin-bottom: 8px;
+  }
+  .curr-module-desc {
+    font-size: 12px; color: var(--text-dim);
+    line-height: 1.65; margin-bottom: 14px;
+  }
+  .curr-module-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.08em;
+    color: var(--text-dim);
+  }
+  .curr-module-arrow { color: var(--gold); }
+
+  /* Formats */
+  .curr-formats { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 12px; }
+  .curr-fmt {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; letter-spacing: 0.08em;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    padding: 2px 7px;
+  }
+
+  /* Tier colour accents */
+  .t1 .curr-module-code { color: #4a7cff; }
+  .t1 .curr-module::before { background: linear-gradient(90deg, #4a7cff, transparent); }
+  .t2 .curr-module-code { color: #3dd68c; }
+  .t2 .curr-module::before { background: linear-gradient(90deg, #3dd68c, transparent); }
+  .t3 .curr-module-code { color: var(--red); }
+  .t3 .curr-module::before { background: linear-gradient(90deg, var(--red), transparent); }
+  .t4 .curr-module-code { color: var(--gold); }
+
+  /* Search */
+  .curr-search-wrap { position: relative; margin-bottom: 32px; }
+  .curr-search {
+    width: 100%; max-width: 400px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 12px 16px 12px 40px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px; color: var(--text-bright);
+    outline: none; transition: border-color 0.2s;
+  }
+  .curr-search:focus { border-color: var(--gold-dim); }
+  .curr-search::placeholder { color: var(--text-dim); }
+  .curr-search-icon {
+    position: absolute; left: 12px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-dim); font-size: 14px;
+    pointer-events: none;
+  }
+
+  /* Paths */
+  .curr-paths {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2px; margin-bottom: 56px;
+  }
+  .curr-path {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    padding: 24px 28px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .curr-path:nth-child(2) { border-left-color: #4a7cff; }
+  .curr-path:nth-child(3) { border-left-color: #3dd68c; }
+  .curr-path:hover { background: var(--bg3); border-color: var(--border); }
+  .curr-path-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 8px;
+  }
+  .curr-path:nth-child(2) .curr-path-label { color: #4a7cff; }
+  .curr-path:nth-child(3) .curr-path-label { color: #3dd68c; }
+  .curr-path-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px; font-weight: 600;
+    color: var(--text-bright); margin-bottom: 6px;
+  }
+  .curr-path-desc { font-size: 12px; color: var(--text-dim); line-height: 1.6; }
+
+  @media (max-width: 1100px) {
+    .curr-grid { grid-template-columns: repeat(2,1fr); }
+    .curr-paths { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .curr-grid { grid-template-columns: 1fr; }
+  }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ NAVIGATION ═══ -->
+  <nav id="navbar">
+   <a class="nav-logo" href="#">
+    <div class="nav-logo-mark">
+    </div>
+    <span class="nav-logo-text">
+     Insight Invest
+    </span>
+   </a>
+   <div class="nav-links">
+    <a href="#pillars">
+     What We Cover
+    </a>
+    <a href="#macro">
+     Macro
+    </a>
+    <a href="#learning">
+     Learn
+    </a>
+    <a class="nav-cta" href="#reports">
+     Access Reports
+    </a>
+   </div>
+  </nav>
+
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="/">Insight Invest</a>
+    <span class="breadcrumb-sep">/</span>
+    <span style="color:var(--text);">Investment Curriculum</span>
+  </div>
+
+  <!-- PAGE HERO -->
+  <div class="curr-page-hero">
+    <div class="section-tag" style="margin-top:0;">
+      <span class="section-tag-dot"></span>
+      Investment Curriculum
+    </div>
+    <h1 class="section-h2" style="font-size:clamp(40px,5vw,72px);margin-bottom:16px;">22 modules.<br>One complete <em style="font-style:italic;color:var(--gold);">investor.</em></h1>
+    <p class="section-sub" style="margin-bottom:0;">Four tiers of structured education — from zero financial knowledge to asymmetric, macro-aware investor. Built on Druckenmiller, Buffett, and second-order thinking.</p>
+  </div>
+
+  <!-- FULL CURRICULUM -->
+  <section id="learning" style="background:var(--bg2);border-top:1px solid var(--border);">
+    <div style="max-width:1400px;margin:0 auto;">
+
+      <!-- Header -->
+      <div class="reveal">
+        <div class="section-tag">
+          <span class="section-tag-dot"></span>
+          Investment Curriculum
+        </div>
+        <h2 class="section-h2">22 modules.<br>One complete <em style="font-style:italic;color:var(--gold);">investor.</em></h2>
+        <p class="section-sub">Four tiers of structured education — from zero financial knowledge to asymmetric, macro-aware investor. Built on Druckenmiller, Buffett, and second-order thinking.</p>
+      </div>
+
+      <!-- Learning Paths -->
+      <div class="curr-paths reveal">
+        <div class="curr-path" onclick="filterPath(['1-1','1-2','1-3','1-4','1-5','1-6','2-1','2-2','2-3','2-4','2-5','2-6','3-1','3-2','3-3','3-4','3-5','3-6','4-1','4-2','4-3','4-4'])">
+          <div class="curr-path-label">Complete Path</div>
+          <div class="curr-path-title">The Full Journey</div>
+          <div class="curr-path-desc">All 22 modules in sequence — the complete investor's education.</div>
+        </div>
+        <div class="curr-path" onclick="filterPath(['1-2','1-3','1-4','3-1','3-2','3-5'])">
+          <div class="curr-path-label">Fast Track</div>
+          <div class="curr-path-title">The Macro Investor</div>
+          <div class="curr-path-desc">Central banks, macro triangle, and the trade thesis framework.</div>
+        </div>
+        <div class="curr-path" onclick="filterPath(['1-5','2-1','2-3','4-2','4-3'])">
+          <div class="curr-path-label">Specialist</div>
+          <div class="curr-path-title">The Stock Picker</div>
+          <div class="curr-path-desc">Valuation, portfolio construction, and the Buffett framework.</div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:32px;">
+        <div class="curr-tabs">
+          <button class="curr-tab active" onclick="filterTier('all',this)">All</button>
+          <button class="curr-tab" onclick="filterTier(1,this)">Tier 1 · Foundation</button>
+          <button class="curr-tab" onclick="filterTier(2,this)">Tier 2 · Investor</button>
+          <button class="curr-tab" onclick="filterTier(3,this)">Tier 3 · Operator</button>
+          <button class="curr-tab" onclick="filterTier(4,this)">Tier 4 · Strategist</button>
+        </div>
+        <div class="curr-search-wrap" style="margin-bottom:0;">
+          <span class="curr-search-icon">⌕</span>
+          <input class="curr-search" id="currSearch" type="text" placeholder="Search modules..." oninput="searchModules(this.value)">
+        </div>
+      </div>
+
+      <!-- Module list rendered by JS -->
+      <div id="curriculumContainer"></div>
+
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+   <div class="footer-grid">
+    <div class="footer-brand">
+     <div class="footer-brand-name">
+      Insight Invest
+     </div>
+     <p class="footer-brand-desc">
+      Macro intelligence, equity analysis, and financial education for serious investors. Not financial advice.
+     </p>
+    </div>
+    <div class="footer-col">
+     <div class="footer-col-title">
+      Research
+     </div>
+     <a href="#macro">
+      Macro Updates
+     </a>
+     <a href="#reports">
+      US Equities
+     </a>
+     <a href="#reports">
+      Global Equities
+     </a>
+     <a href="/iran-conflict">
+      Iran Playbook
+     </a>
+     <a href="/cash-allocation-bear-markets">
+      Cash Strategy
+     </a>
+     <a href="/iran-bursa-playbook">
+      Bursa Playbook
+     </a>
+     <a href="/iran-thesis-framework">
+      Thesis Framework
+     </a>
+     <a href="/halal-pharma-200b-framework">
+      Halal Pharma
+     </a>
+     <a href="/investor-profile">
+      Investor Profile
+     </a>
+    </div>
+    <div class="footer-col">
+     <div class="footer-col-title">
+      Learn
+     </div>
+     <a href="#learning">
+      All Tracks
+     </a>
+     <a href="/buffett-playbook">
+      Buffett Playbook
+     </a>
+     <a href="#learning">
+      Options
+     </a>
+     <a href="#learning">
+      Portfolio
+     </a>
+    </div>
+    <div class="footer-col">
+     <div class="footer-col-title">
+      Company
+     </div>
+     <a href="#">
+      About
+     </a>
+     <a href="#">
+      Contact
+     </a>
+     <a href="#">
+      Disclaimer
+     </a>
+    </div>
+   </div>
+   <div class="footer-bottom">
+    <span>
+     © 2026 Insight Invest. All rights reserved.
+    </span>
+    <span>
+     Educational content only · Not financial advice
+    </span>
+   </div>
+  </footer>
+
+
+  <script>
+// ═══ CURRICULUM DATA & RENDERER ═══
+const MODULES = [
+  { id:'1-1', code:'1.1', tier:1, title:'Money, Value & Time', desc:'What money really is, why inflation steals from you, and how compound growth is the only free lunch in finance.', time:'45 min', formats:['video','article','quiz'], locked:false },
+  { id:'1-2', code:'1.2', tier:1, title:'How Markets Work', desc:'The mechanical reality of how stocks are bought and sold — exchanges, participants, price discovery, and order types.', time:'55 min', formats:['video','article','quiz'], locked:false },
+  { id:'1-3', code:'1.3', tier:1, title:'Interest Rates: The Master Variable', desc:'The single most important variable in all of finance. Understanding rates unlocks everything else.', time:'60 min', formats:['video','case study','quiz'], locked:false },
+  { id:'1-4', code:'1.4', tier:1, title:'Inflation & Purchasing Power', desc:'How inflation is measured, what drives it, and how it distorts every investment decision you will ever make.', time:'50 min', formats:['video','article','quiz'], locked:false },
+  { id:'1-5', code:'1.5', tier:1, title:'Reading Financial Statements', desc:'The three financial statements every investor must read — and what to actually look for beyond the numbers.', time:'70 min', formats:['video','article','template'], locked:false },
+  { id:'1-6', code:'1.6', tier:1, title:'Asset Classes 101', desc:'A clean map of every major asset class — stocks, bonds, real estate, commodities, crypto, and ETFs.', time:'65 min', formats:['video','article','quiz'], locked:false },
+  { id:'2-1', code:'2.1', tier:2, title:'Equity Valuation Fundamentals', desc:"How to put a number on a company. P/E, EV/EBITDA, FCF yield, DCF, and Buffett's margin of safety.", time:'75 min', formats:['video','article','template'], locked:true },
+  { id:'2-2', code:'2.2', tier:2, title:'Behavioral Finance & Psychology', desc:'Why smart people make terrible investment decisions — loss aversion, recency bias, herd behavior, and how to stop.', time:'55 min', formats:['video','article','case study'], locked:true },
+  { id:'2-3', code:'2.3', tier:2, title:'Portfolio Construction & Risk', desc:'Asset allocation, position sizing, Kelly Criterion, stop losses, and cash as a strategic weapon.', time:'80 min', formats:['video','article','tool'], locked:true },
+  { id:'2-4', code:'2.4', tier:2, title:'Investing Strategies Compared', desc:'Value vs growth vs dividend vs momentum vs index. The honest trade-offs of each approach.', time:'65 min', formats:['video','article','quiz'], locked:true },
+  { id:'2-5', code:'2.5', tier:2, title:'Understanding ETFs & Index Funds', desc:'The most democratizing financial product of the last 30 years. How it works, how to use it, how to misuse it.', time:'50 min', formats:['video','article','tool'], locked:true },
+  { id:'2-6', code:'2.6', tier:2, title:'Options & Derivatives Basics', desc:'Not speculation tools — risk management instruments used by every institutional investor on the planet.', time:'70 min', formats:['video','article','quiz'], locked:true },
+  { id:'3-1', code:'3.1', tier:3, title:'Central Banks & Liquidity', desc:'Central banks control the liquidity that inflates and deflates every asset. This is the most important module.', time:'90 min', formats:['video','article','case study'], locked:true },
+  { id:'3-2', code:'3.2', tier:3, title:'The Macro Triangle', desc:'Rates, inflation, and growth — the three variables that drive everything else. Their interactions create opportunity.', time:'75 min', formats:['video','article','tool'], locked:true },
+  { id:'3-3', code:'3.3', tier:3, title:'Geopolitics & Markets', desc:'Every geopolitical shock creates dislocations. The question is: who quietly captures the asymmetric upside?', time:'80 min', formats:['video','article','case study'], locked:true },
+  { id:'3-4', code:'3.4', tier:3, title:'Currency Markets & FX Dynamics', desc:'Currency moves silently through every investment. Ignoring it is not an option for serious investors.', time:'65 min', formats:['video','article','case study'], locked:true },
+  { id:'3-5', code:'3.5', tier:3, title:'Building a Trade Thesis', desc:'The operational module. Setup → Catalyst → Edge → Timeline → Target → Invalidation. Become accountable to your ideas.', time:'100 min', formats:['video','template','case study'], locked:true },
+  { id:'3-6', code:'3.6', tier:3, title:'Sector Analysis & Rotation', desc:'Markets do not move as one block. Sectors lead and lag based on the macro regime — learn to read the rotation.', time:'70 min', formats:['video','article','tool'], locked:true },
+  { id:'4-1', code:'4.1', tier:4, title:'Investing Like Druckenmiller', desc:'Liquidity-first, macro-top-down, asymmetric conviction. The operating framework of the greatest macro investor alive.', time:'90 min', formats:['video','article','case study'], locked:true },
+  { id:'4-2', code:'4.2', tier:4, title:'Investing Like Buffett', desc:'Owner mindset, durable moats, capital allocation, and the patience to wait for the fat pitch. The full playbook.', time:'85 min', formats:['video','article','tool'], locked:true },
+  { id:'4-3', code:'4.3', tier:4, title:'Asymmetric Investing', desc:'Constructing positions where potential gain vastly outweighs potential loss. The core skill of elite investors.', time:'95 min', formats:['video','article','case study','template'], locked:true },
+  { id:'4-4', code:'4.4', tier:4, title:'Managing Through a Full Cycle', desc:'Bull market to mania to crash to bear to recovery. Bringing everything together to navigate with discipline.', time:'110 min', formats:['video','article','tool'], locked:true },
+];
+
+const TIER_META = {
+  1: { label:'Foundation', tag:'Complete beginner → Financially literate', color:'#4a7cff' },
+  2: { label:'Investor',   tag:'Literate → Structured investor',           color:'#3dd68c' },
+  3: { label:'Operator',   tag:'Investor → Macro-aware thinker',           color:'#ff5c5c' },
+  4: { label:'Strategist', tag:'Operator → Asymmetric elite',              color:'#c9a84c' },
+};
+
+let activeTier = 'all';
+let activePath = null;
+let searchQuery = '';
+
+function renderCurriculum() {
+  const container = document.getElementById('curriculumContainer');
+  if (!container) return;
+  let html = '';
+  [1,2,3,4].forEach(t => {
+    const tm = TIER_META[t];
+    const mods = MODULES.filter(m => {
+      if (m.tier !== t) return false;
+      if (activeTier !== 'all' && m.tier !== activeTier) return false;
+      if (activePath && !activePath.includes(m.id)) return false;
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        return m.title.toLowerCase().includes(q) || m.desc.toLowerCase().includes(q);
+      }
+      return true;
+    });
+    if (mods.length === 0) return;
+    html += `<div class="curr-tier-section t${t}">
+      <div class="curr-tier-header">
+        <div class="curr-tier-num" style="color:${tm.color}">${t}</div>
+        <div>
+          <div class="curr-tier-name">${tm.label}</div>
+          <div class="curr-tier-tag">${tm.tag}</div>
+        </div>
+        <div class="curr-tier-count">${mods.length} modules</div>
+      </div>
+      <div class="curr-grid">
+        ${mods.map(m => `
+        <div class="curr-module${m.locked?' locked':''}">
+          <div class="curr-module-top">
+            <span class="curr-module-code">MODULE ${m.code}</span>
+            ${m.locked ? '<span class="curr-module-lock">🔒</span>' : ''}
+          </div>
+          <div class="curr-module-title">${m.title}</div>
+          <div class="curr-module-desc">${m.desc}</div>
+          <div class="curr-formats">${m.formats.map(f=>`<span class="curr-fmt">${f}</span>`).join('')}</div>
+          <div class="curr-module-footer">
+            <span>${m.time}</span>
+            ${m.locked ? '<span style="color:#555c72;font-size:9px;">Complete prior modules</span>' : '<span class="curr-module-arrow">Start →</span>'}
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  });
+  if (!html) html = `<div style="text-align:center;padding:60px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-dim);">No modules match your search.</div>`;
+  container.innerHTML = html;
+}
+
+function filterTier(tier, btn) {
+  activeTier = tier;
+  activePath = null;
+  searchQuery = '';
+  const si = document.getElementById('currSearch');
+  if (si) si.value = '';
+  document.querySelectorAll('.curr-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCurriculum();
+}
+
+function filterPath(ids) {
+  activePath = ids;
+  activeTier = 'all';
+  searchQuery = '';
+  const si = document.getElementById('currSearch');
+  if (si) si.value = '';
+  document.querySelectorAll('.curr-tab').forEach(b => b.classList.remove('active'));
+  renderCurriculum();
+}
+
+function searchModules(q) {
+  searchQuery = q.trim();
+  activePath = null;
+  renderCurriculum();
+}
+
+renderCurriculum();
+
+
+// ═══ SCROLL REVEAL ═══
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+revealEls.forEach(el => observer.observe(el));
+
+// ═══ NAV SCROLL ═══
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+  </script>
+ </body>
+</html>
