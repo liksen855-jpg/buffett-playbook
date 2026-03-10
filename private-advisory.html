@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Private Advisory — InsightInvest</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:       #09090F;
+    --paper:     #F2EFE8;
+    --gold:      #C8A84B;
+    --gold-dim:  #7A6028;
+    --gold-pale: rgba(200,168,75,0.12);
+    --silver:    #8888A0;
+    --border:    rgba(200,168,75,0.18);
+    --border-hi: rgba(200,168,75,0.55);
+    --smoke:     #111118;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ── grain ── */
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 999;
+  }
+
+  /* ════════════════════════ NAV ════════════════════════ */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 48px;
+    z-index: 100;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.4s, background 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(9,9,15,0.92);
+    backdrop-filter: blur(12px);
+    border-color: var(--border);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 500;
+    color: var(--paper); letter-spacing: 0.02em;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-cta {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink); background: var(--gold);
+    padding: 11px 28px; border: none; cursor: pointer;
+    text-decoration: none;
+    transition: background 0.25s;
+  }
+  .nav-cta:hover { background: var(--paper); }
+
+  /* ════════════════════════ HERO ════════════════════════ */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 120px 48px 80px;
+    gap: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    right: -200px; top: 50%;
+    transform: translateY(-50%);
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(200,168,75,0.06) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero-left { position: relative; z-index: 1; }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 12px;
+    margin-bottom: 40px;
+    opacity: 0; animation: up 0.9s ease 0.2s forwards;
+  }
+  .eyebrow-line { width: 32px; height: 1px; background: var(--gold); }
+  .eyebrow-text {
+    font-size: 10px; letter-spacing: 0.32em;
+    text-transform: uppercase; color: var(--gold);
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(44px, 4.8vw, 76px);
+    font-weight: 300; line-height: 1.0;
+    color: var(--paper);
+    margin-bottom: 32px;
+    opacity: 0; animation: up 0.9s ease 0.4s forwards;
+  }
+  .hero-title em { font-style: italic; color: var(--gold); }
+
+  .hero-sub {
+    font-size: 13px; line-height: 1.9;
+    color: var(--silver); max-width: 440px;
+    margin-bottom: 56px;
+    opacity: 0; animation: up 0.9s ease 0.6s forwards;
+  }
+
+  .hero-price-block {
+    display: flex; align-items: flex-end; gap: 16px;
+    margin-bottom: 48px;
+    opacity: 0; animation: up 0.9s ease 0.8s forwards;
+  }
+  .price-main {
+    font-family: 'Playfair Display', serif;
+    font-size: 64px; font-weight: 300; line-height: 1;
+    color: var(--paper);
+  }
+  .price-main sup {
+    font-size: 28px; vertical-align: super;
+    color: var(--gold); font-weight: 400;
+  }
+  .price-label {
+    font-size: 11px; letter-spacing: 0.15em;
+    color: var(--silver); text-transform: uppercase;
+    padding-bottom: 10px; line-height: 1.6;
+  }
+
+  .hero-cta-row {
+    display: flex; align-items: center; gap: 32px;
+    opacity: 0; animation: up 0.9s ease 1.0s forwards;
+  }
+  .btn-primary {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink); background: var(--gold);
+    padding: 18px 48px; border: none; cursor: pointer;
+    text-decoration: none; display: inline-block;
+    transition: background 0.25s, transform 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary:hover { background: var(--paper); transform: translateY(-1px); }
+
+  .btn-ghost {
+    font-size: 11px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--silver);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 0.25s, border-color 0.25s;
+    padding-bottom: 2px;
+  }
+  .btn-ghost:hover { color: var(--gold); border-color: var(--gold); }
+
+  /* hero right — stat stack */
+  .hero-right {
+    display: flex; flex-direction: column; gap: 2px;
+    opacity: 0; animation: up 0.9s ease 0.7s forwards;
+  }
+
+  .stat-card {
+    border: 1px solid var(--border);
+    padding: 28px 32px;
+    background: rgba(255,255,255,0.015);
+    transition: border-color 0.3s, background 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px; background: var(--gold);
+    transform: scaleY(0); transform-origin: bottom;
+    transition: transform 0.3s ease;
+  }
+  .stat-card:hover { border-color: var(--border-hi); background: var(--gold-pale); }
+  .stat-card:hover::before { transform: scaleY(1); }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px; font-weight: 300;
+    color: var(--gold); line-height: 1; margin-bottom: 8px;
+  }
+  .stat-label {
+    font-size: 12px; color: var(--paper); letter-spacing: 0.05em;
+    margin-bottom: 6px; font-weight: 500;
+  }
+  .stat-sub { font-size: 11px; color: var(--silver); line-height: 1.6; }
+
+  /* ════════════════════════ WHAT'S INCLUDED ════════════════════════ */
+  .section {
+    padding: 120px 48px;
+    max-width: 1200px; margin: 0 auto;
+  }
+
+  .section-header {
+    display: flex; align-items: center; gap: 24px;
+    margin-bottom: 80px;
+  }
+  .section-line { flex: 1; height: 1px; background: var(--border); }
+  .section-tag {
+    font-size: 10px; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--gold);
+    white-space: nowrap;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 4vw, 58px);
+    font-weight: 300; line-height: 1.1;
+    color: var(--paper); margin-bottom: 24px;
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+
+  /* included grid */
+  .included-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px; margin-top: 64px;
+  }
+
+  .included-card {
+    border: 1px solid var(--border);
+    padding: 40px 36px;
+    background: rgba(255,255,255,0.012);
+    transition: border-color 0.3s, background 0.3s;
+    position: relative;
+  }
+  .included-card:hover { border-color: var(--border-hi); background: var(--gold-pale); }
+
+  .card-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 64px; font-weight: 300;
+    color: rgba(200,168,75,0.12); line-height: 1;
+    position: absolute; top: 24px; right: 28px;
+  }
+  .card-icon {
+    font-size: 24px; margin-bottom: 20px;
+  }
+  .card-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px; font-weight: 700;
+    color: var(--paper); margin-bottom: 12px;
+  }
+  .card-body {
+    font-size: 12px; color: var(--silver);
+    line-height: 1.8;
+  }
+
+  /* lifetime access card — full width */
+  .included-card.full {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 40px; align-items: center;
+  }
+  .full-left { }
+  .full-badge {
+    display: inline-block;
+    font-size: 10px; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--ink);
+    background: var(--gold); padding: 6px 16px;
+    margin-bottom: 20px;
+  }
+
+  /* ════════════════════════ SESSIONS TIMELINE ════════════════════════ */
+  .timeline { margin-top: 80px; }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 0 40px;
+    margin-bottom: 4px;
+  }
+
+  .timeline-left {
+    display: flex; flex-direction: column;
+    align-items: center;
+  }
+  .timeline-dot {
+    width: 40px; height: 40px;
+    border: 1px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px; color: var(--gold); flex-shrink: 0;
+  }
+  .timeline-line {
+    width: 1px; flex: 1;
+    background: linear-gradient(to bottom, var(--gold-dim), transparent);
+    min-height: 48px;
+  }
+  .timeline-item:last-child .timeline-line { display: none; }
+
+  .timeline-content {
+    border: 1px solid var(--border);
+    padding: 28px 32px; margin-bottom: 4px;
+    background: rgba(255,255,255,0.012);
+    transition: border-color 0.3s;
+  }
+  .timeline-content:hover { border-color: var(--border-hi); }
+
+  .timeline-label {
+    font-size: 10px; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .timeline-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px; font-weight: 700;
+    color: var(--paper); margin-bottom: 8px;
+  }
+  .timeline-body { font-size: 12px; color: var(--silver); line-height: 1.8; }
+
+  /* ════════════════════════ MATERIALS ════════════════════════ */
+  .materials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px; margin-top: 64px;
+  }
+  .material-card {
+    border: 1px solid var(--border);
+    padding: 36px 32px;
+    background: rgba(255,255,255,0.012);
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .material-card:hover { border-color: var(--border-hi); background: var(--gold-pale); }
+  .material-icon { font-size: 28px; margin-bottom: 20px; }
+  .material-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px; font-weight: 700;
+    color: var(--paper); margin-bottom: 10px;
+  }
+  .material-body { font-size: 12px; color: var(--silver); line-height: 1.8; }
+  .material-tag {
+    display: inline-block; margin-top: 16px;
+    font-size: 10px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--gold);
+    border: 1px solid var(--border); padding: 4px 12px;
+  }
+
+  /* ════════════════════════ PRICING BLOCK ════════════════════════ */
+  .pricing-wrapper {
+    padding: 120px 48px;
+    background: var(--smoke);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .pricing-inner {
+    max-width: 760px; margin: 0 auto; text-align: center;
+  }
+
+  .pricing-eyebrow {
+    font-size: 10px; letter-spacing: 0.32em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 24px;
+  }
+  .pricing-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(40px, 5vw, 72px);
+    font-weight: 300; line-height: 1.05;
+    color: var(--paper); margin-bottom: 16px;
+  }
+  .pricing-title em { font-style: italic; color: var(--gold); }
+
+  .pricing-sub {
+    font-size: 13px; color: var(--silver);
+    line-height: 1.8; margin-bottom: 64px;
+    max-width: 480px; margin-left: auto; margin-right: auto;
+  }
+
+  .price-display {
+    display: flex; align-items: center;
+    justify-content: center; gap: 8px;
+    margin-bottom: 16px;
+  }
+  .price-currency {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px; color: var(--gold);
+    align-self: flex-start; padding-top: 16px;
+  }
+  .price-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 96px; font-weight: 300;
+    color: var(--paper); line-height: 1;
+  }
+  .price-period {
+    font-size: 12px; color: var(--silver);
+    align-self: flex-end; padding-bottom: 18px;
+    letter-spacing: 0.1em;
+  }
+
+  .price-note {
+    font-size: 11px; color: var(--silver);
+    letter-spacing: 0.08em; margin-bottom: 56px;
+  }
+
+  .pricing-includes {
+    display: flex; flex-wrap: wrap;
+    justify-content: center; gap: 12px;
+    margin-bottom: 56px;
+  }
+  .pill {
+    font-size: 11px; letter-spacing: 0.1em;
+    color: var(--paper); border: 1px solid var(--border);
+    padding: 8px 20px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .pill-dot { width: 4px; height: 4px; background: var(--gold); border-radius: 50%; }
+
+  /* ── STRIPE BUTTON ── */
+  /* ⚠️  REPLACE the href below with your Stripe Payment Link  */
+  /* e.g. href="https://buy.stripe.com/XXXXXXXXXXXX"           */
+  .stripe-btn {
+    display: inline-flex; align-items: center; gap: 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px; letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink); background: var(--gold);
+    padding: 22px 64px; text-decoration: none;
+    border: none; cursor: pointer;
+    transition: background 0.25s, transform 0.2s;
+    margin-bottom: 20px;
+  }
+  .stripe-btn:hover { background: var(--paper); transform: translateY(-2px); }
+  .stripe-icon { font-size: 16px; }
+
+  .stripe-secure {
+    font-size: 11px; color: var(--silver);
+    display: flex; align-items: center;
+    justify-content: center; gap: 8px;
+  }
+  .stripe-secure svg { opacity: 0.5; }
+
+  /* ════════════════════════ FAQ ════════════════════════ */
+  .faq-list { margin-top: 64px; }
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .faq-q {
+    width: 100%; background: none; border: none;
+    text-align: left; padding: 28px 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px; font-weight: 600;
+    color: var(--paper); cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 24px;
+    transition: color 0.25s;
+  }
+  .faq-q:hover { color: var(--gold); }
+  .faq-icon {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px; color: var(--gold);
+    flex-shrink: 0; transition: transform 0.3s;
+    line-height: 1;
+  }
+  .faq-item.open .faq-icon { transform: rotate(45deg); }
+  .faq-a {
+    font-size: 13px; color: var(--silver);
+    line-height: 1.9; max-height: 0;
+    overflow: hidden; transition: max-height 0.4s ease, padding 0.3s;
+  }
+  .faq-item.open .faq-a { max-height: 300px; padding-bottom: 28px; }
+
+  /* ════════════════════════ FOOTER CTA ════════════════════════ */
+  .footer-cta {
+    padding: 120px 48px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .footer-cta::before {
+    content: '';
+    position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px; height: 400px;
+    background: radial-gradient(ellipse, rgba(200,168,75,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .footer-cta-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(40px, 5vw, 72px);
+    font-weight: 300; line-height: 1.1;
+    color: var(--paper); margin-bottom: 24px;
+  }
+  .footer-cta-title em { font-style: italic; color: var(--gold); }
+  .footer-cta-sub {
+    font-size: 13px; color: var(--silver);
+    line-height: 1.8; margin-bottom: 48px;
+    max-width: 440px; margin-left: auto; margin-right: auto;
+  }
+
+  /* ════════════════════════ FOOTER ════════════════════════ */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px; color: var(--silver);
+  }
+  .footer-brand span { color: var(--gold); }
+  .footer-note { font-size: 11px; color: var(--gold-dim); letter-spacing: 0.1em; }
+
+  /* ════════════════════════ ANIMATIONS ════════════════════════ */
+  @keyframes up {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ════════════════════════ RESPONSIVE ════════════════════════ */
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; gap: 48px; }
+    .hero::before { display: none; }
+    .section { padding: 80px 24px; }
+    .included-grid { grid-template-columns: 1fr; }
+    .included-card.full { grid-template-columns: 1fr; }
+    .materials-grid { grid-template-columns: 1fr; }
+    .pricing-wrapper { padding: 80px 24px; }
+    .footer-cta { padding: 80px 24px; }
+    footer { flex-direction: column; gap: 12px; text-align: center; }
+    .price-number { font-size: 72px; }
+  }
+</style>
+</head>
+<body>
+<!-- ═══ SITE-WIDE NAV ═══ -->
+<div id="siteNav" style="position:fixed;top:0;left:0;right:0;z-index:9998;background:rgba(9,9,15,0.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(200,168,75,0.12);padding:0 32px;font-family:'Inter',sans-serif;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:44px;">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C8A84B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      <span style="font-size:11px;font-weight:500;color:#C8A84B;letter-spacing:0.1em;text-transform:uppercase;">Insight Invest</span>
+    </a>
+    <a href="/private-advisory" style="font-size:10px;color:#C8A84B;background:rgba(200,168,75,0.08);text-decoration:none;padding:4px 12px;border-radius:4px;letter-spacing:0.06em;font-weight:500;">Private Advisory</a>
+  </div>
+</div>
+<div style="height:44px;"></div>
+<!-- ═══ END SITE NAV ═══ -->
+
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="/" class="nav-logo">Insight<span>Invest</span></a>
+  <!-- ⚠️ Replace href with your Stripe Payment Link -->
+  <a href="https://buy.stripe.com/cNi8wR5YUbH09IugZR8og00" class="nav-cta">Enrol Now</a>
+</nav>
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">
+      <div class="eyebrow-line"></div>
+      <div class="eyebrow-text">Private Advisory · Limited Seats</div>
+    </div>
+
+    <h1 class="hero-title">
+      Think sharper.<br>
+      Invest with<br>
+      <em>conviction.</em>
+    </h1>
+
+    <p class="hero-sub">
+      Four private sessions. A framework built around your portfolio and your thinking. Followed by unlimited access to the research that keeps compounding for you long after we're done.
+    </p>
+
+    <div class="hero-price-block">
+      <div class="price-main"><sup>RM</sup>3,499</div>
+      <div class="price-label">One-time<br>investment</div>
+    </div>
+
+    <div class="hero-cta-row">
+      <!-- ⚠️ Replace href with your Stripe Payment Link -->
+      <a href="https://buy.stripe.com/cNi8wR5YUbH09IugZR8og00" class="btn-primary">Reserve Your Seat →</a>
+      <a href="#what-is-it" class="btn-ghost">See what's included</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="stat-card">
+      <div class="stat-num">4</div>
+      <div class="stat-label">Private One-on-One Sessions</div>
+      <div class="stat-sub">60 minutes each. Focused entirely on your portfolio, your questions, your blind spots.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">∞</div>
+      <div class="stat-label">Lifetime Access to Materials</div>
+      <div class="stat-sub">Every research report, macro update, and video we produce — yours, permanently.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">1</div>
+      <div class="stat-label">Framework Built for You</div>
+      <div class="stat-sub">Not generic content. An investing framework shaped around how you think and what you own.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ WHAT IS IT ══════════════════ -->
+<div id="what-is-it" style="background: var(--smoke); border-top: 1px solid var(--border);">
+<div class="section">
+  <div class="section-header reveal">
+    <div class="section-line"></div>
+    <div class="section-tag">What's Included</div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="reveal">
+    <h2 class="section-title">Everything you need.<br><em>Nothing you don't.</em></h2>
+    <p style="font-size:13px; color:var(--silver); line-height:1.9; max-width:560px;">
+      This isn't a course. It's a private working relationship — four sessions of real conversation about your money, your thinking, and the markets that matter to you.
+    </p>
+  </div>
+
+  <div class="included-grid reveal">
+    <div class="included-card">
+      <div class="card-number">01</div>
+      <div class="card-icon">◈</div>
+      <div class="card-title">4 × 60-Min Private Sessions</div>
+      <div class="card-body">One-on-one, video call. No slides, no scripts. We go wherever your portfolio and the market takes us — macro, individual positions, risk, conviction, all of it.</div>
+    </div>
+    <div class="included-card">
+      <div class="card-number">02</div>
+      <div class="card-icon">◉</div>
+      <div class="card-title">Session Prep & Follow-Up Notes</div>
+      <div class="card-body">Before each session you'll receive a brief prep note. After, a written summary of key decisions, frameworks discussed, and what to watch — so nothing gets lost.</div>
+    </div>
+    <div class="included-card">
+      <div class="card-number">03</div>
+      <div class="card-icon">◆</div>
+      <div class="card-title">Your Personal Investment Framework</div>
+      <div class="card-body">By session four, you'll have a clear, documented framework for how you evaluate opportunities, manage risk, and make decisions — built in your language, for your life.</div>
+    </div>
+    <div class="included-card">
+      <div class="card-number">04</div>
+      <div class="card-icon">◇</div>
+      <div class="card-title">Direct Access Between Sessions</div>
+      <div class="card-body">Something moves in the market between sessions? A question you can't shake? You'll have direct messaging access throughout the entire engagement.</div>
+    </div>
+
+    <div class="included-card full">
+      <div class="full-left">
+        <div class="full-badge">After Your Sessions</div>
+        <h3 class="card-title" style="font-size:22px; margin-bottom:12px;">Unlimited Access to All InsightInvest Materials</h3>
+        <div class="card-body" style="max-width:560px;">Once the four sessions are complete, your access doesn't stop — it expands. Every piece of research we produce, every macro update, every video goes into your library permanently. The thinking compounds with you.</div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px; min-width:200px;">
+        <div style="border:1px solid var(--border); padding:16px 20px;">
+          <div style="font-size:10px; letter-spacing:0.2em; color:var(--gold); text-transform:uppercase; margin-bottom:6px;">Included</div>
+          <div style="font-size:13px; color:var(--paper);">Video Content Library</div>
+        </div>
+        <div style="border:1px solid var(--border); padding:16px 20px;">
+          <div style="font-size:10px; letter-spacing:0.2em; color:var(--gold); text-transform:uppercase; margin-bottom:6px;">Included</div>
+          <div style="font-size:13px; color:var(--paper);">Macro Update Archives</div>
+        </div>
+        <div style="border:1px solid var(--border); padding:16px 20px;">
+          <div style="font-size:10px; letter-spacing:0.2em; color:var(--gold); text-transform:uppercase; margin-bottom:6px;">Included</div>
+          <div style="font-size:13px; color:var(--paper);">Equity Research Documents</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════ SESSION BREAKDOWN ══════════════════ -->
+<div style="border-top: 1px solid var(--border);">
+<div class="section">
+  <div class="section-header reveal">
+    <div class="section-line"></div>
+    <div class="section-tag">The Four Sessions</div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="reveal">
+    <h2 class="section-title">A progression,<br>not just <em>four calls.</em></h2>
+  </div>
+
+  <div class="timeline reveal">
+    <div class="timeline-item">
+      <div class="timeline-left">
+        <div class="timeline-dot">1</div>
+        <div class="timeline-line"></div>
+      </div>
+      <div class="timeline-content">
+        <div class="timeline-label">Session One</div>
+        <div class="timeline-title">Diagnosis — Where You Actually Are</div>
+        <div class="timeline-body">We map your current portfolio, your real risk exposure, and the gaps between where you think you are and where you actually are. Honest, direct, no sugar-coating.</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-left">
+        <div class="timeline-dot">2</div>
+        <div class="timeline-line"></div>
+      </div>
+      <div class="timeline-content">
+        <div class="timeline-label">Session Two</div>
+        <div class="timeline-title">Macro Context — The World Your Portfolio Lives In</div>
+        <div class="timeline-body">We look at the macro environment through your specific lens — geopolitics, rates, currency dynamics, sector exposures. Where the tailwinds are and where the traps are hiding.</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-left">
+        <div class="timeline-dot">3</div>
+        <div class="timeline-line"></div>
+      </div>
+      <div class="timeline-content">
+        <div class="timeline-label">Session Three</div>
+        <div class="timeline-title">Opportunities — Conviction Without Noise</div>
+        <div class="timeline-body">We work through specific ideas — yours and mine — applying a clear asymmetric framework. What's worth owning, how much, and why. Building real conviction, not hope.</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-left">
+        <div class="timeline-dot">4</div>
+        <div class="timeline-line"></div>
+      </div>
+      <div class="timeline-content">
+        <div class="timeline-label">Session Four</div>
+        <div class="timeline-title">Your Framework — Built to Last</div>
+        <div class="timeline-body">We crystallise everything into a clear, personal investment framework. How you make decisions, how you manage risk, how you stay rational when markets aren't. Yours to keep and compound.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════ PRICING ══════════════════ -->
+<div class="pricing-wrapper">
+  <div class="pricing-inner reveal">
+    <div class="pricing-eyebrow">— The Investment —</div>
+    <h2 class="pricing-title">One price.<br><em>No surprises.</em></h2>
+    <p class="pricing-sub">Everything is included. No upsells, no monthly fees, no hidden tiers. One engagement, one price, permanent access to everything that follows.</p>
+
+    <div class="price-display">
+      <div class="price-currency">RM</div>
+      <div class="price-number">3,499</div>
+    </div>
+    <div class="price-note">One-time payment · No recurring charges</div>
+
+    <div class="pricing-includes">
+      <div class="pill"><div class="pill-dot"></div>4 Private Sessions</div>
+      <div class="pill"><div class="pill-dot"></div>Session Notes</div>
+      <div class="pill"><div class="pill-dot"></div>Personal Framework</div>
+      <div class="pill"><div class="pill-dot"></div>Direct Messaging Access</div>
+      <div class="pill"><div class="pill-dot"></div>Video Library</div>
+      <div class="pill"><div class="pill-dot"></div>Macro Update Archives</div>
+      <div class="pill"><div class="pill-dot"></div>Equity Research Documents</div>
+      <div class="pill"><div class="pill-dot"></div>Lifetime Access</div>
+    </div>
+
+    <!-- ⚠️ REPLACE href below with your Stripe Payment Link -->
+    <!-- e.g. href="https://buy.stripe.com/XXXXXXXXXXXX"     -->
+    <div style="display:flex; flex-direction:column; align-items:center; gap:16px;">
+      <a href="https://buy.stripe.com/cNi8wR5YUbH09IugZR8og00" class="stripe-btn">
+        <span class="stripe-icon">⚡</span>
+        <span>Secure Checkout via Stripe</span>
+      </a>
+      <div class="stripe-secure">
+        <svg width="12" height="14" viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="5" width="10" height="8" rx="1" stroke="#8888A0" stroke-width="1.2"/>
+          <path d="M3.5 5V3.5a2.5 2.5 0 015 0V5" stroke="#8888A0" stroke-width="1.2"/>
+          <circle cx="6" cy="9" r="1" fill="#8888A0"/>
+        </svg>
+        <span style="font-size:11px; color:var(--silver);">Secured by Stripe · 256-bit encryption</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ FAQ ══════════════════ -->
+<div style="border-top: 1px solid var(--border);">
+<div class="section" style="max-width:760px;">
+  <div class="section-header reveal">
+    <div class="section-line"></div>
+    <div class="section-tag">Questions</div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="faq-list reveal">
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Who is this for?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">This is for investors who are serious about improving — not beginners looking for stock tips. You should already be investing (or ready to) with a real portfolio, a genuine curiosity about markets, and the discipline to do the thinking between sessions.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        How are the sessions conducted?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">All sessions are 60 minutes via video call, scheduled at a time that works for you. We'll confirm scheduling details once your payment is processed. Sessions are typically spread over 4–8 weeks depending on your preference.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        What does "unlimited access to materials" mean exactly?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">Once your four sessions are complete, you'll receive permanent access to InsightInvest's full content library — this includes all video content, macro update archives, and equity research documents. New material we produce is also added to your library as it's released.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Is this financial advice?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">No. InsightInvest provides financial education and investment research — not regulated financial advice. Everything discussed is for educational and analytical purposes. You remain fully responsible for your own investment decisions.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        What if I want to start but I'm not ready right now?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">Seats are limited and allocated based on fit, not first-come-first-served. If you've completed the member profile and spoken with us, reach out directly and we'll hold a spot for you for 48 hours.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════ FOOTER CTA ══════════════════ -->
+<div class="footer-cta">
+  <h2 class="footer-cta-title reveal">The market doesn't<br>wait for <em>clarity.</em></h2>
+  <p class="footer-cta-sub reveal">Four sessions. A framework that lasts. Research that keeps compounding. One decision between you and all of it.</p>
+  <!-- ⚠️ Replace href with your Stripe Payment Link -->
+  <a href="https://buy.stripe.com/cNi8wR5YUbH09IugZR8og00" class="btn-primary reveal">Reserve Your Seat — RM 3,499 →</a>
+</div>
+
+<footer>
+  <div class="footer-brand">Insight<span>Invest</span></div>
+  <div class="footer-note">leiholding.com · Private Advisory</div>
+  <a href="/" style="color:#C8A84B;text-decoration:none;font-size:11px;margin-top:8px;display:inline-block;">← Back to Insight Invest</a>
+</footer>
+
+<script>
+  // Nav scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // FAQ
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+</script>
+</body>
+</html>
