@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
@@ -149,6 +149,9 @@
     mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 20%, transparent 70%);
     animation: gridPulse 8s ease-in-out infinite;
   }
+  @keyframes gateIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-6px)} 40%,80%{transform:translateX(6px)} }
+
   @keyframes gridPulse {
     0%, 100% { opacity: 0.4; }
     50% { opacity: 0.8; }
@@ -1241,6 +1244,58 @@
 </head>
 <body>
 
+  <!-- ═══ PASSWORD GATE ═══ -->
+  <div id="gate" style="position:fixed;inset:0;z-index:2000;background:#08090c;display:flex;align-items:center;justify-content:center;">
+    <div style="width:100%;max-width:400px;padding:0 32px;display:flex;flex-direction:column;align-items:center;animation:gateIn 0.8s cubic-bezier(0.16,1,0.3,1) forwards;">
+
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:56px;">
+        <div style="width:40px;height:40px;border:1.5px solid #c9a84c;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:#c9a84c;">I</div>
+        <span style="font-family:'Syne',sans-serif;font-size:15px;font-weight:600;color:#e4e8f2;letter-spacing:0.14em;text-transform:uppercase;">Insight Invest</span>
+      </div>
+
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:#c9a84c;margin-bottom:18px;display:flex;align-items:center;gap:12px;width:100%;">
+        <span style="flex:1;height:1px;background:linear-gradient(90deg,transparent,#7a6028,transparent);display:block;"></span>
+        Member Access
+        <span style="flex:1;height:1px;background:linear-gradient(90deg,transparent,#7a6028,transparent);display:block;"></span>
+      </div>
+
+      <div style="font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;color:#e4e8f2;text-align:center;line-height:1.1;letter-spacing:-0.01em;margin-bottom:10px;">Private <em style="font-style:italic;color:#c9a84c;">Portal</em></div>
+      <p style="font-size:13px;color:#444a60;text-align:center;line-height:1.6;margin-bottom:40px;">Enter your access key to continue.</p>
+
+      <div id="gateField" style="width:100%;background:#0d0f14;border:1px solid #222533;display:flex;align-items:center;margin-bottom:12px;transition:border-color 0.3s;">
+        <div style="padding:0 16px;color:#444a60;display:flex;align-items:center;">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="6" width="10" height="7" rx="1" stroke="currentColor" stroke-width="1.3"/><path d="M4.5 6V4a2.5 2.5 0 015 0v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <input id="gateInput" type="password" placeholder="Access key" autocomplete="current-password" autocorrect="off" autocapitalize="off" spellcheck="false"
+          style="flex:1;background:none;border:none;outline:none;font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:0.08em;color:#e4e8f2;padding:17px 0;"
+          onkeydown="if(event.key==='Enter')checkPw()"/>
+        <button onclick="togglePw()" type="button" style="background:none;border:none;cursor:pointer;padding:0 16px;color:#444a60;display:flex;align-items:center;" onmouseover="this.style.color='#8a91aa'" onmouseout="this.style.color='#444a60'">
+          <svg id="eyeIcon" width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M1 7s2.333-4 6-4 6 4 6 4-2.333 4-6 4-6-4-6-4z" stroke="currentColor" stroke-width="1.3"/>
+            <circle cx="7" cy="7" r="1.8" stroke="currentColor" stroke-width="1.3"/>
+          </svg>
+        </button>
+      </div>
+
+      <button id="gateBtn" onclick="checkPw()"
+        style="width:100%;padding:15px 32px;background:#c9a84c;color:#08090c;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;border:none;cursor:pointer;"
+        onmouseover="this.style.boxShadow='0 6px 28px rgba(201,168,76,0.3)'" onmouseout="this.style.boxShadow='none'">
+        Enter
+      </button>
+
+      <div id="gateError" style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#e05555;text-align:center;margin-top:12px;opacity:0;transition:opacity 0.3s;">
+        Incorrect access key. Please try again.
+      </div>
+
+      <div style="margin-top:40px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#444a60;letter-spacing:0.08em;text-align:center;">
+        Not a member?&nbsp;&nbsp;<a href="https://www.patreon.com" target="_blank" rel="noopener" style="color:#7a6028;text-decoration:none;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='#7a6028'">Join on Patreon →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MAIN CONTENT ═══ -->
+  <div id="mainContent" style="display:none;">
+
   <!-- ═══ NAVIGATION ═══ -->
   <nav id="navbar">
    <a class="nav-logo" href="index.html">
@@ -1558,5 +1613,57 @@ window.addEventListener('scroll', () => {
 });
 
   </script>
+
+  </div><!-- /#mainContent -->
+
+  <script>
+    // ─── CHANGE THIS PASSWORD ───
+    const ACCESS_KEY = 'insightinvest2026';
+    const SESSION_KEY = 'ii_curriculum_auth';
+
+    function checkPw() {
+      const input = document.getElementById('gateInput').value.trim();
+      const field = document.getElementById('gateField');
+      const err   = document.getElementById('gateError');
+      const btn   = document.getElementById('gateBtn');
+
+      if (input === ACCESS_KEY) {
+        sessionStorage.setItem(SESSION_KEY, '1');
+        const gate = document.getElementById('gate');
+        gate.style.transition = 'opacity 0.5s ease';
+        gate.style.opacity = '0';
+        setTimeout(() => {
+          gate.style.display = 'none';
+          document.getElementById('mainContent').style.display = 'block';
+        }, 500);
+      } else {
+        field.style.borderColor = '#e05555';
+        field.style.animation = 'shake 0.4s ease';
+        setTimeout(() => { field.style.animation = ''; field.style.borderColor = '#222533'; btn.disabled = false; }, 600);
+        err.style.opacity = '1';
+        btn.disabled = true;
+        setTimeout(() => { err.style.opacity = '0'; btn.disabled = false; }, 3000);
+      }
+    }
+
+    function togglePw() {
+      const input = document.getElementById('gateInput');
+      const icon  = document.getElementById('eyeIcon');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.innerHTML = '<path d="M1 7s2.333-4 6-4 6 4 6 4-2.333 4-6 4-6-4-6-4z" stroke="currentColor" stroke-width="1.3"/><path d="M3 3l8 8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>';
+      } else {
+        input.type = 'password';
+        icon.innerHTML = '<path d="M1 7s2.333-4 6-4 6 4 6 4-2.333 4-6 4-6-4-6-4z" stroke="currentColor" stroke-width="1.3"/><circle cx="7" cy="7" r="1.8" stroke="currentColor" stroke-width="1.3"/>';
+      }
+    }
+
+    // Auto-unlock if already authenticated this session
+    if (sessionStorage.getItem(SESSION_KEY) === '1') {
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('mainContent').style.display = 'block';
+    }
+  </script>
+
  </body>
 </html>
