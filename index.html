@@ -76,6 +76,56 @@
   .scroll-line { width: 1px; height: 40px; background: linear-gradient(180deg, var(--gold-dim), transparent); animation: scrollPulse 2s ease-in-out infinite; }
   @keyframes scrollPulse { 0%, 100% { opacity: 0.3; height: 40px; } 50% { opacity: 1; height: 60px; } }
 
+  /* MEMBERS SECTION */
+  .members-section { padding: 100px 48px; background: var(--bg); position: relative; overflow: hidden; }
+  .members-section::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(37,40,56,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(37,40,56,0.12) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse 100% 80% at 80% 50%, black 20%, transparent 70%); }
+  .members-inner { position: relative; z-index: 2; }
+  .members-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; max-width: 1200px; }
+  .members-left .section-tag { margin-bottom: 20px; }
+  .members-h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(34px, 4.5vw, 58px); font-weight: 300; color: var(--text-bright); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 24px; }
+  .members-h2 em { font-style: italic; color: var(--gold); }
+  .members-desc { font-size: 15px; color: var(--text); line-height: 1.75; margin-bottom: 40px; max-width: 440px; }
+  .members-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .members-patreon-badge { display: inline-flex; align-items: center; gap: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: var(--text-dim); text-transform: uppercase; margin-top: 16px; }
+  .members-patreon-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulseDot 2s ease-in-out infinite; }
+  @keyframes pulseDot { 0%,100%{opacity:0.4;transform:scale(1)} 50%{opacity:1;transform:scale(1.3)} }
+  .members-right { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--border); border: 1px solid var(--border); }
+  .mtool-card { background: var(--bg2); padding: 28px 24px; position: relative; overflow: hidden; text-decoration: none; display: block; transition: background 0.3s; }
+  .mtool-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--mtool-color, var(--gold)); transform: scaleX(0); transform-origin: left; transition: transform 0.4s; }
+  .mtool-card:hover { background: var(--bg3); }
+  .mtool-card:hover::before { transform: scaleX(1); }
+  .mtool-icon { font-size: 22px; margin-bottom: 12px; }
+  .mtool-name { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 600; color: var(--text-bright); margin-bottom: 6px; line-height: 1.2; }
+  .mtool-tag { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mtool-color, var(--gold)); }
+  .mtool-glow { position: absolute; width: 120px; height: 120px; border-radius: 50%; filter: blur(40px); bottom: -30px; right: -20px; background: var(--mtool-color, var(--gold)); opacity: 0.04; pointer-events: none; transition: opacity 0.4s; }
+  .mtool-card:hover .mtool-glow { opacity: 0.1; }
+  .members-updates { margin-top: 64px; padding-top: 64px; border-top: 1px solid var(--border); }
+  .members-updates-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 32px; }
+  .members-updates-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 400; color: var(--text-bright); }
+  .members-updates-title em { font-style: italic; color: var(--gold); }
+  .members-see-all { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: gap 0.3s; }
+  .members-see-all:hover { gap: 10px; }
+  .updates-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--border); border: 1px solid var(--border); }
+  .update-mini { background: var(--bg2); padding: 28px 24px; position: relative; overflow: hidden; }
+  .update-mini::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(201,168,76,0.02), transparent 60%); pointer-events: none; }
+  .update-mini-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .update-mini-cat { font-family: 'IBM Plex Mono', monospace; font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; }
+  .cat-strategy { background: rgba(167,139,250,0.08); color: #a78bfa; border: 1px solid rgba(167,139,250,0.2); }
+  .cat-trade { background: rgba(61,214,140,0.08); color: var(--green); border: 1px solid rgba(61,214,140,0.2); }
+  .update-mini-date { font-family: 'IBM Plex Mono', monospace; font-size: 8px; color: var(--text-dim); letter-spacing: 0.08em; margin-left: auto; }
+  .update-mini-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: var(--text-bright); line-height: 1.3; margin-bottom: 14px; }
+  .update-mini-link { display: inline-flex; align-items: center; gap: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); text-decoration: none; transition: gap 0.3s; }
+  .update-mini-link:hover { gap: 10px; }
+  .update-new { position: absolute; top: 16px; right: 16px; background: var(--green); color: var(--bg); font-family: 'IBM Plex Mono', monospace; font-size: 7px; letter-spacing: 0.12em; padding: 2px 6px; font-weight: 600; text-transform: uppercase; }
+  @media (max-width: 900px) {
+    .members-layout { grid-template-columns: 1fr; gap: 48px; }
+    .updates-row { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .members-section { padding: 70px 24px; }
+    .members-right { grid-template-columns: 1fr; }
+  }
+
   /* TICKER */
   .ticker { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 14px 0; overflow: hidden; background: var(--bg2); position: relative; }
   .ticker::before, .ticker::after { content: ''; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2; }
@@ -261,6 +311,7 @@
     <a href="#pillars">What We Cover</a>
     <a href="/reports">Reports</a>
     <a href="#learning">Learn</a>
+    <a href="/members">Members</a>
     <a class="nav-cta" href="/reports">Access Reports</a>
    </div>
   </nav>
@@ -370,6 +421,101 @@
    </div>
   </section>
 
+  <!-- ═══ MEMBERS SECTION ═══ -->
+  <section class="members-section" id="members">
+   <div class="members-inner">
+    <div class="members-layout reveal">
+
+     <div class="members-left">
+      <div class="section-tag"><span class="section-tag-dot"></span>Patreon Members</div>
+      <h2 class="members-h2">Tools &amp; intelligence<br/>for the <em>edge-seekers.</em></h2>
+      <p class="members-desc">Exclusive interactive tools, real-time trade alerts, and member-only analysis — for investors who go deeper than the headlines. Join on Patreon to unlock everything.</p>
+      <div class="members-actions">
+       <a class="btn-primary" href="/members">Member Hub →</a>
+       <a class="btn-ghost" href="https://www.patreon.com" target="_blank" rel="noopener">Join on Patreon</a>
+      </div>
+      <div class="members-patreon-badge">Active · Member Access Open</div>
+     </div>
+
+     <div class="members-right">
+      <a href="/members/valuation-dashboard" class="mtool-card" style="--mtool-color: var(--gold);">
+       <div class="mtool-icon">📊</div>
+       <div class="mtool-name">Valuation Dashboard</div>
+       <div class="mtool-tag">Live IV Tracker</div>
+       <div class="mtool-glow"></div>
+      </a>
+      <a href="/members/iv-calculator" class="mtool-card" style="--mtool-color: var(--blue);">
+       <div class="mtool-icon">🧮</div>
+       <div class="mtool-name">IV Calculator</div>
+       <div class="mtool-tag" style="color:var(--blue);">DCF &amp; Earnings</div>
+       <div class="mtool-glow" style="background:var(--blue);"></div>
+      </a>
+      <a href="/members/portfolio-scorecard" class="mtool-card" style="--mtool-color: var(--green);">
+       <div class="mtool-icon">📋</div>
+       <div class="mtool-name">Portfolio Scorecard</div>
+       <div class="mtool-tag" style="color:var(--green);">Health Check</div>
+       <div class="mtool-glow" style="background:var(--green);"></div>
+      </a>
+      <a href="/members/second-level-thinking" class="mtool-card" style="--mtool-color: #a78bfa;">
+       <div class="mtool-icon">🧠</div>
+       <div class="mtool-name">Second-Level Thinking</div>
+       <div class="mtool-tag" style="color:#a78bfa;">Framework</div>
+       <div class="mtool-glow" style="background:#a78bfa;"></div>
+      </a>
+     </div>
+
+    </div>
+
+    <!-- Latest Updates -->
+    <div class="members-updates reveal">
+     <div class="members-updates-header">
+      <div class="members-updates-title">Latest <em>Member Updates</em></div>
+      <a href="/members#updates" class="members-see-all">
+       All Posts
+       <svg width="12" height="12" viewbox="0 0 12 12" fill="none"><path d="M1.5 6h9M6 1.5l4.5 4.5L6 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+     </div>
+     <div class="updates-row">
+      <div class="update-mini">
+       <span class="update-new">New</span>
+       <div class="update-mini-meta">
+        <span class="update-mini-cat cat-strategy">Strategy</span>
+        <span class="update-mini-date">Mar 2026</span>
+       </div>
+       <div class="update-mini-title">Next Play: The Trump Trade — What Comes After the Noise</div>
+       <a class="update-mini-link" href="https://www.patreon.com/posts/next-play-trump-152859465" target="_blank" rel="noopener">
+        Read on Patreon
+        <svg width="10" height="10" viewbox="0 0 10 10" fill="none"><path d="M1 5h8M5 1l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+       </a>
+      </div>
+      <div class="update-mini">
+       <div class="update-mini-meta">
+        <span class="update-mini-cat cat-trade">Trade</span>
+        <span class="update-mini-date">Mar 2026</span>
+       </div>
+       <div class="update-mini-title">How I Made 150% — The Full Trade Breakdown</div>
+       <a class="update-mini-link" href="https://www.patreon.com/posts/how-i-made-150-152750647" target="_blank" rel="noopener">
+        Read on Patreon
+        <svg width="10" height="10" viewbox="0 0 10 10" fill="none"><path d="M1 5h8M5 1l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+       </a>
+      </div>
+      <div class="update-mini">
+       <div class="update-mini-meta">
+        <span class="update-mini-cat cat-trade">New Trade</span>
+        <span class="update-mini-date">Mar 2026</span>
+       </div>
+       <div class="update-mini-title">New Trade Alert — Full Thesis Inside</div>
+       <a class="update-mini-link" href="https://www.patreon.com/posts/new-trade-152615167" target="_blank" rel="noopener">
+        Read on Patreon
+        <svg width="10" height="10" viewbox="0 0 10 10" fill="none"><path d="M1 5h8M5 1l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+       </a>
+      </div>
+     </div>
+    </div>
+
+   </div>
+  </section>
+
   <!-- ═══ WAITLIST ═══ -->
   <section id="waitlist">
    <div class="wl-layout reveal">
@@ -437,6 +583,15 @@
      <a href="/halal-pharma-200b-framework">Halal Pharma</a>
      <a href="/investor-profile">Investor Profile</a>
      <a href="/private-advisory">Private Advisory</a>
+    </div>
+    <div class="footer-col">
+     <div class="footer-col-title">Members</div>
+     <a href="/members">Member Hub</a>
+     <a href="/members/valuation-dashboard">Valuation Dashboard</a>
+     <a href="/members/iv-calculator">IV Calculator</a>
+     <a href="/members/portfolio-scorecard">Portfolio Scorecard</a>
+     <a href="/members/second-level-thinking">Second-Level Thinking</a>
+     <a href="https://www.patreon.com" target="_blank" rel="noopener">Join on Patreon</a>
     </div>
     <div class="footer-col">
      <div class="footer-col-title">Learn</div>
