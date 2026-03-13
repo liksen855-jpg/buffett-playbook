@@ -1469,28 +1469,86 @@
 </style>
 </head>
 <body>
+<style>
+  .__mod-nav {{
+    position: fixed; top: 0; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 13px 40px;
+    background: rgba(8,9,12,0.97);
+    backdrop-filter: blur(24px);
+    border-bottom: 1px solid #222533;
+    z-index: 10000;
+    font-family: 'Syne', sans-serif;
+  }}
+  .__mod-nav-left {{ display: flex; align-items: center; gap: 18px; }}
+  .__mod-back {{
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #555c72; text-decoration: none; transition: color 0.3s;
+  }}
+  .__mod-back:hover {{ color: #c9a84c; }}
+  .__mod-back svg {{ transition: transform 0.3s; }}
+  .__mod-back:hover svg {{ transform: translateX(-3px); }}
+  .__mod-sep {{ width: 1px; height: 18px; background: #222533; }}
+  .__mod-crumb {{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: #4a7cff;
+  }}
+  .__mod-logo {{
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px; color: #c9a84c; text-decoration: none; font-weight: 600;
+  }}
+  .__mod-nav-right a {{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: #555c72; text-decoration: none;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    transition: color 0.3s; margin-left: 20px;
+  }}
+  .__mod-nav-right a:hover {{ color: #c9a84c; }}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600&family=IBM+Plex+Mono:wght@400&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet"/>
+<nav class="__mod-nav">
+  <div class="__mod-nav-left">
+    <a href="curriculum.html" class="__mod-back">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M9 6.5H2M5.5 2L1 6.5l4.5 4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Curriculum
+    </a>
+    <div class="__mod-sep"></div>
+    <span class="__mod-crumb">Tier 1 · Module 1.1</span>
+  </div>
+  <a href="index.html" class="__mod-logo">Insight Invest</a>
+  <div class="__mod-nav-right">
+    <a href="curriculum.html#tier1">All Modules</a>
+    <a href="members.html">Members</a>
+    <a href="reports.html">Reports</a>
+  </div>
+</nav>
+<style>body {{ padding-top: 54px !important; }}</style>
+
   <div class="mod-progress-bar" id="readingProgress"></div>
 
   <!-- ═══ NAVIGATION ═══ -->
   <nav id="navbar">
-   <a class="nav-logo" href="/">
+   <a class="nav-logo" href="index.html">
     <div class="nav-logo-mark"></div>
     <span class="nav-logo-text">Insight Invest</span>
    </a>
    <div class="nav-links">
     <a href="/#pillars">What We Cover</a>
     <a href="/#macro">Macro</a>
-    <a href="/curriculum">Learn</a>
+    <a href="curriculum.html">Learn</a>
     <a class="nav-cta" href="/#reports">Access Reports</a>
    </div>
   </nav>
 
   <div class="mod-breadcrumb">
-    <a href="/">Insight Invest</a>
+    <a href="index.html">Insight Invest</a>
     <span>/</span>
-    <a href="/curriculum">Curriculum</a>
+    <a href="curriculum.html">Curriculum</a>
     <span>/</span>
-    <a href="/tier-1">Tier 1 · Foundation</a>
+    <a href="curriculum.html">Tier 1 · Foundation</a>
     <span>/</span>
     <span style="color:var(--text);">1.1 · Money, Value & Time</span>
   </div>
@@ -1754,7 +1812,7 @@
       <div class="sidebar-next">
         <div class="sidebar-next-label">Next Module</div>
         <div class="sidebar-next-title">1.2 · How Markets Work</div>
-        <a href="/tier-1/module-1-2">Continue <span>→</span></a>
+        <a href="module-1-2.html">Continue <span>→</span></a>
       </div>
     </div>
   </div>
@@ -1762,7 +1820,7 @@
 
   <div class="mod-nav-bar">
     <div></div>
-    <a class='mod-nav-btn' style='text-align:right' href='/tier-1/module-1-2'><span class='mod-nav-dir'>Next →</span><span class='mod-nav-title'>1.2 · How Markets Work</span></a>
+    <a class='mod-nav-btn' style='text-align:right' href='module-1-2.html'><span class='mod-nav-dir'>Next →</span><span class='mod-nav-title'>1.2 · How Markets Work</span></a>
   </div>
 
   <!-- ═══ FOOTER ═══ -->
