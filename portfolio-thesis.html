@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Leveraged Play — Portfolio Thesis</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #18181f;
+    --border: #2a2a35;
+    --muted: #5a5a72;
+    --text: #e8e8f0;
+    --text2: #a0a0b8;
+    --green: #00d084;
+    --green-dim: #003d27;
+    --red: #ff4757;
+    --red-dim: #3d0010;
+    --amber: #ffa94d;
+    --amber-dim: #3d2800;
+    --blue: #4dabf7;
+    --blue-dim: #0d2a3d;
+    --purple: #cc5de8;
+    --gold: #ffd43b;
+    --gold-dim: #3d3000;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .header-logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .header-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--green);
+    letter-spacing: 0.1em;
+    border: 1px solid var(--green);
+    padding: 4px 10px;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 80px 50px 60px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(0,208,132,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--green);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-eyebrow::before { content: '▶'; font-size: 8px; }
+  .hero-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(42px, 6vw, 80px);
+    font-weight: 400;
+    line-height: 1.05;
+    margin-bottom: 28px;
+    max-width: 900px;
+  }
+  .hero-title span { color: var(--green); font-style: italic; }
+  .hero-sub {
+    font-size: 17px;
+    color: var(--text2);
+    max-width: 650px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+  .meta-pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    text-transform: uppercase;
+  }
+  .meta-pill.active { border-color: var(--green); color: var(--green); }
+
+  /* PORTFOLIO GRID */
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+    padding-top: 50px;
+    padding-left: 50px;
+    padding-right: 50px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-top: 1px solid var(--border);
+  }
+  .pos-card {
+    padding: 28px 24px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    transition: background 0.2s;
+  }
+  .pos-card:last-child { border-right: none; }
+  .pos-card:hover { background: var(--surface2); }
+  .pos-ticker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+    letter-spacing: 0.05em;
+  }
+  .pos-underlying {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .pos-leverage {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .pos-leverage.bull { color: var(--green); }
+  .pos-type {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .pos-alloc {
+    font-size: 11px;
+    color: var(--text2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+  .pos-alloc-pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--amber);
+    font-weight: 500;
+  }
+  .pos-badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    padding: 2px 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+  .badge-semicon { background: var(--blue-dim); color: var(--blue); }
+  .badge-software { background: var(--green-dim); color: var(--green); }
+  .badge-aimarket { background: var(--purple); color: #fff; opacity: 0.85; }
+  .pos-flag {
+    position: absolute;
+    top: 12px; right: 12px;
+    font-size: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.08em;
+    padding: 2px 7px;
+    text-transform: uppercase;
+  }
+  .flag-note { background: var(--amber-dim); color: var(--amber); border: 1px solid var(--amber); }
+
+  /* ALLOCATION BAR */
+  .alloc-section {
+    padding: 40px 50px;
+    border-bottom: 1px solid var(--border);
+  }
+  .alloc-bar-wrap {
+    display: flex;
+    height: 36px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .alloc-seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    transition: opacity 0.2s;
+  }
+  .alloc-seg:hover { opacity: 0.8; }
+  .seg-avgx { width: 13.5%; background: #1a2d3d; color: var(--blue); }
+  .seg-smh3 { width: 13.5%; background: #0d2030; color: #74c0fc; }
+  .seg-crmg { width: 24.3%; background: #1a2e1a; color: var(--green); }
+  .seg-nowl { width: 24.3%; background: #1a2a1a; color: #69db7c; }
+  .seg-zetx { width: 24.3%; background: #1e2a1e; color: #a9e34b; }
+  .alloc-legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text2);
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 8px; height: 8px; }
+
+  /* MAIN CONTENT */
+  .content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 50px;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 50px;
+    margin-bottom: 50px;
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    font-weight: 400;
+    margin-bottom: 18px;
+    line-height: 1.2;
+  }
+  h2 em { font-style: italic; color: var(--green); }
+
+  h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin-bottom: 10px;
+    margin-top: 28px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  p { margin-bottom: 14px; color: var(--text2); }
+  p strong { color: var(--text); }
+
+  /* CALLOUT BOXES */
+  .callout-green {
+    border-left: 3px solid var(--green);
+    background: var(--green-dim);
+    padding: 18px 20px;
+    margin: 20px 0;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+  .callout-amber {
+    border-left: 3px solid var(--amber);
+    background: var(--amber-dim);
+    padding: 18px 20px;
+    margin: 20px 0;
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text2);
+  }
+  .callout-amber strong, .callout-green strong { color: var(--text); }
+  .callout-red {
+    border-left: 3px solid var(--red);
+    background: var(--red-dim);
+    padding: 18px 20px;
+    margin: 20px 0;
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text2);
+  }
+  .callout-red strong { color: var(--text); }
+
+  /* HOLDING DEEP DIVES */
+  .holding-section {
+    margin-bottom: 50px;
+    padding-bottom: 50px;
+    border-bottom: 1px solid var(--border);
+  }
+  .holding-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 20px;
+  }
+  .holding-left {}
+  .holding-ticker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .holding-desc {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+  .holding-right {
+    text-align: right;
+  }
+  .holding-lev {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 36px;
+    line-height: 1;
+    font-weight: 500;
+  }
+  .holding-lev.bull { color: var(--green); }
+  .holding-issuer {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .thesis-points {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .tp {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+  }
+  .tp-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .tp-text { font-size: 13px; line-height: 1.55; color: var(--text2); }
+  .tp-text strong { color: var(--text); }
+
+  /* AMPLIFICATION TABLE */
+  .amp-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 13px; }
+  .amp-table th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .amp-table td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .amp-table tr:last-child td { border-bottom: none; }
+  .amp-table tr:hover td { background: var(--surface2); }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .green-text { color: var(--green); }
+  .amber-text { color: var(--amber); }
+  .red-text { color: var(--red); }
+  .muted-text { color: var(--muted); }
+
+  /* MECHANICS BOX */
+  .mechanics-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin: 20px 0;
+  }
+  .mechanics-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .math-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px dotted var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+  .math-row:last-child { border-bottom: none; }
+  .math-label { color: var(--text2); }
+  .math-val { font-weight: 500; }
+
+  /* SIDEBAR COMPONENTS */
+  .sidebar-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .sc-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sc-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 12.5px;
+  }
+  .sc-row:last-child { border-bottom: none; }
+  .sc-key { color: var(--text2); font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+  .sc-val { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; }
+
+  /* COMPOUNDING VISUAL */
+  .compound-visual {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 20px;
+    margin: 16px 0;
+  }
+  .cv-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .cv-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-size: 12px;
+  }
+  .cv-label { font-family: 'JetBrains Mono', monospace; color: var(--muted); width: 70px; font-size: 10px; }
+  .cv-bar-wrap { flex: 1; background: var(--border); height: 20px; position: relative; }
+  .cv-bar { height: 100%; display: flex; align-items: center; padding-left: 8px; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; transition: width 0.8s; }
+  .cv-bar.underlying { background: #1a3a5c; color: var(--blue); }
+  .cv-bar.lev2x { background: #1a4a2a; color: var(--green); }
+  .cv-bar.lev3x { background: #2a4a1a; color: #a9e34b; }
+
+  /* RISK WARNING */
+  .risk-banner {
+    background: var(--red-dim);
+    border: 1px solid var(--red);
+    padding: 20px 24px;
+    margin: 30px 0;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .risk-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .risk-text { font-size: 13.5px; color: var(--text2); line-height: 1.6; }
+  .risk-text strong { color: var(--text); }
+
+  /* VERDICT */
+  .verdict {
+    background: linear-gradient(135deg, #0a1f12 0%, #0a0f1a 100%);
+    border: 1px solid var(--green);
+    padding: 32px;
+    margin: 40px 0;
+  }
+  .verdict-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 16px;
+  }
+  .verdict-text {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    line-height: 1.45;
+    color: var(--text);
+  }
+
+  /* FOOTER */
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 20px 50px;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero, .portfolio-grid, .content { animation: fadeUp 0.5s ease both; }
+  .portfolio-grid { animation-delay: 0.1s; }
+  .content { animation-delay: 0.2s; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">Portfolio Thesis &nbsp;·&nbsp; Leveraged Tech Positions</div>
+  <div class="header-tag">▲ LONG BIAS — ACTIVE</div>
+</div>
+
+<div class="hero">
+  <div class="hero-eyebrow">Contrarian Leveraged Entry &nbsp;·&nbsp; Q1 2026</div>
+  <div class="hero-title">The <span>Amplified</span> Contrarian</div>
+  <p class="hero-sub">
+    You didn't just buy the dip in software and semiconductors. You built a leveraged portfolio engineered to capture maximum upside on the narrative reversal — 2x on every name, 3x on the broad semicon basket. Here's exactly why each position made sense.
+  </p>
+  <div class="hero-meta">
+    <div class="meta-pill active">5 Positions</div>
+    <div class="meta-pill active">27% Semicon · 73% Software</div>
+    <div class="meta-pill active">2x–3x Leverage</div>
+    <div class="meta-pill">Entry: ~Feb–Mar 2026</div>
+  </div>
+</div>
+
+<!-- PORTFOLIO CARDS -->
+<div class="section-label">Portfolio Holdings</div>
+<div class="portfolio-grid">
+  <div class="pos-card">
+    <div class="pos-ticker">AVGX</div>
+    <div class="pos-underlying">Underlying: AVGO (Broadcom)</div>
+    <div class="pos-leverage bull">2x Daily</div>
+    <div class="pos-type">Defiance ETFs · Nasdaq</div>
+    <div class="pos-badge badge-semicon">Semiconductor</div>
+    <div class="pos-alloc">
+      <span>Semicon sleeve</span>
+      <span class="pos-alloc-pct">~13.5%</span>
+    </div>
+  </div>
+  <div class="pos-card">
+    <div class="pos-ticker">SMH3</div>
+    <div class="pos-underlying">Underlying: SMH ETF (25 chips)</div>
+    <div class="pos-leverage bull">3x Daily</div>
+    <div class="pos-type">Leverage Shares · LSE</div>
+    <div class="pos-badge badge-semicon">Semiconductor Basket</div>
+    <div class="pos-alloc">
+      <span>Semicon sleeve</span>
+      <span class="pos-alloc-pct">~13.5%</span>
+    </div>
+  </div>
+  <div class="pos-card">
+    <div class="pos-ticker">CRMG</div>
+    <div class="pos-underlying">Underlying: CRM (Salesforce)</div>
+    <div class="pos-leverage bull">2x Daily</div>
+    <div class="pos-type">Leverage Shares · Nasdaq</div>
+    <div class="pos-badge badge-software">Software</div>
+    <div class="pos-alloc">
+      <span>Software sleeve</span>
+      <span class="pos-alloc-pct">~24.3%</span>
+    </div>
+  </div>
+  <div class="pos-card">
+    <div class="pos-ticker">NOWL</div>
+    <div class="pos-underlying">Underlying: NOW (ServiceNow)</div>
+    <div class="pos-leverage bull">2x Daily</div>
+    <div class="pos-type">GraniteShares · Nasdaq</div>
+    <div class="pos-badge badge-software">Software</div>
+    <div class="pos-alloc">
+      <span>Software sleeve</span>
+      <span class="pos-alloc-pct">~24.3%</span>
+    </div>
+  </div>
+  <div class="pos-card">
+    <div class="pos-flag flag-note">⚠ Note</div>
+    <div class="pos-ticker">ZETX</div>
+    <div class="pos-underlying">Underlying: ZETA (Zeta Global)</div>
+    <div class="pos-leverage bull">2x Daily</div>
+    <div class="pos-type">Defiance ETFs · NYSE Arca</div>
+    <div class="pos-badge badge-software">AI Software/MarTech</div>
+    <div class="pos-alloc">
+      <span>Software sleeve</span>
+      <span class="pos-alloc-pct">~24.3%</span>
+    </div>
+  </div>
+</div>
+
+<!-- ALLOCATION BAR -->
+<div class="alloc-section">
+  <div class="section-label" style="padding: 0 0 16px 0;">Capital Allocation</div>
+  <div class="alloc-bar-wrap">
+    <div class="alloc-seg seg-avgx">AVGX</div>
+    <div class="alloc-seg seg-smh3">SMH3</div>
+    <div class="alloc-seg seg-crmg">CRMG</div>
+    <div class="alloc-seg seg-nowl">NOWL</div>
+    <div class="alloc-seg seg-zetx">ZETX</div>
+  </div>
+  <div class="alloc-legend">
+    <span class="legend-item"><span class="legend-dot" style="background:#1a2d3d;border:1px solid #4dabf7"></span>AVGX 13.5% — 2x Broadcom</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#0d2030;border:1px solid #74c0fc"></span>SMH3 13.5% — 3x Semicon Basket</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#1a2e1a;border:1px solid #00d084"></span>CRMG 24.3% — 2x Salesforce</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#1a2a1a;border:1px solid #69db7c"></span>NOWL 24.3% — 2x ServiceNow</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#1e2a1e;border:1px solid #a9e34b"></span>ZETX 24.3% — 2x Zeta Global</span>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="content">
+
+  <!-- IMPORTANT NOTE -->
+  <div class="callout-amber" style="margin-bottom:40px;">
+    <strong>⚠ Clarification on ZETX:</strong> ZETX is the Defiance Daily Target 2X Long <em>Zeta Global (ZETA)</em> ETF — an AI-powered marketing software company — not a Zscaler play. This distinction matters for the thesis. Zeta Global is a pure-play AI/data-driven software name, which fits the software rotation argument well, but it carries a very different risk profile than a cybersecurity name like Zscaler. The thesis below reflects this correctly.
+  </div>
+
+  <!-- THE CORE LOGIC -->
+  <div style="margin-bottom:50px; padding-bottom:50px; border-bottom: 1px solid var(--border);">
+    <h2>The Core Logic: Why <em>Leverage</em> Specifically?</h2>
+    <p>The contrarian thesis established that software and semiconductors were suffering a narrative-driven selloff, not a fundamental one. But knowing <em>what</em> to buy is only half the decision. The more important question was <em>how much</em> to buy — and in what structure.</p>
+    <p>Leveraged single-stock and sector ETFs made sense in this context for a specific reason: <strong>the recovery, when it came, would not be gradual</strong>. Mean reversion from deeply oversold conditions tends to be violent. Short-covering events are spike-driven. Narrative reversals get priced in over days, not quarters. In that environment, the compounding amplification of a 2x or 3x instrument — when held through a directional trending move — produces outsized returns relative to direct stock exposure.</p>
+    <div class="mechanics-box">
+      <div class="mechanics-title">Leverage Amplification — How the Math Works On a Trending Move</div>
+      <div class="math-row">
+        <span class="math-label">Underlying stock up +5% in one session</span>
+        <span class="math-val green-text">2x ETF target: +10.0%</span>
+      </div>
+      <div class="math-row">
+        <span class="math-label">Underlying stock up +10% over trending week</span>
+        <span class="math-val green-text">2x ETF approx: +20–22% (positive compounding)</span>
+      </div>
+      <div class="math-row">
+        <span class="math-label">Underlying stock up +15.2% (ServiceNow, Mar 3–7)</span>
+        <span class="math-val green-text">NOWL approx: +32–36% (compounding tailwind)</span>
+      </div>
+      <div class="math-row">
+        <span class="math-label">SMH basket up +8% in recovery week</span>
+        <span class="math-val green-text">SMH3 (3x) approx: +25–28%</span>
+      </div>
+      <div class="math-row" style="border-bottom:none; margin-top: 8px;">
+        <span class="math-label" style="font-size:9px; color: var(--muted);">Note: positive compounding benefits leveraged ETFs during trending up moves. The daily reset works in your favor when the underlying moves consistently in one direction.</span>
+        <span></span>
+      </div>
+    </div>
+    <p>The key insight is that leveraged ETFs are <strong>not permanently value-destroying instruments</strong> — they are volatility-sensitive instruments. They decay in choppy, oscillating markets. They <em>amplify</em> in directional, trending markets. You were betting on a directional trend: the reversal of an oversold narrative. That is precisely the scenario where leverage compounds in your favor.</p>
+  </div>
+
+  <!-- HOLDING DEEP DIVES -->
+
+  <!-- AVGX -->
+  <div class="holding-section">
+    <div class="holding-header">
+      <div class="holding-left">
+        <div class="holding-ticker">AVGX</div>
+        <div class="holding-desc">Defiance 2x Long AVGO · Underlying: Broadcom Inc.</div>
+      </div>
+      <div class="holding-right">
+        <div class="holding-lev bull">2×</div>
+        <div class="holding-issuer">Defiance ETFs · NASDAQ</div>
+      </div>
+    </div>
+
+    <h3>Why Broadcom, and Why 2x?</h3>
+    <p>Broadcom is one of the most structurally unique semiconductor companies in the world, and its inclusion in the semicon sleeve carries a logic that goes beyond simple chip exposure. AVGO straddles two worlds: it is both a semiconductor company and a software company, having acquired VMware in a landmark $61B deal that transformed it into a diversified infrastructure platform. This dual nature made it <strong>uniquely levered to both of the recovery narratives</strong> playing out in Q1 2026.</p>
+
+    <div class="thesis-points">
+      <div class="tp">
+        <div class="tp-label">AI Custom Silicon Moat</div>
+        <div class="tp-text">Broadcom is the leading designer of custom AI accelerators (XPUs) for hyperscalers including Google, Meta, and Apple. As AI infrastructure investment accelerated, Broadcom's AI revenue segment grew materially — a tailwind that was entirely structural, not narrative-dependent.</div>
+      </div>
+      <div class="tp">
+        <div class="tp-label">VMware Synergy Unlocking</div>
+        <div class="tp-text">The VMware integration had been a drag on multiple in 2025 as investors waited for synergies to materialize. By Q1 2026, signs of cross-sell and margin expansion were emerging, providing a catalyst independent of the broader software selloff narrative.</div>
+      </div>
+      <div class="tp">
+        <div class="tp-label">Oversold From Software Fear</div>
+        <div class="tp-text">AVGO was punished alongside pure-play SaaS stocks during the "SaaSpocalypse" despite having limited exposure to the per-seat subscription model at risk. The selloff created mispricing — AVGO was discounted for a risk it didn't own.</div>
+      </div>
+      <div class="tp">
+        <div class="tp-label">AVGX 52-Week Range Signal</div>
+        <div class="tp-text">AVGX ranged from $9.87 to $70.31 over 52 weeks. Entry near the lower bound of that range in late Feb/early March meant buying a 2x instrument at a fraction of its peak NAV — maximum upside asymmetry with defined loss exposure.</div>
+      </div>
+    </div>
+
+    <div class="callout-green">
+      <strong>The Leverage Thesis in One Sentence:</strong> AVGO was discounted for SaaS disruption risk it doesn't own, with a structural AI silicon tailwind the market was momentarily ignoring. 2x leverage on that mispricing, during a trending mean-reversion, was the high-conviction expression of that view.
+    </div>
+  </div>
+
+  <!-- SMH3 -->
+  <div class="holding-section">
+    <div class="holding-header">
+      <div class="holding-left">
+        <div class="holding-ticker">SMH3</div>
+        <div class="holding-desc">Leverage Shares 3x Long SMH · Underlying: VanEck Semiconductor ETF (25 names)</div>
+      </div>
+      <div class="holding-right">
+        <div class="holding-lev bull">3×</div>
+        <div class="holding-issuer">Leverage Shares · LSE</div>
+      </div>
+    </div>
+
+    <h3>The Only 3x Position — Rationale for Maximum Leverage</h3>
+    <p>SMH3 is the most aggressive position in the portfolio — 3x daily leverage on the entire VanEck 25-name semiconductor index. The choice to hold this rather than a 2x equivalent was a deliberate expression of conviction on semiconductors specifically: this was the one sector where the <strong>fundamental case was strongest and the narrative damage most clearly temporary</strong>.</p>
+
+    <div class="thesis-points">
+      <div class="tp">
+        <div class="tp-label">Sector Was Collateral Damage</div>
+        <div class="tp-text">Semiconductors didn't cause the "SaaSpocalypse" narrative — they were caught in the blast radius. Nvidia, TSMC, ASML, and Qualcomm had no per-seat subscription revenue. They were sold because they're in "tech." That's indiscriminate, not analytical.</div>
+      </div>
+      <div class="tp">
+        <div class="tp-label">AI Infrastructure Spend Was Intact</div>
+        <div class="tp-text">Hyperscaler capex commitments — Microsoft, Google, Meta, Amazon — for 2026 data center buildout were not reduced. Semiconductor demand from AI training and inference remained the single largest growth driver for the sector. The selloff was against a rising fundamental tide.</div>
+      </div>
+      <div class="tp">
+        <div class="tp-label">Jensen Huang Catalyst Specific</div>
+        <div class="tp-text">When Jensen Huang defended software incumbents on Feb 26, he simultaneously validated Nvidia and the chip ecosystem. The speech was a confidence catalyst for semiconductors specifically — "AI is good for chips" was never in question; "AI is good for software" was. Huang resolved the latter, and chips ripped as a double-beneficiary.</div>
+      </div>
+      <div class="tp">
+        <div class="tp-label">3x on a Trending Move = Max Capture</div>
+        <div class="tp-text">When semiconductors began their post-Huang recovery trending upward, a 3x structure captured every day's move tripled. Positive compounding on a sustained multi-day directional move is where 3x structures earn their risk premium decisively.</div>
+      </div>
+    </div>
+
+    <div class="callout-green">
+      <strong>Why the basket over a single name:</strong> SMH3 provided diversified upside across all 25 constituents — capturing Nvidia, TSMC, Broadcom, AMD, ASML, and Qualcomm simultaneously. No single-name risk. If any one chip name lagged, the basket absorbed it. This was the right structure for a sector-wide recovery call.
+    </div>
+
+    <div class="callout-amber">
+      <strong>Important note on SMH3:</strong> This trades on the London Stock Exchange (LSE), making it primarily accessible to non-US investors — which matches your Petaling Jaya base. For US-based accounts, the equivalent would be SOXL (Direxion 3x Semiconductor Bull).
+    </div>
+  </div>
+
+  <!-- CRMG -->
+  <div class="holding-section">
+    <div class="holding-header">
+      <div class="holding-left">
+        <div class="holding-ticker">CRMG</div>
+        <div class="holding-desc">Leverage Shares 2x Long CRM · Underlying: Salesforce Inc.</div>
+      </div>
+      <div class="holding-right">
+        <div class="holding-lev bull">2×</div>
+        <div class="holding-issuer">Leverage Shares · NASDAQ</div>
+      </div>
+    </div>
+
+    <h3>The Flagship Contrarian: The Most Mispriced Name</h3>
+    <p>If there was one stock at the center of the "SaaSpocalypse" narrative — the name that embodied the fear more than any other — it was Salesforce. It fell 26% year-to-date while simultaneously posting a 24.9% EPS beat. This is the definition of narrative-driven price destruction. <strong>CRMG was the highest-conviction expression of the thesis that the market had gotten it categorically wrong.</strong></p>
+
+    <div class="thesis-points">
+      <div class="tp">
+        <div class="tp-label">Agentforce ARR: The Evidence No One Listened To</div>
+        <div class="tp-text"><strong>$800M ARR growing 169% year-over-year.</strong> Salesforce's own AI agent product — Agentforce — was growing at a hypergrowth rate while the stock was being sold as an AI victim. The market was pricing AI as a destroyer of Salesforce revenue while Salesforce was demonstrating AI as its fastest-growing revenue line.</div>
+      </div>
+      <div class="tp">
+        <div class="tp-label">Anthropic Partnership — Direct Beneficiary</div>
+        <div class="tp-text">Of all the companies that bounced on Feb 24 when Anthropic announced its enterprise integrations, Salesforce was the most prominent — up 5% in that single session. CRM had a named partnership in the announcement. CRMG therefore provided 2x the most directly catalyzed name.</div>
+      </div>
+      <div class="tp">
+        <div class="tp-label">Valuation: Cheapest in a Decade</div>
+        <div class="tp-text">At its trough, CRM traded at forward P/E multiples not seen since before it was widely recognized as a mission-critical enterprise platform. You were getting a top-5 enterprise software company, growing AI ARR at 169%, at a discount to its 5-year average valuation. That is the margin of safety argument fully intact.</div>
+      </div>
+      <div class="tp">
+        <div class="tp-label">Workflow Moat: Data Lock-In</div>
+        <div class="tp-text">Salesforce holds a decade of enterprise customer relationship data across industries. AI agents need that data to function. Agentforce doesn't replace the Salesforce platform — it runs on top of it, inside it, and depends on it. The moat deepens with AI, it doesn't erode.</div>
+      </div>
+    </div>
+
+    <div class="callout-green">
+      <strong>The CRMG Thesis in Full:</strong> Stock down 26%, earnings up 25%, AI ARR growing 169%, and the company has a named partnership with the exact firm that caused the panic. At 2x leverage, a reversion even halfway to fair value would generate a return that justifies the position size. This was the most asymmetric risk/reward in the portfolio.
+    </div>
+  </div>
+
+  <!-- NOWL -->
+  <div class="holding-section">
+    <div class="holding-header">
+      <div class="holding-left">
+        <div class="holding-ticker">NOWL</div>
+        <div class="holding-desc">GraniteShares 2x Long NOW · Underlying: ServiceNow Inc.</div>
+      </div>
+      <div class="holding-right">
+        <div class="holding-lev bull">2×</div>
+        <div class="holding-issuer">GraniteShares · NASDAQ</div>
+      </div>
+    </div>
+
+    <h3>The Quality Play: Best-in-Class Enterprise Software</h3>
+    <p>If Salesforce was the most mispriced name, ServiceNow was the <em>highest quality</em> name at an irrational discount. ServiceNow has one of the best fundamental business profiles in all of enterprise software — a platform that has never missed a quarterly revenue guidance since going public, with net retention rates consistently above 120%, and a product set so deeply embedded in enterprise IT and workflow infrastructure that replacement is measured in years and tens of millions of dollars of transition cost per customer.</p>
+
+    <div class="thesis-points">
+      <div class="tp">
+        <div class="tp-label">Never Missed Revenue Guidance</div>
+        <div class="tp-text">ServiceNow's track record of execution is exceptional. During the Q1 2026 selloff, NOW fell 9–11% in single sessions despite intact subscription growth guidance. This was pure sentiment-driven selling, not fundamental concern — making the 2x recovery bet a clean risk/reward calculation.</div>
+      </div>
+      <div class="tp">
+        <div class="tp-label">IT Workflow = AI Native Platform</div>
+        <div class="tp-text">NOW is positioned as one of the clearest AI-integration winners in enterprise software. Its Now Platform is already being used to deploy agentic AI for IT service management, HR workflows, and customer service. Jensen Huang specifically named ServiceNow as a platform AI agents would use — not replace.</div>
+      </div>
+      <div class="tp">
+        <div class="tp-label">+15.2% Recovery in One Week</div>
+        <div class="tp-text">ServiceNow gained 15.2% in the week of March 3–7, one of the best single-week performances in its public history. NOWL (2x) would have captured approximately 32–36% of gain in that same period, depending on daily compounding. This validated the leveraged thesis precisely.</div>
+      </div>
+      <div class="tp">
+        <div class="tp-label">52-Week Range Signal</div>
+        <div class="tp-text">NOWL ranged from $5.55 to $29.01 in its 52-week span — a more than 5x range. Entry near the lower bound meant buying a high-quality underlying at peak emotional distress, with a 5x recovery ceiling if the underlying simply returned to its recent peak.</div>
+      </div>
+    </div>
+
+    <div class="callout-green">
+      <strong>Why NOWL over direct NOW shares:</strong> ServiceNow's recovery from the trough was one of the fastest and most decisive in the sector. A 2x instrument during that trending multi-day move captured roughly twice the gain — approximately 32–36% vs 15–17% for the common stock — in the same holding period. That is precisely what leveraged ETFs are designed to do when the underlying is trending.
+    </div>
+  </div>
+
+  <!-- ZETX -->
+  <div class="holding-section">
+    <div class="holding-header">
+      <div class="holding-left">
+        <div class="holding-ticker">ZETX</div>
+        <div class="holding-desc">Defiance 2x Long ZETA · Underlying: Zeta Global Holdings</div>
+      </div>
+      <div class="holding-right">
+        <div class="holding-lev bull">2×</div>
+        <div class="holding-issuer">Defiance ETFs · NYSE Arca</div>
+      </div>
+    </div>
+
+    <h3>The High-Beta Wild Card: AI-Native Software at Maximum Discount</h3>
+
+    <div class="callout-amber">
+      <strong>Critical Clarification:</strong> ZETX tracks <strong>Zeta Global (ZETA)</strong> — an AI-powered marketing and customer data platform — not Zscaler. Zeta Global is a fundamentally different business: it sells an AI-native marketing intelligence platform to enterprise clients, monetizing on usage of its data cloud and AI decision engine. This is important context for understanding the thesis.
+    </div>
+
+    <p>Zeta Global is one of the purest expressions of the "AI as revenue driver" thesis in enterprise software. Unlike legacy SaaS names that are <em>adapting to</em> AI, Zeta was built with machine learning and data intelligence as its foundation. Its core product — the Zeta Marketing Platform — uses AI to process billions of consumer data points and deliver personalized marketing across every digital channel in real time.</p>
+
+    <div class="thesis-points">
+      <div class="tp">
+        <div class="tp-label">AI-Native Architecture = No Displacement Risk</div>
+        <div class="tp-text">The bear case against software was that AI agents would replace legacy SaaS workflows. Zeta Global has no "legacy" to replace — its platform <em>is</em> the AI. It was being sold as part of the broad software selloff despite being structurally immune to the specific risk that was driving the selloff.</div>
+      </div>
+      <div class="tp">
+        <div class="tp-label">Launched Feb 3, 2026 — Recent ETF</div>
+        <div class="tp-text">ZETX launched on February 3, 2026 — almost exactly when the selloff was at its worst. Entering a freshly launched 2x ETF on an AI-native software name at peak sentiment pessimism, shortly after launch, meant capturing the early liquidity build alongside the fundamental recovery. A genuinely contrarian timing combination.</div>
+      </div>
+      <div class="tp">
+        <div class="tp-label">High Beta = Maximum Amplification</div>
+        <div class="tp-text">Smaller-cap, higher-beta software names tend to fall harder and recover harder than mega-caps. ZETA, as a mid-cap AI software name, had higher relative volatility than Salesforce or ServiceNow — which meant greater absolute drawdown during the panic, and greater absolute recovery potential when sentiment turned.</div>
+      </div>
+      <div class="tp">
+        <div class="tp-label">Enterprise AI Monetization Proof Points</div>
+        <div class="tp-text">Zeta's platform processes over 500 billion data signals daily. Enterprise adoption of AI-native marketing tools was accelerating — a trend independent of, and actually helped by, the broader adoption of AI in enterprise workflows. More AI = more data = more need for Zeta's intelligence layer.</div>
+      </div>
+    </div>
+
+    <div class="callout-green">
+      <strong>The ZETX Role in Portfolio Construction:</strong> ZETX was the <em>high-beta kicker</em>. In a portfolio otherwise populated by mega-cap or near-mega-cap names (CRM, NOW, AVGO), ZETX provided exposure to a smaller, higher-beta, AI-native software name that would disproportionately benefit from a full sentiment recovery — with 2x leverage amplifying that asymmetry further.
+    </div>
+  </div>
+
+  <!-- PORTFOLIO CONSTRUCTION LOGIC -->
+  <div style="margin-bottom:50px; padding-bottom:50px; border-bottom:1px solid var(--border);">
+    <h2>Why This Allocation Mix <em>Made Sense</em></h2>
+
+    <h3>73/27 Software vs Semiconductor — The Logic</h3>
+    <p>The core thesis was a <strong>narrative reversal story</strong>, and the narrative was specifically about software. Semiconductors were collateral damage; software was the epicenter of the panic. This warranted a heavier allocation to software as the higher-conviction, more directly catalyzed side of the trade. Semiconductors provided diversification and the 3x leverage kicker via SMH3, but the alpha was expected to come primarily from the software recovery.</p>
+
+    <h3>Three Names in Software — Why Not Concentrate?</h3>
+    <p>CRMG, NOWL, and ZETX represent three distinct archetypes of the software recovery: Salesforce (the most mispriced mega-cap with a direct Anthropic catalyst), ServiceNow (highest quality name at irrational discount), and Zeta Global (AI-native high-beta name with maximum sentiment leverage). Together they capture the recovery across market-cap tiers and business model archetypes — not three similar bets, but three complementary expressions of the same macro thesis.</p>
+
+    <h3>AVGX + SMH3 in Semicon — Single Name + Basket</h3>
+    <p>Pairing a single-name 2x (AVGX/Broadcom) with a basket 3x (SMH3/SMH index) provided two things: concentrated upside if Broadcom specifically outperformed (driven by its AI silicon moat and VMware synergy thesis), and diversified protection via the 25-name basket if the recovery was broad rather than name-specific. This was intelligent construction — conviction on a name, insurance via a basket, 3x on the basket to compensate for the lower single-name concentration.</p>
+
+    <div class="verdict">
+      <div class="verdict-label">▶ Portfolio Verdict</div>
+      <div class="verdict-text">This portfolio was built to do one thing: capture maximum upside from a narrative reversal that fundamentals had already made inevitable. Each position was leveraged precisely because the recovery, when it came, would be fast and trending — the only market condition where leveraged ETFs' compounding mechanics work systematically in your favor rather than against you. The 73/27 split placed the heaviest weight exactly where the mispricing was most acute. This was not speculative. It was conviction, structured.
+      </div>
+    </div>
+  </div>
+
+  <!-- RISK SECTION -->
+  <div>
+    <h2>What You <em>Must</em> Watch</h2>
+
+    <div class="risk-banner">
+      <div class="risk-icon">⚡</div>
+      <div class="risk-text">
+        <strong>Leveraged ETF Decay Warning:</strong> These instruments are daily rebalancing vehicles. If the underlying stocks enter a choppy, oscillating market — moving up 3% one day and down 3% the next with no net directional progress — volatility decay will erode your position even if the underlying ends flat. The thesis depends on a <em>trending</em> recovery, not a sideways one. Monitor momentum closely.
+      </div>
+    </div>
+
+    <div class="callout-red">
+      <strong>The Three Things That Would Break This Thesis:</strong>
+      <br><br>
+      <strong>1. Q1 2026 Earnings Disappoint (April).</strong> If CRM, NOW, and other holdings report deteriorating ARR growth, net retention declines, or guide revenue lower, the "fundamentals are fine" pillar of the bull case collapses. This would confirm the bear thesis and accelerate multiple compression. Leveraged positions would be severely punished — 2x on the downside.
+      <br><br>
+      <strong>2. Agentic AI Adoption Accelerates Faster Than Expected.</strong> If enterprise customers start meaningfully reducing seat counts or cancelling SaaS subscriptions due to AI agent automation within the next two quarters, the structural bear case stops being a future risk and becomes present-day evidence. Watch net revenue retention rates carefully.
+      <br><br>
+      <strong>3. Volatility Spike / Macro Shock.</strong> A geopolitical escalation, unexpected Fed hawkishness, or credit market stress could send risk assets down sharply. Leveraged instruments amplify drawdowns as viciously as they amplify recoveries. A 15% drawdown in CRM becomes a 30%+ loss in CRMG. Know your stop.
+    </div>
+
+    <div class="callout-amber">
+      <strong>The Position Management Imperative:</strong> Leveraged ETFs reward active management. These are not set-and-forget holdings. As the narrative recovery plays out through the April earnings cycle and the positions appreciate, systematic profit-taking — trimming into strength — is how you capture the thesis gain without giving it back to volatility decay. The thesis has a time horizon. Don't let it become an unmanaged long-term hold.
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <span>For informational/analytical purposes only. Not financial advice.</span>
+  <span>Portfolio Thesis — Leveraged Tech Positions</span>
+  <span>March 12, 2026 · Petaling Jaya, MY</span>
+</div>
+
+</body>
+</html>
