@@ -198,6 +198,37 @@
   .equity-card-sparkline { margin-top: 20px; height: 40px; opacity: 0.6; transition: opacity 0.3s; }
   .equity-card:hover .equity-card-sparkline { opacity: 1; }
 
+  /* CURRICULUM PREVIEW */
+  .curriculum-preview { background: var(--bg); border-top: 1px solid var(--border); }
+  .cp-layout { display: grid; grid-template-columns: 1fr 1.6fr; gap: 80px; align-items: start; max-width: 1400px; }
+  .cp-left { position: sticky; top: 100px; }
+  .cp-eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  .cp-eyebrow-line { width: 28px; height: 1px; background: var(--blue); opacity: 0.5; }
+  .cp-h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(32px, 4vw, 52px); font-weight: 300; color: var(--text-bright); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 18px; }
+  .cp-h2 em { font-style: italic; color: var(--blue); }
+  .cp-desc { font-size: 14px; color: var(--text); line-height: 1.75; margin-bottom: 36px; max-width: 360px; }
+  .cp-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 28px; }
+  .cp-stat { background: var(--bg2); padding: 20px 22px; }
+  .cp-stat-val { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300; color: var(--text-bright); line-height: 1; margin-bottom: 4px; }
+  .cp-stat-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-dim); }
+  .cp-cta { display: inline-flex; align-items: center; gap: 10px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue); text-decoration: none; transition: gap 0.3s; }
+  .cp-cta:hover { gap: 14px; }
+  .cp-modules { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .cp-module { background: var(--bg2); padding: 28px 32px; display: flex; align-items: center; gap: 24px; text-decoration: none; transition: background 0.3s; position: relative; overflow: hidden; }
+  .cp-module::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--blue); transform: scaleY(0); transform-origin: top; transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); }
+  .cp-module:hover { background: var(--bg3); }
+  .cp-module:hover::before { transform: scaleY(1); }
+  .cp-module-num { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--blue); letter-spacing: 0.1em; min-width: 28px; opacity: 0.6; }
+  .cp-module-body { flex: 1; }
+  .cp-module-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--text-bright); margin-bottom: 4px; line-height: 1.2; }
+  .cp-module-time { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-dim); letter-spacing: 0.1em; }
+  .cp-module-arrow { color: var(--blue); transition: transform 0.3s; flex-shrink: 0; }
+  .cp-module:hover .cp-module-arrow { transform: translateX(4px); }
+  .cp-locked-row { background: var(--bg); border: 1px solid var(--border); border-top: none; padding: 18px 32px; display: flex; align-items: center; gap: 14px; }
+  .cp-locked-icon { color: var(--text-dim); display: flex; align-items: center; }
+  .cp-locked-text { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 0.06em; }
+  .cp-locked-text strong { color: var(--text); }
+
   /* LEARNING */
   #learning { background: var(--bg2); border-top: 1px solid var(--border); }
   .learning-layout { display: grid; grid-template-columns: 1.3fr 1fr; gap: 80px; max-width: 1400px; margin: 0 auto; align-items: start; }
@@ -309,10 +340,10 @@
    </a>
    <div class="nav-links">
     <a href="#pillars">What We Cover</a>
-    <a href="/reports">Reports</a>
-    <a href="#learning">Learn</a>
-    <a href="/members">Members</a>
-    <a class="nav-cta" href="/reports">Access Reports</a>
+    <a href="reports.html">Reports</a>
+    <a href="curriculum.html">Learn</a>
+    <a href="members.html">Members</a>
+    <a class="nav-cta" href="reports.html">Access Reports</a>
    </div>
   </nav>
 
@@ -327,7 +358,7 @@
     <h1 class="hero-h1">See What<br/>Others <em>Miss</em></h1>
     <p class="hero-sub">Macro intelligence, equity analysis across US &amp; global markets, and financial frameworks — distilled for investors who think in systems, not headlines.</p>
     <div class="hero-actions">
-     <a class="btn-primary" href="/reports">Explore Reports</a>
+     <a class="btn-primary" href="reports.html">Explore Reports</a>
      <a class="btn-ghost" href="#learning">Start Learning</a>
     </div>
    </div>
@@ -351,7 +382,7 @@
      <h3 class="pillar-h3">Macro Updates</h3>
      <p class="pillar-desc">Global macro intelligence — central bank policy, geopolitical risk, commodity cycles, and the cross-currents that move markets before the headlines land.</p>
      <div class="pillar-tags"><span class="pillar-tag">Fed Policy</span><span class="pillar-tag">Geopolitics</span><span class="pillar-tag">Commodities</span><span class="pillar-tag">FX</span><span class="pillar-tag">Rates</span></div>
-     <a class="pillar-link" href="/iran-conflict">Latest macro report <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></a>
+     <a class="pillar-link" href="iran-conflict.html">Latest macro report <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></a>
     </div>
     <div class="pillar-card">
      <div class="pillar-number">02</div>
@@ -359,7 +390,7 @@
      <h3 class="pillar-h3">US &amp; Global Equities</h3>
      <p class="pillar-desc">Deep equity research spanning US large-cap, emerging markets, and overlooked global opportunities. Sector rotations, earnings analysis, and thematic trades.</p>
      <div class="pillar-tags"><span class="pillar-tag">US Markets</span><span class="pillar-tag">Asia Pacific</span><span class="pillar-tag">EMEA</span><span class="pillar-tag">Sectors</span><span class="pillar-tag">Thematic</span></div>
-     <a class="pillar-link" href="/reports">Equity coverage <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></a>
+     <a class="pillar-link" href="reports.html">Equity coverage <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></a>
     </div>
     <div class="pillar-card">
      <div class="pillar-number">03</div>
@@ -367,7 +398,7 @@
      <h3 class="pillar-h3">Financial Learning</h3>
      <p class="pillar-desc">Structured tracks from foundational investing to advanced derivatives and portfolio construction. Real frameworks used by practitioners, explained so they actually stick.</p>
      <div class="pillar-tags"><span class="pillar-tag">Fundamentals</span><span class="pillar-tag">Options</span><span class="pillar-tag">Risk Mgmt</span><span class="pillar-tag">Portfolio</span><span class="pillar-tag">Macro 101</span></div>
-     <a class="pillar-link" href="/buffett-playbook">Start learning <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></a>
+     <a class="pillar-link" href="buffett-playbook.html">Start learning <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></a>
     </div>
    </div>
   </section>
@@ -378,6 +409,88 @@
    <p class="quote-text reveal">The investor's chief problem — and even his worst enemy — is likely to be himself.</p>
    <span class="quote-attr reveal">— Benjamin Graham</span>
   </div>
+
+  <!-- ═══ CURRICULUM SECTION ═══ -->
+  <section class="curriculum-preview" style="padding: 100px 48px;" id="curriculum">
+   <div class="cp-layout reveal">
+
+    <div class="cp-left">
+     <div class="cp-eyebrow"><span class="cp-eyebrow-line"></span>Investment Curriculum</div>
+     <h2 class="cp-h2">22 modules.<br/>One complete<br/><em>investor.</em></h2>
+     <p class="cp-desc">Four tiers of structured education — from zero financial knowledge to asymmetric, macro-aware investor. Built on Druckenmiller, Buffett, and second-order thinking.</p>
+     <div class="cp-stats">
+      <div class="cp-stat"><div class="cp-stat-val">22</div><div class="cp-stat-label">Total Modules</div></div>
+      <div class="cp-stat"><div class="cp-stat-val">4</div><div class="cp-stat-label">Learning Tiers</div></div>
+      <div class="cp-stat"><div class="cp-stat-val">6</div><div class="cp-stat-label">Available Now</div></div>
+      <div class="cp-stat"><div class="cp-stat-val">~6h</div><div class="cp-stat-label">Tier 1 Content</div></div>
+     </div>
+     <a href="curriculum.html" class="cp-cta">
+      View Full Curriculum
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 6.5h10M7 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+     </a>
+    </div>
+
+    <div>
+     <div class="cp-modules">
+      <a href="module-1-1.html" class="cp-module">
+       <span class="cp-module-num">1.1</span>
+       <div class="cp-module-body">
+        <div class="cp-module-title">Money, Value &amp; Time</div>
+        <div class="cp-module-time">45 min · Video · Article · Quiz</div>
+       </div>
+       <svg class="cp-module-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M8 2l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="module-1-2.html" class="cp-module">
+       <span class="cp-module-num">1.2</span>
+       <div class="cp-module-body">
+        <div class="cp-module-title">How Markets Work</div>
+        <div class="cp-module-time">55 min · Video · Article · Quiz</div>
+       </div>
+       <svg class="cp-module-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M8 2l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="module-1-3.html" class="cp-module">
+       <span class="cp-module-num">1.3</span>
+       <div class="cp-module-body">
+        <div class="cp-module-title">Interest Rates: The Master Variable</div>
+        <div class="cp-module-time">60 min · Video · Case Study · Quiz</div>
+       </div>
+       <svg class="cp-module-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M8 2l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="module-1-4.html" class="cp-module">
+       <span class="cp-module-num">1.4</span>
+       <div class="cp-module-body">
+        <div class="cp-module-title">Inflation &amp; Purchasing Power</div>
+        <div class="cp-module-time">50 min · Video · Article · Quiz</div>
+       </div>
+       <svg class="cp-module-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M8 2l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="module-1-5.html" class="cp-module">
+       <span class="cp-module-num">1.5</span>
+       <div class="cp-module-body">
+        <div class="cp-module-title">Reading Financial Statements</div>
+        <div class="cp-module-time">70 min · Video · Article · Template</div>
+       </div>
+       <svg class="cp-module-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M8 2l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="module-1-6.html" class="cp-module">
+       <span class="cp-module-num">1.6</span>
+       <div class="cp-module-body">
+        <div class="cp-module-title">Asset Classes 101</div>
+        <div class="cp-module-time">65 min · Video · Article · Quiz</div>
+       </div>
+       <svg class="cp-module-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M8 2l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+     </div>
+     <div class="cp-locked-row">
+      <span class="cp-locked-icon">
+       <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1.5" y="6" width="10" height="6.5" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 6V4a2.5 2.5 0 015 0v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      </span>
+      <span class="cp-locked-text"><strong>16 advanced modules</strong> across Tiers 2–4 — unlocking progressively as Tier 1 is completed.</span>
+     </div>
+    </div>
+
+   </div>
+  </section>
 
   <!-- ═══ LEARNING SECTION ═══ -->
   <section id="learning">
@@ -401,7 +514,7 @@
       <div class="learning-feature-tag">Featured Track</div>
       <h3 class="learning-feature-h3">The Geopolitical<br/>Investor's Playbook</h3>
       <p class="learning-feature-text">A deep-dive framework for turning geopolitical chaos into structured investment theses. Covers oil shocks, sanctions, regime change, and the signal-to-noise problem.</p>
-      <a class="btn-primary" href="/iran-conflict">Begin This Track →</a>
+      <a class="btn-primary" href="iran-conflict.html">Begin This Track →</a>
      </div>
      <div class="macro-stats" style="margin-top:20px;">
       <div class="macro-stat"><div class="macro-stat-label">Total Lessons</div><div class="macro-stat-value">43</div></div>
@@ -417,7 +530,7 @@
     <div class="section-tag" style="justify-content:center;"><span class="section-tag-dot"></span>Published Reports</div>
     <h2 class="section-h2">Deep-dive<br/>playbooks</h2>
     <p class="section-sub" style="margin:0 auto 40px;">Comprehensive, actionable research reports — each one a complete investment framework you can use immediately.</p>
-    <a class="btn-primary" href="/reports">Browse All Reports →</a>
+    <a class="btn-primary" href="reports.html">Browse All Reports →</a>
    </div>
   </section>
 
@@ -431,7 +544,7 @@
       <h2 class="members-h2">Tools &amp; intelligence<br/>for the <em>edge-seekers.</em></h2>
       <p class="members-desc">Exclusive interactive tools, real-time trade alerts, and member-only analysis — for investors who go deeper than the headlines. Join on Patreon to unlock everything.</p>
       <div class="members-actions">
-       <a class="btn-primary" href="/members">Member Hub →</a>
+       <a class="btn-primary" href="members.html">Member Hub →</a>
        <a class="btn-ghost" href="https://www.patreon.com" target="_blank" rel="noopener">Join on Patreon</a>
       </div>
       <div class="members-patreon-badge">Active · Member Access Open</div>
@@ -470,7 +583,7 @@
     <div class="members-updates reveal">
      <div class="members-updates-header">
       <div class="members-updates-title">Latest <em>Member Updates</em></div>
-      <a href="/members#updates" class="members-see-all">
+      <a href="members.html#updates" class="members-see-all">
        All Posts
        <svg width="12" height="12" viewbox="0 0 12 12" fill="none"><path d="M1.5 6h9M6 1.5l4.5 4.5L6 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
@@ -572,12 +685,12 @@
     </div>
     <div class="footer-col">
      <div class="footer-col-title">Research</div>
-     <a href="/reports">Macro Updates</a>
-     <a href="/reports">US Equities</a>
-     <a href="/reports">Global Equities</a>
-     <a href="/reports">Software Thesis</a>
-     <a href="/reports">Portfolio Thesis</a>
-     <a href="/iran-conflict">Iran Playbook</a>
+     <a href="reports.html">Macro Updates</a>
+     <a href="reports.html">US Equities</a>
+     <a href="reports.html">Global Equities</a>
+     <a href="reports.html">Software Thesis</a>
+     <a href="reports.html">Portfolio Thesis</a>
+     <a href="iran-conflict.html">Iran Playbook</a>
      <a href="/cash-allocation-bear-markets">Cash Strategy</a>
      <a href="/iran-bursa-playbook">Bursa Playbook</a>
      <a href="/halal-pharma-200b-framework">Halal Pharma</a>
@@ -586,7 +699,7 @@
     </div>
     <div class="footer-col">
      <div class="footer-col-title">Members</div>
-     <a href="/members">Member Hub</a>
+     <a href="members.html">Member Hub</a>
      <a href="tool-valuation-dashboard.html">Valuation Dashboard</a>
      <a href="tool-iv-calculator.html">IV Calculator</a>
      <a href="tool-portfolio-scorecard.html">Portfolio Scorecard</a>
@@ -595,10 +708,13 @@
     </div>
     <div class="footer-col">
      <div class="footer-col-title">Learn</div>
-     <a href="#learning">All Tracks</a>
-     <a href="/buffett-playbook">Buffett Playbook</a>
-     <a href="#learning">Options</a>
-     <a href="#learning">Portfolio</a>
+     <a href="curriculum.html">Full Curriculum</a>
+     <a href="module-1-1.html">1.1 · Money &amp; Value</a>
+     <a href="module-1-2.html">1.2 · How Markets Work</a>
+     <a href="module-1-3.html">1.3 · Interest Rates</a>
+     <a href="module-1-4.html">1.4 · Inflation</a>
+     <a href="module-1-5.html">1.5 · Financial Statements</a>
+     <a href="module-1-6.html">1.6 · Asset Classes</a>
     </div>
     <div class="footer-col">
      <div class="footer-col-title">Company</div>
