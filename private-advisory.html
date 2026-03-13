@@ -3,878 +3,1138 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Private Advisory — InsightInvest</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Malaysia's Producer-Importer Framework</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
   :root {
-    --ink:       #09090F;
-    --paper:     #F2EFE8;
-    --gold:      #C8A84B;
-    --gold-dim:  #7A6028;
-    --gold-pale: rgba(200,168,75,0.12);
-    --silver:    #8888A0;
-    --border:    rgba(200,168,75,0.18);
-    --border-hi: rgba(200,168,75,0.55);
-    --smoke:     #111118;
+    --ink: #0f0e0b;
+    --paper: #f5f1e8;
+    --amber: #c17f24;
+    --amber-light: #f0d9a8;
+    --amber-pale: #faf4e6;
+    --blue-deep: #1a3a5c;
+    --blue-mid: #2d6a9f;
+    --blue-pale: #e8f2fc;
+    --green-deep: #1a4a2e;
+    --green-mid: #2d8a4e;
+    --green-pale: #e6f5ec;
+    --muted: #7a7260;
+    --border: rgba(15,14,11,0.12);
+    --serif: 'DM Serif Display', Georgia, serif;
+    --mono: 'DM Mono', monospace;
+    --sans: 'Instrument Sans', sans-serif;
   }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
 
   body {
-    background: var(--ink);
-    color: var(--paper);
-    font-family: 'Inter', sans-serif;
-    overflow-x: hidden;
-  }
-
-  /* ── grain ── */
-  body::after {
-    content: '';
-    position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-    pointer-events: none; z-index: 999;
-  }
-
-  /* ════════════════════════ NAV ════════════════════════ */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 24px 48px;
-    z-index: 100;
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.4s, background 0.4s;
-  }
-  nav.scrolled {
-    background: rgba(9,9,15,0.92);
-    backdrop-filter: blur(12px);
-    border-color: var(--border);
-  }
-  .nav-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px; font-weight: 500;
-    color: var(--paper); letter-spacing: 0.02em;
-    text-decoration: none;
-  }
-  .nav-logo span { color: var(--gold); }
-  .nav-cta {
-    font-family: 'Inter', sans-serif;
-    font-size: 11px; letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--ink); background: var(--gold);
-    padding: 11px 28px; border: none; cursor: pointer;
-    text-decoration: none;
-    transition: background 0.25s;
-  }
-  .nav-cta:hover { background: var(--paper); }
-
-  /* ════════════════════════ HERO ════════════════════════ */
-  .hero {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
     min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    padding: 120px 48px 80px;
-    gap: 80px;
+  }
+
+  /* Grain texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.6;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 56px 48px 48px;
     position: relative;
     overflow: hidden;
   }
 
-  .hero::before {
-    content: '';
+  .header::after {
+    content: 'MY';
     position: absolute;
-    right: -200px; top: 50%;
-    transform: translateY(-50%);
-    width: 700px; height: 700px;
-    background: radial-gradient(circle, rgba(200,168,75,0.06) 0%, transparent 65%);
+    right: -20px;
+    top: -30px;
+    font-family: var(--serif);
+    font-size: 260px;
+    color: rgba(193,127,36,0.07);
+    letter-spacing: -10px;
+    line-height: 1;
+    user-select: none;
     pointer-events: none;
   }
 
-  .hero-left { position: relative; z-index: 1; }
-
-  .hero-eyebrow {
-    display: inline-flex; align-items: center; gap: 12px;
-    margin-bottom: 40px;
-    opacity: 0; animation: up 0.9s ease 0.2s forwards;
-  }
-  .eyebrow-line { width: 32px; height: 1px; background: var(--gold); }
-  .eyebrow-text {
-    font-size: 10px; letter-spacing: 0.32em;
-    text-transform: uppercase; color: var(--gold);
-  }
-
-  .hero-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(44px, 4.8vw, 76px);
-    font-weight: 300; line-height: 1.0;
-    color: var(--paper);
-    margin-bottom: 32px;
-    opacity: 0; animation: up 0.9s ease 0.4s forwards;
-  }
-  .hero-title em { font-style: italic; color: var(--gold); }
-
-  .hero-sub {
-    font-size: 13px; line-height: 1.9;
-    color: var(--silver); max-width: 440px;
-    margin-bottom: 56px;
-    opacity: 0; animation: up 0.9s ease 0.6s forwards;
-  }
-
-  .hero-price-block {
-    display: flex; align-items: flex-end; gap: 16px;
-    margin-bottom: 48px;
-    opacity: 0; animation: up 0.9s ease 0.8s forwards;
-  }
-  .price-main {
-    font-family: 'Playfair Display', serif;
-    font-size: 64px; font-weight: 300; line-height: 1;
-    color: var(--paper);
-  }
-  .price-main sup {
-    font-size: 28px; vertical-align: super;
-    color: var(--gold); font-weight: 400;
-  }
-  .price-label {
-    font-size: 11px; letter-spacing: 0.15em;
-    color: var(--silver); text-transform: uppercase;
-    padding-bottom: 10px; line-height: 1.6;
-  }
-
-  .hero-cta-row {
-    display: flex; align-items: center; gap: 32px;
-    opacity: 0; animation: up 0.9s ease 1.0s forwards;
-  }
-  .btn-primary {
-    font-family: 'Inter', sans-serif;
-    font-size: 11px; letter-spacing: 0.2em;
+  .label {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--ink); background: var(--gold);
-    padding: 18px 48px; border: none; cursor: pointer;
-    text-decoration: none; display: inline-block;
-    transition: background 0.25s, transform 0.2s;
-    position: relative; overflow: hidden;
-  }
-  .btn-primary:hover { background: var(--paper); transform: translateY(-1px); }
-
-  .btn-ghost {
-    font-size: 11px; letter-spacing: 0.15em;
-    text-transform: uppercase; color: var(--silver);
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: color 0.25s, border-color 0.25s;
-    padding-bottom: 2px;
-  }
-  .btn-ghost:hover { color: var(--gold); border-color: var(--gold); }
-
-  /* hero right — stat stack */
-  .hero-right {
-    display: flex; flex-direction: column; gap: 2px;
-    opacity: 0; animation: up 0.9s ease 0.7s forwards;
+    color: var(--muted);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 
-  .stat-card {
-    border: 1px solid var(--border);
-    padding: 28px 32px;
-    background: rgba(255,255,255,0.015);
-    transition: border-color 0.3s, background 0.3s;
-    position: relative; overflow: hidden;
-  }
-  .stat-card::before {
+  .label::before {
     content: '';
-    position: absolute; left: 0; top: 0; bottom: 0;
-    width: 2px; background: var(--gold);
-    transform: scaleY(0); transform-origin: bottom;
-    transition: transform 0.3s ease;
-  }
-  .stat-card:hover { border-color: var(--border-hi); background: var(--gold-pale); }
-  .stat-card:hover::before { transform: scaleY(1); }
-
-  .stat-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 42px; font-weight: 300;
-    color: var(--gold); line-height: 1; margin-bottom: 8px;
-  }
-  .stat-label {
-    font-size: 12px; color: var(--paper); letter-spacing: 0.05em;
-    margin-bottom: 6px; font-weight: 500;
-  }
-  .stat-sub { font-size: 11px; color: var(--silver); line-height: 1.6; }
-
-  /* ════════════════════════ WHAT'S INCLUDED ════════════════════════ */
-  .section {
-    padding: 120px 48px;
-    max-width: 1200px; margin: 0 auto;
+    display: inline-block;
+    width: 24px;
+    height: 1px;
+    background: var(--amber);
   }
 
-  .section-header {
-    display: flex; align-items: center; gap: 24px;
-    margin-bottom: 80px;
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(36px, 5vw, 58px);
+    font-weight: 400;
+    line-height: 1.1;
+    max-width: 720px;
+    margin-bottom: 20px;
+    letter-spacing: -0.5px;
   }
-  .section-line { flex: 1; height: 1px; background: var(--border); }
-  .section-tag {
-    font-size: 10px; letter-spacing: 0.3em;
-    text-transform: uppercase; color: var(--gold);
-    white-space: nowrap;
+
+  h1 em {
+    font-style: italic;
+    color: var(--amber);
+  }
+
+  .header-meta {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    margin-top: 28px;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .meta-value {
+    font-family: var(--serif);
+    font-size: 26px;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .meta-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .meta-divider {
+    width: 1px;
+    background: var(--border);
+    align-self: stretch;
+  }
+
+  /* ── FRAMEWORK INTRO ── */
+  .intro {
+    padding: 48px 48px 0;
+    max-width: 760px;
+  }
+
+  .intro p {
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: #3a3830;
+  }
+
+  .intro strong {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* ── FRAMEWORK GRID ── */
+  .framework {
+    padding: 48px;
+    display: grid;
+    gap: 1px;
+    background: var(--border);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin-top: 48px;
+  }
+
+  .framework-header {
+    background: var(--paper);
+    padding: 20px 0 28px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  .framework-title {
+    font-family: var(--serif);
+    font-size: 13px;
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  .pillar-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .pillar {
+    background: var(--paper);
+    padding: 32px 28px;
+    position: relative;
+    transition: background 0.2s;
+    cursor: default;
+  }
+
+  .pillar:hover { background: #f0ebe0; }
+
+  .pillar-number {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--amber);
+    letter-spacing: 0.15em;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .pillar-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: 18px;
+  }
+
+  .icon-chemical { background: #fff3e0; }
+  .icon-geo { background: var(--blue-pale); }
+  .icon-tech { background: var(--green-pale); }
+  .icon-strat { background: #fce8f0; }
+
+  .pillar h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
+  .pillar-subtitle {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .pillar p {
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.65;
+    color: #4a4840;
+  }
+
+  .pillar p strong { color: var(--ink); font-weight: 600; }
+
+  .pillar-tag {
+    display: inline-block;
+    margin-top: 16px;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+  }
+
+  .tag-amber { background: var(--amber-light); color: #7a4f0a; }
+  .tag-blue { background: var(--blue-pale); color: var(--blue-deep); }
+  .tag-green { background: var(--green-pale); color: var(--green-deep); }
+  .tag-rose { background: #fce8f0; color: #6b1a38; }
+
+  /* ── MECHANICS SECTION ── */
+  .mechanics {
+    padding: 56px 48px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 6px;
   }
 
   .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(36px, 4vw, 58px);
-    font-weight: 300; line-height: 1.1;
-    color: var(--paper); margin-bottom: 24px;
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 400;
+    margin-bottom: 36px;
+    line-height: 1.2;
   }
-  .section-title em { font-style: italic; color: var(--gold); }
 
-  /* included grid */
-  .included-grid {
+  /* Arbitrage flow */
+  .arb-flow {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2px; margin-top: 64px;
-  }
-
-  .included-card {
+    grid-template-columns: 1fr auto 1fr auto 200px;
+    align-items: center;
+    gap: 0;
     border: 1px solid var(--border);
-    padding: 40px 36px;
-    background: rgba(255,255,255,0.012);
-    transition: border-color 0.3s, background 0.3s;
-    position: relative;
-  }
-  .included-card:hover { border-color: var(--border-hi); background: var(--gold-pale); }
-
-  .card-number {
-    font-family: 'Playfair Display', serif;
-    font-size: 64px; font-weight: 300;
-    color: rgba(200,168,75,0.12); line-height: 1;
-    position: absolute; top: 24px; right: 28px;
-  }
-  .card-icon {
-    font-size: 24px; margin-bottom: 20px;
-  }
-  .card-title {
-    font-family: 'Inter', sans-serif;
-    font-size: 18px; font-weight: 700;
-    color: var(--paper); margin-bottom: 12px;
-  }
-  .card-body {
-    font-size: 12px; color: var(--silver);
-    line-height: 1.8;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 32px;
   }
 
-  /* lifetime access card — full width */
-  .included-card.full {
-    grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 40px; align-items: center;
-  }
-  .full-left { }
-  .full-badge {
-    display: inline-block;
-    font-size: 10px; letter-spacing: 0.25em;
-    text-transform: uppercase; color: var(--ink);
-    background: var(--gold); padding: 6px 16px;
-    margin-bottom: 20px;
+  .arb-cell {
+    padding: 28px 24px;
   }
 
-  /* ════════════════════════ SESSIONS TIMELINE ════════════════════════ */
-  .timeline { margin-top: 80px; }
+  .arb-export { background: #fff8ec; border-right: 1px solid var(--border); }
+  .arb-import { background: var(--blue-pale); border-right: 1px solid var(--border); }
+  .arb-gain { background: var(--green-pale); }
 
-  .timeline-item {
-    display: grid;
-    grid-template-columns: 80px 1fr;
-    gap: 0 40px;
+  .arb-arrow-cell {
+    padding: 0 16px;
+    color: var(--muted);
+    font-size: 20px;
+    font-weight: 300;
+  }
+
+  .arb-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .arb-name {
+    font-family: var(--serif);
+    font-size: 22px;
     margin-bottom: 4px;
   }
 
-  .timeline-left {
-    display: flex; flex-direction: column;
-    align-items: center;
+  .arb-spec {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
   }
-  .timeline-dot {
-    width: 40px; height: 40px;
-    border: 1px solid var(--gold);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Playfair Display', serif;
-    font-size: 18px; color: var(--gold); flex-shrink: 0;
-  }
-  .timeline-line {
-    width: 1px; flex: 1;
-    background: linear-gradient(to bottom, var(--gold-dim), transparent);
-    min-height: 48px;
-  }
-  .timeline-item:last-child .timeline-line { display: none; }
 
-  .timeline-content {
-    border: 1px solid var(--border);
-    padding: 28px 32px; margin-bottom: 4px;
-    background: rgba(255,255,255,0.012);
-    transition: border-color 0.3s;
+  .gain-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--green-deep);
+    margin-bottom: 6px;
+    display: block;
   }
-  .timeline-content:hover { border-color: var(--border-hi); }
 
-  .timeline-label {
-    font-size: 10px; letter-spacing: 0.25em;
-    text-transform: uppercase; color: var(--gold);
-    margin-bottom: 8px;
+  .gain-number {
+    font-family: var(--serif);
+    font-size: 30px;
+    color: var(--green-deep);
+    line-height: 1;
+    margin-bottom: 4px;
   }
-  .timeline-title {
-    font-family: 'Inter', sans-serif;
-    font-size: 16px; font-weight: 700;
-    color: var(--paper); margin-bottom: 8px;
-  }
-  .timeline-body { font-size: 12px; color: var(--silver); line-height: 1.8; }
 
-  /* ════════════════════════ MATERIALS ════════════════════════ */
-  .materials-grid {
+  .gain-sub {
+    font-size: 11px;
+    color: var(--green-mid);
+    font-weight: 300;
+  }
+
+  /* Volume gap visual */
+  .gap-visual {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2px; margin-top: 64px;
-  }
-  .material-card {
-    border: 1px solid var(--border);
-    padding: 36px 32px;
-    background: rgba(255,255,255,0.012);
-    transition: border-color 0.3s, background 0.3s;
-  }
-  .material-card:hover { border-color: var(--border-hi); background: var(--gold-pale); }
-  .material-icon { font-size: 28px; margin-bottom: 20px; }
-  .material-title {
-    font-family: 'Inter', sans-serif;
-    font-size: 15px; font-weight: 700;
-    color: var(--paper); margin-bottom: 10px;
-  }
-  .material-body { font-size: 12px; color: var(--silver); line-height: 1.8; }
-  .material-tag {
-    display: inline-block; margin-top: 16px;
-    font-size: 10px; letter-spacing: 0.2em;
-    text-transform: uppercase; color: var(--gold);
-    border: 1px solid var(--border); padding: 4px 12px;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
   }
 
-  /* ════════════════════════ PRICING BLOCK ════════════════════════ */
-  .pricing-wrapper {
-    padding: 120px 48px;
-    background: var(--smoke);
-    border-top: 1px solid var(--border);
+  .gap-bar-container {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .gap-bar-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .gap-bar-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .gap-bar-value {
+    font-family: var(--serif);
+    font-size: 20px;
+  }
+
+  .bar-track {
+    height: 10px;
+    background: rgba(15,14,11,0.06);
+    margin: 20px 20px 8px;
+    border-radius: 1px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 1px;
+    transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .bar-production .bar-fill { background: var(--amber); width: 59.9%; }
+  .bar-capacity .bar-fill { background: var(--blue-mid); width: 100%; }
+
+  .bar-labels {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px 16px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .gap-note {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px 24px;
+    background: #fff8ec;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-top: 16px;
+  }
+
+  .gap-note-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .gap-note-text {
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: #4a4840;
+  }
+
+  .gap-note-text strong { font-weight: 600; color: var(--ink); }
+
+  /* ── GEOGRAPHIC SECTION ── */
+  .geo-section {
+    padding: 56px 48px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .geo-diagram {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .geo-diagram-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .geo-body {
+    padding: 24px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .geo-node {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 16px;
+    border-radius: 3px;
+  }
+
+  .geo-node.peninsula { background: #fff8ec; }
+  .geo-node.borneo { background: var(--blue-pale); }
+  .geo-node.regional { background: var(--green-pale); }
+
+  .geo-node-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot-peninsula { background: var(--amber); }
+  .dot-borneo { background: var(--blue-mid); }
+  .dot-regional { background: var(--green-mid); }
+
+  .geo-node-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 3px;
+    display: block;
+  }
+
+  .geo-node-title { font-weight: 600; font-size: 14px; }
+  .geo-node-desc { font-size: 12px; font-weight: 300; color: var(--muted); }
+
+  .geo-arrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 16px;
+  }
+
+  .geo-arrow-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    position: relative;
+  }
+
+  .geo-arrow-line::after {
+    content: '';
+    position: absolute;
+    right: -1px;
+    top: -3px;
+    width: 6px;
+    height: 6px;
+    border-right: 1px solid var(--muted);
+    border-top: 1px solid var(--muted);
+    transform: rotate(45deg);
+  }
+
+  .geo-arrow-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    white-space: nowrap;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── REFINERY MATRIX ── */
+  .refinery-section {
+    padding: 56px 48px;
     border-bottom: 1px solid var(--border);
   }
-  .pricing-inner {
-    max-width: 760px; margin: 0 auto; text-align: center;
+
+  .refinery-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
   }
 
-  .pricing-eyebrow {
-    font-size: 10px; letter-spacing: 0.32em;
-    text-transform: uppercase; color: var(--gold);
+  .refinery-table th {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 400;
+  }
+
+  .refinery-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(15,14,11,0.06);
+    font-size: 13px;
+    vertical-align: middle;
+  }
+
+  .refinery-table tr:last-child td { border-bottom: none; }
+  .refinery-table tr:hover td { background: rgba(15,14,11,0.02); }
+
+  .refinery-name { font-weight: 500; }
+  .refinery-cap-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .cap-bar {
+    height: 6px;
+    border-radius: 1px;
+    min-width: 4px;
+  }
+
+  .cap-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .feed-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 2px;
+    letter-spacing: 0.06em;
+  }
+
+  .feed-import { background: var(--blue-pale); color: var(--blue-deep); }
+  .feed-domestic { background: var(--green-pale); color: var(--green-deep); }
+  .feed-mixed { background: rgba(15,14,11,0.06); color: var(--muted); }
+
+  /* ── STRATEGY LAYER ── */
+  .strategy {
+    padding: 56px 48px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .strategy-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 32px;
+  }
+
+  .strategy-cell {
+    background: var(--paper);
+    padding: 28px 24px;
+  }
+
+  .strategy-cell:hover { background: #f0ebe0; }
+
+  .strategy-num {
+    font-family: var(--serif);
+    font-size: 48px;
+    color: rgba(193,127,36,0.15);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .strategy-title {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .strategy-desc {
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: #4a4840;
+  }
+
+  /* ── VERDICT ── */
+  .verdict {
+    padding: 56px 48px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .verdict-quote {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-style: italic;
+    line-height: 1.35;
+    color: var(--ink);
     margin-bottom: 24px;
-  }
-  .pricing-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(40px, 5vw, 72px);
-    font-weight: 300; line-height: 1.05;
-    color: var(--paper); margin-bottom: 16px;
-  }
-  .pricing-title em { font-style: italic; color: var(--gold); }
-
-  .pricing-sub {
-    font-size: 13px; color: var(--silver);
-    line-height: 1.8; margin-bottom: 64px;
-    max-width: 480px; margin-left: auto; margin-right: auto;
+    position: relative;
   }
 
-  .price-display {
-    display: flex; align-items: center;
-    justify-content: center; gap: 8px;
-    margin-bottom: 16px;
+  .verdict-quote::before {
+    content: '\201C';
+    position: absolute;
+    left: -28px;
+    top: -8px;
+    font-size: 60px;
+    color: var(--amber-light);
+    font-family: var(--serif);
+    line-height: 1;
   }
-  .price-currency {
-    font-family: 'Playfair Display', serif;
-    font-size: 36px; color: var(--gold);
-    align-self: flex-start; padding-top: 16px;
+
+  .verdict-text {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: #3a3830;
+    margin-left: 0;
   }
-  .price-number {
-    font-family: 'Playfair Display', serif;
-    font-size: 96px; font-weight: 300;
-    color: var(--paper); line-height: 1;
+
+  .verdict-text strong { font-weight: 600; color: var(--ink); }
+
+  .stats-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
   }
-  .price-period {
-    font-size: 12px; color: var(--silver);
-    align-self: flex-end; padding-bottom: 18px;
+
+  .stat-block {
+    background: var(--paper);
+    padding: 20px 22px;
+  }
+
+  .stat-num {
+    font-family: var(--serif);
+    font-size: 28px;
+    color: var(--amber);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    padding: 28px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .footer-left {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
     letter-spacing: 0.1em;
   }
 
-  .price-note {
-    font-size: 11px; color: var(--silver);
-    letter-spacing: 0.08em; margin-bottom: 56px;
+  .footer-sources {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-align: right;
+    line-height: 1.8;
   }
 
-  .pricing-includes {
-    display: flex; flex-wrap: wrap;
-    justify-content: center; gap: 12px;
-    margin-bottom: 56px;
-  }
-  .pill {
-    font-size: 11px; letter-spacing: 0.1em;
-    color: var(--paper); border: 1px solid var(--border);
-    padding: 8px 20px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .pill-dot { width: 4px; height: 4px; background: var(--gold); border-radius: 50%; }
-
-  /* ── STRIPE BUTTON ── */
-  /* ⚠️  REPLACE the href below with your Stripe Payment Link  */
-  /* e.g. href="https://buy.stripe.com/XXXXXXXXXXXX"           */
-  .stripe-btn {
-    display: inline-flex; align-items: center; gap: 14px;
-    font-family: 'Inter', sans-serif;
-    font-size: 12px; letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--ink); background: var(--gold);
-    padding: 22px 64px; text-decoration: none;
-    border: none; cursor: pointer;
-    transition: background 0.25s, transform 0.2s;
-    margin-bottom: 20px;
-  }
-  .stripe-btn:hover { background: var(--paper); transform: translateY(-2px); }
-  .stripe-icon { font-size: 16px; }
-
-  .stripe-secure {
-    font-size: 11px; color: var(--silver);
-    display: flex; align-items: center;
-    justify-content: center; gap: 8px;
-  }
-  .stripe-secure svg { opacity: 0.5; }
-
-  /* ════════════════════════ FAQ ════════════════════════ */
-  .faq-list { margin-top: 64px; }
-  .faq-item {
-    border-bottom: 1px solid var(--border);
-    overflow: hidden;
-  }
-  .faq-q {
-    width: 100%; background: none; border: none;
-    text-align: left; padding: 28px 0;
-    font-family: 'Inter', sans-serif;
-    font-size: 15px; font-weight: 600;
-    color: var(--paper); cursor: pointer;
-    display: flex; justify-content: space-between; align-items: center;
-    gap: 24px;
-    transition: color 0.25s;
-  }
-  .faq-q:hover { color: var(--gold); }
-  .faq-icon {
-    font-family: 'Inter', sans-serif;
-    font-size: 20px; color: var(--gold);
-    flex-shrink: 0; transition: transform 0.3s;
-    line-height: 1;
-  }
-  .faq-item.open .faq-icon { transform: rotate(45deg); }
-  .faq-a {
-    font-size: 13px; color: var(--silver);
-    line-height: 1.9; max-height: 0;
-    overflow: hidden; transition: max-height 0.4s ease, padding 0.3s;
-  }
-  .faq-item.open .faq-a { max-height: 300px; padding-bottom: 28px; }
-
-  /* ════════════════════════ FOOTER CTA ════════════════════════ */
-  .footer-cta {
-    padding: 120px 48px;
-    text-align: center;
-    position: relative; overflow: hidden;
-  }
-  .footer-cta::before {
-    content: '';
-    position: absolute; left: 50%; top: 50%;
-    transform: translate(-50%, -50%);
-    width: 800px; height: 400px;
-    background: radial-gradient(ellipse, rgba(200,168,75,0.07) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  .footer-cta-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(40px, 5vw, 72px);
-    font-weight: 300; line-height: 1.1;
-    color: var(--paper); margin-bottom: 24px;
-  }
-  .footer-cta-title em { font-style: italic; color: var(--gold); }
-  .footer-cta-sub {
-    font-size: 13px; color: var(--silver);
-    line-height: 1.8; margin-bottom: 48px;
-    max-width: 440px; margin-left: auto; margin-right: auto;
-  }
-
-  /* ════════════════════════ FOOTER ════════════════════════ */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 32px 48px;
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .footer-brand {
-    font-family: 'Playfair Display', serif;
-    font-size: 18px; color: var(--silver);
-  }
-  .footer-brand span { color: var(--gold); }
-  .footer-note { font-size: 11px; color: var(--gold-dim); letter-spacing: 0.1em; }
-
-  /* ════════════════════════ ANIMATIONS ════════════════════════ */
-  @keyframes up {
-    from { opacity: 0; transform: translateY(20px); }
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  .reveal {
-    opacity: 0; transform: translateY(24px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
+  .header, .intro, .pillar, .arb-cell, .strategy-cell, .stat-block, .geo-node {
+    animation: fadeUp 0.5s ease both;
   }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
 
-  /* ════════════════════════ RESPONSIVE ════════════════════════ */
+  .pillar:nth-child(1) { animation-delay: 0.05s; }
+  .pillar:nth-child(2) { animation-delay: 0.12s; }
+  .pillar:nth-child(3) { animation-delay: 0.19s; }
+  .pillar:nth-child(4) { animation-delay: 0.26s; }
+
   @media (max-width: 900px) {
-    nav { padding: 20px 24px; }
-    .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; gap: 48px; }
-    .hero::before { display: none; }
-    .section { padding: 80px 24px; }
-    .included-grid { grid-template-columns: 1fr; }
-    .included-card.full { grid-template-columns: 1fr; }
-    .materials-grid { grid-template-columns: 1fr; }
-    .pricing-wrapper { padding: 80px 24px; }
-    .footer-cta { padding: 80px 24px; }
-    footer { flex-direction: column; gap: 12px; text-align: center; }
-    .price-number { font-size: 72px; }
+    .pillar-row { grid-template-columns: 1fr 1fr; }
+    .geo-section { grid-template-columns: 1fr; }
+    .verdict { grid-template-columns: 1fr; }
+    .strategy-grid { grid-template-columns: 1fr; }
+    .arb-flow { grid-template-columns: 1fr; }
+    .arb-arrow-cell { transform: rotate(90deg); text-align: center; }
+    .gap-visual { grid-template-columns: 1fr; }
+    .header, .mechanics, .refinery-section, .strategy, .verdict, .footer { padding: 36px 24px; }
+    .intro { padding: 36px 24px 0; }
+    .framework { padding: 24px; }
   }
 </style>
 </head>
 <body>
-<!-- ═══ SITE-WIDE NAV ═══ -->
-<div id="siteNav" style="position:fixed;top:0;left:0;right:0;z-index:9998;background:rgba(9,9,15,0.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(200,168,75,0.12);padding:0 32px;font-family:'Inter',sans-serif;">
-  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:44px;">
-    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C8A84B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-      <span style="font-size:11px;font-weight:500;color:#C8A84B;letter-spacing:0.1em;text-transform:uppercase;">Insight Invest</span>
-    </a>
-    <a href="/private-advisory" style="font-size:10px;color:#C8A84B;background:rgba(200,168,75,0.08);text-decoration:none;padding:4px 12px;border-radius:4px;letter-spacing:0.06em;font-weight:500;">Private Advisory</a>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="label">Equity Research Framework · Energy Sector · MY</div>
+  <h1>Why Malaysia <em>Deliberately</em><br>Imports Its Own Oil</h1>
+  <div class="header-meta">
+    <div class="meta-item">
+      <span class="meta-value">597k</span>
+      <span class="meta-label">b/d produced (2023)</span>
+    </div>
+    <div class="meta-divider"></div>
+    <div class="meta-item">
+      <span class="meta-value">997k</span>
+      <span class="meta-label">b/d refining capacity</span>
+    </div>
+    <div class="meta-divider"></div>
+    <div class="meta-item">
+      <span class="meta-value">~$219M</span>
+      <span class="meta-label">est. annual arbitrage gain</span>
+    </div>
+    <div class="meta-divider"></div>
+    <div class="meta-item">
+      <span class="meta-value">5th</span>
+      <span class="meta-label">global LNG exporter</span>
+    </div>
   </div>
 </div>
-<div style="height:44px;"></div>
-<!-- ═══ END SITE NAV ═══ -->
 
+<!-- INTRO -->
+<div class="intro">
+  <p>Malaysia appears to be a paradox: a major oil and LNG exporter that simultaneously imports crude oil, refined products, and natural gas. This framework decomposes that paradox into <strong>four structural realities</strong> — chemical, geographic, technical, and strategic — and maps the economic mechanics that make importing the rational, profit-maximising choice.</p>
+</div>
 
-<!-- NAV -->
-<nav id="nav">
-  <a href="/" class="nav-logo">Insight<span>Invest</span></a>
-  <!-- ⚠️ Replace href with your Stripe Payment Link -->
-  <a href="https://buy.stripe.com/00w3cx9b65iC4oaeRJ8og02" class="nav-cta">Enrol Now</a>
-</nav>
-
-<!-- ══════════════════ HERO ══════════════════ -->
-<section class="hero">
-  <div class="hero-left">
-    <div class="hero-eyebrow">
-      <div class="eyebrow-line"></div>
-      <div class="eyebrow-text">Private Advisory · Limited Seats</div>
+<!-- THE FOUR PILLARS -->
+<div class="framework" style="padding: 0 48px;">
+  <div class="framework-header">
+    <div class="label" style="margin-bottom: 0;">The Four-Pillar Framework</div>
+    <span class="framework-title">why a producer imports</span>
+  </div>
+  <div class="pillar-row">
+    <div class="pillar">
+      <span class="pillar-number">01 / 04</span>
+      <div class="pillar-icon icon-chemical">🧪</div>
+      <h3>Chemical Reality</h3>
+      <span class="pillar-subtitle">The crude quality gap</span>
+      <p>Malaysia's <strong>Tapis crude</strong> (API 45°+, sulfur 0.02%) commands a global premium. Exporting it and importing cheaper heavy sour crude from the Middle East captures a persistent <strong>$2–5/bbl price spread</strong>. Too valuable to refine at home.</p>
+      <span class="pillar-tag tag-amber">Comparative Advantage</span>
     </div>
-
-    <h1 class="hero-title">
-      Think sharper.<br>
-      Invest with<br>
-      <em>conviction.</em>
-    </h1>
-
-    <p class="hero-sub">
-      Four private sessions. A framework built around your portfolio and your thinking. Followed by unlimited access to the research that keeps compounding for you long after we're done.
-    </p>
-
-    <div class="hero-price-block">
-      <div class="price-main"><sup>RM</sup>3,100</div>
-      <div class="price-label">One-time<br>investment</div>
+    <div class="pillar">
+      <span class="pillar-number">02 / 04</span>
+      <div class="pillar-icon icon-geo">🗺️</div>
+      <h3>Geographic Reality</h3>
+      <span class="pillar-subtitle">The South China Sea divide</span>
+      <p><strong>70%+ of demand</strong> sits on Peninsular Malaysia. The bulk of gas reserves are in Sarawak and Sabah — 1,000+ km across deep seabed. A subsea pipeline remains uneconomical. Importing from Thailand and Indonesia is cheaper than connecting to its own territory.</p>
+      <span class="pillar-tag tag-blue">Infrastructure Constraint</span>
     </div>
+    <div class="pillar">
+      <span class="pillar-number">03 / 04</span>
+      <div class="pillar-icon icon-tech">⚙️</div>
+      <h3>Technical Reality</h3>
+      <span class="pillar-subtitle">Refineries built for imports</span>
+      <p>The <strong>Pengerang RAPID complex</strong> (300k b/d) is engineered for Saudi grades, not declining domestic fields. Domestic production of 597k b/d cannot feed 997k b/d of capacity. The structural <strong>400k b/d deficit</strong> mandates imports simply to keep refineries running.</p>
+      <span class="pillar-tag tag-green">Feedstock Architecture</span>
+    </div>
+    <div class="pillar">
+      <span class="pillar-number">04 / 04</span>
+      <div class="pillar-icon icon-strat">♟️</div>
+      <h3>Strategic Reality</h3>
+      <span class="pillar-subtitle">Resilience through connectivity</span>
+      <p>The <strong>National Energy Policy 2022–2040</strong> treats imports as a security hedge. Diversified supply insulates the Peninsula from domestic field disruptions. LNG export revenues fund a <strong>RM143B renewable energy transition</strong> — imports preserve the premium barrels for that goal.</p>
+      <span class="pillar-tag tag-rose">Policy Design</span>
+    </div>
+  </div>
+</div>
 
-    <div class="hero-cta-row">
-      <!-- ⚠️ Replace href with your Stripe Payment Link -->
-      <a href="https://buy.stripe.com/00w3cx9b65iC4oaeRJ8og02" class="btn-primary">Reserve Your Seat →</a>
-      <a href="#what-is-it" class="btn-ghost">See what's included</a>
+<!-- MECHANICS: THE ARBITRAGE -->
+<div class="mechanics">
+  <div class="section-label">Mechanism 01</div>
+  <div class="section-title">The Core Arbitrage Trade</div>
+
+  <div class="arb-flow">
+    <div class="arb-cell arb-export">
+      <span class="arb-tag">↑ Export</span>
+      <div class="arb-name">Tapis Crude</div>
+      <div class="arb-spec">API 45°+ · Sulfur 0.02% · Light Sweet</div>
+      <div style="margin-top:12px; font-family:var(--mono); font-size:10px; color:var(--muted);">Buyers: Japan · Korea · China</div>
+    </div>
+    <div class="arb-arrow-cell">→</div>
+    <div class="arb-cell" style="padding:28px 24px; background:var(--paper);">
+      <div style="font-family:var(--mono); font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:8px;">Price Differential</div>
+      <div style="font-family:var(--serif); font-size:32px; color:var(--amber); line-height:1;">$2–5 /bbl</div>
+      <div style="font-size:12px; color:var(--muted); margin-top:4px; font-weight:300;">Tapis–Dubai spread<br>on ~200k b/d swap</div>
+    </div>
+    <div class="arb-arrow-cell">→</div>
+    <div class="arb-cell arb-import">
+      <span class="arb-tag">↓ Import</span>
+      <div class="arb-name">Arab Light</div>
+      <div class="arb-spec">Heavy Sour · Dubai Benchmark</div>
+      <div style="margin-top:12px; font-family:var(--mono); font-size:10px; color:var(--blue-deep);">Via Pengerang &amp; Melaka refineries</div>
+    </div>
+    <div class="arb-cell arb-gain">
+      <span class="gain-label">Est. Annual Gain</span>
+      <div class="gain-number">~$219M</div>
+      <div class="gain-sub">$600k/day gross arbitrage<br>at $3/bbl differential</div>
     </div>
   </div>
 
-  <div class="hero-right">
-    <div class="stat-card">
-      <div class="stat-num">4</div>
-      <div class="stat-label">Private One-on-One Sessions</div>
-      <div class="stat-sub">60 minutes each. Focused entirely on your portfolio, your questions, your blind spots.</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num">∞</div>
-      <div class="stat-label">Lifetime Access to Materials</div>
-      <div class="stat-sub">Every research report, macro update, and video we produce — yours, permanently.</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num">1</div>
-      <div class="stat-label">Framework Built for You</div>
-      <div class="stat-sub">Not generic content. An investing framework shaped around how you think and what you own.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════ WHAT IS IT ══════════════════ -->
-<div id="what-is-it" style="background: var(--smoke); border-top: 1px solid var(--border);">
-<div class="section">
-  <div class="section-header reveal">
-    <div class="section-line"></div>
-    <div class="section-tag">What's Included</div>
-    <div class="section-line"></div>
-  </div>
-
-  <div class="reveal">
-    <h2 class="section-title">Everything you need.<br><em>Nothing you don't.</em></h2>
-    <p style="font-size:13px; color:var(--silver); line-height:1.9; max-width:560px;">
-      This isn't a course. It's a private working relationship — four sessions of real conversation about your money, your thinking, and the markets that matter to you.
-    </p>
-  </div>
-
-  <div class="included-grid reveal">
-    <div class="included-card">
-      <div class="card-number">01</div>
-      <div class="card-icon">◈</div>
-      <div class="card-title">4 × 60-Min Private Sessions</div>
-      <div class="card-body">One-on-one, video call. No slides, no scripts. We go wherever your portfolio and the market takes us — macro, individual positions, risk, conviction, all of it.</div>
-    </div>
-    <div class="included-card">
-      <div class="card-number">02</div>
-      <div class="card-icon">◉</div>
-      <div class="card-title">Session Prep & Follow-Up Notes</div>
-      <div class="card-body">Before each session you'll receive a brief prep note. After, a written summary of key decisions, frameworks discussed, and what to watch — so nothing gets lost.</div>
-    </div>
-    <div class="included-card">
-      <div class="card-number">03</div>
-      <div class="card-icon">◆</div>
-      <div class="card-title">Your Personal Investment Framework</div>
-      <div class="card-body">By session four, you'll have a clear, documented framework for how you evaluate opportunities, manage risk, and make decisions — built in your language, for your life.</div>
-    </div>
-    <div class="included-card">
-      <div class="card-number">04</div>
-      <div class="card-icon">◇</div>
-      <div class="card-title">Direct Access Between Sessions</div>
-      <div class="card-body">Something moves in the market between sessions? A question you can't shake? You'll have direct messaging access throughout the entire engagement.</div>
-    </div>
-
-    <div class="included-card full">
-      <div class="full-left">
-        <div class="full-badge">After Your Sessions</div>
-        <h3 class="card-title" style="font-size:22px; margin-bottom:12px;">Unlimited Access to All InsightInvest Materials</h3>
-        <div class="card-body" style="max-width:560px;">Once the four sessions are complete, your access doesn't stop — it expands. Every piece of research we produce, every macro update, every video goes into your library permanently. The thinking compounds with you.</div>
+  <!-- Volume Gap -->
+  <div class="section-label" style="margin-top:40px;">Mechanism 02</div>
+  <div class="section-title" style="font-size:24px;">The Volume Gap — Why Imports Are Structural</div>
+  <div class="gap-visual">
+    <div class="gap-bar-container">
+      <div class="gap-bar-header">
+        <span class="gap-bar-title">Domestic Production</span>
+        <span class="gap-bar-value">597k b/d</span>
       </div>
-      <div style="display:flex; flex-direction:column; gap:12px; min-width:200px;">
-        <div style="border:1px solid var(--border); padding:16px 20px;">
-          <div style="font-size:10px; letter-spacing:0.2em; color:var(--gold); text-transform:uppercase; margin-bottom:6px;">Included</div>
-          <div style="font-size:13px; color:var(--paper);">Video Content Library</div>
+      <div class="bar-track bar-production"><div class="bar-fill"></div></div>
+      <div class="bar-labels"><span>0</span><span>997k b/d capacity</span></div>
+    </div>
+    <div class="gap-bar-container">
+      <div class="gap-bar-header">
+        <span class="gap-bar-title">Refining Capacity</span>
+        <span class="gap-bar-value">997k b/d</span>
+      </div>
+      <div class="bar-track bar-capacity"><div class="bar-fill"></div></div>
+      <div class="bar-labels"><span>0</span><span>100% utilised</span></div>
+    </div>
+  </div>
+  <div class="gap-note">
+    <div class="gap-note-icon">▲</div>
+    <div class="gap-note-text">Even if Malaysia retained <strong>every drop of domestic production</strong>, it would still face a structural <strong>~400k b/d feedstock deficit</strong>. Imports are not a policy choice at the margin — they are a mathematical necessity to maintain refinery utilisation and meet domestic refined product demand.</div>
+  </div>
+</div>
+
+<!-- GEOGRAPHIC SECTION -->
+<div class="geo-section">
+  <div>
+    <div class="section-label">Mechanism 03</div>
+    <div class="section-title">The Geographic Disconnect</div>
+    <p style="font-size:15px; font-weight:300; line-height:1.75; color:#3a3830; margin-bottom:20px;">Malaysia's hydrocarbon geography is fundamentally misaligned with its demand centres. The country is operationally split into two energy systems that have evolved in opposite directions.</p>
+    <p style="font-size:14px; font-weight:300; line-height:1.7; color:#4a4840; margin-bottom:16px;">A trans-maritime subsea pipeline connecting Borneo's gas fields to the Peninsula — 1,000+ km across deep, geologically active seabed — remains economically unviable. The capital expenditure breakeven is elusive. For distances exceeding 3,000km, LNG beats pipelines; but even at 1,000km in these waters, regasification terminals in Melaka and Johor are the more flexible, lower-capex solution.</p>
+    <p style="font-size:14px; font-weight:300; line-height:1.7; color:#4a4840;">The result: Sarawak and Sabah function as a <strong style="color:var(--ink);">global gas export province</strong> shipping LNG to North Asia, while Peninsular Malaysia functions as a <strong style="color:var(--ink);">regional gas consumer</strong> importing from Thailand's Gulf fields and Indonesian pipelines.</p>
+  </div>
+  <div>
+    <div class="geo-diagram">
+      <div class="geo-diagram-header">Malaysian Energy Geography</div>
+      <div class="geo-body">
+        <div class="geo-node borneo">
+          <div class="geo-node-dot dot-borneo"></div>
+          <div>
+            <span class="geo-node-label">East Malaysia</span>
+            <div class="geo-node-title">Sarawak &amp; Sabah</div>
+            <div class="geo-node-desc">Major gas &amp; oil reserves · MLNG Bintulu · ZFLNG · Exports to Japan, Korea, China</div>
+          </div>
         </div>
-        <div style="border:1px solid var(--border); padding:16px 20px;">
-          <div style="font-size:10px; letter-spacing:0.2em; color:var(--gold); text-transform:uppercase; margin-bottom:6px;">Included</div>
-          <div style="font-size:13px; color:var(--paper);">Macro Update Archives</div>
+        <div class="geo-arrow">
+          <div class="geo-arrow-label" style="color:#c0392b; font-family:var(--mono); font-size:10px;">✗ No subsea pipeline</div>
+          <div class="geo-arrow-line" style="background: rgba(192,57,43,0.3);"></div>
+          <div class="geo-arrow-label">1,000+ km</div>
         </div>
-        <div style="border:1px solid var(--border); padding:16px 20px;">
-          <div style="font-size:10px; letter-spacing:0.2em; color:var(--gold); text-transform:uppercase; margin-bottom:6px;">Included</div>
-          <div style="font-size:13px; color:var(--paper);">Equity Research Documents</div>
+        <div class="geo-node peninsula">
+          <div class="geo-node-dot dot-peninsula"></div>
+          <div>
+            <span class="geo-node-label">West Malaysia</span>
+            <div class="geo-node-title">Peninsular Malaysia</div>
+            <div class="geo-node-desc">70%+ of energy demand · PGU network (3,500 MMscf/d) · Melaka &amp; Johor LNG terminals</div>
+          </div>
+        </div>
+        <div class="geo-arrow">
+          <div class="geo-arrow-label">Imports instead</div>
+          <div class="geo-arrow-line"></div>
+        </div>
+        <div class="geo-node regional">
+          <div class="geo-node-dot dot-regional"></div>
+          <div>
+            <span class="geo-node-label">Regional Partners</span>
+            <div class="geo-node-title">Thailand · Indonesia</div>
+            <div class="geo-node-desc">West Natuna–Duyong pipeline · MTJDA Gulf of Thailand gas · Trans-ASEAN Gas Pipeline</div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<!-- REFINERY MATRIX -->
+<div class="refinery-section">
+  <div class="section-label">Mechanism 04</div>
+  <div class="section-title">Refinery Feedstock Architecture</div>
+  <table class="refinery-table">
+    <thead>
+      <tr>
+        <th>Refinery</th>
+        <th>Operator</th>
+        <th>Capacity</th>
+        <th>Feedstock Type</th>
+        <th>Strategic Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="refinery-name">Pengerang RAPID</td>
+        <td>PETRONAS / Saudi Aramco</td>
+        <td>
+          <div class="refinery-cap-bar">
+            <div class="cap-bar" style="width:92px; background:var(--blue-mid);"></div>
+            <span class="cap-num">300 kb/d</span>
+          </div>
+        </td>
+        <td><span class="feed-badge feed-import">Imported Sour</span></td>
+        <td style="font-size:12px; color:var(--muted);">Integrated with Saudi Aramco supply; anchors petchem complex</td>
+      </tr>
+      <tr>
+        <td class="refinery-name">Melaka PSR-2</td>
+        <td>PETRONAS / ConocoPhillips</td>
+        <td>
+          <div class="refinery-cap-bar">
+            <div class="cap-bar" style="width:52px; background:var(--blue-mid);"></div>
+            <span class="cap-num">170 kb/d</span>
+          </div>
+        </td>
+        <td><span class="feed-badge feed-import">Imported Sour</span></td>
+        <td style="font-size:12px; color:var(--muted);">Reconfigured for heavier grades; Euro 5 diesel output</td>
+      </tr>
+      <tr>
+        <td class="refinery-name">Port Dickson (HRC)</td>
+        <td>Hengyuan Refining</td>
+        <td>
+          <div class="refinery-cap-bar">
+            <div class="cap-bar" style="width:48px; background:var(--blue-mid);"></div>
+            <span class="cap-num">156 kb/d</span>
+          </div>
+        </td>
+        <td><span class="feed-badge feed-import">Merchant Imported</span></td>
+        <td style="font-size:12px; color:var(--muted);">Merchant refiner; processes opportunistic spot cargoes</td>
+      </tr>
+      <tr>
+        <td class="refinery-name">Kerteh</td>
+        <td>PETRONAS</td>
+        <td>
+          <div class="refinery-cap-bar">
+            <div class="cap-bar" style="width:37px; background:var(--green-mid);"></div>
+            <span class="cap-num">121 kb/d</span>
+          </div>
+        </td>
+        <td><span class="feed-badge feed-domestic">Domestic Condensates</span></td>
+        <td style="font-size:12px; color:var(--muted);">Feeds naphtha into Kerteh petchem corridor</td>
+      </tr>
+      <tr>
+        <td class="refinery-name">Melaka PSR-1</td>
+        <td>PETRONAS</td>
+        <td>
+          <div class="refinery-cap-bar">
+            <div class="cap-bar" style="width:31px; background:var(--green-mid);"></div>
+            <span class="cap-num">100 kb/d</span>
+          </div>
+        </td>
+        <td><span class="feed-badge feed-domestic">Domestic Sweet</span></td>
+        <td style="font-size:12px; color:var(--muted);">Legacy facility; processes light Tapis-type grades</td>
+      </tr>
+      <tr>
+        <td class="refinery-name">Port Dickson Petron</td>
+        <td>Petron</td>
+        <td>
+          <div class="refinery-cap-bar">
+            <div class="cap-bar" style="width:26px; background:#888780;"></div>
+            <span class="cap-num">85 kb/d</span>
+          </div>
+        </td>
+        <td><span class="feed-badge feed-mixed">Domestic / Import Blend</span></td>
+        <td style="font-size:12px; color:var(--muted);">Flexible configuration; domestic retail focus</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-size:11px; color:var(--muted); margin-top:12px; font-family:var(--mono);">Source: FACTS Global Energy · PETRONAS Activity Outlook 2024–2026 · Eurasia Review</p>
 </div>
 
-<!-- ══════════════════ SESSION BREAKDOWN ══════════════════ -->
-<div style="border-top: 1px solid var(--border);">
-<div class="section">
-  <div class="section-header reveal">
-    <div class="section-line"></div>
-    <div class="section-tag">The Four Sessions</div>
-    <div class="section-line"></div>
-  </div>
-
-  <div class="reveal">
-    <h2 class="section-title">A progression,<br>not just <em>four calls.</em></h2>
-  </div>
-
-  <div class="timeline reveal">
-    <div class="timeline-item">
-      <div class="timeline-left">
-        <div class="timeline-dot">1</div>
-        <div class="timeline-line"></div>
-      </div>
-      <div class="timeline-content">
-        <div class="timeline-label">Session One</div>
-        <div class="timeline-title">Diagnosis — Where You Actually Are</div>
-        <div class="timeline-body">We map your current portfolio, your real risk exposure, and the gaps between where you think you are and where you actually are. Honest, direct, no sugar-coating.</div>
-      </div>
+<!-- STRATEGY LAYER -->
+<div class="strategy">
+  <div class="section-label">Strategic Layer</div>
+  <div class="section-title">The Policy Logic — Three Interlocking Objectives</div>
+  <div class="strategy-grid">
+    <div class="strategy-cell">
+      <div class="strategy-num">I</div>
+      <div class="strategy-title">Value Maximisation</div>
+      <div class="strategy-desc">Export premium Tapis at a global price premium. Import cheap sour crude at a discount. Capture the spread. Preserve LNG contracts (the high-value long-term play) by substituting coal imports for power generation — pushing domestic gas toward higher-value export slots. Every molecule is routed to its highest-value use.</div>
     </div>
-    <div class="timeline-item">
-      <div class="timeline-left">
-        <div class="timeline-dot">2</div>
-        <div class="timeline-line"></div>
-      </div>
-      <div class="timeline-content">
-        <div class="timeline-label">Session Two</div>
-        <div class="timeline-title">Macro Context — The World Your Portfolio Lives In</div>
-        <div class="timeline-body">We look at the macro environment through your specific lens — geopolitics, rates, currency dynamics, sector exposures. Where the tailwinds are and where the traps are hiding.</div>
-      </div>
+    <div class="strategy-cell">
+      <div class="strategy-num">II</div>
+      <div class="strategy-title">Supply Resilience</div>
+      <div class="strategy-desc">Self-sufficiency concentrates risk. A single subsea pipeline failure or offshore field disruption could cripple the Peninsula. Diversified imports — from Saudi Arabia, Thailand, Indonesia, and global spot LNG markets — create a multi-source buffer. The Pengerang storage terminal (20M+ barrel capacity) amplifies this buffer against global supply shocks.</div>
     </div>
-    <div class="timeline-item">
-      <div class="timeline-left">
-        <div class="timeline-dot">3</div>
-        <div class="timeline-line"></div>
-      </div>
-      <div class="timeline-content">
-        <div class="timeline-label">Session Three</div>
-        <div class="timeline-title">Opportunities — Conviction Without Noise</div>
-        <div class="timeline-body">We work through specific ideas — yours and mine — applying a clear asymmetric framework. What's worth owning, how much, and why. Building real conviction, not hope.</div>
-      </div>
-    </div>
-    <div class="timeline-item">
-      <div class="timeline-left">
-        <div class="timeline-dot">4</div>
-        <div class="timeline-line"></div>
-      </div>
-      <div class="timeline-content">
-        <div class="timeline-label">Session Four</div>
-        <div class="timeline-title">Your Framework — Built to Last</div>
-        <div class="timeline-body">We crystallise everything into a clear, personal investment framework. How you make decisions, how you manage risk, how you stay rational when markets aren't. Yours to keep and compound.</div>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-
-<!-- ══════════════════ PRICING ══════════════════ -->
-<div class="pricing-wrapper">
-  <div class="pricing-inner reveal">
-    <div class="pricing-eyebrow">— The Investment —</div>
-    <h2 class="pricing-title">One price.<br><em>No surprises.</em></h2>
-    <p class="pricing-sub">Everything is included. No upsells, no monthly fees, no hidden tiers. One engagement, one price, permanent access to everything that follows.</p>
-
-    <div class="price-display">
-      <div class="price-currency">RM</div>
-      <div class="price-number">3,100</div>
-    </div>
-    <div class="price-note">One-time payment · No recurring charges</div>
-
-    <div class="pricing-includes">
-      <div class="pill"><div class="pill-dot"></div>4 Private Sessions</div>
-      <div class="pill"><div class="pill-dot"></div>Session Notes</div>
-      <div class="pill"><div class="pill-dot"></div>Personal Framework</div>
-      <div class="pill"><div class="pill-dot"></div>Direct Messaging Access</div>
-      <div class="pill"><div class="pill-dot"></div>Video Library</div>
-      <div class="pill"><div class="pill-dot"></div>Macro Update Archives</div>
-      <div class="pill"><div class="pill-dot"></div>Equity Research Documents</div>
-      <div class="pill"><div class="pill-dot"></div>Lifetime Access</div>
-    </div>
-
-    <!-- ⚠️ REPLACE href below with your Stripe Payment Link -->
-    <!-- e.g. href="https://buy.stripe.com/XXXXXXXXXXXX"     -->
-    <div style="display:flex; flex-direction:column; align-items:center; gap:16px;">
-      <a href="https://buy.stripe.com/00w3cx9b65iC4oaeRJ8og02" class="stripe-btn">
-        <span class="stripe-icon">⚡</span>
-        <span>Secure Checkout via Stripe</span>
-      </a>
-      <div class="stripe-secure">
-        <svg width="12" height="14" viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="1" y="5" width="10" height="8" rx="1" stroke="#8888A0" stroke-width="1.2"/>
-          <path d="M3.5 5V3.5a2.5 2.5 0 015 0V5" stroke="#8888A0" stroke-width="1.2"/>
-          <circle cx="6" cy="9" r="1" fill="#8888A0"/>
-        </svg>
-        <span style="font-size:11px; color:var(--silver);">Secured by Stripe · 256-bit encryption</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════ FAQ ══════════════════ -->
-<div style="border-top: 1px solid var(--border);">
-<div class="section" style="max-width:760px;">
-  <div class="section-header reveal">
-    <div class="section-line"></div>
-    <div class="section-tag">Questions</div>
-    <div class="section-line"></div>
-  </div>
-
-  <div class="faq-list reveal">
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">
-        Who is this for?
-        <span class="faq-icon">+</span>
-      </button>
-      <div class="faq-a">This is for investors who are serious about improving — not beginners looking for stock tips. You should already be investing (or ready to) with a real portfolio, a genuine curiosity about markets, and the discipline to do the thinking between sessions.</div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">
-        How are the sessions conducted?
-        <span class="faq-icon">+</span>
-      </button>
-      <div class="faq-a">All sessions are 60 minutes via video call, scheduled at a time that works for you. We'll confirm scheduling details once your payment is processed. Sessions are typically spread over 4–8 weeks depending on your preference.</div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">
-        What does "unlimited access to materials" mean exactly?
-        <span class="faq-icon">+</span>
-      </button>
-      <div class="faq-a">Once your four sessions are complete, you'll receive permanent access to InsightInvest's full content library — this includes all video content, macro update archives, and equity research documents. New material we produce is also added to your library as it's released.</div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">
-        Is this financial advice?
-        <span class="faq-icon">+</span>
-      </button>
-      <div class="faq-a">No. InsightInvest provides financial education and investment research — not regulated financial advice. Everything discussed is for educational and analytical purposes. You remain fully responsible for your own investment decisions.</div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">
-        What if I want to start but I'm not ready right now?
-        <span class="faq-icon">+</span>
-      </button>
-      <div class="faq-a">Seats are limited and allocated based on fit, not first-come-first-served. If you've completed the member profile and spoken with us, reach out directly and we'll hold a spot for you for 48 hours.</div>
+    <div class="strategy-cell">
+      <div class="strategy-num">III</div>
+      <div class="strategy-title">Transition Funding</div>
+      <div class="strategy-desc">Malaysia's NETR targets 70% renewable power by 2050, requiring RM143B in investment. That capital is being generated by maximising LNG export revenue today. The import model — preserving domestic reserves for premium long-term contracts — is the financial mechanism funding the green transition. Imports are subsidising decarbonisation.</div>
     </div>
   </div>
 </div>
+
+<!-- VERDICT -->
+<div class="verdict">
+  <div>
+    <div class="verdict-quote">The import is not a failure of policy. It is the pinnacle of it.</div>
+    <div class="verdict-text">
+      <p style="margin-bottom:16px;">Malaysia's producer-importer duality is the output of four structural realities intersecting: chemistry (Tapis is too valuable to burn domestically), geography (the Peninsula will always be closer to Thailand than to Borneo), engineering (refineries were designed around the import), and strategy (LNG revenues fund the energy transition).</p>
+      <p style="margin-bottom:16px;">The key <strong>equity risk variable</strong> is not the import model — it is the <strong>subsidy rationalisation timeline</strong>. As targeted diesel and petrol subsidies phase out through 2026–2027, domestic refined product demand softens, narrowing the import-to-sell spread and materially improving PETRONAS's free cash flow.</p>
+      <p>Watch also the <strong>naphtha nexus</strong>: over 50% of feedstock for the Pengerang cracker complex is imported Middle Eastern naphtha. Any sustained disruption to Strait of Hormuz flows — which supply 54% of Asia's naphtha — represents the single largest structural vulnerability in Malaysia's downstream value chain.</p>
+    </div>
+  </div>
+  <div class="stats-stack">
+    <div class="stat-block">
+      <div class="stat-num">78.6%</div>
+      <div class="stat-label">Petroleum production as % of consumption — Malaysia produces less liquid fuel than it uses</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">175%</div>
+      <div class="stat-label">Natural gas production vs consumption — the surplus funds massive LNG exports</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">>50%</div>
+      <div class="stat-label">Naphtha import reliance for cracker feedstock at Pengerang &amp; Titan complexes</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">20.9Mt</div>
+      <div class="stat-label">Record coal imports in H1 2024 — displaced to preserve domestic gas for LNG slots</div>
+    </div>
+    <div class="stat-block" style="background:#fff8ec;">
+      <div class="stat-num" style="color:var(--green-deep); font-size:22px;">RM100B+</div>
+      <div class="stat-label">Annual chemical exports — the downstream payoff of the import-to-export model</div>
+    </div>
+  </div>
 </div>
 
-<!-- ══════════════════ FOOTER CTA ══════════════════ -->
-<div class="footer-cta">
-  <h2 class="footer-cta-title reveal">The market doesn't<br>wait for <em>clarity.</em></h2>
-  <p class="footer-cta-sub reveal">Four sessions. A framework that lasts. Research that keeps compounding. One decision between you and all of it.</p>
-  <!-- ⚠️ Replace href with your Stripe Payment Link -->
-  <a href="https://buy.stripe.com/00w3cx9b65iC4oaeRJ8og02" class="btn-primary reveal">Reserve Your Seat — RM 3,100 →</a>
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-left">
+    Malaysia's Producer-Importer Framework · Equity Research · March 2026
+  </div>
+  <div class="footer-sources">
+    Sources: EIA International Energy Statistics · PETRONAS Activity Outlook 2024–2026<br>
+    Wood Mackenzie · ICIS · National Energy Policy 2022–2040 · NETR Phase 2
+  </div>
 </div>
 
-<footer>
-  <div class="footer-brand">Insight<span>Invest</span></div>
-  <div class="footer-note">leiholding.com · Private Advisory</div>
-  <a href="/" style="color:#C8A84B;text-decoration:none;font-size:11px;margin-top:8px;display:inline-block;">← Back to Insight Invest</a>
-</footer>
-
-<script>
-  // Nav scroll
-  const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 40);
-  });
-
-  // Reveal on scroll
-  const revealEls = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('visible'), i * 80);
-        observer.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  revealEls.forEach(el => observer.observe(el));
-
-  // FAQ
-  function toggleFaq(btn) {
-    const item = btn.parentElement;
-    const isOpen = item.classList.contains('open');
-    document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
-    if (!isOpen) item.classList.add('open');
-  }
-</script>
 </body>
 </html>
