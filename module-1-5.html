@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>Reading Financial Statements — Insight Invest</title>
+  <title>Inflation & Purchasing Power — Insight Invest</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
    :root {
@@ -1469,37 +1469,95 @@
 </style>
 </head>
 <body>
+<style>
+  .__mod-nav {{
+    position: fixed; top: 0; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 13px 40px;
+    background: rgba(8,9,12,0.97);
+    backdrop-filter: blur(24px);
+    border-bottom: 1px solid #222533;
+    z-index: 10000;
+    font-family: 'Syne', sans-serif;
+  }}
+  .__mod-nav-left {{ display: flex; align-items: center; gap: 18px; }}
+  .__mod-back {{
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #555c72; text-decoration: none; transition: color 0.3s;
+  }}
+  .__mod-back:hover {{ color: #c9a84c; }}
+  .__mod-back svg {{ transition: transform 0.3s; }}
+  .__mod-back:hover svg {{ transform: translateX(-3px); }}
+  .__mod-sep {{ width: 1px; height: 18px; background: #222533; }}
+  .__mod-crumb {{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: #4a7cff;
+  }}
+  .__mod-logo {{
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px; color: #c9a84c; text-decoration: none; font-weight: 600;
+  }}
+  .__mod-nav-right a {{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: #555c72; text-decoration: none;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    transition: color 0.3s; margin-left: 20px;
+  }}
+  .__mod-nav-right a:hover {{ color: #c9a84c; }}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600&family=IBM+Plex+Mono:wght@400&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet"/>
+<nav class="__mod-nav">
+  <div class="__mod-nav-left">
+    <a href="curriculum.html" class="__mod-back">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M9 6.5H2M5.5 2L1 6.5l4.5 4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Curriculum
+    </a>
+    <div class="__mod-sep"></div>
+    <span class="__mod-crumb">Tier 1 · Module 1.4</span>
+  </div>
+  <a href="index.html" class="__mod-logo">Insight Invest</a>
+  <div class="__mod-nav-right">
+    <a href="curriculum.html#tier1">All Modules</a>
+    <a href="members.html">Members</a>
+    <a href="reports.html">Reports</a>
+  </div>
+</nav>
+<style>body {{ padding-top: 54px !important; }}</style>
+
   <div class="mod-progress-bar" id="readingProgress"></div>
   <!-- ═══ NAVIGATION ═══ -->
   <nav id="navbar">
-   <a class="nav-logo" href="/">
+   <a class="nav-logo" href="index.html">
     <div class="nav-logo-mark"></div>
     <span class="nav-logo-text">Insight Invest</span>
    </a>
    <div class="nav-links">
     <a href="/#pillars">What We Cover</a>
     <a href="/#macro">Macro</a>
-    <a href="/curriculum">Learn</a>
+    <a href="curriculum.html">Learn</a>
     <a class="nav-cta" href="/#reports">Access Reports</a>
    </div>
   </nav>
   <div class="mod-breadcrumb">
-    <a href="/">Insight Invest</a>
+    <a href="index.html">Insight Invest</a>
     <span>/</span>
-    <a href="/curriculum">Curriculum</a>
+    <a href="curriculum.html">Curriculum</a>
     <span>/</span>
-    <a href="/tier-1">Tier 1 · Foundation</a>
+    <a href="curriculum.html">Tier 1 · Foundation</a>
     <span>/</span>
-    <span style="color:var(--text);">1.5 · Reading Financial Statements</span>
+    <span style="color:var(--text);">1.4 · Inflation & Purchasing Power</span>
   </div>
   
-  <div class="mod-hero" data-watermark="1.5">
-    <div class="mod-code">Module 1.5 · Tier 1: Foundation · 70 min</div>
-    <h1>Reading Financial<br>Statements</h1>
-    <p class="mod-desc">The three financial statements every serious investor must read — and what to actually look for beyond the raw numbers. Numbers tell stories. Your job is to read them correctly.</p>
+  <div class="mod-hero" data-watermark="1.4">
+    <div class="mod-code">Module 1.4 · Tier 1: Foundation · 50 min</div>
+    <h1>Inflation &<br>Purchasing Power</h1>
+    <p class="mod-desc">How inflation is measured, what drives it, and how it distorts every investment decision you will ever make. The investor who ignores inflation is not investing — they are slowly losing.</p>
     <div class="mod-hero-meta">
-      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 70 min</span>
-      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Video · Article · Template · Tool</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 50 min</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Video · Article · Quiz · Tool</span>
     </div>
   </div>
 
@@ -1508,184 +1566,154 @@
 
       <div class="mod-section" id="s1">
         <div class="mod-section-tag">Section 01</div>
-        <h2>The Three Financial Statements</h2>
-        <p>Every public company is required to publish three financial statements. Together, they tell the complete story of a business — what it earned, what it owns, and how cash moves through it. Read any one in isolation and you will be misled. Read all three together and you see the business clearly.</p>
+        <h2>What Is Inflation?</h2>
+        <p>Inflation is the rate at which the general level of prices rises over time — or equivalently, the rate at which the purchasing power of money declines. It is not one price rising; it is the broad price level shifting upward across an economy.</p>
+        <p>The commonly cited inflation measure is the Consumer Price Index (CPI), which tracks the price of a basket of goods and services representing typical household spending. But CPI is only one measure — and arguably the most politically managed one.</p>
 
-        <div class="diagram-container">
-          <div class="diagram-title">The Three Statements & How They Connect</div>
-          <svg class="diagram" viewBox="0 0 640 240" xmlns="http://www.w3.org/2000/svg">
-            <!-- Income Statement -->
-            <rect x="10" y="20" width="185" height="190" rx="8" fill="rgba(74,124,255,0.08)" stroke="#4a7cff" stroke-width="1.5"/>
-            <text x="102" y="46" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#4a7cff" letter-spacing="1.5">INCOME STATEMENT</text>
-            <text x="102" y="68" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">Revenue</text>
-            <text x="102" y="86" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#555c72">− Cost of Goods Sold</text>
-            <text x="102" y="104" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">= Gross Profit</text>
-            <text x="102" y="122" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#555c72">− Operating Expenses</text>
-            <text x="102" y="140" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">= EBIT</text>
-            <text x="102" y="158" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#555c72">− Interest / Tax</text>
-            <text x="102" y="180" text-anchor="middle" font-family="Cormorant Garamond" font-size="14" fill="#e8ecf4" font-weight="500">= Net Income</text>
-            <!-- Arrow 1 -->
-            <path d="M195 120 L225 120" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#arr_gold)"/>
-            <text x="200" y="110" font-family="IBM Plex Mono" font-size="8" fill="#555c72">Net Inc.</text>
-            <!-- Balance Sheet -->
-            <rect x="228" y="20" width="185" height="190" rx="8" fill="rgba(61,214,140,0.08)" stroke="#3dd68c" stroke-width="1.5"/>
-            <text x="320" y="46" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#3dd68c" letter-spacing="1.5">BALANCE SHEET</text>
-            <text x="320" y="68" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">Assets</text>
-            <text x="320" y="84" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">Cash &amp; Receivables</text>
-            <text x="320" y="100" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">PP&amp;E, Intangibles</text>
-            <text x="320" y="122" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">Liabilities</text>
-            <text x="320" y="138" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">Debt, Payables</text>
-            <text x="320" y="160" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">Shareholders' Equity</text>
-            <text x="320" y="176" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">Retained Earnings</text>
-            <text x="320" y="196" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#e8ecf4">Assets = Liab + Equity</text>
-            <!-- Arrow 2 -->
-            <path d="M413 120 L443 120" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#arr_gold)"/>
-            <text x="418" y="110" font-family="IBM Plex Mono" font-size="8" fill="#555c72">Cash</text>
-            <!-- Cash Flow Statement -->
-            <rect x="446" y="20" width="185" height="190" rx="8" fill="rgba(201,168,76,0.08)" stroke="#c9a84c" stroke-width="1.5"/>
-            <text x="538" y="46" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#c9a84c" letter-spacing="1.5">CASH FLOW</text>
-            <text x="538" y="62" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#c9a84c" letter-spacing="1.5">STATEMENT</text>
-            <text x="538" y="84" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">Operating Activities</text>
-            <text x="538" y="100" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">Cash from core business</text>
-            <text x="538" y="122" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">Investing Activities</text>
-            <text x="538" y="138" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">CapEx, acquisitions</text>
-            <text x="538" y="160" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">Financing Activities</text>
-            <text x="538" y="176" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">Debt, dividends, buybacks</text>
-            <text x="538" y="200" text-anchor="middle" font-family="Cormorant Garamond" font-size="14" fill="#e8ecf4" font-weight="500">= Free Cash Flow</text>
-            <defs>
-              <marker id="arr_gold" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
-                <path d="M1,1 L7,4 L1,7" fill="none" stroke="#c9a84c" stroke-width="1.2"/>
-              </marker>
-            </defs>
-          </svg>
+        <table class="compare-table">
+          <thead><tr><th>Measure</th><th>What It Tracks</th><th>Key Limitation</th><th>Investor Use</th></tr></thead>
+          <tbody>
+            <tr><td class="td-highlight">CPI</td><td>Consumer goods basket</td><td>Excludes volatile food/energy (Core CPI)</td><td>Most widely quoted</td></tr>
+            <tr><td class="td-highlight">PPI</td><td>Producer/wholesale prices</td><td>Leads CPI by 1–3 months</td><td>Forward inflation signal</td></tr>
+            <tr><td class="td-highlight">PCE Deflator</td><td>Personal consumption expenditure</td><td>Fed's preferred measure — harder to follow</td><td>Fed policy decisions</td></tr>
+            <tr><td class="td-highlight">Breakeven Rate</td><td>Bond market inflation expectation</td><td>Market-implied, not actual</td><td>Best forward indicator</td></tr>
+          </tbody>
+        </table>
+
+        <div class="insight-box">
+          <div class="insight-label">The Investor's Insight</div>
+          <p>The inflation breakeven rate — derived from the gap between nominal Treasury yields and TIPS (inflation-protected) yields — is the market's real-time forecast of future inflation. It is more predictive than any government survey because it is backed by actual capital at risk.</p>
         </div>
       </div>
 
       <div class="mod-section" id="s2">
         <div class="mod-section-tag">Section 02</div>
-        <h2>The Income Statement: Measuring Profitability</h2>
-        <p>The income statement (also called P&L — profit and loss) measures a company's revenue and expenses over a period, culminating in net income. But net income is not the same as cash. This distinction is crucial.</p>
-        <h3>The Key Metrics Investors Actually Use</h3>
-        <ul class="example-list">
-          <li><strong>Gross Margin:</strong> (Revenue − COGS) ÷ Revenue. Measures how efficiently the core product is produced. A software company at 70%+ gross margin vs a retailer at 25% tells you entirely different things about the business model.</li>
-          <li><strong>Operating Margin (EBIT margin):</strong> Operating profit ÷ Revenue. Shows profitability after all operational costs but before financing and tax. Useful for comparing companies across capital structures.</li>
-          <li><strong>EBITDA:</strong> Earnings before interest, tax, depreciation, amortization. Widely used as a proxy for cash earnings — though aggressively abused by companies wanting to show better "adjusted" results.</li>
-          <li><strong>Net Margin:</strong> Net income ÷ Revenue. The bottom line after everything. Wide variation by industry (tech: 20–30%, retail: 2–5%, banking: 10–15%).</li>
-        </ul>
+        <h2>The Three Drivers of Inflation</h2>
+        <p>Inflation is not a single phenomenon — it has distinct causes that require different responses and create different investment opportunities.</p>
 
-        <div class="insight-box">
-          <div class="insight-label">What Analysts Actually Watch</div>
-          <p>Revenue growth rate, gross margin trend (expanding or compressing?), and operating leverage (does revenue growth convert to disproportionate operating profit growth?). A company growing revenue at 20% with expanding margins and operating leverage is a fundamentally different proposition than one growing at 20% with margin compression.</p>
+        <div class="diagram-container">
+          <div class="diagram-title">Inflation Causation Framework</div>
+          <svg class="diagram" viewBox="0 0 620 220" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="arr2" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+                <path d="M1,1 L7,4 L1,7" fill="none" stroke="#c9a84c" stroke-width="1.2"/>
+              </marker>
+            </defs>
+            <!-- Demand-pull -->
+            <rect x="10" y="20" width="175" height="150" rx="8" fill="rgba(61,214,140,0.07)" stroke="#252838"/>
+            <text x="97" y="48" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#3dd68c" letter-spacing="1.5">DEMAND-PULL</text>
+            <text x="97" y="68" text-anchor="middle" font-family="Cormorant Garamond" font-size="14" fill="#9ca3b8">Too much money</text>
+            <text x="97" y="86" text-anchor="middle" font-family="Cormorant Garamond" font-size="14" fill="#9ca3b8">chasing too few goods</text>
+            <text x="97" y="112" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">Stimulus, low rates,</text>
+            <text x="97" y="128" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">wage growth,</text>
+            <text x="97" y="144" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">credit expansion</text>
+            <!-- Cost-push -->
+            <rect x="225" y="20" width="170" height="150" rx="8" fill="rgba(255,92,92,0.07)" stroke="#252838"/>
+            <text x="310" y="48" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#ff5c5c" letter-spacing="1.5">COST-PUSH</text>
+            <text x="310" y="68" text-anchor="middle" font-family="Cormorant Garamond" font-size="14" fill="#9ca3b8">Rising input costs</text>
+            <text x="310" y="86" text-anchor="middle" font-family="Cormorant Garamond" font-size="14" fill="#9ca3b8">force higher prices</text>
+            <text x="310" y="112" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">Oil shocks, supply</text>
+            <text x="310" y="128" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">chain disruptions,</text>
+            <text x="310" y="144" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">wage-price spirals</text>
+            <!-- Built-in -->
+            <rect x="440" y="20" width="170" height="150" rx="8" fill="rgba(201,168,76,0.07)" stroke="#252838"/>
+            <text x="525" y="48" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#c9a84c" letter-spacing="1.5">BUILT-IN</text>
+            <text x="525" y="68" text-anchor="middle" font-family="Cormorant Garamond" font-size="14" fill="#9ca3b8">Expectation becomes</text>
+            <text x="525" y="86" text-anchor="middle" font-family="Cormorant Garamond" font-size="14" fill="#9ca3b8">self-fulfilling reality</text>
+            <text x="525" y="112" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">Workers demand higher</text>
+            <text x="525" y="128" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">wages; firms raise</text>
+            <text x="525" y="144" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">prices preemptively</text>
+            <!-- INFLATION label at bottom center -->
+            <text x="310" y="196" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#c9a84c" letter-spacing="3">↓ INFLATION ↓</text>
+          </svg>
         </div>
+
+        <h3>Why the Driver Matters</h3>
+        <p>Demand-pull inflation responds to tighter monetary policy (rate hikes reduce spending). Cost-push inflation from supply shocks is harder to fix with rates — raising rates does not create more oil or fix supply chains. Built-in inflation is the most dangerous because it is self-reinforcing and requires breaking expectations, which the Fed did painfully in 1979–82 under Volcker with rates reaching 20%.</p>
       </div>
 
       <div class="mod-section" id="s3">
-        <div class="mod-section-tag">Section 03</div>
-        <h2>The Balance Sheet: Measuring Financial Health</h2>
-        <p>The balance sheet is a snapshot of what a company owns (assets) and owes (liabilities) at a specific date. The difference is shareholders' equity — the net worth of the business from an accounting perspective.</p>
-        <p>The fundamental equation: <strong>Assets = Liabilities + Shareholders' Equity</strong>. This must always balance — hence the name.</p>
+        <div class="mod-section-tag">Interactive Tool</div>
+        <h2>Inflation Impact Calculator</h2>
+        <p>Calculate the real value of your money, your required investment return to stay ahead of inflation, and compare how different assets have historically performed against it.</p>
 
-        <h3>What Investors Look For</h3>
-        <ul class="example-list">
-          <li><strong>Cash position:</strong> How much runway does the company have? Is cash growing or shrinking? Cash is optionality — Berkshire Hathaway's cash hoard is a strategic weapon, not a failure to deploy.</li>
-          <li><strong>Debt-to-equity ratio:</strong> How leveraged is the business? High debt amplifies returns in good times and accelerates distress in bad ones. Capital-intensive businesses (airlines, utilities) naturally carry more debt than asset-light tech companies.</li>
-          <li><strong>Working capital:</strong> Current assets minus current liabilities. Negative working capital can signal liquidity stress — or, in the case of Amazon, that suppliers essentially finance the business.</li>
-          <li><strong>Goodwill and intangibles:</strong> Large goodwill balances from acquisitions warrant scrutiny — they represent what the acquirer paid above book value. Goodwill impairments are often the first sign of a bad acquisition.</li>
-        </ul>
-
-        <!-- Interactive: Balance Sheet Analyser -->
         <div class="tool-container">
-          <div class="tool-title">Balance Sheet Health Analyser</div>
-          <div class="tool-subtitle">Enter company financials to calculate key ratios instantly</div>
+          <div class="tool-title">Real Purchasing Power Calculator</div>
+          <div class="tool-subtitle">Find out what your money is really worth after inflation</div>
           <div class="tool-row">
             <div class="tool-field">
-              <label>Total Assets ($M)</label>
-              <input type="number" id="bs_assets" value="50000"/>
+              <label>Today's Amount (USD)</label>
+              <input type="number" id="inf_amount" value="100000"/>
             </div>
             <div class="tool-field">
-              <label>Total Liabilities ($M)</label>
-              <input type="number" id="bs_liab" value="28000"/>
+              <label>Annual Inflation Rate (%)</label>
+              <input type="number" id="inf_rate" value="3.5" step="0.5" min="0" max="20"/>
             </div>
           </div>
           <div class="tool-row">
             <div class="tool-field">
-              <label>Current Assets ($M)</label>
-              <input type="number" id="bs_curr_assets" value="12000"/>
+              <label>Time Horizon (years)</label>
+              <input type="number" id="inf_years" value="20" min="1" max="50"/>
             </div>
             <div class="tool-field">
-              <label>Current Liabilities ($M)</label>
-              <input type="number" id="bs_curr_liab" value="8000"/>
+              <label>Investment Return (%)</label>
+              <input type="number" id="inf_return" value="8" step="0.5"/>
             </div>
           </div>
-          <div class="tool-row">
-            <div class="tool-field">
-              <label>Cash & Equivalents ($M)</label>
-              <input type="number" id="bs_cash" value="4000"/>
-            </div>
-            <div class="tool-field">
-              <label>Total Debt ($M)</label>
-              <input type="number" id="bs_debt" value="15000"/>
-            </div>
-          </div>
-          <button class="tool-btn" onclick="analyzeBS()">Analyze Balance Sheet</button>
-          <div class="tool-result" id="bs_result">
-            <div id="bs_cards" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"></div>
-            <div id="bs_interpretation" style="margin-top:16px;font-size:13px;color:var(--text);line-height:1.7;"></div>
+          <button class="tool-btn" onclick="calcInflation()">Calculate Real Value</button>
+          <div class="tool-result" id="inf_result">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;" id="inf_cards"></div>
+            <canvas id="inf_chart" height="180"></canvas>
           </div>
         </div>
       </div>
 
       <div class="mod-section" id="s4">
-        <div class="mod-section-tag">Section 04</div>
-        <h2>The Cash Flow Statement: The Truth Teller</h2>
-        <p>If the income statement can be massaged with accounting choices, the cash flow statement is harder to fake. Cash either arrived in the bank account or it did not. This is why experienced investors weight the cash flow statement most heavily.</p>
+        <div class="mod-section-tag">Section 03</div>
+        <h2>How Inflation Distorts Investment Decisions</h2>
+        <p>Inflation does not affect all investments equally. Understanding the inflation sensitivity of different asset classes is fundamental to portfolio construction:</p>
 
-        <h3>Free Cash Flow — The Most Important Number</h3>
-        <div class="formula-box">
-          <div class="formula-label">Free Cash Flow Formula</div>
-          FCF = Operating Cash Flow − Capital Expenditure
-          <br><br>
-          <span style="color:var(--text-dim);font-size:12px;">FCF is what remains after maintaining and growing the business — available for dividends, buybacks, debt repayment, or reinvestment</span>
-        </div>
-        <p>A company can report strong net income while generating negative free cash flow — a red flag that often precedes financial distress. Conversely, companies with modest net income but strong free cash flow conversion are often undervalued by earnings-focused analysts.</p>
+        <table class="compare-table">
+          <thead><tr><th>Asset Class</th><th>Inflation Sensitivity</th><th>Why</th><th>Historical Behaviour</th></tr></thead>
+          <tbody>
+            <tr><td class="td-highlight">Cash / Savings</td><td style="color:var(--red)">Very negative</td><td>Nominal value fixed; real value erodes</td><td>Guaranteed real loss in inflation</td></tr>
+            <tr><td class="td-highlight">Fixed Rate Bonds</td><td style="color:var(--red)">Negative</td><td>Fixed coupons worth less in real terms</td><td>2022: worst bond year in 100yr</td></tr>
+            <tr><td class="td-highlight">Equities (broad)</td><td style="color:var(--gold)">Mixed</td><td>Revenue grows with inflation; margin squeezed</td><td>Good hedge long-term, poor short-term</td></tr>
+            <tr><td class="td-highlight">Real Estate</td><td style="color:var(--green)">Positive</td><td>Property values and rents rise with inflation</td><td>Strong inflation hedge historically</td></tr>
+            <tr><td class="td-highlight">Commodities</td><td style="color:var(--green)">Very positive</td><td>Often the cause of inflation</td><td>Oil, gold surge in inflationary regimes</td></tr>
+            <tr><td class="td-highlight">TIPS / iBonds</td><td style="color:var(--green)">Built-in protection</td><td>Principal adjusts with CPI</td><td>Direct hedge by design</td></tr>
+          </tbody>
+        </table>
 
         <div class="key-concept">
-          <div class="key-concept-label">FCF Yield: The Investor's Filter</div>
-          <p>FCF Yield = Free Cash Flow ÷ Market Capitalization. This tells you the return you are getting in actual cash terms for every dollar of market value. A company with 8% FCF yield is generating 8 cents of real cash for every dollar of its market cap — a useful sanity check against headline earnings multiples.</p>
+          <div class="key-concept-label">The Hyperinflation Lesson</div>
+          <p>Germany's Weimar Republic (1921–23) saw inflation peak at 29,500% per month. Zimbabwe in 2008 reached 89.7 sextillion percent annually. In both cases, real assets (land, gold, foreign currency) survived. Cash and bonds were worthless. These are extreme cases — but they demonstrate the fundamental principle: in inflation, real assets win, paper assets lose.</p>
         </div>
-
-        <h3>Reading the Three Sections</h3>
-        <ul class="example-list">
-          <li><strong>Operating activities (CFO):</strong> Cash generated from the core business. This should consistently exceed net income in a healthy, cash-generative business. If CFO < Net income, ask why.</li>
-          <li><strong>Investing activities (CFI):</strong> Cash spent on CapEx, acquisitions, and investments. Negative is normal — it means the company is investing in growth. Excessive CapEx relative to depreciation may signal overcapitalization.</li>
-          <li><strong>Financing activities (CFF):</strong> Cash flows from raising/repaying debt, issuing/buying back shares, paying dividends. Net borrowing during downturns is a red flag; share buybacks at peak valuations destroy capital.</li>
-        </ul>
       </div>
 
       <div class="mod-section" id="s5">
-        <div class="mod-section-tag">Section 05</div>
-        <h2>Red Flags: What to Look For</h2>
-        <p>Financial statements contain signals that most retail investors miss entirely. These are the most important warning signs:</p>
+        <div class="mod-section-tag">Section 04</div>
+        <h2>The 2021–2023 Inflation Cycle: A Case Study</h2>
+        <p>The post-COVID inflation episode was the most significant inflationary event in 40 years, and it is a textbook example of all three inflation drivers operating simultaneously.</p>
+        <ul class="example-list">
+          <li><strong>Demand-pull component:</strong> $5+ trillion in US fiscal stimulus (CARES Act, ARP) flooded the economy with cash while supply was constrained. Demand surged; supply could not respond.</li>
+          <li><strong>Cost-push component:</strong> Global supply chain disruption, semiconductor shortages, shipping bottlenecks, and the 2022 Ukraine-Russia war driving energy and food prices sharply higher.</li>
+          <li><strong>Built-in component:</strong> Labor markets tightened (Great Resignation), workers demanded higher wages, firms passed costs to consumers. Rent prices, which have long lags in CPI, became sticky.</li>
+        </ul>
+        <p>The Fed's response: 525 basis points of rate hikes in 16 months — the fastest tightening cycle since Volcker. CPI peaked at 9.1% in June 2022 and declined to near 3% by 2024. The lag between monetary tightening and inflation response is typically 12–18 months, which is why central banks must act before inflation becomes entrenched.</p>
 
-        <table class="compare-table">
-          <thead><tr><th>Red Flag</th><th>Where to Find It</th><th>What It May Signal</th></tr></thead>
-          <tbody>
-            <tr><td class="td-highlight">Net income >> Free cash flow</td><td>Compare IS to CFS</td><td>Aggressive revenue recognition, earnings manipulation</td></tr>
-            <tr><td class="td-highlight">Rising accounts receivable vs revenue</td><td>Balance sheet / IS</td><td>Customers not paying; channel stuffing</td></tr>
-            <tr><td class="td-highlight">Goodwill > 50% of assets</td><td>Balance sheet</td><td>Serial acquirer at risk of impairment write-downs</td></tr>
-            <tr><td class="td-highlight">Declining gross margin</td><td>Income statement trend</td><td>Pricing power erosion, competition intensifying</td></tr>
-            <tr><td class="td-highlight">Debt rising faster than EBITDA</td><td>Balance sheet + IS</td><td>Deteriorating debt service capacity</td></tr>
-            <tr><td class="td-highlight">Heavy "adjusted" earnings reliance</td><td>Press releases / notes</td><td>Management hiding recurring costs as "one-time"</td></tr>
-          </tbody>
-        </table>
+        <div class="insight-box">
+          <div class="insight-label">The Trade Thesis Connection</div>
+          <p>Understanding the inflation cycle creates tradeable insights. In 2021, understanding that inflation was building ahead of Fed action meant you could position in commodities, energy stocks, and real assets before the institutional herd caught on. In early 2022, anticipating aggressive rate hikes meant avoiding long-duration bonds and growth stocks. The same inflation framework that looks like dry economics in a textbook is live market alpha when you apply it in real time.</p>
+        </div>
       </div>
 
       <div class="mod-section" id="s6">
         <div class="mod-section-tag">Knowledge Check</div>
-        <h2>Module 1.5 Quiz</h2>
-        <div class="quiz-container" id="quiz_1_5">
+        <h2>Module 1.4 Quiz</h2>
+        <div class="quiz-container" id="quiz_1_4">
           <div class="quiz-header">
-            <div class="quiz-title">Module 1.5 · Assessment</div>
+            <div class="quiz-title">Module 1.4 · Assessment</div>
             <div class="quiz-progress">1 / 8</div>
           </div>
           <div class="quiz-progress-track"><div class="quiz-progress-fill" style="width:0%"></div></div>
@@ -1708,38 +1736,38 @@
     <div class="mod-sidebar">
       <div class="sidebar-toc">
         <div class="sidebar-toc-title">Contents</div>
-        <div class="toc-item" data-target="s1"><span class="toc-num">01</span>Three Statements Overview</div>
-        <div class="toc-item" data-target="s2"><span class="toc-num">02</span>Income Statement</div>
-        <div class="toc-item" data-target="s3"><span class="toc-num">03</span>Balance Sheet + Tool</div>
-        <div class="toc-item" data-target="s4"><span class="toc-num">04</span>Cash Flow Statement</div>
-        <div class="toc-item" data-target="s5"><span class="toc-num">05</span>Red Flags</div>
+        <div class="toc-item" data-target="s1"><span class="toc-num">01</span>What Is Inflation?</div>
+        <div class="toc-item" data-target="s2"><span class="toc-num">02</span>Three Drivers</div>
+        <div class="toc-item" data-target="s3"><span class="toc-num">03</span>Purchasing Power Tool</div>
+        <div class="toc-item" data-target="s4"><span class="toc-num">04</span>Asset Inflation Sensitivity</div>
+        <div class="toc-item" data-target="s5"><span class="toc-num">05</span>2021–23 Case Study</div>
         <div class="toc-item" data-target="s6"><span class="toc-num">06</span>Quiz</div>
       </div>
       <div class="sidebar-key-stats">
         <div class="sidebar-stat">
-          <div class="sidebar-stat-label">Number of core statements</div>
-          <div class="sidebar-stat-value">3</div>
+          <div class="sidebar-stat-label">US CPI Peak (2022)</div>
+          <div class="sidebar-stat-value" style="color:var(--red);">9.1%</div>
         </div>
         <div class="sidebar-stat">
-          <div class="sidebar-stat-label">Software gross margins (typical)</div>
-          <div class="sidebar-stat-value">70%+</div>
+          <div class="sidebar-stat-label">Fed Rate Hike Cycle 2022-23</div>
+          <div class="sidebar-stat-value">525bps</div>
         </div>
         <div class="sidebar-stat">
-          <div class="sidebar-stat-label">Most Important Number</div>
-          <div class="sidebar-stat-value">FCF</div>
+          <div class="sidebar-stat-label">Weimar Peak Monthly Inflation</div>
+          <div class="sidebar-stat-value" style="color:var(--red);">29,500%</div>
         </div>
       </div>
       <div class="sidebar-next">
         <div class="sidebar-next-label">Next Module</div>
-        <div class="sidebar-next-title">1.6 · Asset Classes 101</div>
-        <a href="/tier-1/module-1-6">Continue <span>→</span></a>
+        <div class="sidebar-next-title">1.5 · Reading Financial Statements</div>
+        <a href="module-1-5.html">Continue <span>→</span></a>
       </div>
     </div>
   </div>
 
   <div class="mod-nav-bar">
-    <a class='mod-nav-btn' href='/tier-1/module-1-4'><span class='mod-nav-dir'>← Previous</span><span class='mod-nav-title'>1.4 · Inflation & Purchasing Power</span></a>
-    <a class='mod-nav-btn' style='text-align:right' href='/tier-1/module-1-6'><span class='mod-nav-dir'>Next →</span><span class='mod-nav-title'>1.6 · Asset Classes 101</span></a>
+    <a class='mod-nav-btn' href='module-1-3.html'><span class='mod-nav-dir'>← Previous</span><span class='mod-nav-title'>1.3 · Interest Rates: The Master Variable</span></a>
+    <a class='mod-nav-btn' style='text-align:right' href='module-1-5.html'><span class='mod-nav-dir'>Next →</span><span class='mod-nav-title'>1.5 · Reading Financial Statements</span></a>
   </div>
   <!-- ═══ FOOTER ═══ -->
   <footer>
@@ -1938,75 +1966,94 @@ function initQuiz(containerId, questions) {
 }
 
   
-function analyzeBS() {
-  const assets = parseFloat(document.getElementById('bs_assets').value);
-  const liab = parseFloat(document.getElementById('bs_liab').value);
-  const currA = parseFloat(document.getElementById('bs_curr_assets').value);
-  const currL = parseFloat(document.getElementById('bs_curr_liab').value);
-  const cash = parseFloat(document.getElementById('bs_cash').value);
-  const debt = parseFloat(document.getElementById('bs_debt').value);
-  const equity = assets - liab;
+function calcInflation() {
+  const amount = parseFloat(document.getElementById('inf_amount').value);
+  const inf = parseFloat(document.getElementById('inf_rate').value) / 100;
+  const ret = parseFloat(document.getElementById('inf_return').value) / 100;
+  const years = parseInt(document.getElementById('inf_years').value);
 
-  const currentRatio = currA / currL;
-  const quickRatio = (currA - (currA * 0.3)) / currL; // assume 30% inventory
-  const debtToEquity = debt / equity;
-  const debtToAssets = debt / assets;
+  const nominalFV = amount * Math.pow(1+ret, years);
+  const realFV = amount * Math.pow((1+ret)/(1+inf), years);
+  const cashFV = amount * Math.pow(1-inf, years); // what cash is worth in real terms
+  const requiredReturn = (inf * 100).toFixed(1);
 
-  function grade(val, good, ok) {
-    if (val >= good) return 'var(--green)';
-    if (val >= ok) return 'var(--gold)';
-    return 'var(--red)';
+  document.getElementById('inf_cards').innerHTML = [
+    {label:'Real Value of Your Money', value:'$'+Math.round(realFV).toLocaleString(), sub:'Inflation-adjusted portfolio value', color:'var(--green)'},
+    {label:'Nominal Portfolio Value', value:'$'+Math.round(nominalFV).toLocaleString(), sub:'Before adjusting for inflation', color:'var(--text-bright)'},
+    {label:'Cash Real Value', value:'$'+Math.round(cashFV).toLocaleString(), sub:'What savings account "safely" holds', color:'var(--red)'},
+    {label:'Required Return to Break Even', value:requiredReturn+'%', sub:'Minimum return to preserve purchasing power', color:'var(--gold)'},
+  ].map(c => `<div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;">
+    <div style="font-family:IBM Plex Mono;font-size:9px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin-bottom:8px;">${c.label}</div>
+    <div style="font-family:Cormorant Garamond;font-size:28px;font-weight:400;color:${c.color};line-height:1;">${c.value}</div>
+    <div style="font-family:IBM Plex Mono;font-size:10px;color:var(--text-dim);margin-top:6px;">${c.sub}</div>
+  </div>`).join('');
+
+  document.getElementById('inf_result').className = 'tool-result visible';
+
+  // Chart
+  const canvas = document.getElementById('inf_chart');
+  const ctx = canvas.getContext('2d');
+  canvas.width = (canvas.offsetWidth||600) * window.devicePixelRatio;
+  canvas.height = 180 * window.devicePixelRatio;
+  ctx.scale(window.devicePixelRatio||1, window.devicePixelRatio||1);
+  const W = canvas.offsetWidth||600, H = 150;
+  const yrs = Array.from({length:years+1},(_,i)=>i);
+  const realD = yrs.map(y=>amount*Math.pow((1+ret)/(1+inf),y));
+  const cashD = yrs.map(y=>amount*Math.pow(1-inf,y));
+  const nomD  = yrs.map(y=>amount*Math.pow(1+ret,y));
+  const maxV = Math.max(...nomD);
+
+  ctx.strokeStyle='#252838'; ctx.lineWidth=1;
+  [0.25,0.5,0.75,1].forEach(f=>{
+    const y=H-(f*H)+10;
+    ctx.beginPath();ctx.moveTo(44,y);ctx.lineTo(W-8,y);ctx.stroke();
+    ctx.fillStyle='#555c72';ctx.font='10px IBM Plex Mono';
+    ctx.fillText('$'+(maxV*f/1000).toFixed(0)+'k',2,y+4);
+  });
+
+  function drawL(data,color,dash=false){
+    ctx.beginPath();
+    data.forEach((v,i)=>{
+      const x=44+(i/years)*(W-52),y=H-(v/maxV)*H+10;
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    });
+    ctx.strokeStyle=color;ctx.lineWidth=2;
+    ctx.setLineDash(dash?[5,4]:[]);ctx.stroke();ctx.setLineDash([]);
   }
+  drawL(nomD,'#4a7cff');
+  drawL(realD,'#3dd68c');
+  drawL(cashD,'#ff5c5c',true);
 
-  const cards = [
-    { label:'Shareholders Equity', value:'$'+Math.round(equity).toLocaleString()+'M', sub:'Assets − Liabilities', color: equity>0?'var(--green)':'var(--red)' },
-    { label:'Current Ratio', value:currentRatio.toFixed(2)+'x', sub:'Current assets ÷ current liabilities (>1.5 healthy)', color: grade(currentRatio,1.5,1.0) },
-    { label:'Debt / Equity', value:debtToEquity.toFixed(2)+'x', sub:'Financial leverage (<1.5 conservative)', color: debtToEquity<1.5?'var(--green)':debtToEquity<3?'var(--gold)':'var(--red)' },
-    { label:'Debt / Assets', value:(debtToAssets*100).toFixed(1)+'%', sub:'Capital structure (<40% conservative)', color: debtToAssets<0.4?'var(--green)':debtToAssets<0.6?'var(--gold)':'var(--red)' },
-  ];
-
-  document.getElementById('bs_cards').innerHTML = cards.map(c =>
-    `<div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px;">
-      <div style="font-family:IBM Plex Mono;font-size:9px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin-bottom:8px;">${c.label}</div>
-      <div style="font-family:Cormorant Garamond;font-size:26px;font-weight:400;color:${c.color};line-height:1;">${c.value}</div>
-      <div style="font-family:IBM Plex Mono;font-size:10px;color:var(--text-dim);margin-top:4px;">${c.sub}</div>
-    </div>`
-  ).join('');
-
-  let interpretation = '';
-  if (equity < 0) interpretation += 'Warning: Negative equity — liabilities exceed assets. This company is technically insolvent on a book value basis. ';
-  if (currentRatio < 1) interpretation += 'Liquidity concern: Current ratio below 1.0 means current liabilities exceed current assets — short-term solvency risk. ';
-  if (debtToEquity > 3) interpretation += 'High leverage: D/E above 3x amplifies both upside and downside — appropriate for some industries (utilities, banks), dangerous for cyclicals. ';
-  if (interpretation === '') interpretation = 'Balance sheet appears financially healthy based on these ratios. Verify against industry benchmarks and examine trends over multiple periods for a complete picture.';
-  document.getElementById('bs_interpretation').textContent = interpretation;
-  document.getElementById('bs_result').className = 'tool-result visible';
+  ctx.fillStyle='#4a7cff';ctx.font='10px IBM Plex Mono';ctx.fillText('Nominal',W-54,12);
+  ctx.fillStyle='#3dd68c';ctx.fillText('Real',W-28,26);
+  ctx.fillStyle='#ff5c5c';ctx.fillText('Cash',W-34,40);
 }
 
-initQuiz('quiz_1_5', [
-  { q: "Which financial statement would you analyze to determine if a company's profitability is improving over time?",
-    opts: ["Balance sheet","Cash flow statement","Income statement","Notes to financial statements"],
-    correct: 2, explanation: "The income statement (P&L) shows revenue, expenses, and profit over a period — it is the primary tool for analyzing profitability trends across quarters and years." },
-  { q: "Free Cash Flow is calculated as:",
-    opts: ["Net income + depreciation","Revenue − total costs","Operating cash flow − capital expenditure","EBITDA − interest − taxes"],
-    correct: 2, explanation: "FCF = Operating Cash Flow − CapEx. It represents the cash a business generates after spending what it needs to maintain and grow the business — the 'owner's earnings' Buffett emphasizes." },
-  { q: "A company reports strong net income but consistently negative operating cash flow. This most likely indicates:",
-    opts: ["Exceptional business performance","Aggressive accounting or earnings quality problems","High capital expenditure needs","A young, fast-growing company"],
-    correct: 1, explanation: "Net income > operating cash flow is a red flag. It often means revenue is being recognized before cash is actually collected (rising receivables), or expenses are being capitalized to defer them." },
-  { q: "On the balance sheet, the fundamental accounting equation is:",
-    opts: ["Assets = Revenue − Expenses","Liabilities = Assets + Equity","Assets = Liabilities + Shareholders' Equity","Cash = Assets − Debt"],
-    correct: 2, explanation: "Assets = Liabilities + Shareholders' Equity. This must always balance — assets are funded either by borrowed money (liabilities) or by owner capital (equity)." },
-  { q: "Goodwill on the balance sheet represents:",
-    opts: ["Brand reputation measured by revenue","The premium paid in an acquisition above book value of net assets","Cash reserves set aside for future acquisitions","Intangible patents and intellectual property"],
-    correct: 1, explanation: "Goodwill is the excess amount paid in an acquisition above the fair value of identifiable net assets. Large goodwill relative to total assets raises questions about acquisition quality and impairment risk." },
-  { q: "An investor finds that a company's accounts receivable has been growing much faster than its revenue. This could signal:",
-    opts: ["Strong demand for the company's products","Customers are not paying on time, or revenue is being channel stuffed","Operational efficiency improvements","An increase in the company's pricing power"],
-    correct: 1, explanation: "Receivables growing faster than revenue means sales are being made but cash is not being collected. This may indicate customers struggling to pay, aggressive terms, or even premature revenue recognition." },
-  { q: "Which of the three statements is considered the hardest to manipulate with accounting choices?",
-    opts: ["Income statement","Balance sheet","Cash flow statement","All three are equally reliable"],
-    correct: 2, explanation: "The cash flow statement is harder to manipulate because cash movements are more objective — cash either entered or left the bank account. The income statement allows significant discretion in revenue recognition and expense timing." },
-  { q: "EBITDA is widely used but has an important limitation because it:",
-    opts: ["Includes taxes which vary by jurisdiction","Excludes the real cash costs of maintaining capital assets (D&A often reflect real economic depreciation)","Is not accepted under GAAP accounting standards","Is calculated differently by every company"],
-    correct: 1, explanation: "EBITDA adds back depreciation and amortization, but for capital-intensive businesses, D&A represents the real economic cost of asset wear. EBITDA is frequently 'adjusted' further, creating a measure that flatters performance." }
+initQuiz('quiz_1_4', [
+  { q: "The Federal Reserve's preferred inflation measure is:",
+    opts: ["CPI (Consumer Price Index)","PPI (Producer Price Index)","PCE Deflator","GDP Deflator"],
+    correct: 2, explanation: "The Fed officially targets the PCE (Personal Consumption Expenditure) deflator rather than CPI, because PCE better captures substitution effects and has broader coverage of consumer spending." },
+  { q: "Cost-push inflation is caused by:",
+    opts: ["Too much consumer demand in the economy","Rising input costs passed through to consumer prices","Government printing excess money","Low interest rates encouraging borrowing"],
+    correct: 1, explanation: "Cost-push inflation originates from the supply side — rising production costs (energy, labor, raw materials) that firms pass on to consumers. It is harder to fight with rate hikes than demand-pull inflation." },
+  { q: "Which asset class historically provides the best direct protection against inflation?",
+    opts: ["Long-term government bonds","Cash savings accounts","Commodities and real assets","Short-term treasury bills"],
+    correct: 2, explanation: "Commodities (especially energy and agricultural goods) are often the cause of inflation themselves, making them strong inflation hedges. Real assets like property also protect purchasing power since their values and rents rise with inflation." },
+  { q: "The inflation 'breakeven rate' is:",
+    opts: ["The inflation rate at which the Fed will intervene","The bond market's implied forecast of future inflation","The rate at which purchasing power breaks even with wages","The CPI threshold for a technical recession"],
+    correct: 1, explanation: "The breakeven rate is derived from the yield gap between nominal Treasuries and TIPS (inflation-protected bonds). It represents real money betting on future inflation — more predictive than survey-based measures." },
+  { q: "During Germany's Weimar hyperinflation (1921-23), which assets survived?",
+    opts: ["Government bonds and savings accounts","Cash and bank deposits","Real assets: land, gold, and foreign currencies","Domestic corporate equities priced in marks"],
+    correct: 2, explanation: "In hyperinflation, paper assets (cash, bonds) become worthless as the currency collapses. Real assets — tangible things with intrinsic value independent of a specific currency — preserve wealth. This is the extreme case of inflation's fundamental dynamic." },
+  { q: "The 2021-22 inflationary episode was primarily:",
+    opts: ["Pure demand-pull from low interest rates","Purely cost-push from supply chain issues","A combination of demand-pull, cost-push, and built-in factors","Built-in expectations from the previous decade"],
+    correct: 2, explanation: "The 2021-22 inflation was a rare combination: $5T+ in stimulus (demand-pull), supply chain disruptions and energy shocks (cost-push), and wage-price dynamics (built-in). This made it particularly sticky and harder to control." },
+  { q: "If inflation is 5% and your savings earn 2%, your real return is:",
+    opts: ["+7%","0%","-3%","+3%"],
+    correct: 2, explanation: "Real return = Nominal return - Inflation = 2% - 5% = -3%. A negative real return means you are losing purchasing power even while earning nominal interest. The money grows in nominal terms but shrinks in real terms." },
+  { q: "Built-in (expectations-driven) inflation is particularly dangerous because:",
+    opts: ["It only affects luxury goods","It is self-reinforcing — expected inflation creates actual inflation","Central banks have no tools to address it","It causes deflation in the long run"],
+    correct: 1, explanation: "When workers expect inflation, they demand higher wages. When firms expect inflation, they raise prices preemptively. These expectations become self-fulfilling, creating a wage-price spiral. Breaking this requires extremely painful monetary tightening — as Volcker demonstrated in 1979-82." }
 ]);
 
   </script>
