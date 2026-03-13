@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InsightInvest · Valuation Dashboard · March 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c0f;
+    --surface: #111318;
+    --surface2: #181b22;
+    --border: #1e2330;
+    --border2: #252a38;
+    --gold: #c9a84c;
+    --gold2: #e8c96a;
+    --green: #2ecc8a;
+    --red: #e05252;
+    --blue: #5b9cf6;
+    --text: #e8eaf2;
+    --muted: #7a8099;
+    --faint: #3d4460;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 28px 40px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    background: linear-gradient(180deg, #0d0f14 0%, var(--bg) 100%);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .brand {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .brand-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+  }
+
+  .brand-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .disclaimer-banner {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    background: rgba(201, 168, 76, 0.08);
+    border: 1px solid rgba(201, 168, 76, 0.25);
+    padding: 6px 14px;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .stat-cell {
+    padding: 18px 24px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .stat-cell:last-child { border-right: none; }
+
+  .stat-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .stat-value.green { color: var(--green); }
+  .stat-value.red { color: var(--red); }
+  .stat-value.gold { color: var(--gold); }
+
+  /* CONTROLS */
+  .controls {
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    max-width: 280px;
+  }
+
+  .search-wrap input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    padding: 9px 14px 9px 36px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-wrap input:focus { border-color: var(--gold); }
+  .search-wrap::before {
+    content: '⌕';
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 16px;
+    pointer-events: none;
+  }
+
+  .filter-group {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 7px 14px;
+    border: 1px solid var(--border2);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .filter-btn:hover { color: var(--text); border-color: var(--faint); }
+  .filter-btn.active { background: var(--gold); color: #0a0c0f; border-color: var(--gold); font-weight: 600; }
+
+  .sort-select {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    padding: 7px 12px;
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  /* TABLE */
+  .table-wrap {
+    padding: 0 40px 40px;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 12.5px;
+  }
+
+  thead tr {
+    border-bottom: 2px solid var(--gold);
+  }
+
+  thead th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 10px 12px;
+    text-align: right;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.15s;
+  }
+
+  thead th:hover { color: var(--gold2); }
+  thead th.sort-asc::after { content: ' ↑'; color: var(--gold); }
+  thead th.sort-desc::after { content: ' ↓'; color: var(--gold); }
+  thead th:first-child,
+  thead th:nth-child(2),
+  thead th:nth-child(3),
+  thead th:nth-child(4) { text-align: left; }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.12s;
+    cursor: pointer;
+  }
+
+  tbody tr:hover { background: var(--surface); }
+
+  td {
+    padding: 11px 12px;
+    text-align: right;
+    color: var(--text);
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  td:first-child, td:nth-child(2), td:nth-child(3), td:nth-child(4) { text-align: left; }
+
+  .ticker-cell {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--gold2);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .star-icon { color: var(--gold); font-size: 11px; }
+
+  .sector-tag {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    background: var(--surface2);
+    color: var(--muted);
+    border: 1px solid var(--border2);
+    white-space: nowrap;
+  }
+
+  .status-pill {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+  }
+
+  .status-pill.under { background: rgba(46, 204, 138, 0.12); color: var(--green); border: 1px solid rgba(46, 204, 138, 0.3); }
+  .status-pill.over { background: rgba(224, 82, 82, 0.12); color: var(--red); border: 1px solid rgba(224, 82, 82, 0.3); }
+
+  .mos-pos { color: var(--green); font-family: 'IBM Plex Mono', monospace; font-weight: 500; }
+  .mos-neg { color: var(--red); font-family: 'IBM Plex Mono', monospace; font-weight: 500; }
+
+  .score-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-size: 11px;
+    width: 38px;
+    height: 22px;
+    border-radius: 3px;
+  }
+
+  .score-best { background: rgba(201, 168, 76, 0.2); color: var(--gold2); border: 1px solid rgba(201, 168, 76, 0.4); }
+  .score-great { background: rgba(91, 156, 246, 0.15); color: var(--blue); border: 1px solid rgba(91, 156, 246, 0.3); }
+  .score-good { background: rgba(46, 204, 138, 0.1); color: var(--green); border: 1px solid rgba(46, 204, 138, 0.2); }
+  .score-dev { background: rgba(122, 128, 153, 0.15); color: var(--muted); border: 1px solid var(--border2); }
+
+  .conviction-high { color: var(--green); }
+  .conviction-med { color: var(--gold); }
+  .conviction-low { color: var(--muted); }
+
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+
+  /* DETAIL PANEL */
+  #detail-panel {
+    display: none;
+    position: fixed;
+    top: 0; right: 0;
+    width: 380px;
+    height: 100vh;
+    background: var(--surface);
+    border-left: 1px solid var(--border2);
+    z-index: 200;
+    overflow-y: auto;
+    animation: slideIn 0.22s ease;
+  }
+
+  @keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  #detail-panel.open { display: block; }
+
+  .panel-header {
+    padding: 28px 28px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .panel-ticker {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .panel-sector { font-size: 11px; color: var(--muted); margin-top: 6px; font-family: 'IBM Plex Mono', monospace; }
+
+  .panel-close {
+    background: none;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    width: 30px; height: 30px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .panel-close:hover { color: var(--text); border-color: var(--text); }
+
+  .panel-body { padding: 24px 28px; display: flex; flex-direction: column; gap: 24px; }
+
+  .panel-section { display: flex; flex-direction: column; gap: 10px; }
+
+  .panel-section-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .kv-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+  }
+
+  .kv-key { color: var(--muted); }
+  .kv-val { font-family: 'IBM Plex Mono', monospace; font-weight: 500; color: var(--text); }
+
+  .iv-bar-wrap { display: flex; flex-direction: column; gap: 8px; }
+
+  .iv-bar-row {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .iv-bar-track {
+    width: 100%;
+    height: 6px;
+    background: var(--border2);
+    border-radius: 3px;
+    position: relative;
+    overflow: visible;
+  }
+
+  .iv-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--green), var(--gold));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+
+  .price-pin {
+    position: absolute;
+    top: -4px;
+    width: 2px;
+    height: 14px;
+    background: white;
+    border-radius: 1px;
+    transform: translateX(-1px);
+  }
+
+  .price-pin-label {
+    position: absolute;
+    top: -20px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: white;
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+
+  .comment-box {
+    background: rgba(201, 168, 76, 0.06);
+    border: 1px solid rgba(201, 168, 76, 0.2);
+    border-radius: 4px;
+    padding: 12px 14px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #c8ccdb;
+    font-style: italic;
+  }
+
+  /* CHART */
+  .mini-chart { height: 80px; position: relative; margin-top: 8px; }
+
+  canvas#mosChart { width: 100%; }
+
+  /* OVERLAY */
+  #overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 150;
+  }
+
+  #overlay.open { display: block; }
+
+  /* SECTION DIVIDER */
+  .section-row td {
+    padding: 20px 12px 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: transparent;
+    border-bottom: 1px solid var(--border2);
+    text-align: left !important;
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 60px;
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+  }
+
+  @media (max-width: 768px) {
+    header, .controls, .table-wrap { padding-left: 16px; padding-right: 16px; }
+    .stats-bar { grid-template-columns: repeat(3, 1fr); }
+    #detail-panel { width: 100%; }
+  }
+
+  .moat-dots { font-size: 13px; letter-spacing: 1px; }
+  .moat-wide { color: var(--green); }
+  .moat-narrow { color: var(--gold); }
+
+  tbody tr.favorite-row { border-left: 2px solid var(--gold); }
+</style>
+</head>
+<body>
+<style>
+  .__tool-nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 40px;
+    background: rgba(8,9,12,0.96);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid #252838;
+    z-index: 10000;
+    font-family: 'Syne', sans-serif;
+  }
+  .__tool-nav-left { display: flex; align-items: center; gap: 20px; }
+  .__tool-back {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; color: #555c72;
+    text-decoration: none; transition: color 0.3s;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .__tool-back:hover { color: #c9a84c; }
+  .__tool-back svg { transition: transform 0.3s; }
+  .__tool-back:hover svg { transform: translateX(-3px); }
+  .__tool-sep { width: 1px; height: 20px; background: #252838; }
+  .__tool-breadcrumb {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: #c9a84c;
+  }
+  .__tool-nav-right { display: flex; align-items: center; gap: 24px; }
+  .__tool-nav-links a {
+    font-size: 11px; font-weight: 500; color: #555c72;
+    text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase;
+    transition: color 0.3s; margin-left: 20px;
+  }
+  .__tool-nav-links a:hover { color: #c9a84c; }
+  .__tool-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px; color: #c9a84c; text-decoration: none; font-weight: 600;
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet"/>
+<nav class="__tool-nav">
+  <div class="__tool-nav-left">
+    <a href="/members" class="__tool-back">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 7H2M6 2L1 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Members
+    </a>
+    <div class="__tool-sep"></div>
+    <span class="__tool-breadcrumb">Valuation · Valuation Dashboard</span>
+  </div>
+  <a href="/" class="__tool-logo">Insight Invest</a>
+  <div class="__tool-nav-right">
+    <div class="__tool-nav-links">
+      <a href="/members#tools">All Tools</a>
+      <a href="/members#updates">Updates</a>
+      <a href="/reports">Reports</a>
+    </div>
+  </div>
+</nav>
+<style>
+  body { padding-top: 56px !important; }
+</style>
+
+
+<header>
+  <div class="brand">
+    <div class="brand-name">INSIGHTINVEST</div>
+    <div class="brand-sub">Intrinsic Valuation Dashboard · March 2026</div>
+  </div>
+  <div class="disclaimer-banner">⚠ Personal opinion only · Not financial advice</div>
+</header>
+
+<div class="stats-bar" id="statsBar">
+  <div class="stat-cell">
+    <div class="stat-label">Universe</div>
+    <div class="stat-value">39</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-label">Undervalued</div>
+    <div class="stat-value green" id="statUnder">29</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-label">Overvalued</div>
+    <div class="stat-value red" id="statOver">10</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-label">Best Rated</div>
+    <div class="stat-value gold">11</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-label">Avg MoS</div>
+    <div class="stat-value green">+5.9%</div>
+  </div>
+</div>
+
+<div class="controls">
+  <div class="search-wrap">
+    <input type="text" id="searchBox" placeholder="Search ticker or sector..." oninput="applyFilters()">
+  </div>
+  <div class="filter-group" id="statusFilters">
+    <button class="filter-btn active" onclick="setFilter('status','all',this)">All</button>
+    <button class="filter-btn" onclick="setFilter('status','Undervalued',this)">Undervalued</button>
+    <button class="filter-btn" onclick="setFilter('status','Overvalued',this)">Overvalued</button>
+    <button class="filter-btn" onclick="setFilter('status','favorite',this)">★ Favorites</button>
+  </div>
+  <div class="filter-group" id="ratingFilters">
+    <button class="filter-btn" onclick="setFilter('rating','Best',this)">Best</button>
+    <button class="filter-btn" onclick="setFilter('rating','Great',this)">Great</button>
+    <button class="filter-btn" onclick="setFilter('rating','Good',this)">Good</button>
+  </div>
+  <select class="sort-select" id="sortSelect" onchange="applyFilters()">
+    <option value="">Sort: Default</option>
+    <option value="mos_desc">MoS: High → Low</option>
+    <option value="mos_asc">MoS: Low → High</option>
+    <option value="score_desc">Score: High → Low</option>
+    <option value="mktcap_desc">Mkt Cap: Large → Small</option>
+    <option value="ticker_asc">Ticker A → Z</option>
+  </select>
+</div>
+
+<div class="table-wrap">
+  <table id="mainTable">
+    <thead>
+      <tr>
+        <th>Ticker</th>
+        <th>Sector</th>
+        <th>Type</th>
+        <th style="min-width:80px">Rating</th>
+        <th onclick="sortBy('score')">Score</th>
+        <th onclick="sortBy('mktcap')">Mkt Cap</th>
+        <th onclick="sortBy('margin')">Op Margin</th>
+        <th onclick="sortBy('roe')">ROE</th>
+        <th onclick="sortBy('fcf')">FCF ($Bn)</th>
+        <th onclick="sortBy('moat')">Moat</th>
+        <th onclick="sortBy('avgfv')">Avg FV ($)</th>
+        <th onclick="sortBy('price')">Price ($)</th>
+        <th onclick="sortBy('mos')">MoS %</th>
+        <th>Conviction</th>
+        <th onclick="sortBy('status')">Status</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
+
+<div id="overlay" onclick="closePanel()"></div>
+
+<div id="detail-panel">
+  <div class="panel-header">
+    <div>
+      <div class="panel-ticker" id="pTicker"></div>
+      <div class="panel-sector" id="pSector"></div>
+    </div>
+    <button class="panel-close" onclick="closePanel()">✕</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-section">
+      <div class="panel-section-title">Valuation</div>
+      <div class="iv-bar-wrap" id="pValBar"></div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-section-title">Fundamentals</div>
+      <div id="pFundamentals"></div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-section-title">Quality</div>
+      <div id="pQuality"></div>
+    </div>
+    <div class="panel-section" id="pCommentWrap" style="display:none">
+      <div class="panel-section-title">Analyst Note</div>
+      <div class="comment-box" id="pComment"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const RAW = [
+  // Information Technology
+  {ticker:'AAPL',fav:true,sector:'Information Technology',type:'Dividend Growth',mktcap:3785.4,margin:32.4,roe:152.0,roic:96.8,roa:24.4,fcf:123.3,fcfYield:3.3,mgmt:'Exemplary',moat:'Wide',prospects:'Good',profitability:'Cash Cow',risk:'Medium',score:12,rating:'Best',iv:265.60,mstar:260.00,rkgstk:262.83,avgfv:262.81,price:257.46,mos:3.1,conviction:'LOW',status:'Undervalued',updated:'Jan 2026',comment:"I'll buy more AAPL whenever it becomes undervalued."},
+  {ticker:'ADBE',fav:false,sector:'Information Technology',type:'Growth',mktcap:115.6,margin:36.6,roe:55.4,roic:28.3,roa:18.2,fcf:9.9,fcfYield:8.5,mgmt:'Standard',moat:'Wide',prospects:'Good',profitability:'V.Profitable',risk:'High',score:8,rating:'Good',iv:531.44,mstar:560.00,rkgstk:388.17,avgfv:493.20,price:283.62,mos:46.6,conviction:'MED',status:'Undervalued',updated:'Dec 2025',comment:''},
+  {ticker:'AMAT',fav:false,sector:'Information Technology',type:'Dividend Growth',mktcap:257.7,margin:29.9,roe:38.9,roic:35.5,roa:14.8,fcf:6.2,fcfYield:2.4,mgmt:'Exemplary',moat:'Wide',prospects:'Good',profitability:'V.Profitable',risk:'High',score:10,rating:'Great',iv:335.38,mstar:380.00,rkgstk:341.65,avgfv:352.34,price:324.74,mos:3.2,conviction:'LOW',status:'Undervalued',updated:'Feb 2026',comment:''},
+  {ticker:'AMD',fav:false,sector:'Information Technology',type:'Growth',mktcap:313.7,margin:10.8,roe:7.1,roic:6.6,roa:3.2,fcf:5.5,fcfYield:1.8,mgmt:'Exemplary',moat:'Narrow',prospects:'Great',profitability:'Profitable',risk:'High',score:8,rating:'Good',iv:241.00,mstar:270.00,rkgstk:247.04,avgfv:252.68,price:192.43,mos:20.2,conviction:'MED',status:'Undervalued',updated:'Feb 2026',comment:''},
+  {ticker:'ASML',fav:true,sector:'Information Technology',type:'Dividend Growth',mktcap:501.8,margin:34.6,roe:50.5,roic:73.1,roa:14.2,fcf:12.7,fcfYield:2.5,mgmt:'Exemplary',moat:'Wide',prospects:'Great',profitability:'V.Profitable',risk:'High',score:11,rating:'Great',iv:1169.23,mstar:1170.00,rkgstk:1215.55,avgfv:1184.93,price:1292.80,mos:-10.6,conviction:'LOW',status:'Overvalued',updated:'Jan 2026',comment:"I'll buy more ASML this year when it's undervalued."},
+  {ticker:'AVGO',fav:true,sector:'Information Technology',type:'Dividend Growth',mktcap:1565.0,margin:40.7,roe:21.9,roic:17.9,roa:9.3,fcf:28.9,fcfYield:1.8,mgmt:'Exemplary',moat:'Wide',prospects:'Great',profitability:'Cash Cow',risk:'High',score:12,rating:'Best',iv:372.25,mstar:500.00,rkgstk:404.20,avgfv:425.48,price:330.48,mos:11.2,conviction:'LOW',status:'Undervalued',updated:'Mar 2026',comment:''},
+  {ticker:'CDNS',fav:false,sector:'Information Technology',type:'Growth',mktcap:81.9,margin:31.7,roe:21.9,roic:25.2,roa:11.0,fcf:1.6,fcfYield:1.9,mgmt:'Exemplary',moat:'Wide',prospects:'Good',profitability:'V.Profitable',risk:'High',score:10,rating:'Great',iv:317.08,mstar:330.00,rkgstk:340.45,avgfv:329.18,price:296.94,mos:6.4,conviction:'LOW',status:'Undervalued',updated:'Feb 2026',comment:''},
+  {ticker:'CRM',fav:false,sector:'Information Technology',type:'Dividend Growth',mktcap:186.5,margin:21.5,roe:12.4,roic:11.0,roa:5.2,fcf:14.4,fcfYield:7.7,mgmt:'Standard',moat:'Wide',prospects:'Neutral',profitability:'V.Profitable',risk:'High',score:7,rating:'Good',iv:282.50,mstar:300.00,rkgstk:263.05,avgfv:281.85,price:202.11,mos:28.5,conviction:'MED',status:'Undervalued',updated:'Feb 2026',comment:"I will likely buy back SalesForce later on when it becomes undervalued again."},
+  {ticker:'FICO',fav:false,sector:'Information Technology',type:'Growth',mktcap:35.0,margin:48.0,roe:null,roic:62.8,roa:34.8,fcf:0.7,fcfYield:2.1,mgmt:'Exemplary',moat:'Wide',prospects:'Good',profitability:'V.Profitable',risk:'High',score:10,rating:'Great',iv:1507.63,mstar:2000.00,rkgstk:1758.03,avgfv:1755.22,price:1475.59,mos:2.1,conviction:'LOW',status:'Undervalued',updated:'Feb 2026',comment:''},
+  {ticker:'INTU',fav:false,sector:'Information Technology',type:'Dividend Growth',mktcap:133.1,margin:26.7,roe:22.0,roic:12.7,roa:9.8,fcf:6.8,fcfYield:5.1,mgmt:'Exemplary',moat:'Wide',prospects:'Great',profitability:'V.Profitable',risk:'High',score:11,rating:'Great',iv:653.14,mstar:530.00,rkgstk:636.45,avgfv:606.53,price:481.17,mos:26.3,conviction:'MED',status:'Undervalued',updated:'Feb 2026',comment:''},
+  {ticker:'KLAC',fav:false,sector:'Information Technology',type:'Dividend Growth',mktcap:176.2,margin:42.0,roe:100.7,roic:74.4,roa:21.1,fcf:4.4,fcfYield:2.5,mgmt:'Exemplary',moat:'Wide',prospects:'Good',profitability:'V.Profitable',risk:'High',score:10,rating:'Great',iv:1264.27,mstar:1000.00,rkgstk:1050.15,avgfv:1104.81,price:1344.55,mos:-6.3,conviction:'LOW',status:'Overvalued',updated:'Jan 2026',comment:''},
+  {ticker:'LRCX',fav:false,sector:'Information Technology',type:'Dividend Growth',mktcap:248.9,margin:33.8,roe:65.6,roic:74.9,roa:21.1,fcf:6.2,fcfYield:2.5,mgmt:'Exemplary',moat:'Wide',prospects:'Great',profitability:'V.Profitable',risk:'High',score:11,rating:'Great',iv:202.46,mstar:200.00,rkgstk:188.41,avgfv:196.96,price:199.33,mos:1.5,conviction:'LOW',status:'Undervalued',updated:'Jan 2026',comment:''},
+  {ticker:'MA',fav:true,sector:'Information Technology',type:'Dividend Growth',mktcap:465.8,margin:59.2,roe:209.9,roic:97.4,roa:23.7,fcf:16.4,fcfYield:3.5,mgmt:'Exemplary',moat:'Wide',prospects:'Great',profitability:'Cash Cow',risk:'Medium',score:13,rating:'Best',iv:599.43,mstar:520.00,rkgstk:600.65,avgfv:573.36,price:522.32,mos:12.9,conviction:'LOW',status:'Undervalued',updated:'Feb 2026',comment:"I'll buy more Mastercard when it's more undervalued."},
+  {ticker:'MSFT',fav:true,sector:'Information Technology',type:'Dividend Growth',mktcap:3036.8,margin:46.7,roe:34.4,roic:28.8,roa:14.9,fcf:77.4,fcfYield:2.5,mgmt:'Exemplary',moat:'Wide',prospects:'Great',profitability:'Cash Cow',risk:'Medium',score:13,rating:'Best',iv:526.79,mstar:600.00,rkgstk:537.92,avgfv:554.90,price:408.96,mos:22.4,conviction:'MED',status:'Undervalued',updated:'Feb 2026',comment:"I'll buy more MSFT this year when it's undervalued."},
+  {ticker:'MU',fav:true,sector:'Information Technology',type:'Dividend Growth',mktcap:416.8,margin:32.6,roe:22.6,roic:13.0,roa:10.9,fcf:4.7,fcfYield:1.1,mgmt:'Exemplary',moat:'Narrow',prospects:'Great',profitability:'V.Profitable',risk:'High',score:9,rating:'Good',iv:250.93,mstar:225.00,rkgstk:231.99,avgfv:235.97,price:370.30,mos:-47.6,conviction:'LOW',status:'Overvalued',updated:'Dec 2025',comment:''},
+  {ticker:'NOW',fav:false,sector:'Information Technology',type:'Growth',mktcap:130.1,margin:15.1,roe:15.5,roic:17.8,roa:5.4,fcf:4.5,fcfYield:3.5,mgmt:'Exemplary',moat:'Wide',prospects:'Great',profitability:'Profitable',risk:'High',score:10,rating:'Great',iv:181.96,mstar:200.00,rkgstk:170.26,avgfv:184.07,price:124.34,mos:31.7,conviction:'HIGH',status:'Undervalued',updated:'Feb 2026',comment:''},
+  {ticker:'NVDA',fav:true,sector:'Information Technology',type:'Growth',mktcap:4321.0,margin:60.4,roe:101.5,roic:126.3,roa:51.2,fcf:96.6,fcfYield:2.2,mgmt:'Exemplary',moat:'Wide',prospects:'Great',profitability:'Cash Cow',risk:'High',score:12,rating:'Best',iv:207.29,mstar:240.00,rkgstk:218.09,avgfv:221.79,price:177.82,mos:14.2,conviction:'LOW',status:'Undervalued',updated:'Mar 2026',comment:"I'll continue buying back more Nvidia whenever it dips below my IV over time."},
+  {ticker:'ORCL',fav:false,sector:'Information Technology',type:'Dividend Growth',mktcap:439.5,margin:31.8,roe:69.0,roic:8.8,roa:6.9,fcf:-13.2,fcfYield:-3.0,mgmt:'Exemplary',moat:'Wide',prospects:'Good',profitability:'Profitable',risk:'Very High',score:8,rating:'Good',iv:198.08,mstar:277.00,rkgstk:264.06,avgfv:246.38,price:152.96,mos:22.8,conviction:'MED',status:'Undervalued',updated:'Dec 2025',comment:''},
+  {ticker:'PLTR',fav:false,sector:'Information Technology',type:'Growth',mktcap:375.7,margin:31.6,roe:26.0,roic:271.8,roa:11.6,fcf:2.1,fcfYield:0.6,mgmt:'Exemplary',moat:'Wide',prospects:'Great',profitability:'V.Profitable',risk:'High',score:11,rating:'Great',iv:160.41,mstar:153.00,rkgstk:168.86,avgfv:156.77,price:157.16,mos:2.0,conviction:'LOW',status:'Undervalued',updated:'Feb 2026',comment:''},
+  {ticker:'SNPS',fav:false,sector:'Information Technology',type:'Growth',mktcap:83.8,margin:12.3,roe:5.5,roic:2.3,roa:2.0,fcf:2.3,fcfYield:2.7,mgmt:'Exemplary',moat:'Wide',prospects:'Good',profitability:'Profitable',risk:'High',score:9,rating:'Good',iv:451.77,mstar:515.00,rkgstk:490.61,avgfv:485.79,price:437.41,mos:3.2,conviction:'LOW',status:'Undervalued',updated:'Feb 2026',comment:''},
+  {ticker:'SPOT',fav:false,sector:'Information Technology',type:'Growth',mktcap:116.4,margin:12.8,roe:31.9,roic:85.5,roa:10.2,fcf:3.3,fcfYield:2.8,mgmt:'Exemplary',moat:'Narrow',prospects:'Great',profitability:'Profitable',risk:'High',score:8,rating:'Good',iv:606.22,mstar:510.00,rkgstk:641.71,avgfv:585.98,price:565.19,mos:6.8,conviction:'LOW',status:'Undervalued',updated:'Feb 2026',comment:''},
+  {ticker:'TSM',fav:true,sector:'Information Technology',type:'Dividend Growth',mktcap:1757.7,margin:50.8,roe:35.2,roic:20.5,roa:16.6,fcf:32.2,fcfYield:1.8,mgmt:'Exemplary',moat:'Wide',prospects:'Great',profitability:'Cash Cow',risk:'Medium',score:13,rating:'Best',iv:349.02,mstar:428.00,rkgstk:351.10,avgfv:376.04,price:338.89,mos:2.9,conviction:'LOW',status:'Undervalued',updated:'Jan 2026',comment:''},
+  {ticker:'V',fav:true,sector:'Information Technology',type:'Dividend Growth',mktcap:605.0,margin:67.0,roe:53.9,roic:52.7,roa:18.4,fcf:22.9,fcfYield:3.8,mgmt:'Exemplary',moat:'Wide',prospects:'Great',profitability:'Cash Cow',risk:'Medium',score:13,rating:'Best',iv:349.29,mstar:323.00,rkgstk:364.02,avgfv:345.44,price:317.40,mos:9.1,conviction:'LOW',status:'Undervalued',updated:'Feb 2026',comment:"I'll buy more Visa whenever it's more undervalued."},
+  // Communication Services
+  {ticker:'GOOGL',fav:true,sector:'Communication Services',type:'Dividend Growth',mktcap:3611.2,margin:32.0,roe:35.7,roic:31.2,roa:15.4,fcf:73.3,fcfYield:2.0,mgmt:'Exemplary',moat:'Wide',prospects:'Great',profitability:'Cash Cow',risk:'Medium',score:13,rating:'Best',iv:298.28,mstar:340.00,rkgstk:316.25,avgfv:318.18,price:298.52,mos:-0.1,conviction:'LOW',status:'Overvalued',updated:'Feb 2026',comment:''},
+  {ticker:'META',fav:true,sector:'Communication Services',type:'Growth',mktcap:1631.2,margin:41.4,roe:30.2,roic:27.8,roa:16.2,fcf:43.6,fcfYield:2.7,mgmt:'Exemplary',moat:'Wide',prospects:'Great',profitability:'Cash Cow',risk:'Medium',score:13,rating:'Best',iv:722.20,mstar:850.00,rkgstk:742.68,avgfv:771.63,price:644.86,mos:10.7,conviction:'LOW',status:'Undervalued',updated:'Jan 2026',comment:"I'll be buying back more Meta shares going forward when it becomes undervalued."},
+  {ticker:'NFLX',fav:false,sector:'Communication Services',type:'Growth',mktcap:418.1,margin:29.5,roe:42.8,roic:33.5,roa:15.2,fcf:9.5,fcfYield:2.3,mgmt:'Exemplary',moat:'Narrow',prospects:'Good',profitability:'V.Profitable',risk:'High',score:8,rating:'Good',iv:101.46,mstar:80.00,rkgstk:104.44,avgfv:95.30,price:99.02,mos:2.4,conviction:'LOW',status:'Undervalued',updated:'Feb 2026',comment:''},
+  // Consumer Discretionary
+  {ticker:'AMZN',fav:false,sector:'Consumer Discretionary',type:'Growth',mktcap:2288.8,margin:11.2,roe:22.3,roic:14.2,roa:6.9,fcf:5.8,fcfYield:0.3,mgmt:'Exemplary',moat:'Wide',prospects:'Great',profitability:'Profitable',risk:'Medium',score:11,rating:'Great',iv:238.39,mstar:260.00,rkgstk:265.64,avgfv:254.68,price:213.21,mos:10.6,conviction:'LOW',status:'Undervalued',updated:'Feb 2026',comment:''},
+  {ticker:'BKNG',fav:false,sector:'Consumer Discretionary',type:'Dividend Growth',mktcap:144.1,margin:35.3,roe:null,roic:43.5,roa:20.2,fcf:9.1,fcfYield:6.3,mgmt:'Exemplary',moat:'Narrow',prospects:'Great',profitability:'V.Profitable',risk:'Medium',score:10,rating:'Great',iv:5588.25,mstar:5300.00,rkgstk:5521.20,avgfv:5469.82,price:4550.43,mos:18.6,conviction:'MED',status:'Undervalued',updated:'Feb 2026',comment:''},
+  {ticker:'TSLA',fav:false,sector:'Consumer Discretionary',type:'Growth',mktcap:1488.7,margin:5.1,roe:4.9,roic:7.0,roa:2.3,fcf:6.2,fcfYield:0.4,mgmt:'Exemplary',moat:'Narrow',prospects:'Great',profitability:'Profitable',risk:'High',score:8,rating:'Good',iv:361.95,mstar:400.00,rkgstk:392.09,avgfv:384.68,price:396.73,mos:-9.6,conviction:'LOW',status:'Overvalued',updated:'Jan 2026',comment:''},
+  // Consumer Staples
+  {ticker:'COST',fav:false,sector:'Consumer Staples',type:'Dividend Growth',mktcap:442.8,margin:3.8,roe:27.4,roic:21.6,roa:9.9,fcf:9.1,fcfYield:2.1,mgmt:'Exemplary',moat:'Wide',prospects:'Good',profitability:'V.Profitable',risk:'Low',score:12,rating:'Best',iv:945.60,mstar:650.00,rkgstk:984.53,avgfv:860.04,price:998.10,mos:-5.6,conviction:'LOW',status:'Overvalued',updated:'Mar 2026',comment:''},
+  {ticker:'WMT',fav:false,sector:'Consumer Staples',type:'Dividend Growth',mktcap:986.7,margin:4.2,roe:21.9,roic:14.0,roa:6.9,fcf:14.9,fcfYield:1.5,mgmt:'Exemplary',moat:'Wide',prospects:'Good',profitability:'V.Profitable',risk:'Low',score:12,rating:'Best',iv:94.30,mstar:62.00,rkgstk:122.13,avgfv:92.81,price:123.80,mos:-31.3,conviction:'LOW',status:'Overvalued',updated:'Feb 2026',comment:''},
+  // Financials
+  {ticker:'AXP',fav:true,sector:'Financials',type:'Dividend Growth',mktcap:206.6,margin:20.4,roe:34.0,roic:11.3,roa:3.8,fcf:16.0,fcfYield:7.7,mgmt:'Exemplary',moat:'Wide',prospects:'Good',profitability:'V.Profitable',risk:'Medium',score:11,rating:'Great',iv:358.33,mstar:295.00,rkgstk:341.47,avgfv:331.60,price:300.89,mos:16.0,conviction:'MED',status:'Undervalued',updated:'Feb 2026',comment:"I started a very small position in AMEX. I'll add more to it over time."},
+  {ticker:'BRK.B',fav:false,sector:'Financials',type:'Conglomerate',mktcap:1068.1,margin:15.6,roe:9.8,roic:5.7,roa:4.0,fcf:25.0,fcfYield:2.3,mgmt:'Exemplary',moat:'Narrow',prospects:'Neutral',profitability:'V.Profitable',risk:'Low',score:9,rating:'Good',iv:500.16,mstar:510.00,rkgstk:464.74,avgfv:491.63,price:498.80,mos:0.3,conviction:'LOW',status:'Undervalued',updated:'Mar 2026',comment:''},
+  {ticker:'CME',fav:false,sector:'Financials',type:'Dividend Growth',mktcap:113.7,margin:64.9,roe:14.8,roic:11.3,roa:1.6,fcf:4.2,fcfYield:3.7,mgmt:'Exemplary',moat:'Wide',prospects:'Good',profitability:'Profitable',risk:'Medium',score:10,rating:'Great',iv:285.90,mstar:260.00,rkgstk:278.69,avgfv:274.86,price:317.10,mos:-10.9,conviction:'LOW',status:'Overvalued',updated:'Feb 2026',comment:''},
+  {ticker:'MCO',fav:false,sector:'Financials',type:'Dividend Growth',mktcap:84.0,margin:44.9,roe:62.1,roic:29.5,roa:13.8,fcf:2.6,fcfYield:3.1,mgmt:'Standard',moat:'Wide',prospects:'Good',profitability:'V.Profitable',risk:'Low',score:10,rating:'Great',iv:508.71,mstar:550.00,rkgstk:505.48,avgfv:521.40,price:471.97,mos:7.2,conviction:'LOW',status:'Undervalued',updated:'Feb 2026',comment:''},
+  {ticker:'SPGI',fav:false,sector:'Financials',type:'Dividend Growth',mktcap:135.2,margin:42.0,roe:13.1,roic:10.4,roa:6.6,fcf:5.5,fcfYield:4.0,mgmt:'Exemplary',moat:'Wide',prospects:'Good',profitability:'V.Profitable',risk:'Medium',score:11,rating:'Great',iv:488.13,mstar:570.00,rkgstk:547.63,avgfv:535.25,price:452.36,mos:7.3,conviction:'LOW',status:'Undervalued',updated:'Feb 2026',comment:"I'll likely start a new position in SPGI this year."},
+  // Industrials
+  {ticker:'UBER',fav:false,sector:'Industrials',type:'Growth',mktcap:154.6,margin:10.7,roe:39.9,roic:16.9,roa:6.2,fcf:9.8,fcfYield:6.3,mgmt:'Exemplary',moat:'Narrow',prospects:'Great',profitability:'V.Profitable',risk:'High',score:9,rating:'Good',iv:90.62,mstar:85.00,rkgstk:93.49,avgfv:89.70,price:75.13,mos:17.1,conviction:'MED',status:'Undervalued',updated:'Feb 2026',comment:''},
+  {ticker:'WM',fav:false,sector:'Industrials',type:'Dividend Growth',mktcap:99.2,margin:18.6,roe:29.7,roic:11.2,roa:6.5,fcf:2.8,fcfYield:2.8,mgmt:'Exemplary',moat:'Wide',prospects:'Good',profitability:'Profitable',risk:'Low',score:11,rating:'Great',iv:227.40,mstar:200.00,rkgstk:234.96,avgfv:220.79,price:246.02,mos:-8.2,conviction:'LOW',status:'Overvalued',updated:'Feb 2026',comment:''},
+  // Restaurant
+  {ticker:'MCD',fav:false,sector:'Restaurant',type:'Dividend Growth',mktcap:233.1,margin:46.1,roe:null,roic:18.9,roa:13.5,fcf:7.2,fcfYield:3.1,mgmt:'Exemplary',moat:'Wide',prospects:'Good',profitability:'V.Profitable',risk:'Medium',score:11,rating:'Great',iv:310.13,mstar:307.00,rkgstk:316.32,avgfv:311.15,price:328.06,mos:-5.8,conviction:'LOW',status:'Overvalued',updated:'Feb 2026',comment:''},
+];
+
+let activeFilters = { status: 'all', rating: '' };
+let currentSort = { field: '', dir: 'desc' };
+
+function fmt(n, prefix='', suffix='') {
+  if (n === null || n === undefined || isNaN(n)) return '<span style="color:var(--faint)">—</span>';
+  return prefix + n.toLocaleString('en-US', {maximumFractionDigits:1}) + suffix;
+}
+
+function mosClass(v) { return v >= 0 ? 'mos-pos' : 'mos-neg'; }
+
+function scoreBadgeClass(s) {
+  if (s >= 12) return 'score-best';
+  if (s >= 9) return 'score-great';
+  if (s >= 7) return 'score-good';
+  return 'score-dev';
+}
+
+function ratingLabel(r) {
+  const map = {Best:'score-best',Great:'score-great',Good:'score-good'};
+  return `<span class="score-badge ${map[r]||'score-dev'}">${r}</span>`;
+}
+
+function moatDisplay(m) {
+  if (m === 'Wide') return `<span class="moat-dots moat-wide">●●●</span>`;
+  if (m === 'Narrow') return `<span class="moat-dots moat-narrow">●●○</span>`;
+  return `<span class="moat-dots" style="color:var(--muted)">●○○</span>`;
+}
+
+function convictionDisplay(c) {
+  if (c === 'HIGH') return `<span class="conviction-high">● HIGH</span>`;
+  if (c === 'MED') return `<span class="conviction-med">○ MED</span>`;
+  return `<span class="conviction-low">– LOW</span>`;
+}
+
+function getFiltered() {
+  const q = document.getElementById('searchBox').value.toLowerCase();
+  return RAW.filter(d => {
+    if (q && !d.ticker.toLowerCase().includes(q) && !d.sector.toLowerCase().includes(q)) return false;
+    if (activeFilters.status === 'Undervalued' && d.status !== 'Undervalued') return false;
+    if (activeFilters.status === 'Overvalued' && d.status !== 'Overvalued') return false;
+    if (activeFilters.status === 'favorite' && !d.fav) return false;
+    if (activeFilters.rating && d.rating !== activeFilters.rating) return false;
+    return true;
+  });
+}
+
+function getSorted(data) {
+  const s = document.getElementById('sortSelect').value;
+  if (!s) return data;
+  const d = [...data];
+  const sorts = {
+    mos_desc: (a,b) => b.mos - a.mos,
+    mos_asc: (a,b) => a.mos - b.mos,
+    score_desc: (a,b) => b.score - a.score,
+    mktcap_desc: (a,b) => b.mktcap - a.mktcap,
+    ticker_asc: (a,b) => a.ticker.localeCompare(b.ticker),
+  };
+  return d.sort(sorts[s] || (() => 0));
+}
+
+function renderTable() {
+  const data = getSorted(getFiltered());
+  const tbody = document.getElementById('tableBody');
+  
+  if (data.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="15" class="no-results">NO RESULTS · ADJUST FILTERS</td></tr>`;
+    return;
+  }
+
+  const sortedByDefault = document.getElementById('sortSelect').value === '';
+  let currentSector = '';
+  let html = '';
+
+  const ordered = sortedByDefault ? data : data;
+
+  ordered.forEach(d => {
+    if (sortedByDefault && d.sector !== currentSector) {
+      currentSector = d.sector;
+      html += `<tr class="section-row"><td colspan="15">▸ ${d.sector}</td></tr>`;
+    }
+
+    const mosStr = d.mos >= 0 ? `+${d.mos.toFixed(1)}%` : `${d.mos.toFixed(1)}%`;
+    const priceStr = d.price >= 1000 ? `$${d.price.toLocaleString()}` : `$${d.price.toFixed(2)}`;
+    const avgFvStr = d.avgfv >= 1000 ? `$${d.avgfv.toLocaleString()}` : `$${d.avgfv.toFixed(2)}`;
+
+    html += `<tr class="${d.fav?'favorite-row':''}" onclick="openPanel('${d.ticker}')">
+      <td><div class="ticker-cell">${d.fav?'<span class="star-icon">★</span>':''}${d.ticker}</div></td>
+      <td><span class="sector-tag">${d.sector.split(' ').map(w=>w[0]).join('').substring(0,3)}</span></td>
+      <td><span style="font-size:11px;color:var(--muted)">${d.type}</span></td>
+      <td>${ratingLabel(d.rating)}</td>
+      <td><span class="score-badge ${scoreBadgeClass(d.score)}">${d.score}/13</span></td>
+      <td class="mono" style="color:var(--muted)">$${d.mktcap >= 1000 ? (d.mktcap/1000).toFixed(1)+'T' : d.mktcap.toFixed(0)+'B'}</td>
+      <td class="mono">${d.margin.toFixed(1)}%</td>
+      <td class="mono">${d.roe !== null ? d.roe.toFixed(1)+'%' : '<span style="color:var(--faint)">—</span>'}</td>
+      <td class="mono">${d.fcf < 0 ? '<span style="color:var(--red)">'+d.fcf.toFixed(1)+'</span>' : d.fcf.toFixed(1)}</td>
+      <td>${moatDisplay(d.moat)}</td>
+      <td class="mono" style="color:var(--blue)">${avgFvStr}</td>
+      <td class="mono">${priceStr}</td>
+      <td class="${mosClass(d.mos)} mono">${mosStr}</td>
+      <td>${convictionDisplay(d.conviction)}</td>
+      <td><span class="status-pill ${d.status==='Undervalued'?'under':'over'}">${d.status}</span></td>
+    </tr>`;
+  });
+
+  tbody.innerHTML = html;
+}
+
+function setFilter(type, val, btn) {
+  activeFilters[type] = val;
+  // Update buttons
+  const group = type === 'status' ? document.getElementById('statusFilters') : document.getElementById('ratingFilters');
+  group.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  // If clicking a rating that's already active, deactivate
+  if (type === 'rating') {
+    // toggle behavior
+    const wasActive = btn && btn.classList.contains('active');
+  }
+  applyFilters();
+}
+
+function applyFilters() { renderTable(); }
+
+function openPanel(ticker) {
+  const d = RAW.find(r => r.ticker === ticker);
+  if (!d) return;
+
+  document.getElementById('pTicker').textContent = (d.fav ? '★ ' : '') + d.ticker;
+  document.getElementById('pSector').textContent = d.sector + ' · ' + d.type;
+
+  // Valuation bar
+  const allFVs = [d.iv, d.mstar, d.rkgstk].filter(v => v > 0);
+  const minFV = Math.min(...allFVs) * 0.85;
+  const maxFV = Math.max(...allFVs) * 1.15;
+  const range = maxFV - minFV;
+
+  function barPct(v) { return Math.max(0, Math.min(100, ((v - minFV) / range) * 100)); }
+
+  const pricePct = barPct(d.price);
+  const avgPct = barPct(d.avgfv);
+
+  let barHtml = `
+    <div class="kv-row" style="margin-bottom:6px">
+      <span class="kv-key">MoS vs Avg FV</span>
+      <span class="kv-val ${d.mos >= 0 ? 'mos-pos' : 'mos-neg'}">${d.mos >= 0 ? '+' : ''}${d.mos.toFixed(1)}%</span>
+    </div>
+    <div style="margin:16px 0 8px; position:relative; padding-top:24px;">
+      <div class="iv-bar-track">
+        <div class="iv-bar-fill" style="width:${avgPct}%"></div>
+        <div class="price-pin" style="left:${pricePct}%">
+          <div class="price-pin-label">$${d.price.toLocaleString('en-US',{maximumFractionDigits:2})} ↓</div>
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px;">
+      ${[['II Est.', d.iv], ['Morningstar', d.mstar], ['RankingStock', d.rkgstk]].map(([label, val]) => `
+        <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:3px;padding:8px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:0.1em;margin-bottom:4px">${label}</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;color:var(--blue)">$${val.toLocaleString('en-US',{maximumFractionDigits:2})}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+  document.getElementById('pValBar').innerHTML = barHtml;
+
+  // Fundamentals
+  document.getElementById('pFundamentals').innerHTML = [
+    ['Market Cap', `$${d.mktcap.toLocaleString()}B`],
+    ['Operating Margin', `${d.margin.toFixed(1)}%`],
+    ['ROE', d.roe !== null ? `${d.roe.toFixed(1)}%` : '—'],
+    ['ROIC', `${d.roic.toFixed(1)}%`],
+    ['ROA', `${d.roa.toFixed(1)}%`],
+    ['FCF', `$${d.fcf.toFixed(1)}B`],
+    ['FCF Yield', `${d.fcfYield.toFixed(1)}%`],
+  ].map(([k,v]) => `<div class="kv-row" style="margin-bottom:6px"><span class="kv-key">${k}</span><span class="kv-val">${v}</span></div>`).join('');
+
+  // Quality
+  const riskColor = d.risk === 'Low' ? 'var(--green)' : d.risk === 'Medium' ? 'var(--gold)' : d.risk === 'High' ? 'var(--red)' : '#ff4040';
+  document.getElementById('pQuality').innerHTML = [
+    ['Score', `<span class="score-badge ${scoreBadgeClass(d.score)}" style="display:inline-flex">${d.score}/13</span>`],
+    ['Rating', ratingLabel(d.rating)],
+    ['Moat', moatDisplay(d.moat) + ` <span style="font-size:11px;color:var(--muted);margin-left:4px">${d.moat}</span>`],
+    ['Management', `<span style="color:${d.mgmt==='Exemplary'?'var(--green)':'var(--gold)'}">${d.mgmt}</span>`],
+    ['Prospects', `<span style="color:var(--blue)">${d.prospects}</span>`],
+    ['Profitability', `<span style="color:var(--text)">${d.profitability}</span>`],
+    ['Risk', `<span style="color:${riskColor}">${d.risk}</span>`],
+    ['Conviction', convictionDisplay(d.conviction)],
+    ['Last Updated', `<span style="color:var(--muted)">${d.updated}</span>`],
+  ].map(([k,v]) => `<div class="kv-row" style="margin-bottom:8px"><span class="kv-key">${k}</span><span class="kv-val">${v}</span></div>`).join('');
+
+  const commentWrap = document.getElementById('pCommentWrap');
+  if (d.comment) {
+    document.getElementById('pComment').textContent = d.comment;
+    commentWrap.style.display = 'block';
+  } else {
+    commentWrap.style.display = 'none';
+  }
+
+  document.getElementById('detail-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+}
+
+function closePanel() {
+  document.getElementById('detail-panel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+
+// Rating toggle
+document.getElementById('ratingFilters').querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const val = this.textContent.trim();
+    if (activeFilters.rating === val) {
+      activeFilters.rating = '';
+      this.classList.remove('active');
+    } else {
+      document.getElementById('ratingFilters').querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      activeFilters.rating = val;
+      this.classList.add('active');
+    }
+    applyFilters();
+  });
+});
+
+renderTable();
+</script>
+</body>
+</html>

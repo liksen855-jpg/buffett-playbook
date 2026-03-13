@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InsightInvest — Portfolio Scorecard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0D0D14;
+  --paper: #F7F5F0;
+  --gold: #C9A84C;
+  --gold-dim: #8B6E2E;
+  --gold-faint: rgba(201,168,76,0.07);
+  --gold-border: rgba(201,168,76,0.2);
+  --smoke: #16161F;
+  --mist: #1E1E2E;
+  --silver: #8A8AA0;
+  --border: rgba(255,255,255,0.06);
+  --green: #2ECC8A;
+  --green-faint: rgba(46,204,138,0.08);
+  --red: #E05252;
+  --red-faint: rgba(224,82,82,0.08);
+  --amber: #F0A843;
+  --blue: #5B9CF6;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--ink); color: var(--paper);
+  font-family: 'DM Mono', monospace;
+  min-height: 100vh; overflow-x: hidden;
+}
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 1000; opacity: 0.35;
+}
+header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 24px 48px; border-bottom: 1px solid var(--gold-border);
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(13,13,20,0.94); backdrop-filter: blur(14px);
+}
+.brand-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px; font-weight: 600; color: var(--gold); letter-spacing: 0.08em;
+}
+.brand-sub { font-size: 9px; letter-spacing: 0.28em; color: var(--silver); text-transform: uppercase; margin-top: 3px; }
+.disclaimer {
+  font-size: 9px; letter-spacing: 0.1em; color: var(--gold-dim);
+  background: var(--gold-faint); border: 1px solid var(--gold-border);
+  padding: 6px 14px; border-radius: 2px;
+}
+.hero {
+  padding: 64px 48px 48px; border-bottom: 1px solid var(--gold-border);
+  position: relative; overflow: hidden;
+}
+.hero::after {
+  content: ''; position: absolute; right: -60px; top: -60px;
+  width: 480px; height: 480px;
+  background: radial-gradient(circle, rgba(201,168,76,0.055) 0%, transparent 65%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  font-size: 9px; letter-spacing: 0.32em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 18px;
+  opacity: 0; animation: rise 0.7s ease 0.15s forwards;
+}
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(38px, 5vw, 66px); font-weight: 300;
+  line-height: 1.06; letter-spacing: -0.02em; color: var(--paper); margin-bottom: 18px;
+  opacity: 0; animation: rise 0.7s ease 0.3s forwards;
+}
+.hero-title em { font-style: italic; color: var(--gold); }
+.hero-desc {
+  font-size: 11.5px; color: var(--silver); line-height: 1.9; max-width: 540px;
+  opacity: 0; animation: rise 0.7s ease 0.45s forwards;
+}
+@keyframes rise { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+
+.workspace { display: grid; grid-template-columns: 420px 1fr; min-height: calc(100vh - 200px); align-items: start; }
+
+.entry-panel {
+  border-right: 1px solid var(--gold-border); padding: 40px 36px;
+  position: sticky; top: 72px; max-height: calc(100vh - 72px); overflow-y: auto;
+}
+.panel-section { margin-bottom: 36px; }
+.section-eyebrow {
+  font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 18px; padding-bottom: 10px;
+  border-bottom: 1px solid var(--gold-border);
+  display: flex; align-items: center; gap: 8px;
+}
+.section-eyebrow::before { content:''; width:4px; height:4px; background:var(--gold); border-radius:50%; display:inline-block; }
+.field-group { margin-bottom: 18px; }
+.field-label {
+  font-size: 10px; letter-spacing: 0.12em; color: var(--silver); margin-bottom: 7px;
+  display: flex; justify-content: space-between;
+}
+input[type=text], input[type=number], select {
+  width: 100%; background: var(--smoke); border: 1px solid var(--border);
+  border-radius: 2px; color: var(--paper); font-family: 'DM Mono', monospace;
+  font-size: 12px; padding: 10px 14px; outline: none; transition: border-color 0.2s;
+  -webkit-appearance: none;
+}
+input:focus, select:focus { border-color: var(--gold); }
+input::placeholder { color: rgba(138,138,160,0.5); }
+select option { background: var(--smoke); }
+.inline-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.slider-row { display: flex; align-items: center; gap: 12px; }
+.slider-row input[type=range] {
+  flex: 1; -webkit-appearance: none; height: 2px; background: var(--mist);
+  outline: none; cursor: pointer; padding: 0; border: none;
+}
+.slider-row input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 13px; height: 13px; background: var(--gold);
+  border-radius: 50%; border: 2px solid var(--ink);
+  box-shadow: 0 0 6px rgba(201,168,76,0.5); cursor: pointer; transition: transform 0.15s;
+}
+.slider-row input[type=range]:hover::-webkit-slider-thumb { transform: scale(1.2); }
+.slider-val { font-family:'DM Mono',monospace; font-size:12px; color:var(--gold); min-width:36px; text-align:right; }
+
+.add-btn {
+  width: 100%; padding: 14px; background: var(--gold); color: var(--ink);
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  border: none; border-radius: 2px; cursor: pointer;
+  transition: all 0.2s; position: relative; overflow: hidden; margin-top: 4px;
+}
+.add-btn::before { content:''; position:absolute; inset:0; background:white; transform:translateX(-100%); transition:transform 0.25s; }
+.add-btn:hover::before { transform:translateX(0); }
+.add-btn span { position:relative; z-index:1; }
+.reset-btn {
+  width:100%; padding:10px; background:transparent; color:var(--silver);
+  font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase;
+  border:1px solid var(--border); border-radius:2px; cursor:pointer; transition:all 0.2s; margin-top:8px;
+}
+.reset-btn:hover { border-color:var(--red); color:var(--red); }
+
+.scorecard-panel { padding: 40px 40px 80px; }
+
+.portfolio-summary {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  gap: 1px; background: var(--gold-border);
+  border: 1px solid var(--gold-border); border-radius: 2px;
+  overflow: hidden; margin-bottom: 40px;
+}
+.summary-cell { background:var(--ink); padding:18px 20px; transition:background 0.15s; }
+.summary-cell:hover { background:var(--gold-faint); }
+.summary-cell-label { font-size:8px; letter-spacing:0.22em; text-transform:uppercase; color:var(--silver); margin-bottom:6px; }
+.summary-cell-val { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; line-height:1; color:var(--paper); }
+.summary-cell-val.gold { color:var(--gold); }
+.summary-cell-val.green { color:var(--green); }
+.summary-cell-val.red { color:var(--red); }
+
+.score-ring-wrap {
+  display:flex; align-items:center; gap:32px; padding:28px 32px;
+  border:1px solid var(--gold-border); border-radius:2px; background:var(--gold-faint); margin-bottom:36px;
+}
+.ring-container { position:relative; width:90px; height:90px; flex-shrink:0; }
+.ring-svg { width:90px; height:90px; transform:rotate(-90deg); }
+.ring-bg { fill:none; stroke:var(--mist); stroke-width:7; }
+.ring-fill { fill:none; stroke-width:7; stroke-linecap:round; transition:stroke-dashoffset 0.8s cubic-bezier(0.4,0,0.2,1), stroke 0.5s; }
+.ring-label { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.ring-score { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:300; color:var(--paper); line-height:1; }
+.ring-denom { font-size:9px; color:var(--silver); letter-spacing:0.1em; }
+.ring-meta { flex:1; }
+.ring-grade { font-family:'Syne',sans-serif; font-size:22px; font-weight:700; letter-spacing:0.04em; margin-bottom:6px; }
+.ring-subtitle { font-size:11px; color:var(--silver); line-height:1.7; }
+
+.empty-state {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:100px 40px; text-align:center; border:1px dashed var(--gold-border); border-radius:2px; color:var(--silver);
+}
+.empty-icon { font-family:'Cormorant Garamond',serif; font-size:48px; font-weight:300; color:var(--gold-dim); margin-bottom:16px; opacity:0.5; }
+.empty-text { font-size:11px; letter-spacing:0.1em; line-height:1.8; }
+
+.holdings-title {
+  font-size:9px; letter-spacing:0.28em; text-transform:uppercase; color:var(--gold); margin-bottom:20px;
+  display:flex; align-items:center; gap:10px;
+}
+.holdings-title::before { content:''; width:4px; height:4px; background:var(--gold); border-radius:50%; }
+
+.holding-card {
+  border:1px solid var(--border); border-radius:2px; overflow:hidden; margin-bottom:16px;
+  transition:border-color 0.2s; animation:cardIn 0.35s ease;
+}
+@keyframes cardIn { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
+.holding-card:hover { border-color:var(--gold-border); }
+
+.card-header {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:16px 20px; background:var(--smoke); border-bottom:1px solid var(--border); cursor:pointer;
+}
+.card-ticker {
+  font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:300; color:var(--gold);
+  display:flex; align-items:baseline; gap:10px;
+}
+.card-ticker-sub { font-family:'DM Mono',monospace; font-size:10px; color:var(--silver); }
+.card-right { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+
+.card-score { font-size:11px; font-family:'DM Mono',monospace; padding:4px 12px; border-radius:20px; font-weight:500; }
+.score-best  { background:rgba(201,168,76,0.15); color:var(--gold);   border:1px solid rgba(201,168,76,0.4); }
+.score-great { background:rgba(91,156,246,0.12);  color:var(--blue);   border:1px solid rgba(91,156,246,0.3); }
+.score-good  { background:var(--green-faint);     color:var(--green);  border:1px solid rgba(46,204,138,0.3); }
+.score-dev   { background:rgba(138,138,160,0.1);  color:var(--silver); border:1px solid var(--border); }
+
+.status-pill { font-size:10px; padding:3px 10px; border-radius:2px; letter-spacing:0.05em; font-weight:500; }
+.pill-under { background:var(--green-faint); color:var(--green); border:1px solid rgba(46,204,138,0.3); }
+.pill-over  { background:var(--red-faint);   color:var(--red);   border:1px solid rgba(224,82,82,0.3); }
+.pill-fair  { background:var(--gold-faint);  color:var(--gold);  border:1px solid var(--gold-border); }
+
+.remove-btn {
+  background:none; border:1px solid var(--border); color:var(--silver);
+  width:24px; height:24px; border-radius:2px; cursor:pointer; font-size:13px;
+  display:flex; align-items:center; justify-content:center; transition:all 0.15s;
+}
+.remove-btn:hover { border-color:var(--red); color:var(--red); }
+
+.card-body { padding:20px; }
+.score-breakdown { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-bottom:18px; }
+.score-dim { display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center; }
+.score-dim-label { font-size:8px; letter-spacing:0.1em; color:var(--silver); text-transform:uppercase; line-height:1.3; }
+.pip-row { display:flex; gap:3px; margin-top:4px; }
+.pip { width:8px; height:8px; border-radius:50%; background:var(--mist); transition:background 0.3s; }
+.pip.on { background:var(--gold); }
+.pip.on.grn { background:var(--green); }
+.pip.on.rrd { background:var(--red); }
+
+.card-metrics { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+.metric-box { background:var(--smoke); border:1px solid var(--border); border-radius:2px; padding:10px 12px; }
+.metric-label { font-size:8px; letter-spacing:0.12em; color:var(--silver); text-transform:uppercase; margin-bottom:4px; }
+.metric-val { font-family:'DM Mono',monospace; font-size:13px; font-weight:500; color:var(--paper); }
+.metric-val.good { color:var(--green); }
+.metric-val.warn { color:var(--amber); }
+.metric-val.bad  { color:var(--red); }
+
+.card-flag { margin-top:14px; padding:10px 14px; background:rgba(201,168,76,0.06); border-left:2px solid var(--gold); font-size:10px; color:var(--silver); line-height:1.7; }
+.card-flag.flag-bad { background:var(--red-faint); border-left-color:var(--red); }
+
+.alloc-section { margin-top:36px; }
+.alloc-bars { display:flex; flex-direction:column; gap:10px; }
+.alloc-row { display:flex; align-items:center; gap:12px; }
+.alloc-ticker { font-family:'DM Mono',monospace; font-size:11px; color:var(--gold); width:52px; flex-shrink:0; }
+.alloc-track { flex:1; height:4px; background:var(--mist); border-radius:2px; overflow:hidden; }
+.alloc-fill { height:100%; border-radius:2px; transition:width 0.6s cubic-bezier(0.4,0,0.2,1); }
+.alloc-pct { font-size:10px; color:var(--silver); width:40px; text-align:right; }
+
+.breakdown-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:36px; }
+.breakdown-card { border:1px solid var(--border); border-radius:2px; padding:20px; }
+.breakdown-title { font-size:9px; letter-spacing:0.22em; text-transform:uppercase; color:var(--gold); margin-bottom:16px; }
+.sector-list { display:flex; flex-direction:column; gap:8px; }
+.sector-row { display:flex; align-items:center; gap:10px; font-size:10px; }
+.sector-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.sector-name { flex:1; color:var(--silver); }
+.sector-pct { color:var(--paper); font-family:'DM Mono',monospace; }
+
+.warning-card { margin-top:20px; padding:16px 20px; border:1px solid rgba(224,82,82,0.3); border-radius:2px; background:var(--red-faint); }
+.warning-title { font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--red); margin-bottom:8px; }
+.warning-text { font-size:10px; color:var(--silver); line-height:1.7; }
+.warning-text strong { color:var(--paper); }
+.good-card { margin-top:20px; padding:16px 20px; border:1px solid rgba(46,204,138,0.25); border-radius:2px; background:var(--green-faint); }
+.good-title { font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--green); margin-bottom:8px; }
+.good-text { font-size:10px; color:var(--silver); line-height:1.7; }
+.good-text strong { color:var(--paper); }
+
+footer { padding:24px 48px; border-top:1px solid var(--gold-border); font-size:9px; color:var(--silver); letter-spacing:0.05em; line-height:1.7; }
+
+@media (max-width:960px) {
+  .workspace { grid-template-columns:1fr; }
+  .entry-panel { position:static; max-height:none; border-right:none; border-bottom:1px solid var(--gold-border); }
+  .portfolio-summary { grid-template-columns:repeat(3,1fr); }
+  header, .hero, .entry-panel, .scorecard-panel, footer { padding-left:20px; padding-right:20px; }
+}
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:var(--ink); }
+::-webkit-scrollbar-thumb { background:var(--mist); border-radius:3px; }
+</style>
+</head>
+<body>
+<style>
+  .__tool-nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 40px;
+    background: rgba(8,9,12,0.96);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid #252838;
+    z-index: 10000;
+    font-family: 'Syne', sans-serif;
+  }
+  .__tool-nav-left { display: flex; align-items: center; gap: 20px; }
+  .__tool-back {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; color: #555c72;
+    text-decoration: none; transition: color 0.3s;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .__tool-back:hover { color: #c9a84c; }
+  .__tool-back svg { transition: transform 0.3s; }
+  .__tool-back:hover svg { transform: translateX(-3px); }
+  .__tool-sep { width: 1px; height: 20px; background: #252838; }
+  .__tool-breadcrumb {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: #3dd68c;
+  }
+  .__tool-nav-right { display: flex; align-items: center; gap: 24px; }
+  .__tool-nav-links a {
+    font-size: 11px; font-weight: 500; color: #555c72;
+    text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase;
+    transition: color 0.3s; margin-left: 20px;
+  }
+  .__tool-nav-links a:hover { color: #c9a84c; }
+  .__tool-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px; color: #c9a84c; text-decoration: none; font-weight: 600;
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet"/>
+<nav class="__tool-nav">
+  <div class="__tool-nav-left">
+    <a href="/members" class="__tool-back">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 7H2M6 2L1 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Members
+    </a>
+    <div class="__tool-sep"></div>
+    <span class="__tool-breadcrumb">Portfolio · Portfolio Scorecard</span>
+  </div>
+  <a href="/" class="__tool-logo">Insight Invest</a>
+  <div class="__tool-nav-right">
+    <div class="__tool-nav-links">
+      <a href="/members#tools">All Tools</a>
+      <a href="/members#updates">Updates</a>
+      <a href="/reports">Reports</a>
+    </div>
+  </div>
+</nav>
+<style>
+  body { padding-top: 56px !important; }
+</style>
+
+
+<header>
+  <div>
+    <div class="brand-name">InsightInvest</div>
+    <div class="brand-sub">Portfolio Scorecard & Health Check</div>
+  </div>
+  <div class="disclaimer">⚠ Personal opinion · Not financial advice</div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">InsightInvest · Valuation Toolkit</div>
+  <h1 class="hero-title">How healthy is<br>your <em>portfolio?</em></h1>
+  <p class="hero-desc">Add your holdings and each one gets scored across the same five dimensions used in the InsightInvest Valuation Dashboard — quality, moat, profitability, prospects, and valuation. See your overall grade, concentration risks, and exactly where to focus.</p>
+</div>
+
+<div class="workspace">
+
+  <!-- LEFT: ENTRY -->
+  <div class="entry-panel">
+
+    <div class="panel-section">
+      <div class="section-eyebrow">Add a Holding</div>
+      <div class="field-group">
+        <div class="field-label">Ticker Symbol</div>
+        <input type="text" id="in-ticker" placeholder="e.g. NVDA" maxlength="6" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+      </div>
+      <div class="inline-pair">
+        <div class="field-group">
+          <div class="field-label">Sector</div>
+          <select id="in-sector">
+            <option value="">Select...</option>
+            <option>Information Technology</option>
+            <option>Communication Services</option>
+            <option>Consumer Discretionary</option>
+            <option>Consumer Staples</option>
+            <option>Financials</option>
+            <option>Healthcare</option>
+            <option>Industrials</option>
+            <option>Energy</option>
+            <option>Materials</option>
+            <option>Real Estate</option>
+            <option>Utilities</option>
+            <option>Restaurant</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <div class="field-label">Allocation (%)</div>
+          <input type="number" id="in-alloc" placeholder="e.g. 15" min="0.1" max="100" step="0.1">
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="section-eyebrow">Quality Dimensions</div>
+      <p style="font-size:10px;color:var(--silver);margin-bottom:20px;line-height:1.7">Rate each 1–3. Be honest — this is for your own clarity.</p>
+
+      <div class="field-group">
+        <div class="field-label"><span>Management Quality</span><span id="mgmt-label" style="color:var(--gold)">Standard</span></div>
+        <div class="slider-row">
+          <input type="range" id="sl-mgmt" min="1" max="3" step="1" value="2" oninput="updateLabel(this,'mgmt-label',['','Weak','Standard','Exemplary'])">
+          <span class="slider-val" id="sl-mgmt-v">2</span>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label"><span>Competitive Moat</span><span id="moat-label" style="color:var(--gold)">Narrow</span></div>
+        <div class="slider-row">
+          <input type="range" id="sl-moat" min="1" max="3" step="1" value="2" oninput="updateLabel(this,'moat-label',['','None','Narrow','Wide'])">
+          <span class="slider-val" id="sl-moat-v">2</span>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label"><span>Profitability</span><span id="profit-label" style="color:var(--gold)">Profitable</span></div>
+        <div class="slider-row">
+          <input type="range" id="sl-profit" min="1" max="3" step="1" value="2" oninput="updateLabel(this,'profit-label',['','Loss-Making','Profitable','Cash Cow'])">
+          <span class="slider-val" id="sl-profit-v">2</span>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label"><span>Growth Prospects</span><span id="prosp-label" style="color:var(--gold)">Neutral</span></div>
+        <div class="slider-row">
+          <input type="range" id="sl-prosp" min="1" max="3" step="1" value="2" oninput="updateLabel(this,'prosp-label',['','Declining','Neutral','Great'])">
+          <span class="slider-val" id="sl-prosp-v">2</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="section-eyebrow">Valuation & Risk</div>
+      <div class="field-group">
+        <div class="field-label">Valuation Status</div>
+        <select id="in-val">
+          <option value="under">Undervalued — MoS present</option>
+          <option value="fair">Fair Value — thin margin</option>
+          <option value="over">Overvalued — priced for perfection</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Risk Level</div>
+        <select id="in-risk">
+          <option value="low">Low</option>
+          <option value="medium" selected>Medium</option>
+          <option value="high">High</option>
+          <option value="veryhigh">Very High</option>
+        </select>
+      </div>
+      <div class="inline-pair">
+        <div class="field-group">
+          <div class="field-label">Op. Margin (%)</div>
+          <input type="number" id="in-margin" placeholder="e.g. 32.4" step="0.1">
+        </div>
+        <div class="field-group">
+          <div class="field-label">ROE (%)</div>
+          <input type="number" id="in-roe" placeholder="e.g. 35.2" step="0.1">
+        </div>
+      </div>
+      <div class="inline-pair">
+        <div class="field-group">
+          <div class="field-label">FCF Yield (%)</div>
+          <input type="number" id="in-fcfy" placeholder="e.g. 2.5" step="0.1">
+        </div>
+        <div class="field-group">
+          <div class="field-label">MoS vs IV (%)</div>
+          <input type="number" id="in-mos" placeholder="e.g. 14.2" step="0.1">
+        </div>
+      </div>
+    </div>
+
+    <button class="add-btn" onclick="addHolding()"><span>+ Add to Portfolio</span></button>
+    <button class="reset-btn" onclick="resetAll()">Reset Portfolio</button>
+  </div>
+
+  <!-- RIGHT: SCORECARD -->
+  <div class="scorecard-panel">
+
+    <div class="portfolio-summary">
+      <div class="summary-cell"><div class="summary-cell-label">Holdings</div><div class="summary-cell-val gold" id="sum-count">0</div></div>
+      <div class="summary-cell"><div class="summary-cell-label">Portfolio Score</div><div class="summary-cell-val" id="sum-score">—</div></div>
+      <div class="summary-cell"><div class="summary-cell-label">Undervalued</div><div class="summary-cell-val green" id="sum-under">—</div></div>
+      <div class="summary-cell"><div class="summary-cell-label">Overvalued</div><div class="summary-cell-val red" id="sum-over">—</div></div>
+      <div class="summary-cell"><div class="summary-cell-label">Avg MoS</div><div class="summary-cell-val" id="sum-mos">—</div></div>
+    </div>
+
+    <div class="score-ring-wrap" id="grade-wrap" style="display:none">
+      <div class="ring-container">
+        <svg class="ring-svg" viewBox="0 0 90 90">
+          <circle class="ring-bg" cx="45" cy="45" r="38"/>
+          <circle class="ring-fill" id="ring-arc" cx="45" cy="45" r="38"
+            stroke-dasharray="238.76" stroke-dashoffset="238.76" stroke="var(--gold)"/>
+        </svg>
+        <div class="ring-label">
+          <div class="ring-score" id="ring-score">0</div>
+          <div class="ring-denom">/100</div>
+        </div>
+      </div>
+      <div class="ring-meta">
+        <div class="ring-grade" id="ring-grade">—</div>
+        <div class="ring-subtitle" id="ring-subtitle">—</div>
+      </div>
+    </div>
+
+    <div class="empty-state" id="empty-state">
+      <div class="empty-icon">◈</div>
+      <div class="empty-text">No holdings yet.<br>Add your first position using the panel on the left.</div>
+    </div>
+
+    <div id="holdings-list" style="display:none">
+      <div class="holdings-title">Holdings · Individual Scores</div>
+      <div id="cards-container"></div>
+
+      <div class="alloc-section">
+        <div class="holdings-title" style="margin-top:36px">Allocation Breakdown</div>
+        <div class="alloc-bars" id="alloc-bars"></div>
+      </div>
+
+      <div class="breakdown-grid">
+        <div class="breakdown-card">
+          <div class="breakdown-title">Sector Concentration</div>
+          <div class="sector-list" id="sector-list"></div>
+        </div>
+        <div class="breakdown-card">
+          <div class="breakdown-title">Risk Distribution</div>
+          <div class="sector-list" id="risk-list"></div>
+        </div>
+      </div>
+
+      <div id="insights-container"></div>
+    </div>
+
+  </div>
+</div>
+
+<footer>InsightInvest Capital · leiholding.com · Scores are computed from your self-reported inputs across five quality dimensions. This is a personal reflection framework, not a definitive rating system. Real portfolio decisions require your own research, judgment, and risk tolerance. This is my opinion — take it as you will.</footer>
+
+<script>
+let holdings = [];
+
+const SECTOR_COLORS = ['#C9A84C','#5B9CF6','#2ECC8A','#E05252','#F0A843','#A78BFA','#34D399','#FB923C','#60A5FA','#F472B6','#A3E635','#38BDF8'];
+
+function updateLabel(el, labelId, labels) {
+  const v = parseInt(el.value);
+  document.getElementById(labelId).textContent = labels[v] || '';
+  document.getElementById(el.id + '-v').textContent = v;
+}
+
+function computeScore(h) {
+  let s = 0;
+  s += h.mgmt   === 3 ? 2 : h.mgmt   === 2 ? 1 : 0;
+  s += h.moat   === 3 ? 3 : h.moat   === 2 ? 2 : 0;
+  s += h.profit === 3 ? 2 : h.profit === 2 ? 1 : 0;
+  s += h.prosp  === 3 ? 2 : h.prosp  === 2 ? 1 : 0;
+  s += h.val    === 'under' ? 2 : h.val === 'fair' ? 1 : 0;
+  s += (h.risk === 'low' || h.risk === 'medium') ? 1 : 0;
+  if (h.margin !== null && h.margin >= 25) s += 1;
+  return Math.min(s, 13);
+}
+
+function scoreClass(s) {
+  if (s >= 12) return 'score-best';
+  if (s >=  9) return 'score-great';
+  if (s >=  7) return 'score-good';
+  return 'score-dev';
+}
+function scoreLabel(s) {
+  if (s >= 12) return 'Best';
+  if (s >=  9) return 'Great';
+  if (s >=  7) return 'Good';
+  return 'Developing';
+}
+function valLabel(v) { return v==='under'?'Undervalued':v==='fair'?'Fair Value':'Overvalued'; }
+function valPill(v)  { return v==='under'?'pill-under':v==='fair'?'pill-fair':'pill-over'; }
+
+function addHolding() {
+  const ticker = document.getElementById('in-ticker').value.trim().toUpperCase();
+  const sector = document.getElementById('in-sector').value;
+  const alloc  = parseFloat(document.getElementById('in-alloc').value) || 5;
+
+  if (!ticker) { flashBorder('in-ticker'); return; }
+  if (!sector) { flashBorder('in-sector'); return; }
+  if (holdings.find(h => h.ticker === ticker)) { flashBorder('in-ticker'); return; }
+
+  const h = {
+    ticker, sector, alloc,
+    mgmt:   parseInt(document.getElementById('sl-mgmt').value),
+    moat:   parseInt(document.getElementById('sl-moat').value),
+    profit: parseInt(document.getElementById('sl-profit').value),
+    prosp:  parseInt(document.getElementById('sl-prosp').value),
+    val:    document.getElementById('in-val').value,
+    risk:   document.getElementById('in-risk').value,
+    margin: parseFloat(document.getElementById('in-margin').value) || null,
+    roe:    parseFloat(document.getElementById('in-roe').value)    || null,
+    fcfy:   parseFloat(document.getElementById('in-fcfy').value)   || null,
+    mos:    parseFloat(document.getElementById('in-mos').value)    || null,
+  };
+  h.score = computeScore(h);
+  holdings.push(h);
+  clearForm();
+  render();
+}
+
+function removeHolding(ticker) {
+  holdings = holdings.filter(h => h.ticker !== ticker);
+  render();
+}
+
+function resetAll() { holdings = []; render(); }
+
+function flashBorder(id) {
+  const el = document.getElementById(id);
+  el.style.borderColor = 'var(--red)';
+  setTimeout(() => el.style.borderColor = '', 1400);
+}
+
+function clearForm() {
+  ['in-ticker','in-margin','in-roe','in-fcfy','in-mos','in-alloc'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('in-sector').value = '';
+  document.getElementById('in-val').value = 'under';
+  document.getElementById('in-risk').value = 'medium';
+  ['sl-mgmt','sl-moat','sl-profit','sl-prosp'].forEach(id => {
+    document.getElementById(id).value = 2;
+    document.getElementById(id+'-v').textContent = 2;
+  });
+  document.getElementById('mgmt-label').textContent = 'Standard';
+  document.getElementById('moat-label').textContent = 'Narrow';
+  document.getElementById('profit-label').textContent = 'Profitable';
+  document.getElementById('prosp-label').textContent = 'Neutral';
+}
+
+function render() {
+  const empty = holdings.length === 0;
+  document.getElementById('empty-state').style.display = empty ? 'flex' : 'none';
+  document.getElementById('holdings-list').style.display = empty ? 'none' : 'block';
+  document.getElementById('grade-wrap').style.display = empty ? 'none' : 'flex';
+  document.getElementById('sum-count').textContent = holdings.length;
+
+  if (empty) {
+    ['sum-score','sum-under','sum-over','sum-mos'].forEach(id => {
+      document.getElementById(id).textContent = '—';
+      document.getElementById(id).style.color = '';
+    });
+    return;
+  }
+
+  const avg = holdings.reduce((a,h)=>a+h.score,0)/holdings.length;
+  const underN = holdings.filter(h=>h.val==='under').length;
+  const overN  = holdings.filter(h=>h.val==='over').length;
+  const mosList = holdings.filter(h=>h.mos!==null).map(h=>h.mos);
+  const avgMos  = mosList.length ? mosList.reduce((a,b)=>a+b,0)/mosList.length : null;
+  const norm    = Math.round((avg/13)*100);
+
+  const scoreEl = document.getElementById('sum-score');
+  scoreEl.textContent = avg.toFixed(1)+'/13';
+  scoreEl.style.color = avg>=9?'var(--gold)':avg>=7?'var(--amber)':'var(--red)';
+  document.getElementById('sum-under').textContent = underN;
+  document.getElementById('sum-over').textContent  = overN;
+  const mosEl = document.getElementById('sum-mos');
+  mosEl.textContent = avgMos!==null ? (avgMos>=0?'+':'')+avgMos.toFixed(1)+'%' : '—';
+  mosEl.style.color  = avgMos===null?'var(--silver)':avgMos>=0?'var(--green)':'var(--red)';
+
+  updateRing(norm);
+  renderCards();
+  renderAllocation();
+  renderBreakdown();
+  renderInsights();
+}
+
+function updateRing(pct) {
+  const circ = 238.76;
+  const arc  = document.getElementById('ring-arc');
+  arc.style.strokeDashoffset = circ - (pct/100)*circ;
+  const color = pct>=75?'var(--green)':pct<55?'var(--red)':'var(--gold)';
+  arc.style.stroke = color;
+  document.getElementById('ring-score').textContent = pct;
+  document.getElementById('ring-grade').style.color = color;
+
+  let grade, sub;
+  if      (pct>=85) { grade='Elite Portfolio';      sub='Exceptional quality across all holdings. Each position is well-justified and carefully selected.'; }
+  else if (pct>=70) { grade='Strong Portfolio';     sub='Good overall quality with minor gaps. The foundation is solid — refine the weaker positions.'; }
+  else if (pct>=55) { grade='Developing Portfolio'; sub='Mixed quality. Some strong positions, some that need reassessment. Focus on the lowest-scoring names.'; }
+  else              { grade='Needs Attention';       sub='Several holdings score poorly across key dimensions. Consider a systematic review of your weakest positions.'; }
+
+  document.getElementById('ring-grade').textContent = grade;
+  document.getElementById('ring-subtitle').textContent = sub;
+}
+
+function pipHTML(val, max, cls) {
+  let h = '';
+  for (let i=1;i<=max;i++) h += `<div class="pip ${i<=val?'on '+cls:''}"></div>`;
+  return h;
+}
+
+function riskPips(risk) {
+  const n = {low:1,medium:2,high:3,veryhigh:3}[risk]||2;
+  const c = {low:'grn',medium:'',high:'rrd',veryhigh:'rrd'}[risk]||'';
+  return pipHTML(n,3,c);
+}
+
+function flagHTML(h) {
+  const issues = [];
+  if (h.moat<=1) issues.push('<strong>No durable moat</strong> — this business may struggle to protect returns over time.');
+  if (h.risk==='veryhigh') issues.push('<strong>Very high risk</strong> — ensure position sizing reflects this carefully.');
+  if (h.val==='over' && h.alloc>=10) issues.push(`<strong>${h.alloc}% in an overvalued stock</strong> — consider trimming or waiting for a better entry.`);
+  if (h.profit===1) issues.push('<strong>Loss-making business</strong> — ensure you have conviction on the path to profitability.');
+  if (h.mos!==null && h.mos<-20) issues.push(`<strong>${h.mos.toFixed(0)}% below IV</strong> — significant overvaluation signals caution on adding.`);
+  if (h.margin!==null && h.margin<5) issues.push(`<strong>Thin ${h.margin.toFixed(1)}% operating margin</strong> — vulnerable to any cost or revenue shock.`);
+
+  if (issues.length===0) {
+    if (h.score>=11) return `<div class="card-flag">✦ <strong>Strong conviction hold.</strong> High quality across all scored dimensions — a portfolio anchor.</div>`;
+    return '';
+  }
+  return `<div class="card-flag flag-bad">⚠ ${issues.join(' &nbsp;·&nbsp; ')}</div>`;
+}
+
+function renderCards() {
+  let html = '';
+  holdings.forEach(h => {
+    const mc = h.margin===null?'':h.margin>=25?'good':h.margin>=10?'warn':'bad';
+    const rc = h.roe===null?'':h.roe>=20?'good':h.roe>=10?'warn':'bad';
+    const fc = h.fcfy===null?'':h.fcfy>=3?'good':h.fcfy>=1?'warn':'bad';
+    const oc = h.mos===null?'':h.mos>=15?'good':h.mos>=0?'warn':'bad';
+
+    html += `
+    <div class="holding-card">
+      <div class="card-header" onclick="toggleBody('bd-${h.ticker}')">
+        <div class="card-ticker">${h.ticker}<span class="card-ticker-sub">${h.sector} · ${h.alloc}%</span></div>
+        <div class="card-right">
+          <span class="card-score ${scoreClass(h.score)}">${h.score}/13 · ${scoreLabel(h.score)}</span>
+          <span class="status-pill ${valPill(h.val)}">${valLabel(h.val)}</span>
+          <button class="remove-btn" onclick="event.stopPropagation();removeHolding('${h.ticker}')">✕</button>
+        </div>
+      </div>
+      <div class="card-body" id="bd-${h.ticker}">
+        <div class="score-breakdown">
+          <div class="score-dim"><div class="score-dim-label">Mgmt</div><div class="pip-row">${pipHTML(h.mgmt,3,'grn')}</div></div>
+          <div class="score-dim"><div class="score-dim-label">Moat</div><div class="pip-row">${pipHTML(h.moat,3,'grn')}</div></div>
+          <div class="score-dim"><div class="score-dim-label">Profit</div><div class="pip-row">${pipHTML(h.profit,3,'grn')}</div></div>
+          <div class="score-dim"><div class="score-dim-label">Prospects</div><div class="pip-row">${pipHTML(h.prosp,3,'grn')}</div></div>
+          <div class="score-dim"><div class="score-dim-label">Risk</div><div class="pip-row">${riskPips(h.risk)}</div></div>
+        </div>
+        <div class="card-metrics">
+          <div class="metric-box"><div class="metric-label">Op. Margin</div><div class="metric-val ${mc}">${h.margin!==null?h.margin.toFixed(1)+'%':'—'}</div></div>
+          <div class="metric-box"><div class="metric-label">ROE</div><div class="metric-val ${rc}">${h.roe!==null?h.roe.toFixed(1)+'%':'—'}</div></div>
+          <div class="metric-box"><div class="metric-label">FCF Yield</div><div class="metric-val ${fc}">${h.fcfy!==null?h.fcfy.toFixed(1)+'%':'—'}</div></div>
+          <div class="metric-box"><div class="metric-label">MoS vs IV</div><div class="metric-val ${oc}">${h.mos!==null?(h.mos>=0?'+':'')+h.mos.toFixed(1)+'%':'—'}</div></div>
+        </div>
+        ${flagHTML(h)}
+      </div>
+    </div>`;
+  });
+  document.getElementById('cards-container').innerHTML = html;
+}
+
+function toggleBody(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = el.style.display==='none' ? 'block' : 'none';
+}
+
+function renderAllocation() {
+  const total = holdings.reduce((a,h)=>a+h.alloc,0);
+  const sorted = [...holdings].sort((a,b)=>b.alloc-a.alloc);
+  const sColors = {};
+  let ci = 0;
+  let html = '';
+  sorted.forEach(h => {
+    if (!sColors[h.sector]) sColors[h.sector] = SECTOR_COLORS[ci++ % SECTOR_COLORS.length];
+    const pct = total>0 ? (h.alloc/total)*100 : 0;
+    const warn = pct >= 30;
+    html += `<div class="alloc-row">
+      <span class="alloc-ticker">${h.ticker}</span>
+      <div class="alloc-track"><div class="alloc-fill" style="width:${pct}%;background:${warn?'var(--amber)':sColors[h.sector]}"></div></div>
+      <span class="alloc-pct" style="color:${warn?'var(--amber)':'var(--silver)'}">${pct.toFixed(1)}%</span>
+    </div>`;
+  });
+  document.getElementById('alloc-bars').innerHTML = html;
+}
+
+function renderBreakdown() {
+  const total = holdings.reduce((a,h)=>a+h.alloc,0);
+  const sMap = {};
+  holdings.forEach(h => { sMap[h.sector]=(sMap[h.sector]||0)+h.alloc; });
+  const sSorted = Object.entries(sMap).sort((a,b)=>b[1]-a[1]);
+  let sHtml = '';
+  sSorted.forEach(([s,v],i) => {
+    const pct = total>0 ? (v/total*100).toFixed(1) : '0';
+    sHtml += `<div class="sector-row"><div class="sector-dot" style="background:${SECTOR_COLORS[i%SECTOR_COLORS.length]}"></div><span class="sector-name">${s}</span><span class="sector-pct">${pct}%</span></div>`;
+  });
+  document.getElementById('sector-list').innerHTML = sHtml;
+
+  const rMap = {low:0,medium:0,high:0,veryhigh:0};
+  holdings.forEach(h=>rMap[h.risk]++);
+  const rLabels={low:'Low',medium:'Medium',high:'High',veryhigh:'Very High'};
+  const rCols={low:'var(--green)',medium:'var(--amber)',high:'var(--red)',veryhigh:'#ff4040'};
+  let rHtml='';
+  Object.entries(rMap).filter(([,v])=>v>0).forEach(([k,v])=>{
+    const pct=((v/holdings.length)*100).toFixed(0);
+    rHtml+=`<div class="sector-row"><div class="sector-dot" style="background:${rCols[k]}"></div><span class="sector-name">${rLabels[k]}</span><span class="sector-pct">${v} holding${v>1?'s':''} (${pct}%)</span></div>`;
+  });
+  document.getElementById('risk-list').innerHTML = rHtml;
+}
+
+function renderInsights() {
+  const total = holdings.reduce((a,h)=>a+h.alloc,0);
+  const items = [];
+
+  // Concentration
+  if (holdings.length>0) {
+    const maxH = holdings.reduce((a,b)=>a.alloc>b.alloc?a:b);
+    if (total>0 && (maxH.alloc/total)>0.30) {
+      items.push({type:'warn',title:'⚠ Single-Position Concentration Risk',
+        text:`<strong>${maxH.ticker}</strong> represents <strong>${((maxH.alloc/total)*100).toFixed(0)}%</strong> of your weighted allocation. If this position underperforms, the portfolio impact is disproportionate. Consider whether this level of conviction is matched by your research depth on this name.`});
+    }
+  }
+
+  // Sector
+  const sMap={};
+  holdings.forEach(h=>{sMap[h.sector]=(sMap[h.sector]||0)+h.alloc;});
+  const topSector = Object.entries(sMap).sort((a,b)=>b[1]-a[1])[0];
+  if (topSector && total>0 && topSector[1]/total>0.50) {
+    items.push({type:'warn',title:'⚠ Sector Concentration',
+      text:`Over <strong>${((topSector[1]/total)*100).toFixed(0)}%</strong> of your portfolio sits in <strong>${topSector[0]}</strong>. Heavy sector concentration creates correlated risk — a sector-wide downturn affects all your positions simultaneously.`});
+  }
+
+  // High-risk heavy
+  const highRiskW = holdings.filter(h=>h.risk==='high'||h.risk==='veryhigh').reduce((a,h)=>a+h.alloc,0);
+  if (total>0 && highRiskW/total>0.60) {
+    items.push({type:'warn',title:'⚠ High-Risk Heavy Portfolio',
+      text:`Over <strong>${((highRiskW/total)*100).toFixed(0)}%</strong> of your portfolio weight is in high or very-high risk positions. This portfolio will experience significant volatility. Ensure you have the psychological fortitude — and time horizon — to hold through drawdowns.`});
+  }
+
+  // Overvalued + heavy
+  const overHeavy = holdings.filter(h=>h.val==='over'&&total>0&&(h.alloc/total)>0.12);
+  if (overHeavy.length>0) {
+    items.push({type:'warn',title:'⚠ Overvalued Positions with Heavy Weight',
+      text:`<strong>${overHeavy.map(h=>h.ticker).join(', ')}</strong> — overvalued on current estimates but carrying meaningful allocation weight. You may be holding or averaging into unfavourable prices. Consider waiting for a better entry or trimming.`});
+  }
+
+  // Weak scores
+  const weak = holdings.filter(h=>h.score<=6);
+  if (weak.length>0) {
+    items.push({type:'warn',title:'⚠ Positions Scoring Below Threshold',
+      text:`<strong>${weak.map(h=>h.ticker).join(', ')}</strong> score below 7/13. These rate poorly on quality, moat, or valuation. A useful question: if you didn't already own them, would you buy them at today's price with today's knowledge?`});
+  }
+
+  // Good signals
+  const highQ = holdings.filter(h=>h.score>=11);
+  if (highQ.length>=2) {
+    items.push({type:'good',title:'✦ Quality Core Identified',
+      text:`<strong>${highQ.map(h=>h.ticker).join(', ')}</strong> — ${highQ.length} high-conviction, high-quality positions form a strong core. These are the kinds of businesses worth holding through volatility and adding to during weakness.`});
+  }
+
+  const highQUnder = holdings.filter(h=>h.score>=9&&h.val==='under');
+  if (highQUnder.length>=2) {
+    items.push({type:'good',title:'✦ Quality Undervalued Names Present',
+      text:`<strong>${highQUnder.map(h=>h.ticker).join(', ')}</strong> — quality businesses currently trading below estimated intrinsic value. These represent the highest-conviction opportunities to add to when you have capital to deploy.`});
+  }
+
+  const diverseSectors = Object.keys(sMap).length;
+  if (diverseSectors>=4 && holdings.length>=6) {
+    items.push({type:'good',title:'✦ Healthy Sector Diversification',
+      text:`Your portfolio spans <strong>${diverseSectors} sectors</strong> across ${holdings.length} holdings — a solid base for diversified exposure. Ensure the diversification is genuine and not just cosmetic (e.g., multiple tech sub-sectors moving in lockstep).`});
+  }
+
+  let html = '';
+  items.forEach(i => {
+    if (i.type==='warn') {
+      html += `<div class="warning-card"><div class="warning-title">${i.title}</div><div class="warning-text">${i.text}</div></div>`;
+    } else {
+      html += `<div class="good-card"><div class="good-title">${i.title}</div><div class="good-text">${i.text}</div></div>`;
+    }
+  });
+  document.getElementById('insights-container').innerHTML = html;
+}
+</script>
+</body>
+</html>

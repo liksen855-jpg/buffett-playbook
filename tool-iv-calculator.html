@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InsightInvest — Intrinsic Value Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0D0D14;
+  --paper: #F7F5F0;
+  --gold: #C9A84C;
+  --gold-dim: #8B6E2E;
+  --gold-faint: rgba(201,168,76,0.08);
+  --smoke: #1A1A2A;
+  --mist: #2A2A3E;
+  --silver: #9090A8;
+  --border: rgba(201,168,76,0.18);
+  --border-bright: rgba(201,168,76,0.5);
+  --green: #2ecc8a;
+  --red: #e05252;
+  --blue: #5b9cf6;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: 'DM Mono', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* grain */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 1000; opacity: 0.4;
+}
+
+/* ── HEADER ── */
+header {
+  padding: 28px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(13,13,20,0.92);
+  backdrop-filter: blur(12px);
+}
+
+.brand {
+  display: flex; flex-direction: column; gap: 3px;
+}
+.brand-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px; font-weight: 600;
+  letter-spacing: 0.08em; color: var(--gold);
+}
+.brand-sub {
+  font-size: 9px; letter-spacing: 0.28em;
+  color: var(--silver); text-transform: uppercase;
+}
+
+.disclaimer {
+  font-size: 9px; letter-spacing: 0.12em;
+  color: var(--gold-dim);
+  background: rgba(201,168,76,0.07);
+  border: 1px solid var(--border);
+  padding: 6px 14px; border-radius: 2px;
+}
+
+/* ── HERO ── */
+.hero {
+  padding: 72px 48px 56px;
+  border-bottom: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+
+.hero::after {
+  content: '';
+  position: absolute; right: -80px; top: -80px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.hero-tag {
+  font-size: 10px; letter-spacing: 0.3em;
+  color: var(--gold); text-transform: uppercase;
+  margin-bottom: 20px;
+  opacity: 0; animation: fadeUp 0.7s ease 0.2s forwards;
+}
+
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(42px, 5.5vw, 72px);
+  font-weight: 300; line-height: 1.05;
+  letter-spacing: -0.02em; color: var(--paper);
+  margin-bottom: 20px;
+  opacity: 0; animation: fadeUp 0.7s ease 0.35s forwards;
+}
+.hero-title em { font-style: italic; color: var(--gold); }
+
+.hero-desc {
+  font-size: 12px; color: var(--silver);
+  line-height: 1.9; max-width: 560px;
+  opacity: 0; animation: fadeUp 0.7s ease 0.5s forwards;
+}
+
+/* ── MODE SWITCHER ── */
+.mode-bar {
+  display: flex; gap: 0;
+  border-bottom: 1px solid var(--border);
+  opacity: 0; animation: fadeUp 0.7s ease 0.65s forwards;
+}
+
+.mode-btn {
+  flex: 1; padding: 20px 32px;
+  background: none; border: none; border-right: 1px solid var(--border);
+  cursor: pointer; transition: all 0.25s ease;
+  text-align: left;
+}
+.mode-btn:last-child { border-right: none; }
+
+.mode-btn-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--silver);
+  margin-bottom: 6px; transition: color 0.25s;
+}
+.mode-btn-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 300;
+  color: var(--paper); transition: color 0.25s;
+}
+.mode-btn-desc {
+  font-size: 10px; color: var(--silver);
+  margin-top: 4px; line-height: 1.6;
+  transition: color 0.25s;
+}
+
+.mode-btn.active {
+  background: var(--gold-faint);
+  border-bottom: 2px solid var(--gold);
+}
+.mode-btn.active .mode-btn-label { color: var(--gold); }
+.mode-btn.active .mode-btn-title { color: var(--gold); }
+.mode-btn:hover:not(.active) { background: rgba(255,255,255,0.02); }
+
+/* ── MAIN LAYOUT ── */
+.calc-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - 250px);
+}
+
+.inputs-panel {
+  padding: 48px;
+  border-right: 1px solid var(--border);
+}
+
+.results-panel {
+  padding: 48px;
+  position: sticky; top: 80px;
+  height: fit-content;
+}
+
+/* ── SECTION TITLE ── */
+.panel-section {
+  margin-bottom: 40px;
+}
+
+.section-label {
+  font-size: 9px; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 24px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.section-label::before {
+  content: '';
+  display: inline-block; width: 4px; height: 4px;
+  background: var(--gold); border-radius: 50%;
+}
+
+/* ── INPUT ROWS ── */
+.input-row {
+  margin-bottom: 28px;
+}
+
+.input-label {
+  display: flex; justify-content: space-between;
+  align-items: baseline; margin-bottom: 10px;
+}
+
+.input-label-text {
+  font-size: 11px; letter-spacing: 0.08em;
+  color: var(--paper);
+}
+.input-label-hint {
+  font-size: 10px; color: var(--silver);
+}
+
+.input-label-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 300;
+  color: var(--gold); min-width: 80px;
+  text-align: right;
+}
+
+/* slider */
+.slider-wrap {
+  position: relative; padding: 8px 0;
+}
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%; height: 2px;
+  background: var(--mist);
+  outline: none; border-radius: 1px;
+  cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px; height: 16px;
+  background: var(--gold);
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  box-shadow: 0 0 8px rgba(201,168,76,0.4);
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+input[type=range]:hover::-webkit-slider-thumb {
+  box-shadow: 0 0 16px rgba(201,168,76,0.7);
+  transform: scale(1.15);
+}
+
+.slider-track-fill {
+  position: absolute;
+  top: calc(8px + 1px); left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+  pointer-events: none; border-radius: 1px;
+  transition: width 0.05s;
+}
+
+.slider-bounds {
+  display: flex; justify-content: space-between;
+  margin-top: 6px;
+}
+.slider-bound { font-size: 9px; color: var(--silver); letter-spacing: 0.05em; }
+
+/* text inputs */
+.text-input {
+  width: 100%;
+  background: var(--smoke);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--paper);
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  padding: 12px 16px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.text-input:focus { border-color: var(--gold); }
+.text-input::placeholder { color: var(--silver); }
+
+/* ── RESULTS ── */
+.result-main {
+  margin-bottom: 36px;
+}
+
+.result-main-label {
+  font-size: 10px; letter-spacing: 0.25em;
+  text-transform: uppercase; color: var(--silver);
+  margin-bottom: 8px;
+}
+
+.result-main-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(56px, 6vw, 80px);
+  font-weight: 300; line-height: 1;
+  color: var(--gold);
+  transition: all 0.4s ease;
+  letter-spacing: -0.02em;
+}
+
+.result-main-value.flash {
+  animation: flashValue 0.4s ease;
+}
+
+@keyframes flashValue {
+  0% { opacity: 0.4; transform: scale(0.97); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.result-verdict {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 16px;
+  padding: 8px 18px;
+  border-radius: 2px;
+  font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; font-weight: 500;
+  transition: all 0.4s ease;
+}
+
+.verdict-under {
+  background: rgba(46,204,138,0.1);
+  border: 1px solid rgba(46,204,138,0.35);
+  color: var(--green);
+}
+.verdict-over {
+  background: rgba(224,82,82,0.1);
+  border: 1px solid rgba(224,82,82,0.35);
+  color: var(--red);
+}
+.verdict-fair {
+  background: rgba(201,168,76,0.1);
+  border: 1px solid var(--border-bright);
+  color: var(--gold);
+}
+.verdict-none {
+  background: rgba(144,144,168,0.08);
+  border: 1px solid rgba(144,144,168,0.2);
+  color: var(--silver);
+}
+
+/* result breakdown */
+.result-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border);
+  margin-top: 32px; border-radius: 2px; overflow: hidden;
+}
+
+.result-cell {
+  background: var(--ink);
+  padding: 18px 20px;
+  transition: background 0.2s;
+}
+.result-cell:hover { background: var(--gold-faint); }
+
+.result-cell-label {
+  font-size: 9px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--silver);
+  margin-bottom: 6px;
+}
+.result-cell-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px; font-weight: 300;
+  color: var(--paper);
+  transition: color 0.3s;
+}
+
+/* MoS bar */
+.mos-section { margin-top: 32px; }
+
+.mos-label-row {
+  display: flex; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.mos-label { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--silver); }
+.mos-value { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; }
+
+.mos-track {
+  width: 100%; height: 6px;
+  background: var(--mist);
+  border-radius: 3px; overflow: hidden; position: relative;
+}
+.mos-fill {
+  height: 100%; border-radius: 3px;
+  transition: width 0.5s cubic-bezier(0.4,0,0.2,1), background 0.4s;
+  min-width: 0; max-width: 100%;
+}
+
+/* DCF waterfall */
+.waterfall {
+  margin-top: 32px; border: 1px solid var(--border); border-radius: 2px; overflow: hidden;
+}
+.waterfall-title {
+  font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gold); padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--gold-faint);
+}
+.waterfall-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 11px;
+}
+.waterfall-row:last-child { border-bottom: none; }
+.waterfall-year { color: var(--silver); }
+.waterfall-fcf { font-family: 'DM Mono', monospace; color: var(--paper); }
+.waterfall-pv { font-family: 'DM Mono', monospace; color: var(--gold-dim); font-size: 10px; }
+
+/* reverse dcf note */
+.insight-box {
+  margin-top: 24px;
+  background: var(--gold-faint);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 20px 24px;
+}
+.insight-box-title {
+  font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 10px;
+}
+.insight-box-text {
+  font-size: 11px; color: var(--silver); line-height: 1.8;
+}
+.insight-box-text strong { color: var(--paper); }
+
+/* sensitivity table */
+.sens-table { margin-top: 32px; }
+.sens-title {
+  font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.sens-title::before {
+  content: ''; display: inline-block;
+  width: 4px; height: 4px; background: var(--gold); border-radius: 50%;
+}
+
+.sens-grid {
+  display: grid;
+  grid-template-columns: auto repeat(5, 1fr);
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 2px; overflow: hidden;
+  font-size: 10px;
+}
+
+.sens-cell {
+  background: var(--ink);
+  padding: 10px 8px;
+  text-align: center;
+  font-family: 'DM Mono', monospace;
+  color: var(--silver);
+  transition: background 0.15s;
+}
+.sens-cell.header {
+  background: var(--smoke);
+  color: var(--gold); font-size: 9px; letter-spacing: 0.1em;
+}
+.sens-cell.row-header { background: var(--smoke); text-align: left; padding-left: 12px; }
+.sens-cell.highlight-cell { background: rgba(201,168,76,0.15); color: var(--gold); }
+.sens-cell.green-cell { background: rgba(46,204,138,0.08); color: var(--green); }
+.sens-cell.red-cell { background: rgba(224,82,82,0.08); color: var(--red); }
+
+/* tabs */
+.mode-content { display: none; }
+.mode-content.active { display: block; }
+
+/* footer note */
+.foot-note {
+  padding: 24px 48px;
+  border-top: 1px solid var(--border);
+  font-size: 10px; color: var(--silver);
+  line-height: 1.7; letter-spacing: 0.05em;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--ink); }
+::-webkit-scrollbar-thumb { background: var(--mist); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold-dim); }
+
+@media (max-width: 900px) {
+  .calc-layout { grid-template-columns: 1fr; }
+  .inputs-panel { border-right: none; border-bottom: 1px solid var(--border); }
+  .results-panel { position: static; }
+  header, .hero, .inputs-panel, .results-panel, .foot-note { padding-left: 24px; padding-right: 24px; }
+  .mode-btn { padding: 16px 20px; }
+}
+</style>
+</head>
+<body>
+<style>
+  .__tool-nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 40px;
+    background: rgba(8,9,12,0.96);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid #252838;
+    z-index: 10000;
+    font-family: 'Syne', sans-serif;
+  }
+  .__tool-nav-left { display: flex; align-items: center; gap: 20px; }
+  .__tool-back {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; color: #555c72;
+    text-decoration: none; transition: color 0.3s;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .__tool-back:hover { color: #c9a84c; }
+  .__tool-back svg { transition: transform 0.3s; }
+  .__tool-back:hover svg { transform: translateX(-3px); }
+  .__tool-sep { width: 1px; height: 20px; background: #252838; }
+  .__tool-breadcrumb {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: #4a7cff;
+  }
+  .__tool-nav-right { display: flex; align-items: center; gap: 24px; }
+  .__tool-nav-links a {
+    font-size: 11px; font-weight: 500; color: #555c72;
+    text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase;
+    transition: color 0.3s; margin-left: 20px;
+  }
+  .__tool-nav-links a:hover { color: #c9a84c; }
+  .__tool-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px; color: #c9a84c; text-decoration: none; font-weight: 600;
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet"/>
+<nav class="__tool-nav">
+  <div class="__tool-nav-left">
+    <a href="/members" class="__tool-back">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 7H2M6 2L1 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Members
+    </a>
+    <div class="__tool-sep"></div>
+    <span class="__tool-breadcrumb">Calculator · Intrinsic Value Calculator</span>
+  </div>
+  <a href="/" class="__tool-logo">Insight Invest</a>
+  <div class="__tool-nav-right">
+    <div class="__tool-nav-links">
+      <a href="/members#tools">All Tools</a>
+      <a href="/members#updates">Updates</a>
+      <a href="/reports">Reports</a>
+    </div>
+  </div>
+</nav>
+<style>
+  body { padding-top: 56px !important; }
+</style>
+
+
+<header>
+  <div class="brand">
+    <div class="brand-name">InsightInvest</div>
+    <div class="brand-sub">Intrinsic Value Calculator</div>
+  </div>
+  <div class="disclaimer">⚠ Educational tool only · Not financial advice</div>
+</header>
+
+<div class="hero">
+  <div class="hero-tag">InsightInvest · Valuation Toolkit</div>
+  <h1 class="hero-title">What is a business<br><em>actually worth?</em></h1>
+  <p class="hero-desc">Two modes. One to find a stock's intrinsic value using discounted cash flows. One to reverse-engineer what the market is already pricing in. Move the sliders — watch the logic unfold.</p>
+</div>
+
+<!-- MODE SWITCHER -->
+<div class="mode-bar">
+  <button class="mode-btn active" onclick="setMode('dcf', this)">
+    <div class="mode-btn-label">Mode 01</div>
+    <div class="mode-btn-title">DCF Valuation</div>
+    <div class="mode-btn-desc">Project future cash flows → discount to today → find intrinsic value</div>
+  </button>
+  <button class="mode-btn" onclick="setMode('reverse', this)">
+    <div class="mode-btn-label">Mode 02</div>
+    <div class="mode-btn-title">Reverse DCF</div>
+    <div class="mode-btn-desc">Start from the current price → decode what growth the market expects</div>
+  </button>
+</div>
+
+<!-- ══ DCF MODE ══ -->
+<div class="mode-content active" id="mode-dcf">
+  <div class="calc-layout">
+    <!-- INPUTS -->
+    <div class="inputs-panel">
+
+      <div class="panel-section">
+        <div class="section-label">Company Basics</div>
+
+        <div class="input-row">
+          <div class="input-label">
+            <span class="input-label-text">Current Stock Price ($)</span>
+          </div>
+          <input type="number" class="text-input" id="dcf-price" value="177.82" placeholder="e.g. 177.82" oninput="calcDCF()">
+        </div>
+
+        <div class="input-row">
+          <div class="input-label">
+            <span class="input-label-text">Free Cash Flow — Last 12 Months ($Bn)</span>
+          </div>
+          <input type="number" class="text-input" id="dcf-fcf" value="96.6" placeholder="e.g. 96.6" oninput="calcDCF()">
+        </div>
+
+        <div class="input-row">
+          <div class="input-label">
+            <span class="input-label-text">Shares Outstanding (Bn)</span>
+          </div>
+          <input type="number" class="text-input" id="dcf-shares" value="24.4" placeholder="e.g. 24.4" oninput="calcDCF()">
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="section-label">Growth Assumptions</div>
+
+        <div class="input-row">
+          <div class="input-label">
+            <span class="input-label-text">FCF Growth Rate — Years 1–5</span>
+            <span class="input-label-val" id="dcf-g1-val">18%</span>
+          </div>
+          <div class="slider-wrap">
+            <div class="slider-track-fill" id="dcf-g1-fill"></div>
+            <input type="range" id="dcf-g1" min="0" max="60" step="0.5" value="18" oninput="syncSlider(this,'dcf-g1-val','%');calcDCF()">
+          </div>
+          <div class="slider-bounds"><span class="slider-bound">0%</span><span class="slider-bound">60%</span></div>
+        </div>
+
+        <div class="input-row">
+          <div class="input-label">
+            <span class="input-label-text">FCF Growth Rate — Years 6–10</span>
+            <span class="input-label-val" id="dcf-g2-val">12%</span>
+          </div>
+          <div class="slider-wrap">
+            <div class="slider-track-fill" id="dcf-g2-fill"></div>
+            <input type="range" id="dcf-g2" min="0" max="40" step="0.5" value="12" oninput="syncSlider(this,'dcf-g2-val','%');calcDCF()">
+          </div>
+          <div class="slider-bounds"><span class="slider-bound">0%</span><span class="slider-bound">40%</span></div>
+        </div>
+
+        <div class="input-row">
+          <div class="input-label">
+            <span class="input-label-text">Terminal Growth Rate (perpetuity)</span>
+            <span class="input-label-val" id="dcf-tg-val">3.0%</span>
+          </div>
+          <div class="slider-wrap">
+            <div class="slider-track-fill" id="dcf-tg-fill"></div>
+            <input type="range" id="dcf-tg" min="0" max="6" step="0.1" value="3.0" oninput="syncSlider(this,'dcf-tg-val','%');calcDCF()">
+          </div>
+          <div class="slider-bounds"><span class="slider-bound">0%</span><span class="slider-bound">6%</span></div>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="section-label">Risk & Discount</div>
+
+        <div class="input-row">
+          <div class="input-label">
+            <span class="input-label-text">Discount Rate (WACC / Required Return)</span>
+            <span class="input-label-val" id="dcf-dr-val">10%</span>
+          </div>
+          <div class="slider-wrap">
+            <div class="slider-track-fill" id="dcf-dr-fill"></div>
+            <input type="range" id="dcf-dr" min="6" max="20" step="0.5" value="10" oninput="syncSlider(this,'dcf-dr-val','%');calcDCF()">
+          </div>
+          <div class="slider-bounds"><span class="slider-bound">6%</span><span class="slider-bound">20%</span></div>
+        </div>
+
+        <div class="input-row">
+          <div class="input-label">
+            <span class="input-label-text">Margin of Safety</span>
+            <span class="input-label-val" id="dcf-mos-val">20%</span>
+          </div>
+          <div class="slider-wrap">
+            <div class="slider-track-fill" id="dcf-mos-fill"></div>
+            <input type="range" id="dcf-mos" min="0" max="50" step="1" value="20" oninput="syncSlider(this,'dcf-mos-val','%');calcDCF()">
+          </div>
+          <div class="slider-bounds"><span class="slider-bound">0%</span><span class="slider-bound">50%</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results-panel">
+
+      <div class="result-main">
+        <div class="result-main-label">Intrinsic Value Per Share</div>
+        <div class="result-main-value" id="dcf-iv-result">—</div>
+        <div style="margin-top:12px;">
+          <div class="result-main-label" style="font-size:9px">Buy Below (with MoS)</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:var(--silver)" id="dcf-buy-below">—</div>
+        </div>
+        <div id="dcf-verdict" class="result-verdict verdict-none" style="margin-top:16px">Enter figures above</div>
+      </div>
+
+      <div class="mos-section">
+        <div class="mos-label-row">
+          <span class="mos-label">Margin of Safety vs Current Price</span>
+          <span class="mos-value" id="dcf-mos-pct" style="color:var(--silver)">—</span>
+        </div>
+        <div class="mos-track">
+          <div class="mos-fill" id="dcf-mos-bar" style="width:0%;background:var(--gold)"></div>
+        </div>
+      </div>
+
+      <div class="result-grid">
+        <div class="result-cell">
+          <div class="result-cell-label">PV of FCF (Yr 1–10)</div>
+          <div class="result-cell-val" id="dcf-pv-fcf">—</div>
+        </div>
+        <div class="result-cell">
+          <div class="result-cell-label">Terminal Value (PV)</div>
+          <div class="result-cell-val" id="dcf-pv-tv">—</div>
+        </div>
+        <div class="result-cell">
+          <div class="result-cell-label">Total Firm Value</div>
+          <div class="result-cell-val" id="dcf-total">—</div>
+        </div>
+        <div class="result-cell">
+          <div class="result-cell-label">Upside / Downside</div>
+          <div class="result-cell-val" id="dcf-updown">—</div>
+        </div>
+      </div>
+
+      <!-- Cash flow waterfall -->
+      <div class="waterfall" id="dcf-waterfall">
+        <div class="waterfall-title">Projected Free Cash Flows  ·  Present Values</div>
+        <div id="waterfall-rows"></div>
+      </div>
+
+      <!-- Sensitivity table -->
+      <div class="sens-table">
+        <div class="sens-title">Sensitivity  ·  Growth Rate vs Discount Rate</div>
+        <div class="sens-grid" id="sens-grid"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ REVERSE DCF MODE ══ -->
+<div class="mode-content" id="mode-reverse">
+  <div class="calc-layout">
+    <!-- INPUTS -->
+    <div class="inputs-panel">
+
+      <div class="panel-section">
+        <div class="section-label">Market Data</div>
+
+        <div class="input-row">
+          <div class="input-label">
+            <span class="input-label-text">Current Stock Price ($)</span>
+          </div>
+          <input type="number" class="text-input" id="rev-price" value="177.82" placeholder="e.g. 177.82" oninput="calcReverse()">
+        </div>
+
+        <div class="input-row">
+          <div class="input-label">
+            <span class="input-label-text">Free Cash Flow — Last 12 Months ($Bn)</span>
+          </div>
+          <input type="number" class="text-input" id="rev-fcf" value="96.6" placeholder="e.g. 96.6" oninput="calcReverse()">
+        </div>
+
+        <div class="input-row">
+          <div class="input-label">
+            <span class="input-label-text">Shares Outstanding (Bn)</span>
+          </div>
+          <input type="number" class="text-input" id="rev-shares" value="24.4" placeholder="e.g. 24.4" oninput="calcReverse()">
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="section-label">Your Assumptions</div>
+
+        <div class="input-row">
+          <div class="input-label">
+            <span class="input-label-text">Discount Rate (Required Return)</span>
+            <span class="input-label-val" id="rev-dr-val">10%</span>
+          </div>
+          <div class="slider-wrap">
+            <div class="slider-track-fill" id="rev-dr-fill"></div>
+            <input type="range" id="rev-dr" min="6" max="20" step="0.5" value="10" oninput="syncSlider(this,'rev-dr-val','%');calcReverse()">
+          </div>
+          <div class="slider-bounds"><span class="slider-bound">6%</span><span class="slider-bound">20%</span></div>
+        </div>
+
+        <div class="input-row">
+          <div class="input-label">
+            <span class="input-label-text">Terminal Growth Rate</span>
+            <span class="input-label-val" id="rev-tg-val">3.0%</span>
+          </div>
+          <div class="slider-wrap">
+            <div class="slider-track-fill" id="rev-tg-fill"></div>
+            <input type="range" id="rev-tg" min="0" max="6" step="0.1" value="3.0" oninput="syncSlider(this,'rev-tg-val','%');calcReverse()">
+          </div>
+          <div class="slider-bounds"><span class="slider-bound">0%</span><span class="slider-bound">6%</span></div>
+        </div>
+
+        <div class="input-row">
+          <div class="input-label">
+            <span class="input-label-text">Your Realistic Growth Estimate (Yr 1–10)</span>
+            <span class="input-label-val" id="rev-your-g-val">18%</span>
+          </div>
+          <div class="slider-wrap">
+            <div class="slider-track-fill" id="rev-your-g-fill"></div>
+            <input type="range" id="rev-your-g" min="0" max="60" step="0.5" value="18" oninput="syncSlider(this,'rev-your-g-val','%');calcReverse()">
+          </div>
+          <div class="slider-bounds"><span class="slider-bound">0%</span><span class="slider-bound">60%</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results-panel">
+
+      <div class="result-main">
+        <div class="result-main-label">Growth Rate Priced Into This Stock</div>
+        <div class="result-main-value" id="rev-implied-g">—</div>
+        <div id="rev-verdict" class="result-verdict verdict-none" style="margin-top:16px">Enter figures above</div>
+      </div>
+
+      <div class="result-grid">
+        <div class="result-cell">
+          <div class="result-cell-label">Market-Implied Growth</div>
+          <div class="result-cell-val" id="rev-implied-cell">—</div>
+        </div>
+        <div class="result-cell">
+          <div class="result-cell-label">Your Growth Estimate</div>
+          <div class="result-cell-val" id="rev-your-cell">—</div>
+        </div>
+        <div class="result-cell">
+          <div class="result-cell-label">Growth Gap</div>
+          <div class="result-cell-val" id="rev-gap-cell">—</div>
+        </div>
+        <div class="result-cell">
+          <div class="result-cell-label">FCF / Share (TTM)</div>
+          <div class="result-cell-val" id="rev-fcf-share">—</div>
+        </div>
+      </div>
+
+      <div class="insight-box" id="rev-insight-box">
+        <div class="insight-box-title">What This Means</div>
+        <div class="insight-box-text" id="rev-insight-text">Adjust the inputs above to see the market's embedded expectations.</div>
+      </div>
+
+      <!-- growth comparison bars -->
+      <div class="mos-section" style="margin-top:28px;">
+        <div class="mos-label-row">
+          <span class="mos-label">Market-Implied Growth</span>
+          <span class="mos-value" id="rev-bar1-val" style="color:var(--red)">—</span>
+        </div>
+        <div class="mos-track" style="margin-bottom:14px;">
+          <div class="mos-fill" id="rev-bar1" style="width:0%;background:var(--red)"></div>
+        </div>
+        <div class="mos-label-row">
+          <span class="mos-label">Your Realistic Estimate</span>
+          <span class="mos-value" id="rev-bar2-val" style="color:var(--green)">—</span>
+        </div>
+        <div class="mos-track">
+          <div class="mos-fill" id="rev-bar2" style="width:0%;background:var(--green)"></div>
+        </div>
+      </div>
+
+      <!-- Historical context -->
+      <div class="insight-box" style="margin-top:24px;">
+        <div class="insight-box-title">Growth Benchmarks · Context</div>
+        <div class="insight-box-text">
+          <strong>S&P 500 avg earnings growth:</strong> ~7–8% / year<br>
+          <strong>Top-tier tech compounders:</strong> 15–25% / year<br>
+          <strong>Hypergrowth phase (early):</strong> 30–60%+ / year<br>
+          <strong>Mature large-cap:</strong> 5–12% / year<br><br>
+          <span style="color:var(--gold)">If the implied growth exceeds what's historically sustainable for this business — the market is pricing in perfection.</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="foot-note">
+  InsightInvest Capital · leiholding.com · This tool uses a simplified 10-year DCF model. It is designed for educational purposes to help investors understand valuation mechanics. Real-world analysis requires qualitative judgment, competitive analysis, and balance sheet scrutiny. This is my opinion — take it as you will.
+</div>
+
+<script>
+// ── UTILITIES ──
+function fmt$(n) {
+  if (isNaN(n) || !isFinite(n)) return '—';
+  if (Math.abs(n) >= 1000) return '$' + (n/1000).toFixed(1) + 'T';
+  return '$' + n.toFixed(2);
+}
+function fmtBn(n) {
+  if (isNaN(n) || !isFinite(n)) return '—';
+  return '$' + n.toFixed(1) + 'Bn';
+}
+function fmtPct(n) {
+  if (isNaN(n) || !isFinite(n)) return '—';
+  return (n >= 0 ? '+' : '') + n.toFixed(1) + '%';
+}
+function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+function syncSlider(el, valId, suffix) {
+  const v = parseFloat(el.value);
+  const pct = (v - parseFloat(el.min)) / (parseFloat(el.max) - parseFloat(el.min));
+  document.getElementById(valId).textContent = v.toFixed(v < 10 ? 1 : 0) + suffix;
+  // fill track
+  const fillId = el.id + '-fill';
+  const fill = document.getElementById(fillId);
+  if (fill) fill.style.width = (pct * 100) + '%';
+}
+
+// init fills on load
+function initSliders() {
+  document.querySelectorAll('input[type=range]').forEach(el => {
+    const v = parseFloat(el.value);
+    const pct = (v - parseFloat(el.min)) / (parseFloat(el.max) - parseFloat(el.min));
+    const fillId = el.id + '-fill';
+    const fill = document.getElementById(fillId);
+    if (fill) fill.style.width = (pct * 100) + '%';
+  });
+}
+
+// ── MODE ──
+function setMode(mode, btn) {
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.mode-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('mode-' + mode).classList.add('active');
+}
+
+// ── DCF CALC ──
+function calcDCF() {
+  const price    = parseFloat(document.getElementById('dcf-price').value) || 0;
+  const fcfBn    = parseFloat(document.getElementById('dcf-fcf').value) || 0;
+  const shares   = parseFloat(document.getElementById('dcf-shares').value) || 1;
+  const g1       = parseFloat(document.getElementById('dcf-g1').value) / 100;
+  const g2       = parseFloat(document.getElementById('dcf-g2').value) / 100;
+  const tg       = parseFloat(document.getElementById('dcf-tg').value) / 100;
+  const dr       = parseFloat(document.getElementById('dcf-dr').value) / 100;
+  const mosPct   = parseFloat(document.getElementById('dcf-mos').value) / 100;
+
+  if (!fcfBn || !shares || dr <= tg) return;
+
+  const fcfPerShare = (fcfBn * 1e9) / (shares * 1e9);
+  let pvFCF = 0;
+  let fcf = fcfPerShare;
+  const wfRows = [];
+
+  for (let yr = 1; yr <= 10; yr++) {
+    const g = yr <= 5 ? g1 : g2;
+    fcf *= (1 + g);
+    const pv = fcf / Math.pow(1 + dr, yr);
+    pvFCF += pv;
+    wfRows.push({ yr, fcf, pv });
+  }
+
+  const terminalFCF = fcf * (1 + tg);
+  const terminalValue = terminalFCF / (dr - tg);
+  const pvTV = terminalValue / Math.pow(1 + dr, 10);
+  const totalIV = pvFCF + pvTV;
+  const buyBelow = totalIV * (1 - mosPct);
+
+  // real MoS vs price
+  const mosVsPrice = price > 0 ? ((totalIV - price) / price) * 100 : 0;
+
+  // UPDATE UI
+  flashEl('dcf-iv-result');
+  document.getElementById('dcf-iv-result').textContent = fmt$(totalIV);
+  document.getElementById('dcf-buy-below').textContent = fmt$(buyBelow);
+  document.getElementById('dcf-pv-fcf').textContent = fmt$(pvFCF);
+  document.getElementById('dcf-pv-tv').textContent = fmt$(pvTV);
+  document.getElementById('dcf-total').textContent = fmt$(totalIV);
+
+  const updown = price > 0 ? mosVsPrice : 0;
+  const upEl = document.getElementById('dcf-updown');
+  upEl.textContent = price > 0 ? fmtPct(updown) : '—';
+  upEl.style.color = updown >= 0 ? 'var(--green)' : 'var(--red)';
+
+  // MoS bar
+  const mosBarEl = document.getElementById('dcf-mos-bar');
+  const mosPctEl = document.getElementById('dcf-mos-pct');
+  if (price > 0) {
+    const barW = clamp(Math.abs(mosVsPrice), 0, 100);
+    mosBarEl.style.width = barW + '%';
+    mosBarEl.style.background = mosVsPrice >= 0 ? 'var(--green)' : 'var(--red)';
+    mosPctEl.textContent = fmtPct(mosVsPrice);
+    mosPctEl.style.color = mosVsPrice >= 0 ? 'var(--green)' : 'var(--red)';
+  }
+
+  // Verdict
+  const verdict = document.getElementById('dcf-verdict');
+  if (price <= 0) {
+    verdict.className = 'result-verdict verdict-none';
+    verdict.textContent = 'Enter a price to see verdict';
+  } else if (mosVsPrice >= 15) {
+    verdict.className = 'result-verdict verdict-under';
+    verdict.textContent = '✦ Undervalued · Margin of Safety Present';
+  } else if (mosVsPrice >= 0) {
+    verdict.className = 'result-verdict verdict-fair';
+    verdict.textContent = '◆ Near Fair Value · Slim Margin';
+  } else {
+    verdict.className = 'result-verdict verdict-over';
+    verdict.textContent = '▲ Overvalued · Market Pricing Optimism';
+  }
+
+  // Waterfall
+  let wfHtml = '';
+  wfRows.forEach(r => {
+    wfHtml += `<div class="waterfall-row">
+      <span class="waterfall-year">Year ${r.yr}</span>
+      <span class="waterfall-fcf">${fmt$(r.fcf)} / share FCF</span>
+      <span class="waterfall-pv">PV: ${fmt$(r.pv)}</span>
+    </div>`;
+  });
+  wfHtml += `<div class="waterfall-row" style="background:var(--gold-faint);border-top:1px solid var(--border)">
+    <span class="waterfall-year" style="color:var(--gold)">Terminal</span>
+    <span class="waterfall-fcf" style="color:var(--gold)">g = ${(tg*100).toFixed(1)}% perpetuity</span>
+    <span class="waterfall-pv" style="color:var(--gold)">PV: ${fmt$(pvTV)}</span>
+  </div>`;
+  document.getElementById('waterfall-rows').innerHTML = wfHtml;
+
+  // Sensitivity table
+  buildSensitivity(fcfBn, shares, g1, tg, dr, price);
+}
+
+function buildSensitivity(fcfBn, shares, baseG1, tg, baseDr, price) {
+  const growthRates = [baseG1 - 0.08, baseG1 - 0.04, baseG1, baseG1 + 0.04, baseG1 + 0.08];
+  const discRates   = [baseDr - 0.02, baseDr - 0.01, baseDr, baseDr + 0.01, baseDr + 0.02];
+
+  let html = '<div class="sens-cell header" style="text-align:left;padding-left:12px">g1 \\ DR</div>';
+  discRates.forEach(dr => {
+    html += `<div class="sens-cell header">${(dr*100).toFixed(1)}%</div>`;
+  });
+
+  growthRates.forEach((g1, gi) => {
+    html += `<div class="sens-cell row-header">${(g1*100).toFixed(1)}%</div>`;
+    discRates.forEach((dr, di) => {
+      if (dr <= tg) { html += `<div class="sens-cell">—</div>`; return; }
+      const iv = computeIV(fcfBn, shares, g1, g1 * 0.65, tg, dr);
+      const mos = price > 0 ? ((iv - price) / price) * 100 : 0;
+      let cls = '';
+      if (gi === 2 && di === 2) cls = 'highlight-cell';
+      else if (mos >= 10) cls = 'green-cell';
+      else if (mos < -5) cls = 'red-cell';
+      html += `<div class="sens-cell ${cls}">${fmt$(iv)}</div>`;
+    });
+  });
+
+  document.getElementById('sens-grid').innerHTML = html;
+}
+
+function computeIV(fcfBn, shares, g1, g2, tg, dr) {
+  const fcfPerShare = (fcfBn * 1e9) / (shares * 1e9);
+  let pvFCF = 0; let fcf = fcfPerShare;
+  for (let yr = 1; yr <= 10; yr++) {
+    const g = yr <= 5 ? g1 : g2;
+    fcf *= (1 + g);
+    pvFCF += fcf / Math.pow(1 + dr, yr);
+  }
+  const pvTV = (fcf * (1 + tg) / (dr - tg)) / Math.pow(1 + dr, 10);
+  return pvFCF + pvTV;
+}
+
+// ── REVERSE DCF ──
+function calcReverse() {
+  const price    = parseFloat(document.getElementById('rev-price').value) || 0;
+  const fcfBn    = parseFloat(document.getElementById('rev-fcf').value) || 0;
+  const shares   = parseFloat(document.getElementById('rev-shares').value) || 1;
+  const dr       = parseFloat(document.getElementById('rev-dr').value) / 100;
+  const tg       = parseFloat(document.getElementById('rev-tg').value) / 100;
+  const yourG    = parseFloat(document.getElementById('rev-your-g').value) / 100;
+
+  if (!price || !fcfBn || !shares) return;
+
+  const fcfPerShare = (fcfBn * 1e9) / (shares * 1e9);
+  document.getElementById('rev-fcf-share').textContent = fmt$(fcfPerShare);
+
+  // Binary search for implied growth
+  const impliedG = solveImpliedGrowth(price, fcfPerShare, dr, tg);
+
+  // Update
+  flashEl('rev-implied-g');
+  document.getElementById('rev-implied-g').textContent = impliedG !== null ? (impliedG * 100).toFixed(1) + '%' : '—';
+  document.getElementById('rev-implied-cell').textContent = impliedG !== null ? (impliedG * 100).toFixed(1) + '%' : '—';
+  document.getElementById('rev-your-cell').textContent = (yourG * 100).toFixed(1) + '%';
+
+  if (impliedG !== null) {
+    const gap = (yourG - impliedG) * 100;
+    const gapEl = document.getElementById('rev-gap-cell');
+    gapEl.textContent = fmtPct(gap);
+    gapEl.style.color = gap >= 0 ? 'var(--green)' : 'var(--red)';
+
+    // Bars
+    const maxG = Math.max(impliedG, yourG, 0.3) * 100;
+    document.getElementById('rev-bar1').style.width = clamp((impliedG*100)/maxG*100, 0, 100) + '%';
+    document.getElementById('rev-bar2').style.width = clamp((yourG*100)/maxG*100, 0, 100) + '%';
+    document.getElementById('rev-bar1-val').textContent = (impliedG*100).toFixed(1) + '%';
+    document.getElementById('rev-bar2-val').textContent = (yourG*100).toFixed(1) + '%';
+
+    // Verdict
+    const verdict = document.getElementById('rev-verdict');
+    if (gap >= 5) {
+      verdict.className = 'result-verdict verdict-under';
+      verdict.textContent = '✦ Market underestimates this business';
+    } else if (gap >= 0) {
+      verdict.className = 'result-verdict verdict-fair';
+      verdict.textContent = '◆ Market fairly reflects your thesis';
+    } else {
+      verdict.className = 'result-verdict verdict-over';
+      verdict.textContent = '▲ Market expects more than you believe';
+    }
+
+    // Insight
+    const impliedPct = (impliedG * 100).toFixed(1);
+    const yourPct    = (yourG * 100).toFixed(1);
+    let insight = '';
+    if (impliedG > 0.35) {
+      insight = `The market is pricing in <strong>${impliedPct}% annual FCF growth</strong> — that's exceptionally aggressive. Even elite compounders rarely sustain this. Your estimate of <strong>${yourPct}%</strong> may be more realistic. `;
+    } else if (impliedG > 0.20) {
+      insight = `At <strong>${impliedPct}% implied growth</strong>, the market has high confidence in this company's trajectory. Your estimate of <strong>${yourPct}%</strong> ${gap >= 0 ? 'suggests the market is underestimating it.' : 'is more conservative — consider if that difference is justified.'}`;
+    } else if (impliedG > 0.10) {
+      insight = `The market is pricing in <strong>${impliedPct}% growth</strong> — reasonable for a quality business. Your estimate of <strong>${yourPct}%</strong> ${gap >= 5 ? 'implies meaningful upside if you\'re right.' : gap >= 0 ? 'roughly aligns.' : 'is lower — ensure your thesis accounts for this.'}`;
+    } else {
+      insight = `A <strong>${impliedPct}% implied growth rate</strong> is modest — the market isn't expecting much. If you believe in a <strong>${yourPct}%</strong> trajectory, this may be a deeply undervalued opportunity worth investigating further.`;
+    }
+    insight += ` <strong style="color:var(--gold)">The question isn't just the number — it's whether you can justify your estimate better than the market can.</strong>`;
+    document.getElementById('rev-insight-text').innerHTML = insight;
+  }
+}
+
+function solveImpliedGrowth(price, fcfPerShare, dr, tg) {
+  // Binary search: find g such that DCF(g) = price
+  let lo = -0.2, hi = 1.5;
+  for (let i = 0; i < 60; i++) {
+    const mid = (lo + hi) / 2;
+    const iv = computeIV(fcfPerShare, 1, mid, mid * 0.65, tg, dr);
+    if (Math.abs(iv - price) < 0.01) return mid;
+    if (iv < price) lo = mid;
+    else hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+
+function flashEl(id) {
+  const el = document.getElementById(id);
+  el.classList.remove('flash');
+  void el.offsetWidth;
+  el.classList.add('flash');
+}
+
+// ── INIT ──
+initSliders();
+calcDCF();
+calcReverse();
+</script>
+</body>
+</html>

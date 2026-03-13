@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InsightInvest — Second-Level Thinking</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:       #09090F;
+  --deep:      #0D0D16;
+  --surface:   #13131E;
+  --lift:      #1A1A28;
+  --paper:     #EDEAE2;
+  --paper-dim: #9A9888;
+  --gold:      #C9A84C;
+  --gold-2:    #E8C96A;
+  --gold-dim:  #6B5520;
+  --gold-glow: rgba(201,168,76,0.12);
+  --gold-line: rgba(201,168,76,0.22);
+  --red:       #D94F4F;
+  --green:     #2DB87A;
+  --blue:      #4E8FE8;
+  --amber:     #E8933A;
+  --border:    rgba(255,255,255,0.055);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: 'DM Mono', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* grain */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 900; opacity: 0.5;
+}
+
+/* ── HEADER ── */
+nav {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 22px 52px;
+  border-bottom: 1px solid var(--gold-line);
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: rgba(9,9,15,0.95);
+  backdrop-filter: blur(16px);
+}
+.nav-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px; font-weight: 600;
+  color: var(--gold); letter-spacing: 0.07em;
+}
+.nav-tool {
+  font-size: 9px; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--paper-dim);
+  margin-top: 3px;
+}
+.nav-right {
+  display: flex; align-items: center; gap: 20px;
+}
+.nav-score-wrap {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 10px; letter-spacing: 0.15em; color: var(--paper-dim);
+  text-transform: uppercase;
+}
+.nav-score-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 300;
+  color: var(--gold); transition: all 0.4s;
+}
+.nav-disclaimer {
+  font-size: 9px; letter-spacing: 0.1em; color: var(--gold-dim);
+  background: var(--gold-glow);
+  border: 1px solid var(--gold-line);
+  padding: 5px 12px; border-radius: 2px;
+}
+
+/* ── LANDING ── */
+#screen-landing {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: flex-start;
+  padding: 120px 52px 80px;
+  position: relative; overflow: hidden;
+}
+
+.landing-bg-text {
+  position: absolute;
+  right: -20px; top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(120px, 18vw, 240px);
+  font-weight: 800;
+  color: rgba(201,168,76,0.028);
+  letter-spacing: -0.05em;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.eyebrow {
+  font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 24px;
+  opacity: 0; animation: fadeUp 0.8s ease 0.2s forwards;
+}
+
+.landing-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(48px, 7vw, 100px);
+  font-weight: 300; line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--paper); margin-bottom: 32px;
+  opacity: 0; animation: fadeUp 0.8s ease 0.4s forwards;
+  max-width: 820px;
+}
+.landing-title em { font-style: italic; color: var(--gold); }
+.landing-title .line2 { display: block; padding-left: 60px; }
+
+.landing-rule {
+  width: 60px; height: 1px; background: var(--gold);
+  margin-bottom: 28px;
+  opacity: 0; animation: fadeUp 0.8s ease 0.55s forwards;
+}
+
+.landing-desc {
+  font-size: 12px; color: var(--paper-dim);
+  line-height: 2; max-width: 520px; margin-bottom: 52px;
+  opacity: 0; animation: fadeUp 0.8s ease 0.65s forwards;
+}
+
+.marks-quote {
+  border-left: 2px solid var(--gold);
+  padding: 16px 24px; margin-bottom: 52px;
+  max-width: 540px;
+  opacity: 0; animation: fadeUp 0.8s ease 0.75s forwards;
+}
+.marks-quote-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 19px; font-weight: 300; font-style: italic;
+  line-height: 1.6; color: var(--paper); margin-bottom: 10px;
+}
+.marks-quote-attr {
+  font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold-dim);
+}
+
+.how-it-works {
+  display: flex; gap: 40px; margin-bottom: 56px;
+  opacity: 0; animation: fadeUp 0.8s ease 0.85s forwards;
+}
+.how-step { display: flex; flex-direction: column; gap: 6px; }
+.how-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px; font-weight: 300; color: var(--gold); line-height: 1;
+}
+.how-label { font-size: 10px; color: var(--paper-dim); letter-spacing: 0.05em; line-height: 1.5; max-width: 140px; }
+
+.begin-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink); background: var(--gold);
+  border: none; padding: 20px 56px;
+  cursor: pointer; transition: all 0.25s;
+  position: relative; overflow: hidden;
+  opacity: 0; animation: fadeUp 0.8s ease 0.95s forwards;
+}
+.begin-btn::before {
+  content: ''; position: absolute; inset: 0;
+  background: var(--paper); transform: translateX(-100%);
+  transition: transform 0.28s ease;
+}
+.begin-btn:hover::before { transform: translateX(0); }
+.begin-btn span { position: relative; z-index: 1; }
+
+/* ── PRESSURE TEST SCREEN ── */
+#screen-test { display: none; padding-top: 80px; }
+
+/* progress bar */
+.progress-strip {
+  height: 2px; background: var(--lift);
+  position: fixed; top: 65px; left: 0; right: 0; z-index: 199;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold-dim), var(--gold-2));
+  transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 0 10px var(--gold);
+}
+
+/* consensus view */
+.consensus-stage {
+  max-width: 900px; margin: 0 auto;
+  padding: 72px 52px 48px;
+  border-bottom: 1px solid var(--border);
+}
+
+.stage-label {
+  font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--paper-dim); margin-bottom: 28px;
+  display: flex; align-items: center; gap: 12px;
+}
+.stage-label::before {
+  content: ''; display: inline-block;
+  width: 24px; height: 1px; background: var(--gold);
+}
+
+.consensus-category {
+  display: inline-block;
+  font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 4px 12px; border-radius: 2px; margin-bottom: 20px;
+}
+.cat-macro    { background: rgba(78,143,232,0.12); color: var(--blue);   border: 1px solid rgba(78,143,232,0.3); }
+.cat-sector   { background: rgba(232,147,58,0.12); color: var(--amber);  border: 1px solid rgba(232,147,58,0.3); }
+.cat-market   { background: rgba(217,79,79,0.12);  color: var(--red);    border: 1px solid rgba(217,79,79,0.3); }
+.cat-geopolitical { background: rgba(201,168,76,0.12); color: var(--gold); border: 1px solid var(--gold-line); }
+
+.consensus-statement {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 300; line-height: 1.15;
+  color: var(--paper); margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+.consensus-statement .highlight {
+  font-style: italic; color: var(--gold-2);
+  border-bottom: 1px solid var(--gold-line);
+}
+
+.consensus-meta {
+  font-size: 10px; color: var(--paper-dim); letter-spacing: 0.05em;
+  display: flex; align-items: center; gap: 16px;
+}
+.consensus-strength {
+  display: flex; align-items: center; gap: 6px;
+}
+.strength-bar {
+  display: flex; gap: 3px;
+}
+.strength-pip { width: 6px; height: 6px; border-radius: 1px; background: var(--lift); }
+.strength-pip.on { background: var(--red); }
+
+/* questions */
+.questions-stage {
+  max-width: 900px; margin: 0 auto; padding: 48px 52px;
+}
+
+.question-block {
+  margin-bottom: 52px;
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.question-block.visible { opacity: 1; transform: translateY(0); }
+
+.q-label {
+  font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.q-label::before { content: ''; width: 16px; height: 1px; background: var(--gold); }
+
+.q-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(18px, 2.2vw, 26px);
+  font-weight: 300; line-height: 1.4; color: var(--paper);
+  margin-bottom: 8px;
+}
+.q-sub {
+  font-size: 10px; color: var(--paper-dim); line-height: 1.7; margin-bottom: 22px;
+}
+
+/* choice options */
+.choices { display: flex; flex-direction: column; gap: 10px; }
+.choice-btn {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 16px 20px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 2px; cursor: pointer;
+  transition: all 0.18s; text-align: left;
+  font-family: 'DM Mono', monospace;
+  color: var(--paper-dim); font-size: 11px; line-height: 1.7;
+}
+.choice-btn:hover { border-color: var(--gold-line); color: var(--paper); background: var(--lift); }
+.choice-btn.selected {
+  border-color: var(--gold); background: var(--gold-glow);
+  color: var(--paper);
+}
+.choice-btn.correct { border-color: var(--green); background: rgba(45,184,122,0.08); color: var(--paper); }
+.choice-btn.wrong   { border-color: var(--red); background: rgba(217,79,79,0.08); }
+.choice-letter {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px; font-weight: 300;
+  color: var(--gold-dim); flex-shrink: 0; line-height: 1.2;
+  transition: color 0.18s;
+}
+.choice-btn.selected .choice-letter { color: var(--gold); }
+.choice-btn.correct  .choice-letter { color: var(--green); }
+.choice-btn.wrong    .choice-letter { color: var(--red); }
+
+/* slider question */
+.slider-question { padding: 0; }
+.sq-track-wrap { position: relative; padding: 16px 0; }
+input.sq-range {
+  -webkit-appearance: none; width: 100%;
+  height: 2px; background: var(--lift); outline: none; cursor: pointer;
+}
+input.sq-range::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 18px; height: 18px;
+  background: var(--gold); border-radius: 50%;
+  border: 3px solid var(--ink);
+  box-shadow: 0 0 10px rgba(201,168,76,0.5);
+  cursor: pointer; transition: transform 0.15s;
+}
+input.sq-range:hover::-webkit-slider-thumb { transform: scale(1.15); }
+.sq-labels { display: flex; justify-content: space-between; margin-top: 8px; }
+.sq-label-end { font-size: 9px; color: var(--paper-dim); letter-spacing: 0.1em; }
+.sq-current {
+  text-align: center; margin-top: 12px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px; font-weight: 300; color: var(--gold);
+}
+
+/* textarea */
+.q-textarea {
+  width: 100%; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 2px; color: var(--paper); font-family: 'DM Mono', monospace;
+  font-size: 12px; padding: 16px 18px; outline: none; resize: vertical;
+  min-height: 100px; line-height: 1.8; transition: border-color 0.2s;
+}
+.q-textarea:focus { border-color: var(--gold); }
+.q-textarea::placeholder { color: rgba(154,152,136,0.4); }
+
+/* reveal box */
+.reveal-box {
+  margin-top: 20px; padding: 20px 24px;
+  border-left: 2px solid var(--gold);
+  background: var(--gold-glow);
+  display: none;
+  animation: fadeUp 0.4s ease forwards;
+}
+.reveal-box.show { display: block; }
+.reveal-title {
+  font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 10px;
+}
+.reveal-text { font-size: 11px; color: var(--paper-dim); line-height: 1.8; }
+.reveal-text strong { color: var(--paper); }
+.reveal-text .case {
+  margin-top: 12px; padding: 10px 14px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 2px; font-size: 10px; line-height: 1.7;
+}
+.reveal-text .case-label {
+  font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold-dim); margin-bottom: 4px;
+}
+
+/* next button */
+.next-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold); background: transparent;
+  border: 1px solid var(--gold-line); padding: 12px 32px;
+  cursor: pointer; transition: all 0.2s; margin-top: 24px;
+  display: none;
+}
+.next-btn.show { display: inline-flex; align-items: center; gap: 10px; }
+.next-btn:hover { background: var(--gold-glow); border-color: var(--gold); }
+
+/* ── RESULTS SCREEN ── */
+#screen-results {
+  display: none; padding: 100px 52px 80px;
+  max-width: 860px; margin: 0 auto;
+}
+
+.results-eyebrow {
+  font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 24px;
+  opacity: 0; animation: fadeUp 0.6s ease 0.1s forwards;
+}
+
+.results-grade {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(52px, 8vw, 88px);
+  font-weight: 300; line-height: 0.95;
+  letter-spacing: -0.03em; margin-bottom: 8px;
+  opacity: 0; animation: fadeUp 0.6s ease 0.25s forwards;
+}
+
+.results-score-line {
+  font-size: 11px; color: var(--paper-dim); margin-bottom: 40px;
+  opacity: 0; animation: fadeUp 0.6s ease 0.4s forwards;
+  display: flex; align-items: center; gap: 16px;
+}
+.score-divider { width: 24px; height: 1px; background: var(--gold-line); }
+
+.results-summary {
+  font-size: 13px; color: var(--paper-dim); line-height: 1.9;
+  border-left: 2px solid var(--gold); padding: 18px 24px;
+  margin-bottom: 48px;
+  opacity: 0; animation: fadeUp 0.6s ease 0.5s forwards;
+}
+.results-summary strong { color: var(--paper); }
+
+/* dimension breakdown */
+.dim-breakdown {
+  margin-bottom: 48px;
+  opacity: 0; animation: fadeUp 0.6s ease 0.6s forwards;
+}
+.dim-title {
+  font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.dim-title::before { content:''; width:20px; height:1px; background:var(--gold); }
+
+.dim-row {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 14px;
+}
+.dim-label { font-size: 10px; color: var(--paper-dim); width: 220px; flex-shrink: 0; letter-spacing: 0.05em; }
+.dim-track { flex: 1; height: 3px; background: var(--lift); border-radius: 2px; overflow: hidden; }
+.dim-fill { height: 100%; border-radius: 2px; transition: width 1s cubic-bezier(0.4,0,0.2,1) 0.8s; }
+.dim-score { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--gold); width: 32px; text-align: right; }
+
+/* principles */
+.principles-section {
+  margin-bottom: 48px;
+  opacity: 0; animation: fadeUp 0.6s ease 0.75s forwards;
+}
+.principle-card {
+  padding: 20px 24px; border: 1px solid var(--border);
+  border-radius: 2px; margin-bottom: 12px;
+  background: var(--surface);
+}
+.principle-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px; color: var(--gold-dim); margin-bottom: 6px;
+  letter-spacing: 0.1em;
+}
+.principle-text { font-size: 11px; color: var(--paper-dim); line-height: 1.8; }
+.principle-text strong { color: var(--paper); }
+
+/* restart */
+.restart-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink); background: var(--gold); border: none;
+  padding: 18px 48px; cursor: pointer; transition: all 0.2s;
+  position: relative; overflow: hidden;
+  opacity: 0; animation: fadeUp 0.6s ease 0.9s forwards;
+}
+.restart-btn::before {
+  content:''; position:absolute; inset:0;
+  background:var(--paper); transform:translateX(-100%); transition:transform 0.25s;
+}
+.restart-btn:hover::before { transform:translateX(0); }
+.restart-btn span { position:relative; z-index:1; }
+
+/* ── UTILS ── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(14px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+.hidden { display: none !important; }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--ink); }
+::-webkit-scrollbar-thumb { background: var(--lift); border-radius:2px; }
+
+@media (max-width: 768px) {
+  nav, #screen-landing, .consensus-stage, .questions-stage, #screen-results { padding-left: 24px; padding-right: 24px; }
+  .how-it-works { flex-direction: column; gap: 24px; }
+  .landing-title .line2 { padding-left: 0; }
+}
+</style>
+</head>
+<body>
+<style>
+  .__tool-nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 40px;
+    background: rgba(8,9,12,0.96);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid #252838;
+    z-index: 10000;
+    font-family: 'Syne', sans-serif;
+  }
+  .__tool-nav-left { display: flex; align-items: center; gap: 20px; }
+  .__tool-back {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; color: #555c72;
+    text-decoration: none; transition: color 0.3s;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .__tool-back:hover { color: #c9a84c; }
+  .__tool-back svg { transition: transform 0.3s; }
+  .__tool-back:hover svg { transform: translateX(-3px); }
+  .__tool-sep { width: 1px; height: 20px; background: #252838; }
+  .__tool-breadcrumb {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: #a78bfa;
+  }
+  .__tool-nav-right { display: flex; align-items: center; gap: 24px; }
+  .__tool-nav-links a {
+    font-size: 11px; font-weight: 500; color: #555c72;
+    text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase;
+    transition: color 0.3s; margin-left: 20px;
+  }
+  .__tool-nav-links a:hover { color: #c9a84c; }
+  .__tool-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px; color: #c9a84c; text-decoration: none; font-weight: 600;
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet"/>
+<nav class="__tool-nav">
+  <div class="__tool-nav-left">
+    <a href="/members" class="__tool-back">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 7H2M6 2L1 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Members
+    </a>
+    <div class="__tool-sep"></div>
+    <span class="__tool-breadcrumb">Framework · Second-Level Thinking</span>
+  </div>
+  <a href="/" class="__tool-logo">Insight Invest</a>
+  <div class="__tool-nav-right">
+    <div class="__tool-nav-links">
+      <a href="/members#tools">All Tools</a>
+      <a href="/members#updates">Updates</a>
+      <a href="/reports">Reports</a>
+    </div>
+  </div>
+</nav>
+<style>
+  body { padding-top: 56px !important; }
+</style>
+
+
+<nav>
+  <div>
+    <div class="nav-brand">InsightInvest</div>
+    <div class="nav-tool">Second-Level Thinking · Pressure Test</div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-score-wrap">
+      <span>Score</span>
+      <span class="nav-score-val" id="nav-score">—</span>
+      <span id="nav-score-denom" style="display:none">/100</span>
+    </div>
+    <div class="nav-disclaimer">⚠ Opinion only</div>
+  </div>
+</nav>
+
+<!-- ══════════ LANDING ══════════ -->
+<div id="screen-landing">
+  <div class="landing-bg-text">THINK</div>
+
+  <div class="eyebrow">InsightInvest · Cognitive Toolkit</div>
+
+  <h1 class="landing-title">
+    What does everyone<br>
+    <em class="line2">already know?</em>
+  </h1>
+
+  <div class="landing-rule"></div>
+
+  <p class="landing-desc">
+    First-level thinking says: "This is a good company, so I'll buy the stock." Second-level thinking asks: "This is a good company — but does everyone already know that, and is it already priced in?" This tool trains the mental model that separates average investors from great ones.
+  </p>
+
+  <div class="marks-quote">
+    <div class="marks-quote-text">"Second-level thinking is deep, complex and convoluted. The second-level thinker takes a great many things into account. They know that the market is a large group of people who set prices, and that to beat them you have to know something they don't."</div>
+    <div class="marks-quote-attr">— Howard Marks · The Most Important Thing</div>
+  </div>
+
+  <div class="how-it-works">
+    <div class="how-step">
+      <div class="how-num">01</div>
+      <div class="how-label">A consensus view is presented. The market believes this.</div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">02</div>
+      <div class="how-label">You're challenged to think one level deeper at each stage.</div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">03</div>
+      <div class="how-label">Real historical cases reveal what actually happened when the consensus was wrong.</div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">04</div>
+      <div class="how-label">You receive a Second-Level Score and a diagnosis of your thinking patterns.</div>
+    </div>
+  </div>
+
+  <button class="begin-btn" onclick="startTest()"><span>Begin Pressure Test →</span></button>
+</div>
+
+<!-- ══════════ TEST ══════════ -->
+<div id="screen-test">
+  <div class="progress-strip"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+
+  <div id="scenario-container"></div>
+</div>
+
+<!-- ══════════ RESULTS ══════════ -->
+<div id="screen-results">
+  <div class="results-eyebrow">Assessment Complete · Second-Level Score</div>
+  <div class="results-grade" id="res-grade">—</div>
+  <div class="results-score-line">
+    <span id="res-score-txt">—</span>
+    <div class="score-divider"></div>
+    <span id="res-level-txt" style="color:var(--gold)">—</span>
+  </div>
+  <div class="results-summary" id="res-summary">—</div>
+
+  <div class="dim-breakdown">
+    <div class="dim-title">Dimension Breakdown</div>
+    <div id="dim-rows"></div>
+  </div>
+
+  <div class="principles-section">
+    <div class="dim-title">Second-Level Principles to Internalise</div>
+    <div id="principles-container"></div>
+  </div>
+
+  <button class="restart-btn" onclick="restartTest()"><span>Run Again →</span></button>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// DATA — 5 SCENARIOS, each with layers of questions
+// ═══════════════════════════════════════════════════════
+const SCENARIOS = [
+  {
+    id: 'ai-revolution',
+    category: 'sector',
+    catLabel: 'Sector Narrative',
+    consensus: '"AI is going to revolutionise every industry. AI companies will be the biggest winners of the next decade."',
+    highlightWord: 'AI companies will be the biggest winners',
+    strength: 5,
+    strengthLabel: 'Extreme consensus — nearly universal belief',
+    questions: [
+      {
+        type: 'choice',
+        dimension: 'pricing',
+        label: 'What Does the Market Already Know?',
+        text: 'If everyone believes AI will revolutionise industries, what does that mean for the price of leading AI stocks right now?',
+        sub: 'This is the first move of second-level thinking: identify what the consensus already knows and therefore what is already priced in.',
+        choices: [
+          { letter:'A', text:'The stocks are probably still cheap — the upside hasn\'t been captured yet.', score: 0 },
+          { letter:'B', text:'The optimism is partially priced in, but there\'s still room to run.', score: 1 },
+          { letter:'C', text:'Near-universal bullish consensus almost certainly means elevated valuations are already baked in.', score: 3 },
+          { letter:'D', text:'Valuation doesn\'t matter for transformative technology — growth justifies any price.', score: 0 },
+        ],
+        correctIdx: 2,
+        reveal: 'When a narrative becomes consensus — when taxi drivers, news anchors, and pension funds all agree — the price almost always already reflects that belief. The question is never "is AI real?" — it\'s "what growth rate is already priced in, and can reality exceed it?" <strong>In 1999, the internet genuinely did change everything. But buying Cisco at 100x earnings still cost you 80% of your capital over the next three years.</strong>',
+        cases: [
+          { label: 'Historical Parallel · Cisco (2000)', text: 'At peak internet mania, Cisco was the most valuable company in the world. The internet thesis was entirely correct. Cisco\'s stock still fell 86% — not because the technology failed, but because the price had already captured decades of growth. It never recovered to its 2000 high.' },
+        ]
+      },
+      {
+        type: 'choice',
+        dimension: 'contrarian',
+        label: 'Who Are the Real Winners?',
+        text: 'First-level: "AI companies win." Second-level asks: who benefits from AI adoption that the market might be underpricing?',
+        sub: 'The most obvious beneficiaries are rarely the best investments — because they\'re already obvious.',
+        choices: [
+          { letter:'A', text:'The leading AI model providers — they control the technology.', score: 0 },
+          { letter:'B', text:'Companies that use AI to dramatically expand margins in boring, overlooked industries.', score: 3 },
+          { letter:'C', text:'Semiconductor manufacturers — AI runs on chips.', score: 1 },
+          { letter:'D', text:'Cloud providers hosting AI workloads.', score: 1 },
+        ],
+        correctIdx: 1,
+        reveal: '<strong>The picks-and-shovels principle, taken one step further:</strong> During the Gold Rush, the miners rarely got rich. The people selling shovels did better. But the people selling denim jeans to miners — Levi Strauss — quietly became a dynasty. The least glamorous application of a transformative technology is often where the durable value compounds. AI-driven margin expansion in healthcare administration, legal document processing, or logistics may be far more mispriced than another AI chipmaker.',
+        cases: [
+          { label: 'Historical Parallel · Industrial Revolution', text: 'When railroads transformed America, the most obvious investment was railroad companies. Most went bankrupt. The durable winners were the steel companies, land developers, and agricultural businesses that railroads made viable. The transformation was real — the beneficiaries weren\'t who you\'d expect.' },
+        ]
+      },
+      {
+        type: 'slider',
+        dimension: 'probability',
+        label: 'Calibrate Your Confidence',
+        text: 'What probability do you assign to AI growth exceeding current market expectations over the next 5 years?',
+        sub: 'The market has already priced in substantial growth. For you to profit from an AI-themed investment, reality must exceed those expectations — not just be good, but better than what\'s already assumed.',
+        min: 0, max: 100, default: 50, unit: '%',
+        reveal: 'Most people anchor too high here. The base rate for transformative technologies <strong>exceeding already-elevated market expectations</strong> is surprisingly low — roughly 20–30% over 5-year periods. The technology wins. The valuations often don\'t. This is second-level thinking: separating the outcome of the technology from the outcome of the investment.',
+        cases: []
+      },
+    ]
+  },
+
+  {
+    id: 'rates-high',
+    category: 'macro',
+    catLabel: 'Macro View',
+    consensus: '"Interest rates will stay higher for longer. Borrowing is expensive. Growth stocks are dead."',
+    highlightWord: 'Growth stocks are dead',
+    strength: 4,
+    strengthLabel: 'Strong consensus — dominant institutional view',
+    questions: [
+      {
+        type: 'choice',
+        dimension: 'pricing',
+        label: 'First vs Second Level',
+        text: 'If the entire market consensus is that high rates kill growth stocks — what does second-level thinking immediately ask?',
+        sub: 'Remember: markets are discounting machines. They price in known information almost instantly.',
+        choices: [
+          { letter:'A', text:'How do I position my portfolio for a prolonged high-rate environment?', score: 0 },
+          { letter:'B', text:'If everyone believes this, have quality growth stocks already been excessively sold off — creating opportunity?', score: 3 },
+          { letter:'C', text:'I should move entirely into value stocks and financials.', score: 0 },
+          { letter:'D', text:'I should wait until rates actually fall before buying growth.', score: 1 },
+        ],
+        correctIdx: 1,
+        reveal: '<strong>By the time a macro narrative dominates the financial press, it is already embedded in prices.</strong> "Higher for longer" became consensus in 2022–2023. Quality compounders like MSFT, NVDA, and META were sold down alongside speculative tech. The second-level thinker asked: are these businesses actually impaired by rates, or are they being thrown out with the bathwater? The businesses with strong FCF, pricing power, and low debt are far less rate-sensitive than their price action suggested.',
+        cases: [
+          { label: 'Historical Parallel · 2022 Rate Sell-Off', text: 'At the height of rate-hike panic in late 2022, MSFT traded at ~$214, GOOGL at ~$85, META at ~$88. The businesses had not changed. Investors who separated the macro narrative from business fundamentals captured 80–200% returns over the next 18 months.' },
+        ]
+      },
+      {
+        type: 'choice',
+        dimension: 'contrarian',
+        label: 'The Asymmetry Hidden in Consensus',
+        text: 'When a macro view reaches extreme consensus, what is the risk/reward asymmetry of betting against it?',
+        sub: 'Think about what happens if the consensus is right versus wrong — and what is already priced in.',
+        choices: [
+          { letter:'A', text:'Betting against consensus is always too risky — the crowd is usually right.', score: 0 },
+          { letter:'B', text:'If consensus is right, the downside is limited because it\'s priced in. If wrong, the upside can be substantial.', score: 3 },
+          { letter:'C', text:'The risk/reward is symmetric — no particular edge in either direction.', score: 1 },
+          { letter:'D', text:'Betting against consensus is only worth it if you have insider information.', score: 0 },
+        ],
+        correctIdx: 1,
+        reveal: 'This is the core asymmetry Howard Marks describes: <strong>when a bearish view is consensus, the downside is partially priced in and the upside of being contrarian and correct is large.</strong> This isn\'t about being contrarian for its own sake — it\'s about recognising that the risk/reward shifts when everyone agrees. The question is always: what has to be true for the consensus to be wrong, and how likely is that?',
+        cases: [
+          { label: 'Howard Marks · Distressed Debt 2008', text: 'In 2009, the consensus was that the financial system was broken and credit was toxic. Oaktree Capital bought distressed debt aggressively when sentiment was at its worst. Not because they were reckless — but because the price already reflected catastrophe, so the asymmetry was in their favour.' },
+        ]
+      },
+      {
+        type: 'textarea',
+        dimension: 'synthesis',
+        label: 'Your Second-Level Thesis',
+        text: 'If rates stay high and the market has priced that in — write the contrarian second-level thesis. What might the market be getting wrong?',
+        sub: 'There is no single right answer here. The goal is to practise the muscle of going one level deeper.',
+        placeholder: 'e.g. "The market is pricing in rate pain for all growth stocks equally — but companies with strong FCF and pricing power are actually less vulnerable than loss-making rate-sensitive names. The indiscriminate sell-off created an opportunity in quality that the blunt macro narrative missed..."',
+        reveal: 'Strong second-level thinking separates the macro from the company-specific. Rate sensitivity varies enormously — a FCF-generating compounder with no debt and pricing power is fundamentally different from a loss-making startup burning cash. The market often sells both. <strong>That indiscriminate selling — driven by first-level thinking — is where second-level opportunities appear.</strong>',
+        cases: []
+      },
+    ]
+  },
+
+  {
+    id: 'china-uninvestable',
+    category: 'geopolitical',
+    catLabel: 'Geopolitical Narrative',
+    consensus: '"China is uninvestable. Regulatory crackdowns, geopolitical risk, and delisting threats make Chinese stocks too dangerous."',
+    highlightWord: 'China is uninvestable',
+    strength: 4,
+    strengthLabel: 'Strong consensus — particularly among Western institutions',
+    questions: [
+      {
+        type: 'choice',
+        dimension: 'pricing',
+        label: 'Sentiment vs. Value',
+        text: 'When a country or market becomes labelled "uninvestable" by the mainstream — what typically happens to valuations?',
+        sub: 'Think about the relationship between negative sentiment and price levels.',
+        choices: [
+          { letter:'A', text:'Valuations stay rational because institutions use DCF models regardless of sentiment.', score: 0 },
+          { letter:'B', text:'Valuations compress significantly — sometimes to levels that reflect catastrophe scenarios that don\'t materialise.', score: 3 },
+          { letter:'C', text:'Valuations are impossible to assess because the risks are genuinely unknowable.', score: 1 },
+          { letter:'D', text:'Smart money always exits early, so by the time consensus turns negative, good prices are gone.', score: 0 },
+        ],
+        correctIdx: 1,
+        reveal: '<strong>When institutional flows reverse en masse — driven by a narrative of uninvestability — prices often fall to levels that price in outcomes more severe than what actually occurs.</strong> In 2022, Alibaba traded below 10x earnings. JD.com at sub-7x. These were businesses generating tens of billions in FCF. The "uninvestable" label had compressed valuations to levels that assumed permanent impairment. The second-level question: is the business actually broken, or is the sentiment broken?',
+        cases: [
+          { label: 'Historical Parallel · Russia 1998 / South Korea 1997', text: 'Both markets were declared uninvestable during their respective crises. Investors who bought when the label was most extreme earned multiples over the following decade in South Korea. The risks were real — but priced in at multiples of the actual outcome.' },
+        ]
+      },
+      {
+        type: 'choice',
+        dimension: 'contrarian',
+        label: 'Distinguishing Impairment from Sentiment',
+        text: 'Second-level thinking requires separating two different questions. Which framing is more useful?',
+        sub: 'This is about the right question to ask — not about whether China is "good" or "bad."',
+        choices: [
+          { letter:'A', text:'"Is China a good place to invest?" vs "Is China a bad place to invest?"', score: 0 },
+          { letter:'B', text:'"Is China risky?" vs "Is it safe?"', score: 0 },
+          { letter:'C', text:'"Are these businesses fundamentally impaired?" vs "Is the current price already reflecting the risks?"', score: 3 },
+          { letter:'D', text:'"What do most fund managers think?" vs "What does the data say?"', score: 1 },
+        ],
+        correctIdx: 2,
+        reveal: 'The right question is never "is this risky?" — everything in investing involves risk. The right question is <strong>"am I being compensated for the risk at this price?"</strong> A business with genuine structural problems is a bad investment at any price. A fundamentally sound business with political risk may be a great investment if that risk is already embedded in a 60% discount to intrinsic value. Second-level thinking always asks: compared to what? At what price?',
+        cases: []
+      },
+      {
+        type: 'slider',
+        dimension: 'probability',
+        label: 'Price In the Probability',
+        text: 'At what discount to intrinsic value would Chinese business risk be adequately compensated — i.e., the margin of safety needed?',
+        sub: 'There is no universal answer — but force yourself to quantify it. Most investors stay entirely out because they refuse to price the risk. That itself is a decision.',
+        min: 10, max: 80, default: 40, unit: '%',
+        reveal: 'Most second-level thinkers land between 40–60% for emerging market political risk on otherwise sound businesses. The key insight: <strong>choosing not to invest is not a "safe" decision — it carries the opportunity cost of the returns foregone.</strong> Every decision has a price. Refusing to price in geopolitical risk doesn\'t make it go away — it just means you\'re making the decision emotionally rather than analytically.',
+        cases: []
+      },
+    ]
+  },
+
+  {
+    id: 'recession-coming',
+    category: 'macro',
+    catLabel: 'Macro View',
+    consensus: '"A recession is coming. Unemployment will rise, consumer spending will collapse, and equities will fall 30%."',
+    highlightWord: 'equities will fall 30%',
+    strength: 3,
+    strengthLabel: 'Moderate-strong consensus — majority institutional view',
+    questions: [
+      {
+        type: 'choice',
+        dimension: 'pricing',
+        label: 'The Forecaster\'s Paradox',
+        text: 'Economic recessions are widely predicted ahead of time. What does history tell us about acting on consensus recession forecasts?',
+        sub: 'Consider the base rate: how often do consensus recession forecasts translate into actionable investment timing?',
+        choices: [
+          { letter:'A', text:'Consensus recession forecasts are reliable — you should reduce equity exposure when economists agree.', score: 0 },
+          { letter:'B', text:'By the time a recession is consensus, markets have often already priced in significant damage — sometimes more than actually occurs.', score: 3 },
+          { letter:'C', text:'Recession forecasting is so unreliable that you should ignore all macro analysis entirely.', score: 1 },
+          { letter:'D', text:'Recessions always last long enough that selling early gives you time to buy back cheaper.', score: 0 },
+        ],
+        correctIdx: 1,
+        reveal: '<strong>Markets are forward-looking. They price in anticipated recessions before they arrive.</strong> In late 2022, when recession fear peaked, the S&P 500 had already fallen ~25%. Much of the damage was done before the recession even confirmed. Investors who sold at the bottom "to avoid the recession" often missed the recovery. The historical base rate: acting on consensus macro forecasts at the point of maximum agreement is one of the lowest-return strategies in investing.',
+        cases: [
+          { label: 'Historical Record · Economist Consensus', text: 'A 2018 IMF study found that professional economists predicted only 5 of the 153 recessions in their dataset a year in advance. The ones they did predict were often priced into equities before the recession arrived. Consensus macro timing has an extremely poor track record.' },
+        ]
+      },
+      {
+        type: 'choice',
+        dimension: 'contrarian',
+        label: 'What the Recession Gets Wrong',
+        text: 'If recession risk is already priced in, what is the second-level opportunity most investors miss?',
+        sub: 'Think about the distribution of outcomes — what happens if the recession is milder than feared?',
+        choices: [
+          { letter:'A', text:'There is no opportunity — recessions always get worse than expected.', score: 0 },
+          { letter:'B', text:'Cash is king in recessions — wait until the bottom is confirmed.', score: 0 },
+          { letter:'C', text:'High-quality businesses with strong balance sheets get sold off with weaker ones, creating entry points in companies that don\'t need a recovery to survive.', score: 3 },
+          { letter:'D', text:'Defensive sectors like utilities always outperform — rotate aggressively.', score: 1 },
+        ],
+        correctIdx: 2,
+        reveal: '<strong>Recession panic is indiscriminate.</strong> Index selling, margin calls, and forced liquidations push down companies with pristine balance sheets alongside genuinely fragile ones. The second-level investor asks: which businesses in this sell-off are fundamentally unimpaired by a recession? Which ones will be generating strong FCF in year 3 regardless of the next two quarters? Those are the asymmetric opportunities — bought at recession prices but owned for the recovery and beyond.',
+        cases: [
+          { label: 'Historical Parallel · 2020 COVID Crash', text: 'In March 2020, MSFT fell 30%, AAPL fell 31%, and Visa fell 33% — alongside genuinely impaired businesses. These companies were never going to be permanently harmed by a pandemic. Investors who separated "impaired" from "indiscriminately sold" earned 100%+ in 12 months.' },
+        ]
+      },
+      {
+        type: 'textarea',
+        dimension: 'synthesis',
+        label: 'Your Recession Playbook',
+        text: 'Write the second-level playbook: if a recession arrives exactly as the consensus predicts — what is the investing strategy that most people will get wrong, and what is the right one?',
+        sub: 'Think about behaviour, not prediction. What does the average investor do during recessions, and what should the second-level thinker do instead?',
+        placeholder: 'e.g. "Most investors sell at the worst point, driven by fear and negative headlines. The second-level thinker prepares a watchlist of high-quality businesses they\'d want to own at recession prices — and has the discipline and dry powder to act when sentiment is darkest..."',
+        reveal: 'The second-level recession playbook has three components: <strong>(1) prepare before, not during</strong> — know which businesses you want to own at distressed prices; <strong>(2) separate impaired from indiscriminately sold</strong> — don\'t buy airlines when you mean to buy Microsoft; <strong>(3) act on process, not emotion</strong> — the best time to buy always feels like the worst time.',
+        cases: []
+      },
+    ]
+  },
+
+  {
+    id: 'ev-dominance',
+    category: 'sector',
+    catLabel: 'Sector Narrative',
+    consensus: '"Electric vehicles will dominate the auto industry within 10 years. EV manufacturers are the future of transportation."',
+    highlightWord: 'EV manufacturers are the future',
+    strength: 4,
+    strengthLabel: 'Strong consensus — widely held among retail and institutional investors',
+    questions: [
+      {
+        type: 'choice',
+        dimension: 'pricing',
+        label: 'Technology vs Investment Returns',
+        text: 'EV adoption is real and accelerating. Does that mean EV stocks are good investments?',
+        sub: 'This is the core second-level question: separating the outcome of a technology from the investment returns of companies in that space.',
+        choices: [
+          { letter:'A', text:'Yes — the technology wins, so the leading companies win.', score: 0 },
+          { letter:'B', text:'Not necessarily — transformative technologies often destroy more value than they create for early investors, as competition drives down margins.', score: 3 },
+          { letter:'C', text:'Only the first-mover wins — whoever leads now will dominate.', score: 0 },
+          { letter:'D', text:'It depends entirely on management quality.', score: 1 },
+        ],
+        correctIdx: 1,
+        reveal: '<strong>The history of transformative technology is littered with great innovations that created terrible investments.</strong> Airlines transformed global connectivity — and have collectively lost money for investors over their entire history. The automobile itself: of the hundreds of car manufacturers that existed in the early 1900s, almost all went bankrupt. The technology won. The investors mostly didn\'t. Second-level thinking asks: in a world where EVs win, who actually captures the value — and at what price are they offering me today?',
+        cases: [
+          { label: 'Historical Parallel · Early Automobile Industry', text: 'In 1910, there were over 200 automobile manufacturers in the United States. The automobile thesis was entirely correct — it transformed civilisation. Only a handful of companies survived to 1950. Buying the "obvious future" at 1910 valuations would have destroyed most investors\' capital.' },
+        ]
+      },
+      {
+        type: 'choice',
+        dimension: 'contrarian',
+        label: 'The Hidden Winner',
+        text: 'If EV adoption is inevitable — who is the second-level winner the consensus is ignoring?',
+        sub: 'Think upstream, downstream, and adjacent to the obvious narrative.',
+        choices: [
+          { letter:'A', text:'The largest EV manufacturers by market share.', score: 0 },
+          { letter:'B', text:'Battery manufacturers — they\'re in the picks-and-shovels position.', score: 1 },
+          { letter:'C', text:'Electrical grid infrastructure, utilities, and charging networks — the unglamorous enablers that every EV needs regardless of which manufacturer wins.', score: 3 },
+          { letter:'D', text:'Traditional automakers pivoting to EV — they have the distribution.', score: 1 },
+        ],
+        correctIdx: 2,
+        reveal: 'The most durable second-level insight on EVs: <strong>every EV — regardless of brand, battery chemistry, or software — needs electricity to run.</strong> Grid infrastructure, transmission capacity, smart charging, and electrical utilities benefit from EV adoption with far less competitive risk than the car manufacturers themselves. The market was obsessed with Tesla, Rivian, and NIO. It largely ignored the picks-and-shovels of the electrical grid. The latter are assets with near-monopoly characteristics, regulated returns, and 30-year demand tailwinds.',
+        cases: [
+          { label: 'Historical Parallel · Internet Infrastructure', text: 'During the dot-com boom, the obvious winners were internet companies. The second-level winners were tower companies, fibre optic infrastructure, and data centres — unglamorous businesses that didn\'t capture headlines but delivered the infrastructure every internet company needed. Many are now among the best long-term investments of the era.' },
+        ]
+      },
+      {
+        type: 'slider',
+        dimension: 'probability',
+        label: 'Competitive Moat Assessment',
+        text: 'Rate the moat strength of the average pure-play EV manufacturer (not infrastructure): how defensible is their competitive position in 10 years?',
+        sub: 'Consider: barriers to entry, brand loyalty, switching costs, regulatory advantages, and the history of automotive competition.',
+        min: 0, max: 10, default: 5, unit: '/10',
+        reveal: 'Most rigorous analysts rate pure-play EV manufacturers at 4–6/10 for moat strength — <strong>substantially lower than the valuations often implied.</strong> Unlike software or platforms, EVs have high capital requirements, rapidly commoditising battery technology, low switching costs, and intense global competition. The companies with the widest moats in the EV ecosystem tend to be the infrastructure plays, not the car companies — consistent with the historical pattern across every major technology transition.',
+        cases: []
+      },
+    ]
+  },
+];
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+let scenarioIdx = 0;
+let questionIdx = 0;
+let scores = {};       // scenarioId -> [q scores]
+let userAnswers = {};  // scenarioId -> [answer]
+let totalPoints = 0;
+let maxPoints = 0;
+
+function startTest() {
+  scenarioIdx = 0; questionIdx = 0; scores = {}; userAnswers = {}; totalPoints = 0; maxPoints = 0;
+  document.getElementById('screen-landing').style.display = 'none';
+  document.getElementById('screen-test').style.display = 'block';
+  document.getElementById('nav-score').textContent = '0';
+  document.getElementById('nav-score-denom').style.display = 'inline';
+  renderScenario();
+}
+
+function renderScenario() {
+  const sc = SCENARIOS[scenarioIdx];
+  if (!sc) { showResults(); return; }
+
+  scores[sc.id] = scores[sc.id] || [];
+  userAnswers[sc.id] = userAnswers[sc.id] || [];
+
+  const totalQ = SCENARIOS.reduce((a,s) => a + s.questions.length, 0);
+  const doneQ  = SCENARIOS.slice(0, scenarioIdx).reduce((a,s) => a + s.questions.length, 0) + questionIdx;
+  const pct = Math.round((doneQ / totalQ) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+
+  const q = sc.questions[questionIdx];
+  if (!q) { scenarioIdx++; questionIdx = 0; renderScenario(); return; }
+
+  const isFirstQ = questionIdx === 0;
+
+  const strengthPips = Array.from({length:5}, (_,i) =>
+    `<div class="strength-pip ${i < sc.strength ? 'on' : ''}"></div>`).join('');
+
+  const catColors = { macro:'cat-macro', sector:'cat-sector', market:'cat-market', geopolitical:'cat-geopolitical' };
+  const catCls = catColors[sc.category] || 'cat-macro';
+
+  let consensusHTML = '';
+  if (isFirstQ) {
+    consensusHTML = `
+    <div class="consensus-stage" id="consensus-block">
+      <div class="stage-label">Scenario ${scenarioIdx + 1} of ${SCENARIOS.length} · The Consensus View</div>
+      <span class="consensus-category ${catCls}">${sc.catLabel}</span>
+      <div class="consensus-statement">"${sc.consensus.replace(sc.highlightWord, `<span class="highlight">${sc.highlightWord}</span>`)}"</div>
+      <div class="consensus-meta">
+        <span>Consensus Strength</span>
+        <div class="consensus-strength">
+          <div class="strength-bar">${strengthPips}</div>
+          <span>${sc.strengthLabel}</span>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  let questionHTML = buildQuestionHTML(q, scenarioIdx, questionIdx);
+
+  document.getElementById('scenario-container').innerHTML = consensusHTML + `
+    <div class="questions-stage" id="q-stage">
+      ${questionHTML}
+    </div>`;
+
+  // animate question blocks
+  setTimeout(() => {
+    document.querySelectorAll('.question-block').forEach(el => {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+      }, { threshold: 0.1 });
+      observer.observe(el);
+    });
+  }, 50);
+
+  // init sliders
+  document.querySelectorAll('.sq-range').forEach(el => {
+    updateSliderDisplay(el);
+    el.addEventListener('input', () => updateSliderDisplay(el));
+  });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function buildQuestionHTML(q, sIdx, qIdx) {
+  const qNum = SCENARIOS.slice(0, sIdx).reduce((a,s) => a + s.questions.length, 0) + qIdx + 1;
+
+  let inputHTML = '';
+  if (q.type === 'choice') {
+    inputHTML = `<div class="choices">` +
+      q.choices.map((c,i) => `
+        <button class="choice-btn" onclick="selectChoice(${i}, this)">
+          <span class="choice-letter">${c.letter}</span>
+          <span>${c.text}</span>
+        </button>`).join('') +
+      `</div>`;
+  } else if (q.type === 'slider') {
+    inputHTML = `
+      <div class="slider-question">
+        <div class="sq-track-wrap">
+          <input class="sq-range" type="range" min="${q.min}" max="${q.max}" value="${q.default}" data-unit="${q.unit}">
+        </div>
+        <div class="sq-labels">
+          <span class="sq-label-end">${q.min}${q.unit}</span>
+          <span class="sq-label-end">${q.max}${q.unit}</span>
+        </div>
+        <div class="sq-current" id="sq-current-${sIdx}-${qIdx}">${q.default}${q.unit}</div>
+      </div>`;
+  } else if (q.type === 'textarea') {
+    inputHTML = `<textarea class="q-textarea" id="ta-${sIdx}-${qIdx}" placeholder="${q.placeholder}" rows="5"></textarea>`;
+  }
+
+  const casesHTML = q.cases && q.cases.length
+    ? q.cases.map(c => `<div class="case"><div class="case-label">${c.label}</div>${c.text}</div>`).join('')
+    : '';
+
+  return `
+    <div class="question-block" data-q="${qNum}">
+      <div class="q-label">Question ${qNum} · ${q.label}</div>
+      <div class="q-text">${q.text}</div>
+      <div class="q-sub">${q.sub}</div>
+      ${inputHTML}
+
+      <div class="reveal-box" id="reveal-${sIdx}-${qIdx}">
+        <div class="reveal-title">Second-Level Insight</div>
+        <div class="reveal-text">${q.reveal}${casesHTML}</div>
+      </div>
+
+      <button class="next-btn" id="next-${sIdx}-${qIdx}" onclick="nextQuestion(${sIdx}, ${qIdx})">
+        ${qIdx < SCENARIOS[sIdx].questions.length - 1 ? 'Next Question →' : sIdx < SCENARIOS.length - 1 ? 'Next Scenario →' : 'See My Results →'}
+      </button>
+    </div>`;
+}
+
+function selectChoice(choiceIdx, btn) {
+  const sc = SCENARIOS[scenarioIdx];
+  const q  = sc.questions[questionIdx];
+  if (!q || btn.disabled) return;
+
+  // Disable all
+  document.querySelectorAll('.choice-btn').forEach(b => { b.disabled = true; b.style.cursor = 'default'; });
+
+  const allBtns = document.querySelectorAll('.choice-btn');
+  allBtns[choiceIdx].classList.add('selected');
+  allBtns[q.correctIdx].classList.add('correct');
+  if (choiceIdx !== q.correctIdx) allBtns[choiceIdx].classList.add('wrong');
+
+  const earned = q.choices[choiceIdx].score;
+  const maxQ   = Math.max(...q.choices.map(c => c.score));
+  scores[sc.id].push({ earned, max: maxQ, dimension: q.dimension });
+  userAnswers[sc.id].push(choiceIdx);
+  totalPoints += earned; maxPoints += maxQ;
+  updateNavScore();
+  showRevealAndNext();
+}
+
+function updateSliderDisplay(el) {
+  const unit = el.dataset.unit || '';
+  const val  = el.value;
+  const sIdx = scenarioIdx; const qIdx = questionIdx;
+  const disp = document.getElementById(`sq-current-${sIdx}-${qIdx}`);
+  if (disp) disp.textContent = val + unit;
+}
+
+function confirmSlider() {
+  const sc = SCENARIOS[scenarioIdx];
+  const q  = sc.questions[questionIdx];
+  const el = document.querySelector('.sq-range');
+  if (!el) return;
+  const maxQ = 2;
+  scores[sc.id].push({ earned: 2, max: maxQ, dimension: q.dimension });
+  userAnswers[sc.id].push(parseInt(el.value));
+  totalPoints += 2; maxPoints += maxQ;
+  updateNavScore();
+  el.disabled = true;
+  showRevealAndNext();
+}
+
+function confirmTextarea() {
+  const sc = SCENARIOS[scenarioIdx];
+  const q  = sc.questions[questionIdx];
+  const ta = document.querySelector(`.q-textarea`);
+  const val = ta ? ta.value.trim() : '';
+  const earned = val.length > 30 ? 3 : val.length > 0 ? 1 : 0;
+  const maxQ = 3;
+  scores[sc.id].push({ earned, max: maxQ, dimension: q.dimension });
+  userAnswers[sc.id].push(val);
+  totalPoints += earned; maxPoints += maxQ;
+  updateNavScore();
+  if (ta) ta.disabled = true;
+  showRevealAndNext();
+}
+
+function showRevealAndNext() {
+  const reveal = document.getElementById(`reveal-${scenarioIdx}-${questionIdx}`);
+  const next   = document.getElementById(`next-${scenarioIdx}-${questionIdx}`);
+  if (reveal) reveal.classList.add('show');
+  if (next)   next.classList.add('show');
+  // scroll to reveal
+  setTimeout(() => { if (reveal) reveal.scrollIntoView({ behavior:'smooth', block:'nearest' }); }, 100);
+}
+
+function nextQuestion(sIdx, qIdx) {
+  questionIdx++;
+  if (questionIdx >= SCENARIOS[scenarioIdx].questions.length) {
+    scenarioIdx++; questionIdx = 0;
+  }
+  renderScenario();
+}
+
+function updateNavScore() {
+  const pct = maxPoints > 0 ? Math.round((totalPoints / maxPoints) * 100) : 0;
+  document.getElementById('nav-score').textContent = pct;
+}
+
+// Intercept answer for slider/textarea types
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('next-btn')) return; // handled by onclick
+
+  // Check if clicking next on slider/textarea (they need confirm first)
+  const q = SCENARIOS[scenarioIdx] && SCENARIOS[scenarioIdx].questions[questionIdx];
+  if (!q) return;
+
+  const revealId = `reveal-${scenarioIdx}-${questionIdx}`;
+  const reveal = document.getElementById(revealId);
+  if (reveal && reveal.classList.contains('show')) return; // already answered
+
+  if (q.type === 'slider' && e.target.classList.contains('next-btn')) {
+    confirmSlider();
+  }
+});
+
+// Override next for slider/textarea
+document.addEventListener('click', function(e) {
+  if (!e.target.classList.contains('next-btn') && !e.target.closest('.next-btn')) return;
+  const q = SCENARIOS[scenarioIdx] && SCENARIOS[scenarioIdx].questions[questionIdx];
+  if (!q) return;
+  const reveal = document.getElementById(`reveal-${scenarioIdx}-${questionIdx}`);
+  if (reveal && !reveal.classList.contains('show')) {
+    e.preventDefault(); e.stopPropagation();
+    if (q.type === 'slider') confirmSlider();
+    else if (q.type === 'textarea') confirmTextarea();
+  }
+}, true);
+
+// ═══════════════════════════════════════════════════════
+// RESULTS
+// ═══════════════════════════════════════════════════════
+function showResults() {
+  document.getElementById('screen-test').style.display = 'none';
+  document.getElementById('screen-results').style.display = 'block';
+  document.getElementById('progress-fill').style.width = '100%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  const pct = maxPoints > 0 ? Math.round((totalPoints / maxPoints) * 100) : 0;
+
+  let grade, level, summary, gradeColor;
+  if (pct >= 80) {
+    grade = 'Second-Level\nThinker.'; level = 'Advanced';
+    gradeColor = 'var(--green)';
+    summary = `You consistently went one level deeper — asking not just "what is true?" but <strong>"what does everyone already know, and is it priced in?"</strong> This is the mental model that separates exceptional investors from the crowd. Your instinct to separate narrative from valuation, and technology outcomes from investment returns, is the foundation of asymmetric thinking. The next step: apply this discipline to your own portfolio and every conviction you currently hold.`;
+  } else if (pct >= 60) {
+    grade = 'Developing\nThe Edge.'; level = 'Intermediate';
+    gradeColor = 'var(--gold)';
+    summary = `You showed genuine second-level instincts in several areas, but <strong>first-level thinking still surfaces at key moments</strong> — particularly around consensus narratives and pricing. The gap between knowing the concept and applying it under pressure is where most investors live. The work is to make this reflexive: every time you form an investment view, immediately ask "who already knows this, and what does it mean for the price?"`;
+  } else {
+    grade = 'First-Level\nStill Dominant.'; level = 'Developing';
+    gradeColor = 'var(--red)';
+    summary = `Your responses suggest <strong>first-level thinking is still the default</strong> — which is entirely normal, because first-level thinking is how humans are wired. The market punishes first-level thinking because it's already priced in by everyone else who thought it. The most important shift: stop asking "is this a good company?" and start asking "does the price already reflect how good this company is — and can reality beat those expectations?"`;
+  }
+
+  document.getElementById('res-grade').textContent = grade;
+  document.getElementById('res-grade').style.color = gradeColor;
+  document.getElementById('res-score-txt').textContent = `${pct} / 100 · ${totalPoints} points earned`;
+  document.getElementById('res-level-txt').textContent = level;
+  document.getElementById('res-summary').innerHTML = summary;
+
+  // Dimension breakdown
+  const dimMap = {};
+  Object.values(scores).forEach(qs => {
+    qs.forEach(q => {
+      if (!dimMap[q.dimension]) dimMap[q.dimension] = { earned: 0, max: 0 };
+      dimMap[q.dimension].earned += q.earned;
+      dimMap[q.dimension].max    += q.max;
+    });
+  });
+
+  const dimLabels = {
+    pricing: 'Pricing Awareness · Is it already priced in?',
+    contrarian: 'Contrarian Instinct · What is the crowd missing?',
+    probability: 'Probability Calibration · Quantifying the odds',
+    synthesis: 'Synthesis · Building the second-level thesis',
+  };
+  const dimColors = { pricing:'var(--gold)', contrarian:'var(--blue)', probability:'var(--green)', synthesis:'var(--amber)' };
+
+  let dimHTML = '';
+  Object.entries(dimMap).forEach(([dim, data]) => {
+    const pctD = data.max > 0 ? Math.round((data.earned / data.max) * 100) : 0;
+    dimHTML += `
+      <div class="dim-row">
+        <div class="dim-label">${dimLabels[dim] || dim}</div>
+        <div class="dim-track"><div class="dim-fill" style="width:0%;background:${dimColors[dim]||'var(--gold)'}" data-target="${pctD}"></div></div>
+        <div class="dim-score">${pctD}%</div>
+      </div>`;
+  });
+  document.getElementById('dim-rows').innerHTML = dimHTML;
+
+  // animate bars
+  setTimeout(() => {
+    document.querySelectorAll('.dim-fill').forEach(el => {
+      el.style.width = el.dataset.target + '%';
+    });
+  }, 300);
+
+  // Principles
+  const principles = [
+    { num:'I', text:'<strong>Price is what you pay; value is what you get.</strong> A great business at a high price is not a great investment. Second-level thinking always asks what is already embedded in the price.' },
+    { num:'II', text:'<strong>When consensus is loudest, asymmetry is often at its peak.</strong> The most widely-believed narrative carries the least incremental information — and therefore the least price-moving potential if correct.' },
+    { num:'III', text:'<strong>Separate technology outcomes from investment outcomes.</strong> The technology always wins. The companies that pioneered it often don\'t. Ask who captures the value — and at what price.' },
+    { num:'IV', text:'<strong>Not investing is a decision with a price.</strong> Refusing to analyse something because it "feels risky" is a choice that carries the opportunity cost of all returns foregone. Every decision has a price.' },
+    { num:'V', text:'<strong>The question is never "is this good or bad?" — it\'s "is the price right?"</strong> Good businesses can be terrible investments at the wrong price. Bad businesses can be asymmetric opportunities at the right one.' },
+  ];
+
+  document.getElementById('principles-container').innerHTML = principles.map(p =>
+    `<div class="principle-card"><div class="principle-num">Principle ${p.num}</div><div class="principle-text">${p.text}</div></div>`
+  ).join('');
+}
+
+function restartTest() {
+  document.getElementById('screen-results').style.display = 'none';
+  startTest();
+}
+</script>
+</body>
+</html>
