@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The Cyber Sovereign — InsightInvest</title>
+<meta name="description" content="Reclassifying cybersecurity as defense infrastructure. Policy architecture, geopolitical catalysts, asymmetric edge, and full macro-micro investment framework."/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=IBM+Plex+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #08090c;
+  --bg2: #0c0d11;
+  --bg3: #111318;
+  --surface: #161820;
+  --border: #1e2028;
+  --border2: #2a2d3a;
+  --text: #9ca3b8;
+  --text-bright: #e8ecf4;
+  --text-dim: #4a5068;
+  --cyan: #2dd4bf;
+  --cyan-dim: #0d4f47;
+  --cyan-bg: rgba(45,212,191,0.06);
+  --gold: #c9a84c;
+  --gold-dim: #8a7234;
+  --gold-bg: rgba(201,168,76,0.07);
+  --red: #f87171;
+  --red-bg: rgba(248,113,113,0.08);
+  --blue: #60a5fa;
+  --blue-bg: rgba(96,165,250,0.08);
+  --green: #34d399;
+  --green-bg: rgba(52,211,153,0.08);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: var(--border2) var(--bg); }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* grain */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  padding: 18px 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  z-index: 100;
+  background: linear-gradient(180deg, var(--bg) 0%, transparent 100%);
+  transition: all 0.4s;
+}
+nav.scrolled {
+  background: rgba(8,9,12,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 13px 48px;
+}
+.nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.nav-logo-mark {
+  width: 34px; height: 34px;
+  border: 1.5px solid var(--gold);
+  display: flex; align-items: center; justify-content: center;
+}
+.nav-logo-mark::before { content: 'I'; font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: var(--gold); }
+.nav-logo-text { font-size: 13px; font-weight: 600; color: var(--text-bright); letter-spacing: 0.12em; text-transform: uppercase; }
+.nav-right { display: flex; align-items: center; gap: 32px; }
+.nav-link { font-size: 11px; color: var(--text-dim); text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+.nav-link:hover { color: var(--cyan); }
+.nav-back { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-dim); text-decoration: none; letter-spacing: 0.12em; text-transform: uppercase; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
+.nav-back:hover { color: var(--cyan); }
+.nav-back::before { content: '←'; }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 0 60px 80px;
+  position: relative; overflow: hidden;
+}
+
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(45,212,191,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(45,212,191,0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 70% at 30% 50%, black 10%, transparent 75%);
+}
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hero-orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(45,212,191,0.07) 0%, transparent 70%); top: -15%; right: -10%; }
+.hero-orb-2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(96,165,250,0.05) 0%, transparent 70%); bottom: 5%; left: -8%; }
+
+.hero-content { position: relative; z-index: 2; max-width: 800px; }
+
+.hero-kicker {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; font-weight: 400;
+  color: var(--cyan); letter-spacing: 0.22em; text-transform: uppercase;
+  margin-bottom: 28px;
+  opacity: 0; animation: fadeUp 0.7s ease 0.2s forwards;
+}
+.hero-kicker-dot { width: 5px; height: 5px; background: var(--cyan); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:0.4;} 50%{opacity:1;} }
+
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(56px, 8.5vw, 116px);
+  font-weight: 300; line-height: 0.92;
+  letter-spacing: -0.03em;
+  color: var(--text-bright);
+  margin-bottom: 32px;
+  opacity: 0; animation: fadeUp 0.9s ease 0.35s forwards;
+}
+.hero-title em { font-style: italic; color: var(--cyan); }
+
+.hero-deck {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 19px; font-weight: 400;
+  color: var(--text); line-height: 1.65;
+  max-width: 580px; margin-bottom: 44px;
+  border-left: 2px solid var(--cyan-dim);
+  padding-left: 20px;
+  opacity: 0; animation: fadeUp 0.8s ease 0.5s forwards;
+}
+
+.hero-meta {
+  display: flex; align-items: center; gap: 28px;
+  flex-wrap: wrap;
+  opacity: 0; animation: fadeUp 0.7s ease 0.65s forwards;
+}
+.hero-meta-item { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; }
+.hero-meta-div { width: 1px; height: 14px; background: var(--border2); }
+.hero-meta-tag {
+  font-family: 'IBM Plex Mono', monospace; font-size: 9px; font-weight: 500;
+  padding: 3px 10px; letter-spacing: 0.1em; text-transform: uppercase;
+}
+.tag-cyan { background: var(--cyan-bg); color: var(--cyan); border: 1px solid rgba(45,212,191,0.2); }
+.tag-red { background: var(--red-bg); color: var(--red); border: 1px solid rgba(248,113,113,0.2); }
+.tag-gold { background: var(--gold-bg); color: var(--gold); border: 1px solid rgba(201,168,76,0.2); }
+.tag-blue { background: var(--blue-bg); color: var(--blue); border: 1px solid rgba(96,165,250,0.2); }
+.tag-green { background: var(--green-bg); color: var(--green); border: 1px solid rgba(52,211,153,0.2); }
+.tag-dim { background: rgba(255,255,255,0.04); color: var(--text-dim); border: 1px solid var(--border2); }
+
+.hero-scroll {
+  position: absolute; right: 60px; bottom: 80px;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  opacity: 0; animation: fadeIn 1s ease 1.2s forwards;
+}
+.hero-scroll-line { width: 1px; height: 52px; background: linear-gradient(to bottom, var(--cyan-dim), transparent); animation: scrollPulse 2.2s ease-in-out infinite; }
+@keyframes scrollPulse { 0%,100%{opacity:0.3;height:52px;} 50%{opacity:1;height:70px;} }
+.hero-scroll-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-dim); letter-spacing: 0.18em; text-transform: uppercase; writing-mode: vertical-rl; }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(28px);} to{opacity:1;transform:translateY(0);} }
+@keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+
+/* STAT BAND */
+.stat-band {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+}
+.stat-cell {
+  padding: 28px 36px;
+  border-right: 1px solid var(--border);
+}
+.stat-cell:last-child { border-right: none; }
+.stat-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 10px; }
+.stat-value { font-family: 'Cormorant Garamond', serif; font-size: 38px; font-weight: 300; line-height: 1; color: var(--text-bright); margin-bottom: 5px; }
+.stat-value.cyan { color: var(--cyan); }
+.stat-value.red { color: var(--red); }
+.stat-value.gold { color: var(--gold); }
+.stat-sub { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-dim); line-height: 1.4; }
+
+/* LAYOUT */
+.content-wrap { max-width: 1280px; margin: 0 auto; }
+
+/* SECTION */
+.section { padding: 80px 60px; border-bottom: 1px solid var(--border); }
+.section:last-child { border-bottom: none; }
+.section-alt { background: var(--bg2); }
+
+.section-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px; font-weight: 500;
+  color: var(--cyan); letter-spacing: 0.22em; text-transform: uppercase;
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-eyebrow::after { content: ''; flex: 0 0 32px; height: 1px; background: linear-gradient(to right, var(--cyan-dim), transparent); }
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 300; line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text-bright);
+  margin-bottom: 18px;
+}
+.section-title em { font-style: italic; color: var(--cyan); }
+
+.section-body { font-size: 15px; color: var(--text); line-height: 1.75; max-width: 620px; margin-bottom: 48px; }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.75s ease, transform 0.75s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-d1 { transition-delay: 0.1s; }
+.reveal-d2 { transition-delay: 0.2s; }
+.reveal-d3 { transition-delay: 0.3s; }
+.reveal-d4 { transition-delay: 0.4s; }
+.reveal-d5 { transition-delay: 0.5s; }
+
+/* THESIS CARDS */
+.thesis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.thesis-card {
+  padding: 32px 36px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  position: relative;
+  cursor: default;
+  transition: background 0.25s, border-color 0.25s;
+}
+.thesis-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  opacity: 0; transition: opacity 0.3s;
+}
+.thesis-card:hover { background: var(--surface); border-color: var(--border2); }
+.thesis-card:hover::before { opacity: 1; }
+.thesis-card.c1::before { background: linear-gradient(90deg, var(--gold), transparent); }
+.thesis-card.c2::before { background: linear-gradient(90deg, var(--red), transparent); }
+.thesis-card.c3::before { background: linear-gradient(90deg, var(--cyan), transparent); }
+.thesis-card.c4::before { background: linear-gradient(90deg, var(--gold), transparent); }
+.thesis-card.c5::before { background: linear-gradient(90deg, var(--blue), transparent); }
+.thesis-card.c-highlight { grid-column: 1 / -1; background: var(--cyan-bg); border-color: rgba(45,212,191,0.15); }
+.thesis-card.c-highlight::before { background: linear-gradient(90deg, var(--cyan), transparent); }
+
+.tc-num { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--cyan); letter-spacing: 0.12em; margin-bottom: 14px; }
+.tc-title { font-size: 16px; font-weight: 600; color: var(--text-bright); margin-bottom: 10px; line-height: 1.3; }
+.tc-body { font-size: 13.5px; color: var(--text); line-height: 1.65; margin-bottom: 14px; }
+
+/* SPLIT LAYOUT */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+.split-wide { grid-template-columns: 1.4fr 1fr; }
+
+/* QUOTE BLOCK */
+.quote-block {
+  padding: 80px 60px;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+  position: relative;
+}
+.quote-block::before {
+  content: '\201C';
+  position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 160px; font-weight: 300;
+  color: var(--border2); line-height: 1;
+  pointer-events: none;
+}
+.quote-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(22px, 3vw, 38px);
+  font-weight: 300; font-style: italic;
+  color: var(--text-bright);
+  max-width: 780px; margin: 0 auto 20px;
+  line-height: 1.45; position: relative;
+}
+.quote-text em { color: var(--cyan); font-style: normal; }
+.quote-attr { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* COMPANY TABLE */
+.company-table { width: 100%; border-collapse: collapse; }
+.company-table th {
+  font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text-dim); text-align: left; padding: 12px 16px;
+  border-bottom: 1px solid var(--border2);
+  background: var(--bg2);
+}
+.company-table td { padding: 18px 16px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.company-table tr { transition: background 0.15s; }
+.company-table tbody tr:hover { background: rgba(255,255,255,0.015); }
+.ct-ticker { font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 500; color: var(--text-bright); letter-spacing: 0.06em; }
+.ct-name { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+.ct-dots { display: flex; gap: 3px; margin-top: 6px; }
+.ct-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border2); }
+.ct-dot.on { background: var(--cyan); }
+.ct-desc { font-size: 13px; color: var(--text); line-height: 1.55; max-width: 300px; }
+.ct-val { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text-dim); }
+
+/* TIMELINE */
+.timeline-row { display: grid; grid-template-columns: 100px 1fr; gap: 0; }
+.tl-spine { display: flex; flex-direction: column; align-items: center; padding-top: 12px; }
+.tl-dot { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--border2); background: var(--bg2); flex-shrink: 0; position: relative; z-index: 1; }
+.tl-dot.active { background: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 12px rgba(45,212,191,0.4); }
+.tl-line { width: 1px; flex: 1; background: var(--border); margin-top: 4px; }
+.tl-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-dim); letter-spacing: 0.08em; text-align: center; margin-top: 8px; line-height: 1.3; }
+.tl-content { padding: 6px 0 40px 0; }
+.tl-phase { font-size: 13px; font-weight: 600; color: var(--text-bright); margin-bottom: 5px; }
+.tl-badge { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 9px; padding: 2px 8px; border-radius: 2px; margin-bottom: 10px; }
+.tl-badge-now { background: var(--cyan-bg); color: var(--cyan); border: 1px solid rgba(45,212,191,0.2); }
+.tl-badge-next { background: rgba(255,255,255,0.04); color: var(--text-dim); border: 1px solid var(--border); }
+.tl-window { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-dim); margin-bottom: 10px; }
+.tl-desc { font-size: 13px; color: var(--text); line-height: 1.6; margin-bottom: 10px; }
+.tl-signal { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-dim); line-height: 1.5; padding-top: 12px; border-top: 1px solid var(--border); }
+.tl-signal span { color: var(--cyan); }
+
+/* SIGNALS */
+.signal-row {
+  display: grid; grid-template-columns: 24px 1fr auto;
+  gap: 14px; padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: start;
+}
+.signal-row:last-child { border-bottom: none; }
+.sig-num { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--cyan); padding-top: 2px; }
+.sig-text { font-size: 14px; font-weight: 500; color: var(--text-bright); margin-bottom: 4px; line-height: 1.3; }
+.sig-sub { font-size: 12.5px; color: var(--text); line-height: 1.5; }
+.sig-status { font-family: 'IBM Plex Mono', monospace; font-size: 9px; font-weight: 500; padding: 3px 9px; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; margin-top: 2px; }
+.ss-critical { background: var(--red-bg); color: var(--red); }
+.ss-active { background: var(--green-bg); color: var(--green); }
+.ss-watch { background: var(--gold-bg); color: var(--gold); }
+
+/* RISK TABLE */
+.risk-row { display: grid; grid-template-columns: 1fr 64px; gap: 14px; padding: 18px 0; border-bottom: 1px solid var(--border); align-items: start; }
+.risk-row:last-child { border-bottom: none; }
+.risk-name { font-size: 14px; font-weight: 500; color: var(--text-bright); margin-bottom: 5px; }
+.risk-desc { font-size: 13px; color: var(--text); line-height: 1.55; }
+.risk-lvl { font-family: 'IBM Plex Mono', monospace; font-size: 9px; font-weight: 500; padding: 3px 9px; text-align: center; letter-spacing: 0.06em; text-transform: uppercase; }
+.rl-hi { background: var(--red-bg); color: var(--red); }
+.rl-med { background: var(--gold-bg); color: var(--gold); }
+
+/* CALLOUT */
+.callout {
+  padding: 24px 28px; margin: 24px 0;
+  border: 1px solid rgba(45,212,191,0.15);
+  background: var(--cyan-bg);
+  position: relative;
+}
+.callout::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 2px; background: var(--cyan);
+}
+.callout-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--cyan); margin-bottom: 10px; }
+.callout-text { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-style: italic; line-height: 1.5; color: var(--text-bright); }
+.callout-text em { color: var(--cyan); font-style: normal; }
+
+/* COMPARISON CARDS */
+.comp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 32px; }
+.comp-card { padding: 28px 30px; border: 1px solid var(--border); }
+.comp-card.then { background: var(--bg3); }
+.comp-card.now { background: var(--cyan-bg); border-color: rgba(45,212,191,0.2); }
+.comp-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 14px; }
+.comp-card.now .comp-label { color: var(--cyan); }
+.comp-year { font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 300; line-height: 1; margin-bottom: 14px; color: var(--border2); }
+.comp-card.now .comp-year { color: var(--cyan); }
+.comp-title { font-size: 17px; font-weight: 600; color: var(--text-bright); margin-bottom: 10px; }
+.comp-desc { font-size: 13px; color: var(--text); line-height: 1.6; }
+.comp-connector { grid-column: 1 / -1; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--cyan); letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 0; }
+
+/* CTA SECTION */
+.cta-section {
+  padding: 100px 60px;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(45,212,191,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-inner { max-width: 620px; margin: 0 auto; position: relative; z-index: 2; }
+.cta-eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cyan); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.cta-eyebrow::before { content: ''; display: inline-block; width: 28px; height: 1px; background: var(--cyan-dim); }
+.cta-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(30px, 4vw, 48px); font-weight: 300; line-height: 1.1; letter-spacing: -0.02em; color: var(--text-bright); margin-bottom: 16px; }
+.cta-title em { font-style: italic; color: var(--cyan); }
+.cta-desc { font-size: 15px; color: var(--text); line-height: 1.75; margin-bottom: 32px; }
+.cta-form { display: flex; gap: 0; margin-bottom: 14px; }
+.cta-input { flex: 1; padding: 14px 18px; background: var(--bg2); border: 1px solid var(--border2); border-right: none; color: var(--text-bright); font-family: 'Syne', sans-serif; font-size: 14px; outline: none; transition: border-color 0.3s; }
+.cta-input:focus { border-color: var(--cyan-dim); }
+.cta-input::placeholder { color: var(--text-dim); }
+.cta-btn { padding: 14px 28px; background: var(--cyan); color: #08090c; font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; border: none; cursor: pointer; transition: all 0.25s; white-space: nowrap; }
+.cta-btn:hover { background: #5eead4; }
+.cta-meta { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 0.07em; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.cta-spots { display: flex; align-items: center; gap: 6px; color: var(--cyan); }
+.cta-spots-dot { width: 5px; height: 5px; background: var(--cyan); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+
+/* PATREON STRIP */
+.patreon-strip {
+  display: flex; align-items: center; justify-content: space-between; gap: 28px;
+  padding: 28px 36px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  margin: 40px 0;
+}
+.ps-left {}
+.ps-eye { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 5px; }
+.ps-text { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; color: var(--text-bright); line-height: 1.3; }
+.ps-text em { font-style: italic; color: var(--cyan); }
+.ps-btn { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cyan); text-decoration: none; border: 1px solid var(--cyan-dim); padding: 9px 18px; white-space: nowrap; transition: all 0.2s; flex-shrink: 0; }
+.ps-btn:hover { background: var(--cyan); color: var(--bg); }
+
+/* FOOTER */
+footer { padding: 48px 60px 36px; background: var(--bg); border-top: 1px solid var(--border); }
+.footer-inner { max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; padding-bottom: 28px; border-bottom: 1px solid var(--border); }
+.footer-brand { font-size: 13px; font-weight: 600; color: var(--text-bright); letter-spacing: 0.1em; text-transform: uppercase; }
+.footer-links { display: flex; gap: 28px; flex-wrap: wrap; }
+.footer-links a { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-dim); text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; }
+.footer-links a:hover { color: var(--cyan); }
+.footer-bottom { max-width: 1280px; margin: 20px auto 0; display: flex; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-dim); flex-wrap: wrap; gap: 10px; }
+
+@media(max-width:900px){
+  nav { padding: 14px 24px; }
+  .hero { padding: 0 24px 60px; }
+  .hero-scroll { display: none; }
+  .stat-band { grid-template-columns: 1fr 1fr; }
+  .stat-cell:nth-child(2) { border-right: none; }
+  .section { padding: 56px 24px; }
+  .thesis-grid { grid-template-columns: 1fr; }
+  .thesis-card.c-highlight { grid-column: 1; }
+  .split, .split-wide { grid-template-columns: 1fr; gap: 40px; }
+  .comp-grid { grid-template-columns: 1fr; }
+  .cta-section { padding: 70px 24px; }
+  .cta-form { flex-direction: column; }
+  .cta-input { border-right: 1px solid var(--border2); border-bottom: none; }
+  .patreon-strip { flex-direction: column; align-items: flex-start; }
+  footer { padding: 40px 24px; }
+}
+</style>
+</head>
+<body>
+
+<nav id="navbar">
+  <a class="nav-logo" href="/">
+    <div class="nav-logo-mark"></div>
+    <span class="nav-logo-text">InsightInvest</span>
+  </a>
+  <div class="nav-right">
+    <a href="/" class="nav-link">Home</a>
+    <a href="/reports" class="nav-link">Reports</a>
+    <a href="/reports" class="nav-back">All Reports</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-content">
+    <div class="hero-kicker"><span class="hero-kicker-dot"></span>InsightInvest · Defense Infrastructure Thesis · March 2026</div>
+    <h1 class="hero-title">The Cyber<br/><em>Sovereign</em></h1>
+    <p class="hero-deck">Reclassifying cybersecurity as defense infrastructure. The market prices these companies like software subscriptions. The government uses them like F-35s. That gap is the trade.</p>
+    <div class="hero-meta">
+      <span class="hero-meta-item">March 6, 2026</span>
+      <div class="hero-meta-div"></div>
+      <span class="hero-meta-item">6 equities</span>
+      <div class="hero-meta-div"></div>
+      <span class="hero-meta-tag tag-red">Active conflict</span>
+      <span class="hero-meta-tag tag-cyan">Policy reclassification</span>
+      <span class="hero-meta-tag tag-gold">12–24 month window</span>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    <span class="hero-scroll-label">Scroll</span>
+  </div>
+</section>
+
+<!-- STAT BAND -->
+<div class="stat-band reveal">
+  <div class="stat-cell">
+    <div class="stat-label">AI breakout time</div>
+    <div class="stat-value red">27s</div>
+    <div class="stat-sub">Avg AI-enabled lateral movement. Human defense is architecturally obsolete.</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-label">CISA workforce cut</div>
+    <div class="stat-value gold">33%</div>
+    <div class="stat-sub">1,000+ staff gone. No Senate-confirmed director. Private sector fills the gap permanently.</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-label">Palantir Army deal</div>
+    <div class="stat-value cyan">$10B</div>
+    <div class="stat-sub">10-year enterprise agreement. The reclassification template. CRWD is at month zero.</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-label">Edge window</div>
+    <div class="stat-value cyan">0–6mo</div>
+    <div class="stat-sub">Months into the cyber reclassification. Market still using SaaS pricing framework.</div>
+  </div>
+</div>
+
+<!-- SECTION I: CORE THESIS -->
+<section class="section reveal">
+  <div class="content-wrap">
+    <div class="section-eyebrow">Core thesis</div>
+    <h2 class="section-title">Five structural reasons<br/>for <em>reclassification</em></h2>
+    <p class="section-body">The central claim is precise: cybersecurity's leading firms are undergoing a category transition from discretionary software vendors to obligatory national defense infrastructure — a shift that will force a re-pricing of their equities comparable to what Palantir experienced from 2022–2026.</p>
+
+    <div class="thesis-grid">
+      <div class="thesis-card c1 reveal reveal-d1">
+        <div class="tc-num">01 · Policy</div>
+        <div class="tc-title">The government declared it</div>
+        <div class="tc-body">The Trump Cyber Strategy (March 6, 2026) formally classifies cyberspace as a warfighting domain. CEOs are "required to dedicate real resources" to collective digital defense. Not vendors. Partners.</div>
+        <span class="hero-meta-tag tag-gold">Doctrine shift</span>
+      </div>
+      <div class="thesis-card c2 reveal reveal-d2">
+        <div class="tc-num">02 · Conflict</div>
+        <div class="tc-title">Iran proved the kinetic thesis</div>
+        <div class="tc-body">Post-Feb 28 strikes, Iranian APT Seedworm hit a U.S. bank, airport, and defense contractor. The Stryker attack wiped surgical equipment controllers at hospitals globally. Cyber conflict produces physical casualties.</div>
+        <span class="hero-meta-tag tag-red">Active conflict</span>
+      </div>
+      <div class="thesis-card c3 reveal reveal-d3">
+        <div class="tc-num">03 · Regulation</div>
+        <div class="tc-title">Procurement architecture changed</div>
+        <div class="tc-body">CMMC Level 2 mandatory for all CUI contracts. FedRAMP Class D (High) only capital-intensive, technically mature platforms can maintain. The regulatory moat is being built by the government on behalf of incumbents. Switching cost is now policy-enforced.</div>
+        <span class="hero-meta-tag tag-cyan">Structural moat</span>
+      </div>
+      <div class="thesis-card c4 reveal reveal-d4">
+        <div class="tc-num">04 · Paradox</div>
+        <div class="tc-title">CISA was hollowed out</div>
+        <div class="tc-body">1,000+ staff lost — 33% of the workforce. No Senate-confirmed director. The government simultaneously declared cyber a warfighting priority and dismantled its own defense agency. This permanently outsources sovereign cyber capacity to the private sector.</div>
+        <span class="hero-meta-tag tag-gold">Paradox accelerant</span>
+      </div>
+      <div class="thesis-card c5 c-highlight reveal reveal-d5">
+        <div class="tc-num">05 · Technology</div>
+        <div class="tc-title">AI breakout times collapse human defense</div>
+        <div class="tc-body">CrowdStrike 2026: average adversary breakout time 29 minutes. AI-enabled intrusions: 27 seconds. Human security operations cannot respond at that speed. AI-native, automated platforms are the only viable architecture. The government's strategy mandate for "AI-driven defense" is a technology specification, not a feature request.</div>
+        <span class="hero-meta-tag tag-blue">Tech necessity</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<div class="quote-block reveal">
+  <p class="quote-text">"Wall Street prices these companies like <em>Spotify subscriptions.</em> The government uses them like <em>F-35s.</em> One of those is very, very wrong."</p>
+  <div class="quote-attr">— Cyber Sovereign Framework · InsightInvest · March 2026</div>
+</div>
+
+<!-- SECTION II: THE EDGE -->
+<section class="section section-alt reveal">
+  <div class="content-wrap">
+    <div class="split split-wide">
+      <div>
+        <div class="section-eyebrow">The asymmetric edge</div>
+        <h2 class="section-title">Where the market<br/>is <em>wrong</em></h2>
+        <p class="section-body">The dominant equity research framework for cybersecurity applies SaaS metrics: ARR growth, NRR, gross margin, Rule of 40. The emerging reality is that the correct framework is defense infrastructure: contract duration, backlog visibility, strategic necessity, and government designation.</p>
+
+        <div class="callout reveal">
+          <div class="callout-label">The edge window</div>
+          <div class="callout-text">Palantir's reclassification took approximately <em>18–24 months</em> from the Army enterprise contract announcement to full market re-rating. The cyber sector is 0–6 months into an equivalent process. This is the window.</div>
+        </div>
+
+        <div class="comp-grid reveal">
+          <div class="comp-card then">
+            <div class="comp-label">Then — Palantir</div>
+            <div class="comp-year">2022</div>
+            <div class="comp-title">Government data analytics vendor</div>
+            <div class="comp-desc">Priced as SaaS. Revenue from government contracts discounted. Treated as political stock by institutional investors.</div>
+          </div>
+          <div class="comp-card now">
+            <div class="comp-label">Now — Cyber sector</div>
+            <div class="comp-year">2026</div>
+            <div class="comp-title">National defense partners</div>
+            <div class="comp-desc">$CRWD, $PANW, $FTNT still priced as software. Policy reclassification declared. Market hasn't moved yet.</div>
+          </div>
+          <div class="comp-connector">↓ Palantir re-rated 3× in 36 months. Cyber is at month zero. ↓</div>
+        </div>
+      </div>
+
+      <div>
+        <div style="padding: 28px 30px; background: var(--bg3); border: 1px solid var(--border); margin-bottom: 16px;">
+          <div class="stat-label" style="margin-bottom: 16px;">Six disconnects</div>
+          <div style="display: flex; flex-direction: column; gap: 0;">
+            <div style="padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text); line-height: 1.5;"><span style="color: var(--cyan); font-family: 'IBM Plex Mono', monospace; font-size: 10px; display: block; margin-bottom: 3px;">Market mispricing</span>Cyber equities priced as software — defense funds exclude them entirely</div>
+            <div style="padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text); line-height: 1.5;"><span style="color: var(--cyan); font-family: 'IBM Plex Mono', monospace; font-size: 10px; display: block; margin-bottom: 3px;">CIBR ETF vs reality</span>CIBR down ~9% YTD Mar 2026 on AI disruption fears — buying window opened at peak threat premium</div>
+            <div style="padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text); line-height: 1.5;"><span style="color: var(--cyan); font-family: 'IBM Plex Mono', monospace; font-size: 10px; display: block; margin-bottom: 3px;">Procurement reform</span>RFO overhaul breaks prime contractor monopoly — CRWD/PANW/NET can now compete for classified work</div>
+            <div style="padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text); line-height: 1.5;"><span style="color: var(--cyan); font-family: 'IBM Plex Mono', monospace; font-size: 10px; display: block; margin-bottom: 3px;">Valuation floor from backlog</span>When CRWD/PANW sign first 5–10yr federal enterprise deals, analyst models shift permanently</div>
+            <div style="padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text); line-height: 1.5;"><span style="color: var(--cyan); font-family: 'IBM Plex Mono', monospace; font-size: 10px; display: block; margin-bottom: 3px;">AI arms race asymmetry</span>Only AI-native platforms can operate at 27-second breakout speeds — legacy vendors structurally excluded</div>
+            <div style="padding: 12px 0; font-size: 13px; color: var(--text); line-height: 1.5;"><span style="color: var(--cyan); font-family: 'IBM Plex Mono', monospace; font-size: 10px; display: block; margin-bottom: 3px;">Sovereign compliance moat</span>CMMC Level 2 + FedRAMP Class D + DoD IL5 = stack very few firms can maintain</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PATREON STRIP -->
+<div style="padding: 0 60px; background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="patreon-strip content-wrap reveal">
+    <div class="ps-left">
+      <div class="ps-eye">InsightInvest Community</div>
+      <div class="ps-text">Weekly intelligence briefs and <em>early frameworks</em> — inside.</div>
+    </div>
+    <a href="https://www.patreon.com/insightinvests" target="_blank" class="ps-btn">Join on Patreon →</a>
+  </div>
+</div>
+
+<!-- SECTION III: COMPANY MATRIX -->
+<section class="section reveal">
+  <div class="content-wrap">
+    <div class="section-eyebrow">Company matrix</div>
+    <h2 class="section-title">6 stocks to <em>watch</em></h2>
+    <p class="section-body">Ranked by repricing potential. The edge exists specifically in companies still priced as SaaS with existing or near-term federal enterprise exposure — at the moment the market hasn't reclassified them yet.</p>
+
+    <table class="company-table">
+      <thead>
+        <tr>
+          <th>Ticker</th>
+          <th>Conviction</th>
+          <th>Thesis</th>
+          <th>Valuation</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="ct-ticker">$CRWD</div><div class="ct-name">CrowdStrike</div><div class="ct-dots"><div class="ct-dot on"></div><div class="ct-dot on"></div><div class="ct-dot on"></div><div class="ct-dot on"></div><div class="ct-dot on"></div></div></td>
+          <td><span class="hero-meta-tag tag-cyan">★★★★★</span></td>
+          <td><div class="ct-desc">Highest velocity. FedRAMP High, CMMC engine for 3rd-party contractors, Charlotte AI offensive roadmap. Most likely to land the first 5–10yr federal enterprise deal.</div></td>
+          <td><div class="ct-val">22x NTM<br/>$5B ARR</div></td>
+          <td><span class="hero-meta-tag tag-cyan">Highest conviction</span></td>
+        </tr>
+        <tr>
+          <td><div class="ct-ticker">$FTNT</div><div class="ct-name">Fortinet</div><div class="ct-dots"><div class="ct-dot on"></div><div class="ct-dot on"></div><div class="ct-dot on"></div><div class="ct-dot on"></div><div class="ct-dot"></div></div></td>
+          <td><span class="hero-meta-tag tag-green">★★★★</span></td>
+          <td><div class="ct-desc">Most overlooked. Deepest OT/ICS penetration — energy grids, hospitals, industrial systems. The strategy's critical infrastructure pillar maps directly here. Lowest valuation in group.</div></td>
+          <td><div class="ct-val">~13x NTM<br/>Lowest val.</div></td>
+          <td><span class="hero-meta-tag tag-green">Undervalued</span></td>
+        </tr>
+        <tr>
+          <td><div class="ct-ticker">$PANW</div><div class="ct-name">Palo Alto Networks</div><div class="ct-dots"><div class="ct-dot on"></div><div class="ct-dot on"></div><div class="ct-dot on"></div><div class="ct-dot on"></div><div class="ct-dot"></div></div></td>
+          <td><span class="hero-meta-tag tag-blue">★★★★</span></td>
+          <td><div class="ct-desc">The Lockheed Martin of cyber. Largest federal footprint, Unit 42 embedded in government decision loops. CyberArk acquisition fills identity gap. Partially re-rated already.</div></td>
+          <td><div class="ct-val">40x fwd P/E<br/>Decelerating</div></td>
+          <td><span class="hero-meta-tag tag-blue">Partial re-rate</span></td>
+        </tr>
+        <tr>
+          <td><div class="ct-ticker">$NET</div><div class="ct-name">Cloudflare</div><div class="ct-dots"><div class="ct-dot on"></div><div class="ct-dot on"></div><div class="ct-dot on"></div><div class="ct-dot"></div><div class="ct-dot"></div></div></td>
+          <td><span class="hero-meta-tag tag-dim">★★★</span></td>
+          <td><div class="ct-desc">The perimeter layer. Blocks 140B+ threats daily. Post-quantum encryption (Feb 2026). FedRAMP High in process — watch Sept 2026 machine-readable package deadline.</div></td>
+          <td><div class="ct-val">146x fwd P/E<br/>28% CAGR</div></td>
+          <td><span class="hero-meta-tag tag-dim">Watch FedRAMP</span></td>
+        </tr>
+        <tr>
+          <td><div class="ct-ticker">$PLTR</div><div class="ct-name">Palantir</div><div class="ct-dots"><div class="ct-dot on"></div><div class="ct-dot on"></div><div class="ct-dot on"></div><div class="ct-dot on"></div><div class="ct-dot on"></div></div></td>
+          <td><span class="hero-meta-tag tag-gold">Template</span></td>
+          <td><div class="ct-desc">Reclassification complete. $10B Army deal, Pentagon AI hub, Space Force integration. This is the roadmap, not the bet. ~41% gov revenue creates binary political concentration risk.</div></td>
+          <td><div class="ct-val">30–40x NTM<br/>$7.18B guide</div></td>
+          <td><span class="hero-meta-tag tag-gold">The template</span></td>
+        </tr>
+        <tr>
+          <td><div class="ct-ticker">$ZS</div><div class="ct-name">Zscaler</div><div class="ct-dots"><div class="ct-dot on"></div><div class="ct-dot on"></div><div class="ct-dot on"></div><div class="ct-dot"></div><div class="ct-dot"></div></div></td>
+          <td><span class="hero-meta-tag tag-dim">★★★</span></td>
+          <td><div class="ct-desc">Zero-trust aligns directly to federal mandate. SSE market leader. Competitive moat risk from PANW platformization limits conviction relative to CRWD/FTNT.</div></td>
+          <td><div class="ct-val">~14x NTM<br/>Mid-tier exp.</div></td>
+          <td><span class="hero-meta-tag tag-dim">Mid-tier</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SECTION IV: TIMELINE -->
+<section class="section section-alt reveal">
+  <div class="content-wrap">
+    <div class="section-eyebrow">Three-phase playbook</div>
+    <h2 class="section-title">How the repricing <em>unfolds</em></h2>
+    <p class="section-body">From policy doctrine to full market reclassification — each phase has distinct catalysts, revenue impacts, and investor signals. We are currently in Phase 1.</p>
+
+    <div style="padding: 0 0 0 8px;">
+      <div class="timeline-row reveal">
+        <div class="tl-spine">
+          <div class="tl-dot active"></div>
+          <div class="tl-line"></div>
+          <div class="tl-label">Now →<br/>Q3 2026</div>
+        </div>
+        <div class="tl-content" style="padding-left: 24px;">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+            <div class="tl-phase">Signal phase</div>
+            <span class="tl-badge tl-badge-now">We are here</span>
+          </div>
+          <div class="tl-desc">Policy doctrine declared. CMMC mandatory. Iran conflict active. CISA hollowed. Procurement vehicles forming. Revenue impact: FedRAMP High wins, CMMC compliance platforms, pilot offensive ops contracts.</div>
+          <div class="tl-signal"><span>Monitor →</span> Federal revenue mix. CRWD/PANW gov. contract announcements. CMMC sales acceleration.</div>
+        </div>
+      </div>
+
+      <div class="timeline-row reveal reveal-d2">
+        <div class="tl-spine">
+          <div class="tl-dot"></div>
+          <div class="tl-line"></div>
+          <div class="tl-label">Q3 2026 →<br/>2027</div>
+        </div>
+        <div class="tl-content" style="padding-left: 24px;">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+            <div class="tl-phase">Contract phase</div>
+            <span class="tl-badge tl-badge-next">Next</span>
+          </div>
+          <div class="tl-desc">First generation of "Risk Imposition" contract vehicles issued. Multi-year enterprise government deals signed. RFO procurement reform operational. Revenue mix shifts analyst models toward defense premium.</div>
+          <div class="tl-signal"><span>Watch →</span> First 3–5yr federal enterprise agreements. Blended SaaS/defense multiples begin appearing in equity research.</div>
+        </div>
+      </div>
+
+      <div class="timeline-row reveal reveal-d4">
+        <div class="tl-spine">
+          <div class="tl-dot"></div>
+          <div class="tl-line" style="background: transparent;"></div>
+          <div class="tl-label">2027 →<br/>2028+</div>
+        </div>
+        <div class="tl-content" style="padding-left: 24px;">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+            <div class="tl-phase">Re-rating phase</div>
+            <span class="tl-badge tl-badge-next">The payoff</span>
+          </div>
+          <div class="tl-desc">Backlog visibility from long-duration contracts. ETF/index reclassification. Institutional defense fund inflows. Palantir model fully established. 30–50% multiple expansion possible for CRWD/FTNT.</div>
+          <div class="tl-signal"><span>Payoff →</span> Defense infrastructure multiples + SaaS growth profile = structural premium over pure software.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION V: SIGNALS -->
+<section class="section reveal">
+  <div class="content-wrap">
+    <div class="split">
+      <div>
+        <div class="section-eyebrow">Catalyst signals</div>
+        <h2 class="section-title">Seven events<br/>to <em>track</em></h2>
+        <p class="section-body">These events either confirm the thesis, compress the timeline, or signal it's breaking down. Monitor all seven.</p>
+        <div style="padding: 20px 24px; background: var(--bg3); border: 1px solid var(--border); margin-top: 24px;">
+          <div class="stat-label" style="margin-bottom: 12px;">Risk matrix</div>
+          <div class="risk-row">
+            <div><div class="risk-name">Implementation gap</div><div class="risk-desc">Strategy is 7 pages with no budget line items. Policy → contract → revenue = 18–36 months.</div></div>
+            <span class="risk-lvl rl-hi">High</span>
+          </div>
+          <div class="risk-row">
+            <div><div class="risk-name">CISA hollowing paradox</div><div class="risk-desc">Amplifies private sector role but decimates coordination capacity. Procurement chaos risk.</div></div>
+            <span class="risk-lvl rl-hi">High</span>
+          </div>
+          <div class="risk-row">
+            <div><div class="risk-name">Geopolitical de-escalation</div><div class="risk-desc">Iran ceasefire compresses urgency premium. China/Russia structural threat persists regardless.</div></div>
+            <span class="risk-lvl rl-med">Med</span>
+          </div>
+          <div class="risk-row">
+            <div><div class="risk-name">AI disruption to stacks</div><div class="risk-desc">Agentic AI could commoditize elements of current platforms. Watch Charlotte AI differentiation.</div></div>
+            <span class="risk-lvl rl-med">Med</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="signal-row reveal">
+          <div class="sig-num">01</div>
+          <div><div class="sig-text">Implementing executive order release</div><div class="sig-sub">Agency mandates, timelines, and procurement vehicles that compress the implementation gap.</div></div>
+          <span class="sig-status ss-watch">Watch</span>
+        </div>
+        <div class="signal-row reveal reveal-d1">
+          <div class="sig-num">02</div>
+          <div><div class="sig-text">CISA Senate-confirmed director</div><div class="sig-sub">Coordination layer activates. Single most important near-term execution risk resolved.</div></div>
+          <span class="sig-status ss-watch">Watch</span>
+        </div>
+        <div class="signal-row reveal reveal-d2">
+          <div class="sig-num">03</div>
+          <div><div class="sig-text">First 5–10yr federal enterprise deal — $CRWD or $PANW</div><div class="sig-sub">The Palantir-template trigger. Analyst model reframe begins immediately.</div></div>
+          <span class="sig-status ss-critical">Critical</span>
+        </div>
+        <div class="signal-row reveal reveal-d3">
+          <div class="sig-num">04</div>
+          <div><div class="sig-text">ETF / index reclassification event</div><div class="sig-sub">When $CRWD or $PANW appear in defense sector screens, institutional buyer base emerges overnight.</div></div>
+          <span class="sig-status ss-watch">Watch</span>
+        </div>
+        <div class="signal-row reveal reveal-d4">
+          <div class="sig-num">05</div>
+          <div><div class="sig-text">Q1–Q2 2026 earnings calls</div><div class="sig-sub">"Government pipeline accelerating" — first leading indicator of contract flow.</div></div>
+          <span class="sig-status ss-active">Active now</span>
+        </div>
+        <div class="signal-row reveal">
+          <div class="sig-num">06</div>
+          <div><div class="sig-text">$NET FedRAMP High authorization</div><div class="sig-sub">Closes the last gap in Cloudflare's federal credentialing. Before Sept 2026 deadline.</div></div>
+          <span class="sig-status ss-watch">Watch</span>
+        </div>
+        <div class="signal-row reveal reveal-d1">
+          <div class="sig-num">07</div>
+          <div><div class="sig-text">Iran conflict trajectory</div><div class="sig-sub">Active conflict maintains urgency premium. China/Russia structural threat persists regardless.</div></div>
+          <span class="sig-status ss-active">Active</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION VI: SUMMARY -->
+<section class="section section-alt reveal">
+  <div class="content-wrap">
+    <div class="section-eyebrow">Framework summary</div>
+    <h2 class="section-title">The trade,<br/><em>distilled</em></h2>
+
+    <div style="padding: 28px 32px; border: 1px solid rgba(45,212,191,0.15); background: var(--cyan-bg); margin-bottom: 32px;">
+      <div class="callout-label">Core thesis statement</div>
+      <p style="font-size: 15px; color: var(--text); line-height: 1.8;">The market prices these companies as SaaS. The government uses them as defense infrastructure. Five structural forces — policy doctrine, active kinetic conflict, procurement reform, CISA hollowing, AI necessity — have converged simultaneously. The window is 12–24 months. Before the ETFs reclassify them. Before the defense funds pile in. Before analyst models catch up.</p>
+    </div>
+
+    <div style="border: 1px solid var(--border); overflow: hidden; margin-bottom: 32px;">
+      <div style="display: grid; grid-template-columns: 40px 80px 1fr 120px; padding: 10px 20px; background: var(--bg3); font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); border-bottom: 1px solid var(--border);">
+        <div>Rank</div><div>Ticker</div><div>Reason</div><div>Status</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 40px 80px 1fr 120px; padding: 14px 20px; border-bottom: 1px solid var(--border); align-items: start;">
+        <div style="font-size: 13px; color: var(--text-dim);">1</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500; color: var(--text-bright);">$CRWD</div>
+        <div style="font-size: 13px; color: var(--text); line-height: 1.4;">Highest velocity. Least re-rated for defense status. Charlotte AI + FedRAMP High = Palantir template setup.</div>
+        <div><span class="hero-meta-tag tag-cyan">Highest conviction</span></div>
+      </div>
+      <div style="display: grid; grid-template-columns: 40px 80px 1fr 120px; padding: 14px 20px; border-bottom: 1px solid var(--border); align-items: start;">
+        <div style="font-size: 13px; color: var(--text-dim);">2</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500; color: var(--text-bright);">$FTNT</div>
+        <div style="font-size: 13px; color: var(--text); line-height: 1.4;">Most overlooked. Lowest valuation. OT/ICS mandate directly aligned to critical infrastructure pillar.</div>
+        <div><span class="hero-meta-tag tag-green">Undervalued</span></div>
+      </div>
+      <div style="display: grid; grid-template-columns: 40px 80px 1fr 120px; padding: 14px 20px; border-bottom: 1px solid var(--border); align-items: start;">
+        <div style="font-size: 13px; color: var(--text-dim);">3</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500; color: var(--text-bright);">$PANW</div>
+        <div style="font-size: 13px; color: var(--text); line-height: 1.4;">Structural prime positioning. Wide moat. Partial re-rating in progress. CyberArk fills last gap.</div>
+        <div><span class="hero-meta-tag tag-blue">Partial re-rate</span></div>
+      </div>
+      <div style="display: grid; grid-template-columns: 40px 80px 1fr 120px; padding: 14px 20px; border-bottom: 1px solid var(--border); align-items: start;">
+        <div style="font-size: 13px; color: var(--text-dim);">4</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500; color: var(--text-bright);">$NET</div>
+        <div style="font-size: 13px; color: var(--text); line-height: 1.4;">Re-rating advanced, tighter margin of safety at 146x P/E. Watch FedRAMP High authorization.</div>
+        <div><span class="hero-meta-tag tag-dim">Watch</span></div>
+      </div>
+      <div style="display: grid; grid-template-columns: 40px 80px 1fr 120px; padding: 14px 20px; align-items: start;">
+        <div style="font-size: 13px; color: var(--text-dim);">5</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500; color: var(--text-bright);">$PLTR</div>
+        <div style="font-size: 13px; color: var(--text); line-height: 1.4;">Reclassification complete. This is the comparable and the roadmap — not a new repricing opportunity.</div>
+        <div><span class="hero-meta-tag tag-gold">Template</span></div>
+      </div>
+    </div>
+
+    <div style="font-family: 'Cormorant Garamond', serif; font-size: clamp(20px, 3vw, 32px); font-weight: 300; line-height: 1.3; color: var(--text-bright); max-width: 700px; padding-top: 8px;">
+      The window is <span style="color: var(--cyan); font-style: italic;">12 to 24 months.</span> The market calls these software. The government calls them national security. Pick a side.
+    </div>
+
+    <div style="margin-top: 24px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); line-height: 1.6; padding: 16px 20px; border: 1px solid var(--border); background: var(--bg3);">
+      Not investment advice. This framework is a research synthesis for analytical and educational purposes only. All views based on publicly available information as of March 2026. Markets and geopolitical situations evolve rapidly. Conduct independent due diligence before making investment decisions.
+    </div>
+  </div>
+</section>
+
+<!-- WAITLIST CTA -->
+<section class="cta-section" id="waitlist">
+  <div class="cta-inner reveal">
+    <div class="cta-eyebrow">Private advisory · Limited spots</div>
+    <h2 class="cta-title">Some questions don't have<br/>a <em>general</em> answer.</h2>
+    <p class="cta-desc">The research here is built for everyone. But your portfolio, your risk tolerance, your timeline — those are yours alone. We open a small number of one-on-one strategy sessions for investors who want a thinking partner, not a product pitch.</p>
+    <form id="ctaForm">
+      <div class="cta-form">
+        <input type="email" class="cta-input" id="ctaEmail" placeholder="Your email address" required/>
+        <button type="submit" class="cta-btn" id="ctaBtn">Join Waitlist</button>
+      </div>
+    </form>
+    <div class="cta-meta">
+      <span>No spam · We reach out when a spot opens</span>
+      <span class="cta-spots"><span class="cta-spots-dot"></span>Limited spots per month</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">InsightInvest</div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/reports">All Reports</a>
+      <a href="/iran-conflict">Iran Playbook</a>
+      <a href="/buffett-playbook">Buffett Playbook</a>
+      <a href="https://www.patreon.com/insightinvests" target="_blank">Patreon</a>
+      <a href="/#waitlist">1-on-1 Advisory</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 InsightInvest. For research and educational purposes only. Not financial advice.</span>
+    <span>March 2026 · Petaling Jaya, MY</span>
+  </div>
+</footer>
+
+<script>
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+revealEls.forEach(el => observer.observe(el));
+
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+document.getElementById('ctaForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('ctaBtn');
+  btn.textContent = 'On the list ✓';
+  btn.style.background = '#34d399';
+  btn.style.color = '#08090c';
+  btn.disabled = true;
+});
+</script>
+</body>
+</html>
