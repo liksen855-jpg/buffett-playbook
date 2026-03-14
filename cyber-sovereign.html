@@ -621,7 +621,7 @@ footer { padding: 48px 60px 36px; background: var(--bg); border-top: 1px solid v
       <div class="ps-eye">InsightInvest Community</div>
       <div class="ps-text">Weekly intelligence briefs and <em>early frameworks</em> — inside.</div>
     </div>
-    <a href="https://www.patreon.com/insightinvests" target="_blank" class="ps-btn">Join on Patreon →</a>
+    <a href="https://www.patreon.com/15273026/join" target="_blank" class="ps-btn">Join on Patreon →</a>
   </div>
 </div>
 
@@ -881,11 +881,14 @@ footer { padding: 48px 60px 36px; background: var(--bg); border-top: 1px solid v
     <div class="cta-eyebrow">Private advisory · Limited spots</div>
     <h2 class="cta-title">Some questions don't have<br/>a <em>general</em> answer.</h2>
     <p class="cta-desc">The research here is built for everyone. But your portfolio, your risk tolerance, your timeline — those are yours alone. We open a small number of one-on-one strategy sessions for investors who want a thinking partner, not a product pitch.</p>
-    <form id="ctaForm">
+    <form id="ctaForm" action="https://formspree.io/f/xjgabnak" method="POST">
       <div class="cta-form">
-        <input type="email" class="cta-input" id="ctaEmail" placeholder="Your email address" required/>
+        <input type="email" class="cta-input" id="ctaEmail" name="email" placeholder="Your email address" required/>
         <button type="submit" class="cta-btn" id="ctaBtn">Join Waitlist</button>
       </div>
+      <input type="hidden" name="_subject" value="New Waitlist Signup — Cyber Sovereign"/>
+      <input type="hidden" name="source" value="cyber-sovereign report page"/>
+      <input type="text" name="_gotcha" style="display:none"/>
     </form>
     <div class="cta-meta">
       <span>No spam · We reach out when a spot opens</span>
@@ -902,7 +905,7 @@ footer { padding: 48px 60px 36px; background: var(--bg); border-top: 1px solid v
       <a href="/reports">All Reports</a>
       <a href="/iran-conflict">Iran Playbook</a>
       <a href="/buffett-playbook">Buffett Playbook</a>
-      <a href="https://www.patreon.com/insightinvests" target="_blank">Patreon</a>
+      <a href="https://www.patreon.com/15273026/join" target="_blank">Patreon</a>
       <a href="/#waitlist">1-on-1 Advisory</a>
     </div>
   </div>
@@ -924,12 +927,14 @@ window.addEventListener('scroll', () => {
 });
 
 document.getElementById('ctaForm').addEventListener('submit', function(e) {
-  e.preventDefault();
   const btn = document.getElementById('ctaBtn');
-  btn.textContent = 'On the list ✓';
-  btn.style.background = '#34d399';
-  btn.style.color = '#08090c';
+  btn.textContent = 'Sending...';
   btn.disabled = true;
+  setTimeout(() => {
+    btn.textContent = 'On the list ✓';
+    btn.style.background = '#34d399';
+    btn.style.color = '#08090c';
+  }, 1200);
 });
 </script>
 </body>
