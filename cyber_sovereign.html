@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Cyber Sovereign — InsightInvest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0d0b;
+  --bg2: #121210;
+  --bg3: #171714;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --gold: #c9942a;
+  --gold-dim: #8a6319;
+  --gold-bg: rgba(201,148,42,0.08);
+  --gold-bg2: rgba(201,148,42,0.14);
+  --text: #e8e4dc;
+  --text2: #9a9488;
+  --text3: #5a5750;
+  --red: #c0392b;
+  --red-bg: rgba(192,57,43,0.1);
+  --teal: #1a7a5e;
+  --teal-bg: rgba(26,122,94,0.1);
+  --teal-light: #2db38a;
+  --blue: #1e5fa0;
+  --blue-bg: rgba(30,95,160,0.1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* SCROLL ANIMATIONS */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.75s ease, transform 0.75s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  height: 56px;
+  background: rgba(13,13,11,0.88);
+  backdrop-filter: blur(12px);
+  border-bottom: 0.5px solid var(--border);
+}
+.nav-logo {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--gold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text3);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-cta {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--gold);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 0.5px solid var(--gold-dim);
+  padding: 7px 16px;
+  border-radius: 2px;
+  transition: background 0.2s;
+}
+.nav-cta:hover { background: var(--gold-bg); }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 48px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(201,148,42,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,148,42,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+.hero-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 60%, transparent 30%, var(--bg) 80%);
+  pointer-events: none;
+}
+
+.hero-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--gold);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.2s forwards;
+}
+
+.hero-headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(52px, 8vw, 108px);
+  font-weight: 300;
+  line-height: 0.95;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: fadeUp 0.9s ease 0.35s forwards;
+}
+.hero-headline em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.hero-sub {
+  max-width: 560px;
+  font-size: 17px;
+  color: var(--text2);
+  line-height: 1.65;
+  margin-bottom: 40px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.5s forwards;
+}
+
+.hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.65s forwards;
+}
+.hero-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: 0.1em;
+}
+.hero-divider {
+  width: 1px;
+  height: 16px;
+  background: var(--border2);
+}
+.hero-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero-scroll {
+  position: absolute;
+  right: 48px;
+  bottom: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: fadeIn 1s ease 1.2s forwards;
+}
+.hero-scroll span {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+}
+.hero-scroll-line {
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(to bottom, var(--gold-dim), transparent);
+  animation: pulse 2s ease infinite;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* SECTIONS */
+section { padding: 100px 48px; }
+
+.section-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--gold);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 300;
+  line-height: 1.05;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  margin-bottom: 24px;
+}
+.section-title em { font-style: italic; color: var(--gold); }
+
+.section-body {
+  font-size: 17px;
+  color: var(--text2);
+  line-height: 1.7;
+  max-width: 600px;
+}
+
+hr.section-rule {
+  border: none;
+  border-top: 0.5px solid var(--border);
+  margin: 0 48px;
+}
+
+/* STATEMENT BAND */
+.statement-band {
+  padding: 80px 48px;
+  background: var(--bg2);
+  border-top: 0.5px solid var(--border);
+  border-bottom: 0.5px solid var(--border);
+}
+.statement-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(26px, 3.5vw, 46px);
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--text);
+  max-width: 900px;
+}
+.statement-text em { font-style: italic; color: var(--gold); }
+.statement-source {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: 0.1em;
+  margin-top: 24px;
+}
+
+/* THESIS GRID */
+.thesis-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+.thesis-left {
+  padding: 100px 48px;
+  border-right: 0.5px solid var(--border);
+}
+.thesis-right {
+  padding: 100px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.thesis-card {
+  padding: 28px 0;
+  border-bottom: 0.5px solid var(--border);
+  cursor: default;
+  transition: background 0.2s;
+}
+.thesis-card:first-child { border-top: 0.5px solid var(--border); }
+.thesis-card:hover { background: rgba(255,255,255,0.015); }
+.thesis-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+}
+.thesis-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.thesis-body {
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.6;
+}
+.thesis-tag {
+  display: inline-block;
+  margin-top: 10px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 2px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.tag-gold { background: var(--gold-bg2); color: var(--gold); }
+.tag-red { background: var(--red-bg); color: #e05a4e; }
+.tag-teal { background: var(--teal-bg); color: var(--teal-light); }
+.tag-blue { background: var(--blue-bg); color: #5b9fd8; }
+
+/* CONFLICT PANEL */
+.conflict-section {
+  padding: 100px 48px;
+  background: var(--bg2);
+  border-top: 0.5px solid var(--border);
+  border-bottom: 0.5px solid var(--border);
+}
+.conflict-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0;
+  margin-top: 56px;
+  border: 0.5px solid var(--border);
+}
+.conflict-card {
+  padding: 32px;
+  border-right: 0.5px solid var(--border);
+}
+.conflict-card:last-child { border-right: none; }
+.conflict-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 2px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.conflict-icon-red { background: var(--red-bg); }
+.conflict-icon-gold { background: var(--gold-bg2); }
+.conflict-icon-teal { background: var(--teal-bg); }
+.conflict-stat {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 42px;
+  font-weight: 300;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.conflict-stat-gold { color: var(--gold); }
+.conflict-stat-red { color: #e05a4e; }
+.conflict-stat-teal { color: var(--teal-light); }
+.conflict-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.conflict-sub {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.55;
+}
+
+/* PALANTIR COMPARISON */
+.comparison-section {
+  padding: 100px 48px;
+}
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 56px;
+}
+.comparison-card {
+  padding: 32px;
+  border: 0.5px solid var(--border);
+  position: relative;
+}
+.comparison-card.then { background: var(--bg2); }
+.comparison-card.now { background: var(--gold-bg); border-color: var(--gold-dim); }
+.comparison-card-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  color: var(--text3);
+}
+.comparison-card.now .comparison-card-label { color: var(--gold); }
+.comparison-year {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 52px;
+  font-weight: 300;
+  line-height: 1;
+  margin-bottom: 16px;
+  color: var(--text3);
+}
+.comparison-card.now .comparison-year { color: var(--gold); }
+.comparison-event {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+.comparison-desc {
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.6;
+}
+.arrow-connector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-column: 1 / -1;
+  padding: 8px 0;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* COMPANIES */
+.companies-section { padding: 100px 0; }
+.companies-header { padding: 0 48px; margin-bottom: 56px; }
+.companies-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-top: 0.5px solid var(--border);
+}
+.companies-table th {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text3);
+  padding: 16px 48px;
+  text-align: left;
+  border-bottom: 0.5px solid var(--border);
+  background: var(--bg2);
+}
+.companies-table td {
+  padding: 24px 48px;
+  border-bottom: 0.5px solid var(--border);
+  vertical-align: top;
+}
+.companies-table tr { transition: background 0.15s; }
+.companies-table tbody tr:hover { background: rgba(255,255,255,0.02); }
+.ticker-cell {
+  font-family: 'DM Mono', monospace;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: 0.05em;
+}
+.company-name-cell {
+  font-size: 14px;
+  color: var(--text2);
+  margin-top: 3px;
+}
+.conviction-cell {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.conv-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--border2);
+}
+.conv-dot.on { background: var(--gold); }
+.desc-cell {
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.55;
+  max-width: 340px;
+}
+.val-cell {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: var(--text2);
+  white-space: nowrap;
+}
+.rank-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 2px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.rank-1 { background: var(--gold-bg2); color: var(--gold); border: 0.5px solid var(--gold-dim); }
+.rank-2 { background: var(--teal-bg); color: var(--teal-light); }
+.rank-3 { background: var(--blue-bg); color: #5b9fd8; }
+.rank-4, .rank-5, .rank-6 { background: rgba(255,255,255,0.04); color: var(--text3); }
+
+/* TIMELINE */
+.timeline-section {
+  padding: 100px 48px;
+  background: var(--bg2);
+  border-top: 0.5px solid var(--border);
+  border-bottom: 0.5px solid var(--border);
+}
+.timeline-track {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0;
+  margin-top: 56px;
+  position: relative;
+}
+.timeline-track::before {
+  content: '';
+  position: absolute;
+  top: 20px; left: 0; right: 0;
+  height: 0.5px;
+  background: linear-gradient(to right, var(--gold), var(--border), var(--border));
+}
+.phase-col { padding: 0 24px; }
+.phase-col:first-child { padding-left: 0; }
+.phase-dot-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.phase-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 0.5px solid var(--border2);
+  background: var(--bg2);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+.phase-dot.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  box-shadow: 0 0 12px rgba(201,148,42,0.4);
+}
+.phase-now-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--gold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--gold-bg2);
+  padding: 2px 8px;
+  border-radius: 2px;
+}
+.phase-window {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+}
+.phase-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--text);
+  margin-bottom: 12px;
+  line-height: 1.1;
+}
+.phase-desc {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+.phase-signal {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text3);
+  line-height: 1.5;
+  padding-top: 16px;
+  border-top: 0.5px solid var(--border);
+}
+.phase-signal span { color: var(--gold); }
+
+/* SIGNALS */
+.signals-section {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 0;
+  border-top: 0.5px solid var(--border);
+}
+.signals-left {
+  padding: 100px 48px;
+  border-right: 0.5px solid var(--border);
+  background: var(--bg2);
+}
+.signals-right {
+  padding: 100px 48px;
+}
+.signal-list { display: flex; flex-direction: column; gap: 0; }
+.signal-item {
+  display: grid;
+  grid-template-columns: 32px 1fr auto;
+  gap: 16px;
+  padding: 20px 0;
+  border-bottom: 0.5px solid var(--border);
+  align-items: start;
+}
+.signal-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--gold);
+  padding-top: 2px;
+}
+.signal-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+.signal-sub { font-size: 13px; color: var(--text2); line-height: 1.5; }
+.signal-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 2px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  margin-top: 2px;
+}
+.s-critical { background: var(--red-bg); color: #e05a4e; }
+.s-active { background: var(--teal-bg); color: var(--teal-light); }
+.s-watch { background: var(--gold-bg); color: var(--gold); }
+
+/* RISKS */
+.risks-section {
+  padding: 100px 48px;
+  border-top: 0.5px solid var(--border);
+}
+.risk-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 56px;
+}
+.risk-card {
+  padding: 24px;
+  border: 0.5px solid var(--border);
+  background: var(--bg2);
+}
+.risk-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.risk-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.3;
+}
+.risk-level {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 2px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.r-hi { background: var(--red-bg); color: #e05a4e; }
+.r-med { background: var(--gold-bg); color: var(--gold); }
+.risk-desc { font-size: 13px; color: var(--text2); line-height: 1.55; }
+
+/* CLOSING CTA */
+.cta-section {
+  padding: 140px 48px;
+  text-align: center;
+  border-top: 0.5px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.cta-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(201,148,42,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,148,42,0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.cta-headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(42px, 6vw, 80px);
+  font-weight: 300;
+  line-height: 1.05;
+  color: var(--text);
+  margin-bottom: 24px;
+  position: relative;
+}
+.cta-headline em { font-style: italic; color: var(--gold); }
+.cta-sub {
+  font-size: 17px;
+  color: var(--text2);
+  max-width: 480px;
+  margin: 0 auto 40px;
+  line-height: 1.6;
+  position: relative;
+}
+.cta-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  position: relative;
+}
+.btn-primary {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--gold);
+  border: none;
+  padding: 14px 28px;
+  border-radius: 2px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.btn-primary:hover { opacity: 0.85; }
+.btn-secondary {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text2);
+  background: transparent;
+  border: 0.5px solid var(--border2);
+  padding: 14px 28px;
+  border-radius: 2px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-secondary:hover { border-color: var(--text2); color: var(--text); }
+
+/* FOOTER */
+footer {
+  padding: 32px 48px;
+  border-top: 0.5px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.footer-logo {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.footer-disclaimer {
+  font-size: 12px;
+  color: var(--text3);
+  line-height: 1.5;
+  max-width: 500px;
+}
+.footer-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 900px) {
+  nav { padding: 0 24px; }
+  .nav-links { display: none; }
+  section, .hero { padding-left: 24px; padding-right: 24px; }
+  .thesis-section { grid-template-columns: 1fr; }
+  .thesis-left { border-right: none; border-bottom: 0.5px solid var(--border); padding: 60px 24px; }
+  .thesis-right { padding: 40px 24px; }
+  .conflict-grid { grid-template-columns: 1fr; }
+  .conflict-card { border-right: none; border-bottom: 0.5px solid var(--border); }
+  .comparison-grid { grid-template-columns: 1fr; }
+  .timeline-track { grid-template-columns: 1fr; }
+  .timeline-track::before { display: none; }
+  .phase-col { padding: 0 0 40px; border-bottom: 0.5px solid var(--border); margin-bottom: 40px; }
+  .signals-section { grid-template-columns: 1fr; }
+  .signals-left { border-right: none; border-bottom: 0.5px solid var(--border); padding: 60px 24px; }
+  .signals-right { padding: 60px 24px; }
+  .risk-grid { grid-template-columns: 1fr; }
+  .companies-table th, .companies-table td { padding: 16px 24px; }
+  footer { padding: 24px; flex-direction: column; align-items: flex-start; }
+  .hero-scroll { display: none; }
+  .conflict-section, .timeline-section { padding: 60px 24px; }
+  .comparison-section, .companies-section .companies-header, .risks-section { padding-left: 24px; padding-right: 24px; }
+  .cta-section { padding: 80px 24px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">InsightInvest</a>
+  <ul class="nav-links">
+    <li><a href="#thesis">Thesis</a></li>
+    <li><a href="#companies">Companies</a></li>
+    <li><a href="#timeline">Timeline</a></li>
+    <li><a href="#signals">Signals</a></li>
+    <li><a href="#risks">Risks</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">Join community</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-vignette"></div>
+  <div class="hero-label">InsightInvest · Research · March 2026</div>
+  <h1 class="hero-headline">The Cyber<br><em>Sovereign</em></h1>
+  <p class="hero-sub">Trump just declared cyberspace a warfighting domain and named private cybersecurity companies as America's frontline defense. The market hasn't priced this yet. That gap is the trade.</p>
+  <div class="hero-meta">
+    <span class="hero-date">March 6, 2026</span>
+    <div class="hero-divider"></div>
+    <span class="hero-tag">Defense infrastructure thesis</span>
+    <div class="hero-divider"></div>
+    <span class="hero-tag">6 stocks to watch</span>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- STATEMENT -->
+<div class="statement-band reveal">
+  <p class="statement-text">"Wall Street prices these companies like <em>software subscriptions.</em> The government uses them like <em>defense contractors.</em> That gap is the trade."</p>
+  <p class="statement-source">— CYBER SOVEREIGN FRAMEWORK · INSIGHTINVEST · MARCH 2026</p>
+</div>
+
+<!-- THESIS -->
+<div class="thesis-section" id="thesis">
+  <div class="thesis-left">
+    <div class="section-eyebrow reveal">The core thesis</div>
+    <h2 class="section-title reveal reveal-delay-1">Five structural<br>reasons for<br><em>reclassification</em></h2>
+    <p class="section-body reveal reveal-delay-2">Cybersecurity's leading firms are undergoing a category transition — from discretionary software vendors to obligatory national defense infrastructure. This forces a re-pricing of their equities comparable to what Palantir experienced from 2022–2026.</p>
+  </div>
+  <div class="thesis-right">
+    <div class="thesis-card reveal">
+      <div class="thesis-num">01 / Policy</div>
+      <div class="thesis-title">The government declared it</div>
+      <div class="thesis-body">The Trump Cyber Strategy (March 6, 2026) formally classifies cyberspace as a warfighting domain. CEOs are "required to dedicate real resources" to collective digital defense. Not vendors — partners.</div>
+      <span class="thesis-tag tag-gold">Doctrine shift</span>
+    </div>
+    <div class="thesis-card reveal reveal-delay-1">
+      <div class="thesis-num">02 / Conflict</div>
+      <div class="thesis-title">Iran proved the kinetic thesis</div>
+      <div class="thesis-body">Post-Feb 28 strikes, Iranian APT Seedworm hit a U.S. bank, airport, and defense contractor. A separate attack wiped surgical equipment at hospitals globally. Cyber conflict is producing physical casualties.</div>
+      <span class="thesis-tag tag-red">Active conflict</span>
+    </div>
+    <div class="thesis-card reveal reveal-delay-2">
+      <div class="thesis-num">03 / Regulation</div>
+      <div class="thesis-title">Procurement architecture changed</div>
+      <div class="thesis-body">CMMC Level 2 now mandatory for all CUI contracts. FedRAMP Class D (High) only capital-intensive platforms can maintain. The regulatory moat is being built by the government on behalf of incumbents.</div>
+      <span class="thesis-tag tag-teal">Structural moat</span>
+    </div>
+    <div class="thesis-card reveal reveal-delay-3">
+      <div class="thesis-num">04 / Paradox</div>
+      <div class="thesis-title">CISA was hollowed out</div>
+      <div class="thesis-body">1,000+ staff lost — 33% of the workforce. No Senate-confirmed director. The government simultaneously declared cyber a warfighting priority and dismantled its own defense agency. Private sector fills the gap permanently.</div>
+      <span class="thesis-tag tag-gold">Accelerant</span>
+    </div>
+    <div class="thesis-card reveal reveal-delay-4">
+      <div class="thesis-num">05 / Technology</div>
+      <div class="thesis-title">AI breakout times collapse human defense</div>
+      <div class="thesis-body">CrowdStrike 2026: average adversary breakout time 29 minutes. AI-enabled intrusions: 27 seconds. Human security operations cannot respond at that speed. AI-native platforms are the only viable architecture.</div>
+      <span class="thesis-tag tag-blue">Tech necessity</span>
+    </div>
+  </div>
+</div>
+
+<hr class="section-rule">
+
+<!-- CONFLICT STATS -->
+<section class="conflict-section" id="conflict">
+  <div class="section-eyebrow reveal">The evidence</div>
+  <h2 class="section-title reveal reveal-delay-1">The numbers that<br>prove the <em>thesis</em></h2>
+  <div class="conflict-grid">
+    <div class="conflict-card reveal">
+      <div class="conflict-icon conflict-icon-red">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2L14 13H2L8 2Z" stroke="#e05a4e" stroke-width="1" fill="none"/></svg>
+      </div>
+      <div class="conflict-stat conflict-stat-red">27s</div>
+      <div class="conflict-label">AI-enabled breakout time</div>
+      <div class="conflict-sub">The speed at which AI-powered intrusions execute lateral movement. Human defenders cannot respond in time.</div>
+    </div>
+    <div class="conflict-card reveal reveal-delay-1">
+      <div class="conflict-icon conflict-icon-gold">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" stroke="#c9942a" stroke-width="1" fill="none"/></svg>
+      </div>
+      <div class="conflict-stat conflict-stat-gold">33%</div>
+      <div class="conflict-label">CISA workforce eliminated</div>
+      <div class="conflict-sub">1,000+ staff lost through buyouts and layoffs. No Senate-confirmed director. Counter-ransomware leads departed.</div>
+    </div>
+    <div class="conflict-card reveal reveal-delay-2">
+      <div class="conflict-icon conflict-icon-teal">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5" stroke="#2db38a" stroke-width="1" fill="none"/></svg>
+      </div>
+      <div class="conflict-stat conflict-stat-teal">$10B</div>
+      <div class="conflict-label">Palantir Army deal — the template</div>
+      <div class="conflict-sub">The 10-year Army enterprise agreement that triggered Palantir's reclassification from software vendor to defense contractor.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PALANTIR COMPARISON -->
+<section class="comparison-section" id="comparison">
+  <div class="section-eyebrow reveal">Historical precedent</div>
+  <h2 class="section-title reveal reveal-delay-1">Palantir did this.<br>Now it's cyber's <em>turn.</em></h2>
+  <p class="section-body reveal reveal-delay-2">The reclassification playbook has already been proven. One enterprise deal changes everything — analyst models shift, ETF categorization changes, institutional defense funds enter.</p>
+  <div class="comparison-grid reveal reveal-delay-3">
+    <div class="comparison-card then">
+      <div class="comparison-card-label">Then — Palantir</div>
+      <div class="comparison-year">2022</div>
+      <div class="comparison-event">Government data analytics vendor</div>
+      <div class="comparison-desc">Priced as SaaS. Revenue from government contracts discounted due to perceived instability. Treated as "political" stock by institutional investors.</div>
+    </div>
+    <div class="comparison-card now">
+      <div class="comparison-card-label">Now — Cyber sector</div>
+      <div class="comparison-year">2026</div>
+      <div class="comparison-event">National defense partners</div>
+      <div class="comparison-desc">$CRWD, $PANW, $FTNT still priced as software. Policy reclassification declared. Procurement architecture changed. Market hasn't moved yet.</div>
+    </div>
+    <div class="arrow-connector">↓ Palantir re-rated 3× in 36 months. The cyber sector is at month zero. ↓</div>
+  </div>
+</section>
+
+<!-- COMPANIES -->
+<section class="companies-section" id="companies">
+  <div class="companies-header">
+    <div class="section-eyebrow reveal">Company matrix</div>
+    <h2 class="section-title reveal reveal-delay-1">6 stocks to <em>watch</em></h2>
+    <p class="section-body reveal reveal-delay-2">Ranked by repricing potential — highest conviction to already-reclassified. The edge exists specifically in companies still priced as SaaS with existing or near-term federal enterprise exposure.</p>
+  </div>
+  <table class="companies-table reveal">
+    <thead>
+      <tr>
+        <th>Ticker</th>
+        <th>Conviction</th>
+        <th>Thesis</th>
+        <th>Valuation</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><div class="ticker-cell">$CRWD</div><div class="company-name-cell">CrowdStrike</div></td>
+        <td><div class="conviction-cell"><div class="conv-dot on"></div><div class="conv-dot on"></div><div class="conv-dot on"></div><div class="conv-dot on"></div><div class="conv-dot on"></div></div></td>
+        <td><div class="desc-cell">Highest velocity. FedRAMP High, CMMC engine for 3rd-party contractors, Charlotte AI offensive roadmap. Most likely to land the first 5–10yr federal enterprise deal.</div></td>
+        <td><div class="val-cell">22x NTM<br>$5B ARR</div></td>
+        <td><span class="rank-badge rank-1">Highest conviction</span></td>
+      </tr>
+      <tr>
+        <td><div class="ticker-cell">$FTNT</div><div class="company-name-cell">Fortinet</div></td>
+        <td><div class="conviction-cell"><div class="conv-dot on"></div><div class="conv-dot on"></div><div class="conv-dot on"></div><div class="conv-dot on"></div><div class="conv-dot"></div></div></td>
+        <td><div class="desc-cell">Most overlooked. Deepest OT/ICS penetration — energy grids, hospitals, industrial systems. The strategy's critical infrastructure pillar maps directly to Fortinet.</div></td>
+        <td><div class="val-cell">~13x NTM<br>Lowest val.</div></td>
+        <td><span class="rank-badge rank-2">Undervalued</span></td>
+      </tr>
+      <tr>
+        <td><div class="ticker-cell">$PANW</div><div class="company-name-cell">Palo Alto Networks</div></td>
+        <td><div class="conviction-cell"><div class="conv-dot on"></div><div class="conv-dot on"></div><div class="conv-dot on"></div><div class="conv-dot on"></div><div class="conv-dot"></div></div></td>
+        <td><div class="desc-cell">The Lockheed Martin of cyber. Largest federal footprint, Unit 42 embedded in government decision loops. CyberArk acquisition fills last identity gap. Partially re-rated already.</div></td>
+        <td><div class="val-cell">40x fwd P/E<br>Decelerating</div></td>
+        <td><span class="rank-badge rank-3">Partial re-rate</span></td>
+      </tr>
+      <tr>
+        <td><div class="ticker-cell">$NET</div><div class="company-name-cell">Cloudflare</div></td>
+        <td><div class="conviction-cell"><div class="conv-dot on"></div><div class="conv-dot on"></div><div class="conv-dot on"></div><div class="conv-dot"></div><div class="conv-dot"></div></div></td>
+        <td><div class="desc-cell">The perimeter layer. Blocks 140B+ threats daily. Post-quantum encryption (Feb 2026). FedRAMP High in process. Re-rating advanced — tighter margin of safety at 146x P/E.</div></td>
+        <td><div class="val-cell">146x fwd P/E<br>28% CAGR</div></td>
+        <td><span class="rank-badge rank-4">Watch FedRAMP</span></td>
+      </tr>
+      <tr>
+        <td><div class="ticker-cell">$PLTR</div><div class="company-name-cell">Palantir</div></td>
+        <td><div class="conviction-cell"><div class="conv-dot on"></div><div class="conv-dot on"></div><div class="conv-dot on"></div><div class="conv-dot on"></div><div class="conv-dot on"></div></div></td>
+        <td><div class="desc-cell">Reclassification complete. $10B Army deal, Pentagon AI hub, Space Force integration. This is the roadmap, not the bet. ~41% gov revenue = binary political risk to monitor.</div></td>
+        <td><div class="val-cell">30–40x NTM<br>$7.18B guide</div></td>
+        <td><span class="rank-badge rank-5">The template</span></td>
+      </tr>
+      <tr>
+        <td><div class="ticker-cell">$ZS</div><div class="company-name-cell">Zscaler</div></td>
+        <td><div class="conviction-cell"><div class="conv-dot on"></div><div class="conv-dot on"></div><div class="conv-dot on"></div><div class="conv-dot"></div><div class="conv-dot"></div></div></td>
+        <td><div class="desc-cell">Zero-trust architecture aligns directly to federal mandate. SSE market leader. Competitive moat risk from PANW platformization limits conviction relative to others.</div></td>
+        <td><div class="val-cell">~14x NTM<br>Mid-tier exp.</div></td>
+        <td><span class="rank-badge rank-6">Mid-tier</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<hr class="section-rule">
+
+<!-- TIMELINE -->
+<section class="timeline-section" id="timeline">
+  <div class="section-eyebrow reveal">Three-phase playbook</div>
+  <h2 class="section-title reveal reveal-delay-1">How the repricing <em>unfolds</em></h2>
+  <div class="timeline-track">
+    <div class="phase-col reveal">
+      <div class="phase-dot-wrap">
+        <div class="phase-dot active"></div>
+        <span class="phase-now-badge">We are here</span>
+      </div>
+      <div class="phase-window">Now → Q3 2026</div>
+      <div class="phase-name">Signal<br>phase</div>
+      <div class="phase-desc">Policy doctrine declared. CMMC mandatory. Iran conflict active. CISA hollowed. Procurement vehicles forming. FedRAMP High wins. Pilot offensive ops contracts.</div>
+      <div class="phase-signal"><span>Monitor →</span> Federal revenue mix. CRWD/PANW gov. announcements. CMMC sales acceleration.</div>
+    </div>
+    <div class="phase-col reveal reveal-delay-2">
+      <div class="phase-dot-wrap">
+        <div class="phase-dot"></div>
+      </div>
+      <div class="phase-window">Q3 2026 → 2027</div>
+      <div class="phase-name">Contract<br>phase</div>
+      <div class="phase-desc">First "Risk Imposition" contract vehicles issued. Multi-year enterprise government deals signed. RFO procurement reform operational. Revenue mix shifts analyst models toward defense premium.</div>
+      <div class="phase-signal"><span>Watch →</span> First 3–5yr federal enterprise agreements. Blended multiples begin appearing.</div>
+    </div>
+    <div class="phase-col reveal reveal-delay-4">
+      <div class="phase-dot-wrap">
+        <div class="phase-dot"></div>
+      </div>
+      <div class="phase-window">2027 → 2028+</div>
+      <div class="phase-name">Re-rating<br>phase</div>
+      <div class="phase-desc">Backlog visibility from long-duration contracts. ETF reclassification. Institutional defense fund inflows. Palantir model fully established. 30–50% multiple expansion possible for CRWD/FTNT.</div>
+      <div class="phase-signal"><span>Payoff →</span> Defense infra multiples + SaaS growth profile = structural premium.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SIGNALS -->
+<div class="signals-section" id="signals">
+  <div class="signals-left">
+    <div class="section-eyebrow reveal">What to track</div>
+    <h2 class="section-title reveal reveal-delay-1" style="font-size: clamp(28px, 3.5vw, 48px);">Seven catalyst<br><em>signals</em></h2>
+    <p class="section-body reveal reveal-delay-2" style="font-size: 14px; margin-top: 16px;">These events either confirm the thesis, compress the timeline, or signal it's breaking down. Watch all seven.</p>
+  </div>
+  <div class="signals-right">
+    <div class="signal-list">
+      <div class="signal-item reveal">
+        <div class="signal-num">01</div>
+        <div><div class="signal-text">Implementing executive order release</div><div class="signal-sub">Specific agency mandates, timelines, and procurement vehicles that compress the implementation gap.</div></div>
+        <span class="signal-badge s-watch">Watch</span>
+      </div>
+      <div class="signal-item reveal reveal-delay-1">
+        <div class="signal-num">02</div>
+        <div><div class="signal-text">CISA Senate-confirmed director</div><div class="signal-sub">Coordination layer activates. Single most important near-term execution risk resolved.</div></div>
+        <span class="signal-badge s-watch">Watch</span>
+      </div>
+      <div class="signal-item reveal reveal-delay-2">
+        <div class="signal-num">03</div>
+        <div><div class="signal-text">First 5–10yr federal enterprise deal — $CRWD or $PANW</div><div class="signal-sub">The Palantir-template trigger. Analyst model reframe begins immediately. Biggest single catalyst.</div></div>
+        <span class="signal-badge s-critical">Critical</span>
+      </div>
+      <div class="signal-item reveal reveal-delay-3">
+        <div class="signal-num">04</div>
+        <div><div class="signal-text">ETF / index reclassification event</div><div class="signal-sub">When $CRWD or $PANW appear in defense sector screens, institutional buyer base expands overnight.</div></div>
+        <span class="signal-badge s-watch">Watch</span>
+      </div>
+      <div class="signal-item reveal reveal-delay-4">
+        <div class="signal-num">05</div>
+        <div><div class="signal-text">Q1–Q2 2026 earnings calls</div><div class="signal-sub">"Government pipeline accelerating" or "federal mix expanding" language. First leading indicator of contract flow.</div></div>
+        <span class="signal-badge s-active">Active now</span>
+      </div>
+      <div class="signal-item reveal">
+        <div class="signal-num">06</div>
+        <div><div class="signal-text">$NET FedRAMP High authorization</div><div class="signal-sub">Closes the last gap in Cloudflare's federal credentialing. Accelerates if achieved before Sept 2026.</div></div>
+        <span class="signal-badge s-watch">Watch</span>
+      </div>
+      <div class="signal-item reveal reveal-delay-1">
+        <div class="signal-num">07</div>
+        <div><div class="signal-text">Iran conflict trajectory</div><div class="signal-sub">Active conflict maintains urgency premium. China/Russia structural threat persists regardless of Iran outcome.</div></div>
+        <span class="signal-badge s-active">Active</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RISKS -->
+<section class="risks-section" id="risks">
+  <div class="section-eyebrow reveal">Know the risks</div>
+  <h2 class="section-title reveal reveal-delay-1">When the thesis<br><em>breaks</em></h2>
+  <p class="section-body reveal reveal-delay-2">The thesis has real failure modes. Know them before entering.</p>
+  <div class="risk-grid">
+    <div class="risk-card reveal">
+      <div class="risk-header"><div class="risk-name">Implementation gap</div><span class="risk-level r-hi">High</span></div>
+      <div class="risk-desc">Strategy is 7 pages with no budget line items. Contracting vehicles for offensive cyber don't exist yet. Policy → contract → revenue = 18–36 months.</div>
+    </div>
+    <div class="risk-card reveal reveal-delay-1">
+      <div class="risk-header"><div class="risk-name">CISA hollowing paradox</div><span class="risk-level r-hi">High</span></div>
+      <div class="risk-desc">Amplifies private sector dependency but decimates coordination capacity. No director = procurement chaos risk. Watch Senate confirmation closely.</div>
+    </div>
+    <div class="risk-card reveal reveal-delay-2">
+      <div class="risk-header"><div class="risk-name">PLTR concentration risk</div><span class="risk-level r-hi">High</span></div>
+      <div class="risk-desc">~41% government revenue creates binary political risk. Not present for CRWD/PANW/NET yet. Watch if they cross 30% threshold.</div>
+    </div>
+    <div class="risk-card reveal reveal-delay-3">
+      <div class="risk-header"><div class="risk-name">Procurement timeline</div><span class="risk-level r-med">Medium</span></div>
+      <div class="risk-desc">Market can price expectations before cash flows materialize. Risk of multiple expansion running ahead of fundamentals.</div>
+    </div>
+    <div class="risk-card reveal">
+      <div class="risk-header"><div class="risk-name">Geopolitical de-escalation</div><span class="risk-level r-med">Medium</span></div>
+      <div class="risk-desc">Iran ceasefire compresses urgency premium. China/Russia structural threat persists indefinitely — longer-term thesis remains intact.</div>
+    </div>
+    <div class="risk-card reveal reveal-delay-1">
+      <div class="risk-header"><div class="risk-name">AI disruption to existing stacks</div><span class="risk-level r-med">Medium</span></div>
+      <div class="risk-desc">Agentic AI could commoditize elements of current platforms. Incumbents must own the AI layer — watch Charlotte AI and Cortex differentiation.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <div class="cta-grid-bg"></div>
+  <h2 class="cta-headline reveal">The window is<br>12 to 24 <em>months.</em></h2>
+  <p class="cta-sub reveal reveal-delay-1">The market calls these software. The government calls them national security. The full research framework, weekly intelligence briefs, and private advisory access — all inside the InsightInvest community.</p>
+  <div class="cta-buttons reveal reveal-delay-2">
+    <a href="https://leiholding.com" class="btn-primary">Join InsightInvest</a>
+    <a href="#thesis" class="btn-secondary">Read the framework</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">InsightInvest</div>
+  <div class="footer-disclaimer">Not investment advice. This research framework is for analytical and educational purposes only. All views based on publicly available information as of March 2026. Conduct independent due diligence before making investment decisions.</div>
+  <div class="footer-date">March 2026</div>
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
