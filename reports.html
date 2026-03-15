@@ -5,73 +5,77 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Published Reports — InsightInvest</title>
 <meta content="Deep-dive investment playbooks — comprehensive, actionable research reports you can use immediately." name="description"/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
 :root{--bg:#08090c;--bg2:#0e1016;--bg3:#14161e;--surface:#1a1d28;--border:#252838;--text:#9ca3b8;--text-bright:#e8ecf4;--text-dim:#555c72;--gold:#c9a84c;--gold-light:#e4cc7a;--gold-dim:#8a7234;--blue:#4a7cff;--green:#3dd68c;--red:#ff5c5c;--cyan:#38d9d9;}
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--border) var(--bg);}
 ::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
-body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased;}
 body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;}
 
 nav{position:fixed;top:0;left:0;right:0;padding:20px 48px;display:flex;align-items:center;justify-content:space-between;z-index:100;background:linear-gradient(180deg,var(--bg) 0%,transparent 100%);transition:all 0.4s;}
-nav.scrolled{background:var(--bg)ee;backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 48px;}
+nav.scrolled{background:#08090cee;backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 48px;}
 .nav-logo{display:flex;align-items:center;gap:14px;text-decoration:none;}
 .nav-logo-mark{width:38px;height:38px;border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;}
-.nav-logo-mark::before{content:'I';font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--gold);}
-.nav-logo-text{font-family:'Syne',sans-serif;font-size:15px;font-weight:600;color:var(--text-bright);letter-spacing:0.12em;text-transform:uppercase;}
+.nav-logo-mark::before{content:'I';font-family:'Instrument Serif',serif;font-size:20px;font-weight:400;color:var(--gold);}
+.nav-logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;color:var(--text-bright);letter-spacing:0.08em;text-transform:uppercase;}
 .nav-links{display:flex;gap:36px;align-items:center;}
-.nav-links a{font-size:12px;font-weight:500;color:var(--text-dim);text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.3s;position:relative;}
+.nav-links a{font-size:12px;font-weight:500;color:var(--text-dim);text-decoration:none;letter-spacing:0.06em;text-transform:uppercase;transition:color 0.3s;position:relative;}
 .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--gold);transition:width 0.3s;}
 .nav-links a:hover{color:var(--gold);}
 .nav-links a:hover::after{width:100%;}
-.nav-cta{padding:10px 24px !important;border:1px solid var(--gold-dim) !important;color:var(--gold) !important;font-size:11px !important;letter-spacing:0.14em !important;transition:all 0.3s !important;}
+.nav-cta{padding:10px 24px !important;border:1px solid var(--gold-dim) !important;color:var(--gold) !important;font-size:11px !important;letter-spacing:0.1em !important;transition:all 0.3s !important;}
 .nav-cta:hover{background:var(--gold) !important;color:var(--bg) !important;}
 
 .reports-hero{padding:120px 48px 100px;position:relative;overflow:hidden;background:var(--bg);border-bottom:1px solid var(--border);text-align:center;}
 .reports-hero::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:700px;height:700px;background:radial-gradient(circle,var(--gold)05,transparent 65%);pointer-events:none;}
 .reports-hero-inner{max-width:700px;margin:0 auto;position:relative;z-index:1;}
-.section-tag{display:inline-flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;color:var(--gold);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:20px;}
+.section-tag{display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;color:var(--gold);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:20px;}
 .section-tag-dot{width:6px;height:6px;background:var(--gold);border-radius:50%;animation:dotPulse 2s ease-in-out infinite;}
 @keyframes dotPulse{0%,100%{opacity:0.4;}50%{opacity:1;}}
-.section-h2{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,4.5vw,64px);font-weight:400;color:var(--text-bright);line-height:1.15;letter-spacing:-0.02em;margin-bottom:20px;}
-.section-sub{font-size:16px;color:var(--text);max-width:560px;line-height:1.7;margin-bottom:60px;}
+.section-h2{font-family:'Instrument Serif',serif;font-size:clamp(36px,4.5vw,64px);font-weight:400;color:var(--text-bright);line-height:1.1;letter-spacing:-0.02em;margin-bottom:20px;}
+.section-sub{font-size:15px;color:var(--text);max-width:560px;line-height:1.75;margin-bottom:60px;font-weight:400;}
+
+.report-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;}
+.report-title{font-family:'Instrument Serif',serif;font-size:30px;font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:14px;}
+.report-body{font-size:14px;color:var(--text);line-height:1.72;margin-bottom:28px;font-weight:400;}
+.report-chip{font-family:'JetBrains Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);}
+.report-cta{font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;font-family:'Plus Jakarta Sans',sans-serif;}
 
 .reports-grid-wrap{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:80px 48px;}
 
-/* PATREON CTA — subtle mid-section */
 .patreon-interlude{padding:0 48px;margin:0;}
 .patreon-strip{max-width:680px;margin:0 auto;padding:40px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:32px;}
 .patreon-strip-left{display:flex;flex-direction:column;gap:4px;}
-.patreon-strip-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);}
-.patreon-strip-text{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--text-bright);line-height:1.3;}
+.patreon-strip-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);}
+.patreon-strip-text{font-family:'Instrument Serif',serif;font-size:22px;font-weight:400;color:var(--text-bright);line-height:1.3;}
 .patreon-strip-text em{font-style:italic;color:var(--gold);}
-.patreon-strip-sub{font-size:13px;color:var(--text-dim);margin-top:4px;line-height:1.5;}
-.patreon-strip-btn{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);text-decoration:none;border:1px solid var(--gold-dim);padding:10px 20px;white-space:nowrap;transition:all 0.25s;flex-shrink:0;}
+.patreon-strip-sub{font-size:13px;color:var(--text-dim);margin-top:4px;line-height:1.6;font-weight:400;}
+.patreon-strip-btn{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);text-decoration:none;border:1px solid var(--gold-dim);padding:10px 20px;white-space:nowrap;transition:all 0.25s;flex-shrink:0;}
 .patreon-strip-btn:hover{background:var(--gold);color:var(--bg);}
 
-/* WAITLIST CTA — end of page */
 .waitlist-cta{padding:100px 48px;background:var(--bg);border-top:1px solid var(--border);position:relative;overflow:hidden;}
 .waitlist-cta::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,var(--gold)06,transparent 70%);pointer-events:none;}
 .wl-inner{max-width:640px;margin:0 auto;position:relative;z-index:2;}
-.wl-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.wl-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
 .wl-eyebrow::before{content:'';display:inline-block;width:24px;height:1px;background:var(--gold);}
-.wl-headline{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4vw,52px);font-weight:400;color:var(--text-bright);line-height:1.1;letter-spacing:-0.02em;margin-bottom:16px;}
+.wl-headline{font-family:'Instrument Serif',serif;font-size:clamp(32px,4vw,52px);font-weight:400;color:var(--text-bright);line-height:1.1;letter-spacing:-0.02em;margin-bottom:16px;}
 .wl-headline em{font-style:italic;color:var(--gold);}
-.wl-desc{font-size:15px;color:var(--text);line-height:1.75;margin-bottom:36px;max-width:520px;}
+.wl-desc{font-size:15px;color:var(--text);line-height:1.75;margin-bottom:36px;max-width:520px;font-weight:400;}
 .wl-proof{display:flex;align-items:center;gap:14px;margin-bottom:32px;}
 .wl-avatars{display:flex;}
 .wl-avatar{width:30px;height:30px;border-radius:50%;border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--bg);font-weight:700;margin-left:-8px;}
 .wl-avatar:first-child{margin-left:0;}
-.wl-proof-text{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-dim);line-height:1.5;}
+.wl-proof-text{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);line-height:1.5;}
 .wl-proof-text strong{color:var(--text);font-weight:500;}
 .wl-form{display:flex;gap:0;margin-bottom:14px;}
-.wl-input{flex:1;padding:15px 18px;background:var(--bg2);border:1px solid var(--border);border-right:none;color:var(--text-bright);font-family:'Syne',sans-serif;font-size:14px;outline:none;transition:border-color 0.3s;}
+.wl-input{flex:1;padding:15px 18px;background:var(--bg2);border:1px solid var(--border);border-right:none;color:var(--text-bright);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;outline:none;transition:border-color 0.3s;}
 .wl-input:focus{border-color:var(--gold-dim);}
 .wl-input::placeholder{color:var(--text-dim);}
-.wl-btn{padding:15px 28px;background:var(--gold);color:var(--bg);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;border:none;cursor:pointer;transition:all 0.3s;white-space:nowrap;}
+.wl-btn{padding:15px 28px;background:var(--gold);color:var(--bg);font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;border:none;cursor:pointer;transition:all 0.3s;white-space:nowrap;}
 .wl-btn:hover{background:var(--gold-light);}
-.wl-meta{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:0.07em;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.wl-meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:0.07em;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
 .wl-spots{display:flex;align-items:center;gap:6px;color:var(--gold);}
 .wl-spots-dot{width:5px;height:5px;background:var(--gold);border-radius:50%;animation:dotPulse 2s ease-in-out infinite;}
 
@@ -82,13 +86,13 @@ nav.scrolled{background:var(--bg)ee;backdrop-filter:blur(20px);border-bottom:1px
 .report-modal-overlay.active{display:flex;flex-direction:column;}
 @keyframes modalFadeIn{from{opacity:0;}to{opacity:1;}}
 .report-modal-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0;}
-.report-modal-title{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:10px;}
+.report-modal-title{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:10px;}
 .report-modal-title::before{content:'▶';font-size:8px;}
-.report-modal-close{display:flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;color:var(--text-dim);cursor:pointer;border:1px solid var(--border);padding:7px 16px;background:none;transition:all 0.2s;text-transform:uppercase;}
+.report-modal-close{display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:var(--text-dim);cursor:pointer;border:1px solid var(--border);padding:7px 16px;background:none;transition:all 0.2s;text-transform:uppercase;}
 .report-modal-close:hover{border-color:var(--red);color:var(--red);}
 .report-modal-iframe{flex:1;width:100%;border:none;background:white;}
 .report-modal-loading{position:absolute;inset:60px 0 0 0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
-.report-modal-loading-text{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:0.15em;text-transform:uppercase;}
+.report-modal-loading-text{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:0.15em;text-transform:uppercase;}
 .loading-bar{width:200px;height:2px;background:var(--border);position:relative;overflow:hidden;}
 .loading-bar::after{content:'';position:absolute;left:-50%;top:0;height:100%;width:50%;background:var(--gold);animation:loadingSlide 1.2s ease-in-out infinite;}
 @keyframes loadingSlide{0%{left:-50%;}100%{left:100%;}}
@@ -96,14 +100,14 @@ nav.scrolled{background:var(--bg)ee;backdrop-filter:blur(20px);border-bottom:1px
 footer{padding:60px 48px 40px;background:var(--bg);border-top:1px solid var(--border);}
 .footer-grid{display:flex;justify-content:space-between;max-width:1400px;margin:0 auto;padding-bottom:40px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:40px;}
 .footer-brand{max-width:280px;}
-.footer-brand-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:600;color:var(--text-bright);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;}
+.footer-brand-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;color:var(--text-bright);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;}
 .footer-brand-desc{font-size:13px;color:var(--text-dim);line-height:1.7;}
-.footer-col-title{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;color:var(--text-dim);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:16px;}
+.footer-col-title{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;color:var(--text-dim);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:16px;}
 .footer-col a{display:block;font-size:13px;color:var(--text);text-decoration:none;padding:4px 0;transition:color 0.3s;}
 .footer-col a:hover{color:var(--gold);}
-.footer-bottom{max-width:1400px;margin:24px auto 0;display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-dim);flex-wrap:wrap;gap:12px;}
+.footer-bottom{max-width:1400px;margin:24px auto 0;display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);flex-wrap:wrap;gap:12px;}
 
-@media(max-width:1100px){nav{padding:16px 24px;}.nav-links{display:none;}.reports-grid-wrap,.patreon-interlude,.waitlist-cta{padding-left:24px;padding-right:24px;}.reports-hero{padding:100px 24px 60px;}.patreon-strip{flex-direction:column;align-items:flex-start;gap:20px;}.wl-form{flex-direction:column;}.wl-input{border-right:1px solid var(--border);border-bottom:none;}.wl-btn{padding:15px;}.footer-grid{flex-direction:column;}.footer{padding:40px 24px;}}
+@media(max-width:1100px){nav{padding:16px 24px;}.nav-links{display:none;}.reports-grid-wrap,.patreon-interlude,.waitlist-cta{padding-left:24px;padding-right:24px;}.reports-hero{padding:100px 24px 60px;}.patreon-strip{flex-direction:column;align-items:flex-start;gap:20px;}.wl-form{flex-direction:column;}.wl-input{border-right:1px solid var(--border);border-bottom:none;}.wl-btn{padding:15px;}.footer-grid{flex-direction:column;}}
 </style>
 </head>
 <body>
@@ -133,86 +137,64 @@ footer{padding:60px 48px 40px;background:var(--bg);border-top:1px solid var(--bo
 <div class="reports-grid-wrap">
   <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:20px;max-width:1400px;margin:0 auto;">
 
-    <!-- ★ CYBER SOVEREIGN — NEW ★ -->
     <a href="/cyber-sovereign" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#38d9d960';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(56,217,217,0.08)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
       <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#38d9d9,#4a7cff);"></div>
-      <div style="position:absolute;top:16px;right:16px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;background:rgba(56,217,217,0.1);color:#38d9d9;border:1px solid rgba(56,217,217,0.3);padding:3px 9px;">New</div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#38d9d9;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;">Defense Infrastructure · Cyber · 6 Equities</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:14px;">The Cyber<br/>Sovereign</div>
-      <p style="font-size:14px;color:var(--text);line-height:1.7;margin-bottom:28px;">Trump declared cyberspace a warfighting domain on March 6, 2026. Wall Street still prices these companies as SaaS. The government uses them as defense contractors. Full reclassification thesis — policy doctrine, procurement mechanics, company matrix, and 7 signals to watch.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;">
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Cybersecurity</span>
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Defense</span>
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Reclassification</span>
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Macro</span>
-      </div>
-      <div style="font-size:12px;font-weight:600;color:#38d9d9;letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;">Read Framework <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
+      <div style="position:absolute;top:16px;right:16px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;background:rgba(56,217,217,0.1);color:#38d9d9;border:1px solid rgba(56,217,217,0.3);padding:3px 9px;">New</div>
+      <div class="report-tag" style="color:#38d9d9;">Defense Infrastructure · Cyber · 6 Equities</div>
+      <div class="report-title">The Cyber<br/>Sovereign</div>
+      <p class="report-body">Trump declared cyberspace a warfighting domain on March 6, 2026. Wall Street still prices these companies as SaaS. The government uses them as defense contractors. Full reclassification thesis — policy doctrine, procurement mechanics, company matrix, and 7 signals to watch.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">Cybersecurity</span><span class="report-chip">Defense</span><span class="report-chip">Reclassification</span><span class="report-chip">Macro</span></div>
+      <div class="report-cta" style="color:#38d9d9;">Read Framework <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
     </a>
 
-    <!-- Software Thesis -->
-    <div onclick="openReport('sw')" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#3dd68c60';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(61,214,140,0.08)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);cursor:pointer;">
+    <div onclick="openReport('sw')" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#3dd68c60';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(61,214,140,0.08)'" style="display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);cursor:pointer;">
       <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#3dd68c,#a9e34b);"></div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#3dd68c;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;">Equity Analysis · Software · 7 Dimensions</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:14px;">The Contrarian<br/>Software Thesis</div>
-      <p style="font-size:14px;color:var(--text);line-height:1.7;margin-bottom:28px;">Why IGV fell 16.7% in Q1 2026 — and why that collapse was the opportunity. A full-cycle sector analysis: narrative vs. fundamentals, the Anthropic inflection, and what the data actually said.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;">
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">SaaS</span>
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">AI Narrative</span>
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Contrarian</span>
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Sector Rotation</span>
-      </div>
-      <div style="font-size:12px;font-weight:600;color:#3dd68c;letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;">Read Analysis <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
+      <div class="report-tag" style="color:#3dd68c;">Equity Analysis · Software · 7 Dimensions</div>
+      <div class="report-title">The Contrarian<br/>Software Thesis</div>
+      <p class="report-body">Why IGV fell 16.7% in Q1 2026 — and why that collapse was the opportunity. A full-cycle sector analysis: narrative vs. fundamentals, the Anthropic inflection, and what the data actually said.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">SaaS</span><span class="report-chip">AI Narrative</span><span class="report-chip">Contrarian</span><span class="report-chip">Sector Rotation</span></div>
+      <div class="report-cta" style="color:#3dd68c;">Read Analysis <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
     </div>
 
-    <!-- Portfolio Thesis -->
-    <div onclick="openReport('pt')" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#4a7cff60';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(74,124,255,0.08)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);cursor:pointer;">
+    <div onclick="openReport('pt')" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#4a7cff60';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(74,124,255,0.08)'" style="display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);cursor:pointer;">
       <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#4a7cff,#38d9d9);"></div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#4a7cff;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;">Portfolio Strategy · Leveraged ETFs · 5 Positions</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:14px;">The Amplified<br/>Contrarian</div>
-      <p style="font-size:14px;color:var(--text);line-height:1.7;margin-bottom:28px;">The leveraged portfolio built to capture maximum upside from the software and semiconductor narrative reversal. Deep dives on AVGX, SMH3, CRMG, NOWL, and ZETX — why each position, why the structure.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;">
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">2x Leverage</span>
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Semicon</span>
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Software</span>
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">AI Thesis</span>
-      </div>
-      <div style="font-size:12px;font-weight:600;color:#4a7cff;letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;">Read Thesis <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
+      <div class="report-tag" style="color:#4a7cff;">Portfolio Strategy · Leveraged ETFs · 5 Positions</div>
+      <div class="report-title">The Amplified<br/>Contrarian</div>
+      <p class="report-body">The leveraged portfolio built to capture maximum upside from the software and semiconductor narrative reversal. Deep dives on AVGX, SMH3, CRMG, NOWL, and ZETX — why each position, why the structure.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">2x Leverage</span><span class="report-chip">Semicon</span><span class="report-chip">Software</span><span class="report-chip">AI Thesis</span></div>
+      <div class="report-cta" style="color:#4a7cff;">Read Thesis <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
     </div>
 
-    <!-- Buffett -->
     <a href="/buffett-playbook" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='var(--gold-dim)';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(201,168,76,0.08)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
       <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#c9a84c,#f0d078);"></div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;">Financial Learning · 8 Plays</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:14px;">The Buffett<br/>Investor Playbook</div>
-      <p style="font-size:14px;color:var(--text);line-height:1.7;margin-bottom:28px;">Warren Buffett's entire investment strategy — decoded into 8 actionable plays. Owner mindset, circle of competence, margin of safety, the 4-filter system, and more.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Value Investing</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Moats</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Psychology</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Portfolio</span></div>
-      <div style="font-size:12px;font-weight:600;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;">Read Playbook <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
+      <div class="report-tag" style="color:var(--gold);">Financial Learning · 8 Plays</div>
+      <div class="report-title">The Buffett<br/>Investor Playbook</div>
+      <p class="report-body">Warren Buffett's entire investment strategy — decoded into 8 actionable plays. Owner mindset, circle of competence, margin of safety, the 4-filter system, and more.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">Value Investing</span><span class="report-chip">Moats</span><span class="report-chip">Psychology</span><span class="report-chip">Portfolio</span></div>
+      <div class="report-cta" style="color:var(--gold);">Read Playbook <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
     </a>
 
-    <!-- Iran Conflict -->
     <a href="/iran-conflict" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#ff6b6b40';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(255,107,107,0.06)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
       <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#ff6b6b,#ffa07a);"></div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#ff6b6b;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;">Macro · Geopolitics · 5 Frameworks</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:14px;">Iran Conflict<br/>Investment Frameworks</div>
-      <p style="font-size:14px;color:var(--text);line-height:1.7;margin-bottom:28px;">Five actionable frameworks for navigating the Iran crisis — from bimodal straddles to reconstruction plays and the China squeeze. Built for both scenarios.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Oil</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Geopolitics</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Options</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Macro</span></div>
-      <div style="font-size:12px;font-weight:600;color:#ff6b6b;letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;">Read Report <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
+      <div class="report-tag" style="color:#ff6b6b;">Macro · Geopolitics · 5 Frameworks</div>
+      <div class="report-title">Iran Conflict<br/>Investment Frameworks</div>
+      <p class="report-body">Five actionable frameworks for navigating the Iran crisis — from bimodal straddles to reconstruction plays and the China squeeze. Built for both scenarios.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">Oil</span><span class="report-chip">Geopolitics</span><span class="report-chip">Options</span><span class="report-chip">Macro</span></div>
+      <div class="report-cta" style="color:#ff6b6b;">Read Report <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
     </a>
 
-    <!-- Cash Allocation -->
     <a href="/cash-allocation-bear-markets" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#c0392b40';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(192,57,43,0.06)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
       <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#c0392b,#e74c3c);"></div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#c0392b;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;">Portfolio Strategy · 8 Sections</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:14px;">Cash Allocation<br/>in Bear Markets</div>
-      <p style="font-size:14px;color:var(--text);line-height:1.7;margin-bottom:28px;">Evidence-based analysis of how to size, time, and deploy cash during downturns. Covers the dual-function framework, historical bear market data, and deployment triggers.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Bear Markets</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Cash Strategy</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Risk Mgmt</span></div>
-      <div style="font-size:12px;font-weight:600;color:#c0392b;letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;">Read Analysis <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
+      <div class="report-tag" style="color:#c0392b;">Portfolio Strategy · 8 Sections</div>
+      <div class="report-title">Cash Allocation<br/>in Bear Markets</div>
+      <p class="report-body">Evidence-based analysis of how to size, time, and deploy cash during downturns. Covers the dual-function framework, historical bear market data, and deployment triggers.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">Bear Markets</span><span class="report-chip">Cash Strategy</span><span class="report-chip">Risk Mgmt</span></div>
+      <div class="report-cta" style="color:#c0392b;">Read Analysis <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
     </a>
 
   </div>
 </div>
 
-<!-- ═══ PATREON INTERLUDE — subtle mid-page ═══ -->
 <div class="patreon-interlude reveal">
   <div class="patreon-strip">
     <div class="patreon-strip-left">
@@ -220,78 +202,70 @@ footer{padding:60px 48px 40px;background:var(--bg);border-top:1px solid var(--bo
       <div class="patreon-strip-text">The full analysis lives <em>inside.</em></div>
       <div class="patreon-strip-sub">Weekly intelligence briefs, early frameworks, and the thinking behind the research — on Patreon.</div>
     </div>
-    <a href="https://www.patreon.com/insightinvests" target="_blank" class="patreon-strip-btn">Join on Patreon →</a>
+    <a href="https://www.patreon.com/15273026/join" target="_blank" rel="noopener" class="patreon-strip-btn">Join on Patreon →</a>
   </div>
 </div>
 
-<!-- ═══ REMAINING REPORTS ═══ -->
 <div class="reports-grid-wrap" style="border-top:none;">
   <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:20px;max-width:1400px;margin:0 auto;">
 
-    <!-- Bursa Playbook -->
     <a href="/iran-bursa-playbook" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#e84c1e40';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(232,76,30,0.06)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
       <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#e84c1e,#f0a500);"></div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#e84c1e;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;">Malaysia · Bursa · 8 Stocks · 3 Scenarios</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:14px;">Iran Oil Shock<br/>Bursa Playbook</div>
-      <p style="font-size:14px;color:var(--text);line-height:1.7;margin-bottom:28px;">Three oil price scenarios mapped to 8 Bursa-listed stocks. Which ones win at $80, $120, and $160+ Brent — Malaysia's net exporter edge, CPO correlation, and the honest caveats.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Oil</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Bursa</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Malaysia</span></div>
-      <div style="font-size:12px;font-weight:600;color:#e84c1e;letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;">Read Playbook <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
+      <div class="report-tag" style="color:#e84c1e;">Malaysia · Bursa · 8 Stocks · 3 Scenarios</div>
+      <div class="report-title">Iran Oil Shock<br/>Bursa Playbook</div>
+      <p class="report-body">Three oil price scenarios mapped to 8 Bursa-listed stocks. Which ones win at $80, $120, and $160+ Brent — Malaysia's net exporter edge, CPO correlation, and the honest caveats.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">Oil</span><span class="report-chip">Bursa</span><span class="report-chip">Malaysia</span></div>
+      <div class="report-cta" style="color:#e84c1e;">Read Playbook <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
     </a>
 
-    <!-- Iran Thesis Framework -->
     <a href="/iran-thesis-framework" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#e8450a40';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(232,69,10,0.06)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
       <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#e8450a,#d4a020);"></div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#e8450a;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;">Geopolitical × Macro · Thesis Grade: B+</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:14px;">Iran × Stagflation<br/>Thesis Framework</div>
-      <p style="font-size:14px;color:var(--text);line-height:1.7;margin-bottom:28px;">The full investment thesis chain: Hormuz closes → oil spikes → Fed paralysis → stagflation → 60/40 breaks. Scenario mapping, portfolio positioning, and causal chains.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Stagflation</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Fed Policy</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Hormuz</span></div>
-      <div style="font-size:12px;font-weight:600;color:#e8450a;letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;">Read Framework <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
+      <div class="report-tag" style="color:#e8450a;">Geopolitical × Macro · Thesis Grade: B+</div>
+      <div class="report-title">Iran × Stagflation<br/>Thesis Framework</div>
+      <p class="report-body">The full investment thesis chain: Hormuz closes → oil spikes → Fed paralysis → stagflation → 60/40 breaks. Scenario mapping, portfolio positioning, and causal chains.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">Stagflation</span><span class="report-chip">Fed Policy</span><span class="report-chip">Hormuz</span></div>
+      <div class="report-cta" style="color:#e8450a;">Read Framework <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
     </a>
 
-    <!-- Halal Pharma -->
     <a href="/halal-pharma-200b-framework" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#c9a84c40';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(201,168,76,0.06)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
       <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#c9a84c,#e8c96a);"></div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#c9a84c;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;">Malaysia · Halal Pharma · RM200B Opportunity</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:14px;">The RM200 Billion<br/>Gold Mine</div>
-      <p style="font-size:14px;color:var(--text);line-height:1.7;margin-bottom:28px;">Full framework on Malaysia's halal pharmaceutical opportunity — the gelatin gap, heparin crisis, Indonesia mandate, and the companies positioned to capture a $200B global market.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Halal</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Pharma</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Malaysia</span></div>
-      <div style="font-size:12px;font-weight:600;color:#c9a84c;letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;">Read Framework <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
+      <div class="report-tag" style="color:#c9a84c;">Malaysia · Halal Pharma · RM200B Opportunity</div>
+      <div class="report-title">The RM200 Billion<br/>Gold Mine</div>
+      <p class="report-body">Full framework on Malaysia's halal pharmaceutical opportunity — the gelatin gap, heparin crisis, Indonesia mandate, and the companies positioned to capture a $200B global market.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">Halal</span><span class="report-chip">Pharma</span><span class="report-chip">Malaysia</span></div>
+      <div class="report-cta" style="color:#c9a84c;">Read Framework <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
     </a>
 
-    <!-- Investor Profile -->
     <a href="/investor-profile" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#7b5ea740';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(123,94,167,0.06)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
       <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#7b5ea7,#c9a84c);"></div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#7b5ea7;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;">Interactive Tool · 3 Phases · Personalised Result</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:14px;">Investor Profile<br/>Assessment</div>
-      <p style="font-size:14px;color:var(--text);line-height:1.7;margin-bottom:28px;">Discover your investor archetype through emotional calibration, analytical filtering, and framework alignment. A diagnostic built on how you actually respond to risk, loss, and uncertainty.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Psychology</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Risk Profile</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Interactive</span></div>
-      <div style="font-size:12px;font-weight:600;color:#7b5ea7;letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;">Take the Assessment <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
+      <div class="report-tag" style="color:#7b5ea7;">Interactive Tool · 3 Phases · Personalised Result</div>
+      <div class="report-title">Investor Profile<br/>Assessment</div>
+      <p class="report-body">Discover your investor archetype through emotional calibration, analytical filtering, and framework alignment. A diagnostic built on how you actually respond to risk, loss, and uncertainty.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">Psychology</span><span class="report-chip">Risk Profile</span><span class="report-chip">Interactive</span></div>
+      <div class="report-cta" style="color:#7b5ea7;">Take the Assessment <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
     </a>
 
-    <!-- Member Profile -->
     <a href="/member-profile" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#c9a84c40';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(201,168,76,0.06)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
       <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#c9a84c,#e4cc7a);"></div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;">Private · 12 Questions · ~6 Minutes</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:14px;">Member<br/>Profile</div>
-      <p style="font-size:14px;color:var(--text);line-height:1.7;margin-bottom:28px;">A confidential profile we ask every serious candidate to complete. Your investing relationship, risk tolerance, portfolio reality, and what you're actually looking for — in your own words.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Confidential</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);">Pre-Session</span></div>
-      <div style="font-size:12px;font-weight:600;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;">Begin Profile <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
+      <div class="report-tag" style="color:var(--gold);">Private · 12 Questions · ~6 Minutes</div>
+      <div class="report-title">Member<br/>Profile</div>
+      <p class="report-body">A confidential profile we ask every serious candidate to complete. Your investing relationship, risk tolerance, portfolio reality, and what you're actually looking for — in your own words.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">Confidential</span><span class="report-chip">Pre-Session</span></div>
+      <div class="report-cta" style="color:var(--gold);">Begin Profile <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
     </a>
 
-    <!-- Private Advisory -->
     <a href="/private-advisory" onmouseout="this.style.borderColor='var(--gold-dim)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#c9a84c60';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(201,168,76,0.1)'" style="text-decoration:none;display:block;background:linear-gradient(135deg,var(--bg),#0e0d08);border:1px solid var(--gold-dim);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
       <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#c9a84c,#e4cc7a,#c9a84c);"></div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;">Private · 4 Sessions · Framework + Research</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;color:var(--gold-light);line-height:1.2;margin-bottom:14px;">Private<br/>Advisory</div>
-      <p style="font-size:14px;color:var(--text);line-height:1.7;margin-bottom:28px;">Four deep-dive sessions, a personalised investment framework, ongoing research access, and direct support. For investors ready to move from reading to acting.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--gold-dim);color:var(--gold);">1-on-1</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--gold-dim);color:var(--gold);">Framework</span></div>
-      <div style="font-size:12px;font-weight:600;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;">Learn More <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
+      <div class="report-tag" style="color:var(--gold);">Private · 4 Sessions · Framework + Research</div>
+      <div class="report-title" style="color:var(--gold-light);">Private<br/>Advisory</div>
+      <p class="report-body">Four deep-dive sessions, a personalised investment framework, ongoing research access, and direct support. For investors ready to move from reading to acting.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip" style="border-color:var(--gold-dim);color:var(--gold);">1-on-1</span><span class="report-chip" style="border-color:var(--gold-dim);color:var(--gold);">Framework</span></div>
+      <div class="report-cta" style="color:var(--gold);">Learn More <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
     </a>
 
   </div>
 </div>
 
-<!-- ═══ WAITLIST CTA ═══ -->
 <section class="waitlist-cta" id="waitlist">
   <div class="wl-inner reveal">
     <div class="wl-eyebrow">Private advisory · Limited spots</div>
@@ -342,7 +316,7 @@ footer{padding:60px 48px 40px;background:var(--bg);border-top:1px solid var(--bo
       <a href="/#learning">Learning Tracks</a>
       <a href="#waitlist">1-on-1 Advisory</a>
       <a href="/private-advisory">Private Advisory</a>
-      <a href="https://www.patreon.com/insightinvests" target="_blank">Patreon Community</a>
+      <a href="https://www.patreon.com/15273026/join" target="_blank" rel="noopener">Patreon Community</a>
     </div>
     <div class="footer-col">
       <div class="footer-col-title">Company</div>
@@ -357,7 +331,6 @@ footer{padding:60px 48px 40px;background:var(--bg);border-top:1px solid var(--bo
   </div>
 </footer>
 
-<!-- ═══ MODALS ═══ -->
 <div class="report-modal-overlay" id="modalSW">
   <div class="report-modal-bar">
     <div class="report-modal-title">The Contrarian Software Thesis — Q1 2026 Sector Analysis</div>
@@ -383,63 +356,62 @@ footer{padding:60px 48px 40px;background:var(--bg);border-top:1px solid var(--bo
 </div>
 
 <script>
-/* PASTE YOUR EXISTING SW_B64 VALUE HERE FROM YOUR ORIGINAL reports.html */
 const SW_B64="PASTE_SW_B64_HERE";
-/* PASTE YOUR EXISTING PT_B64 VALUE HERE FROM YOUR ORIGINAL reports.html */
 const PT_B64="PASTE_PT_B64_HERE";
-
-let swLoaded=false, ptLoaded=false;
-
+let swLoaded=false,ptLoaded=false;
 function b64ToDataURI(b64){return 'data:text/html;base64,'+b64;}
-
 function openReport(type){
   document.body.style.overflow='hidden';
   if(type==='sw'){
     document.getElementById('modalSW').classList.add('active');
-    if(!swLoaded){
-      swLoaded=true;
-      const iframe=document.getElementById('iframeSW');
-      const loading=document.getElementById('loadingSW');
-      iframe.onload=()=>{loading.style.display='none';iframe.style.display='block';};
-      iframe.src=b64ToDataURI(SW_B64);
-    }
+    if(!swLoaded){swLoaded=true;const iframe=document.getElementById('iframeSW');const loading=document.getElementById('loadingSW');iframe.onload=()=>{loading.style.display='none';iframe.style.display='block';};iframe.src=b64ToDataURI(SW_B64);}
   } else {
     document.getElementById('modalPT').classList.add('active');
-    if(!ptLoaded){
-      ptLoaded=true;
-      const iframe=document.getElementById('iframePT');
-      const loading=document.getElementById('loadingPT');
-      iframe.onload=()=>{loading.style.display='none';iframe.style.display='block';};
-      iframe.src=b64ToDataURI(PT_B64);
-    }
+    if(!ptLoaded){ptLoaded=true;const iframe=document.getElementById('iframePT');const loading=document.getElementById('loadingPT');iframe.onload=()=>{loading.style.display='none';iframe.style.display='block';};iframe.src=b64ToDataURI(PT_B64);}
   }
 }
-
 function closeReport(){
   document.getElementById('modalSW').classList.remove('active');
   document.getElementById('modalPT').classList.remove('active');
   document.body.style.overflow='';
 }
-
 document.addEventListener('keydown',(e)=>{if(e.key==='Escape')closeReport();});
 
 const revealEls=document.querySelectorAll('.reveal');
-const observer=new IntersectionObserver((entries)=>{
-  entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible');});
-},{threshold:0.1,rootMargin:'0px 0px -30px 0px'});
+const observer=new IntersectionObserver((entries)=>{entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible');});},{threshold:0.1,rootMargin:'0px 0px -30px 0px'});
 revealEls.forEach(el=>observer.observe(el));
 
-window.addEventListener('scroll',()=>{
-  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>60);
-});
+window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>60);});
 
-document.getElementById('wlForm').addEventListener('submit',function(e){
+document.getElementById('wlForm').addEventListener('submit', async function(e) {
   e.preventDefault();
-  const btn=document.getElementById('wlBtn');
-  btn.textContent='On the list ✓';
-  btn.style.background='#3dd68c';
-  btn.style.color='#08090c';
-  btn.disabled=true;
+  const btn = document.getElementById('wlBtn');
+  const email = document.getElementById('wlEmail').value.trim();
+  if (!email) return;
+  btn.textContent = 'Joining...';
+  btn.disabled = true;
+  try {
+    const res = await fetch('https://formspree.io/f/xjgabnak', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, source: 'reports.html waitlist' })
+    });
+    if (res.ok) {
+      btn.textContent = "You're in \u2713";
+      btn.style.background = '#3dd68c';
+      btn.style.color = '#08090c';
+      document.getElementById('wlEmail').value = '';
+    } else {
+      btn.textContent = 'Try again';
+      btn.disabled = false;
+      setTimeout(() => { btn.textContent = 'Join Waitlist'; }, 3000);
+    }
+  } catch(err) {
+    btn.textContent = 'Try again';
+    btn.disabled = false;
+    setTimeout(() => { btn.textContent = 'Join Waitlist'; }, 3000);
+  }
 });
 </script>
+</body>
 </html>
