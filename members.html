@@ -4,496 +4,405 @@
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <title>Members — Insight Invest</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg: #08090c;
-      --bg2: #0d0f14;
-      --bg3: #13151d;
-      --surface: #181b24;
-      --border: #222533;
-      --text: #8a91aa;
-      --text-bright: #e4e8f2;
-      --text-dim: #444a60;
-      --gold: #c9a84c;
-      --gold-light: #dfc06e;
-      --gold-dim: #7a6028;
-      --gold-faint: rgba(201,168,76,0.06);
-      --blue: #4a7cff;
-      --green: #3dd68c;
-      --red: #e05555;
-      --purple: #9b7ff4;
+      --bg:#08090c; --bg2:#0d0f14; --bg3:#13151d;
+      --border:#222533;
+      --text:#8a91aa; --text-bright:#e4e8f2; --text-dim:#444a60;
+      --gold:#c9a84c; --gold-dim:#7a6028; --gold-faint:rgba(201,168,76,0.06);
+      --blue:#4a7cff; --green:#3dd68c; --red:#e05555; --purple:#9b7ff4;
+      --f-xs:11px; --f-sm:13px; --f-base:15px; --f-md:17px;
+      --f-lg:21px; --f-xl:26px; --f-2xl:34px; --f-hero:clamp(46px,6.5vw,80px);
     }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:#1e2130 var(--bg)}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#1e2130;border-radius:2px}
+    body{font-family:'Source Sans 3',sans-serif;font-size:var(--f-base);font-weight:400;line-height:1.65;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+    body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+    h1,h2,h3,.serif{font-family:'Libre Baskerville',Georgia,serif;font-weight:400;line-height:1.15;color:var(--text-bright)}
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: #1e2130 var(--bg); }
-    ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: #1e2130; border-radius: 2px; }
-    body { font-family: 'Syne', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
-    body::before { content: ''; position: fixed; inset: 0; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9999; }
+    /* GATE */
+    #gate{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;align-items:center;justify-content:center}
+    #gate.hidden{display:none}
+    .gate-wrap{width:100%;max-width:380px;padding:0 32px;display:flex;flex-direction:column;align-items:center;animation:gateIn .7s cubic-bezier(.16,1,.3,1) forwards}
+    @keyframes gateIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+    .gate-logo{display:flex;align-items:center;gap:14px;margin-bottom:52px}
+    .gate-logo-mark{width:38px;height:38px;border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Libre Baskerville',serif;font-size:18px;color:var(--gold)}
+    .gate-logo-text{font-size:var(--f-sm);font-weight:600;color:var(--text-bright);letter-spacing:.1em;text-transform:uppercase}
+    .gate-eyebrow{font-size:var(--f-xs);font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:14px;width:100%}
+    .gate-eyebrow::before,.gate-eyebrow::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent)}
+    .gate-heading{font-family:'Libre Baskerville',serif;font-size:var(--f-2xl);font-weight:400;color:var(--text-bright);text-align:center;line-height:1.1;margin-bottom:10px}
+    .gate-heading em{font-style:italic;color:var(--gold)}
+    .gate-sub{font-size:var(--f-sm);font-weight:300;color:var(--text-dim);text-align:center;line-height:1.6;margin-bottom:36px}
+    .gate-field{width:100%;background:var(--bg2);border:1px solid var(--border);display:flex;align-items:center;transition:border-color .3s;margin-bottom:10px}
+    .gate-field:focus-within{border-color:var(--gold-dim)}
+    .gate-field.error{border-color:var(--red);animation:shake .4s ease}
+    @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+    .gate-field-icon{padding:0 14px;color:var(--text-dim);display:flex;align-items:center}
+    .gate-input{flex:1;background:none;border:none;outline:none;font-family:'Source Sans 3',sans-serif;font-size:var(--f-base);font-weight:400;color:var(--text-bright);padding:15px 0}
+    .gate-input::placeholder{color:var(--text-dim)}
+    .gate-toggle{background:none;border:none;cursor:pointer;padding:0 14px;color:var(--text-dim);display:flex;align-items:center;transition:color .3s}
+    .gate-toggle:hover{color:var(--text)}
+    .gate-btn{width:100%;padding:14px 32px;background:var(--gold);color:var(--bg);font-size:var(--f-xs);font-weight:700;letter-spacing:.16em;text-transform:uppercase;border:none;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+    .gate-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent,rgba(255,255,255,.1));transform:translateX(-100%);transition:transform .5s}
+    .gate-btn:hover::before{transform:translateX(100%)}
+    .gate-btn:hover{box-shadow:0 6px 24px rgba(201,168,76,.28)}
+    .gate-btn:disabled{opacity:.5;cursor:not-allowed}
+    .gate-error-msg{font-size:var(--f-xs);font-weight:500;color:var(--red);text-align:center;margin-top:10px;opacity:0;transition:opacity .3s}
+    .gate-error-msg.visible{opacity:1}
+    .gate-footer{margin-top:36px;font-size:var(--f-xs);color:var(--text-dim);text-align:center}
+    .gate-footer a{color:var(--gold-dim);text-decoration:none;transition:color .3s}
+    .gate-footer a:hover{color:var(--gold)}
 
-    /* ─── PASSWORD GATE ─── */
-    #gate {
-      position: fixed; inset: 0; z-index: 1000;
-      background: var(--bg);
-      display: flex; align-items: center; justify-content: center;
-    }
-    #gate.hidden { display: none; }
-
-    .gate-wrap {
-      width: 100%; max-width: 400px; padding: 0 32px;
-      display: flex; flex-direction: column; align-items: center;
-      animation: gateIn 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
-    }
-    @keyframes gateIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-    .gate-logo { display: flex; align-items: center; gap: 14px; margin-bottom: 56px; }
-    .gate-logo-mark { width: 40px; height: 40px; border: 1.5px solid var(--gold); display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--gold); }
-    .gate-logo-text { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 600; color: var(--text-bright); letter-spacing: 0.14em; text-transform: uppercase; }
-
-    .gate-eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; width: 100%; }
-    .gate-eyebrow::before, .gate-eyebrow::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-dim), transparent); }
-
-    .gate-heading { font-family: 'Cormorant Garamond', serif; font-size: 40px; font-weight: 300; color: var(--text-bright); text-align: center; line-height: 1.1; letter-spacing: -0.01em; margin-bottom: 10px; }
-    .gate-heading em { font-style: italic; color: var(--gold); }
-    .gate-sub { font-size: 13px; color: var(--text-dim); text-align: center; line-height: 1.6; margin-bottom: 40px; }
-
-    .gate-field { width: 100%; background: var(--bg2); border: 1px solid var(--border); display: flex; align-items: center; transition: border-color 0.3s; margin-bottom: 12px; }
-    .gate-field:focus-within { border-color: var(--gold-dim); }
-    .gate-field.error { border-color: var(--red); animation: shake 0.4s ease; }
-    @keyframes shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-6px)} 40%,80%{transform:translateX(6px)} }
-
-    .gate-field-icon { padding: 0 16px; color: var(--text-dim); display: flex; align-items: center; }
-    .gate-input { flex: 1; background: none; border: none; outline: none; font-family: 'IBM Plex Mono', monospace; font-size: 14px; letter-spacing: 0.08em; color: var(--text-bright); padding: 17px 0; }
-    .gate-input::placeholder { color: var(--text-dim); }
-    .gate-toggle { background: none; border: none; cursor: pointer; padding: 0 16px; color: var(--text-dim); display: flex; align-items: center; transition: color 0.3s; }
-    .gate-toggle:hover { color: var(--text); }
-
-    .gate-btn { width: 100%; padding: 15px 32px; background: var(--gold); color: var(--bg); font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; border: none; cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; }
-    .gate-btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, transparent, rgba(255,255,255,0.12)); transform: translateX(-100%); transition: transform 0.5s; }
-    .gate-btn:hover::before { transform: translateX(100%); }
-    .gate-btn:hover { box-shadow: 0 6px 28px rgba(201,168,76,0.3); }
-    .gate-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    .gate-error-msg { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: var(--red); text-align: center; margin-top: 12px; opacity: 0; transition: opacity 0.3s; }
-    .gate-error-msg.visible { opacity: 1; }
-
-    .gate-footer { margin-top: 40px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 0.08em; text-align: center; }
-    .gate-footer a { color: var(--gold-dim); text-decoration: none; transition: color 0.3s; }
-    .gate-footer a:hover { color: var(--gold); }
-
-    /* ─── MAIN CONTENT ─── */
-    #content { display: none; }
-    #content.visible { display: block; }
+    /* CONTENT */
+    #content{display:none}
+    #content.visible{display:block}
 
     /* NAV */
-    nav { position: fixed; top: 0; left: 0; right: 0; padding: 20px 52px; display: flex; align-items: center; justify-content: space-between; z-index: 100; background: linear-gradient(180deg, var(--bg) 0%, transparent 100%); transition: all 0.4s; }
-    nav.scrolled { background: rgba(8,9,12,0.95); backdrop-filter: blur(24px); border-bottom: 1px solid var(--border); padding: 14px 52px; }
-    .nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; }
-    .nav-logo-mark { width: 36px; height: 36px; border: 1.5px solid var(--gold); display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: var(--gold); }
-    .nav-logo-text { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; color: var(--text-bright); letter-spacing: 0.14em; text-transform: uppercase; }
-    .nav-links { display: flex; gap: 36px; align-items: center; }
-    .nav-links a { font-size: 11px; font-weight: 500; color: var(--text-dim); text-decoration: none; letter-spacing: 0.12em; text-transform: uppercase; transition: color 0.3s; position: relative; }
-    .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: var(--gold); transition: width 0.3s; }
-    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
-    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
-    .nav-cta { padding: 9px 22px !important; border: 1px solid var(--gold-dim) !important; color: var(--gold) !important; font-size: 10px !important; letter-spacing: 0.14em !important; transition: all 0.3s !important; }
-    .nav-cta:hover { background: var(--gold) !important; color: var(--bg) !important; }
+    nav{position:fixed;top:0;left:0;right:0;padding:20px 52px;display:flex;align-items:center;justify-content:space-between;z-index:100;background:linear-gradient(180deg,var(--bg) 0%,transparent 100%);transition:all .4s}
+    nav.scrolled{background:rgba(8,9,12,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 52px}
+    .nav-logo{display:flex;align-items:center;gap:13px;text-decoration:none}
+    .nav-logo-mark{width:34px;height:34px;border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Libre Baskerville',serif;font-size:17px;color:var(--gold)}
+    .nav-logo-text{font-size:var(--f-sm);font-weight:600;color:var(--text-bright);letter-spacing:.1em;text-transform:uppercase}
+    .nav-links{display:flex;gap:34px;align-items:center}
+    .nav-links a{font-size:var(--f-xs);font-weight:600;color:var(--text-dim);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:color .25s;position:relative}
+    .nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--gold);transition:width .25s}
+    .nav-links a:hover,.nav-links a.active{color:var(--gold)}
+    .nav-links a:hover::after,.nav-links a.active::after{width:100%}
+    .nav-cta{padding:8px 20px !important;border:1px solid var(--gold-dim) !important;color:var(--gold) !important;transition:all .3s !important}
+    .nav-cta:hover{background:var(--gold) !important;color:var(--bg) !important}
 
     /* PAGE HEADER */
-    .page-header { padding: 148px 52px 88px; position: relative; overflow: hidden; border-bottom: 1px solid var(--border); }
-    .ph-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(34,37,51,0.16) 1px, transparent 1px), linear-gradient(90deg, rgba(34,37,51,0.16) 1px, transparent 1px); background-size: 64px 64px; mask-image: radial-gradient(ellipse 70% 90% at 15% 50%, black 10%, transparent 70%); }
-    .ph-orb-1 { position: absolute; width: 480px; height: 480px; border-radius: 50%; filter: blur(100px); background: rgba(201,168,76,0.055); top: -15%; right: 5%; pointer-events: none; }
-    .ph-orb-2 { position: absolute; width: 320px; height: 320px; border-radius: 50%; filter: blur(80px); background: rgba(155,127,244,0.04); bottom: -10%; left: 30%; pointer-events: none; }
-    .ph-content { position: relative; z-index: 2; max-width: 720px; }
-    .ph-eyebrow { display: inline-flex; align-items: center; gap: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); margin-bottom: 28px; }
-    .ph-eyebrow-line { width: 36px; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); }
-    .ph-h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(46px, 6.5vw, 88px); font-weight: 300; color: var(--text-bright); line-height: 1.0; letter-spacing: -0.025em; margin-bottom: 22px; }
-    .ph-h1 em { font-style: italic; color: var(--gold); }
-    .ph-sub { font-size: 15px; color: var(--text); line-height: 1.75; max-width: 460px; margin-bottom: 32px; }
-    .ph-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(61,214,140,0.06); border: 1px solid rgba(61,214,140,0.18); padding: 7px 16px; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--green); }
-    .ph-badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--green); animation: liveDot 2.5s ease-in-out infinite; }
-    @keyframes liveDot { 0%,100%{opacity:0.3} 50%{opacity:1} }
+    .page-header{padding:148px 52px 88px;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+    .ph-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(34,37,51,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(34,37,51,.16) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 70% 90% at 15% 50%,black 10%,transparent 70%)}
+    .ph-orb-1{position:absolute;width:480px;height:480px;border-radius:50%;filter:blur(100px);background:rgba(201,168,76,.055);top:-15%;right:5%;pointer-events:none}
+    .ph-orb-2{position:absolute;width:320px;height:320px;border-radius:50%;filter:blur(80px);background:rgba(155,127,244,.04);bottom:-10%;left:30%;pointer-events:none}
+    .ph-content{position:relative;z-index:2;max-width:680px}
+    .ph-eyebrow{display:inline-flex;align-items:center;gap:12px;font-size:var(--f-xs);font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:26px}
+    .ph-eyebrow-line{width:32px;height:1px;background:linear-gradient(90deg,var(--gold),transparent)}
+    .ph-h1{font-family:'Libre Baskerville',serif;font-size:var(--f-hero);font-weight:400;color:var(--text-bright);line-height:1.05;letter-spacing:-.01em;margin-bottom:20px}
+    .ph-h1 em{font-style:italic;color:var(--gold)}
+    .ph-sub{font-size:var(--f-md);font-weight:300;color:var(--text);line-height:1.75;max-width:480px;margin-bottom:30px}
+    .ph-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(61,214,140,.06);border:1px solid rgba(61,214,140,.18);padding:7px 16px;font-size:var(--f-xs);font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--green)}
+    .ph-badge::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);animation:liveDot 2.5s ease-in-out infinite}
+    @keyframes liveDot{0%,100%{opacity:.3}50%{opacity:1}}
 
     /* SECTION */
-    .section { padding: 88px 52px; }
-    .section-label { display: flex; align-items: center; gap: 16px; margin-bottom: 48px; }
-    .section-label-text { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-dim); white-space: nowrap; }
-    .section-label-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
-    .section-label-count { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.12em; color: var(--text-dim); }
+    .section{padding:88px 52px}
+    .section-label{display:flex;align-items:center;gap:16px;margin-bottom:44px}
+    .section-label-text{font-size:var(--f-xs);font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);white-space:nowrap}
+    .section-label-line{flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+    .section-label-count{font-size:var(--f-xs);font-weight:500;color:var(--text-dim)}
 
-    /* TOOLS GRID */
-    .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); }
-    .tool-card { background: var(--bg2); padding: 40px 36px; position: relative; overflow: hidden; text-decoration: none; display: block; transition: background 0.3s; }
-    .tool-card:hover { background: var(--bg3); }
-    .tool-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--tc-color, var(--gold)); transform: scaleX(0); transform-origin: left; transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); }
-    .tool-card:hover::after { transform: scaleX(1); }
+    /* TOOLS */
+    .tools-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
+    .tool-card{background:var(--bg2);padding:40px 36px;position:relative;overflow:hidden;text-decoration:none;display:block;transition:background .3s}
+    .tool-card:hover{background:var(--bg3)}
+    .tool-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--tc-color,var(--gold));transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+    .tool-card:hover::after{transform:scaleX(1)}
+    .tc-number{font-size:var(--f-xs);font-weight:600;letter-spacing:.12em;color:var(--text-dim);margin-bottom:26px;display:flex;align-items:center;gap:10px}
+    .tc-number-line{width:18px;height:1px;background:var(--tc-color,var(--gold));opacity:.5}
+    .tc-icon{width:40px;height:40px;border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;margin-bottom:20px;color:var(--tc-color,var(--gold));transition:border-color .3s}
+    .tool-card:hover .tc-icon{border-color:var(--tc-color,var(--gold))}
+    .tc-tag{font-size:var(--f-xs);font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--tc-color,var(--gold));margin-bottom:8px;opacity:.7}
+    .tc-name{font-family:'Libre Baskerville',serif;font-size:var(--f-xl);font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:12px}
+    .tc-desc{font-size:var(--f-sm);font-weight:400;color:var(--text);line-height:1.7;margin-bottom:28px}
+    .tc-link{display:inline-flex;align-items:center;gap:9px;font-size:var(--f-xs);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--tc-color,var(--gold));transition:gap .3s}
+    .tool-card:hover .tc-link{gap:13px}
+    .tc-glow{position:absolute;width:240px;height:240px;border-radius:50%;filter:blur(70px);bottom:-80px;right:-60px;background:var(--tc-color,var(--gold));opacity:.03;pointer-events:none;transition:opacity .5s}
+    .tool-card:hover .tc-glow{opacity:.07}
 
-    .tc-number { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--text-dim); margin-bottom: 28px; display: flex; align-items: center; gap: 10px; }
-    .tc-number-line { width: 20px; height: 1px; background: var(--tc-color, var(--gold)); opacity: 0.5; }
-    .tc-icon { width: 42px; height: 42px; border: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; margin-bottom: 22px; color: var(--tc-color, var(--gold)); transition: border-color 0.3s; }
-    .tool-card:hover .tc-icon { border-color: var(--tc-color, var(--gold)); }
-    .tc-tag { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--tc-color, var(--gold)); margin-bottom: 10px; opacity: 0.7; }
-    .tc-name { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; color: var(--text-bright); line-height: 1.15; margin-bottom: 12px; }
-    .tc-desc { font-size: 13px; color: var(--text); line-height: 1.7; margin-bottom: 32px; }
-    .tc-link { display: inline-flex; align-items: center; gap: 10px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--tc-color, var(--gold)); transition: gap 0.3s; }
-    .tool-card:hover .tc-link { gap: 14px; }
-    .tc-glow { position: absolute; width: 240px; height: 240px; border-radius: 50%; filter: blur(70px); bottom: -80px; right: -60px; background: var(--tc-color, var(--gold)); opacity: 0.03; pointer-events: none; transition: opacity 0.5s; }
-    .tool-card:hover .tc-glow { opacity: 0.07; }
+    /* STOCK BRIEFS */
+    .briefs-section{background:var(--bg);border-top:1px solid var(--border)}
+    .briefs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
+    .brief-card{background:var(--bg2);padding:34px 30px;position:relative;overflow:hidden;text-decoration:none;display:block;transition:background .3s}
+    .brief-card:hover{background:var(--bg3)}
+    .brief-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--bc-color,var(--gold));transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+    .brief-card:hover::after{transform:scaleX(1)}
+    .bc-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
+    .bc-ticker{font-size:var(--f-lg);font-weight:600;letter-spacing:.04em;color:var(--bc-color,var(--gold))}
+    .bc-rating{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border:1px solid}
+    .rating-buy{color:var(--green);border-color:rgba(61,214,140,.3);background:rgba(61,214,140,.06)}
+    .bc-name{font-family:'Libre Baskerville',serif;font-size:var(--f-lg);font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:10px}
+    .bc-thesis{font-size:var(--f-sm);font-weight:400;color:var(--text);line-height:1.7;margin-bottom:22px}
+    .bc-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:22px}
+    .bc-stat{background:rgba(255,255,255,.02);border:1px solid var(--border);padding:10px 12px}
+    .bc-stat-val{font-size:var(--f-md);font-weight:600;color:var(--text-bright);margin-bottom:3px}
+    .bc-stat-lbl{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim)}
+    .bc-footer{display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px solid var(--border)}
+    .bc-date{font-size:var(--f-xs);font-weight:400;color:var(--text-dim)}
+    .bc-cta{display:inline-flex;align-items:center;gap:7px;font-size:var(--f-xs);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--bc-color,var(--gold));transition:gap .3s}
+    .brief-card:hover .bc-cta{gap:11px}
+    .brief-card-soon{background:var(--bg);padding:34px 30px;position:relative;overflow:hidden;opacity:.38}
+    .bc-soon-label{font-size:var(--f-xs);font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);border:1px solid var(--border);display:inline-block;padding:4px 10px;margin-bottom:18px}
+    .bc-soon-name{font-family:'Libre Baskerville',serif;font-size:var(--f-lg);font-weight:400;font-style:italic;color:var(--text-dim);line-height:1.3}
 
     /* UPDATES */
-    .updates-section { background: var(--bg2); border-top: 1px solid var(--border); }
-    .updates-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); }
-    .update-card { background: var(--bg); padding: 36px 32px; position: relative; overflow: hidden; }
-    .update-card::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 1px; background: var(--uc-color, var(--gold)); transform: scaleY(0); transform-origin: top; transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); }
-    .update-card:hover::before { transform: scaleY(1); }
+    .updates-section{background:var(--bg2);border-top:1px solid var(--border)}
+    .updates-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
+    .update-card{background:var(--bg);padding:34px 30px;position:relative;overflow:hidden}
+    .update-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:1px;background:var(--uc-color,var(--gold));transform:scaleY(0);transform-origin:top;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+    .update-card:hover::before{transform:scaleY(1)}
+    .uc-meta{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+    .uc-cat{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px}
+    .cat-strategy{background:rgba(155,127,244,.07);color:var(--purple);border:1px solid rgba(155,127,244,.18)}
+    .cat-trade{background:rgba(61,214,140,.07);color:var(--green);border:1px solid rgba(61,214,140,.18)}
+    .uc-date{font-size:11px;font-weight:400;color:var(--text-dim);margin-left:auto}
+    .uc-new{background:var(--green);color:var(--bg);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px}
+    .uc-title{font-family:'Libre Baskerville',serif;font-size:var(--f-lg);font-weight:400;color:var(--text-bright);line-height:1.3;margin-bottom:12px}
+    .uc-excerpt{font-size:var(--f-sm);font-weight:400;color:var(--text);line-height:1.7;margin-bottom:24px}
+    .uc-footer{display:flex;align-items:center;justify-content:space-between;padding-top:18px;border-top:1px solid var(--border)}
+    .uc-author{display:flex;align-items:center;gap:10px}
+    .uc-avatar{width:26px;height:26px;border:1px solid var(--gold-dim);display:flex;align-items:center;justify-content:center;font-family:'Libre Baskerville',serif;font-size:13px;color:var(--gold)}
+    .uc-author-name{font-size:var(--f-xs);font-weight:600;color:var(--text-dim);letter-spacing:.04em}
+    .uc-read{display:inline-flex;align-items:center;gap:7px;font-size:var(--f-xs);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);text-decoration:none;transition:gap .3s}
+    .uc-read:hover{gap:11px}
 
-    .uc-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
-    .uc-cat { font-family: 'IBM Plex Mono', monospace; font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; padding: 4px 10px; }
-    .cat-strategy { background: rgba(155,127,244,0.07); color: var(--purple); border: 1px solid rgba(155,127,244,0.18); }
-    .cat-trade { background: rgba(61,214,140,0.07); color: var(--green); border: 1px solid rgba(61,214,140,0.18); }
-    .uc-date { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-dim); letter-spacing: 0.08em; margin-left: auto; }
-    .uc-new { background: var(--green); color: var(--bg); font-family: 'IBM Plex Mono', monospace; font-size: 7px; letter-spacing: 0.14em; padding: 3px 7px; font-weight: 700; text-transform: uppercase; }
-
-    .uc-title { font-family: 'Cormorant Garamond', serif; font-size: 21px; font-weight: 600; color: var(--text-bright); line-height: 1.3; margin-bottom: 14px; }
-    .uc-excerpt { font-size: 13px; color: var(--text); line-height: 1.7; margin-bottom: 28px; }
-    .uc-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 20px; border-top: 1px solid var(--border); }
-    .uc-author { display: flex; align-items: center; gap: 10px; }
-    .uc-avatar { width: 26px; height: 26px; border: 1px solid var(--gold-dim); display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 13px; color: var(--gold); }
-    .uc-author-name { font-size: 11px; font-weight: 600; color: var(--text-dim); }
-    .uc-read { display: inline-flex; align-items: center; gap: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); text-decoration: none; transition: gap 0.3s; }
-    .uc-read:hover { gap: 12px; }
-
-    /* PATREON STRIP */
-    .patreon-strip { margin: 0 52px 80px; background: var(--gold-faint); border: 1px solid rgba(201,168,76,0.14); padding: 36px 44px; display: flex; align-items: center; justify-content: space-between; gap: 32px; }
-    .ps-text h3 { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: var(--text-bright); margin-bottom: 6px; }
-    .ps-text p { font-size: 13px; color: var(--text); line-height: 1.6; }
-    .ps-btn { display: inline-flex; align-items: center; gap: 10px; padding: 13px 30px; background: var(--gold); color: var(--bg); font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; white-space: nowrap; transition: all 0.3s; }
-    .ps-btn:hover { box-shadow: 0 6px 28px rgba(201,168,76,0.28); transform: translateY(-1px); }
+    /* PATREON */
+    .patreon-strip{margin:0 52px 80px;background:var(--gold-faint);border:1px solid rgba(201,168,76,.14);padding:36px 44px;display:flex;align-items:center;justify-content:space-between;gap:32px}
+    .ps-text h3{font-family:'Libre Baskerville',serif;font-size:var(--f-xl);font-weight:400;color:var(--text-bright);margin-bottom:6px}
+    .ps-text p{font-size:var(--f-sm);font-weight:400;color:var(--text);line-height:1.6}
+    .ps-btn{display:inline-flex;align-items:center;gap:10px;padding:13px 28px;background:var(--gold);color:var(--bg);font-size:var(--f-xs);font-weight:700;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;white-space:nowrap;transition:all .3s}
+    .ps-btn:hover{box-shadow:0 6px 24px rgba(201,168,76,.28);transform:translateY(-1px)}
 
     /* FOOTER */
-    footer { border-top: 1px solid var(--border); padding: 36px 52px; display: flex; align-items: center; justify-content: space-between; }
-    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 17px; color: var(--gold); font-weight: 400; }
-    .footer-links { display: flex; gap: 28px; }
-    .footer-links a { font-size: 11px; color: var(--text-dim); text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.3s; }
-    .footer-links a:hover { color: var(--gold); }
-    .footer-copy { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-dim); }
+    footer{border-top:1px solid var(--border);padding:32px 52px;display:flex;align-items:center;justify-content:space-between}
+    .footer-logo{font-family:'Libre Baskerville',serif;font-size:var(--f-md);color:var(--gold);font-weight:400}
+    .footer-links{display:flex;gap:28px}
+    .footer-links a{font-size:var(--f-xs);font-weight:600;color:var(--text-dim);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:color .3s}
+    .footer-links a:hover{color:var(--gold)}
+    .footer-copy{font-size:var(--f-xs);font-weight:400;color:var(--text-dim)}
 
     /* REVEAL */
-    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal{opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .65s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
 
-    @media (max-width: 900px) {
-      nav, nav.scrolled { padding: 16px 24px; }
-      .page-header { padding: 120px 24px 64px; }
-      .section { padding: 64px 24px; }
-      .tools-grid { grid-template-columns: 1fr; }
-      .updates-grid { grid-template-columns: 1fr; }
-      .patreon-strip { margin: 0 24px 60px; flex-direction: column; padding: 28px 24px; }
-      footer { flex-direction: column; gap: 20px; padding: 32px 24px; text-align: center; }
-      .footer-links { flex-wrap: wrap; justify-content: center; }
+    @media(max-width:900px){
+      nav,nav.scrolled{padding:16px 24px}
+      .page-header{padding:120px 24px 64px}
+      .section{padding:64px 24px}
+      .tools-grid,.updates-grid,.briefs-grid{grid-template-columns:1fr}
+      .patreon-strip{margin:0 24px 60px;flex-direction:column;padding:28px 24px}
+      footer{flex-direction:column;gap:18px;padding:28px 24px;text-align:center}
+      .footer-links{flex-wrap:wrap;justify-content:center}
     }
   </style>
 </head>
 <body>
 
-  <!-- ═══ PASSWORD GATE ═══ -->
-  <div id="gate">
-    <div class="gate-wrap">
-      <div class="gate-logo">
-        <div class="gate-logo-mark">I</div>
-        <span class="gate-logo-text">Insight Invest</span>
+<div id="gate">
+  <div class="gate-wrap">
+    <div class="gate-logo">
+      <div class="gate-logo-mark">I</div>
+      <span class="gate-logo-text">Insight Invest</span>
+    </div>
+    <div class="gate-eyebrow">Member Access</div>
+    <h1 class="gate-heading">Private <em>Portal</em></h1>
+    <p class="gate-sub">Enter your access key to continue.</p>
+    <div class="gate-field" id="gateField">
+      <div class="gate-field-icon">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="6" width="10" height="7" rx="1" stroke="currentColor" stroke-width="1.3"/><path d="M4.5 6V4a2.5 2.5 0 015 0v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
       </div>
+      <input class="gate-input" id="gateInput" type="password" placeholder="Access key" autocomplete="current-password" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <button class="gate-toggle" type="button" onclick="togglePw()">
+        <svg id="eyeIcon" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7s2.333-4 6-4 6 4 6 4-2.333 4-6 4-6-4-6-4z" stroke="currentColor" stroke-width="1.3"/><circle cx="7" cy="7" r="1.8" stroke="currentColor" stroke-width="1.3"/></svg>
+      </button>
+    </div>
+    <button class="gate-btn" id="gateBtn" onclick="checkPw()">Enter</button>
+    <div class="gate-error-msg" id="gateError">Incorrect access key. Please try again.</div>
+    <div class="gate-footer">Not a member?&nbsp;&nbsp;<a href="https://www.patreon.com" target="_blank" rel="noopener">Join on Patreon →</a></div>
+  </div>
+</div>
 
-      <div class="gate-eyebrow">Member Access</div>
-      <h1 class="gate-heading">Private <em>Portal</em></h1>
-      <p class="gate-sub">Enter your access key to continue.</p>
+<div id="content">
 
-      <div class="gate-field" id="gateField">
-        <div class="gate-field-icon">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <rect x="2" y="6" width="10" height="7" rx="1" stroke="currentColor" stroke-width="1.3"/>
-            <path d="M4.5 6V4a2.5 2.5 0 015 0v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <input class="gate-input" id="gateInput" type="password" placeholder="Access key" autocomplete="current-password" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-        <button class="gate-toggle" id="gateToggle" type="button" onclick="togglePw()">
-          <svg id="eyeIcon" width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M1 7s2.333-4 6-4 6 4 6 4-2.333 4-6 4-6-4-6-4z" stroke="currentColor" stroke-width="1.3"/>
-            <circle cx="7" cy="7" r="1.8" stroke="currentColor" stroke-width="1.3"/>
-          </svg>
-        </button>
-      </div>
+  <nav id="mainNav">
+    <a class="nav-logo" href="index.html">
+      <div class="nav-logo-mark">I</div>
+      <span class="nav-logo-text">Insight Invest</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="reports.html">Reports</a>
+      <a href="members.html" class="active">Members</a>
+      <a href="index.html#waitlist" class="nav-cta">Join Waitlist</a>
+    </div>
+  </nav>
 
-      <button class="gate-btn" id="gateBtn" onclick="checkPw()">Enter</button>
-      <div class="gate-error-msg" id="gateError">Incorrect access key. Please try again.</div>
-
-      <div class="gate-footer">
-        Not a member?&nbsp;&nbsp;<a href="https://www.patreon.com" target="_blank" rel="noopener">Join on Patreon →</a>
-      </div>
+  <div class="page-header">
+    <div class="ph-grid"></div><div class="ph-orb-1"></div><div class="ph-orb-2"></div>
+    <div class="ph-content">
+      <div class="ph-eyebrow"><span class="ph-eyebrow-line"></span>Member Access</div>
+      <h1 class="ph-h1">Your investing<br><em>edge, unlocked.</em></h1>
+      <p class="ph-sub">Exclusive tools, stock briefs, and real-time intelligence — built for members who think differently about markets.</p>
+      <div class="ph-badge">Patreon Exclusive · Active Session</div>
     </div>
   </div>
 
-  <!-- ═══ MAIN CONTENT ═══ -->
-  <div id="content">
-
-    <nav id="mainNav">
-      <a class="nav-logo" href="index.html">
-        <div class="nav-logo-mark">I</div>
-        <span class="nav-logo-text">Insight Invest</span>
-      </a>
-      <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="reports.html">Reports</a>
-        <a href="members.html" class="active">Members</a>
-        <a href="index.html#waitlist" class="nav-cta">Join Waitlist</a>
-      </div>
-    </nav>
-
-    <!-- PAGE HEADER -->
-    <div class="page-header">
-      <div class="ph-grid"></div>
-      <div class="ph-orb-1"></div>
-      <div class="ph-orb-2"></div>
-      <div class="ph-content">
-        <div class="ph-eyebrow"><span class="ph-eyebrow-line"></span>Member Access</div>
-        <h1 class="ph-h1">Your investing<br><em>edge, unlocked.</em></h1>
-        <p class="ph-sub">Exclusive tools, frameworks, and real-time intelligence — built for members who think differently about markets.</p>
-        <div class="ph-badge">Patreon Exclusive · Active Session</div>
-      </div>
+  <section class="section" id="tools">
+    <div class="section-label reveal">
+      <span class="section-label-text">Investment Tools</span>
+      <span class="section-label-line"></span>
+      <span class="section-label-count">04</span>
     </div>
+    <div class="tools-grid reveal">
 
-    <!-- TOOLS SECTION -->
-    <section class="section" id="tools">
-      <div class="section-label reveal">
-        <span class="section-label-text">Investment Tools</span>
-        <span class="section-label-line"></span>
-        <span class="section-label-count">04</span>
-      </div>
-
-      <div class="tools-grid reveal">
-
-        <a href="tool-valuation-dashboard.html" class="tool-card" style="--tc-color: var(--gold);">
-          <div class="tc-number"><span class="tc-number-line"></span>01</div>
-          <div class="tc-icon">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <rect x="1.5" y="9.5" width="3" height="7" rx="0.5" stroke="currentColor" stroke-width="1.3"/>
-              <rect x="7.5" y="5.5" width="3" height="11" rx="0.5" stroke="currentColor" stroke-width="1.3"/>
-              <rect x="13.5" y="1.5" width="3" height="15" rx="0.5" stroke="currentColor" stroke-width="1.3"/>
-              <path d="M2.5 7L7 4.5l5 2.5 4.5-3.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
-            </svg>
-          </div>
-          <div class="tc-tag">Valuation</div>
-          <div class="tc-name">Valuation Dashboard</div>
-          <div class="tc-desc">Live intrinsic value tracking across top equities. Compare price vs. fair value, margin of safety, moat ratings, and quality scores in one unified view.</div>
-          <div class="tc-link">Open Tool <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <div class="tc-glow"></div>
-        </a>
-
-        <a href="tool-iv-calculator.html" class="tool-card" style="--tc-color: var(--blue);">
-          <div class="tc-number"><span class="tc-number-line" style="background:var(--blue);"></span>02</div>
-          <div class="tc-icon">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <rect x="1.5" y="1.5" width="15" height="15" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
-              <path d="M5.5 9h7M9 5.5v7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-              <path d="M5.5 13.5l7-9" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.35"/>
-            </svg>
-          </div>
-          <div class="tc-tag">Calculator</div>
-          <div class="tc-name">Intrinsic Value Calculator</div>
-          <div class="tc-desc">DCF and earnings-power models in one tool. Input your assumptions, run sensitivity analysis, and arrive at a defensible fair value for any stock.</div>
-          <div class="tc-link">Open Tool <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <div class="tc-glow" style="background:var(--blue);"></div>
-        </a>
-
-        <a href="tool-portfolio-scorecard.html" class="tool-card" style="--tc-color: var(--green);">
-          <div class="tc-number"><span class="tc-number-line" style="background:var(--green);"></span>03</div>
-          <div class="tc-icon">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.3"/>
-              <path d="M9 2v7l4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-              <circle cx="9" cy="9" r="1.2" fill="currentColor"/>
-            </svg>
-          </div>
-          <div class="tc-tag">Portfolio</div>
-          <div class="tc-name">Portfolio Scorecard</div>
-          <div class="tc-desc">Rate your portfolio's health across concentration, quality, sector balance, and risk. Get a composite score that highlights hidden vulnerabilities.</div>
-          <div class="tc-link">Open Tool <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <div class="tc-glow" style="background:var(--green);"></div>
-        </a>
-
-        <a href="tool-second-level-thinking.html" class="tool-card" style="--tc-color: var(--purple);">
-          <div class="tc-number"><span class="tc-number-line" style="background:var(--purple);"></span>04</div>
-          <div class="tc-icon">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <path d="M9 2C5.134 2 2 5.134 2 9c0 2.18 0.94 4.14 2.44 5.5L4 16l2.5-1c.78.32 1.62.5 2.5.5 3.866 0 7-3.134 7-7S12.866 2 9 2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
-              <path d="M6.5 7.5h.01M9 7.5h.01M11.5 7.5h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="tc-tag">Framework</div>
-          <div class="tc-name">Second-Level Thinking</div>
-          <div class="tc-desc">Howard Marks' core framework, turned interactive. Challenge your surface-level thesis and pressure-test it against contrarian scenarios and market consensus.</div>
-          <div class="tc-link">Open Tool <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <div class="tc-glow" style="background:var(--purple);"></div>
-        </a>
-
-      </div>
-    </section>
-
-    <!-- UPDATES SECTION -->
-    <section class="section updates-section" id="updates">
-      <div class="section-label reveal">
-        <span class="section-label-text">Member Updates</span>
-        <span class="section-label-line"></span>
-        <span class="section-label-count">03</span>
-      </div>
-
-      <div class="updates-grid">
-
-        <div class="update-card reveal" style="--uc-color: var(--purple);">
-          <div class="uc-meta">
-            <span class="uc-cat cat-strategy">Strategy</span>
-            <span class="uc-new">New</span>
-            <span class="uc-date">Mar 2026</span>
-          </div>
-          <h3 class="uc-title">Next Play: The Trump Trade — What Comes After the Noise</h3>
-          <p class="uc-excerpt">A tactical breakdown of where capital should be positioned as the market recalibrates around policy uncertainty. Separating signal from noise in a politically-charged tape.</p>
-          <div class="uc-footer">
-            <div class="uc-author"><div class="uc-avatar">I</div><span class="uc-author-name">Insight Invest</span></div>
-            <a class="uc-read" href="https://www.patreon.com/posts/next-play-trump-152859465" target="_blank" rel="noopener">
-              Read on Patreon <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5 1.5l3.5 3.5L5 8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
-          </div>
-        </div>
-
-        <div class="update-card reveal" style="--uc-color: var(--green);">
-          <div class="uc-meta">
-            <span class="uc-cat cat-trade">Trade</span>
-            <span class="uc-date">Mar 2026</span>
-          </div>
-          <h3 class="uc-title">How I Made 150% — The Full Trade Breakdown</h3>
-          <p class="uc-excerpt">Step-by-step walkthrough: the thesis, entry logic, position sizing, what almost made me exit early, and how I let it run. The exact thought process behind a 150% return.</p>
-          <div class="uc-footer">
-            <div class="uc-author"><div class="uc-avatar">I</div><span class="uc-author-name">Insight Invest</span></div>
-            <a class="uc-read" href="https://www.patreon.com/posts/how-i-made-150-152750647" target="_blank" rel="noopener">
-              Read on Patreon <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5 1.5l3.5 3.5L5 8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
-          </div>
-        </div>
-
-        <div class="update-card reveal" style="--uc-color: var(--green);">
-          <div class="uc-meta">
-            <span class="uc-cat cat-trade">New Trade</span>
-            <span class="uc-date">Mar 2026</span>
-          </div>
-          <h3 class="uc-title">New Trade Alert — Full Thesis Inside</h3>
-          <p class="uc-excerpt">A new position is open. Full entry rationale, target price, stop-loss logic, and the macro backdrop that makes this trade compelling right now. Exclusive to members.</p>
-          <div class="uc-footer">
-            <div class="uc-author"><div class="uc-avatar">I</div><span class="uc-author-name">Insight Invest</span></div>
-            <a class="uc-read" href="https://www.patreon.com/posts/new-trade-152615167" target="_blank" rel="noopener">
-              Read on Patreon <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5 1.5l3.5 3.5L5 8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- PATREON STRIP -->
-    <div class="patreon-strip reveal">
-      <div class="ps-text">
-        <h3>Not a member yet?</h3>
-        <p>Join on Patreon to unlock all tools, real-time trade alerts, and the full archive.</p>
-      </div>
-      <a href="https://www.patreon.com" target="_blank" rel="noopener" class="ps-btn">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><circle cx="9" cy="5.5" r="3.5"/><rect x="1" y="1" width="2.5" height="12" rx="0.5"/></svg>
-        Join on Patreon
+      <a href="tool-valuation-dashboard.html" class="tool-card" style="--tc-color:var(--gold)">
+        <div class="tc-number"><span class="tc-number-line"></span>01</div>
+        <div class="tc-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1.5" y="9.5" width="3" height="7" rx=".5" stroke="currentColor" stroke-width="1.3"/><rect x="7.5" y="5.5" width="3" height="11" rx=".5" stroke="currentColor" stroke-width="1.3"/><rect x="13.5" y="1.5" width="3" height="15" rx=".5" stroke="currentColor" stroke-width="1.3"/><path d="M2.5 7L7 4.5l5 2.5 4.5-3.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" opacity=".5"/></svg></div>
+        <div class="tc-tag">Valuation</div>
+        <div class="tc-name">Valuation Dashboard</div>
+        <div class="tc-desc">Live intrinsic value tracking across top equities. Compare price vs. fair value, margin of safety, moat ratings, and quality scores in one unified view.</div>
+        <div class="tc-link">Open Tool <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="tc-glow"></div>
       </a>
+
+      <a href="tool-iv-calculator.html" class="tool-card" style="--tc-color:var(--blue)">
+        <div class="tc-number"><span class="tc-number-line" style="background:var(--blue)"></span>02</div>
+        <div class="tc-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1.5" y="1.5" width="15" height="15" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5.5 9h7M9 5.5v7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M5.5 13.5l7-9" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity=".35"/></svg></div>
+        <div class="tc-tag">Calculator</div>
+        <div class="tc-name">Intrinsic Value Calculator</div>
+        <div class="tc-desc">DCF and earnings-power models in one tool. Input your assumptions, run sensitivity analysis, and arrive at a defensible fair value for any stock.</div>
+        <div class="tc-link">Open Tool <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="tc-glow" style="background:var(--blue)"></div>
+      </a>
+
+      <a href="tool-portfolio-scorecard.html" class="tool-card" style="--tc-color:var(--green)">
+        <div class="tc-number"><span class="tc-number-line" style="background:var(--green)"></span>03</div>
+        <div class="tc-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.3"/><path d="M9 2v7l4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="9" r="1.2" fill="currentColor"/></svg></div>
+        <div class="tc-tag">Portfolio</div>
+        <div class="tc-name">Portfolio Scorecard</div>
+        <div class="tc-desc">Rate your portfolio's health across concentration, quality, sector balance, and risk. Get a composite score that highlights hidden vulnerabilities.</div>
+        <div class="tc-link">Open Tool <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="tc-glow" style="background:var(--green)"></div>
+      </a>
+
+      <a href="tool-second-level-thinking.html" class="tool-card" style="--tc-color:var(--purple)">
+        <div class="tc-number"><span class="tc-number-line" style="background:var(--purple)"></span>04</div>
+        <div class="tc-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2C5.134 2 2 5.134 2 9c0 2.18.94 4.14 2.44 5.5L4 16l2.5-1c.78.32 1.62.5 2.5.5 3.866 0 7-3.134 7-7S12.866 2 9 2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M6.5 7.5h.01M9 7.5h.01M11.5 7.5h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <div class="tc-tag">Framework</div>
+        <div class="tc-name">Second-Level Thinking</div>
+        <div class="tc-desc">Howard Marks' core framework, turned interactive. Challenge your surface-level thesis and pressure-test it against contrarian scenarios and market consensus.</div>
+        <div class="tc-link">Open Tool <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="tc-glow" style="background:var(--purple)"></div>
+      </a>
+
     </div>
+  </section>
 
-    <!-- FOOTER -->
-    <footer>
-      <div class="footer-logo">Insight Invest</div>
-      <div class="footer-links">
-        <a href="index.html">Home</a>
-        <a href="reports.html">Reports</a>
-        <a href="members.html">Members</a>
-        <a href="index.html#waitlist">Advisory</a>
+  <section class="section briefs-section" id="briefs">
+    <div class="section-label reveal">
+      <span class="section-label-text">Stock Briefs</span>
+      <span class="section-label-line"></span>
+      <span class="section-label-count">01</span>
+    </div>
+    <div class="briefs-grid reveal">
+
+      <a href="brief-rddt.html" class="brief-card" style="--bc-color:var(--gold)">
+        <div class="bc-header">
+          <div class="bc-ticker">RDDT</div>
+          <div class="bc-rating rating-buy">Mod. Buy</div>
+        </div>
+        <div class="bc-name">Reddit Inc.</div>
+        <div class="bc-thesis">The internet's last authentic data asset. Down 48% from highs on a business that just posted its first profitable year — $684M free cash flow on less than 1% of revenue in capital expenditure.</div>
+        <div class="bc-stats">
+          <div class="bc-stat"><div class="bc-stat-val">$2.2B</div><div class="bc-stat-lbl">FY2025 Revenue</div></div>
+          <div class="bc-stat"><div class="bc-stat-val">+69%</div><div class="bc-stat-lbl">YoY Growth</div></div>
+          <div class="bc-stat"><div class="bc-stat-val">$140</div><div class="bc-stat-lbl">Current Price</div></div>
+          <div class="bc-stat"><div class="bc-stat-val">$232–238</div><div class="bc-stat-lbl">Analyst PT</div></div>
+        </div>
+        <div class="bc-footer">
+          <div class="bc-date">March 2026</div>
+          <div class="bc-cta">Read Brief <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </a>
+
+      <div class="brief-card-soon"><div class="bc-soon-label">Coming Soon</div><div class="bc-soon-name">Next Brief<br>In Preparation</div></div>
+      <div class="brief-card-soon"><div class="bc-soon-label">Coming Soon</div><div class="bc-soon-name">Next Brief<br>In Preparation</div></div>
+
+    </div>
+  </section>
+
+  <section class="section updates-section" id="updates">
+    <div class="section-label reveal">
+      <span class="section-label-text">Member Updates</span>
+      <span class="section-label-line"></span>
+      <span class="section-label-count">03</span>
+    </div>
+    <div class="updates-grid">
+
+      <div class="update-card reveal" style="--uc-color:var(--purple)">
+        <div class="uc-meta"><span class="uc-cat cat-strategy">Strategy</span><span class="uc-new">New</span><span class="uc-date">Mar 2026</span></div>
+        <h3 class="uc-title">Next Play: The Trump Trade — What Comes After the Noise</h3>
+        <p class="uc-excerpt">A tactical breakdown of where capital should be positioned as the market recalibrates around policy uncertainty. Separating signal from noise in a politically-charged tape.</p>
+        <div class="uc-footer">
+          <div class="uc-author"><div class="uc-avatar">I</div><span class="uc-author-name">Insight Invest</span></div>
+          <a class="uc-read" href="https://www.patreon.com/posts/next-play-trump-152859465" target="_blank" rel="noopener">Read on Patreon <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5 1.5l3.5 3.5L5 8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
       </div>
-      <div class="footer-copy">© 2026 Insight Invest</div>
-    </footer>
 
+      <div class="update-card reveal" style="--uc-color:var(--green)">
+        <div class="uc-meta"><span class="uc-cat cat-trade">Trade</span><span class="uc-date">Mar 2026</span></div>
+        <h3 class="uc-title">How I Made 150% — The Full Trade Breakdown</h3>
+        <p class="uc-excerpt">Step-by-step walkthrough: the thesis, entry logic, position sizing, what almost made me exit early, and how I let it run. The exact thought process behind a 150% return.</p>
+        <div class="uc-footer">
+          <div class="uc-author"><div class="uc-avatar">I</div><span class="uc-author-name">Insight Invest</span></div>
+          <a class="uc-read" href="https://www.patreon.com/posts/how-i-made-150-152750647" target="_blank" rel="noopener">Read on Patreon <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5 1.5l3.5 3.5L5 8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+      </div>
+
+      <div class="update-card reveal" style="--uc-color:var(--green)">
+        <div class="uc-meta"><span class="uc-cat cat-trade">New Trade</span><span class="uc-date">Mar 2026</span></div>
+        <h3 class="uc-title">New Trade Alert — Full Thesis Inside</h3>
+        <p class="uc-excerpt">A new position is open. Full entry rationale, target price, stop-loss logic, and the macro backdrop that makes this trade compelling right now. Exclusive to members.</p>
+        <div class="uc-footer">
+          <div class="uc-author"><div class="uc-avatar">I</div><span class="uc-author-name">Insight Invest</span></div>
+          <a class="uc-read" href="https://www.patreon.com/posts/new-trade-152615167" target="_blank" rel="noopener">Read on Patreon <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5h7M5 1.5l3.5 3.5L5 8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="patreon-strip reveal">
+    <div class="ps-text">
+      <h3>Not a member yet?</h3>
+      <p>Join on Patreon to unlock all tools, stock briefs, real-time trade alerts, and the full archive.</p>
+    </div>
+    <a href="https://www.patreon.com" target="_blank" rel="noopener" class="ps-btn">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><circle cx="9" cy="5.5" r="3.5"/><rect x="1" y="1" width="2.5" height="12" rx=".5"/></svg>
+      Join on Patreon
+    </a>
   </div>
 
-  <script>
-    // ─── CHANGE THIS TO YOUR PASSWORD ───
-    const ACCESS_KEY = 'insightinvest2026';
-    const SESSION_KEY = 'ii_member_auth';
+  <footer>
+    <div class="footer-logo">Insight Invest</div>
+    <div class="footer-links">
+      <a href="index.html">Home</a><a href="reports.html">Reports</a>
+      <a href="members.html">Members</a><a href="index.html#waitlist">Advisory</a>
+    </div>
+    <div class="footer-copy">© 2026 Insight Invest</div>
+  </footer>
 
-    function checkPw() {
-      const input = document.getElementById('gateInput').value.trim();
-      const field = document.getElementById('gateField');
-      const err   = document.getElementById('gateError');
-      const btn   = document.getElementById('gateBtn');
+</div>
 
-      if (input === ACCESS_KEY) {
-        sessionStorage.setItem(SESSION_KEY, '1');
-        const gate = document.getElementById('gate');
-        gate.style.transition = 'opacity 0.5s ease';
-        gate.style.opacity = '0';
-        setTimeout(() => {
-          gate.classList.add('hidden');
-          document.getElementById('content').classList.add('visible');
-          initPage();
-        }, 500);
-      } else {
-        field.classList.add('error');
-        err.classList.add('visible');
-        btn.disabled = true;
-        setTimeout(() => { field.classList.remove('error'); btn.disabled = false; }, 600);
-        setTimeout(() => err.classList.remove('visible'), 3000);
-      }
-    }
-
-    function togglePw() {
-      const input = document.getElementById('gateInput');
-      if (input.type === 'password') {
-        input.type = 'text';
-        document.getElementById('eyeIcon').innerHTML = '<path d="M1 7s2.333-4 6-4 6 4 6 4-2.333 4-6 4-6-4-6-4z" stroke="currentColor" stroke-width="1.3"/><path d="M3 3l8 8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>';
-      } else {
-        input.type = 'password';
-        document.getElementById('eyeIcon').innerHTML = '<path d="M1 7s2.333-4 6-4 6 4 6 4-2.333 4-6 4-6-4-6-4z" stroke="currentColor" stroke-width="1.3"/><circle cx="7" cy="7" r="1.8" stroke="currentColor" stroke-width="1.3"/>';
-      }
-    }
-
-    document.getElementById('gateInput').addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') checkPw();
-    });
-
-    // Skip gate if already authenticated this session
-    if (sessionStorage.getItem(SESSION_KEY) === '1') {
-      document.getElementById('gate').classList.add('hidden');
-      document.getElementById('content').classList.add('visible');
-      initPage();
-    }
-
-    function initPage() {
-      const nav = document.getElementById('mainNav');
-      window.addEventListener('scroll', () => {
-        nav.classList.toggle('scrolled', window.scrollY > 40);
-      });
-      const reveals = document.querySelectorAll('.reveal');
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach((e, i) => {
-          if (e.isIntersecting) {
-            setTimeout(() => e.target.classList.add('visible'), i * 90);
-            io.unobserve(e.target);
-          }
-        });
-      }, { threshold: 0.08 });
-      reveals.forEach(el => io.observe(el));
-    }
-  </script>
+<script>
+  const ACCESS_KEY='insightinvest2026',SESSION_KEY='ii_member_auth';
+  function checkPw(){
+    const v=document.getElementById('gateInput').value.trim(),f=document.getElementById('gateField'),e=document.getElementById('gateError'),b=document.getElementById('gateBtn');
+    if(v===ACCESS_KEY){sessionStorage.setItem(SESSION_KEY,'1');const g=document.getElementById('gate');g.style.transition='opacity .5s ease';g.style.opacity='0';setTimeout(()=>{g.classList.add('hidden');document.getElementById('content').classList.add('visible');initPage()},500)}
+    else{f.classList.add('error');e.classList.add('visible');b.disabled=true;setTimeout(()=>{f.classList.remove('error');b.disabled=false},600);setTimeout(()=>e.classList.remove('visible'),3000)}
+  }
+  function togglePw(){const i=document.getElementById('gateInput');if(i.type==='password'){i.type='text';document.getElementById('eyeIcon').innerHTML='<path d="M1 7s2.333-4 6-4 6 4 6 4-2.333 4-6 4-6-4-6-4z" stroke="currentColor" stroke-width="1.3"/><path d="M3 3l8 8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>';}else{i.type='password';document.getElementById('eyeIcon').innerHTML='<path d="M1 7s2.333-4 6-4 6 4 6 4-2.333 4-6 4-6-4-6-4z" stroke="currentColor" stroke-width="1.3"/><circle cx="7" cy="7" r="1.8" stroke="currentColor" stroke-width="1.3"/>';}}
+  document.getElementById('gateInput').addEventListener('keydown',e=>{if(e.key==='Enter')checkPw()});
+  if(sessionStorage.getItem(SESSION_KEY)==='1'){document.getElementById('gate').classList.add('hidden');document.getElementById('content').classList.add('visible');initPage();}
+  function initPage(){
+    const nav=document.getElementById('mainNav');
+    window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>40));
+    const io=new IntersectionObserver((entries)=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*90);io.unobserve(e.target)}})},{threshold:.08});
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  }
+</script>
 </body>
 </html>
