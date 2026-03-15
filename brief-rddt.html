@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>RDDT — Stock Brief | Insight Invest</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:#08090c; --bg2:#0d0f14; --bg3:#13151d;
+      --border:#222533;
+      --text:#8a91aa; --text-bright:#e4e8f2; --text-dim:#444a60;
+      --gold:#c9a84c; --gold-dim:#7a6028; --gold-faint:rgba(201,168,76,0.06);
+      --blue:#4a7cff; --green:#3dd68c; --red:#e05555; --purple:#9b7ff4;
+      --f-xs:11px; --f-sm:13px; --f-base:15px; --f-md:17px;
+      --f-lg:21px; --f-xl:26px; --f-hero:clamp(40px,5.5vw,70px);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:#1e2130 var(--bg)}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#1e2130;border-radius:2px}
+    body{font-family:'Source Sans 3',sans-serif;font-size:var(--f-base);font-weight:400;line-height:1.65;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+    body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+    h1,h2,h3,.serif{font-family:'Libre Baskerville',Georgia,serif;font-weight:400;line-height:1.15;color:var(--text-bright)}
+
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;padding:20px 52px;display:flex;align-items:center;justify-content:space-between;z-index:100;background:linear-gradient(180deg,var(--bg) 0%,transparent 100%);transition:all .4s}
+    nav.scrolled{background:rgba(8,9,12,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 52px}
+    .nav-logo{display:flex;align-items:center;gap:13px;text-decoration:none}
+    .nav-logo-mark{width:34px;height:34px;border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Libre Baskerville',serif;font-size:17px;color:var(--gold)}
+    .nav-logo-text{font-size:var(--f-sm);font-weight:600;color:var(--text-bright);letter-spacing:.1em;text-transform:uppercase}
+    .nav-links{display:flex;gap:32px;align-items:center}
+    .nav-links a{font-size:var(--f-xs);font-weight:600;color:var(--text-dim);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:color .25s;position:relative}
+    .nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--gold);transition:width .25s}
+    .nav-links a:hover{color:var(--gold)}
+    .nav-links a:hover::after{width:100%}
+    .nav-back{display:inline-flex;align-items:center;gap:8px;font-size:var(--f-xs);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);text-decoration:none;transition:color .25s}
+    .nav-back:hover{color:var(--gold)}
+    .nav-back svg{transition:transform .25s}
+    .nav-back:hover svg{transform:translateX(-3px)}
+
+    /* PAGE HEADER */
+    .page-header{padding:148px 52px 80px;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+    .ph-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(34,37,51,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(34,37,51,.16) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 70% 90% at 15% 50%,black 10%,transparent 70%)}
+    .ph-orb-1{position:absolute;width:520px;height:520px;border-radius:50%;filter:blur(110px);background:rgba(201,168,76,.06);top:-20%;right:0;pointer-events:none}
+    .ph-orb-2{position:absolute;width:280px;height:280px;border-radius:50%;filter:blur(80px);background:rgba(61,214,140,.03);bottom:-10%;left:40%;pointer-events:none}
+    .ph-content{position:relative;z-index:2;max-width:780px}
+
+    .ph-breadcrumb{display:inline-flex;align-items:center;gap:10px;font-size:var(--f-xs);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:24px}
+    .ph-breadcrumb .sep{opacity:.35}
+    .ph-breadcrumb .current{color:var(--gold)}
+
+    .ph-meta-row{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+    .ph-ticker{font-size:var(--f-sm);font-weight:600;letter-spacing:.08em;color:var(--gold);background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);padding:5px 14px}
+    .ph-badge-buy{display:inline-flex;align-items:center;gap:7px;background:rgba(61,214,140,.06);border:1px solid rgba(61,214,140,.2);padding:5px 14px;font-size:var(--f-xs);font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--green)}
+    .ph-badge-buy::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);animation:liveDot 2.5s ease-in-out infinite}
+    @keyframes liveDot{0%,100%{opacity:.3}50%{opacity:1}}
+    .ph-price{font-size:var(--f-xs);font-weight:400;color:var(--text-dim)}
+
+    .ph-h1{font-family:'Libre Baskerville',serif;font-size:var(--f-hero);font-weight:400;color:var(--text-bright);line-height:1.05;letter-spacing:-.01em;margin-bottom:18px}
+    .ph-h1 em{font-style:italic;color:var(--gold)}
+    .ph-sub{font-size:var(--f-md);font-weight:300;color:var(--text);line-height:1.78;max-width:560px;margin-bottom:36px}
+
+    /* STAT STRIP */
+    .ph-stat-row{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--border);border:1px solid var(--border);max-width:780px}
+    .ph-stat{background:var(--bg2);padding:18px 14px;text-align:center}
+    .ph-stat-val{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:400;color:var(--text-bright);line-height:1;margin-bottom:5px}
+    .ph-stat-lbl{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);margin-bottom:3px}
+    .ph-stat-delta{font-size:10px;font-weight:600;letter-spacing:.04em}
+    .delta-up{color:var(--green)}
+    .delta-flat{color:var(--gold)}
+
+    /* BODY */
+    .content-wrap{max-width:1060px;margin:0 auto;padding:0 52px 6rem}
+
+    /* TAB NAV */
+    .tab-nav{display:flex;gap:0;border-bottom:1px solid var(--border);margin:60px 0 48px;overflow-x:auto;scrollbar-width:none}
+    .tab-nav::-webkit-scrollbar{display:none}
+    .tab-btn{font-size:var(--f-xs);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);background:none;border:none;padding:14px 22px;cursor:pointer;border-bottom:1px solid transparent;white-space:nowrap;transition:color .2s,border-color .2s;margin-bottom:-1px}
+    .tab-btn:hover{color:var(--text)}
+    .tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+    .panel{display:none;animation:panelIn .22s ease}
+    .panel.active{display:block}
+    @keyframes panelIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+    /* CARDS */
+    .card{background:var(--bg2);border:1px solid var(--border);padding:30px 34px;margin-bottom:1px;position:relative;overflow:hidden}
+    .card+.card{border-top:none}
+    .card-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:1px}
+    .card-grid .card{border:none;margin:0}
+    .card-accent-green{border-left:2px solid rgba(61,214,140,.45)}
+    .card-accent-gold{border-left:2px solid rgba(201,168,76,.45)}
+    .card-accent-red{border-left:2px solid rgba(224,85,85,.45)}
+
+    .card-eyebrow{font-size:var(--f-xs);font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);margin-bottom:12px}
+    .card-title{font-family:'Libre Baskerville',serif;font-size:var(--f-lg);font-weight:400;color:var(--text-bright);line-height:1.25;margin-bottom:12px}
+    .card-body{font-size:var(--f-base);font-weight:400;color:var(--text);line-height:1.8}
+    .card-body strong{color:var(--text-bright);font-weight:600}
+    .card-body em{color:var(--gold);font-style:normal}
+
+    /* REVENUE BARS */
+    .rev-item{display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid var(--border)}
+    .rev-item:last-child{border-bottom:none}
+    .rev-name{font-size:var(--f-sm);font-weight:400;color:var(--text);min-width:220px}
+    .rev-track{flex:1;height:4px;background:rgba(255,255,255,.04)}
+    .rev-fill{height:100%}
+    .fill-gold{background:var(--gold);width:93.6%}
+    .fill-teal{background:var(--green);width:6.4%}
+    .rev-pct{font-size:var(--f-sm);font-weight:600;color:var(--green);min-width:48px;text-align:right}
+
+    /* PEER TABLE */
+    .peer-table{width:100%;border-collapse:collapse}
+    .peer-table th{font-size:var(--f-xs);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);padding:10px 14px;border-bottom:1px solid var(--border);text-align:left}
+    .peer-table th:not(:first-child){text-align:right}
+    .peer-table td{padding:12px 14px;border-bottom:1px solid var(--border);font-size:var(--f-sm);font-weight:400;color:var(--text)}
+    .peer-table td:not(:first-child){text-align:right;font-weight:500}
+    .peer-table tr:last-child td{border-bottom:none}
+    .peer-table .row-rddt td{color:var(--gold)}
+    .peer-table .row-rddt td:first-child{font-weight:600}
+
+    /* SCENARIO BARS */
+    .scen-block{padding:26px 0;border-bottom:1px solid var(--border)}
+    .scen-block:last-child{border-bottom:none;padding-bottom:0}
+    .scen-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+    .scen-label{display:flex;align-items:center;gap:12px}
+    .scen-name{font-size:var(--f-base);font-weight:600;color:var(--text-bright)}
+    .scen-tag{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border:1px solid}
+    .tag-bear{color:var(--red);border-color:rgba(224,85,85,.3);background:rgba(224,85,85,.06)}
+    .tag-base{color:var(--green);border-color:rgba(61,214,140,.3);background:rgba(61,214,140,.06)}
+    .tag-bull{color:#3ecfb8;border-color:rgba(62,207,184,.3);background:rgba(62,207,184,.06)}
+    .scen-revenue{font-family:'Libre Baskerville',serif;font-size:28px;font-weight:400}
+    .rev-bear{color:var(--red)}
+    .rev-base{color:var(--green)}
+    .rev-bull{color:#3ecfb8}
+    .scen-track{height:3px;background:rgba(255,255,255,.05);margin-bottom:8px}
+    .scen-fill-bar{height:100%}
+    .bar-bear{background:var(--red);width:52%}
+    .bar-base{background:var(--green);width:77%}
+    .bar-bull{background:#3ecfb8;width:100%}
+    .scen-desc{font-size:var(--f-sm);font-weight:400;color:var(--text-dim);line-height:1.7}
+
+    /* WATCH ITEMS */
+    .watch-group-label{font-size:var(--f-xs);font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:10px 0 8px;margin-bottom:4px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px}
+    .wgl-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+    .watch-item{display:flex;gap:18px;padding:18px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+    .watch-item:last-child{border-bottom:none}
+    .wi-icon{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:2px}
+    .wi-green{background:rgba(61,214,140,.07);border:1px solid rgba(61,214,140,.2)}
+    .wi-red{background:rgba(224,85,85,.07);border:1px solid rgba(224,85,85,.2)}
+    .wi-amber{background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2)}
+    .wi-icon svg{width:13px;height:13px}
+    .wi-title{font-size:var(--f-base);font-weight:600;color:var(--text-bright);margin-bottom:5px}
+    .wi-desc{font-size:var(--f-sm);font-weight:400;color:var(--text);line-height:1.75}
+
+    /* VERDICT */
+    .verdict{background:rgba(201,168,76,.03);border:1px solid rgba(201,168,76,.18);padding:44px;margin:60px 0 0;position:relative;overflow:hidden}
+    .verdict::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent)}
+    .verdict-eyebrow{font-size:var(--f-xs);font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:14px}
+    .verdict-title{font-family:'Libre Baskerville',serif;font-size:30px;font-weight:400;color:var(--text-bright);margin-bottom:20px;line-height:1.2}
+    .verdict-title em{font-style:italic;color:var(--gold)}
+    .verdict-pt-row{display:flex;gap:36px;margin:24px 0;flex-wrap:wrap}
+    .verdict-pt-val{font-family:'Libre Baskerville',serif;font-size:38px;font-weight:400;line-height:1;margin-bottom:5px}
+    .verdict-pt-lbl{font-size:var(--f-xs);font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim)}
+    .verdict-body{font-size:var(--f-base);font-weight:400;color:var(--text);line-height:1.85}
+    .verdict-body strong{color:var(--text-bright);font-weight:600}
+
+    /* DISCLAIMER */
+    .disclaimer{border-top:1px solid var(--border);margin-top:52px;padding-top:26px;font-size:var(--f-xs);font-weight:400;color:var(--text-dim);line-height:1.8;letter-spacing:.02em}
+
+    /* FOOTER */
+    footer{border-top:1px solid var(--border);padding:32px 52px;display:flex;align-items:center;justify-content:space-between}
+    .footer-logo{font-family:'Libre Baskerville',serif;font-size:var(--f-md);color:var(--gold);font-weight:400}
+    .footer-links{display:flex;gap:28px}
+    .footer-links a{font-size:var(--f-xs);font-weight:600;color:var(--text-dim);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:color .3s}
+    .footer-links a:hover{color:var(--gold)}
+    .footer-copy{font-size:var(--f-xs);font-weight:400;color:var(--text-dim)}
+
+    /* REVEAL */
+    .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+
+    @media(max-width:900px){
+      nav,nav.scrolled{padding:16px 24px}
+      .page-header{padding:110px 24px 56px}
+      .content-wrap{padding:0 24px 4rem}
+      .ph-stat-row{grid-template-columns:repeat(3,1fr)}
+      .card-grid{grid-template-columns:1fr}
+      footer{flex-direction:column;gap:18px;padding:28px 24px;text-align:center}
+      .footer-links{flex-wrap:wrap;justify-content:center}
+      .verdict{padding:28px 24px}
+      .nav-links{display:none}
+    }
+    @media(max-width:480px){
+      .ph-stat-row{grid-template-columns:repeat(2,1fr)}
+    }
+  </style>
+</head>
+<body>
+
+<nav id="mainNav">
+  <a class="nav-logo" href="index.html">
+    <div class="nav-logo-mark">I</div>
+    <span class="nav-logo-text">Insight Invest</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="reports.html">Reports</a>
+    <a href="members.html">Members</a>
+    <a href="members.html#briefs" style="color:var(--gold)">Stock Briefs</a>
+  </div>
+  <a href="members.html#briefs" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 7H2M5 3L1 7l4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    All Briefs
+  </a>
+</nav>
+
+<div class="page-header">
+  <div class="ph-grid"></div><div class="ph-orb-1"></div><div class="ph-orb-2"></div>
+  <div class="ph-content">
+
+    <div class="ph-breadcrumb">
+      <span>Members</span><span class="sep">/</span>
+      <span>Stock Briefs</span><span class="sep">/</span>
+      <span class="current">RDDT</span>
+    </div>
+
+    <div class="ph-meta-row">
+      <div class="ph-ticker">NYSE: RDDT</div>
+      <div class="ph-badge-buy">Moderate Buy</div>
+      <div class="ph-price">~$140 · March 2026 · Educational only</div>
+    </div>
+
+    <h1 class="ph-h1">Reddit Inc.<br><em>the internet's last authentic data asset</em></h1>
+    <p class="ph-sub">Down 48% from its all-time high on a business that just posted its first profitable year, $684M in free cash flow, and 69% revenue growth. The market is pricing it as a maturing ad platform. The evidence says something more interesting.</p>
+
+    <div class="ph-stat-row">
+      <div class="ph-stat"><div class="ph-stat-val">$2.2B</div><div class="ph-stat-lbl">Revenue</div><div class="ph-stat-delta delta-up">+69% YoY</div></div>
+      <div class="ph-stat"><div class="ph-stat-val">$684M</div><div class="ph-stat-lbl">Free Cash Flow</div><div class="ph-stat-delta delta-up">31% margin</div></div>
+      <div class="ph-stat"><div class="ph-stat-val">$2.48B</div><div class="ph-stat-lbl">Cash &amp; Securities</div><div class="ph-stat-delta delta-flat">Zero debt</div></div>
+      <div class="ph-stat"><div class="ph-stat-val">121M</div><div class="ph-stat-lbl">Daily Active Users</div><div class="ph-stat-delta delta-up">+19% YoY</div></div>
+      <div class="ph-stat"><div class="ph-stat-val">91.2%</div><div class="ph-stat-lbl">Gross Margin</div><div class="ph-stat-delta delta-up">+70bps YoY</div></div>
+      <div class="ph-stat"><div class="ph-stat-val">$6.7M</div><div class="ph-stat-lbl">Annual CapEx</div><div class="ph-stat-delta delta-flat">&lt;1% revenue</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="content-wrap">
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('why',this)">Why it matters</button>
+    <button class="tab-btn" onclick="switchTab('money',this)">Revenue &amp; financials</button>
+    <button class="tab-btn" onclick="switchTab('scenarios',this)">3 scenarios</button>
+    <button class="tab-btn" onclick="switchTab('watch',this)">Watch list</button>
+  </div>
+
+  <!-- WHY -->
+  <div id="panel-why" class="panel active">
+
+    <div class="card card-accent-green reveal">
+      <div class="card-eyebrow">Pillar 01 — Data Moat</div>
+      <div class="card-title">The data moat nobody else can replicate</div>
+      <div class="card-body">Reddit has <strong>22 billion human comments</strong> built up over 20 years, structured into 100,000+ topic communities. As AI companies train large language models they need authentic human conversation — and the rest of the internet is increasingly filled with synthetic content. Reddit's archive becomes <em>more</em> strategically valuable as that happens, not less. <strong>Google and OpenAI are already paying for access.</strong> Contract renewals in 2026–2027 are the single highest-impact event in the thesis.</div>
+    </div>
+
+    <div class="card card-accent-green reveal">
+      <div class="card-eyebrow">Pillar 02 — Balance Sheet</div>
+      <div class="card-title">$2.48 billion in cash, zero debt, $1 billion buyback</div>
+      <div class="card-body">The company generates <strong>$1.30 in operating cash for every $1 of reported profit</strong> — an exceptional earnings quality ratio. CapEx was just $6.7M on $2.2B of revenue, making this one of the most capital-efficient business models at scale. Management can buy back nearly 4% of the market cap at current prices every year. The Altman Z-Score of 50.78 places this among the most financially sound companies in the market.</div>
+    </div>
+
+    <div class="card card-accent-green reveal">
+      <div class="card-eyebrow">Pillar 03 — Unmonetised Search</div>
+      <div class="card-title">80 million weekly search users — generating $0 in direct revenue today</div>
+      <div class="card-body">Reddit is now the <strong>second most visited search destination in the US, behind only Wikipedia.</strong> Search traffic grew 600% since mid-2023. Reddit Answers — the AI-powered search product — grew from 1 million to 15 million weekly users in a single year. None of these users generate a dollar of direct search ad revenue. When sponsored search launches, it converts a zero-revenue asset into a new high-margin stream. The current $140 price does not reflect this.</div>
+    </div>
+
+    <div class="card card-accent-green reveal">
+      <div class="card-eyebrow">Pillar 04 — Advertising Upgrade</div>
+      <div class="card-title">Performance advertising has replaced cyclical brand spending</div>
+      <div class="card-body">Reddit's ad tools — <strong>Conversion API, Dynamic Product Ads, Reddit Max</strong> — moved it from brand-awareness budgets, which are the first cut in a downturn, into performance budgets tied directly to sales and app installs. Lower-funnel revenue doubled year-on-year in 2025. Eleven of the top 15 advertising verticals posted 50%+ revenue growth. This is a more durable, recession-resistant advertiser relationship than Reddit had 24 months ago.</div>
+    </div>
+
+  </div>
+
+  <!-- MONEY -->
+  <div id="panel-money" class="panel">
+
+    <div class="card reveal">
+      <div class="card-eyebrow">Revenue breakdown · FY2025</div>
+      <div style="margin-top:10px">
+        <div class="rev-item">
+          <div class="rev-name">Advertising · $2.06B · 93.6%</div>
+          <div class="rev-track"><div class="rev-fill fill-gold"></div></div>
+          <div class="rev-pct">+74%</div>
+        </div>
+        <div class="rev-item">
+          <div class="rev-name">Data Licensing &amp; Other · $140M · 6.4%</div>
+          <div class="rev-track"><div class="rev-fill fill-teal"></div></div>
+          <div class="rev-pct">+22%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-accent-gold reveal">
+      <div class="card-eyebrow">The number that matters most</div>
+      <div class="card-title">Data licensing: small revenue, outsized strategic importance</div>
+      <div class="card-body">At $140M, data licensing is only 6.4% of revenue. But it carries the highest margins and is the primary reason Reddit trades at a premium to all peers. Google and OpenAI are the disclosed anchor customers. <strong>Whether those contracts renew in 2026–2027 — and at what price — is the most important single variable in the thesis.</strong> Usage-based pricing tiers at renewal would be a re-rating event for the stock.</div>
+    </div>
+
+    <div class="card-grid reveal">
+      <div class="card">
+        <div class="card-eyebrow">Valuation vs peers</div>
+        <table class="peer-table" style="margin-top:10px">
+          <thead><tr><th>Company</th><th>EV/Rev</th><th>Growth</th><th>FCF Margin</th></tr></thead>
+          <tbody>
+            <tr class="row-rddt"><td>RDDT</td><td>10.4×</td><td>+69%</td><td>31%</td></tr>
+            <tr><td>Alphabet</td><td>6.5×</td><td>+11%</td><td>~25%</td></tr>
+            <tr><td>Pinterest</td><td>4.5×</td><td>+23%</td><td>~28%</td></tr>
+            <tr><td>Snap</td><td>3.2×</td><td>+15%</td><td>Neg.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-eyebrow">Why the premium may hold</div>
+        <div class="card-body" style="margin-top:10px">Reddit's 69% revenue growth is 2–3× faster than any peer. Its global ARPU of $5.98 is roughly <strong>one-tenth of Meta's</strong> — a long monetisation runway. No comparable peer has a data licensing business. Traditional P/E comparisons miss the point. The correct frame is a growth-adjusted multiple accounting for ARPU expansion and the AI data premium.</div>
+      </div>
+    </div>
+
+    <div class="card reveal">
+      <div class="card-eyebrow">Cash flow quality</div>
+      <div class="card-body">Free cash flow went from <strong>–$85M in FY2023 to +$216M in FY2024 to +$684M in FY2025.</strong> That three-year trajectory changes the nature of the investment thesis. CapEx of $6.7M on $2.2B revenue means every incremental dollar of revenue drops almost entirely to free cash flow. The company generated $1.30 in operating cash for every $1 of GAAP net income — confirming earnings quality is real, not an accounting artefact.</div>
+    </div>
+
+  </div>
+
+  <!-- SCENARIOS -->
+  <div id="panel-scenarios" class="panel">
+
+    <div class="card reveal">
+      <div class="card-eyebrow">5-year revenue outlook · FY2025 base $2.2B</div>
+      <div style="margin-top:10px">
+
+        <div class="scen-block">
+          <div class="scen-top">
+            <div class="scen-label">
+              <span class="scen-name">Bear case</span>
+              <span class="scen-tag tag-bear">Growth –10pp below guide</span>
+            </div>
+            <div class="scen-revenue rev-bear">$6.2B</div>
+          </div>
+          <div class="scen-track"><div class="scen-fill-bar bar-bear"></div></div>
+          <div class="scen-desc">Ad market contracts, data licensing pressured. Still profitable and cash-generative through the cycle. 5-year revenue CAGR: 23%.</div>
+        </div>
+
+        <div class="scen-block">
+          <div class="scen-top">
+            <div class="scen-label">
+              <span class="scen-name">Base case</span>
+              <span class="scen-tag tag-base">Management guidance</span>
+            </div>
+            <div class="scen-revenue rev-base">$9.2B</div>
+          </div>
+          <div class="scen-track"><div class="scen-fill-bar bar-base"></div></div>
+          <div class="scen-desc">53% → 40% → 30% → 25% → 20% growth stepdown. FCF reaches ~$3.3B by FY2030. Analyst consensus price target: $232–$238. 5-year CAGR: 33%.</div>
+        </div>
+
+        <div class="scen-block">
+          <div class="scen-top">
+            <div class="scen-label">
+              <span class="scen-name">Bull case</span>
+              <span class="scen-tag tag-bull">Search + data re-rated</span>
+            </div>
+            <div class="scen-revenue rev-bull">$11.9B</div>
+          </div>
+          <div class="scen-track"><div class="scen-fill-bar bar-bull"></div></div>
+          <div class="scen-desc">Search monetised + data contracts renewed at higher tiers + international ARPU converges toward US levels. DCF fair value up to $360. 5-year CAGR: 40%.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="card card-accent-gold reveal">
+      <div class="card-eyebrow">The honest valuation picture</div>
+      <div class="card-title">A premium that demands execution</div>
+      <div class="card-body">Reddit trades at 47.7× trailing earnings and 10.4× EV/Revenue. <strong>That premium holds only if growth stays above roughly 40% for at least two years.</strong> The risk is not that the business fails — even the bear case reaches $6.2B in revenue by 2030 on a profitable, cash-generative model. The risk is pure multiple compression: any meaningful growth miss will be priced in quickly. The $1B buyback and $2.48B cash pile cushion the downside. They do not eliminate it.</div>
+    </div>
+
+    <div class="card-grid reveal">
+      <div class="card">
+        <div class="card-eyebrow">Conservative DCF</div>
+        <div style="font-family:'Libre Baskerville',serif;font-size:44px;font-weight:400;color:var(--text-bright);line-height:1;margin:12px 0 8px">$177</div>
+        <div class="card-body" style="font-size:var(--f-sm)">10.5% discount rate, 35% FCF CAGR over 5 years. Floor of the credible fair value range. Implies 26% upside from current levels.</div>
+      </div>
+      <div class="card">
+        <div class="card-eyebrow">Analyst consensus target</div>
+        <div style="font-family:'Libre Baskerville',serif;font-size:44px;font-weight:400;color:var(--green);line-height:1;margin:12px 0 8px">$232–238</div>
+        <div class="card-body" style="font-size:var(--f-sm)">17 sell-side analysts. 66–70% implied upside from ~$140. Requires base case growth trajectory to sustain through FY2027.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- WATCH -->
+  <div id="panel-watch" class="panel">
+
+    <div class="card reveal">
+      <div class="watch-group-label"><span class="wgl-dot" style="background:var(--green)"></span><span style="color:var(--green)">Green flags — thesis getting stronger</span></div>
+
+      <div class="watch-item">
+        <div class="wi-icon wi-green"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-7" stroke="#3dd68c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <div class="wi-title">Q1 2026 earnings beat — report due May 2026</div>
+          <div class="wi-desc">Management guided $595–605M revenue at 52–54% YoY growth. A beat confirms the deceleration is controlled and within thesis range. Listen specifically for any commentary on data licensing contract renewals or pricing — even a sentence matters at this stage.</div>
+        </div>
+      </div>
+
+      <div class="watch-item">
+        <div class="wi-icon wi-green"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-7" stroke="#3dd68c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <div class="wi-title">Data licensing contracts renewed at same or higher price</div>
+          <div class="wi-desc">Google and OpenAI contracts come up in 2026–2027. Renewal at equivalent pricing confirms the data moat has real pricing power. Usage-based pricing tiers would be a re-rating event — this single data point could push the stock toward the bull case target on its own.</div>
+        </div>
+      </div>
+
+      <div class="watch-item">
+        <div class="wi-icon wi-green"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-7" stroke="#3dd68c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <div class="wi-title">Reddit Answers search monetisation announced with a timeline</div>
+          <div class="wi-desc">Converts 80M weekly unmonetised search users into a direct revenue line at near-zero incremental cost. Currently generating $0. Any product announcement with a committed timeline converts this unpriced option into something the market can value — and apply a multiple to.</div>
+        </div>
+      </div>
+
+      <div class="watch-item" style="border-bottom:none">
+        <div class="wi-icon wi-green"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-7" stroke="#3dd68c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <div class="wi-title">Stock-based compensation falls below 15% of revenue</div>
+          <div class="wi-desc">Currently at 18% ($387M in FY2025). A decline below 15% accelerates GAAP EPS growth and attracts a new category of institutional buyers who screen on GAAP P/E — broadening the investor base and providing a second multiple expansion driver.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card reveal" style="margin-top:1px">
+      <div class="watch-group-label"><span class="wgl-dot" style="background:var(--red)"></span><span style="color:var(--red)">Red flags — reassess or reduce exposure</span></div>
+
+      <div class="watch-item">
+        <div class="wi-icon wi-red"><svg viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="#e05555" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <div>
+          <div class="wi-title">Data licensing non-renewal or price step-down disclosed</div>
+          <div class="wi-desc">This breaks the core thesis. If Google or OpenAI walk away or reduce pricing significantly, the AI narrative premium collapses simultaneously with the licensing revenue line. Exit signal — do not average down waiting for a recovery. Both risks materialise at once.</div>
+        </div>
+      </div>
+
+      <div class="watch-item">
+        <div class="wi-icon wi-red"><svg viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="#e05555" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <div>
+          <div class="wi-title">Section 230 repeal passes committee with bipartisan support</div>
+          <div class="wi-desc">A US law change forcing over-moderation would destroy the authentic community content that underpins both the ad business and data licensing simultaneously. Binary legal risk — it cannot be hedged operationally. A meaningful committee vote is an exit signal, not a buying opportunity.</div>
+        </div>
+      </div>
+
+      <div class="watch-item">
+        <div class="wi-icon wi-red"><svg viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="#e05555" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <div>
+          <div class="wi-title">Revenue growth below 35% for two consecutive quarters</div>
+          <div class="wi-desc">The valuation multiple holds only with sustained growth above roughly 40%. Two consecutive misses below 35% — which would still be exceptional for most businesses — signals multiple compression. Expect the market to price this in quickly and fully.</div>
+        </div>
+      </div>
+
+      <div class="watch-item" style="border-bottom:none">
+        <div class="wi-icon wi-amber"><svg viewBox="0 0 16 16" fill="none"><path d="M8 5v4M8 11v1" stroke="#c9a84c" stroke-width="1.8" stroke-linecap="round"/><circle cx="8" cy="8" r="6.5" stroke="#c9a84c" stroke-width="1.2"/></svg></div>
+        <div>
+          <div class="wi-title">Major moderator revolt or measurable DAU decline</div>
+          <div class="wi-desc">Reddit's content is moderated by volunteers at no cost. If management alienates that community, content quality drops, advertiser brand safety scores fall, and data licensing value follows — all simultaneously. Watch community health commentary on every earnings call, not just the headline numbers.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- VERDICT -->
+  <div class="verdict reveal">
+    <div class="verdict-eyebrow">Bottom line · Insight Invest · March 2026</div>
+    <div class="verdict-title">Moderate Buy —<br><em>an asymmetric entry, not a sure thing</em></div>
+
+    <div class="verdict-pt-row">
+      <div class="verdict-pt">
+        <div class="verdict-pt-val" style="color:var(--text-bright)">$177</div>
+        <div class="verdict-pt-lbl">Conservative DCF floor</div>
+      </div>
+      <div class="verdict-pt">
+        <div class="verdict-pt-val" style="color:var(--green)">$232–238</div>
+        <div class="verdict-pt-lbl">Analyst consensus target</div>
+      </div>
+      <div class="verdict-pt">
+        <div class="verdict-pt-val" style="color:var(--gold)">$140</div>
+        <div class="verdict-pt-lbl">Current price (~48% off highs)</div>
+      </div>
+    </div>
+
+    <div class="verdict-body">
+      At ~$140, Reddit is trading 48% below its all-time high on a business that just delivered its <strong>first profitable year, $684M in free cash flow, and 69% revenue growth.</strong> The market is pricing it as a maturing ad platform. The evidence says it is building data infrastructure for the AI era with no direct competitor and no obvious substitute.<br><br>
+      The <strong>$1B buyback and $2.48B cash balance</strong> provide a genuine floor. The valuation demands high growth continue — that is the single condition this thesis lives or dies on. Use the watch list above every earnings season. <strong>Set your exit triggers before you enter, not after.</strong> Size the position to reflect two binary risks — data licensing and Section 230 — that cannot be hedged operationally.
+    </div>
+  </div>
+
+  <div class="disclaimer reveal">
+    Important disclaimer — This brief is produced by Insight Invest for educational and community purposes only. It does not constitute financial advice, an offer to buy or sell any security, or a solicitation of any kind. All projections are assumptions and not guarantees of future results. Investing involves risk, including possible loss of principal. All figures sourced from Reddit Inc. SEC filings — 10-K FY2025 accession 0001713445-26-000022, Q4'25 Earnings Release February 5 2026, and Insight Invest's proprietary 3-statement financial model. Always conduct independent due diligence and consult a qualified financial advisor before making investment decisions.
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-logo">Insight Invest</div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="reports.html">Reports</a>
+    <a href="members.html">Members</a>
+    <a href="members.html#briefs">Stock Briefs</a>
+  </div>
+  <div class="footer-copy">© 2026 Insight Invest</div>
+</footer>
+
+<script>
+  const nav=document.getElementById('mainNav');
+  window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>40));
+  function switchTab(id,btn){
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.getElementById('panel-'+id).classList.add('active');
+    btn.classList.add('active');
+  }
+  const io=new IntersectionObserver((entries)=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*70);io.unobserve(e.target)}})},{threshold:.06});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
