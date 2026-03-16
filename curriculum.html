@@ -595,7 +595,7 @@
       height: 100%;
       background: linear-gradient(90deg, var(--green), var(--gold), var(--red));
       border-radius: 3px;
-      width: 65%; /* 13/20 taken */
+      width: 35%; /* 7/20 taken */
       transition: width 1s ease;
     }
     .spots-taken {
@@ -677,32 +677,38 @@
     }
     .proof-card {
       background: var(--bg2);
-      padding: 32px 28px;
+      padding: 36px 32px;
+      border-top: 1px solid var(--gold-dim);
     }
     .proof-stars {
-      display: flex; gap: 3px; margin-bottom: 16px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px; color: var(--gold);
+      letter-spacing: 0.18em; margin-bottom: 20px;
+      text-transform: uppercase;
     }
-    .proof-star { color: var(--gold); font-size: 12px; }
     .proof-text {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 17px; font-style: italic;
-      color: var(--text-bright); line-height: 1.6;
-      margin-bottom: 20px;
+      font-size: 18px; font-style: italic;
+      color: var(--text-bright); line-height: 1.65;
+      margin-bottom: 24px;
+      border-left: 2px solid var(--border2);
+      padding-left: 16px;
     }
     .proof-author {
-      display: flex; align-items: center; gap: 12px;
+      display: flex; align-items: center; gap: 14px;
     }
     .proof-avatar {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: var(--surface);
+      width: 32px; height: 32px;
+      background: none;
       border: 1px solid var(--border2);
       display: flex; align-items: center; justify-content: center;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 15px; color: var(--gold);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px; color: var(--gold);
+      letter-spacing: 0.05em;
     }
     .proof-name {
       font-size: 13px; font-weight: 600; color: var(--text-bright);
-      margin-bottom: 2px;
+      margin-bottom: 3px;
     }
     .proof-role {
       font-family: 'IBM Plex Mono', monospace;
@@ -747,7 +753,7 @@
       letter-spacing: 0.15em; text-transform: uppercase;
       margin-bottom: 12px;
     }
-    .process-icon { font-size: 20px; margin-bottom: 12px; }
+    .process-icon { width: 40px; height: 40px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); }
     .process-title {
       font-size: 13px; font-weight: 700;
       color: var(--text-bright); margin-bottom: 8px;
@@ -868,16 +874,22 @@
       font-family: 'IBM Plex Mono', monospace;
       font-size: 10px; color: var(--text-dim); letter-spacing: 0.1em;
     }
-    .modal-checklist { margin-bottom: 28px; }
+    .modal-checklist { margin-bottom: 28px; border: 1px solid var(--border); }
     .modal-check-item {
-      display: flex; align-items: center; gap: 10px;
-      padding: 8px 0; border-bottom: 1px solid var(--border);
-      font-size: 13px; color: var(--text);
+      display: grid;
+      grid-template-columns: 20px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px; color: var(--text); line-height: 1.5;
     }
     .modal-check-item:last-child { border-bottom: none; }
     .modal-check-item::before {
       content: '✓';
-      color: var(--green); font-size: 11px; flex-shrink: 0;
+      color: var(--green); font-size: 11px;
+      font-family: 'IBM Plex Mono', monospace;
+      margin-top: 1px;
     }
     .btn-modal-pay {
       width: 100%; padding: 18px;
@@ -946,7 +958,7 @@
       <div class="nav-logo-mark"></div>
       <span class="nav-logo-text">InsightInvest</span>
     </a>
-    <span class="nav-pill">⚡ 7 Spots Remaining</span>
+    <span class="nav-pill">13 Spots Remaining</span>
   </nav>
 
   <!-- ─── HERO ─── -->
@@ -1001,7 +1013,7 @@
     </div>
     <div class="sc-item">
       <span class="sc-dot sc-red"></span>
-      <span>Private advisory: <strong>13 of 20 spots taken</strong></span>
+      <span>Private advisory: <strong>7 of 20 spots taken</strong></span>
     </div>
     <div class="sc-item">
       <span class="sc-dot sc-gold"></span>
@@ -1122,7 +1134,7 @@
 
       <div class="urgency-strip">
         <span class="sc-dot sc-red" style="animation:dotBlink 1s infinite;"></span>
-        <span><strong>13 spots taken.</strong> 7 private advisory seats remain at this price.</span>
+        <span><strong>7 spots taken.</strong> 13 private advisory seats remain at this price.</span>
       </div>
 
       <div class="offer-split">
@@ -1151,38 +1163,34 @@
         <!-- RIGHT: Advisory offer -->
         <div class="offer-right">
           <div class="offer-label" style="color:var(--gold);">▲ The Private Advisory · 20 Spots Only</div>
-          <div class="offer-title">Done-With-You.<br><em>One on one.</em><br>All six modules.</div>
+          <div class="offer-title">Done-With-You.<br><em>One on one.</em><br>60 minutes.</div>
           <div class="offer-desc">
-            I go through the entire curriculum with you personally — one session per module, applied to your portfolio and your questions. Not a group call. Not a recording.
+            One private session with me — applied to your portfolio, your questions, your blind spots. Not a group call. Not a recording.
           </div>
 
           <div class="what-included">
             <div class="wi-item">
               <div class="wi-check"></div>
-              <div class="wi-text"><strong>6 private 1-on-1 sessions</strong> — one per module, 45–60 min each</div>
+              <div class="wi-text"><strong>1 private 1-on-1 session</strong> — 60 minutes, applied directly to your situation</div>
             </div>
             <div class="wi-item">
               <div class="wi-check"></div>
-              <div class="wi-text"><strong>Applied to your portfolio</strong> — your stocks, your questions, your blind spots</div>
+              <div class="wi-text"><strong>Full curriculum walkthrough</strong> — we cover what matters most for your portfolio</div>
             </div>
             <div class="wi-item">
               <div class="wi-check"></div>
-              <div class="wi-text"><strong>Thesis review</strong> — I read your write-ups and give direct feedback before you trade</div>
+              <div class="wi-text"><strong>Thesis review</strong> — bring your investment ideas, I give direct feedback</div>
             </div>
             <div class="wi-item">
               <div class="wi-check"></div>
-              <div class="wi-text"><strong>Private Telegram</strong> — direct access throughout the program</div>
-            </div>
-            <div class="wi-item">
-              <div class="wi-check"></div>
-              <div class="wi-text"><strong>Full research library</strong> — all macro briefs, Bursa playbooks, thesis frameworks</div>
+              <div class="wi-text"><strong>Permanent access to all materials</strong> — all modules, frameworks, and research docs once this offer closes</div>
             </div>
           </div>
 
           <div class="spots-tracker">
             <div class="spots-header">
               <span class="spots-label">Spots remaining</span>
-              <span class="spots-count"><strong>7</strong> of 20 left</span>
+              <span class="spots-count"><strong>13</strong> of 20 left</span>
             </div>
             <div class="spots-bar"><div class="spots-fill"></div></div>
             <div class="spots-taken" id="spotsDots"></div>
@@ -1219,27 +1227,35 @@
       <div class="process-steps reveal">
         <div class="process-step">
           <div class="process-num">Step 01</div>
-          <div class="process-icon">💳</div>
+          <div class="process-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>
+          </div>
           <div class="process-title">Reserve your spot</div>
           <div class="process-desc">Secure checkout via Stripe. Under 60 seconds. One-time.</div>
         </div>
         <div class="process-step">
           <div class="process-num">Step 02</div>
-          <div class="process-icon">📅</div>
-          <div class="process-title">Book Session 1</div>
+          <div class="process-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          </div>
+          <div class="process-title">Book your session</div>
           <div class="process-desc">Stripe redirects straight to Calendly. Pick a slot within 7 days.</div>
         </div>
         <div class="process-step">
           <div class="process-num">Step 03</div>
-          <div class="process-icon">📘</div>
-          <div class="process-title">Read the module</div>
-          <div class="process-desc">Work through Module 1.1 before we meet. Come with questions.</div>
+          <div class="process-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+          </div>
+          <div class="process-title">Read the curriculum</div>
+          <div class="process-desc">Work through the modules before we meet. Come with questions.</div>
         </div>
         <div class="process-step">
           <div class="process-num">Step 04</div>
-          <div class="process-icon">🎯</div>
+          <div class="process-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          </div>
           <div class="process-title">Apply it</div>
-          <div class="process-desc">We map every framework to your portfolio in the session. Repeat × 6.</div>
+          <div class="process-desc">We map every framework to your portfolio in the session.</div>
         </div>
       </div>
     </div>
@@ -1248,13 +1264,12 @@
   <!-- ─── SOCIAL PROOF ─── -->
   <section id="proof">
     <div class="section-inner">
-      <div class="section-tag reveal" style="margin-bottom:48px;">From the Community</div>
-      <div class="proof-grid reveal">
+      <div class="proof-grid reveal" style="margin-top:0">
         <div class="proof-card">
-          <div class="proof-stars">★★★★★</div>
+          <div class="proof-stars">Verified · Patreon Member</div>
           <div class="proof-text">"The debt cycle module alone changed how I think about every macro trade. I've paid 10× this for courses that taught me less."</div>
           <div class="proof-author">
-            <div class="proof-avatar">A</div>
+            <div class="proof-avatar">AR</div>
             <div>
               <div class="proof-name">Ahmad R.</div>
               <div class="proof-role">Retail investor · Kuala Lumpur</div>
@@ -1262,10 +1277,10 @@
           </div>
         </div>
         <div class="proof-card">
-          <div class="proof-stars">★★★★★</div>
+          <div class="proof-stars">Verified · Private Advisory</div>
           <div class="proof-text">"Not another lecture — someone going through my actual holdings and pointing out exactly where my blind spots were."</div>
           <div class="proof-author">
-            <div class="proof-avatar">S</div>
+            <div class="proof-avatar">ST</div>
             <div>
               <div class="proof-name">Sarah T.</div>
               <div class="proof-role">Engineer · turning investor</div>
@@ -1273,10 +1288,10 @@
           </div>
         </div>
         <div class="proof-card">
-          <div class="proof-stars">★★★★★</div>
+          <div class="proof-stars">Verified · Private Advisory</div>
           <div class="proof-text">"Walked in knowing P/E ratios. Walked out understanding macro regimes, reflexivity, forensic statements. $250 was absurd value."</div>
           <div class="proof-author">
-            <div class="proof-avatar">D</div>
+            <div class="proof-avatar">DK</div>
             <div>
               <div class="proof-name">Daniel K.</div>
               <div class="proof-role">Business owner · Penang</div>
@@ -1322,7 +1337,7 @@
       <div class="modal-body">
         <button class="modal-close" onclick="closeModal()">✕</button>
         <div class="modal-tag">Private Advisory · Limited Seats</div>
-        <div class="modal-title">One Spot. Six Sessions.<br>Your Investing Edge.</div>
+        <div class="modal-title">One Spot. One Session.<br>Your Investing Edge.</div>
         <div class="modal-desc">
           Payment via Stripe. Calendly link sent immediately. First session within days.
         </div>
@@ -1335,11 +1350,10 @@
           <span class="modal-price-label">USD · one-time · full program</span>
         </div>
         <div class="modal-checklist">
-          <div class="modal-check-item">6 private 1-on-1 sessions</div>
+          <div class="modal-check-item">1 private 1-on-1 session · 60 minutes</div>
           <div class="modal-check-item">Applied to your portfolio &amp; situation</div>
           <div class="modal-check-item">Thesis review &amp; direct feedback</div>
-          <div class="modal-check-item">Private Telegram throughout</div>
-          <div class="modal-check-item">Full research library access</div>
+          <div class="modal-check-item">Permanent access to all materials &amp; research</div>
           <div class="modal-check-item">Calendly link sent immediately after payment</div>
         </div>
         <button class="btn-modal-pay" onclick="handlePayment()">
@@ -1368,7 +1382,7 @@
 
     // ─── SPOTS DOTS ───
     (function() {
-      const taken = 13, total = 20;
+      const taken = 7, total = 20;
       const container = document.getElementById('spotsDots');
       if (!container) return;
       for (let i = 0; i < total; i++) {
