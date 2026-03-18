@@ -164,6 +164,34 @@
     .verdict-body strong{color:var(--text-bright);font-weight:600}
 
     /* DISCLAIMER */
+    /* ─── CURRICULUM CTA BANNER ─── */
+    .cta-banner{position:relative;overflow:hidden;margin:72px 0 0;background:var(--bg2);border:1px solid var(--border)}
+    .cta-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+    .cta-orb{position:absolute;width:400px;height:400px;border-radius:50%;filter:blur(90px);background:rgba(201,168,76,.055);top:-40%;right:-5%;pointer-events:none}
+    .cta-inner{position:relative;z-index:2;display:grid;grid-template-columns:1fr 400px;gap:52px;align-items:center;padding:56px 52px}
+    .cta-eyebrow{font-size:var(--f-xs);font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+    .cta-eyebrow-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:liveDot 2.5s ease-in-out infinite}
+    .cta-headline{font-family:'Libre Baskerville',serif;font-size:clamp(26px,3.5vw,38px);font-weight:400;color:var(--text-bright);line-height:1.15;margin-bottom:16px}
+    .cta-headline em{font-style:italic;color:var(--gold)}
+    .cta-sub{font-size:var(--f-md);font-weight:300;color:var(--text);line-height:1.75;margin-bottom:28px;max-width:480px}
+    .cta-modules{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px}
+    .cta-mod{font-size:var(--f-xs);font-weight:600;letter-spacing:.06em;color:var(--text-dim);background:rgba(255,255,255,.03);border:1px solid var(--border);padding:5px 12px;display:flex;align-items:center;gap:6px}
+    .cta-mod-num{color:var(--gold);font-weight:700}
+    .cta-cta-btn{display:inline-flex;align-items:center;gap:10px;padding:15px 32px;background:var(--gold);color:var(--bg);font-size:var(--f-sm);font-weight:700;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;transition:all .3s;position:relative;overflow:hidden}
+    .cta-cta-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent,rgba(255,255,255,.12));transform:translateX(-100%);transition:transform .5s}
+    .cta-cta-btn:hover::before{transform:translateX(100%)}
+    .cta-cta-btn:hover{box-shadow:0 8px 32px rgba(201,168,76,.32);transform:translateY(-1px)}
+    .cta-free-tag{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-size:var(--f-xs);font-weight:600;letter-spacing:.08em;color:var(--text-dim)}
+    .cta-free-tag span{color:var(--green)}
+    .cta-right{display:flex;flex-direction:column;gap:1px}
+    .cta-module-card{background:var(--bg);border:1px solid var(--border);padding:16px 20px;display:flex;align-items:flex-start;gap:14px;transition:border-color .25s;cursor:default}
+    .cta-module-card:not(:first-child){border-top:none}
+    .cta-module-card:hover{border-color:rgba(201,168,76,.25)}
+    .cta-mod-icon{width:32px;height:32px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--gold);font-family:'Libre Baskerville',serif;font-size:13px;font-weight:400}
+    .cta-mod-title{font-size:var(--f-sm);font-weight:600;color:var(--text-bright);margin-bottom:3px}
+    .cta-mod-desc{font-size:var(--f-xs);font-weight:400;color:var(--text-dim);line-height:1.5}
+    @media(max-width:900px){.cta-inner{grid-template-columns:1fr;padding:36px 24px;gap:32px}.cta-right{display:none}}
+
     .disclaimer{border-top:1px solid var(--border);margin-top:52px;padding-top:26px;font-size:var(--f-xs);font-weight:400;color:var(--text-dim);line-height:1.8;letter-spacing:.02em}
 
     /* FOOTER */
@@ -491,14 +519,65 @@
         <div class="verdict-pt-lbl">Analyst consensus target</div>
       </div>
       <div class="verdict-pt">
-        <div class="verdict-pt-val" style="color:var(--gold)">$133</div>
+        <div class="verdict-pt-val" style="color:var(--gold)">$140</div>
         <div class="verdict-pt-lbl">Current price (~48% off highs)</div>
       </div>
     </div>
 
     <div class="verdict-body">
-      At ~$133, Reddit is trading 48% below its all-time high on a business that just delivered its <strong>first profitable year, $684M in free cash flow, and 69% revenue growth.</strong> The market is pricing it as a maturing ad platform. The evidence says it is building data infrastructure for the AI era with no direct competitor and no obvious substitute.<br><br>
+      At ~$140, Reddit is trading 48% below its all-time high on a business that just delivered its <strong>first profitable year, $684M in free cash flow, and 69% revenue growth.</strong> The market is pricing it as a maturing ad platform. The evidence says it is building data infrastructure for the AI era with no direct competitor and no obvious substitute.<br><br>
       The <strong>$1B buyback and $2.48B cash balance</strong> provide a genuine floor. The valuation demands high growth continue — that is the single condition this thesis lives or dies on. Use the watch list above every earnings season. <strong>Set your exit triggers before you enter, not after.</strong> Size the position to reflect two binary risks — data licensing and Section 230 — that cannot be hedged operationally.
+    </div>
+  </div>
+
+  <!-- ─── CURRICULUM CTA BANNER ─── -->
+  <div class="cta-banner reveal">
+    <div class="cta-orb"></div>
+    <div class="cta-inner">
+      <div>
+        <div class="cta-eyebrow"><span class="cta-eyebrow-dot"></span>Free Resource · Total Beginners Only</div>
+        <h2 class="cta-headline">6 modules that will prepare you<br>to invest your <em>first dollar.</em></h2>
+        <p class="cta-sub">You just read a professional-grade research brief. But if terms like FCF, WACC, and EV/Revenue were unfamiliar — this free curriculum was built for exactly where you are right now.</p>
+        <div class="cta-modules">
+          <div class="cta-mod"><span class="cta-mod-num">01</span> How markets really work</div>
+          <div class="cta-mod"><span class="cta-mod-num">02</span> Reading a company's financials</div>
+          <div class="cta-mod"><span class="cta-mod-num">03</span> Valuation from scratch</div>
+          <div class="cta-mod"><span class="cta-mod-num">04</span> Risk &amp; position sizing</div>
+          <div class="cta-mod"><span class="cta-mod-num">05</span> Building your first watchlist</div>
+          <div class="cta-mod"><span class="cta-mod-num">06</span> Making your first investment</div>
+        </div>
+        <a href="curriculum-waitlist.html" class="cta-cta-btn">
+          Get Free Access
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <div class="cta-free-tag"><span>Free</span> &nbsp;·&nbsp; No credit card &nbsp;·&nbsp; Built for complete beginners</div>
+      </div>
+      <div class="cta-right">
+        <div class="cta-module-card">
+          <div class="cta-mod-icon">01</div>
+          <div><div class="cta-mod-title">How markets really work</div><div class="cta-mod-desc">Price vs. value, why markets misprice assets, and how to exploit it.</div></div>
+        </div>
+        <div class="cta-module-card">
+          <div class="cta-mod-icon">02</div>
+          <div><div class="cta-mod-title">Reading a company's financials</div><div class="cta-mod-desc">Income statement, balance sheet, cash flow — explained in plain English.</div></div>
+        </div>
+        <div class="cta-module-card">
+          <div class="cta-mod-icon">03</div>
+          <div><div class="cta-mod-title">Valuation from scratch</div><div class="cta-mod-desc">What a stock is actually worth and how to calculate it yourself.</div></div>
+        </div>
+        <div class="cta-module-card">
+          <div class="cta-mod-icon">04</div>
+          <div><div class="cta-mod-title">Risk &amp; position sizing</div><div class="cta-mod-desc">How much to put in, when to cut, and how to never blow up a portfolio.</div></div>
+        </div>
+        <div class="cta-module-card">
+          <div class="cta-mod-icon">05</div>
+          <div><div class="cta-mod-title">Building your first watchlist</div><div class="cta-mod-desc">A systematic way to find, track, and patiently wait for the right price.</div></div>
+        </div>
+        <div class="cta-module-card">
+          <div class="cta-mod-icon">06</div>
+          <div><div class="cta-mod-title">Making your first investment</div><div class="cta-mod-desc">The exact checklist to run before putting real money to work.</div></div>
+        </div>
+      </div>
     </div>
   </div>
 
