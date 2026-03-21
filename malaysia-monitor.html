@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Malaysia Economic Monitor · InsightInvest</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Sora:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --bg: #0c0e13;
+  --bg2: #12151c;
+  --bg3: #181c25;
+  --bg4: #1e2330;
+  --border: rgba(255,255,255,0.06);
+  --border2: rgba(255,255,255,0.11);
+  --gold: #c9a84c;
+  --gold2: #f0d080;
+  --cyan: #4ecdc4;
+  --red: #e05555;
+  --green: #52b788;
+  --amber: #f4a261;
+  --muted: rgba(155,163,175,0.35);
+  --text: #e8eaf0;
+  --text2: #9ba3af;
+  --text3: #4e5562;
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans: 'Sora', sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.6;min-height:100vh}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* HEADER */
+.header{
+  padding:40px 48px 32px;
+  border-bottom:1px solid var(--border);
+  background:var(--bg);
+  position:sticky;top:0;z-index:100;
+}
+.header-inner{max-width:1400px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.brand{font-family:var(--serif);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.page-title{font-family:var(--serif);font-size:34px;color:var(--text);line-height:1.1}
+.page-title em{color:var(--gold);font-style:normal}
+.header-meta{text-align:right}
+.update-time{font-size:11px;color:var(--text3);margin-bottom:6px;letter-spacing:0.05em}
+.live-pill{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(82,183,136,0.1);
+  border:1px solid rgba(82,183,136,0.2);
+  color:var(--green);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;
+  padding:3px 10px;border-radius:20px;
+}
+.live-dot{width:5px;height:5px;background:var(--green);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.2}}
+
+/* NAV TABS */
+.nav{border-bottom:1px solid var(--border);background:var(--bg)}
+.nav-inner{max-width:1400px;margin:0 auto;padding:0 48px;display:flex;gap:0;overflow-x:auto}
+.tab{
+  padding:12px 22px;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;
+  cursor:pointer;color:var(--text3);border-bottom:2px solid transparent;
+  transition:all 0.15s;white-space:nowrap;
+}
+.tab:hover{color:var(--text2)}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+/* CONTENT */
+.content{max-width:1400px;margin:0 auto;padding:36px 48px 80px}
+.section{display:none}
+.section.active{display:block}
+
+/* LOADING */
+.loading-state{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:80px 20px;color:var(--text3);gap:16px;
+}
+.loading-spinner{
+  width:32px;height:32px;border:2px solid var(--border2);
+  border-top-color:var(--gold);border-radius:50%;
+  animation:spin 0.8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ERROR */
+.error-state{
+  background:rgba(224,85,85,0.06);border:1px solid rgba(224,85,85,0.15);
+  border-radius:10px;padding:20px 24px;color:var(--red);font-size:13px;
+  margin-bottom:24px;
+}
+
+/* ALERTS */
+.alert-list{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.alert{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:8px;padding:14px 16px;display:flex;gap:14px;
+}
+.alert.ok{border-left:3px solid var(--green)}
+.alert.warn{border-left:3px solid var(--amber)}
+.alert.danger{border-left:3px solid var(--red)}
+.alert.info{border-left:3px solid var(--cyan)}
+.alert-icon{font-size:15px;flex-shrink:0;margin-top:1px}
+.alert-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px}
+.alert-body{font-size:12px;color:var(--text2);line-height:1.5}
+
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:12px;margin-bottom:28px}
+.kpi{
+  background:var(--bg2);border:1px solid var(--border);border-radius:10px;
+  padding:16px;cursor:default;transition:border-color 0.2s;
+}
+.kpi:hover{border-color:var(--border2)}
+.kpi.highlight{border-color:rgba(201,168,76,0.25);background:rgba(201,168,76,0.03)}
+.kpi-label{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.kpi-value{font-family:var(--mono);font-size:24px;font-weight:500;color:var(--text);line-height:1;margin-bottom:6px}
+.kpi.highlight .kpi-value{color:var(--gold2)}
+.kpi-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.kpi-badge{
+  font-size:10px;font-weight:500;padding:2px 7px;border-radius:20px;
+  display:inline-flex;align-items:center;gap:3px;
+}
+.kpi-badge.up{background:rgba(82,183,136,0.12);color:var(--green)}
+.kpi-badge.down{background:rgba(224,85,85,0.12);color:var(--red)}
+.kpi-badge.neutral{background:rgba(255,255,255,0.06);color:var(--text3)}
+.kpi-period{font-size:11px;color:var(--text3)}
+.kpi-source{font-size:9px;color:var(--text3);margin-top:6px;opacity:0.6}
+
+/* CHARTS */
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.chart-row.full{grid-template-columns:1fr}
+.chart-box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px}
+.chart-title{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--text2);margin-bottom:3px}
+.chart-sub{font-size:11px;color:var(--text3);margin-bottom:16px}
+.chart-wrap{position:relative;width:100%}
+
+/* SECTION TITLE */
+.sec-title{font-family:var(--serif);font-size:22px;color:var(--text);margin-bottom:4px}
+.sec-sub{font-size:12px;color:var(--text3);margin-bottom:24px}
+
+/* DATA TABLE */
+.data-table{width:100%;border-collapse:collapse;font-size:12px}
+.data-table th{
+  padding:8px 12px;text-align:left;font-size:10px;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border);font-weight:400;
+}
+.data-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.03);color:var(--text2);vertical-align:middle}
+.data-table tr:hover td{background:rgba(255,255,255,0.015)}
+.mono{font-family:var(--mono)}
+.pos{color:var(--green);font-family:var(--mono)}
+.neg{color:var(--red);font-family:var(--mono)}
+.tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:500}
+.tag.green{background:rgba(82,183,136,0.12);color:var(--green)}
+.tag.red{background:rgba(224,85,85,0.12);color:var(--red)}
+.tag.amber{background:rgba(244,162,97,0.12);color:var(--amber)}
+.tag.cyan{background:rgba(78,205,196,0.12);color:var(--cyan)}
+.tag.gold{background:rgba(201,168,76,0.12);color:var(--gold2)}
+.tag.gray{background:rgba(255,255,255,0.06);color:var(--text3)}
+
+/* INFO GRID */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.info-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px}
+.info-card-title{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12px}
+.info-row:last-child{border-bottom:none}
+.info-key{color:var(--text3)}
+.info-val{color:var(--text);font-family:var(--mono);font-size:12px}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:28px 0}
+
+/* TOOLTIP */
+.note{
+  background:var(--bg3);border:1px solid var(--border2);border-radius:8px;
+  padding:12px 16px;font-size:12px;color:var(--text2);line-height:1.6;margin-top:16px;
+}
+.note strong{color:var(--text)}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .header{padding:24px 20px 20px}
+  .nav-inner{padding:0 20px}
+  .content{padding:24px 20px 60px}
+  .chart-row{grid-template-columns:1fr}
+  .info-grid{grid-template-columns:1fr}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .page-title{font-size:26px}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div>
+      <div class="brand">InsightInvest · leiholding.com</div>
+      <h1 class="page-title">Malaysia <em>Economic</em> Monitor</h1>
+    </div>
+    <div class="header-meta">
+      <div class="update-time" id="updateTime">Loading data…</div>
+      <div class="live-pill"><span class="live-dot"></span> Live Pipeline</div>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="tab active" onclick="switchTab('macro')">Macro</div>
+    <div class="tab" onclick="switchTab('markets')">Markets</div>
+    <div class="tab" onclick="switchTab('labour')">Labour</div>
+    <div class="tab" onclick="switchTab('fdi')">FDI</div>
+    <div class="tab" onclick="switchTab('sources')">Sources</div>
+  </div>
+</nav>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- LOADING -->
+  <div id="loadingState" class="loading-state">
+    <div class="loading-spinner"></div>
+    <div>Fetching live economic data…</div>
+  </div>
+
+  <!-- ERROR -->
+  <div id="errorState" class="error-state" style="display:none">
+    ⚠ Could not load dashboard data. The pipeline may be running — try again in a moment.
+  </div>
+
+  <!-- ── MACRO ─────────────────────────────────────────── -->
+  <div id="section-macro" class="section" style="display:none">
+    <div class="sec-title">Macroeconomic Overview</div>
+    <div class="sec-sub">Core national indicators · BNM · DOSM · Updated daily via automated pipeline</div>
+
+    <div class="alert-list" id="macroAlerts"></div>
+    <div class="kpi-grid" id="macroKpis"></div>
+
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-title">GDP Growth Rate</div>
+        <div class="chart-sub">Quarterly YoY % · Chained 2015 prices · Source: DOSM</div>
+        <div class="chart-wrap"><canvas id="gdpChart" style="height:220px"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Consumer Price Index</div>
+        <div class="chart-sub">Headline &amp; Core inflation YoY % · Source: DOSM</div>
+        <div class="chart-wrap"><canvas id="cpiChart" style="height:220px"></canvas></div>
+      </div>
+    </div>
+
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-title">Industrial Production Index</div>
+        <div class="chart-sub">Monthly YoY growth % · Base 2015=100 · Source: DOSM</div>
+        <div class="chart-wrap"><canvas id="ipiChart" style="height:200px"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Labour Force</div>
+        <div class="chart-sub">Unemployment rate &amp; LFPR % · Quarterly · Source: DOSM</div>
+        <div class="chart-wrap"><canvas id="labourChart" style="height:200px"></canvas></div>
+      </div>
+    </div>
+
+    <div class="note"><strong>Data sources:</strong> GDP and CPI from DOSM OpenAPI. OPR from BNM monetary policy statements. International reserves from BNM MSB Table 1.4. Pipeline runs daily at 08:30 KL time.</div>
+  </div>
+
+  <!-- ── MARKETS ────────────────────────────────────────── -->
+  <div id="section-markets" class="section" style="display:none">
+    <div class="sec-title">Capital Markets</div>
+    <div class="sec-sub">KLCI index · FX rates · Bursa Malaysia · BNM</div>
+
+    <div class="kpi-grid" id="marketsKpis"></div>
+
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-title">KLCI Index</div>
+        <div class="chart-sub">Daily close · 1 year · Source: Bursa Malaysia via Yahoo Finance</div>
+        <div class="chart-wrap"><canvas id="klciChart" style="height:240px"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Tracker Stocks</div>
+        <div class="chart-sub">Large-cap Bursa Malaysia equities · Current price &amp; 52-week range</div>
+        <div style="overflow-x:auto;margin-top:4px">
+          <table class="data-table" id="stockTable">
+            <thead><tr><th>Stock</th><th>Price (RM)</th><th>52W High</th><th>52W Low</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-grid" id="marketsInfo"></div>
+  </div>
+
+  <!-- ── LABOUR ─────────────────────────────────────────── -->
+  <div id="section-labour" class="section" style="display:none">
+    <div class="sec-title">Labour Market</div>
+    <div class="sec-sub">Employment · Unemployment · Labour force participation · DOSM LFS</div>
+
+    <div class="kpi-grid" id="labourKpis"></div>
+
+    <div class="chart-row full">
+      <div class="chart-box">
+        <div class="chart-title">Labour Force Dynamics</div>
+        <div class="chart-sub">Unemployment rate &amp; LFPR quarterly trend · Source: DOSM LFS</div>
+        <div class="chart-wrap"><canvas id="labourFullChart" style="height:280px"></canvas></div>
+      </div>
+    </div>
+
+    <div class="info-grid" id="labourInfo"></div>
+  </div>
+
+  <!-- ── FDI ───────────────────────────────────────────── -->
+  <div id="section-fdi" class="section" style="display:none">
+    <div class="sec-title">Foreign Direct Investment</div>
+    <div class="sec-sub">Approved investments · Source country breakdown · MIDA quarterly data</div>
+
+    <div class="kpi-grid" id="fdiKpis"></div>
+
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-title">FDI Inflows</div>
+        <div class="chart-sub">Annual USD billions · Source: World Bank Open Data</div>
+        <div class="chart-wrap"><canvas id="fdiChart" style="height:240px"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">MIDA Approved Investment</div>
+        <div class="chart-sub">Quarterly RM billions · By sector · Source: MIDA press releases</div>
+        <div style="overflow-x:auto;margin-top:4px">
+          <table class="data-table" id="midaTable">
+            <thead><tr><th>Period</th><th>Total (RM B)</th><th>Jobs Created</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-grid" id="fdiInfo"></div>
+  </div>
+
+  <!-- ── SOURCES ────────────────────────────────────────── -->
+  <div id="section-sources" class="section" style="display:none">
+    <div class="sec-title">Data Sources &amp; Pipeline</div>
+    <div class="sec-sub">All data is fetched automatically via open public APIs — no manual entry required (except MIDA quarterly press releases)</div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-card-title">BNM OpenAPI</div>
+        <div class="info-row"><span class="info-key">OPR rate</span><span class="info-val">api.bnm.gov.my/public/opr</span></div>
+        <div class="info-row"><span class="info-key">FX rates</span><span class="info-val">api.bnm.gov.my/public/exchange-rate</span></div>
+        <div class="info-row"><span class="info-key">Reserves</span><span class="info-val">api.bnm.gov.my/public/msb/1.4</span></div>
+        <div class="info-row"><span class="info-key">Money supply</span><span class="info-val">api.bnm.gov.my/public/msb/1.1</span></div>
+        <div class="info-row"><span class="info-key">Frequency</span><span class="info-val">Daily</span></div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">OpenDOSM</div>
+        <div class="info-row"><span class="info-key">GDP quarterly</span><span class="info-val">gdp_qtr_real / gdp_qtr_nominal</span></div>
+        <div class="info-row"><span class="info-key">CPI headline + core</span><span class="info-val">cpi_headline / cpi_core</span></div>
+        <div class="info-row"><span class="info-key">Labour force</span><span class="info-val">lfs_qtr</span></div>
+        <div class="info-row"><span class="info-key">IPI + PPI</span><span class="info-val">ipi / ppi</span></div>
+        <div class="info-row"><span class="info-key">Frequency</span><span class="info-val">Monthly / Quarterly</span></div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Bursa Malaysia</div>
+        <div class="info-row"><span class="info-key">KLCI index</span><span class="info-val">Yahoo Finance (^KLSE)</span></div>
+        <div class="info-row"><span class="info-key">Tracker stocks</span><span class="info-val">yfinance .KL suffix</span></div>
+        <div class="info-row"><span class="info-key">Sector indices</span><span class="info-val">Yahoo Finance sector ETFs</span></div>
+        <div class="info-row"><span class="info-key">Frequency</span><span class="info-val">Daily (market hours)</span></div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">MIDA + World Bank</div>
+        <div class="info-row"><span class="info-key">FDI inflows</span><span class="info-val">World Bank Open Data API</span></div>
+        <div class="info-row"><span class="info-key">Investment approved</span><span class="info-val">MIDA press releases (manual)</span></div>
+        <div class="info-row"><span class="info-key">Pipeline</span><span class="info-val">GitHub Actions · Daily 08:30 KL</span></div>
+        <div class="info-row"><span class="info-key">Repo</span><span class="info-val">malaysia-econ-pipeline</span></div>
+      </div>
+    </div>
+
+    <div class="note" id="pipelineMeta"></div>
+  </div>
+
+</div><!-- /content -->
+
+<script>
+const CHART_OPTS = {
+  responsive: true, maintainAspectRatio: false,
+  plugins: {
+    legend: { display: false },
+    tooltip: {
+      backgroundColor: '#1e2330', titleColor: '#e8eaf0',
+      bodyColor: '#9ba3af', borderColor: 'rgba(255,255,255,0.08)',
+      borderWidth: 1, padding: 10,
+    }
+  },
+  scales: {
+    x: { ticks: { color: '#4e5562', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+    y: { ticks: { color: '#4e5562', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.06)' } }
+  }
+};
+
+const GOLD='#c9a84c', CYAN='#4ecdc4', RED='#e05555', GREEN='#52b788', AMBER='#f4a261';
+
+function fmt(v, decimals=1, prefix='', suffix='') {
+  if (v == null || v === undefined) return '—';
+  return prefix + Number(v).toFixed(decimals) + suffix;
+}
+
+function badge(v, upGood=true) {
+  if (v == null) return '';
+  const isUp = v > 0;
+  const cls = isUp === upGood ? 'up' : 'down';
+  const arrow = isUp ? '▲' : '▼';
+  return `<span class="kpi-badge ${cls}">${arrow} ${Math.abs(v).toFixed(2)}%</span>`;
+}
+
+function mkChart(id, type, labels, datasets, extra={}) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const opts = JSON.parse(JSON.stringify(CHART_OPTS));
+  // merge extra
+  if (extra.scales) Object.assign(opts.scales, extra.scales);
+  if (extra.plugins) Object.assign(opts.plugins, extra.plugins);
+  return new Chart(el, { type, data: { labels, datasets }, options: opts });
+}
+
+// ── Main data loader ────────────────────────────────────────────────────────
+async function loadDashboard() {
+  try {
+    const res = await fetch('/data/dashboard.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const d = await res.json();
+    document.getElementById('loadingState').style.display = 'none';
+    render(d);
+    switchTab('macro');
+  } catch(e) {
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('errorState').style.display = 'block';
+    // Show sections with fallback empty state
+    switchTab('macro');
+    console.error('Dashboard load failed:', e);
+  }
+}
+
+function render(d) {
+  const kpis = d.kpis || {};
+  const series = d.series || {};
+  const meta = d._meta || {};
+
+  // Update time
+  if (meta.built_at) {
+    const dt = new Date(meta.built_at);
+    document.getElementById('updateTime').textContent =
+      'Updated ' + dt.toLocaleDateString('en-MY', { day:'numeric', month:'short', year:'numeric' }) +
+      ' · ' + dt.toLocaleTimeString('en-MY', { hour:'2-digit', minute:'2-digit' }) + ' UTC';
+  }
+
+  renderMacro(kpis, series);
+  renderMarkets(kpis, d);
+  renderLabour(kpis, series);
+  renderFDI(kpis, series, d.mida_latest);
+  renderSources(meta);
+}
+
+// ── MACRO ───────────────────────────────────────────────────────────────────
+function renderMacro(kpis, series) {
+  // Alerts
+  const alerts = [
+    kpis.gdp_growth_pct != null ? {
+      cls: kpis.gdp_growth_pct >= 4 ? 'ok' : 'warn',
+      icon: kpis.gdp_growth_pct >= 4 ? '✓' : '⚠',
+      title: `GDP Growth ${fmt(kpis.gdp_growth_pct,1,'','%')} YoY`,
+      body: kpis.gdp_growth_pct >= 4
+        ? 'Malaysia economy expanding above consensus. Domestic demand remains primary growth driver.'
+        : 'GDP growth below 4% threshold — monitor for further deceleration.'
+    } : null,
+    { cls:'info', icon:'◈', title:`OPR ${fmt(kpis.opr_rate,2,'','')}% — BNM Monetary Policy`,
+      body: kpis.opr_rate <= 2.75
+        ? 'BNM cut OPR to ' + fmt(kpis.opr_rate,2,'','%') + '. Accommodative stance to support growth amid global uncertainty.'
+        : 'BNM holding OPR steady. Data-dependent guidance. Watch for CPI trajectory before next move.' },
+    { cls:'warn', icon:'⚠', title:'MYR FX Watch — Monitor USD/MYR',
+      body: `USD/MYR at ${fmt(kpis.usd_myr,3)}. BNM intervention threshold historically near 4.80. Export sectors benefit; import costs elevated.` },
+  ].filter(Boolean);
+
+  document.getElementById('macroAlerts').innerHTML = alerts.map(a =>
+    `<div class="alert ${a.cls}">
+      <div class="alert-icon">${a.icon}</div>
+      <div><div class="alert-title">${a.title}</div><div class="alert-body">${a.body}</div></div>
+    </div>`
+  ).join('');
+
+  // KPI cards
+  const macroKpiDefs = [
+    { label:'GDP Growth', val:fmt(kpis.gdp_growth_pct,1,'','%'), badge:badge(kpis.gdp_growth_pct - 3.6), period:'vs 2023', src:'DOSM', hi:true },
+    { label:'CPI Inflation', val:fmt(kpis.cpi_yoy_pct,2,'','%'), badge:badge(-(kpis.cpi_yoy_pct||0), false), period:'YoY', src:'DOSM' },
+    { label:'OPR', val:fmt(kpis.opr_rate,2,'','%'), badge:`<span class="kpi-badge neutral">— BNM</span>`, period:'Policy rate', src:'BNM' },
+    { label:'USD/MYR', val:fmt(kpis.usd_myr,3), badge:'', period:'Reference rate', src:'BNM' },
+    { label:'Unemployment', val:fmt(kpis.unemployment_rate,1,'','%'), badge:'', period:'LFPR quarterly', src:'DOSM' },
+    { label:'Reserves', val:`USD ${fmt(kpis.reserves_usd_bn,1,'','')}B`, badge:'', period:fmt(kpis.import_months_cover,1,'','')+' months imports', src:'BNM MSB 1.4' },
+    { label:'Trade Balance', val:`RM ${fmt(kpis.trade_balance_rm_bn,1,'','')}B`, badge:`<span class="kpi-badge up">▲ Surplus</span>`, period:'Monthly', src:'DOSM' },
+    { label:'Int\'l Reserves', val:`USD ${fmt(kpis.reserves_usd_bn,0,'','')}B`, badge:'', period:'Approx USD', src:'BNM' },
+  ];
+
+  document.getElementById('macroKpis').innerHTML = macroKpiDefs.map(k =>
+    `<div class="kpi ${k.hi?'highlight':''}">
+      <div class="kpi-label">${k.label}</div>
+      <div class="kpi-value">${k.val}</div>
+      <div class="kpi-meta">${k.badge}<span class="kpi-period">${k.period}</span></div>
+      <div class="kpi-source">${k.src}</div>
+    </div>`
+  ).join('');
+
+  // GDP chart
+  const gdpData = (series.gdp_annual || []).filter(r => r.growth != null).slice(0,12).reverse();
+  if (gdpData.length) {
+    mkChart('gdpChart', 'bar',
+      gdpData.map(r => r.date ? r.date.slice(0,7) : r.year || ''),
+      [{ data: gdpData.map(r => r.growth), backgroundColor: gdpData.map(r => r.growth >= 4 ? GOLD : 'rgba(78,205,196,0.4)'), borderRadius:4, borderWidth:0 }],
+      { scales: { y: { ticks: { callback: v => v+'%', color:'#4e5562', font:{size:10} }, grid:{color:'rgba(255,255,255,0.06)'} }, x:{ticks:{color:'#4e5562',font:{size:10}},grid:{display:false}} } }
+    );
+  }
+
+  // CPI chart
+  const cpiData = (series.cpi_monthly || []).filter(r => r.date).slice(0,24).reverse();
+  if (cpiData.length) {
+    mkChart('cpiChart', 'line',
+      cpiData.map(r => r.date.slice(0,7)),
+      [
+        { label:'Headline', data: cpiData.map(r => r.headline), borderColor: GOLD, backgroundColor:'rgba(201,168,76,0.08)', tension:0.4, fill:true, pointRadius:2, borderWidth:2 },
+        { label:'Core', data: cpiData.map(r => r.core), borderColor: CYAN, backgroundColor:'transparent', tension:0.4, pointRadius:2, borderWidth:1.5, borderDash:[3,3] },
+      ],
+      { plugins:{ legend:{ display:true, labels:{color:'#9ba3af',font:{size:11},boxWidth:12} } },
+        scales:{ y:{ticks:{callback:v=>v+'%',color:'#4e5562',font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'}}, x:{ticks:{color:'#4e5562',font:{size:10},maxRotation:45},grid:{display:false}} } }
+    );
+  }
+
+  // IPI chart
+  const ipiData = (series.ipi_monthly || []).filter(r => r.date && r.growth_yoy != null).slice(0,24).reverse();
+  if (ipiData.length) {
+    mkChart('ipiChart', 'bar',
+      ipiData.map(r => r.date.slice(0,7)),
+      [{ data: ipiData.map(r => r.growth_yoy), backgroundColor: ipiData.map(r => r.growth_yoy >= 0 ? 'rgba(78,205,196,0.5)' : 'rgba(224,85,85,0.4)'), borderRadius:3, borderWidth:0 }],
+      { scales:{ y:{ticks:{callback:v=>v+'%',color:'#4e5562',font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'}}, x:{ticks:{color:'#4e5562',font:{size:10},maxRotation:45},grid:{display:false}} } }
+    );
+  }
+
+  // Labour mini chart
+  const lData = (series.labour_monthly || []).filter(r => r.date).slice(0,16).reverse();
+  if (lData.length) {
+    mkChart('labourChart', 'line',
+      lData.map(r => r.date.slice(0,7)),
+      [
+        { label:'Unemployment %', data: lData.map(r => r.unemployment_rate), borderColor: RED, borderWidth:2, tension:0.4, pointRadius:2 },
+        { label:'LFPR %', data: lData.map(r => r.lfpr), borderColor: GREEN, borderWidth:1.5, tension:0.4, pointRadius:2, yAxisID:'y2' },
+      ],
+      { plugins:{ legend:{display:true, labels:{color:'#9ba3af',font:{size:11},boxWidth:12}} },
+        scales:{
+          y:{min:2,max:5,ticks:{callback:v=>v+'%',color:'#4e5562',font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'},position:'left'},
+          y2:{min:68,max:74,ticks:{callback:v=>v+'%',color:'#4e5562',font:{size:10}},position:'right',grid:{display:false}},
+          x:{ticks:{color:'#4e5562',font:{size:10},maxRotation:45},grid:{display:false}}
+        }
+      }
+    );
+  }
+}
+
+// ── MARKETS ─────────────────────────────────────────────────────────────────
+function renderMarkets(kpis, d) {
+  const stocks = (d.sector_indices && d.sector_indices.stocks) ? d.sector_indices.stocks
+    : (d.bursa_tracker ? d.bursa_tracker.stocks : {});
+
+  document.getElementById('marketsKpis').innerHTML = [
+    { label:'KLCI', val: fmt(kpis.klci, 2), badge: badge(kpis.klci_change_1m_pct), period:'1-month change', src:'Bursa / Yahoo Finance', hi:true },
+    { label:'USD/MYR', val: fmt(kpis.usd_myr, 3), badge:'', period:'BNM reference', src:'BNM' },
+    { label:'OPR', val: fmt(kpis.opr_rate, 2, '', '%'), badge:'<span class="kpi-badge neutral">— Unchanged</span>', period:'Policy rate', src:'BNM' },
+    { label:'Reserves', val: `USD ${fmt(kpis.reserves_usd_bn, 1)}B`, badge:'', period:`${fmt(kpis.import_months_cover,1)} months imports`, src:'BNM' },
+  ].map(k =>
+    `<div class="kpi ${k.hi?'highlight':''}">
+      <div class="kpi-label">${k.label}</div>
+      <div class="kpi-value">${k.val}</div>
+      <div class="kpi-meta">${k.badge}<span class="kpi-period">${k.period}</span></div>
+      <div class="kpi-source">${k.src}</div>
+    </div>`
+  ).join('');
+
+  // KLCI chart
+  const klciData = (d.series?.klci_daily || []).filter(r => r.date && r.close).slice(-252);
+  if (klciData.length) {
+    mkChart('klciChart', 'line',
+      klciData.map(r => r.date),
+      [{ data: klciData.map(r => r.close), borderColor: GOLD, backgroundColor:'rgba(201,168,76,0.05)', tension:0.3, fill:true, pointRadius:0, borderWidth:2 }],
+      { scales:{ y:{ticks:{color:'#4e5562',font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'}}, x:{ticks:{color:'#4e5562',font:{size:10},maxTicksLimit:8},grid:{display:false}} } }
+    );
+  }
+
+  // Stock table — from tracker_stocks
+  const trackerData = d.bursa_tracker_stocks || {};
+  const tbody = document.querySelector('#stockTable tbody');
+  if (tbody && Object.keys(trackerData).length) {
+    tbody.innerHTML = Object.entries(trackerData).map(([name, s]) =>
+      `<tr>
+        <td style="color:var(--text)">${name} <span style="color:var(--text3);font-size:10px">${s.symbol||''}</span></td>
+        <td class="mono">${fmt(s.price,3,'RM ')}</td>
+        <td class="mono" style="color:var(--green)">${fmt(s['52w_high'],3,'RM ')}</td>
+        <td class="mono" style="color:var(--red)">${fmt(s['52w_low'],3,'RM ')}</td>
+      </tr>`
+    ).join('');
+  } else if (tbody) {
+    tbody.innerHTML = '<tr><td colspan="4" style="color:var(--text3);text-align:center;padding:20px">Stock data refreshes daily during market hours</td></tr>';
+  }
+}
+
+// ── LABOUR ──────────────────────────────────────────────────────────────────
+function renderLabour(kpis, series) {
+  document.getElementById('labourKpis').innerHTML = [
+    { label:'Unemployment Rate', val: fmt(kpis.unemployment_rate, 1, '', '%'), badge:'', period:'DOSM LFS quarterly', src:'DOSM', hi:true },
+  ].map(k =>
+    `<div class="kpi ${k.hi?'highlight':''}">
+      <div class="kpi-label">${k.label}</div>
+      <div class="kpi-value">${k.val}</div>
+      <div class="kpi-source">${k.src}</div>
+    </div>`
+  ).join('');
+
+  const lData = (series.labour_monthly || []).filter(r => r.date).slice(0,20).reverse();
+  if (lData.length) {
+    mkChart('labourFullChart', 'line',
+      lData.map(r => r.date.slice(0,7)),
+      [
+        { label:'Unemployment %', data: lData.map(r => r.unemployment_rate), borderColor: RED, backgroundColor:'rgba(224,85,85,0.06)', tension:0.4, fill:true, pointRadius:3, borderWidth:2 },
+        { label:'LFPR %', data: lData.map(r => r.lfpr), borderColor: GREEN, backgroundColor:'transparent', tension:0.4, pointRadius:3, borderWidth:1.5, yAxisID:'y2' },
+      ],
+      { plugins:{ legend:{display:true, labels:{color:'#9ba3af',font:{size:11},boxWidth:12}} },
+        scales:{
+          y:{min:2,max:5,ticks:{callback:v=>v+'%',color:'#4e5562',font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'},position:'left'},
+          y2:{min:68,max:74,ticks:{callback:v=>v+'%',color:'#4e5562',font:{size:10}},position:'right',grid:{display:false}},
+          x:{ticks:{color:'#4e5562',font:{size:10},maxRotation:45},grid:{display:false}}
+        }
+      }
+    );
+  }
+}
+
+// ── FDI ─────────────────────────────────────────────────────────────────────
+function renderFDI(kpis, series, midaLatest) {
+  document.getElementById('fdiKpis').innerHTML = [
+    { label:'FDI Approved', val: `RM ${fmt(kpis.fdi_approved_rm_bn, 1)}B`, badge:'', period:'Latest MIDA quarter', src:'MIDA', hi:true },
+  ].map(k =>
+    `<div class="kpi ${k.hi?'highlight':''}">
+      <div class="kpi-label">${k.label}</div>
+      <div class="kpi-value">${k.val}</div>
+      <div class="kpi-source">${k.src}</div>
+    </div>`
+  ).join('');
+
+  // FDI World Bank chart
+  const fdiData = (series.fdi_annual_wb || []).filter(r => r.year && r.fdi_inflow_usd_bn != null).slice(0,15).reverse();
+  if (fdiData.length) {
+    mkChart('fdiChart', 'bar',
+      fdiData.map(r => r.year),
+      [{ data: fdiData.map(r => r.fdi_inflow_usd_bn), backgroundColor: fdiData.map(r => r.fdi_inflow_usd_bn > 10 ? GOLD : 'rgba(78,205,196,0.4)'), borderRadius:4, borderWidth:0 }],
+      { scales:{ y:{ticks:{callback:v=>'$'+v+'B',color:'#4e5562',font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'}}, x:{ticks:{color:'#4e5562',font:{size:10}},grid:{display:false}} } }
+    );
+  }
+
+  // MIDA table
+  const tbody = document.querySelector('#midaTable tbody');
+  if (tbody) {
+    const rows = series.fdi_quarterly_mida || [];
+    if (rows.length) {
+      tbody.innerHTML = rows.map(r =>
+        `<tr>
+          <td style="color:var(--text)">${r.period || '—'}</td>
+          <td class="mono" style="color:var(--gold2)">RM ${fmt(r.total_approved_rm_bn,1)}B</td>
+          <td class="mono">${r.jobs_created ? r.jobs_created.toLocaleString() : '—'}</td>
+        </tr>`
+      ).join('');
+    } else {
+      tbody.innerHTML = '<tr><td colspan="3" style="color:var(--text3);text-align:center;padding:20px">MIDA data seeded from press releases</td></tr>';
+    }
+  }
+
+  // MIDA latest info
+  if (midaLatest && midaLatest.period) {
+    const sources = midaLatest.top_sources || {};
+    const sectors = midaLatest.top_sectors || {};
+    document.getElementById('fdiInfo').innerHTML = `
+      <div class="info-card">
+        <div class="info-card-title">Top Source Countries · ${midaLatest.period}</div>
+        ${Object.entries(sources).map(([k,v]) => `<div class="info-row"><span class="info-key">${k}</span><span class="info-val">RM ${v}B</span></div>`).join('')}
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Top Sectors · ${midaLatest.period}</div>
+        ${Object.entries(sectors).map(([k,v]) => `<div class="info-row"><span class="info-key">${k}</span><span class="info-val">RM ${v}B</span></div>`).join('')}
+      </div>
+    `;
+  }
+}
+
+// ── SOURCES ─────────────────────────────────────────────────────────────────
+function renderSources(meta) {
+  const el = document.getElementById('pipelineMeta');
+  if (el && meta.built_at) {
+    el.innerHTML = `<strong>Pipeline last ran:</strong> ${new Date(meta.built_at).toLocaleString('en-MY')} UTC · Version ${meta.version || '1.0'} · Sources: ${(meta.sources||[]).join(', ')}`;
+  }
+}
+
+// ── TAB NAVIGATION ───────────────────────────────────────────────────────────
+function switchTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  const sec = document.getElementById('section-' + id);
+  if (sec) sec.style.display = 'block';
+  document.querySelectorAll('.tab').forEach(t => {
+    if (t.getAttribute('onclick') === `switchTab('${id}')`) t.classList.add('active');
+  });
+}
+
+// ── Boot ─────────────────────────────────────────────────────────────────────
+loadDashboard();
+</script>
+</body>
+</html>
