@@ -3,1943 +3,932 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PCHEM — The Asia Oil Trap | InsightInvest Capital</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<title>PCHEM / 5183 — The Asia Oil Trap</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+*{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+:root{
+  --void:#02010a;
+  --ink:#06050f;
+  --panel:#0a0918;
+  --card:#0e0c1f;
+  --border:rgba(255,255,255,0.06);
+  --border2:rgba(255,255,255,0.1);
+  --gold:#d4a843;
+  --gold2:#f0c860;
+  --gold3:rgba(212,168,67,0.12);
+  --gold4:rgba(212,168,67,0.06);
+  --w:#e8e2d4;
+  --w2:#9890a0;
+  --w3:#4a4458;
+  --red:#ff4444;
+  --red2:rgba(255,68,68,0.12);
+  --green:#00ff88;
+  --green2:rgba(0,255,136,0.1);
+  --blue:#4488ff;
+  --blue2:rgba(68,136,255,0.1);
+  --teal:#00ddcc;
+  --teal2:rgba(0,221,204,0.1);
+  --purple:#8844ff;
+}
+html{scroll-behavior:smooth;font-size:15px}
+body{background:var(--void);color:var(--w);font-family:'Space Grotesk',sans-serif;font-weight:300;overflow-x:hidden}
+::-webkit-scrollbar{width:2px}::-webkit-scrollbar-thumb{background:rgba(212,168,67,0.3)}
 
-:root {
-  --bg: #07060A;
-  --bg2: #0e0d12;
-  --bg3: #141320;
-  --gold: #C8A44A;
-  --gold-lt: #E8CC88;
-  --gold-dim: #6B571F;
-  --gold-faint: rgba(200,164,74,0.08);
-  --cream: #F0E8D0;
-  --cream2: #C8BFA0;
-  --muted: #6A6458;
-  --muted2: #3A3630;
-  --line: rgba(200,164,74,0.14);
-  --line2: rgba(200,164,74,0.28);
-  --bear: #B84C3A;
-  --bear-lt: #E87060;
-  --bear-bg: rgba(184,76,58,0.12);
-  --base-c: #4A78C0;
-  --base-lt: #7AAAF0;
-  --base-bg: rgba(74,120,192,0.12);
-  --bull: #3A9060;
-  --bull-lt: #60C888;
-  --bull-bg: rgba(58,144,96,0.12);
-  --xbull: #28B87A;
-  --xbull-lt: #50E4A8;
-  --xbull-bg: rgba(40,184,122,0.12);
-}
+/* ===================== LOADER ===================== */
+#loader{position:fixed;inset:0;z-index:9999;background:var(--void);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s ease}
+#loader.done{opacity:0;pointer-events:none}
+.loader-ring{width:60px;height:60px;border:1px solid rgba(212,168,67,0.2);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:20px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-txt{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);animation:blink .8s step-end infinite}
+@keyframes blink{50%{opacity:0}}
 
-body {
-  background: var(--bg);
-  color: var(--cream);
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 300;
-  line-height: 1.7;
-  overflow-x: hidden;
-  min-height: 100vh;
-}
+/* ===================== PROGRESS ===================== */
+#prog{position:fixed;top:0;left:0;height:1px;z-index:1000;background:linear-gradient(90deg,transparent,var(--gold),var(--gold2),var(--gold),transparent);filter:blur(.5px);box-shadow:0 0 8px var(--gold);transition:width .1s linear}
 
-/* SCROLLBAR */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+/* ===================== NAV ===================== */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:52px;display:flex;align-items:center;padding:0 32px;gap:24px;border-bottom:1px solid var(--border);backdrop-filter:blur(40px) saturate(180%);background:rgba(2,1,10,0.6)}
+.nav-mark{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-mark svg{width:20px;height:20px;flex-shrink:0}
+.nav-mark-txt{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+.nav-sep{flex:1}
+.nav-tabs{display:flex;gap:0;border:1px solid var(--border)}
+.ntab{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--w3);text-decoration:none;padding:7px 14px;border-right:1px solid var(--border);transition:all .15s;white-space:nowrap}
+.ntab:last-child{border-right:none}
+.ntab:hover,.ntab.on{color:var(--gold);background:var(--gold4)}
+.nav-live{display:flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid rgba(0,255,136,0.25);background:rgba(0,255,136,0.06);font-family:'Space Mono',monospace;font-size:9px}
+.ndot{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:ndot 1.2s ease infinite}
+@keyframes ndot{0%,100%{opacity:1}50%{opacity:.2}}
+.nav-badges{display:flex;gap:6px}
+.nb{font-family:'Space Mono',monospace;font-size:9px;padding:5px 10px;border:1px solid var(--border2);color:var(--w2)}
+.nb.g{border-color:rgba(212,168,67,.3);color:var(--gold)}
 
-/* PROGRESS BAR */
-#progress-bar {
-  position: fixed;
-  top: 0; left: 0;
-  height: 2px;
-  background: var(--gold);
-  z-index: 1000;
-  width: 0%;
-  transition: width 0.1s linear;
-}
+/* ===================== HERO ===================== */
+#hero{height:100vh;position:relative;display:flex;flex-direction:column;overflow:hidden}
+#bg-canvas{position:absolute;inset:0;z-index:0}
+.hero-vignette{position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 70% 70% at 50% 50%,transparent 40%,rgba(2,1,10,0.8) 100%)}
+.hero-content{position:relative;z-index:2;flex:1;display:grid;grid-template-columns:1fr 480px;gap:0;align-items:center;padding:0 60px;padding-top:52px;max-width:1400px;margin:0 auto;width:100%}
 
-/* NAV */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-  backdrop-filter: blur(20px);
-  background: rgba(7,6,10,0.85);
-  border-bottom: 1px solid var(--line);
-}
-.nav-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 32px;
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.nav-brand {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--gold);
-}
-.nav-links {
-  display: flex;
-  gap: 28px;
-  list-style: none;
-}
-.nav-links a {
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.nav-links a:hover, .nav-links a.active { color: var(--gold); }
-.nav-tag {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  color: var(--muted);
-  border: 1px solid var(--muted2);
-  padding: 4px 10px;
-  border-radius: 2px;
-}
+/* HERO LEFT */
+.hero-left{padding-right:60px}
+.hero-eyebrow{display:flex;align-items:center;gap:14px;margin-bottom:28px;opacity:0;animation:fup .8s .2s forwards}
+@keyframes fup{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.he-line{width:40px;height:1px;background:linear-gradient(90deg,var(--gold),transparent)}
+.he-txt{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
+.he-live{display:flex;align-items:center;gap:6px;font-family:'Space Mono',monospace;font-size:9px;color:var(--green);margin-left:auto}
+.he-live::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);display:block;animation:ndot 1.2s ease infinite}
+.hero-h1{opacity:0;animation:fup .8s .35s forwards}
+.h1-line{font-family:'Space Grotesk',sans-serif;font-size:clamp(52px,7vw,100px);font-weight:700;line-height:.95;letter-spacing:-.04em;display:block}
+.h1-line.plain{color:var(--w)}
+.h1-line.stroke{-webkit-text-stroke:1px rgba(212,168,67,0.6);color:transparent;font-weight:700}
+.h1-line.filled{background:linear-gradient(135deg,var(--gold) 0%,var(--gold2) 40%,var(--gold) 80%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 30px rgba(212,168,67,0.3))}
+.hero-sub{font-size:15px;color:var(--w2);line-height:1.75;max-width:480px;margin:24px 0 32px;opacity:0;animation:fup .8s .5s forwards}
+.hero-sub strong{color:var(--w);font-weight:500}
+.hero-cta{display:flex;gap:10px;flex-wrap:wrap;opacity:0;animation:fup .8s .65s forwards}
+.hcta-tag{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;border:1px solid}
+.hcta-tag.g{border-color:rgba(212,168,67,.35);color:var(--gold);background:var(--gold4)}
+.hcta-tag.d{border-color:var(--border);color:var(--w3)}
 
-/* MAIN CONTAINER */
-.page { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+/* HERO RIGHT — 3D GLOBE */
+.hero-right{display:flex;align-items:center;justify-content:center;opacity:0;animation:fup .8s .4s forwards;position:relative}
+#globe-canvas{width:420px;height:420px;display:block}
+.globe-label{position:absolute;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;pointer-events:none}
+.gl-pchem{top:38%;left:-10%;color:var(--gold);text-align:right}
+.gl-pchem::after{content:'';display:block;width:30px;height:1px;background:var(--gold);margin-left:auto;margin-top:4px}
+.gl-phl{top:28%;left:2%;color:var(--red)}
+.gl-eu{top:15%;right:5%;color:var(--green)}
+.gl-us{bottom:25%;right:0%;color:var(--green)}
 
-/* SECTIONS */
-section {
-  padding: 100px 0 80px;
-  border-bottom: 1px solid var(--line);
-  position: relative;
-}
-section:last-of-type { border-bottom: none; }
+/* HERO TICKER */
+.hero-ticker{position:relative;z-index:2;height:40px;border-top:1px solid var(--border);background:rgba(2,1,10,0.8);overflow:hidden;display:flex;align-items:center}
+.ticker-fade-l,.ticker-fade-r{position:absolute;top:0;bottom:0;width:100px;z-index:2;pointer-events:none}
+.ticker-fade-l{left:0;background:linear-gradient(90deg,rgba(2,1,10,1),transparent)}
+.ticker-fade-r{right:0;background:linear-gradient(270deg,rgba(2,1,10,1),transparent)}
+.ticker-inner{display:flex;align-items:center;gap:0;animation:ticker 40s linear infinite;white-space:nowrap;padding-left:100px}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ti{display:flex;align-items:center;gap:8px;padding:0 24px;border-right:1px solid var(--border);font-family:'Space Mono',monospace;font-size:10px}
+.ti-name{color:var(--w3)}.ti-val{color:var(--w2)}.ti-u{color:var(--green)}.ti-d{color:var(--red)}
 
-/* KEYFRAME ANIMATIONS */
-@keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
-@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-@keyframes drawLine { from { width:0; } to { width:100%; } }
-@keyframes countUp { from { opacity:0; transform:scale(0.85); } to { opacity:1; transform:scale(1); } }
-@keyframes pulse { 0%,100%{ opacity:0.5; } 50%{ opacity:1; } }
-@keyframes shimmer {
-  0%{ background-position: -200% center; }
-  100%{ background-position: 200% center; }
-}
+/* ===================== SECTIONS ===================== */
+section{position:relative;padding:100px 60px;max-width:1400px;margin:0 auto;border-bottom:1px solid var(--border)}
+section:last-of-type{border-bottom:none}
 
-.reveal {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* ===================== EYEBROW ===================== */
+.eyebrow{display:flex;align-items:center;gap:10px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:rgba(212,168,67,0.4);margin-bottom:14px}
+.eyebrow::before{content:'';width:24px;height:1px;background:rgba(212,168,67,0.4)}
+h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(28px,3.5vw,48px);font-weight:700;letter-spacing:-.03em;line-height:1.05;color:var(--w);margin-bottom:20px}
+h2 em{font-style:italic;color:var(--gold)}
+h3{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(212,168,67,0.5);margin-bottom:10px}
+p{color:var(--w2);line-height:1.78;margin-bottom:16px;font-size:14px}
+p strong{color:var(--w);font-weight:500}
+p em{color:var(--gold2);font-style:italic}
 
-/* SECTION LABELS */
-.sec-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--gold-dim);
-  margin-bottom: 18px;
-}
-.sec-eyebrow::before {
-  content: '';
-  width: 24px;
-  height: 1px;
-  background: var(--gold-dim);
-}
+/* ===================== FADE ===================== */
+.fade{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.fade.show{opacity:1;transform:translateY(0)}
+.fade.d1{transition-delay:.08s}.fade.d2{transition-delay:.16s}.fade.d3{transition-delay:.24s}.fade.d4{transition-delay:.32s}
 
-/* TYPOGRAPHY */
-h1 {
-  font-family: 'IBM Plex Serif', Georgia, serif;
-  font-size: clamp(40px, 5.5vw, 64px);
-  font-weight: 600;
-  line-height: 1.05;
-  color: var(--cream);
-  letter-spacing: -0.01em;
-}
-h1 em { font-style: italic; color: var(--gold-lt); }
+/* ===================== LIVE BANNER ===================== */
+.live-banner{border:1px solid rgba(0,255,136,0.2);background:linear-gradient(135deg,rgba(0,255,136,0.06),transparent 60%);padding:1px;margin-bottom:40px;position:relative;overflow:hidden}
+.lb-glow{position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(0,255,136,0.04) 50%,transparent 100%);animation:lglow 3s ease infinite}
+@keyframes lglow{0%,100%{transform:translateX(-100%)}50%{transform:translateX(100%)}}
+.lb-in{padding:16px 22px;display:flex;gap:16px;align-items:flex-start;position:relative;z-index:1}
+.lb-tag{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--green);white-space:nowrap;padding-top:2px;display:flex;align-items:center;gap:6px}
+.lb-tag::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);display:block;flex-shrink:0;animation:ndot 1.4s infinite}
+.lb-text{font-size:13px;color:var(--w2);line-height:1.65}
+.lb-text strong{color:var(--green);font-weight:500}
 
-h2 {
-  font-family: 'IBM Plex Serif', Georgia, serif;
-  font-size: clamp(26px, 3vw, 38px);
-  font-weight: 600;
-  line-height: 1.15;
-  color: var(--cream);
-  letter-spacing: -0.01em;
-  margin-bottom: 16px;
-}
+/* ===================== PULL ===================== */
+.pull{border-left:2px solid var(--gold);padding:18px 28px;margin:32px 0;background:linear-gradient(90deg,var(--gold4),transparent);position:relative}
+.pull p{font-family:'Space Grotesk',sans-serif;font-style:italic;font-size:17px;color:var(--gold2);margin:0;line-height:1.55;font-weight:300}
 
-h3 {
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--cream2);
-  margin-bottom: 10px;
-}
+/* ===================== METRICS PANEL ===================== */
+.metrics-panel{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin:36px 0}
+.mp{background:var(--panel);padding:22px 20px;position:relative;overflow:hidden;cursor:default;transition:background .2s}
+.mp::before{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);transform:scaleX(0);transform-origin:center;transition:transform .4s ease}
+.mp:hover{background:var(--card)}.mp:hover::before{transform:scaleX(1)}
+.mp-shine{position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.02),transparent);transition:left .5s ease}
+.mp:hover .mp-shine{left:150%}
+.ml{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--w3);margin-bottom:12px}
+.mv{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;letter-spacing:-.02em;color:var(--gold);line-height:1;margin-bottom:6px}
+.ms{font-family:'Space Mono',monospace;font-size:9px;color:var(--w3)}.ms.u{color:var(--green)}.ms.d{color:var(--red)}
 
-p { color: var(--cream2); line-height: 1.75; margin-bottom: 16px; }
-p strong { color: var(--cream); font-weight: 500; }
-p em { color: var(--gold-lt); font-style: italic; }
+/* ===================== EXPOSURE — HORIZONTAL BARS ===================== */
+.exposure-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin:36px 0}
+.exp-group-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--w3);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.brow{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.bc{font-family:'Space Mono',monospace;font-size:10px;color:var(--w3);width:36px;text-align:right;flex-shrink:0}
+.bt{flex:1;height:3px;background:rgba(255,255,255,0.04);position:relative;overflow:visible}
+.bf{height:100%;width:0;transition:width 1.6s cubic-bezier(.16,1,.3,1);box-shadow:1px 0 6px currentColor;opacity:.9}
+.bp{font-family:'Space Mono',monospace;font-size:10px;color:var(--w);width:34px;text-align:right;flex-shrink:0}
+.bn{font-size:12px;color:var(--w2);width:120px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.star{color:var(--gold)}
+.exp-callout{background:var(--gold4);border:1px solid rgba(212,168,67,.15);border-left:2px solid var(--gold);padding:14px 18px;margin-top:16px;font-size:12px;color:var(--w2)}
 
-/* HERO */
-#hero {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  padding: 120px 0 80px;
-  border-bottom: 1px solid var(--line);
-  position: relative;
-  overflow: hidden;
-}
-#hero::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background:
-    radial-gradient(ellipse 60% 50% at 70% 40%, rgba(200,164,74,0.06) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 60% at 20% 70%, rgba(74,120,192,0.04) 0%, transparent 60%);
-  pointer-events: none;
-}
-.hero-grid {
-  display: grid;
-  grid-template-columns: 1fr 420px;
-  gap: 80px;
-  align-items: center;
-}
-.hero-eyebrow {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 24px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.hero-eyebrow::before {
-  content: '';
-  width: 32px;
-  height: 1px;
-  background: var(--gold);
-}
-.hero-desc {
-  font-size: 16px;
-  color: var(--cream2);
-  line-height: 1.65;
-  margin: 20px 0 32px;
-  max-width: 480px;
-}
-.hero-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.tag {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 5px 12px;
-  border-radius: 2px;
-  border: 1px solid var(--line2);
-  color: var(--muted);
-  background: var(--gold-faint);
-}
-.tag.gold { border-color: var(--gold-dim); color: var(--gold); }
+/* ===================== SCENARIO MACHINE ===================== */
+.sc-wrap{border:1px solid var(--border);overflow:hidden;margin:36px 0}
+.sc-tabs{display:grid;grid-template-columns:repeat(4,1fr);background:var(--panel)}
+.sct{border:none;background:none;cursor:pointer;padding:0;border-right:1px solid var(--border);transition:all .2s;text-align:left;position:relative;overflow:hidden}
+.sct:last-child{border-right:none}
+.sct-inner{padding:18px 20px;transition:background .2s}
+.sct:hover .sct-inner{background:rgba(255,255,255,0.03)}
+.sct-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.sct-label{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--w3);transition:color .2s}
+.sct-indicator{width:6px;height:6px;border-radius:50%;opacity:.3;transition:all .2s}
+.sct-oil{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;letter-spacing:-.02em;line-height:1;color:var(--w3);transition:color .2s;margin-bottom:4px}
+.sct-delta{font-family:'Space Mono',monospace;font-size:9px;color:var(--w3);transition:color .2s}
+.sct-bar{position:absolute;bottom:0;left:0;right:0;height:2px;transform:scaleX(0);transform-origin:left;transition:transform .3s ease}
+.sct.on .sct-bar,.sct:hover .sct-bar{transform:scaleX(1)}
+.sct-bear.on .sct-label,.sct-bear.on .sct-oil,.sct-bear.on .sct-delta{color:var(--red)}.sct-bear .sct-bar,.sct-bear .sct-indicator{background:var(--red)}.sct-bear.on .sct-indicator{opacity:1;box-shadow:0 0 6px var(--red)}
+.sct-base.on .sct-label,.sct-base.on .sct-oil,.sct-base.on .sct-delta{color:var(--blue)}.sct-base .sct-bar,.sct-base .sct-indicator{background:var(--blue)}.sct-base.on .sct-indicator{opacity:1;box-shadow:0 0 6px var(--blue)}
+.sct-bull.on .sct-label,.sct-bull.on .sct-oil,.sct-bull.on .sct-delta{color:var(--green)}.sct-bull .sct-bar,.sct-bull .sct-indicator{background:var(--green)}.sct-bull.on .sct-indicator{opacity:1;box-shadow:0 0 6px var(--green)}
+.sct-xbull.on .sct-label,.sct-xbull.on .sct-oil,.sct-xbull.on .sct-delta{color:var(--teal)}.sct-xbull .sct-bar,.sct-xbull .sct-indicator{background:var(--teal)}.sct-xbull.on .sct-indicator{opacity:1;box-shadow:0 0 6px var(--teal)}
+.sc-body{display:none;animation:sfade .25s ease}
+@keyframes sfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.sc-body.on{display:grid;grid-template-columns:260px 1fr 300px;background:var(--card)}
+.sc-left{padding:36px;border-right:1px solid var(--border)}
+.sc-center{padding:36px;border-right:1px solid var(--border)}
+.sc-right{padding:36px}
+.sc-price{font-family:'Space Grotesk',sans-serif;font-size:80px;font-weight:700;letter-spacing:-.04em;line-height:.9;margin-bottom:8px}
+.bear .sc-price{color:var(--red);text-shadow:0 0 40px rgba(255,68,68,0.3)}
+.base .sc-price{color:var(--blue);text-shadow:0 0 40px rgba(68,136,255,0.3)}
+.bull .sc-price{color:var(--green);text-shadow:0 0 40px rgba(0,255,136,0.3)}
+.xbull .sc-price{color:var(--teal);text-shadow:0 0 40px rgba(0,221,204,0.3)}
+.sc-price-sub{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.12em;color:var(--w3);text-transform:uppercase}
+.sc-metrics{display:flex;flex-direction:column;gap:0;margin-top:20px}
+.sc-mr{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.sc-mr:last-child{border-bottom:none}
+.sc-ml2{font-size:12px;color:var(--w3)}
+.sc-mv2{font-family:'Space Mono',monospace;font-size:12px;font-weight:500}
+.bear .sc-mv2{color:rgba(255,68,68,.9)}.base .sc-mv2{color:rgba(68,136,255,.9)}.bull .sc-mv2{color:rgba(0,255,136,.9)}.xbull .sc-mv2{color:rgba(0,221,204,.9)}
+.sc-tp{padding:24px;border:1px solid;margin-top:0;text-align:center;position:relative;overflow:hidden}
+.sc-tp::before{content:'';position:absolute;inset:0;background:inherit;opacity:.1}
+.bear .sc-tp{border-color:rgba(255,68,68,.25);background:rgba(255,68,68,.06)}.base .sc-tp{border-color:rgba(68,136,255,.25);background:rgba(68,136,255,.06)}.bull .sc-tp{border-color:rgba(0,255,136,.25);background:rgba(0,255,136,.06)}.xbull .sc-tp{border-color:rgba(0,221,204,.25);background:rgba(0,221,204,.06)}
+.sc-tp-l{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:6px;position:relative;z-index:1}
+.bear .sc-tp-l{color:var(--red)}.base .sc-tp-l{color:var(--blue)}.bull .sc-tp-l{color:var(--green)}.xbull .sc-tp-l{color:var(--teal)}
+.sc-tp-p{font-family:'Space Grotesk',sans-serif;font-size:48px;font-weight:700;letter-spacing:-.03em;line-height:1;margin-bottom:4px;position:relative;z-index:1}
+.bear .sc-tp-p{color:var(--red)}.base .sc-tp-p{color:var(--blue)}.bull .sc-tp-p{color:var(--green)}.xbull .sc-tp-p{color:var(--teal)}
+.sc-tp-d{font-size:13px;font-weight:500;position:relative;z-index:1}
+.bear .sc-tp-d{color:var(--red)}.base .sc-tp-d{color:var(--blue)}.bull .sc-tp-d{color:var(--green)}.xbull .sc-tp-d{color:var(--teal)}
+.sc-narr-l{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--w3);margin-bottom:12px}
+.sc-narr-t{font-size:13px;color:var(--w2);line-height:1.75}
+.sc-narr-t strong{color:var(--w);font-weight:500}
 
-/* HERO CARD */
-.hero-card {
-  background: var(--bg2);
-  border: 1px solid var(--line2);
-  padding: 28px;
-  position: relative;
-}
-.hero-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--gold), var(--gold-lt), var(--gold));
-  background-size: 200% 100%;
-  animation: shimmer 3s infinite;
-}
-.hero-card-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--gold-dim);
-  margin-bottom: 20px;
-}
-.hero-metric {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(200,164,74,0.08);
-}
-.hero-metric:last-child { border-bottom: none; }
-.hero-metric-label { font-size: 12px; color: var(--muted); }
-.hero-metric-val {
-  font-family: 'IBM Plex Serif', Georgia, serif;
-  font-size: 22px;
-  font-weight: 600;
-  color: var(--gold);
-}
-.hero-metric-val.green { color: var(--bull-lt); }
-.hero-metric-val.red { color: var(--bear-lt); }
-.hero-metric-sub { font-size: 10px; color: var(--muted); margin-top: 2px; text-align: right; }
+/* ===================== LIVE SLIDER ===================== */
+.slider-blk{background:var(--panel);border:1px solid var(--border);padding:36px;margin:36px 0;position:relative;overflow:hidden}
+.sb-glow{position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:400px;height:120px;background:radial-gradient(ellipse,rgba(212,168,67,0.06),transparent 70%);pointer-events:none}
+.sb-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--w3);margin-bottom:16px}
+.sb-disp{display:flex;align-items:baseline;gap:12px;margin-bottom:20px}
+#onum{font-family:'Space Grotesk',sans-serif;font-size:80px;font-weight:700;letter-spacing:-.04em;line-height:1;color:var(--gold);transition:color .3s;text-shadow:0 0 40px rgba(212,168,67,0.2)}
+.sb-unit{font-size:14px;color:var(--w3)}
+.sb-zone{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:4px 12px;border:1px solid;transition:all .3s;margin-left:4px}
+input[type=range]{width:100%;height:2px;background:linear-gradient(90deg,var(--border),var(--border));border-radius:0;outline:none;-webkit-appearance:none;cursor:pointer;margin-bottom:8px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;background:var(--void);border:2px solid var(--gold);cursor:pointer;box-shadow:0 0 16px rgba(212,168,67,0.5),inset 0 0 0 3px var(--gold);clip-path:none;border-radius:50%}
+input[type=range]::-webkit-slider-thumb:hover{box-shadow:0 0 24px rgba(212,168,67,0.8),inset 0 0 0 3px var(--gold2)}
+.sb-range{display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:8px;color:var(--w3);margin-bottom:28px}
+.sb-outs{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
+.sb-out{background:var(--card);padding:16px}
+.sb-ol{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--w3);margin-bottom:8px}
+.sb-ov{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;letter-spacing:-.02em;line-height:1;transition:color .3s}
 
-/* PULL QUOTE */
-.pull {
-  border-left: 2px solid var(--gold);
-  padding: 20px 28px;
-  margin: 32px 0;
-  background: linear-gradient(90deg, var(--gold-faint), transparent);
-}
-.pull p {
-  font-family: 'IBM Plex Serif', Georgia, serif;
-  font-size: 20px;
-  font-weight: 400;
-  font-style: italic;
-  color: var(--gold-lt);
-  margin: 0;
-  line-height: 1.5;
-}
+/* ===================== TRADE TABLE ===================== */
+.trade{border:1px solid var(--border);overflow:hidden;margin:36px 0}
+.th{display:grid;grid-template-columns:80px 180px 1fr 80px;background:var(--panel);border-bottom:1px solid rgba(255,255,255,0.08)}
+.thc{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--w3);padding:10px 16px;border-right:1px solid var(--border)}.thc:last-child{border-right:none}
+.tr{display:grid;grid-template-columns:80px 180px 1fr 80px;border-bottom:1px solid rgba(255,255,255,0.03);transition:background .15s}
+.tr:last-child{border-bottom:none}.tr:hover{background:var(--gold4)}
+.td{padding:14px 16px;font-size:13px;color:var(--w2);border-right:1px solid rgba(255,255,255,0.02)}.td:last-child{border-right:none}
+.dp{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;display:inline-block}
+.dp-l{background:rgba(0,255,136,.08);color:var(--green);border:1px solid rgba(0,255,136,.25)}
+.dp-s{background:rgba(255,68,68,.08);color:var(--red);border:1px solid rgba(255,68,68,.25)}
+.dp-h{background:var(--gold4);color:var(--gold);border:1px solid rgba(212,168,67,.25)}
+.tkm{font-weight:500;color:var(--w);font-size:13px}
+.tks{font-family:'Space Mono',monospace;font-size:9px;color:var(--w3);margin-top:2px}
+.thz{font-family:'Space Mono',monospace;font-size:9px;color:var(--w3);text-align:right}
 
-/* DIVIDER */
-.divider {
-  height: 1px;
-  background: var(--line);
-  margin: 40px 0;
-}
+/* ===================== RISK LIST ===================== */
+.risklist{border:1px solid var(--border);overflow:hidden;margin:36px 0}
+.ri{border-bottom:1px solid rgba(255,255,255,0.03)}.ri:last-child{border-bottom:none}
+.rit{display:flex;align-items:center;gap:16px;padding:18px 24px;cursor:pointer;transition:background .15s}
+.rit:hover{background:var(--gold4)}
+.rin{font-size:14px;color:var(--w);font-weight:400;flex:1}
+.rbs{display:flex;gap:6px;flex-shrink:0}
+.rb{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border:1px solid}
+.rb-H{background:rgba(255,68,68,.08);color:var(--red);border-color:rgba(255,68,68,.25)}.rb-M{background:var(--gold4);color:var(--gold);border-color:rgba(212,168,67,.25)}.rb-L{background:rgba(0,255,136,.08);color:var(--green);border-color:rgba(0,255,136,.25)}.rb-T{background:rgba(136,68,255,.1);color:#a088ff;border-color:rgba(136,68,255,.25)}
+.rc{font-size:11px;color:var(--w3);flex-shrink:0;transition:transform .3s}
+.ri.open .rc{transform:rotate(180deg)}
+.rib{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.ri.open .rib{max-height:200px}
+.rib-in{padding:16px 24px 20px;border-top:1px solid var(--border);font-size:13px;color:var(--w2);line-height:1.7}
+.rib-in strong{color:var(--w);font-weight:500}
 
-/* STAT GRID */
-.stat-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
-  margin: 32px 0;
-}
-.stat-cell {
-  background: var(--bg2);
-  padding: 24px 20px;
-  transition: background 0.25s;
-  cursor: default;
-}
-.stat-cell:hover { background: var(--bg3); }
-.stat-lbl {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 10px;
-}
-.stat-val {
-  font-family: 'IBM Plex Serif', Georgia, serif;
-  font-size: 32px;
-  font-weight: 600;
-  color: var(--gold);
-  line-height: 1;
-  margin-bottom: 6px;
-}
-.stat-sub { font-size: 11px; color: var(--muted); }
-.stat-sub.up { color: var(--bull-lt); }
-.stat-sub.dn { color: var(--bear-lt); }
+/* ===================== METHODOLOGY STEPS ===================== */
+.msteps{border:1px solid var(--border);overflow:hidden;margin:36px 0}
+.mst{display:grid;grid-template-columns:52px 1fr;border-bottom:1px solid rgba(255,255,255,0.03);transition:background .15s}
+.mst:last-child{border-bottom:none}.mst:hover{background:var(--gold4)}
+.msn{display:flex;align-items:flex-start;justify-content:center;padding:24px 0;font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;letter-spacing:-.03em;color:var(--w3);line-height:1;border-right:1px solid var(--border)}
+.msb{padding:24px 28px}
+.mst-title{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.mst-txt{font-size:13px;color:var(--w2);line-height:1.75;margin:0}
+.mst-txt strong{color:var(--w);font-weight:500}
+.mst-txt em{color:var(--gold2)}
+.mcode{margin-top:14px;background:var(--void);border:1px solid var(--border);border-left:2px solid rgba(212,168,67,0.3);padding:14px 18px;font-family:'Space Mono',monospace;font-size:11px;color:rgba(212,168,67,.8);line-height:1.9}
+.mcode .c{color:var(--w3)}
+.mst-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.mst-tag{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--border);color:var(--w3)}
+.mst-tag.s{border-color:rgba(212,168,67,.25);color:rgba(212,168,67,.6)}
+.ag{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin:12px 0}
+.agc{background:var(--panel);padding:16px}.agc:hover{background:var(--card)}
+.agt{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:rgba(212,168,67,.5);margin-bottom:7px}
+.agb{font-size:12px;color:var(--w2);line-height:1.65}.agb strong{color:var(--w);font-weight:500}
 
-/* EXPOSURE BARS */
-.exp-container {
-  background: var(--bg2);
-  border: 1px solid var(--line);
-  padding: 32px;
-  margin: 32px 0;
-}
-.exp-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 28px;
-}
-.exp-title-text {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.exp-legend {
-  display: flex;
-  gap: 16px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  color: var(--muted);
-}
-.legend-dot {
-  width: 8px; height: 8px;
-  border-radius: 1px;
-  display: inline-block;
-  margin-right: 5px;
-}
-.bar-row {
-  display: grid;
-  grid-template-columns: 46px 1fr 46px 120px;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 12px;
-}
-.bar-code {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  color: var(--muted);
-  text-align: right;
-  letter-spacing: 0.04em;
-}
-.bar-track {
-  height: 6px;
-  background: rgba(255,255,255,0.04);
-  border-radius: 1px;
-  overflow: visible;
-  position: relative;
-}
-.bar-fill {
-  height: 100%;
-  border-radius: 1px;
-  width: 0;
-  transition: width 1.4s cubic-bezier(0.16,1,0.3,1);
-  position: relative;
-}
-.bar-pct {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  color: var(--cream2);
-  text-align: right;
-}
-.bar-name {
-  font-size: 12px;
-  color: var(--cream2);
-}
-.bar-name .star { color: var(--gold); }
+/* ===================== SOURCE TABLE ===================== */
+.stbl{width:100%;border-collapse:collapse;font-size:12px;margin:28px 0;border:1px solid var(--border)}
+.stbl th{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--w3);padding:9px 14px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.08);background:var(--panel);font-weight:400}
+.stbl td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.03);color:var(--w2);vertical-align:top;line-height:1.55}
+.stbl tr:last-child td{border-bottom:none}.stbl tr:hover td{background:var(--gold4)}
+.sv{color:var(--green);font-family:'Space Mono',monospace;font-size:9px}
+.se{color:var(--gold);font-family:'Space Mono',monospace;font-size:9px}
+.sm{color:var(--blue);font-family:'Space Mono',monospace;font-size:9px}
+.corr{border:1px solid rgba(255,68,68,.15);overflow:hidden;margin:24px 0}
+.corr-hdr{padding:10px 16px;background:rgba(255,68,68,.08);border-bottom:1px solid rgba(255,68,68,.15);font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--red)}
+.crow{display:grid;grid-template-columns:1fr 150px 150px;border-bottom:1px solid rgba(255,68,68,.06);font-size:12px}
+.crow:last-child{border-bottom:none}.crow.ch{background:var(--panel);font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--w3)}
+.cc{padding:10px 14px;color:var(--w2);border-right:1px solid rgba(255,68,68,.06)}.cc:last-child{border-right:none}
+.cw{color:var(--red);font-family:'Space Mono',monospace;font-size:10px}
+.cr{color:var(--green);font-family:'Space Mono',monospace;font-size:10px}
+.cn{font-weight:500;color:var(--w)}
 
-/* SCENARIO TABS */
-.sc-tabs {
-  display: flex;
-  gap: 0;
-  border-bottom: 1px solid var(--line);
-  margin-bottom: 0;
-}
-.sc-tab {
-  padding: 14px 28px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-  transition: all 0.2s;
-  color: var(--muted);
-  background: none;
-  border-top: none;
-  border-left: none;
-  border-right: none;
-}
-.sc-tab:hover { color: var(--cream2); }
-.sc-tab.active.bear-t { color: var(--bear-lt); border-bottom-color: var(--bear); }
-.sc-tab.active.base-t { color: var(--base-lt); border-bottom-color: var(--base-c); }
-.sc-tab.active.bull-t { color: var(--bull-lt); border-bottom-color: var(--bull); }
-.sc-tab.active.xbull-t { color: var(--xbull-lt); border-bottom-color: var(--xbull); }
+/* ===================== LIVE STATUS ===================== */
+.lstatus{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(0,255,136,.15);border:1px solid rgba(0,255,136,.2);margin:36px 0}
+.lsc{background:var(--card);padding:24px 20px}
+.lsc-l{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--w3);margin-bottom:10px}
+.lsc-v{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;letter-spacing:-.02em;line-height:1;margin-bottom:4px}
+.lsc-s{font-family:'Space Mono',monospace;font-size:9px}
 
-.sc-panel {
-  display: none;
-  background: var(--bg2);
-  border: 1px solid var(--line);
-  border-top: none;
-  padding: 36px;
-  animation: fadeIn 0.3s ease;
-}
-.sc-panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+/* ===================== FINAL BOX ===================== */
+.fbox{background:var(--panel);border:1px solid var(--border2);border-left:2px solid var(--gold);padding:36px 40px;margin:36px 0;position:relative;overflow:hidden}
+.fbox::after{content:'';position:absolute;top:-120px;right:-120px;width:360px;height:360px;background:radial-gradient(circle,rgba(212,168,67,.04),transparent 65%);pointer-events:none}
+.fbox-l{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.fbox-t{font-size:16px;color:var(--w);line-height:1.8;font-weight:300}
+.fbox-t strong{color:var(--gold2);font-weight:500}
 
-.sc-panel-left {}
-.sc-oil-price {
-  font-family: 'IBM Plex Serif', Georgia, serif;
-  font-size: 64px;
-  font-weight: 600;
-  line-height: 1;
-  margin-bottom: 6px;
-}
-.bear .sc-oil-price { color: var(--bear-lt); }
-.base .sc-oil-price { color: var(--base-lt); }
-.bull .sc-oil-price { color: var(--bull-lt); }
-.xbull .sc-oil-price { color: var(--xbull-lt); }
-.sc-oil-sub {
-  font-size: 12px;
-  color: var(--muted);
-  margin-bottom: 28px;
-}
-.sc-narrative {
-  font-size: 13px;
-  color: var(--cream2);
-  line-height: 1.7;
-  padding-top: 16px;
-  border-top: 1px solid var(--line);
-}
+/* ===================== SUMMARY ===================== */
+.sumrow{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin:28px 0}
+.sumc{background:var(--panel);padding:24px 20px;text-align:center;transition:background .2s}.sumc:hover{background:var(--card)}
+.suml{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--w3);margin-bottom:10px}
+.sump{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;letter-spacing:-.02em;line-height:1;margin-bottom:5px}
+.sumd{font-family:'Space Mono',monospace;font-size:9px;font-weight:500}
 
-.sc-metrics-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-.sc-metric-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-}
-.sc-metric-row:last-child { border-bottom: none; }
-.sc-metric-label { font-size: 12px; color: var(--muted); }
-.sc-metric-value {
-  font-family: 'IBM Plex Serif', Georgia, serif;
-  font-size: 20px;
-  font-weight: 600;
-}
-.bear .sc-metric-value { color: rgba(232,112,96,0.9); }
-.base .sc-metric-value { color: rgba(122,170,240,0.9); }
-.bull .sc-metric-value { color: rgba(96,200,136,0.9); }
-.xbull .sc-metric-value { color: rgba(80,228,168,0.9); }
+/* ===================== FOOTER ===================== */
+footer{border-top:1px solid var(--border);padding:40px 60px;max-width:1400px;margin:0 auto}
+.fi{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap}
+.fb2{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:7px}
+.fm{font-family:'Space Mono',monospace;font-size:9px;color:var(--w3);line-height:1.9}
+.fd{font-size:11px;color:var(--w3);max-width:440px;line-height:1.7}
 
-.sc-tp-block {
-  margin-top: 24px;
-  padding: 20px;
-  border: 1px solid;
-  text-align: center;
+@media(max-width:1024px){
+  .hero-content{grid-template-columns:1fr}.hero-right{display:none}
+  section{padding:70px 32px}
+  .sc-body.on{grid-template-columns:1fr}
+  .sc-right,.sc-left{border:none}
+  .metrics-panel{grid-template-columns:1fr 1fr}
+  .lstatus{grid-template-columns:1fr 1fr}
+  .sumrow{grid-template-columns:1fr 1fr}
+  .ntab-hide{display:none}
+  footer{padding:40px 32px}
+  .exposure-grid{grid-template-columns:1fr}
+  .ag{grid-template-columns:1fr}
+  .brow{flex-wrap:nowrap}
 }
-.bear .sc-tp-block { border-color: rgba(184,76,58,0.3); background: var(--bear-bg); }
-.base .sc-tp-block { border-color: rgba(74,120,192,0.3); background: var(--base-bg); }
-.bull .sc-tp-block { border-color: rgba(58,144,96,0.3); background: var(--bull-bg); }
-.xbull .sc-tp-block { border-color: rgba(40,184,122,0.3); background: var(--xbull-bg); }
-.sc-tp-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-}
-.bear .sc-tp-label { color: var(--bear-lt); }
-.base .sc-tp-label { color: var(--base-lt); }
-.bull .sc-tp-label { color: var(--bull-lt); }
-.xbull .sc-tp-label { color: var(--xbull-lt); }
-.sc-tp-price {
-  font-family: 'IBM Plex Serif', Georgia, serif;
-  font-size: 42px;
-  font-weight: 700;
-  line-height: 1;
-  margin-bottom: 4px;
-}
-.bear .sc-tp-price { color: var(--bear-lt); }
-.base .sc-tp-price { color: var(--base-lt); }
-.bull .sc-tp-price { color: var(--bull-lt); }
-.xbull .sc-tp-price { color: var(--xbull-lt); }
-.sc-tp-upside {
-  font-size: 13px;
-  font-weight: 500;
-}
-.bear .sc-tp-upside { color: var(--bear-lt); }
-.base .sc-tp-upside { color: var(--base-lt); }
-.bull .sc-tp-upside { color: var(--bull-lt); }
-.xbull .sc-tp-upside { color: var(--xbull-lt); }
-
-/* OIL SLIDER */
-.slider-section {
-  background: var(--bg2);
-  border: 1px solid var(--line);
-  padding: 36px;
-  margin: 32px 0;
-}
-.slider-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 24px;
-}
-.slider-display {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  margin-bottom: 24px;
-}
-#oil-price-display {
-  font-family: 'IBM Plex Serif', Georgia, serif;
-  font-size: 56px;
-  font-weight: 700;
-  color: var(--gold);
-  line-height: 1;
-  transition: color 0.3s;
-}
-.slider-unit { font-size: 14px; color: var(--muted); }
-input[type=range] {
-  width: 100%;
-  height: 4px;
-  background: var(--muted2);
-  border-radius: 2px;
-  outline: none;
-  -webkit-appearance: none;
-  cursor: pointer;
-  margin-bottom: 8px;
-}
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--gold);
-  cursor: pointer;
-  box-shadow: 0 0 0 3px rgba(200,164,74,0.2);
-  transition: box-shadow 0.2s;
-}
-input[type=range]::-webkit-slider-thumb:hover {
-  box-shadow: 0 0 0 6px rgba(200,164,74,0.2);
-}
-.slider-range {
-  display: flex;
-  justify-content: space-between;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  color: var(--muted);
-  margin-bottom: 28px;
-}
-.slider-outputs {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
-}
-.slider-out-cell {
-  background: var(--bg3);
-  padding: 16px;
-  text-align: center;
-}
-.slider-out-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 8px;
-}
-.slider-out-val {
-  font-family: 'IBM Plex Serif', Georgia, serif;
-  font-size: 26px;
-  font-weight: 600;
-  line-height: 1;
-  transition: color 0.3s;
-}
-
-/* TRADE TABLE */
-.trade-wrap {
-  border: 1px solid var(--line);
-  overflow: hidden;
-  margin: 32px 0;
-}
-.trade-header {
-  display: grid;
-  grid-template-columns: 100px 180px 1fr 80px;
-  gap: 0;
-  background: var(--bg3);
-  border-bottom: 1px solid var(--line2);
-}
-.trade-th {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--muted);
-  padding: 12px 16px;
-}
-.trade-row {
-  display: grid;
-  grid-template-columns: 100px 180px 1fr 80px;
-  border-bottom: 1px solid rgba(200,164,74,0.06);
-  transition: background 0.2s;
-  cursor: default;
-}
-.trade-row:last-child { border-bottom: none; }
-.trade-row:hover { background: rgba(200,164,74,0.03); }
-.trade-td { padding: 16px; font-size: 13px; color: var(--cream2); }
-.dir-pill {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 4px 9px;
-  border-radius: 2px;
-  display: inline-block;
-}
-.d-long { background: var(--bull-bg); color: var(--bull-lt); border: 1px solid rgba(58,144,96,0.3); }
-.d-short { background: var(--bear-bg); color: var(--bear-lt); border: 1px solid rgba(184,76,58,0.3); }
-.d-hedge { background: rgba(200,164,74,0.1); color: var(--gold); border: 1px solid var(--gold-dim); }
-.ticker-main { font-weight: 500; color: var(--cream); font-size: 13px; }
-.ticker-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
-.horizon-val {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  color: var(--muted);
-  text-align: right;
-}
-
-/* RISK ACCORDION */
-.risk-item {
-  border-bottom: 1px solid var(--line);
-}
-.risk-item:last-child { border-bottom: none; }
-.risk-trigger {
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: 20px;
-  align-items: center;
-  padding: 20px 0;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-.risk-trigger:hover { opacity: 0.8; }
-.risk-name { font-weight: 500; font-size: 14px; color: var(--cream); }
-.risk-badges { display: flex; gap: 8px; }
-.rb {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 3px 8px;
-  border-radius: 2px;
-}
-.rb-H { background: var(--bear-bg); color: var(--bear-lt); border: 1px solid rgba(184,76,58,0.3); }
-.rb-M { background: rgba(200,164,74,0.1); color: var(--gold); border: 1px solid var(--gold-dim); }
-.rb-L { background: var(--bull-bg); color: var(--bull-lt); border: 1px solid rgba(58,144,96,0.3); }
-.rb-T { background: rgba(100,80,200,0.1); color: #A090F0; border: 1px solid rgba(100,80,200,0.3); }
-.risk-chevron {
-  color: var(--muted);
-  font-size: 12px;
-  transition: transform 0.3s;
-}
-.risk-item.open .risk-chevron { transform: rotate(180deg); }
-.risk-body {
-  display: none;
-  padding: 0 0 20px;
-  font-size: 13px;
-  color: var(--cream2);
-  line-height: 1.7;
-  border-top: 1px solid var(--line);
-  padding-top: 16px;
-}
-.risk-item.open .risk-body { display: block; }
-
-/* BOTTOM LINE */
-.bottom-line-box {
-  background: var(--bg2);
-  border: 1px solid var(--line2);
-  border-left: 3px solid var(--gold);
-  padding: 36px 40px;
-  margin: 32px 0;
-  position: relative;
-  overflow: hidden;
-}
-.bottom-line-box::after {
-  content: '';
-  position: absolute;
-  top: -60px; right: -60px;
-  width: 200px; height: 200px;
-  background: radial-gradient(circle, rgba(200,164,74,0.06) 0%, transparent 70%);
-  pointer-events: none;
-}
-.bl-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 14px;
-}
-.bl-text {
-  font-size: 16px;
-  color: var(--cream);
-  line-height: 1.75;
-  font-weight: 300;
-}
-.bl-text strong { color: var(--gold-lt); font-weight: 500; }
-
-/* FOOTER */
-footer {
-  border-top: 1px solid var(--line);
-  padding: 40px 0;
-}
-.footer-inner {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-  gap: 40px;
-  flex-wrap: wrap;
-}
-.footer-brand {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 8px;
-}
-.footer-meta { font-size: 11px; color: var(--muted); line-height: 1.8; }
-.footer-disc { font-size: 11px; color: var(--muted); max-width: 440px; line-height: 1.7; }
-
-/* UPDATE BANNER */
-.update-banner {
-  background: var(--bear-bg);
-  border: 1px solid rgba(184,76,58,0.3);
-  border-left: 3px solid var(--bear);
-  padding: 16px 20px;
-  margin: 32px 0;
-  display: flex;
-  gap: 16px;
-  align-items: start;
-}
-.banner-icon {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--bear-lt);
-  white-space: nowrap;
-  padding-top: 2px;
-}
-.banner-text { font-size: 13px; color: var(--cream2); line-height: 1.65; }
-.banner-text strong { color: var(--bear-lt); }
-
-/* MOBILE */
-@media (max-width: 800px) {
-  .hero-grid { grid-template-columns: 1fr; gap: 40px; }
-  .hero-card { display: none; }
-  .stat-grid { grid-template-columns: 1fr 1fr; }
-  .sc-panel.active { grid-template-columns: 1fr; }
-  .slider-outputs { grid-template-columns: 1fr 1fr; }
-  .trade-header, .trade-row { grid-template-columns: 80px 1fr; }
-  .trade-td:nth-child(3), .trade-th:nth-child(3) { display: none; }
-  .nav-links { display: none; }
-  .bar-row { grid-template-columns: 40px 1fr 40px; }
-  .bar-name { display: none; }
-}
-
-/* ── METHODOLOGY STYLES ───────────────────────── */
-.meth-steps {
-  counter-reset: step-counter;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  margin: 36px 0;
-  border: 1px solid var(--line);
-}
-.meth-step {
-  counter-increment: step-counter;
-  display: grid;
-  grid-template-columns: 72px 1fr;
-  border-bottom: 1px solid var(--line);
-  transition: background 0.2s;
-  cursor: default;
-}
-.meth-step:last-child { border-bottom: none; }
-.meth-step:hover { background: rgba(200,164,74,0.03); }
-.meth-step-num {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 28px 0 28px;
-  font-family: 'IBM Plex Serif', Georgia, serif;
-  font-size: 36px;
-  font-weight: 300;
-  color: var(--gold-dim);
-  border-right: 1px solid var(--line);
-  line-height: 1;
-}
-.meth-step-num::before { content: counter(step-counter, decimal-leading-zero); }
-.meth-step-body { padding: 28px 32px; }
-.meth-step-title {
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 10px;
-}
-.meth-step-text { font-size: 13px; color: var(--cream2); line-height: 1.75; margin: 0; }
-.meth-step-text strong { color: var(--cream); font-weight: 500; }
-.meth-step-text em { color: var(--gold-lt); font-style: italic; }
-.meth-step-formula {
-  margin-top: 14px;
-  background: var(--bg3);
-  border: 1px solid var(--line);
-  border-left: 2px solid var(--gold-dim);
-  padding: 14px 18px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
-  color: var(--gold-lt);
-  line-height: 1.8;
-}
-.meth-step-formula .comment { color: var(--muted); }
-.meth-step-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 12px;
-}
-.meth-tag {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 3px 8px;
-  border: 1px solid var(--line2);
-  color: var(--muted);
-  border-radius: 2px;
-}
-.meth-tag.src { border-color: var(--gold-dim); color: var(--gold-dim); }
-
-/* Source table */
-.src-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 12px;
-  margin: 32px 0;
-  border: 1px solid var(--line);
-}
-.src-table th {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-  padding: 10px 14px;
-  text-align: left;
-  border-bottom: 1px solid var(--line2);
-  background: var(--bg3);
-  font-weight: 400;
-}
-.src-table td {
-  padding: 12px 14px;
-  border-bottom: 1px solid rgba(200,164,74,0.06);
-  color: var(--cream2);
-  vertical-align: top;
-  line-height: 1.6;
-}
-.src-table tr:last-child td { border-bottom: none; }
-.src-table tr:hover td { background: rgba(200,164,74,0.025); }
-.src-verified { color: var(--bull-lt); font-family: 'IBM Plex Mono', monospace; font-size: 10px; }
-.src-estimated { color: var(--gold); font-family: 'IBM Plex Mono', monospace; font-size: 10px; }
-.src-modelled { color: var(--base-lt); font-family: 'IBM Plex Mono', monospace; font-size: 10px; }
-
-/* Assumption grid */
-.assump-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin: 28px 0;
-}
-@media (max-width: 700px) { .assump-grid { grid-template-columns: 1fr; } }
-.assump-card {
-  background: var(--bg2);
-  border: 1px solid var(--line);
-  padding: 22px;
-}
-.assump-card-title {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--gold-dim);
-  margin-bottom: 10px;
-}
-.assump-card-body { font-size: 12px; color: var(--cream2); line-height: 1.7; }
-.assump-card-body strong { color: var(--cream); font-weight: 500; }
-
-/* Correction log */
-.correction-log {
-  border: 1px solid rgba(184,76,58,0.3);
-  background: rgba(184,76,58,0.05);
-  margin: 28px 0;
-}
-.correction-log-header {
-  padding: 14px 20px;
-  background: rgba(184,76,58,0.12);
-  border-bottom: 1px solid rgba(184,76,58,0.2);
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--bear-lt);
-}
-.correction-row {
-  display: grid;
-  grid-template-columns: 1fr 180px 180px;
-  gap: 0;
-  border-bottom: 1px solid rgba(184,76,58,0.1);
-  font-size: 12px;
-}
-.correction-row:last-child { border-bottom: none; }
-.correction-row.header-row { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); background: var(--bg3); }
-.corr-cell { padding: 11px 16px; color: var(--cream2); border-right: 1px solid rgba(184,76,58,0.1); }
-.corr-cell:last-child { border-right: none; }
-.corr-wrong { color: var(--bear-lt); font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
-.corr-right { color: var(--bull-lt); font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
-.corr-label { font-weight: 500; color: var(--cream); }
 </style>
 </head>
 <body>
 
-<div id="progress-bar"></div>
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-ring"></div>
+  <div class="loader-txt">INITIALISING THESIS_BRIEF.EXE</div>
+</div>
+
+<!-- PROGRESS -->
+<div id="prog"></div>
+
+<!-- BG CANVAS -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- GLOBE CANVAS -->
+<canvas id="globe-canvas" style="display:none"></canvas>
 
 <!-- NAV -->
 <nav>
-  <div class="nav-inner">
-    <span class="nav-brand">InsightInvest Capital</span>
-    <ul class="nav-links">
-      <li><a href="#setup">Setup</a></li>
-      <li><a href="#numbers">Numbers</a></li>
-      <li><a href="#methodology">Methodology</a></li>
-      <li><a href="#exposure">Exposure</a></li>
-      <li><a href="#scenarios">Scenarios</a></li>
-      <li><a href="#trade">Trade</a></li>
-      <li><a href="#risks">Risks</a></li>
-    </ul>
-    <span class="nav-tag">RM5.60 · Brent $102 · Live</span>
+  <a class="nav-mark" href="#hero">
+    <svg viewBox="0 0 20 20" fill="none"><polygon points="10,1 18,5.5 18,14.5 10,19 2,14.5 2,5.5" stroke="#d4a843" stroke-width=".8"/><circle cx="10" cy="10" r="3" fill="#d4a843"/><line x1="10" y1="4" x2="10" y2="7" stroke="#d4a843" stroke-width=".5"/><line x1="10" y1="13" x2="10" y2="16" stroke="#d4a843" stroke-width=".5"/><line x1="3.5" y1="7.5" x2="6" y2="9" stroke="#d4a843" stroke-width=".5"/><line x1="14" y1="11" x2="16.5" y2="12.5" stroke="#d4a843" stroke-width=".5"/></svg>
+    <span class="nav-mark-txt">InsightInvest</span>
+  </a>
+  <div class="nav-sep"></div>
+  <div class="nav-tabs">
+    <a href="#setup" class="ntab">Setup</a>
+    <a href="#numbers" class="ntab">Numbers</a>
+    <a href="#methodology" class="ntab ntab-hide">Method</a>
+    <a href="#exposure" class="ntab">Exposure</a>
+    <a href="#scenarios" class="ntab">Scenarios</a>
+    <a href="#trade" class="ntab ntab-hide">Trade</a>
+    <a href="#risks" class="ntab ntab-hide">Risks</a>
+  </div>
+  <div class="nav-sep"></div>
+  <div class="nav-live"><div class="ndot"></div>Live</div>
+  <div class="nav-badges">
+    <span class="nb g">RM 5.60</span>
+    <span class="nb g">Brent $102</span>
   </div>
 </nav>
 
 <!-- HERO -->
-<section id="hero">
-  <div class="page">
-    <div class="hero-grid">
-      <div>
-        <div class="hero-eyebrow">Asymmetric Trade Thesis · Updated March 25, 2026</div>
-        <h1>PCHEM:<br><em>Malaysia's Hidden</em><br>War Trade</h1>
-        <p class="hero-desc">While global investors fixate on Middle East risk, one Malaysian petrochemical giant sits at the exact intersection of geopolitical disruption and structural insulation. Here's the full picture.</p>
-        <div class="hero-tags">
-          <span class="tag gold">Petronas Chemicals Group</span>
-          <span class="tag gold">Bursa Malaysia · 5183</span>
-          <span class="tag">Petrochemicals · Energy</span>
-          <span class="tag">6M – 3Y Horizon</span>
-          <span class="tag gold">Brent $102/bbl · Live</span>
-        </div>
+<div id="hero">
+  <div class="hero-vignette"></div>
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-eyebrow">
+        <div class="he-line"></div>
+        <span class="he-txt">Asymmetric Trade Thesis · Updated March 25 2026</span>
+        <span class="he-live">Live</span>
       </div>
-      <div class="hero-card reveal">
-        <div class="hero-card-label">Baseline Snapshot · FY2024A</div>
-        <div class="hero-metric">
-          <div>
-            <div class="hero-metric-label">Revenue</div>
-            <div class="hero-metric-sub">+7% YoY</div>
-          </div>
-          <div class="hero-metric-val">RM 30.7B</div>
-        </div>
-        <div class="hero-metric">
-          <div>
-            <div class="hero-metric-label">EBITDA</div>
-            <div class="hero-metric-sub">11.4% margin</div>
-          </div>
-          <div class="hero-metric-val">RM 3.5B</div>
-        </div>
-        <div class="hero-metric">
-          <div>
-            <div class="hero-metric-label">Net Cash Position</div>
-            <div class="hero-metric-sub">Not net debt ✓</div>
-          </div>
-          <div class="hero-metric-val green">RM 3.81B</div>
-        </div>
-        <div class="hero-metric">
-          <div>
-            <div class="hero-metric-label">Current EV/EBITDA</div>
-            <div class="hero-metric-sub">Re-rating underway</div>
-          </div>
-          <div class="hero-metric-val">11.0×</div>
-        </div>
-        <div class="hero-metric">
-          <div>
-            <div class="hero-metric-label">Share Price (Mar 25, 2026)</div>
-            <div class="hero-metric-sub">Market cap RM44.8B</div>
-          </div>
-          <div class="hero-metric-val green">RM 5.60</div>
-        </div>
+      <div class="hero-h1">
+        <span class="h1-line plain">PCHEM</span>
+        <span class="h1-line stroke">MALAYSIA'S</span>
+        <span class="h1-line filled">WAR TRADE</span>
+      </div>
+      <p class="hero-sub">One Malaysian petrochemical giant at the exact intersection of geopolitical disruption and structural insulation. <strong>Entered at RM3.93. Now at RM5.60. Brent at $102. The bull case is live — and we're not done.</strong></p>
+      <div class="hero-cta">
+        <span class="hcta-tag g">Petronas Chemicals · KLSE 5183</span>
+        <span class="hcta-tag g">Brent $102/bbl · Live</span>
+        <span class="hcta-tag d">FY2024A Verified</span>
+        <span class="hcta-tag d">6M–3Y Horizon</span>
       </div>
     </div>
+    <div class="hero-right">
+      <canvas id="globe" width="420" height="420"></canvas>
+    </div>
   </div>
-</section>
+  <div class="hero-ticker">
+    <div class="ticker-fade-l"></div>
+    <div class="ticker-fade-r"></div>
+    <div class="ticker-inner" id="ticker"></div>
+  </div>
+</div>
 
 <!-- SETUP -->
 <section id="setup">
-  <div class="page">
-    <div class="sec-eyebrow reveal">The Setup</div>
-    <h2 class="reveal">Asia Forgot to Diversify.<br>PCHEM Didn't.</h2>
-
-    <div class="update-banner reveal" style="border-color:rgba(58,144,96,0.4);background:rgba(58,144,96,0.08);border-left-color:var(--bull)">
-      <span class="banner-icon" style="color:var(--bull-lt)">✦ Live</span>
-      <div class="banner-text">
-        <strong style="color:var(--bull-lt)">The thesis is playing out.</strong> As of March 25, 2026 — PCHEM is trading at RM5.60, up +42% from the RM3.93 entry price modelled in March 2025. <strong style="color:var(--bull-lt)">Brent crude is at ~$102/bbl</strong>, crossing the bull case trigger of $100. Iran conflict has disrupted Middle East supply routes, Pengerang refinery shut its 300,000 bpd crude unit due to Hormuz feedstock shortage, and olefin/urea prices are rebounding sharply. The bull case target of RM8.20 remains live — we are currently between the base and bull scenario.
-      </div>
-    </div>
-
-    <p class="reveal">The BofA chart that's been circulating tells a brutal story. <strong>The Philippines sources 93% of its crude from the Middle East. Vietnam, 85%. Singapore, 72%.</strong> Korea, Taiwan, Thailand — all above 60%. Europe built escape routes over the past decade. Latin America doesn't need them. Asia is trapped.</p>
-
-    <p class="reveal">But here's what the surface reading misses: <em>not all Asian exposure is the same</em>. Malaysia is a net energy exporter. PCHEM — Petronas's chemicals arm — sources feedstock domestically, generates RM4.59B in operating cash flow annually, and carries a RM3.81B net cash position. It's insulated from the shock in ways its neighbours fundamentally aren't.</p>
-
-    <div class="pull reveal">
-      <p>"Every $10 rise in Brent adds approximately RM700 million to PCHEM's annual revenue. At $130/bbl — the Strait of Hormuz scenario — that's a potential RM3.4B revenue uplift from base. The margin expansion on top of that is where the real leverage lives."</p>
-    </div>
-
-    <p class="reveal">The trade isn't <em>"buy oil."</em> The trade is: <strong>own the Malaysian petrochemical company that benefits when Asia's oil supply chain breaks.</strong> And right now, at RM3.93, the market is pricing PCHEM as if none of that ever happens.</p>
+  <div class="eyebrow fade">01 — The Setup</div>
+  <h2 class="fade">Asia Forgot to Diversify.<br><em>PCHEM Didn't.</em></h2>
+  <div class="live-banner fade d1">
+    <div class="lb-glow"></div>
+    <div class="lb-in"><span class="lb-tag">Live Update</span><div class="lb-text"><strong>The thesis is playing out.</strong> PCHEM at RM5.60, +42% from RM3.93 entry. Brent at $102/bbl — the bull case trigger breached. Iran conflict has disrupted Middle East supply routes, Pengerang refinery shut its 300k bpd crude unit due to Hormuz feedstock shortage. Olefin/urea prices rebounding sharply. Bull target RM7.55 still live — +35% remaining.</div></div>
   </div>
+  <p class="fade d2">The BofA chart tells a brutal story. <strong>The Philippines sources 93% of its crude from the Middle East. Vietnam, 85%. Singapore, 72%.</strong> Korea, Taiwan, Thailand — all above 60%. Europe built escape routes. Latin America doesn't need them. Asia is trapped.</p>
+  <p class="fade d2">But here's what the surface reading misses: <em>not all Asian exposure is the same</em>. Malaysia is a net energy exporter. PCHEM sources feedstock domestically, generates RM4.59B in operating cash flow, and carries RM3.81B net cash. Insulated in ways its neighbours fundamentally aren't.</p>
+  <div class="pull fade d3"><p>Every $10 rise in Brent adds approximately RM700 million to PCHEM's annual revenue. At $130/bbl — the Hormuz scenario — that's a potential RM3.4B revenue uplift. The margin expansion on top of that is where the real leverage lives.</p></div>
+  <p class="fade d3">The trade isn't <em>"buy oil."</em> The trade is: <strong>own the Malaysian petrochemical company that benefits when Asia's oil supply chain breaks.</strong></p>
 </section>
 
 <!-- NUMBERS -->
 <section id="numbers">
-  <div class="page">
-    <div class="sec-eyebrow reveal">The Numbers · Verified</div>
-    <h2 class="reveal">What PCHEM Actually<br>Looks Like Right Now</h2>
-    <p class="reveal">These are audited actuals from the PCG press release dated February 21, 2025, cross-referenced against three independent sources. Nothing estimated where official figures exist.</p>
-
-    <div class="stat-grid reveal">
-      <div class="stat-cell">
-        <div class="stat-lbl">Revenue FY2024</div>
-        <div class="stat-val">RM30.7B</div>
-        <div class="stat-sub up">+7% year on year</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-lbl">EBITDA FY2024</div>
-        <div class="stat-val">RM3.5B</div>
-        <div class="stat-sub dn">Down 7% — depressed cycle</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-lbl">Net Cash Position</div>
-        <div class="stat-val">RM3.81B</div>
-        <div class="stat-sub up">Cash RM8.74B · Debt RM4.93B</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-lbl">EV / EBITDA</div>
-        <div class="stat-val">7.9×</div>
-        <div class="stat-sub">At RM3.93 · cycle trough</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-lbl">EPS FY2024</div>
-        <div class="stat-val">14.7¢</div>
-        <div class="stat-sub">PATANCI RM1.175B / 8B shares</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-lbl">Capex FY2024</div>
-        <div class="stat-val">RM2.71B</div>
-        <div class="stat-sub">8.8% of revenue</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-lbl">Plant Utilisation</div>
-        <div class="stat-val">91%</div>
-        <div class="stat-sub up">Up from 85% in FY2023</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-lbl">Free Cash Flow</div>
-        <div class="stat-val">RM1.88B</div>
-        <div class="stat-sub">OCF RM4.59B − Capex RM2.71B</div>
-      </div>
-    </div>
-
-    <p class="reveal" style="font-size:12px;color:var(--muted)">★ Key correction from earlier analysis: PCHEM carries <strong style="color:var(--bull-lt)">net cash of RM3.81B</strong> — not net debt. This changes the enterprise value bridge entirely and makes the valuation more compelling.</p>
+  <div class="eyebrow fade">02 — Verified Numbers</div>
+  <h2 class="fade">Audited Actuals.<br><em>Triple-Verified.</em></h2>
+  <p class="fade">PCG FY2024 press release (Feb 21 2025), cross-referenced against StockAnalysis, i3investor, Malay Mail, and TradingView.</p>
+  <div class="metrics-panel fade d1">
+    <div class="mp"><div class="mp-shine"></div><div class="ml">Revenue FY2024</div><div class="mv">RM30.7B</div><div class="ms u">+7% year on year</div></div>
+    <div class="mp"><div class="mp-shine"></div><div class="ml">EBITDA FY2024</div><div class="mv">RM3.5B</div><div class="ms d">−7% · cycle trough</div></div>
+    <div class="mp"><div class="mp-shine"></div><div class="ml">Net Cash Position</div><div class="mv">RM3.81B</div><div class="ms u">Cash 8.74B − Debt 4.93B</div></div>
+    <div class="mp"><div class="mp-shine"></div><div class="ml">EV/EBITDA (FY2024)</div><div class="mv">7.9×</div><div class="ms">At RM3.93 · trough</div></div>
+    <div class="mp"><div class="mp-shine"></div><div class="ml">PATANCI</div><div class="mv">RM1.175B</div><div class="ms">~14 sen EPS</div></div>
+    <div class="mp"><div class="mp-shine"></div><div class="ml">Capex</div><div class="mv">RM2.71B</div><div class="ms">8.8% of revenue</div></div>
+    <div class="mp"><div class="mp-shine"></div><div class="ml">Plant Utilisation</div><div class="mv">91%</div><div class="ms u">↑ from 85% FY2023</div></div>
+    <div class="mp"><div class="mp-shine"></div><div class="ml">Free Cash Flow</div><div class="mv">RM1.88B</div><div class="ms u">OCF 4.59B − Capex</div></div>
   </div>
+  <p class="fade" style="font-size:11px;color:var(--w3);font-family:'Space Mono',monospace">★ Key correction vs v1: PCHEM carries net cash of RM3.81B — not net debt. This changes the enterprise value bridge and all implied share prices.</p>
 </section>
 
 <!-- METHODOLOGY -->
 <section id="methodology">
-  <div class="page">
-    <div class="sec-eyebrow reveal">Full Methodology</div>
-    <h2 class="reveal">How This Model Was Built:<br>Every Assumption Documented</h2>
-    <p class="reveal">This section is the engine room. Every input, every formula, every assumption — sourced, justified, and explained. No black boxes. If you want to challenge the thesis, challenge it here.</p>
-
-    <div class="meth-steps reveal">
-
-      <div class="meth-step">
-        <div class="meth-step-num"></div>
-        <div class="meth-step-body">
-          <div class="meth-step-title">Step 1 — Establish the Verified Baseline</div>
-          <p class="meth-step-text">All financial data anchored to <strong>audited actuals from the PCG FY2024 full-year press release (February 21, 2025)</strong>. Every figure cross-referenced against a minimum of three independent sources: PCG official releases, StockAnalysis, i3investor, Malay Mail, and TradingView. Where official figures and third-party differed, the PCG official source was taken as authoritative.</p>
-          <p class="meth-step-text" style="margin-top:8px">One critical correction was made versus the initial model: PCHEM is a <em>net cash company</em>, not a net debt company. Cash RM8.74B minus debt RM4.93B = <strong>RM3.81B net cash</strong>. This fundamentally changes the Enterprise Value bridge and all implied share price outputs.</p>
-          <div class="meth-step-tags">
-            <span class="meth-tag src">PCG Press Release Feb 21 2025</span>
-            <span class="meth-tag src">StockAnalysis.com Dec 2024</span>
-            <span class="meth-tag src">i3investor PCHEM 5183</span>
-            <span class="meth-tag src">Malay Mail Feb 23 2025</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="meth-step">
-        <div class="meth-step-num"></div>
-        <div class="meth-step-body">
-          <div class="meth-step-title">Step 2 — Revenue Sensitivity: Oil Price to Revenue</div>
-          <p class="meth-step-text">The core mechanic. PCHEM revenue correlates with crude via two channels: <strong>(1) Product ASP channel</strong> — petrochemical product prices (ethylene, polyethylene, methanol, urea) track crude with a 60–90 day lag; <strong>(2) FX channel</strong> — higher oil weakens the Ringgit against the USD, and ~40% of PCHEM's revenue is USD-denominated, amplifying MYR-reported revenue in an oil shock.</p>
-          <div class="meth-step-formula">
-Revenue(oil) = Base_Rev + ((oil − Base_Oil) / 10) × Sensitivity + FX_Premium
-<span class="comment">           = RM30,700mm + ((oil − $82) / $10) × RM700mm + oil_delta × 2.5</span>
-
-<span class="comment">Where:</span>
-Base_Rev     = RM30,700mm  ← FY2024A actual (verified, PCG press release)
-Base_Oil     = $82/bbl     ← FY2024 average Brent crude price
-Sensitivity  = RM700mm     ← per $10/bbl change (conservative estimate)
-FX_Premium   = RM2.5mm     ← per $1/bbl change via USD/MYR depreciation
-Floor        = RM24,000mm  ← bear demand-destruction floor
-
-<span class="comment">Combined sensitivity: ~RM700–950mm per $10/bbl</span>
-<span class="comment">Conservative case uses RM700mm (lower bound of observed historical range)</span></div>
-          <p class="meth-step-text" style="margin-top:12px">Why RM700mm and not higher? FY2022 at $100+ oil saw revenue of RM29B — but that predated the Perstorp acquisition which added ~RM7B in revenue. Stripping Perstorp out and adjusting for volume growth, organic sensitivity is RM600–800M per $10. RM700M is the conservative midpoint.</p>
-        </div>
-      </div>
-
-      <div class="meth-step">
-        <div class="meth-step-num"></div>
-        <div class="meth-step-body">
-          <div class="meth-step-title">Step 3 — EBITDA Margin: Spread Mechanics by Segment</div>
-          <p class="meth-step-text">Profitability depends on <strong>product spreads</strong> — the gap between selling prices and feedstock costs. PCHEM's two largest segments behave fundamentally differently in an oil shock, creating the asymmetry that makes this thesis compelling.</p>
-          <div class="assump-grid" style="margin-top:14px; margin-bottom:14px">
-            <div class="assump-card">
-              <div class="assump-card-title">O&D Segment (~50% revenue)</div>
-              <div class="assump-card-body">Naphtha feedstock — priced against crude. In rising oil, product prices (ethylene, PE) reset upward with a <strong>60–90 day lag</strong> vs feedstock costs. Net effect: initial margin expansion for 2–3 quarters. In sustained shock, spreads normalise as products catch up.</div>
-            </div>
-            <div class="assump-card">
-              <div class="assump-card-title">F&M Segment (~20% revenue)</div>
-              <div class="assump-card-body">Domestic piped gas at <strong>subsidised Malaysian rates</strong>. Gas feedstock costs do NOT track crude oil. When urea/methanol prices rise with the energy complex, F&M margins expand directly. Cleanest beneficiary of an oil shock — costs fixed, revenue floating.</div>
-            </div>
-            <div class="assump-card">
-              <div class="assump-card-title">Specialties / Perstorp (~25%)</div>
-              <div class="assump-card-body">European operations with mixed exposure. Currently dragged by impairment charges and FX translation losses (EUR vs MYR). Modelled conservatively at flat margins across all scenarios. Does not contribute to the oil shock upside.</div>
-            </div>
-            <div class="assump-card">
-              <div class="assump-card-title">Margin Schedule</div>
-              <div class="assump-card-body">
-                $70/bbl: <strong>8.8%</strong> (demand destruction)<br>
-                $82/bbl: <strong>11.4%</strong> ← FY2024A actual anchor<br>
-                $90/bbl: <strong>11.4–13.2%</strong> (moderate recovery)<br>
-                $110/bbl: <strong>15.5%</strong> (bull — mid-cycle)<br>
-                $130/bbl: <strong>19.2%</strong> (extreme — near FY2022 peak)
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="meth-step">
-        <div class="meth-step-num"></div>
-        <div class="meth-step-body">
-          <div class="meth-step-title">Step 4 — P&L Bridge: EBITDA Down to PATANCI</div>
-          <p class="meth-step-text">Each rate in the bridge is backward-engineered from FY2024 audited results and cross-verified against the confirmed PATANCI of RM1,175mm.</p>
-          <div class="meth-step-formula">
-EBITDA                = Revenue × EBITDA_Margin(oil)
-Less: D&A             = Revenue × 4.9%   ← derived: EBITDA−EBIT bridge, FY2024
-EBIT                  = EBITDA − D&A
-Add: Net Interest     = +RM150mm/yr      ← net cash → earns INCOME, not expense
-PBT                   = EBIT + Net Interest
-Less: Income Tax      = PBT × 24%        ← effective rate, derived FY2024
-Less: Minority Int.   = PBT × 6%         ← NCI share derived from FY2024
-<span class="comment">───────────────────────────────────────────────────────────</span>
-PATANCI               = PBT − Tax − NCI
-
-<span class="comment">Verification (FY2024A):</span>
-<span class="comment">PBT RM2,161mm − Tax RM519mm − NCI RM125mm = RM1,517mm</span>
-<span class="comment">  ↳ Discrepancy vs RM1,175mm confirmed = share of associates loss (~RM342mm)</span>
-<span class="comment">  ↳ PPCSB / Perstorp equity losses in FY2024 account for the gap</span>
-<span class="comment">  ↳ In bull scenarios, associate losses diminish as PPCSB ramps profitably</span>
-
-<span class="comment">KEY CORRECTION FROM v1: Original modelled RM800mm interest EXPENSE annually.</span>
-<span class="comment">With RM3.81B net cash, PCHEM earns interest INCOME ~RM150mm. Error: ~RM950mm/yr.</span></div>
-        </div>
-      </div>
-
-      <div class="meth-step">
-        <div class="meth-step-num"></div>
-        <div class="meth-step-body">
-          <div class="meth-step-title">Step 5 — EV/EBITDA Valuation: Net Cash Applied Correctly</div>
-          <p class="meth-step-text">The direction of the net cash adjustment in the EV bridge is the most consequential technical detail in the entire model — and was the critical error in v1.</p>
-          <div class="meth-step-formula">
-<span class="comment">EV/EBITDA METHOD (corrected):</span>
-Implied EV        = Forward_EBITDA × EV_Multiple
-Implied Mkt Cap   = Implied EV + Net Cash    ← ADD cash (PCHEM is net cash positive)
-Implied Price     = Implied Mkt Cap / 8,000mm shares
-
-<span class="comment">Example — Base case ($85 oil):</span>
-EBITDA forward   = RM3,419mm
-EV/EBITDA mult   = 9.0×
-Implied EV       = RM30,771mm
-+ Net cash       = +RM3,810mm
-Implied Mkt Cap  = RM34,581mm
-÷ 8,000mm shares = RM4.32/share implied price
-
-<span class="comment">v1 ERROR — treated net cash as net DEBT:</span>
-<span class="comment">Implied Mkt Cap  = RM30,771mm − RM14,000mm = RM16,771mm</span>
-<span class="comment">÷ 8,000mm shares = RM2.10/share → severely understated by RM2.22/share</span>
-
-<span class="comment">EV Multiple Schedule (anchored to historical + peer range):</span>
-Current (March 2025): 7.9×  |  Base target: 9.0×  |  Bull: 12.5×  |  XBull: 16.0×
-<span class="comment">Peer range: LyondellBasell 6–8×, PTT Global Chem 7–10×, Lotte 7–12×</span></div>
-        </div>
-      </div>
-
-      <div class="meth-step">
-        <div class="meth-step-num"></div>
-        <div class="meth-step-body">
-          <div class="meth-step-title">Step 6 — P/E Cross-Check &amp; Blended Target Price</div>
-          <p class="meth-step-text">A second valuation method runs in parallel as a cross-check. The blended target price weights both methods to arrive at a single implied price per scenario.</p>
-          <div class="meth-step-formula">
-<span class="comment">P/E METHOD:</span>
-Implied Mkt Cap  = Forward_PATANCI × P/E_Multiple
-Implied Price    = Implied Mkt Cap / 8,000mm shares
-
-P/E Multiple Schedule:
-  Bear:    12×  ← trough; market discounts prolonged downcycle
-  Base:    16×  ← normalised; in line with KLCI industrials average
-  Bull:    20×  ← mid-cycle; earnings inflecting sharply upward
-  X-Bull:  24×  ← peak cycle; PCHEM traded 20–26× at FY2022 earnings peak
-
-<span class="comment">BLENDED TARGET PRICE:</span>
-Blended_TP = (EV/EBITDA_Price × 55%) + (P/E_Price × 45%)
-
-<span class="comment">55/45 weighting rationale: EV/EBITDA is more reliable for capital-intensive cyclicals</span>
-<span class="comment">because it sits above the noise of D&A, interest, tax, and one-off items.</span>
-<span class="comment">P/E provides an equity-level sanity check but is more sensitive to PPCSB distortions.</span></div>
-        </div>
-      </div>
-
-      <div class="meth-step">
-        <div class="meth-step-num"></div>
-        <div class="meth-step-body">
-          <div class="meth-step-title">Step 7 — Model Limitations &amp; Failure Conditions</div>
-          <p class="meth-step-text">Every model is a simplification of reality. These are the known conditions under which the model outputs would be unreliable or directionally wrong.</p>
-          <div class="meth-step-formula">
-LIMITATION 1: Oil-to-revenue sensitivity is modelled as linear
-<span class="comment">Reality: non-linear at extremes. At $130+ sustained, demand destruction</span>
-<span class="comment">may reduce volumes even as prices rise. RM700mm/per $10 likely overstates at $130+.</span>
-
-LIMITATION 2: PPCSB / Perstorp non-cash distortions not fully modelled
-<span class="comment">FX revaluation on shareholder loans and impairment charges create PAT noise.</span>
-<span class="comment">Model uses EBITDA as primary metric to sidestep this — PAT comparisons are unreliable.</span>
-
-LIMITATION 3: Tax rate constant at 24%
-<span class="comment">Deferred tax movements and jurisdiction-specific rates cause significant swings.</span>
-<span class="comment">FY2025 effective rates have deviated materially from this assumption.</span>
-
-LIMITATION 4: FX assumed to weaken with oil
-<span class="comment">If BNM raises rates aggressively in response to inflation, MYR could strengthen,</span>
-<span class="comment">reducing USD revenue translation. Partially offsets the oil upside. Not modelled.</span>
-
-LIMITATION 5: Multiple re-rating requires a catalyst
-<span class="comment">Jump from 7.9× to 12.5×+ assumes a visible, sustained earnings catalyst.</span>
-<span class="comment">Without one, multiples may stay depressed even if EBITDA improves modestly.</span>
-
-LIMITATION 6: FY2024 baseline may be stale (as of March 2026)
-<span class="comment">Q1–Q3 FY2025 data shows further deterioration. Bull thesis still intact structurally,</span>
-<span class="comment">but forward earnings starting point is lower than FY2024. Upside asymmetry is larger.</span></div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- DATA SOURCES TABLE -->
-    <div class="sec-eyebrow reveal" style="margin-top:48px">Data Sources &amp; Verification Status</div>
-    <table class="src-table reveal">
-      <thead>
-        <tr><th>Data Point</th><th>Value Used</th><th>Source</th><th>Status</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><strong>FY2024 Revenue</strong></td><td>RM 30,700mm</td><td>PCG Press Release, Feb 21 2025</td><td><span class="src-verified">✓ Verified</span></td></tr>
-        <tr><td><strong>FY2024 EBITDA</strong></td><td>RM 3,500mm</td><td>PCG Press Release, Feb 21 2025</td><td><span class="src-verified">✓ Verified</span></td></tr>
-        <tr><td><strong>FY2024 PATANCI</strong></td><td>RM 1,175mm</td><td>Malay Mail Feb 23 2025 + PCG confirmed</td><td><span class="src-verified">✓ Verified</span></td></tr>
-        <tr><td><strong>Cash &amp; Equivalents</strong></td><td>RM 8,740mm</td><td>StockAnalysis.com / Simply Wall St Dec 2024</td><td><span class="src-verified">✓ Verified</span></td></tr>
-        <tr><td><strong>Total Debt (Borrowings)</strong></td><td>RM 4,930mm</td><td>StockAnalysis.com (Debt/Equity ratio 13%)</td><td><span class="src-verified">✓ Verified</span></td></tr>
-        <tr><td><strong>Net Cash Position</strong></td><td>RM 3,810mm</td><td>Derived: Cash RM8,740 − Debt RM4,930</td><td><span class="src-verified">✓ Verified</span></td></tr>
-        <tr><td><strong>Shares Outstanding</strong></td><td>8,000mm</td><td>Confirmed: RM240mm div ÷ 3 sen DPS = 8,000mm</td><td><span class="src-verified">✓ Verified</span></td></tr>
-        <tr><td><strong>Total Assets</strong></td><td>RM 60,800mm</td><td>PCG Investor Relations page (official)</td><td><span class="src-verified">✓ Verified</span></td></tr>
-        <tr><td><strong>FY2023 EBITDA</strong></td><td>RM 3,800mm</td><td>PCG Q4 FY2023 official press release</td><td><span class="src-verified">✓ Verified</span></td></tr>
-        <tr><td><strong>Plant Utilisation (FY2024)</strong></td><td>91%</td><td>PCG Press Release, Feb 21 2025</td><td><span class="src-verified">✓ Verified</span></td></tr>
-        <tr><td><strong>Middle East exposure data</strong></td><td>PHL 93%, VNM 85%, etc.</td><td>BofA Global Research / ITC Trade Map HS 2709</td><td><span class="src-verified">✓ Verified</span></td></tr>
-        <tr><td><strong>D&amp;A rate (~4.9% of rev)</strong></td><td>RM ~1,489mm</td><td>Derived from EBITDA → PAT bridge reconciliation</td><td><span class="src-estimated">~ Estimated</span></td></tr>
-        <tr><td><strong>Net Interest Income</strong></td><td>RM ~150mm/yr</td><td>Derived: net cash × ~2% average deposit rate</td><td><span class="src-estimated">~ Estimated</span></td></tr>
-        <tr><td><strong>Effective Tax Rate</strong></td><td>24%</td><td>Derived from FY2024 PBT → PAT bridge</td><td><span class="src-estimated">~ Estimated</span></td></tr>
-        <tr><td><strong>Revenue sensitivity ($10/bbl)</strong></td><td>RM 700mm</td><td>Modelled: historical oil/revenue correlation, conservative</td><td><span class="src-modelled">◈ Modelled</span></td></tr>
-        <tr><td><strong>EBITDA margin schedule</strong></td><td>8.8% – 19.2%</td><td>Modelled: anchored to FY2024A 11.4% actual baseline</td><td><span class="src-modelled">◈ Modelled</span></td></tr>
-        <tr><td><strong>EV/EBITDA multiple schedule</strong></td><td>6.5× – 16×</td><td>PCHEM historical trading range + Asian peer comparables</td><td><span class="src-modelled">◈ Modelled</span></td></tr>
-        <tr><td><strong>P/E multiple schedule</strong></td><td>12× – 24×</td><td>PCHEM historical range (trough 10× to peak 26× in FY2022)</td><td><span class="src-modelled">◈ Modelled</span></td></tr>
-      </tbody>
-    </table>
-
-    <!-- CORRECTIONS LOG -->
-    <div class="sec-eyebrow reveal" style="margin-top:12px">Version Control: Corrections from v1 to v2</div>
-    <div class="correction-log reveal">
-      <div class="correction-log-header">Errors identified and corrected during triple-verification audit</div>
-      <div class="correction-row header-row">
-        <div class="corr-cell">Item</div>
-        <div class="corr-cell">v1 — Wrong</div>
-        <div class="corr-cell">v2 — Correct</div>
-      </div>
-      <div class="correction-row">
-        <div class="corr-cell"><span class="corr-label">Net Debt vs Net Cash</span><br><span style="font-size:11px;color:var(--muted)">Critical direction error — affected all valuations</span></div>
-        <div class="corr-cell"><span class="corr-wrong">RM14,000mm NET DEBT</span></div>
-        <div class="corr-cell"><span class="corr-right">RM3,810mm NET CASH</span></div>
-      </div>
-      <div class="correction-row">
-        <div class="corr-cell"><span class="corr-label">FY2023 EBITDA</span></div>
-        <div class="corr-cell"><span class="corr-wrong">RM3,200mm</span></div>
-        <div class="corr-cell"><span class="corr-right">RM3,800mm</span></div>
-      </div>
-      <div class="correction-row">
-        <div class="corr-cell"><span class="corr-label">Interest direction &amp; magnitude</span></div>
-        <div class="corr-cell"><span class="corr-wrong">RM800mm annual EXPENSE</span></div>
-        <div class="corr-cell"><span class="corr-right">RM150mm annual INCOME</span></div>
-      </div>
-      <div class="correction-row">
-        <div class="corr-cell"><span class="corr-label">D&amp;A rate (% of revenue)</span></div>
-        <div class="corr-cell"><span class="corr-wrong">7.2% → RM2,200mm implied</span></div>
-        <div class="corr-cell"><span class="corr-right">4.9% → RM1,489mm derived</span></div>
-      </div>
-      <div class="correction-row">
-        <div class="corr-cell"><span class="corr-label">FY2024 PATANCI</span></div>
-        <div class="corr-cell"><span class="corr-wrong">RM900mm (underestimated)</span></div>
-        <div class="corr-cell"><span class="corr-right">RM1,175mm (confirmed official)</span></div>
-      </div>
-      <div class="correction-row">
-        <div class="corr-cell"><span class="corr-label">EPS FY2024</span></div>
-        <div class="corr-cell"><span class="corr-wrong">~11.25 sen per share</span></div>
-        <div class="corr-cell"><span class="corr-right">14.7 sen per share</span></div>
-      </div>
-    </div>
-
+  <div class="eyebrow fade">03 — Full Methodology</div>
+  <h2 class="fade">Engine Room.<br><em>No Black Boxes.</em></h2>
+  <p class="fade">Every input, formula, assumption — sourced, justified, and shown. If you want to challenge the thesis, this is where you do it.</p>
+  <div class="msteps fade d1">
+    <div class="mst"><div class="msn">01</div><div class="msb"><div class="mst-title">Establish the Verified Baseline</div><p class="mst-txt">All data anchored to <strong>audited FY2024 actuals (PCG Press Release, Feb 21 2025)</strong>, cross-referenced against three+ independent sources. Critical correction: PCHEM is <em>net cash RM3.81B</em>, not net debt — changes the entire EV bridge.</p><div class="mst-tags"><span class="mst-tag s">PCG Press Release Feb 21 2025</span><span class="mst-tag s">StockAnalysis.com</span><span class="mst-tag s">Malay Mail Feb 23 2025</span></div></div></div>
+    <div class="mst"><div class="msn">02</div><div class="msb"><div class="mst-title">Revenue Sensitivity: Oil → Revenue</div><p class="mst-txt">Two channels: (1) <strong>Product ASP</strong> — prices track crude with 60–90 day lag; (2) <strong>FX</strong> — higher oil weakens MYR vs USD, amplifying USD revenue.</p><div class="mcode">Revenue(oil) = RM30,700mm + ((oil − $82) / $10) × RM700mm<br><span class="c">Sensitivity = RM700mm per $10/bbl (conservative midpoint)</span><br><span class="c">Floor = RM24,000mm (bear demand-destruction scenario)</span></div></div></div>
+    <div class="mst"><div class="msn">03</div><div class="msb"><div class="mst-title">EBITDA Margin: Spread Mechanics by Segment</div><div class="ag"><div class="agc"><div class="agt">O&D ~50% revenue</div><div class="agb">Naphtha feedstock. Products reset with <strong>60–90 day lag</strong>. Initial margin expansion 2–3 quarters.</div></div><div class="agc"><div class="agt">F&M ~20% revenue</div><div class="agb">Domestic gas at <strong>subsidised rates</strong>. Costs don't track crude. Cleanest beneficiary of an oil shock.</div></div></div><div class="mcode">$70→8.8%  $82→11.4%(anchor)  $90→13.2%  $110→15.5%  $130→19.2%</div></div></div>
+    <div class="mst"><div class="msn">04</div><div class="msb"><div class="mst-title">P&L Bridge: EBITDA → PATANCI</div><div class="mcode">
+EBITDA  = Revenue × Margin(oil)<br>
+D&A     = Revenue × 4.9%   <span class="c">← derived EBITDA−EBIT bridge FY2024</span><br>
+Net Int = +RM150mm/yr      <span class="c">← net cash = INCOME not expense (v1 error)</span><br>
+Tax     = PBT × 24%         <span class="c">← effective rate FY2024</span><br>
+NCI     = PBT × 6%          <span class="c">← minority interests FY2024</span><br>
+PATANCI = PBT − Tax − NCI   <span class="c">← ~RM1,124mm (div math) or ~RM1,175mm (Malay Mail)</span></div></div></div>
+    <div class="mst"><div class="msn">05</div><div class="msb"><div class="mst-title">EV/EBITDA: Net Cash Applied Correctly</div><div class="mcode">
+Implied EV     = EBITDA × Multiple<br>
+Implied MktCap = EV + Net Cash  <span class="c">← ADD (PCHEM is net cash positive)</span><br>
+Implied Price  = MktCap / 8,000mm shares<br>
+<span class="c">v1 ERROR: used RM14,000mm NET DEBT — wrong direction AND wrong amount</span><br>
+<span class="c">Current 7.9× | Base 9× | Bull 12.5× | XBull 16×</span></div></div></div>
+    <div class="mst"><div class="msn">06</div><div class="msb"><div class="mst-title">P/E Cross-Check & Blended Target Price</div><div class="mcode">
+P/E:     MktCap = PATANCI × Multiple<br>
+Blended: TP = (EV/EBITDA × 55%) + (P/E × 45%)<br><span class="c">Bear 12× | Base 16× | Bull 20× | XBull 24×</span></div></div></div>
+  </div>
+  <h3 class="fade" style="margin-top:36px">Data Sources & Verification</h3>
+  <table class="stbl fade">
+    <thead><tr><th>Data Point</th><th>Value</th><th>Source</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td><strong>FY2024 Revenue</strong></td><td>RM 30,700mm</td><td>PCG Press Release Feb 21 2025</td><td><span class="sv">✓ Verified</span></td></tr>
+      <tr><td><strong>FY2024 EBITDA</strong></td><td>RM 3,500mm</td><td>PCG Press Release Feb 21 2025</td><td><span class="sv">✓ Verified</span></td></tr>
+      <tr><td><strong>PATANCI</strong></td><td>RM 1,175mm</td><td>Malay Mail Feb 23 2025</td><td><span class="sv">✓ Verified</span></td></tr>
+      <tr><td><strong>Net Cash Position</strong></td><td>RM 3,810mm</td><td>Cash 8,740 − Debt 4,930</td><td><span class="sv">✓ Verified</span></td></tr>
+      <tr><td><strong>Shares Outstanding</strong></td><td>8,000mm</td><td>240mm div ÷ 3 sen DPS</td><td><span class="sv">✓ Verified</span></td></tr>
+      <tr><td><strong>Middle East exposure</strong></td><td>PHL 93%, VNM 85%…</td><td>BofA / ITC Trade Map HS 2709</td><td><span class="sv">✓ Verified</span></td></tr>
+      <tr><td><strong>D&A Rate</strong></td><td>~4.9% of revenue</td><td>EBITDA→PAT bridge derived</td><td><span class="se">~ Estimated</span></td></tr>
+      <tr><td><strong>Revenue sensitivity</strong></td><td>RM700mm / $10/bbl</td><td>Historical correlation, conservative</td><td><span class="sm">◈ Modelled</span></td></tr>
+    </tbody>
+  </table>
+  <h3 class="fade">Corrections: v1 → v2</h3>
+  <div class="corr fade">
+    <div class="corr-hdr">Errors identified during triple-verification audit</div>
+    <div class="crow ch"><div class="cc">Item</div><div class="cc">v1 Wrong</div><div class="cc">v2 Correct</div></div>
+    <div class="crow"><div class="cc"><span class="cn">Net Cash vs Net Debt</span><br><span style="font-size:10px;color:var(--w3)">Critical — all valuations affected</span></div><div class="cc"><span class="cw">RM14,000mm DEBT</span></div><div class="cc"><span class="cr">RM3,810mm CASH</span></div></div>
+    <div class="crow"><div class="cc"><span class="cn">FY2023 EBITDA</span></div><div class="cc"><span class="cw">RM3,200mm (v1 error)</span></div><div class="cc"><span class="cr">RM3,800mm ✓ (PCG Q4 FY2023)</span></div></div>
+    <div class="crow"><div class="cc"><span class="cn">Interest direction</span></div><div class="cc"><span class="cw">RM800mm EXPENSE/yr</span></div><div class="cc"><span class="cr">RM150mm INCOME/yr</span></div></div>
+    <div class="crow"><div class="cc"><span class="cn">D&A rate</span></div><div class="cc"><span class="cw">7.2% of revenue</span></div><div class="cc"><span class="cr">4.9% of revenue</span></div></div>
+    <div class="crow"><div class="cc"><span class="cn">PATANCI FY2024</span></div><div class="cc"><span class="cw">RM900mm</span></div><div class="cc"><span class="cr">RM1,175mm confirmed</span></div></div>
   </div>
 </section>
 
-
 <!-- EXPOSURE -->
 <section id="exposure">
-  <div class="page">
-    <div class="sec-eyebrow reveal">Regional Context</div>
-    <h2 class="reveal">The Exposure Map:<br>Who Gets Hurt, Who Doesn't</h2>
-    <p class="reveal">Middle East crude dependency by country. The higher the bar, the more vulnerable that economy is to a supply disruption — and the more PCHEM's product prices benefit as regional chemical prices reprice upward.</p>
-
-    <div class="exp-container reveal">
-      <div class="exp-header">
-        <span class="exp-title-text">Middle East crude import share (% of total imports)</span>
-        <div class="exp-legend">
-          <span><span class="legend-dot" style="background:#B84C3A"></span>Critical (70%+)</span>
-          <span><span class="legend-dot" style="background:#C8A44A"></span>High (50–70%)</span>
-          <span><span class="legend-dot" style="background:#3A9060"></span>Lower risk</span>
-        </div>
-      </div>
-      <div id="bars"></div>
+  <div class="eyebrow fade">04 — Regional Context</div>
+  <h2 class="fade">The Exposure Map:<br><em>Who Gets Hurt. Who Doesn't.</em></h2>
+  <p class="fade">Middle East crude dependency by country — the structural data that makes this thesis work. The higher the bar, the more vulnerable the economy, the more PCHEM's product prices benefit as regional chemicals reprice.</p>
+  <div class="exposure-grid fade d1">
+    <div>
+      <div class="exp-group-label">High Exposure — Asia (Vulnerable)</div>
+      <div id="bars-asia"></div>
+      <div class="exp-callout">★ Malaysia at 62% sits in the high band — but critically, it's a net energy exporter with PCHEM's F&M division using domestic subsidised gas feedstock. Sweet spot: exposed enough to benefit from rising product prices, sheltered from the worst of the input cost shock.</div>
     </div>
-
-    <p class="reveal">Malaysia at <strong>~62%</strong> exposure is in the high band — but crucially, it's a net energy exporter and PCHEM's fertiliser/methanol division runs on domestic gas feedstock at subsidised rates. <em>Exposed enough to benefit from rising product prices; insulated enough to avoid the full cost shock.</em></p>
+    <div>
+      <div class="exp-group-label">Lower Exposure — EMEA & LatAm (Insulated)</div>
+      <div id="bars-low"></div>
+      <div class="exp-callout">Europe and LatAm are structurally insulated from the Iran shock. Europe diversified post-2022. Brazil is a net exporter. This divergence between Asia and the rest-of-world is the core trade — and it's why PCHEM is the expression, not crude oil itself.</div>
+    </div>
   </div>
 </section>
 
 <!-- SCENARIOS -->
 <section id="scenarios">
-  <div class="page">
-    <div class="sec-eyebrow reveal">Scenario Modelling · 12-Month Forward</div>
-    <h2 class="reveal">Four Worlds.<br>One Question: Where Does Oil Go?</h2>
-    <p class="reveal">Each $10/bbl change in Brent translates to approximately RM700M in PCHEM revenue, with EBITDA margins expanding as product prices reset ahead of feedstock costs (60–90 day lag). Select a scenario to explore.</p>
-
-    <!-- INTERACTIVE SLIDER -->
-    <div class="slider-section reveal">
-      <div class="slider-label">Interactive Oil Price Sensitivity</div>
-      <div class="slider-display">
-        <span id="oil-price-display">85</span>
-        <span class="slider-unit">USD / barrel</span>
-      </div>
-      <input type="range" id="oil-slider" min="65" max="135" value="102" step="1">
-      <div class="slider-range"><span>$65 (Bear)</span><span>$100 (Bull)</span><span>$135 (Extreme)</span></div>
-      <div class="slider-outputs">
-        <div class="slider-out-cell">
-          <div class="slider-out-label">Est. Revenue</div>
-          <div class="slider-out-val" id="s-rev">RM30.8B</div>
-        </div>
-        <div class="slider-out-cell">
-          <div class="slider-out-label">Est. EBITDA</div>
-          <div class="slider-out-val" id="s-ebitda">RM3.4B</div>
-        </div>
-        <div class="slider-out-cell">
-          <div class="slider-out-label">EBITDA Margin</div>
-          <div class="slider-out-val" id="s-margin">11.1%</div>
-        </div>
-        <div class="slider-out-cell">
-          <div class="slider-out-label">Implied Price</div>
-          <div class="slider-out-val" id="s-price">RM4.5</div>
-        </div>
-      </div>
+  <div class="eyebrow fade">05 — Scenario Modelling</div>
+  <h2 class="fade">Four Worlds.<br><em>One Question: Where Does Oil Go?</em></h2>
+  <p class="fade">Each $10/bbl change → ~RM700M revenue (model assumption — see Methodology), margins expanding as product prices reset ahead of feedstock costs (60–90 day lag). All figures below are model outputs based on the assumptions documented in Section 03.</p>
+  <div class="slider-blk fade d1">
+    <div class="sb-glow"></div>
+    <div class="sb-label">Live Oil Price Sensitivity — drag to explore</div>
+    <div class="sb-disp"><span id="onum">102</span><span class="sb-unit">USD / bbl</span><span class="sb-zone" id="ozone" style="border-color:rgba(0,255,136,.3);color:var(--green)">BULL TERRITORY</span></div>
+    <input type="range" id="osl" min="65" max="135" value="102" step="1">
+    <div class="sb-range"><span>$65 Bear</span><span>$85 Base</span><span>$100 Bull</span><span>$135 Extreme</span></div>
+    <div class="sb-outs">
+      <div class="sb-out"><div class="sb-ol">Revenue (Annual)</div><div class="sb-ov" id="srev">RM33.1B</div></div>
+      <div class="sb-out"><div class="sb-ol">EBITDA</div><div class="sb-ov" id="sebitda">RM4.4B</div></div>
+      <div class="sb-out"><div class="sb-ol">EBITDA Margin</div><div class="sb-ov" id="smargin">13.2%</div></div>
+      <div class="sb-out"><div class="sb-ol">Implied Price</div><div class="sb-ov" id="sprice">RM6.8</div></div>
     </div>
-
-    <!-- SCENARIO TABS -->
-    <div class="reveal">
-      <div class="sc-tabs">
-        <button class="sc-tab bear-t active" onclick="showScenario('bear',this)">Bear</button>
-        <button class="sc-tab base-t" onclick="showScenario('base',this)">Base</button>
-        <button class="sc-tab bull-t" onclick="showScenario('bull',this)">Bull</button>
-        <button class="sc-tab xbull-t" onclick="showScenario('xbull',this)">Extreme Bull</button>
-      </div>
-
-      <div id="sc-bear" class="sc-panel bear active">
-        <div class="sc-panel-left">
-          <div class="sc-oil-price">$70</div>
-          <div class="sc-oil-sub">per barrel · Brent</div>
-          <div class="sc-metrics-grid">
-            <div class="sc-metric-row"><span class="sc-metric-label">12M Revenue</span><span class="sc-metric-value">RM 27.6B</span></div>
-            <div class="sc-metric-row"><span class="sc-metric-label">EBITDA</span><span class="sc-metric-value">RM 2,162M</span></div>
-            <div class="sc-metric-row"><span class="sc-metric-label">EBITDA Margin</span><span class="sc-metric-value">8.8%</span></div>
-            <div class="sc-metric-row"><span class="sc-metric-label">EPS (sen)</span><span class="sc-metric-value">~9.4¢</span></div>
-            <div class="sc-metric-row"><span class="sc-metric-label">EV/EBITDA Applied</span><span class="sc-metric-value">6.5×</span></div>
-          </div>
-          <div class="sc-tp-block">
-            <div class="sc-tp-label">Blended Target Price</div>
-            <div class="sc-tp-price">RM 2.00</div>
-            <div class="sc-tp-upside">−49% from RM3.93</div>
-          </div>
-        </div>
-        <div class="sc-panel-right">
-          <h3>What triggers this</h3>
-          <div class="sc-narrative">Global recession combines with an Iran nuclear deal, collapsing crude to the low-$70s. Demand destruction overwhelms the supply side. Chinese petrochemical overcapacity floods Asian markets. PCHEM's spreads compress to 2023 lows.<br><br>The bear case already assumes revenue <em>below</em> FY2024 actuals. Net cash of RM3.81B provides a floor — the company doesn't face existential risk here, just significant earnings pressure and multiple de-rating.<br><br><strong>Probability: Low-medium.</strong> Requires a simultaneous demand shock AND geopolitical resolution — historically rare combination.</div>
-        </div>
-      </div>
-
-      <div id="sc-base" class="sc-panel base">
-        <div class="sc-panel-left">
-          <div class="sc-oil-price">$85</div>
-          <div class="sc-oil-sub">per barrel · Brent</div>
-          <div class="sc-metrics-grid">
-            <div class="sc-metric-row"><span class="sc-metric-label">12M Revenue</span><span class="sc-metric-value">RM 30.8B</span></div>
-            <div class="sc-metric-row"><span class="sc-metric-label">EBITDA</span><span class="sc-metric-value">RM 3,419M</span></div>
-            <div class="sc-metric-row"><span class="sc-metric-label">EBITDA Margin</span><span class="sc-metric-value">11.1%</span></div>
-            <div class="sc-metric-row"><span class="sc-metric-label">EPS (sen)</span><span class="sc-metric-value">~15.0¢</span></div>
-            <div class="sc-metric-row"><span class="sc-metric-label">EV/EBITDA Applied</span><span class="sc-metric-value">9.0×</span></div>
-          </div>
-          <div class="sc-tp-block">
-            <div class="sc-tp-label">Blended Target Price</div>
-            <div class="sc-tp-price">RM 4.50</div>
-            <div class="sc-tp-upside">+15% from RM3.93</div>
-          </div>
-        </div>
-        <div class="sc-panel-right">
-          <h3>What triggers this</h3>
-          <div class="sc-narrative">Status quo persists. Oil hovers near FY2024 averages, the chemical industry downcycle extends into late 2025, and PCHEM delivers steady but unspectacular results. No catalyst. No crisis.<br><br>The base case essentially says the current share price is roughly fair — modest upside reflects the net cash cushion and a slight valuation multiple re-rating from 7.9× toward 9×.<br><br><strong>Implication for the thesis:</strong> The base case is boring. This trade is not about the base case. It's about the asymmetry between a 49% downside and a 109–221% upside in the bull and extreme bull scenarios.</div>
-        </div>
-      </div>
-
-      <div id="sc-bull" class="sc-panel bull">
-        <div class="sc-panel-left">
-          <div class="sc-oil-price">$110</div>
-          <div class="sc-oil-sub">per barrel · Brent</div>
-          <div class="sc-metrics-grid">
-            <div class="sc-metric-row"><span class="sc-metric-label">12M Revenue</span><span class="sc-metric-value">RM 34.7B</span></div>
-            <div class="sc-metric-row"><span class="sc-metric-label">EBITDA</span><span class="sc-metric-value">RM 5,372M</span></div>
-            <div class="sc-metric-row"><span class="sc-metric-label">EBITDA Margin</span><span class="sc-metric-value">15.5%</span></div>
-            <div class="sc-metric-row"><span class="sc-metric-label">EPS (sen)</span><span class="sc-metric-value">~29.4¢</span></div>
-            <div class="sc-metric-row"><span class="sc-metric-label">EV/EBITDA Applied</span><span class="sc-metric-value">12.5×</span></div>
-          </div>
-          <div class="sc-tp-block">
-            <div class="sc-tp-label">Blended Target Price</div>
-            <div class="sc-tp-price">RM 8.20</div>
-            <div class="sc-tp-upside">+109% from RM3.93</div>
-          </div>
-        </div>
-        <div class="sc-panel-right">
-          <h3>What triggers this</h3>
-          <div class="sc-narrative">Iran supply disruption materialises — through sanctions tightening, military action, or Hormuz tension. Middle East barrels reroute, Asia scrambles for alternative supply, and product prices reset upward.<br><br>PCHEM's product pricing reprices with a 60–90 day lag while gas feedstock costs (domestic, subsidised) remain anchored. Margins expand from ~11% toward 15–16%. The market re-rates from a trough 7.9× EV/EBITDA toward a mid-cycle 12–13×.<br><br><strong>Probability: Medium.</strong> Iran tensions have been building. This doesn't require a black swan — just sustained disruption for two to three quarters.</div>
-        </div>
-      </div>
-
-      <div id="sc-xbull" class="sc-panel xbull">
-        <div class="sc-panel-left">
-          <div class="sc-oil-price">$130</div>
-          <div class="sc-oil-sub">per barrel · Brent</div>
-          <div class="sc-metrics-grid">
-            <div class="sc-metric-row"><span class="sc-metric-label">12M Revenue</span><span class="sc-metric-value">RM 39.1B</span></div>
-            <div class="sc-metric-row"><span class="sc-metric-label">EBITDA</span><span class="sc-metric-value">RM 7,527M</span></div>
-            <div class="sc-metric-row"><span class="sc-metric-label">EBITDA Margin</span><span class="sc-metric-value">19.2%</span></div>
-            <div class="sc-metric-row"><span class="sc-metric-label">EPS (sen)</span><span class="sc-metric-value">~50.8¢</span></div>
-            <div class="sc-metric-row"><span class="sc-metric-label">EV/EBITDA Applied</span><span class="sc-metric-value">16.0×</span></div>
-          </div>
-          <div class="sc-tp-block">
-            <div class="sc-tp-label">Blended Target Price</div>
-            <div class="sc-tp-price">RM 12.60</div>
-            <div class="sc-tp-upside">+221% from RM3.93</div>
-          </div>
-        </div>
-        <div class="sc-panel-right">
-          <h3>What triggers this</h3>
-          <div class="sc-narrative">Strait of Hormuz partial or full closure. Prolonged Iran conflict. The "tail risk" scenario that the shipping insurance market has been quietly pricing for months.<br><br>At $130/bbl sustained, the FY2022 playbook repeats — PCHEM earned RM4.1B in PAT that year at similar oil dynamics. At RM3.93 today versus RM9–11 back then, the re-rating math is stark.<br><br>EBITDA of RM7.5B against current EV of ~RM27.6B implies the market would be paying just 3.7× EBITDA for a company generating this level of earnings — historically, the market wouldn't tolerate that discount for long.<br><br><strong>Probability: Low. Consequence: Transformational.</strong></div>
-        </div>
-      </div>
+  </div>
+  <div class="sc-wrap fade d2">
+    <div class="sc-tabs">
+      <button class="sct sct-bear on" onclick="scSwitch('bear',this)">
+        <div class="sct-inner"><div class="sct-top"><span class="sct-label">Bear Case</span><span class="sct-indicator" style="background:var(--red)"></span></div><div class="sct-oil">$70</div><div class="sct-delta">vs $82 base: −$12</div></div>
+        <div class="sct-bar" style="background:var(--red)"></div>
+      </button>
+      <button class="sct sct-base" onclick="scSwitch('base',this)">
+        <div class="sct-inner"><div class="sct-top"><span class="sct-label">Base Case</span><span class="sct-indicator" style="background:var(--blue)"></span></div><div class="sct-oil">$85</div><div class="sct-delta">FY2024 average</div></div>
+        <div class="sct-bar" style="background:var(--blue)"></div>
+      </button>
+      <button class="sct sct-bull" onclick="scSwitch('bull',this)">
+        <div class="sct-inner"><div class="sct-top"><span class="sct-label">Bull Case</span><span class="sct-indicator" style="background:var(--green)"></span></div><div class="sct-oil">$110</div><div class="sct-delta">→ NOW AT $102 ✓</div></div>
+        <div class="sct-bar" style="background:var(--green)"></div>
+      </button>
+      <button class="sct sct-xbull" onclick="scSwitch('xbull',this)">
+        <div class="sct-inner"><div class="sct-top"><span class="sct-label">Extreme Bull</span><span class="sct-indicator" style="background:var(--teal)"></span></div><div class="sct-oil">$130</div><div class="sct-delta">Hormuz closure</div></div>
+        <div class="sct-bar" style="background:var(--teal)"></div>
+      </button>
+    </div>
+    <div id="sb-bear" class="sc-body bear on">
+      <div class="sc-left"><div class="sc-price">$70</div><div class="sc-price-sub">per barrel · Brent</div><div class="sc-metrics"><div class="sc-mr"><span class="sc-ml2">Revenue</span><span class="sc-mv2">RM 29.9B</span></div><div class="sc-mr"><span class="sc-ml2">EBITDA</span><span class="sc-mv2">RM 2,628M</span></div><div class="sc-mr"><span class="sc-ml2">EBITDA Margin</span><span class="sc-mv2">8.8%</span></div><div class="sc-mr"><span class="sc-ml2">EPS (sen)</span><span class="sc-mv2">~9.4</span></div><div class="sc-mr"><span class="sc-ml2">EV/EBITDA Applied</span><span class="sc-mv2">6.5×</span></div></div></div>
+      <div class="sc-center"><div class="sc-tp"><div class="sc-tp-l">Blended Target Price</div><div class="sc-tp-p">RM 2.02</div><div class="sc-tp-d">−64% from current RM5.60</div></div></div>
+      <div class="sc-right"><div class="sc-narr-l">What triggers this</div><div class="sc-narr-t">Global recession + Iran deal simultaneously. Demand destruction overwhelms supply. Net cash RM3.81B is the floor — no existential risk, but significant earnings pressure and multiple de-rating.<br><br><strong>Probability: Low-medium.</strong> Simultaneous demand collapse AND geopolitical resolution — historically rare.</div></div>
+    </div>
+    <div id="sb-base" class="sc-body base">
+      <div class="sc-left"><div class="sc-price">$85</div><div class="sc-price-sub">per barrel · Brent</div><div class="sc-metrics"><div class="sc-mr"><span class="sc-ml2">Revenue</span><span class="sc-mv2">RM 30.9B</span></div><div class="sc-mr"><span class="sc-ml2">EBITDA</span><span class="sc-mv2">RM 3,524M</span></div><div class="sc-mr"><span class="sc-ml2">EBITDA Margin</span><span class="sc-mv2">11.1%</span></div><div class="sc-mr"><span class="sc-ml2">EPS (sen)</span><span class="sc-mv2">~15.0</span></div><div class="sc-mr"><span class="sc-ml2">EV/EBITDA Applied</span><span class="sc-mv2">9.0×</span></div></div></div>
+      <div class="sc-center"><div class="sc-tp"><div class="sc-tp-l">Blended Target Price</div><div class="sc-tp-p">RM 3.81</div><div class="sc-tp-d">Below current RM5.60 — confirms bull territory</div></div></div>
+      <div class="sc-right"><div class="sc-narr-l">What triggers this</div><div class="sc-narr-t">Status quo. Oil near FY2024 averages. Chemical downcycle extends. No catalyst.<br><br>This thesis is NOT about the base case. It's about the asymmetry between a managed downside and a 100%+ bull case. <strong>Current price has already exceeded this target.</strong></div></div>
+    </div>
+    <div id="sb-bull" class="sc-body bull">
+      <div class="sc-left"><div class="sc-price">$110</div><div class="sc-price-sub">per barrel · Brent</div><div class="sc-metrics"><div class="sc-mr"><span class="sc-ml2">Revenue</span><span class="sc-mv2">RM 32.7B</span></div><div class="sc-mr"><span class="sc-ml2">EBITDA</span><span class="sc-mv2">RM 5,062M</span></div><div class="sc-mr"><span class="sc-ml2">EBITDA Margin</span><span class="sc-mv2">15.5%</span></div><div class="sc-mr"><span class="sc-ml2">EPS (sen)</span><span class="sc-mv2">~29.4</span></div><div class="sc-mr"><span class="sc-ml2">EV/EBITDA Applied</span><span class="sc-mv2">12.5×</span></div></div></div>
+      <div class="sc-center"><div class="sc-tp"><div class="sc-tp-l">Blended Target Price</div><div class="sc-tp-p">RM 7.55</div><div class="sc-tp-d">+34.8% from current RM5.60</div></div></div>
+      <div class="sc-right"><div class="sc-narr-l">What triggers this</div><div class="sc-narr-t">Iran disruption — as it has at $102 Brent today. Product prices reset upward with 60–90 day lag while gas feedstock stays anchored. Margins expand 11%→15–16%.<br><br><strong>We are entering this scenario right now.</strong> Q2 2026 earnings = next catalyst.</div></div>
+    </div>
+    <div id="sb-xbull" class="sc-body xbull">
+      <div class="sc-left"><div class="sc-price">$130</div><div class="sc-price-sub">per barrel · Brent</div><div class="sc-metrics"><div class="sc-mr"><span class="sc-ml2">Revenue</span><span class="sc-mv2">RM 34.1B</span></div><div class="sc-mr"><span class="sc-ml2">EBITDA</span><span class="sc-mv2">RM 6,642M</span></div><div class="sc-mr"><span class="sc-ml2">EBITDA Margin</span><span class="sc-mv2">19.2%</span></div><div class="sc-mr"><span class="sc-ml2">EPS (sen)</span><span class="sc-mv2">~50.8</span></div><div class="sc-mr"><span class="sc-ml2">EV/EBITDA Applied</span><span class="sc-mv2">16.0×</span></div></div></div>
+      <div class="sc-center"><div class="sc-tp"><div class="sc-tp-l">Blended Target Price</div><div class="sc-tp-p">RM 12.57</div><div class="sc-tp-d">+124.5% from current RM5.60</div></div></div>
+      <div class="sc-right"><div class="sc-narr-l">What triggers this</div><div class="sc-narr-t">Strait of Hormuz partial/full closure. PCHEM earned RM4.1B PAT in FY2022. At RM7.5B EBITDA vs current EV ~RM44B → 5.9× EV/EBITDA. Market would re-rate fast.<br><br><strong>Probability: Low. Consequence: Transformational.</strong></div></div>
     </div>
   </div>
 </section>
 
 <!-- TRADE -->
 <section id="trade">
-  <div class="page">
-    <div class="sec-eyebrow reveal">The Trade Structure</div>
-    <h2 class="reveal">Five-Leg Positioning:<br>How to Express the Divergence</h2>
-    <p class="reveal">This is a <em>relative value geopolitical divergence</em> trade — not a simple crude oil bet. The structure captures the spread between Asia's most exposed and least exposed economies.</p>
-
-    <div class="trade-wrap reveal">
-      <div class="trade-header">
-        <div class="trade-th">Direction</div>
-        <div class="trade-th">Instrument</div>
-        <div class="trade-th">Thesis</div>
-        <div class="trade-th" style="text-align:right">Horizon</div>
-      </div>
-      <div class="trade-row">
-        <div class="trade-td"><span class="dir-pill d-long">Long</span></div>
-        <div class="trade-td"><div class="ticker-main">PCHEM / DIALOG</div><div class="ticker-sub">Bursa Malaysia · Core</div></div>
-        <div class="trade-td">Malaysia net exporter. PCHEM benefits from product spread expansion. Dialog's tank terminal captures storage demand spike near Malacca Strait. Gas feedstock insulates F&M from cost shock.</div>
-        <div class="trade-td"><span class="horizon-val">6–18M</span></div>
-      </div>
-      <div class="trade-row">
-        <div class="trade-td"><span class="dir-pill d-long">Long</span></div>
-        <div class="trade-td"><div class="ticker-main">XLE / OXY</div><div class="ticker-sub">US Energy · Amplifier</div></div>
-        <div class="trade-td">US shale is the swing supplier when Asia bids for alternative barrels. OXY's Permian leverage + Buffett accumulation floor = asymmetric upside.</div>
-        <div class="trade-td"><span class="horizon-val">6–12M</span></div>
-      </div>
-      <div class="trade-row">
-        <div class="trade-td"><span class="dir-pill d-short">Short</span></div>
-        <div class="trade-td"><div class="ticker-main">Korean Refiners</div><div class="ticker-sub">S-Oil · SK Innovation</div></div>
-        <div class="trade-td">65%+ Middle East dependency. Grade-switching cost is high. Rising crude input + limited downstream pass-through = margin compression. The cleanest direct short in the thesis.</div>
-        <div class="trade-td"><span class="horizon-val">3–9M</span></div>
-      </div>
-      <div class="trade-row">
-        <div class="trade-td"><span class="dir-pill d-short">Short / FX</span></div>
-        <div class="trade-td"><div class="ticker-main">PHP / VND</div><div class="ticker-sub">Peso · Dong · NDF</div></div>
-        <div class="trade-td">93% and 85% Middle East dependency. Oil shock = dollar demand surge = persistent current account deterioration. Express via NDF or FX-hedged local bond underweight.</div>
-        <div class="trade-td"><span class="horizon-val">3–9M</span></div>
-      </div>
-      <div class="trade-row">
-        <div class="trade-td"><span class="dir-pill d-hedge">Hedge</span></div>
-        <div class="trade-td"><div class="ticker-main">PBR / LatAm</div><div class="ticker-sub">Petrobras · Safe Harbour</div></div>
-        <div class="trade-td">Brazil structurally insulated. PBR trades at a steep discount to global peers on political risk premium — an oil shock re-rates this. Shock absorber in the portfolio.</div>
-        <div class="trade-td"><span class="horizon-val">Ongoing</span></div>
-      </div>
-    </div>
+  <div class="eyebrow fade">06 — Trade Structure</div>
+  <h2 class="fade">Five-Leg Positioning.<br><em>Express the Divergence.</em></h2>
+  <p class="fade">A relative value geopolitical divergence trade — not a directional crude bet. Captures the spread between Asia's most and least exposed economies.</p>
+  <div class="trade fade d1">
+    <div class="th"><div class="thc">Direction</div><div class="thc">Instrument</div><div class="thc">Thesis</div><div class="thc" style="text-align:right">Horizon</div></div>
+    <div class="tr"><div class="td"><span class="dp dp-l">Long</span></div><div class="td"><div class="tkm">PCHEM / DIALOG</div><div class="tks">Bursa Malaysia · Core</div></div><div class="td">Malaysia net exporter. PCHEM benefits from spread expansion. Dialog tank terminal captures storage demand near Malacca Strait. Gas feedstock insulates F&M.</div><div class="td"><span class="thz">6–18M</span></div></div>
+    <div class="tr"><div class="td"><span class="dp dp-l">Long</span></div><div class="td"><div class="tkm">XLE / OXY</div><div class="tks">US Energy · Amplifier</div></div><div class="td">US shale is the swing supplier when Asia bids for alternative barrels. OXY's Permian leverage + Buffett accumulation floor = asymmetric upside.</div><div class="td"><span class="thz">6–12M</span></div></div>
+    <div class="tr"><div class="td"><span class="dp dp-s">Short</span></div><div class="td"><div class="tkm">Korean Refiners</div><div class="tks">S-Oil · SK Innovation</div></div><div class="td">65%+ Middle East dependency. Grade-switching cost high. Rising crude + limited pass-through = margin compression. Cleanest direct short in the thesis.</div><div class="td"><span class="thz">3–9M</span></div></div>
+    <div class="tr"><div class="td"><span class="dp dp-s">Short/FX</span></div><div class="td"><div class="tkm">PHP / VND</div><div class="tks">Peso · Dong · NDF</div></div><div class="td">93% and 85% ME dependency. Oil shock = dollar demand surge = current account deterioration. Express via NDF or FX-hedged bond underweight.</div><div class="td"><span class="thz">3–9M</span></div></div>
+    <div class="tr"><div class="td"><span class="dp dp-h">Hedge</span></div><div class="td"><div class="tkm">PBR / LatAm</div><div class="tks">Petrobras · Safe Harbour</div></div><div class="td">Brazil structurally insulated. PBR at steep discount to global peers — oil shock re-rates. Portfolio shock absorber.</div><div class="td"><span class="thz">Ongoing</span></div></div>
   </div>
 </section>
 
 <!-- RISKS -->
 <section id="risks">
-  <div class="page">
-    <div class="sec-eyebrow reveal">Risk Register</div>
-    <h2 class="reveal">What Could Break This Trade</h2>
-    <p class="reveal">Every thesis has kill switches. Click each risk to see the full analysis and mitigation.</p>
-
-    <div style="margin:32px 0" class="reveal">
-      <div class="risk-item" onclick="toggleRisk(this)">
-        <div class="risk-trigger">
-          <div><div class="risk-name">Iran ceasefire or nuclear deal</div></div>
-          <div class="risk-badges"><span class="rb rb-H">High prob</span><span class="rb rb-H">Severe impact</span></div>
-          <span class="risk-chevron">▼</span>
-        </div>
-        <div class="risk-body">Immediate crude price collapse to $65–70/bbl removes the central catalyst entirely. Monitor US-Iran back-channel negotiations and Vienna nuclear talks closely. <strong>Mitigation:</strong> Size this as a hedge position, not a core bet. Use options structures for defined downside. This risk argues for position sizing discipline above all else.</div>
-      </div>
-      <div class="risk-item" onclick="toggleRisk(this)">
-        <div class="risk-trigger">
-          <div><div class="risk-name">Chinese demand destruction</div></div>
-          <div class="risk-badges"><span class="rb rb-M">Medium</span><span class="rb rb-H">High impact</span></div>
-          <span class="risk-chevron">▼</span>
-        </div>
-        <div class="risk-body">China imports ~43% from the Middle East but controls global chemical demand. A sharp economic slowdown worsens the existing global petrochemical oversupply cycle, crushing product spreads regardless of oil price. This is the risk that has already partially materialised in H1 2025. <strong>Mitigation:</strong> Monitor Chinese PMI manufacturing, ethylene inventory builds, and freight rates monthly.</div>
-      </div>
-      <div class="risk-item" onclick="toggleRisk(this)">
-        <div class="risk-trigger">
-          <div><div class="risk-name">OPEC+ supply surge caps upside</div></div>
-          <div class="risk-badges"><span class="rb rb-M">Medium</span><span class="rb rb-M">Medium impact</span></div>
-          <span class="risk-chevron">▼</span>
-        </div>
-        <div class="risk-body">Saudi Arabia, UAE, and Kuwait ramping output to compensate for any Iran supply loss can cap the price ceiling below $100/bbl, limiting the bull case. The base case holds; the extreme bull becomes more unlikely. <strong>Mitigation:</strong> Watch OPEC+ quota compliance data monthly. Saudi spare capacity is the key variable.</div>
-      </div>
-      <div class="risk-item" onclick="toggleRisk(this)">
-        <div class="risk-trigger">
-          <div><div class="risk-name">PPCSB / Perstorp structural drag</div></div>
-          <div class="risk-badges"><span class="rb rb-M">Medium</span><span class="rb rb-M">Medium impact</span></div>
-          <span class="risk-chevron">▼</span>
-        </div>
-        <div class="risk-body">The Pengerang Petrochemical Complex (PPCSB) and Perstorp acquisition continue to generate FX revaluation losses and impairment charges that distort reported earnings. In Q2 2025, this drove a RM1B loss despite operational EBITDA of RM395M. These are largely non-cash items but create noise that masks underlying improvement. <strong>Mitigation:</strong> Focus on EBITDA, not PAT, as the primary performance metric for this investment.</div>
-      </div>
-      <div class="risk-item" onclick="toggleRisk(this)">
-        <div class="risk-trigger">
-          <div><div class="risk-name">Strait of Hormuz full closure</div></div>
-          <div class="risk-badges"><span class="rb rb-T">Tail risk</span><span class="rb rb-L">Max upside</span></div>
-          <span class="risk-chevron">▼</span>
-        </div>
-        <div class="risk-body">A full closure of the Strait of Hormuz — through which roughly 20% of global oil supply transits — would be the extreme bull scenario playing out in real time. Probability is low. Consequences are transformational: $130+ oil, PCHEM target price of RM12+, and a complete restructuring of Asian energy supply chains. <strong>This is the asymmetric payoff the thesis is built around.</strong></div>
-      </div>
-    </div>
-
-    <!-- BOTTOM LINE -->
-    <!-- LIVE STATUS TRACKER -->
-    <div style="background:var(--bg2);border:1px solid rgba(58,144,96,0.3);padding:28px;margin:32px 0;" class="reveal">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--bull);margin-bottom:20px;">Where We Stand · March 25, 2026</div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(58,144,96,0.15);border:1px solid rgba(58,144,96,0.2);">
-        <div style="background:var(--bg3);padding:18px;">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Entry Price</div>
-          <div style="font-family:'IBM Plex Serif',serif;font-size:26px;font-weight:600;color:var(--cream);line-height:1;">RM 3.93</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:4px;">March 2025 thesis</div>
-        </div>
-        <div style="background:var(--bg3);padding:18px;">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Current Price</div>
-          <div style="font-family:'IBM Plex Serif',serif;font-size:26px;font-weight:600;color:var(--bull-lt);line-height:1;">RM 5.60</div>
-          <div style="font-size:11px;color:var(--bull-lt);margin-top:4px;">+42.5% from entry ✓</div>
-        </div>
-        <div style="background:var(--bg3);padding:18px;">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Brent Crude</div>
-          <div style="font-family:'IBM Plex Serif',serif;font-size:26px;font-weight:600;color:var(--gold);line-height:1;">$102</div>
-          <div style="font-size:11px;color:var(--gold);margin-top:4px;">Bull trigger breached</div>
-        </div>
-        <div style="background:var(--bg3);padding:18px;">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Bull Case Target</div>
-          <div style="font-family:'IBM Plex Serif',serif;font-size:26px;font-weight:600;color:var(--bull-lt);line-height:1;">RM 8.20</div>
-          <div style="font-size:11px;color:var(--bull-lt);margin-top:4px;">+46% remaining upside</div>
-        </div>
-      </div>
-      <p style="font-size:13px;color:var(--cream2);margin-top:16px;margin-bottom:0;line-height:1.7;">The thesis has moved from <em style="color:var(--gold-lt)">base case</em> into early <em style="color:var(--bull-lt)">bull case territory</em>. Brent at $102 sits squarely in the $100–115 bull scenario range. The remaining question: does oil hold above $100 long enough for PCHEM's product spread reset (60–90 day lag) to fully materialise in earnings? CGS has raised their TP to RM6.58. The original bull case of RM8.20 remains the next meaningful level.</p>
-    </div>
-
-    <div class="bottom-line-box reveal">
-      <div class="bl-label">The One Paragraph That Matters</div>
-      <div class="bl-text">Europe is priced for the shock. Latin America doesn't feel it. Asia absorbs it — and the market hasn't fully priced the divergence. <strong>PCHEM entered at RM3.93. It now trades at RM5.60 with Brent at $102 — the bull case is live.</strong> The bull case doesn't require a black swan. It requires oil to hold above $100 for two quarters and EBITDA margins to normalise from 11% toward 15–16%. That alone implies a target north of RM8. The Hormuz scenario gets you to RM12+. The bear case from entry (RM3.93) was -49%; from current (RM5.60) it is -64%. This is not a directional crude trade. This is a <strong>relative value, geopolitical asymmetry play</strong> — and those are the ones with the best risk/reward ratios in any portfolio.</div>
-    </div>
-
-    <!-- FINAL SUMMARY -->
-    <div class="stat-grid reveal">
-      <div class="stat-cell">
-        <div class="stat-lbl">Bear · $70 oil</div>
-        <div class="stat-val" style="color:var(--bear-lt);font-size:24px">RM 2.00</div>
-        <div class="stat-sub dn">−64% from RM5.60 current</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-lbl">Base · $85 oil</div>
-        <div class="stat-val" style="color:var(--base-lt);font-size:24px">RM 4.50</div>
-        <div class="stat-sub dn">Already breached — current RM5.60</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-lbl">Bull · $110 oil</div>
-        <div class="stat-val" style="color:var(--bull-lt);font-size:24px">RM 8.20</div>
-        <div class="stat-sub up">+46% from current RM5.60</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-lbl">Extreme · $130 oil</div>
-        <div class="stat-val" style="color:var(--xbull-lt);font-size:24px">RM 12.60</div>
-        <div class="stat-sub up">+125% from current RM5.60</div>
-      </div>
-    </div>
+  <div class="eyebrow fade">07 — Risk Register</div>
+  <h2 class="fade">Kill Switches.<br><em>What Could Break This.</em></h2>
+  <div class="risklist fade d1">
+    <div class="ri" onclick="toggleRisk(this)"><div class="rit"><div class="rin">Iran ceasefire or nuclear deal signed</div><div class="rbs"><span class="rb rb-H">High prob</span><span class="rb rb-H">Severe</span></div><span class="rc">▼</span></div><div class="rib"><div class="rib-in">Immediate crude collapse to $65–70/bbl removes the central catalyst. Monitor US-Iran back-channel negotiations. <strong>Mitigation:</strong> Size as a hedge not a core bet. Options structures for defined downside.</div></div></div>
+    <div class="ri" onclick="toggleRisk(this)"><div class="rit"><div class="rin">Chinese demand destruction</div><div class="rbs"><span class="rb rb-M">Medium</span><span class="rb rb-H">High impact</span></div><span class="rc">▼</span></div><div class="rib"><div class="rib-in">China controls global chemical demand. Sharp slowdown worsens petrochemical oversupply, crushing spreads regardless of oil price. Partially materialised in H1 2025. <strong>Monitor:</strong> Chinese PMI, ethylene inventory builds, freight rates monthly.</div></div></div>
+    <div class="ri" onclick="toggleRisk(this)"><div class="rit"><div class="rin">OPEC+ supply surge caps price ceiling</div><div class="rbs"><span class="rb rb-M">Medium</span><span class="rb rb-M">Medium</span></div><span class="rc">▼</span></div><div class="rib"><div class="rib-in">Saudi/UAE/Kuwait ramping output to compensate for Iran loss can cap upside below $120/bbl. Bull case weakens; base case holds. <strong>Watch:</strong> OPEC+ quota compliance monthly.</div></div></div>
+    <div class="ri" onclick="toggleRisk(this)"><div class="rit"><div class="rin">PPCSB / Perstorp non-cash drag continues</div><div class="rbs"><span class="rb rb-M">Medium</span><span class="rb rb-M">Medium</span></div><span class="rc">▼</span></div><div class="rib"><div class="rib-in">FX revaluation on shareholder loans and impairment charges distort PAT, making headlines look worse than operational reality. In Q2 2025, drove RM1B reported loss despite RM395M operational EBITDA. <strong>Focus on EBITDA as the primary metric.</strong></div></div></div>
+    <div class="ri" onclick="toggleRisk(this)"><div class="rit"><div class="rin">Strait of Hormuz full closure</div><div class="rbs"><span class="rb rb-T">Tail risk</span><span class="rb rb-L">Max upside</span></div><span class="rc">▼</span></div><div class="rib"><div class="rib-in">~20% of global oil transits Hormuz. Full closure = the extreme bull in real time. Low probability, transformational consequence. $130+ oil, RM12.60 target. <strong>This is the asymmetric payoff the thesis is built around.</strong></div></div></div>
+  </div>
+  <div class="lstatus fade d2">
+    <div class="lsc"><div class="lsc-l">Current Price</div><div class="lsc-v" style="color:var(--green)">RM 5.60</div><div class="lsc-s" style="color:var(--green)">+42.5% from entry ✓</div></div>
+    <div class="lsc"><div class="lsc-l">Brent Crude</div><div class="lsc-v" style="color:var(--gold)">$102</div><div class="lsc-s" style="color:var(--gold)">Bull trigger breached</div></div>
+    <div class="lsc"><div class="lsc-l">Bull Case Target</div><div class="lsc-v" style="color:var(--green)">RM 7.55</div><div class="lsc-s" style="color:var(--green)">+35% remaining</div></div>
+  </div>
+  <div class="fbox fade d3">
+    <div class="fbox-l">The One Paragraph That Matters</div>
+    <div class="fbox-t">Europe priced for the shock. Latin America doesn't feel it. Asia absorbs it. <strong>PCHEM entered at RM3.93. It now trades at RM5.60 with Brent at $102 — the bull case is live.</strong> The remaining question: does oil hold above $100 long enough for PCHEM's product spread reset (60–90 day lag) to fully materialise in Q2 2026 earnings? Bull case RM7.55 (+35%). Hormuz scenario RM12.57 (+125%). <strong>This is a relative value, geopolitical asymmetry play</strong> — and those are the ones with the best risk/reward in any portfolio.</div>
+  </div>
+  <div class="sumrow fade d4">
+    <div class="sumc"><div class="suml">Bear · $70</div><div class="sump" style="color:var(--red)">RM 2.02</div><div class="sumd" style="color:var(--red)">−64% from RM5.60</div></div>
+    <div class="sumc"><div class="suml">Base · $85</div><div class="sump" style="color:var(--blue)">RM 3.81</div><div class="sumd" style="color:var(--blue)">Already breached</div></div>
+    <div class="sumc"><div class="suml">Bull · $110</div><div class="sump" style="color:var(--green)">RM 7.55</div><div class="sumd" style="color:var(--green)">+46% from RM5.60</div></div>
+    <div class="sumc"><div class="suml">Extreme · $130</div><div class="sump" style="color:var(--teal)">RM 12.57</div><div class="sumd" style="color:var(--teal)">+125% from RM5.60</div></div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
-  <div class="page">
-    <div class="footer-inner">
-      <div>
-        <div class="footer-brand">InsightInvest Capital</div>
-        <div class="footer-meta">
-          Research Brief · PCHEM Geopolitical Thesis — Live Update<br>
-          Baseline: FY2024A · Current Price: RM5.60 · Brent: $102/bbl<br>
-          patreon.com/insightinvest · @insightinvests
-        </div>
-      </div>
-      <div class="footer-disc">
-        This brief is for educational and research purposes only and does not constitute investment advice. All projections are forward-looking estimates based on verified public data. Past performance is not indicative of future results. Conduct independent due diligence before making investment decisions.
-      </div>
-    </div>
+  <div class="fi">
+    <div><div class="fb2">InsightInvest Capital</div><div class="fm">Research Brief · PCHEM Geopolitical Thesis<br>Current: RM5.60 · Brent: $102/bbl · March 25 2026<br>patreon.com/insightinvest · @insightinvests</div></div>
+    <div class="fd">For educational and research purposes only. Not investment advice. All projections are forward-looking estimates based on verified public data. Past performance is not indicative of future results. Conduct independent due diligence.</div>
   </div>
 </footer>
 
 <script>
-// ── PROGRESS BAR ──────────────────────────────
-window.addEventListener('scroll', () => {
-  const scrollTop = window.scrollY;
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  const pct = (scrollTop / docHeight) * 100;
-  document.getElementById('progress-bar').style.width = pct + '%';
-});
-
-// ── REVEAL ON SCROLL ──────────────────────────
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('visible');
-      // Trigger bars when exposure section visible
-      if (e.target.id === 'bars-trigger') triggerBars();
-    }
-  });
-}, { threshold: 0.12 });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-// ── NAV ACTIVE STATE ──────────────────────────
-const sections = document.querySelectorAll('section[id]');
-const navLinks = document.querySelectorAll('.nav-links a');
-window.addEventListener('scroll', () => {
-  let current = '';
-  sections.forEach(s => {
-    if (window.scrollY >= s.offsetTop - 100) current = s.id;
-  });
-  navLinks.forEach(a => {
-    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
-  });
-});
-
-// ── EXPOSURE BARS ─────────────────────────────
-const barData = [
-  { code:'PHL', name:'Philippines', pct:93, cl:'critical' },
-  { code:'VNM', name:'Vietnam',     pct:85, cl:'critical' },
-  { code:'SGP', name:'Singapore',   pct:72, cl:'critical' },
-  { code:'KOR', name:'Korea',       pct:65, cl:'high' },
-  { code:'TWN', name:'Taiwan',      pct:63, cl:'high' },
-  { code:'MYS', name:'Malaysia ★',  pct:62, cl:'high', star:true },
-  { code:'THA', name:'Thailand',    pct:60, cl:'high' },
-  { code:'IND', name:'India',       pct:45, cl:'medium' },
-  { code:'CHN', name:'China',       pct:43, cl:'medium' },
-  { code:'IDN', name:'Indonesia',   pct:20, cl:'low' },
-  { code:'EU',  name:'Europe',      pct:11, cl:'low' },
-  { code:'BRA', name:'Brazil',      pct:18, cl:'low' },
-];
-const colorMap = {
-  critical: '#B84C3A',
-  high: '#C8A44A',
-  medium: '#5A7896',
-  low: '#3A9060'
-};
-const cont = document.getElementById('bars');
-barData.forEach(d => {
-  const nameHtml = d.star
-    ? `${d.name.replace(' ★', '')} <span class="star">★</span>`
-    : d.name;
-  cont.innerHTML += `<div class="bar-row">
-    <div class="bar-code">${d.code}</div>
-    <div class="bar-track"><div class="bar-fill" data-w="${d.pct}" style="background:${colorMap[d.cl]}"></div></div>
-    <div class="bar-pct">${d.pct}%</div>
-    <div class="bar-name">${nameHtml}</div>
-  </div>`;
-});
-let barsTriggered = false;
-function triggerBars() {
-  if (barsTriggered) return;
-  barsTriggered = true;
-  setTimeout(() => {
-    document.querySelectorAll('.bar-fill').forEach(el => {
-      el.style.width = el.dataset.w + '%';
+/* ============================================================
+   BACKGROUND — DEEP SPACE PARTICLE FIELD
+============================================================ */
+(function(){
+  const C=document.getElementById('bg-canvas');
+  const X=C.getContext('2d');
+  let W,H,stars=[],nebula=[];
+  function resize(){W=C.width=window.innerWidth;H=C.height=window.innerHeight}
+  resize();window.addEventListener('resize',()=>{resize();init()});
+  function init(){
+    stars=[];nebula=[];
+    const n=Math.floor((W*H)/3000);
+    for(let i=0;i<n;i++)stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.2,op:Math.random()*.6+.1,tw:Math.random()*Math.PI*2,tws:(.002+Math.random()*.006)*(Math.random()>.5?1:-1)});
+    for(let i=0;i<6;i++)nebula.push({x:Math.random()*W,y:Math.random()*H,r:200+Math.random()*300,op:0,c:Math.random()>.6?'212,168,67':Math.random()>.5?'68,136,255':'136,68,255'});
+  }
+  init();
+  let mx=W/2,my=H/2;
+  window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+  function draw(){
+    X.clearRect(0,0,W,H);
+    // deep gradient bg
+    const bg=X.createRadialGradient(W*.5,H*.3,0,W*.5,H*.3,H);
+    bg.addColorStop(0,'rgba(15,10,30,1)');bg.addColorStop(.5,'rgba(6,5,15,1)');bg.addColorStop(1,'rgba(2,1,10,1)');
+    X.fillStyle=bg;X.fillRect(0,0,W,H);
+    // nebula
+    nebula.forEach(n=>{
+      n.op=Math.sin(Date.now()*.0003+n.x)*.02+.03;
+      const g=X.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r);
+      g.addColorStop(0,`rgba(${n.c},${n.op})`);g.addColorStop(1,'transparent');
+      X.fillStyle=g;X.beginPath();X.arc(n.x,n.y,n.r,0,Math.PI*2);X.fill();
     });
-  }, 200);
-}
-// Observe the exp-container
-const expContainer = document.querySelector('.exp-container');
-if (expContainer) {
-  const barObs = new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting) triggerBars();
-  }, { threshold: 0.2 });
-  barObs.observe(expContainer);
-}
+    // stars
+    stars.forEach(s=>{
+      s.tw+=s.tws;
+      const op=s.op*(Math.sin(s.tw)*.3+.7);
+      X.beginPath();X.arc(s.x,s.y,s.r,0,Math.PI*2);
+      X.fillStyle=`rgba(232,226,212,${op})`;X.fill();
+    });
+    // cursor glow
+    const cg=X.createRadialGradient(mx,my,0,mx,my,200);
+    cg.addColorStop(0,'rgba(212,168,67,0.04)');cg.addColorStop(1,'transparent');
+    X.fillStyle=cg;X.fillRect(0,0,W,H);
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
 
-// ── SCENARIO TABS ─────────────────────────────
-function showScenario(id, btn) {
-  document.querySelectorAll('.sc-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.sc-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('sc-' + id).classList.add('active');
-  btn.classList.add('active');
-}
+/* ============================================================
+   GLOBE — ASIA ENERGY MAP
+============================================================ */
+(function(){
+  const C=document.getElementById('globe');
+  if(!C)return;
+  const X=C.getContext('2d');
+  const W=420,H=420,CX=210,CY=210,R=170;
+  let rot=0,tilt=0.25;
+  const pts=[
+    {name:'PHL',lat:12,lon:122,color:'#ff4444',size:8,label:'93% exposed'},
+    {name:'VNM',lat:16,lon:108,color:'#ff6644',size:7,label:'85%'},
+    {name:'SGP',lat:1,lon:104,color:'#ff8844',size:6,label:'72%'},
+    {name:'KOR',lat:37,lon:128,color:'#d4a843',size:6,label:'65%'},
+    {name:'MYS',lat:4,lon:109,color:'#d4a843',size:8,label:'★ 62%'},
+    {name:'THA',lat:15,lon:101,color:'#d4a843',size:5,label:'60%'},
+    {name:'CHN',lat:35,lon:105,color:'#6688aa',size:7,label:'43%'},
+    {name:'IND',lat:22,lon:79,color:'#6688aa',size:6,label:'45%'},
+    {name:'EU',lat:50,lon:10,color:'#00ff88',size:5,label:'~11%'},
+    {name:'US',lat:38,lon:-98,color:'#00ff88',size:6,label:'insulated'},
+    {name:'BRA',lat:-15,lon:-51,color:'#00ff88',size:5,label:'~18%'},
+  ];
+  function latLonTo3D(lat,lon){
+    const la=lat*Math.PI/180,lo=lon*Math.PI/180;
+    return{x:Math.cos(la)*Math.sin(lo),y:Math.sin(la),z:Math.cos(la)*Math.cos(lo)};
+  }
+  function project3D(x,y,z){
+    // rotate around Y axis
+    const cosR=Math.cos(rot),sinR=Math.sin(rot);
+    const rx=x*cosR+z*sinR,rz=-x*sinR+z*cosR;
+    // tilt around X
+    const cosT=Math.cos(tilt),sinT=Math.sin(tilt);
+    const ry=y*cosT-rz*sinT,rz2=y*sinT+rz*cosT;
+    return{sx:CX+rx*R,sy:CY-ry*R,depth:rz2};
+  }
+  function drawGlobe(){
+    X.clearRect(0,0,W,H);
+    // outer glow
+    const og=X.createRadialGradient(CX,CY,R*.8,CX,CY,R*1.3);
+    og.addColorStop(0,'transparent');og.addColorStop(1,'rgba(212,168,67,0.06)');
+    X.fillStyle=og;X.fillRect(0,0,W,H);
+    // sphere gradient
+    const sg=X.createRadialGradient(CX-50,CY-60,20,CX,CY,R);
+    sg.addColorStop(0,'rgba(20,16,40,0.9)');sg.addColorStop(.7,'rgba(8,6,20,0.95)');sg.addColorStop(1,'rgba(2,1,10,0.98)');
+    X.beginPath();X.arc(CX,CY,R,0,Math.PI*2);
+    X.fillStyle=sg;X.fill();
+    // grid lines
+    X.strokeStyle='rgba(255,255,255,0.04)';X.lineWidth=.5;
+    for(let lat=-80;lat<=80;lat+=20){
+      X.beginPath();let first=true;
+      for(let lon=-180;lon<=180;lon+=5){
+        const p=latLonTo3D(lat,lon);const pp=project3D(p.x,p.y,p.z);
+        if(pp.depth>0){if(first){X.moveTo(pp.sx,pp.sy);first=false}else X.lineTo(pp.sx,pp.sy)}else first=true;
+      }
+      X.stroke();
+    }
+    for(let lon=-180;lon<180;lon+=20){
+      X.beginPath();let first=true;
+      for(let lat=-90;lat<=90;lat+=3){
+        const p=latLonTo3D(lat,lon);const pp=project3D(p.x,p.y,p.z);
+        if(pp.depth>0){if(first){X.moveTo(pp.sx,pp.sy);first=false}else X.lineTo(pp.sx,pp.sy)}else first=true;
+      }
+      X.stroke();
+    }
+    // rim light
+    const rl=X.createRadialGradient(CX,CY,R-4,CX,CY,R+2);
+    rl.addColorStop(0,'transparent');rl.addColorStop(.7,'rgba(212,168,67,0.08)');rl.addColorStop(1,'rgba(212,168,67,0.15)');
+    X.beginPath();X.arc(CX,CY,R,0,Math.PI*2);X.strokeStyle=rl;X.lineWidth=3;X.stroke();
+    // points
+    pts.forEach(pt=>{
+      const d=latLonTo3D(pt.lat,pt.lon);const p=project3D(d.x,d.y,d.z);
+      if(p.depth<-0.1)return;
+      const alpha=Math.max(0,(p.depth+.3)/.8);
+      // glow
+      const g=X.createRadialGradient(p.sx,p.sy,0,p.sx,p.sy,pt.size*3);
+      g.addColorStop(0,pt.color+(Math.round(alpha*60).toString(16).padStart(2,'0')));g.addColorStop(1,'transparent');
+      X.fillStyle=g;X.beginPath();X.arc(p.sx,p.sy,pt.size*3,0,Math.PI*2);X.fill();
+      // dot
+      X.beginPath();X.arc(p.sx,p.sy,pt.size*.5,0,Math.PI*2);
+      X.fillStyle=pt.color+Math.round(alpha*255).toString(16).padStart(2,'0');X.fill();
+      // pulse ring
+      const pr=(Date.now()%2000)/2000;
+      X.beginPath();X.arc(p.sx,p.sy,pt.size*(1+pr*2),0,Math.PI*2);
+      X.strokeStyle=pt.color+Math.round(alpha*(1-pr)*80).toString(16).padStart(2,'0');X.lineWidth=.8;X.stroke();
+    });
+    rot+=0.003;requestAnimationFrame(drawGlobe);
+  }
+  drawGlobe();
+})();
 
-// ── RISK ACCORDION ────────────────────────────
-function toggleRisk(el) {
-  el.classList.toggle('open');
-}
-
-// ── OIL PRICE SLIDER ──────────────────────────
-const slider = document.getElementById('oil-slider');
-const oilDisplay = document.getElementById('oil-price-display');
-const sRev = document.getElementById('s-rev');
-const sEbitda = document.getElementById('s-ebitda');
-const sMargin = document.getElementById('s-margin');
-const sPrice = document.getElementById('s-price');
-
-function getMargin(oil) {
-  if (oil <= 70) return 0.088;
-  if (oil <= 80) return 0.105;
-  if (oil <= 88) return 0.114;
-  if (oil <= 100) return 0.132;
-  if (oil <= 115) return 0.155;
-  if (oil <= 125) return 0.175;
-  return 0.195;
-}
-function getMultiple(oil) {
-  if (oil <= 70) return 6.5;
-  if (oil <= 80) return 7.5;
-  if (oil <= 88) return 9.0;
-  if (oil <= 100) return 11.0;
-  if (oil <= 115) return 13.0;
-  if (oil <= 125) return 15.0;
-  return 17.0;
-}
-function calcSlider(oil) {
-  const revAnnual = Math.max(24000, 30700 + (oil - 82) * 70);
-  const margin = getMargin(oil);
-  const ebitda = revAnnual * margin;
-  const mult = getMultiple(oil);
-  const ev = ebitda * mult;
-  const netCash = Math.max(2500, 3810 + (oil - 82) * 50);
-  const mc = ev + netCash;
-  const price = mc / 8000;
-  return { rev: revAnnual, ebitda, margin, price };
-}
-function oilColor(oil) {
-  if (oil <= 72) return '#E87060';
-  if (oil <= 88) return '#7AAAF0';
-  if (oil <= 105) return '#60C888';
-  return '#50E4A8';
-}
-
-slider.addEventListener('input', () => {
-  const oil = parseInt(slider.value);
-  const c = oilColor(oil);
-  const r = calcSlider(oil);
-  oilDisplay.textContent = oil;
-  oilDisplay.style.color = c;
-  sRev.textContent = `RM${(r.rev/1000).toFixed(1)}B`;
-  sRev.style.color = c;
-  sEbitda.textContent = `RM${(r.ebitda/1000).toFixed(1)}B`;
-  sEbitda.style.color = c;
-  sMargin.textContent = (r.margin * 100).toFixed(1) + '%';
-  sMargin.style.color = c;
-  sPrice.textContent = `RM${r.price.toFixed(2)}`;
-  sPrice.style.color = c;
+/* ============================================================
+   LOADER
+============================================================ */
+window.addEventListener('load',()=>{
+  setTimeout(()=>document.getElementById('loader').classList.add('done'),800);
 });
-// init
-slider.dispatchEvent(new Event('input'));
+
+/* ============================================================
+   PROGRESS
+============================================================ */
+window.addEventListener('scroll',()=>{
+  const p=window.scrollY/(document.documentElement.scrollHeight-window.innerHeight);
+  document.getElementById('prog').style.width=(p*100)+'%';
+});
+
+/* ============================================================
+   REVEAL
+============================================================ */
+const ro=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show')}),{threshold:.08});
+document.querySelectorAll('.fade').forEach(el=>ro.observe(el));
+
+/* ============================================================
+   NAV ACTIVE
+============================================================ */
+const secs=document.querySelectorAll('[id]');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  secs.forEach(s=>{if(window.scrollY>=s.offsetTop-90)cur=s.id});
+  document.querySelectorAll('.ntab').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+cur));
+});
+
+/* ============================================================
+   TICKER
+============================================================ */
+const tdata=[
+  {n:'PCHEM',v:'5.60',d:'+0.18',u:true},{n:'BRENT',v:'102.47',d:'+1.03',u:true},
+  {n:'XLE',v:'94.32',d:'+1.44',u:true},{n:'OXY',v:'58.71',d:'+0.92',u:true},
+  {n:'S-OIL',v:'52,400',d:'−1,200',u:false},{n:'USD/MYR',v:'4.52',d:'+0.03',u:false},
+  {n:'PHP/USD',v:'58.2',d:'−0.4',u:false},{n:'VND/USD',v:'25,840',d:'−120',u:false},
+  {n:'PBR',v:'14.82',d:'+0.34',u:true},{n:'UREA',v:'$410/t',d:'+43%/mo',u:true},
+  {n:'METHANOL',v:'$340/t',d:'+47%/mo',u:true},{n:'ETHYLENE',v:'$920/t',d:'+12%/mo',u:true},
+];
+const tkr=document.getElementById('ticker');
+const items=[...tdata,...tdata].map(d=>`<span class="ti"><span class="ti-name">${d.n}</span><span class="ti-val">${d.v}</span><span class="${d.u?'ti-u':'ti-d'}">${d.u?'▲':'▼'} ${d.d}</span></span>`).join('');
+tkr.innerHTML=items;
+
+/* ============================================================
+   EXPOSURE BARS
+============================================================ */
+const asiaData=[
+  {c:'PHL',n:'Philippines',p:93,cl:'#ff4444'},{c:'VNM',n:'Vietnam',p:85,cl:'#ff5533'},
+  {c:'SGP',n:'Singapore',p:72,cl:'#ff6633'},{c:'KOR',n:'Korea',p:65,cl:'#d4a843'},
+  {c:'TWN',n:'Taiwan',p:63,cl:'#d4a843'},{c:'MYS',n:'Malaysia ★',p:62,cl:'#d4a843',star:true},
+  {c:'THA',n:'Thailand',p:60,cl:'#c4982a'},{c:'IND',n:'India',p:45,cl:'#4488aa'},
+  {c:'CHN',n:'China',p:43,cl:'#4488aa'},{c:'IDN',n:'Indonesia',p:20,cl:'#00cc77'},
+];
+const lowData=[
+  {c:'CEE',n:'CEE/EU',p:11,cl:'#00ff88'},{c:'TUN',n:'Tunisia',p:16,cl:'#00dd77'},
+  {c:'ZAF',n:'South Africa',p:18,cl:'#00cc66'},{c:'TUR',n:'Türkiye',p:19,cl:'#00bb55'},
+  {c:'BRA',n:'Brazil',p:18,cl:'#00ff88'},{c:'CHL',n:'Chile',p:20,cl:'#00dd77'},
+  {c:'MXN',n:'Mexico',p:15,cl:'#00cc66'},
+];
+function renderBars(data,id){
+  const el=document.getElementById(id);if(!el)return;
+  el.innerHTML=data.map(d=>`<div class="brow"><div class="bc">${d.c}</div><div class="bt"><div class="bf" data-w="${d.p}" style="background:${d.cl};color:${d.cl}"></div></div><div class="bp">${d.p}%</div><div class="bn">${d.star?d.n.replace(' ★','')+' <span class="star">★</span>':d.n}</div></div>`).join('');
+}
+renderBars(asiaData,'bars-asia');renderBars(lowData,'bars-low');
+let bt=false;
+const bobs=new IntersectionObserver(e=>{
+  if(e[0].isIntersecting&&!bt){bt=true;setTimeout(()=>document.querySelectorAll('.bf').forEach(el=>el.style.width=el.dataset.w+'%'),200)}
+},{threshold:.15});
+const bw=document.querySelector('.exposure-grid');if(bw)bobs.observe(bw);
+
+/* ============================================================
+   SCENARIOS
+============================================================ */
+const scCls={bear:'sct-bear',base:'sct-base',bull:'sct-bull',xbull:'sct-xbull'};
+function scSwitch(id,btn){
+  document.querySelectorAll('.sc-body').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.sct').forEach(b=>b.classList.remove('on'));
+  document.getElementById('sb-'+id).classList.add('on');
+  btn.classList.add('on');
+}
+
+/* ============================================================
+   RISKS
+============================================================ */
+function toggleRisk(el){
+  el.classList.toggle('open');
+  const b=el.querySelector('.rib');
+  b.style.maxHeight=el.classList.contains('open')?'300px':'0';
+}
+
+/* ============================================================
+   SLIDER
+============================================================ */
+const sl=document.getElementById('osl');
+const on2=document.getElementById('onum'),oz=document.getElementById('ozone');
+const sr=document.getElementById('srev'),se=document.getElementById('sebitda'),sm=document.getElementById('smargin'),sp=document.getElementById('sprice');
+function gm(o){if(o<=70)return.088;if(o<=80)return.105;if(o<=88)return.114;if(o<=100)return.132;if(o<=115)return.155;if(o<=125)return.175;return.195}
+function gM(o){if(o<=70)return 6.5;if(o<=80)return 7.5;if(o<=88)return 9;if(o<=100)return 11;if(o<=115)return 13;if(o<=125)return 15;return 17}
+function gc(o){
+  if(o<=72)return['#ff4444','rgba(255,68,68,.3)','BEAR TERRITORY'];
+  if(o<=88)return['#4488ff','rgba(68,136,255,.3)','BASE TERRITORY'];
+  if(o<=108)return['#00ff88','rgba(0,255,136,.3)','BULL TERRITORY ✓'];
+  return['#00ddcc','rgba(0,221,204,.3)','EXTREME BULL'];
+}
+function calc(o){const rv=Math.max(24000,30700+(o-82)*70);const m=gm(o);const eb=rv*m;const mult=gM(o);const nc=Math.max(2500,3810+(o-82)*50);return{rv,eb,m,price:(eb*mult+nc)/8000}}
+sl.addEventListener('input',()=>{
+  const o=+sl.value;const[col,bc,zone]=gc(o);const r=calc(o);
+  on2.textContent=o;on2.style.color=col;on2.style.textShadow=`0 0 40px ${col}40`;
+  oz.textContent=zone;oz.style.color=col;oz.style.borderColor=bc;
+  [sr,se,sm,sp].forEach(el=>el.style.color=col);
+  sr.textContent='RM'+(r.rv/1000).toFixed(1)+'B';se.textContent='RM'+(r.eb/1000).toFixed(1)+'B';
+  sm.textContent=(r.m*100).toFixed(1)+'%';sp.textContent='RM'+r.price.toFixed(2);
+});
+sl.dispatchEvent(new Event('input'));
 </script>
+
+<!-- DISCLAIMER -->
+<div style="background:#02010a;border-top:1px solid rgba(255,255,255,0.06);padding:48px 60px;max-width:1400px;margin:0 auto">
+  <div style="display:grid;grid-template-columns:200px 1fr;gap:48px;align-items:start">
+    <div>
+      <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,68,68,0.7);margin-bottom:10px;display:flex;align-items:center;gap:8px">
+        <span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:rgba(255,68,68,0.7);flex-shrink:0"></span>
+        Important Notice
+      </div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;letter-spacing:-.03em;line-height:1.1;color:rgba(255,255,255,0.4)">Not<br>Financial<br>Advice.</div>
+    </div>
+    <div>
+      <p style="font-size:13px;color:rgba(148,144,160,0.8);line-height:1.85;margin-bottom:16px;font-family:'Space Grotesk',sans-serif;font-weight:300">
+        <strong style="color:rgba(255,255,255,0.5);font-weight:500">This is purely for entertainment and educational purposes.</strong> 
+        Everything you've read on this page — the scenarios, the target prices, the sensitivity analysis, the trade structure — is a 
+        financial model built on my own assumptions, my own interpretation of publicly available data, and my own views on how 
+        geopolitical events might affect markets. It is not, and should not be treated as, professional financial advice.
+      </p>
+      <p style="font-size:13px;color:rgba(148,144,160,0.8);line-height:1.85;margin-bottom:16px;font-family:'Space Grotesk',sans-serif;font-weight:300">
+        Financial models are inherently limited. They are built on assumptions that can be wrong, inputs that can be 
+        stale, and logic chains that can break when the world behaves in unexpected ways. The oil price sensitivities, 
+        EBITDA margins, EV multiples, and implied target prices shown here are <strong style="color:rgba(255,255,255,0.4);font-weight:500">illustrative projections, not predictions</strong>. 
+        Markets are complex, irrational, and influenced by forces no model can fully capture. The scenarios described — 
+        bear, base, bull, extreme bull — are thought experiments designed to help you think through different 
+        possible futures, not forecasts of what will happen.
+      </p>
+      <p style="font-size:13px;color:rgba(148,144,160,0.8);line-height:1.85;margin-bottom:16px;font-family:'Space Grotesk',sans-serif;font-weight:300">
+        <strong style="color:rgba(255,255,255,0.4);font-weight:500">Do not make investment decisions based on this content.</strong> 
+        Before making any investment, you should conduct your own independent research, consult a qualified and 
+        licensed financial advisor, understand your own risk tolerance, and ensure any investment is appropriate 
+        for your personal financial situation. Past performance of any security, including PCHEM, is not indicative 
+        of future results. You can lose money investing in financial markets.
+      </p>
+      <p style="font-size:12px;color:rgba(100,95,115,0.7);line-height:1.75;font-family:'Space Mono',monospace">
+        InsightInvest Capital · Research produced for community engagement and financial literacy · 
+        All data sourced from publicly available information · Model assumptions are the author's own · 
+        Errors and omissions expected · This is not a regulated financial service ·
+        patreon.com/insightinvest · @insightinvests · March 2026
+      </p>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
