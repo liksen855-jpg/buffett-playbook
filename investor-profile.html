@@ -315,7 +315,347 @@
     .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
+    /* ══════════════════════════════════════
+       CINEMATIC REVEAL
+    ══════════════════════════════════════ */
+    #reveal-screen {
+      position: fixed; inset: 0; z-index: 500;
+      background: #07080a;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 40px 24px;
+    }
+    #reveal-screen.exit {
+      animation: revealExit 0.8s cubic-bezier(0.76,0,0.24,1) forwards;
+    }
+    @keyframes revealExit { to { opacity:0; transform: scale(1.04); } }
+
+    .rv-tag {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.25em;
+      text-transform: uppercase; color: var(--text-faint); margin-bottom: 48px;
+      opacity: 0; animation: rvFade 0.6s ease 0.3s forwards;
+    }
+    @keyframes rvFade { to { opacity:1; } }
+
+    .rv-archetype-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(52px, 12vw, 96px);
+      font-weight: 400; line-height: 1; text-align: center;
+      opacity: 0; transform: translateY(20px);
+      animation: rvRise 1s cubic-bezier(0.16,1,0.3,1) 0.8s forwards;
+      letter-spacing: -0.02em;
+    }
+    @keyframes rvRise { to { opacity:1; transform: translateY(0); } }
+
+    .rv-line {
+      width: 0; height: 1px; background: var(--border2); margin: 32px auto;
+      animation: rvLine 0.8s ease 1.6s forwards;
+    }
+    @keyframes rvLine { to { width: 120px; } }
+
+    .rv-tagline {
+      font-size: 14px; font-weight: 300; color: var(--text-dim); text-align: center;
+      max-width: 480px; line-height: 1.75; font-style: italic;
+      opacity: 0; animation: rvFade 0.8s ease 2s forwards;
+    }
+
+    .rv-sentence-wrap {
+      margin-top: 40px; max-width: 560px; text-align: center;
+      opacity: 0; animation: rvFade 0.8s ease 2.6s forwards;
+    }
+    .rv-sentence {
+      font-family: 'DM Serif Display', serif; font-size: clamp(18px, 3.5vw, 26px);
+      line-height: 1.4; color: var(--text); letter-spacing: -0.01em;
+    }
+    .rv-sentence em { color: var(--gold); font-style: italic; }
+
+    .rv-continue {
+      margin-top: 48px; opacity: 0; animation: rvFade 0.6s ease 3.4s forwards;
+      background: transparent; border: 1px solid var(--border2); color: var(--text-dim);
+      padding: 12px 28px; font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .rv-continue:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+    /* ══════════════════════════════════════
+       CRASH SIMULATION
+    ══════════════════════════════════════ */
+    .crash-wrap {
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 0; margin-bottom: 2px; overflow: hidden;
+    }
+    .crash-header {
+      padding: 20px 24px 16px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    }
+    .crash-header-left {}
+    .crash-eyebrow {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--red);
+      letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 8px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .crash-eyebrow::before { content:''; width:8px; height:8px; border-radius:50%; background: var(--red); display:inline-block; animation: pulse 1.4s ease infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+    .crash-headline { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--text); margin-bottom: 4px; }
+    .crash-sub { font-size: 12px; font-weight: 300; color: var(--text-dim); }
+    .crash-scenario-btn {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text-dim); border: 1px solid var(--border2);
+      background: transparent; padding: 6px 12px; cursor: pointer; transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .crash-scenario-btn.active { color: var(--red); border-color: rgba(192,57,43,0.4); background: var(--red-dim); }
+    .crash-scenario-btn:hover { border-color: var(--text-dim); color: var(--text); }
+    .crash-scenarios { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    .crash-chart-area { position: relative; height: 260px; padding: 0 0 0 0; }
+    #crashChart { width: 100% !important; }
+
+    .crash-marker {
+      position: absolute; top: 0; bottom: 0; pointer-events: none;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .crash-marker-line { width: 1px; flex: 1; }
+    .crash-marker-label {
+      font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 2px 5px; white-space: nowrap; margin-top: 4px;
+    }
+
+    .crash-outcome {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1px; background: var(--border); border-top: 1px solid var(--border);
+    }
+    .crash-outcome-cell { background: var(--bg2); padding: 16px 18px; }
+    .crash-outcome-label {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-faint);
+      letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px;
+    }
+    .crash-outcome-val {
+      font-family: 'DM Serif Display', serif; font-size: 22px; line-height: 1; margin-bottom: 4px;
+    }
+    .crash-outcome-sub { font-size: 11px; font-weight: 300; color: var(--text-dim); line-height: 1.4; }
+
+    .crash-verdict {
+      padding: 18px 24px; border-top: 1px solid var(--border);
+      background: rgba(192,57,43,0.04); border-left: 3px solid var(--red);
+    }
+    .crash-verdict-label {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--red);
+      letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 8px;
+    }
+    .crash-verdict-text { font-size: 13px; font-weight: 300; color: var(--text-dim); line-height: 1.7; }
+    .crash-verdict-text strong { color: var(--text); font-weight: 500; }
+
+    /* ══════════════════════════════════════
+       DIMENSION VERDICTS
+    ══════════════════════════════════════ */
+    .verdicts-grid { display: flex; flex-direction: column; gap: 1px; background: var(--border); margin-bottom: 2px; }
+    .verdict-row {
+      background: var(--surface); padding: 20px 22px;
+      display: grid; grid-template-columns: 3px 1fr; gap: 20px; align-items: start;
+      transition: background 0.15s;
+    }
+    .verdict-row:hover { background: var(--surface2); }
+    .verdict-accent { border-radius: 1px; align-self: stretch; }
+    .verdict-body {}
+    .verdict-dim-name {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--text-faint); margin-bottom: 6px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .verdict-score-pill {
+      font-size: 11px; padding: 1px 8px; border-radius: 2px;
+    }
+    .verdict-text {
+      font-size: 14px; font-weight: 300; color: var(--text); line-height: 1.65;
+      font-style: italic;
+    }
+    .verdict-text strong { font-style: normal; font-weight: 500; }
+
+    /* ══════════════════════════════════════
+       BLIND SPOT MIRROR
+    ══════════════════════════════════════ */
+    .mirror-wrap { background: var(--surface); border: 1px solid var(--border); margin-bottom: 2px; }
+    .mirror-header {
+      padding: 18px 22px 14px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; gap: 16px;
+    }
+    .mirror-header-left { flex: 1; }
+    .mirror-eyebrow {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--purple); margin-bottom: 6px;
+    }
+    .mirror-headline { font-size: 15px; font-weight: 500; color: var(--text); }
+    .mirror-sub { font-size: 12px; font-weight: 300; color: var(--text-dim); margin-top: 2px; }
+    .mirror-col-heads {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+      background: var(--border); border-bottom: 1px solid var(--border);
+    }
+    .mirror-col-head {
+      padding: 8px 16px; background: var(--bg2);
+      font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .mirror-rows { display: flex; flex-direction: column; gap: 1px; background: var(--border); }
+    .mirror-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
+    .mirror-cell { background: var(--surface); padding: 14px 16px; }
+    .mirror-cell.stated { border-left: 2px solid rgba(59,130,246,0.4); }
+    .mirror-cell.actual { border-left: 2px solid rgba(192,57,43,0.4); }
+    .mirror-cell-label {
+      font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.12em;
+      text-transform: uppercase; margin-bottom: 5px;
+    }
+    .mirror-cell.stated .mirror-cell-label { color: var(--blue); }
+    .mirror-cell.actual .mirror-cell-label { color: var(--red); }
+    .mirror-cell-text { font-size: 12px; font-weight: 300; color: var(--text-dim); line-height: 1.55; }
+    .mirror-cell-text strong { color: var(--text); font-weight: 500; }
+    .mirror-gap-row {
+      background: rgba(168,85,247,0.06); border-top: 1px solid rgba(168,85,247,0.15);
+      padding: 12px 16px; display: flex; align-items: flex-start; gap: 10px;
+    }
+    .mirror-gap-icon { color: var(--purple); font-size: 12px; flex-shrink:0; margin-top:1px; }
+    .mirror-gap-text { font-size: 12px; font-weight: 300; color: var(--text-dim); line-height: 1.6; font-style: italic; }
+    .mirror-gap-text strong { color: var(--purple); font-style: normal; font-weight: 500; }
+
+    /* ══════════════════════════════════════
+       BRUTAL SENTENCE
+    ══════════════════════════════════════ */
+    .brutal-wrap {
+      background: #07080a; border: 1px solid var(--border);
+      padding: 36px 32px; margin-bottom: 2px; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .brutal-wrap::before {
+      content: '"'; font-family: 'DM Serif Display', serif; font-size: 200px;
+      color: rgba(201,168,76,0.04); position: absolute; top: -40px; left: 10px;
+      line-height: 1; pointer-events: none; user-select: none;
+    }
+    .brutal-eyebrow {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--text-faint); margin-bottom: 20px;
+    }
+    .brutal-sentence {
+      font-family: 'DM Serif Display', serif; font-size: clamp(18px, 3.2vw, 26px);
+      line-height: 1.5; color: var(--text); letter-spacing: -0.01em;
+      position: relative; z-index: 1;
+    }
+    .brutal-sentence em { color: var(--gold); font-style: italic; }
+    .brutal-sentence mark {
+      background: transparent; color: var(--red); font-style: normal;
+    }
+    .brutal-credit {
+      margin-top: 20px; font-size: 11px; font-weight: 300; color: var(--text-faint);
+      font-style: italic;
+    }
+    .brutal-share-btn {
+      margin-top: 20px; background: transparent; border: 1px solid var(--border2);
+      color: var(--text-faint); padding: 9px 20px;
+      font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .brutal-share-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+
     footer { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-faint); letter-spacing: 0.14em; text-transform: uppercase; z-index: 1; white-space: nowrap; }
+
+    /* ── ARCHETYPE METER (live dots row) ── */
+    .archetype-meter { display: flex; align-items: center; gap: 10px; margin-bottom: 32px; }
+    .meter-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-faint); letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
+    .meter-pill {
+      flex: 1; background: var(--surface); border: 1px solid var(--border);
+      padding: 7px 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .meter-archetype-name {
+      font-family: 'DM Serif Display', serif; font-size: 13px;
+      filter: blur(5px); opacity: 0.4; transition: filter 0.6s ease, opacity 0.6s ease;
+      user-select: none; letter-spacing: 0.02em;
+    }
+    .meter-archetype-name.revealed { filter: blur(0px); opacity: 1; }
+    .meter-bar-track { flex: 1; height: 2px; background: var(--border2); max-width: 80px; }
+    .meter-bar-fill { height: 100%; background: var(--gold); transition: width 0.8s cubic-bezier(0.16,1,0.3,1); }
+
+    /* ── PHASE TRANSITION SCREEN ── */
+    .phase-transition {
+      text-align: center; padding: 48px 0 40px;
+      animation: phaseIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    @keyframes phaseIn { from { opacity:0; transform: scale(0.96); } to { opacity:1; transform: scale(1); } }
+    .pt-phase-tag {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--text-faint); margin-bottom: 28px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .pt-phase-tag::before, .pt-phase-tag::after { content:''; width:32px; height:1px; background: var(--border2); }
+    .pt-check {
+      width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; margin: 0 auto 24px; font-size: 20px;
+      animation: checkPop 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.15s both;
+    }
+    @keyframes checkPop { from { transform: scale(0); opacity:0; } to { transform: scale(1); opacity:1; } }
+    .pt-headline {
+      font-family: 'DM Serif Display', serif; font-size: clamp(22px,4vw,32px);
+      font-weight: 400; line-height: 1.2; color: var(--text); margin-bottom: 12px;
+    }
+    .pt-headline em { font-style: italic; }
+    .pt-sub {
+      font-size: 13px; font-weight: 300; color: var(--text-dim); line-height: 1.7;
+      max-width: 440px; margin: 0 auto 32px;
+    }
+    .pt-insight {
+      background: var(--surface); border: 1px solid var(--border);
+      border-left: 3px solid var(--gold); padding: 16px 20px; text-align: left;
+      margin-bottom: 32px;
+    }
+    .pt-insight-label {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--gold);
+      letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 6px;
+    }
+    .pt-insight-text {
+      font-size: 13px; font-weight: 300; color: var(--text-dim);
+      line-height: 1.65; font-style: italic;
+    }
+    .pt-insight-text strong { color: var(--text); font-weight: 500; font-style: normal; }
+    .pt-score-reveal {
+      display: flex; gap: 1px; background: var(--border); margin-bottom: 32px;
+    }
+    .pt-score-cell { flex:1; background: var(--surface); padding: 16px 12px; text-align: center; }
+    .pt-score-val {
+      font-family: 'DM Serif Display', serif; font-size: 28px; line-height: 1;
+      margin-bottom: 4px; animation: countUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.3s both;
+    }
+    @keyframes countUp { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: translateY(0); } }
+    .pt-score-label {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-faint);
+      letter-spacing: 0.12em; text-transform: uppercase;
+    }
+    .pt-next-label {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-dim);
+      letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 10px; justify-content: center;
+    }
+    .pt-next-label::before, .pt-next-label::after { content:''; flex: 1; max-width:48px; height:1px; background: var(--border); }
+
+    /* ── AUTO-ADVANCE FLASH ── */
+    .opt-card.selecting, .opt-row.selecting {
+      border-color: var(--gold) !important;
+      background: var(--gold-glow2) !important;
+      transition: background 0.05s, border-color 0.05s !important;
+    }
+
+    /* ── SHARE CARD ── */
+    .share-card-wrap { margin-bottom: 2px; }
+    #shareCardCanvas { display: block; width: 100%; border: 1px solid var(--border); }
+    .share-card-actions { display: flex; gap: 8px; margin-top: 8px; }
+    .btn-share-action {
+      flex: 1; background: transparent; border: 1px solid var(--border2);
+      color: var(--text-dim); padding: 10px 16px;
+      font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-share-action:hover { border-color: var(--gold-dim); color: var(--gold); }
+    .btn-share-action.primary { border-color: var(--gold-dim); color: var(--gold); background: var(--gold-glow); }
+    .btn-share-action.primary:hover { background: var(--gold-glow2); }
 
     @media (max-width: 560px) {
       .options-grid { grid-template-columns: 1fr; }
@@ -325,6 +665,7 @@
       .portfolio-container { grid-template-columns: 1fr; }
       .radar-legend { flex-direction: row; flex-wrap: wrap; }
       .simulator-controls { grid-template-columns: 1fr; }
+      .share-card-actions { flex-wrap: wrap; }
     }
   </style>
 </head>
@@ -407,6 +748,53 @@ const QUESTIONS = [
   { id:'mistake_type', phase:'FRAMEWORK', question:"Which mistake do you think you're more prone to making?", subtext:"Knowing your failure mode is the beginning of managing it.", type:'choice', options:[{value:'sell_early',label:'Selling too early (FOMO loss)',sub:"I take profits and watch them run without me.",score:2},{value:'hold_losers',label:'Holding losers too long',sub:"I refuse to admit I was wrong.",score:1},{value:'oversize',label:'Oversizing when excited',sub:'High conviction makes me reckless on size.',score:3},{value:'under_research',label:'Not researching enough',sub:'I act on conviction before completing the work.',score:4}]},
 ];
 
+// ══════════════════════════════════════════════════════════
+// MICRO-REVEAL ENGINE
+// ══════════════════════════════════════════════════════════
+
+const PHASE_TRANSITIONS = { 4:'SENTIMENT_DONE', 8:'FILTER_DONE' };
+
+function getPartialDimensions(answers) {
+  function sc(qid, val) {
+    const q = QUESTIONS.find(q => q.id === qid);
+    if (!q || !q.options) return 3;
+    const o = q.options.find(o => o.value === val);
+    return (o && typeof o.score === 'number') ? o.score : 3;
+  }
+  const emotionalCtrl  = Math.round(((sc('loss_reaction',answers.loss_reaction)+sc('gain_reaction',answers.gain_reaction)+sc('drawdown_reaction',answers.drawdown_reaction))/15)*100);
+  const independentThk = Math.round(((sc('regret_style',answers.regret_style)+sc('conviction_style',answers.conviction_style))/10)*100);
+  const riskCapacity   = Math.round(((sc('risk_capacity',answers.risk_capacity)+sc('time_horizon',answers.time_horizon))/10)*100);
+  return { emotionalCtrl, independentThk, riskCapacity };
+}
+
+function getPartialArchetype(answers) {
+  const dims = getPartialDimensions(answers);
+  const p = (dims.emotionalCtrl*0.35 + dims.independentThk*0.35 + dims.riskCapacity*0.30)/100*5;
+  if (p < 1.5) return { name:'The Protector',   color:'#3b82f6', progress:20 };
+  if (p < 2.5) return { name:'The Pragmatist',  color:'#a855f7', progress:40 };
+  if (p < 3.5) return { name:'The Builder',     color:'#C9A84C', progress:60 };
+  if (p < 4.2) return { name:'The Operator',    color:'#22c55e', progress:80 };
+  return         { name:'The Asymmetrist', color:'#f97316', progress:95 };
+}
+
+function getSentimentInsight(answers) {
+  const avg = (getScore('loss_reaction',answers.loss_reaction)+getScore('gain_reaction',answers.gain_reaction)+getScore('drawdown_reaction',answers.drawdown_reaction))/3;
+  if (avg <= 2)   return { headline:'High emotional sensitivity detected.', body:"Your instincts under loss and volatility are more reactive than average. This is not a flaw — it's information. The <strong>next phase</strong> maps whether your financial position can absorb what your psychology finds difficult." };
+  if (avg <= 3.5) return { headline:'Measured emotional responses.', body:"You process gains and losses without extreme reaction. This is rarer than you think. <strong>The Filter phase</strong> will determine whether your financial capacity matches your composure." };
+  return           { headline:'Exceptional psychological resilience.', body:"Your emotional responses are characteristic of experienced investors. <strong>The next two phases</strong> will determine whether your framework and capacity match this temperament." };
+}
+
+function getFilterInsight(answers) {
+  const dims = getPartialDimensions(answers);
+  const s_fam = getScore('familiarity', answers.familiarity);
+  const pos = Number(state.slider);
+  const posDisc = pos <= 15 ? 'disciplined' : pos <= 30 ? 'moderate' : 'aggressive';
+  return {
+    headline:`Risk Capacity: ${dims.riskCapacity}/100`,
+    body:`Your financial capacity is <strong>${dims.riskCapacity >= 70 ? 'strong' : dims.riskCapacity >= 40 ? 'moderate' : 'limited'}</strong>, position sizing is <strong>${posDisc}</strong>, and research depth is <strong>${s_fam <= 2 ? 'an area to develop' : s_fam <= 3 ? 'developing' : 'a genuine edge'}</strong>. The final phase identifies the framework that fits all of this.`
+  };
+}
+
 const EQUITY_MAP = {
   consumer: { label:'Consumer Brands', examples:["McDonald's (MCD)","Nike (NKE)","Coca-Cola (KO)","P&G (PG)"], why:"You already understand how these businesses generate value. Daily familiarity with the product is a genuine informational edge that institutions underestimate." },
   tech:     { label:'Technology Platforms', examples:["Microsoft (MSFT)","Alphabet (GOOGL)","TSMC (TSM)","Sea Ltd (SE)"], why:"High operating leverage, network effects, and reinvestment opportunities create exceptional long-run compounding. Volatility is the entry price." },
@@ -420,7 +808,7 @@ const STYLE_MAP = { value:'Value Investor', growth:'Growth Investor', macro:'Mac
 // STATE & PERSISTENCE
 // ══════════════════════════════════════════════════════════
 
-let state = { step:-1, answers:{}, slider:10, profile:null };
+let state = { step:-1, answers:{}, slider:10, profile:null, phase_transition:null };
 
 function saveProgress() {
   try { localStorage.setItem('ii_state', JSON.stringify({ step:state.step, answers:state.answers, slider:state.slider })); } catch(e){}
@@ -456,8 +844,289 @@ function updateResumeButton() {
 }
 
 // ══════════════════════════════════════════════════════════
-// CONTRADICTION DETECTION
+// BRUTAL SENTENCE ENGINE
 // ══════════════════════════════════════════════════════════
+
+function buildBrutalSentence(answers, positionPct) {
+  const s_loss = getScore('loss_reaction', answers.loss_reaction);
+  const s_gain = getScore('gain_reaction', answers.gain_reaction);
+  const s_draw = getScore('drawdown_reaction', answers.drawdown_reaction);
+  const s_conv = getScore('conviction_style', answers.conviction_style);
+  const s_fam  = getScore('familiarity', answers.familiarity);
+  const s_time = getScore('time_horizon', answers.time_horizon);
+  const s_regret = getScore('regret_style', answers.regret_style);
+
+  // Specific pattern combinations → specific sentences
+  if (s_loss <= 2 && (answers.gain_reaction === 'sell_all' || answers.gain_reaction === 'sell_half') && answers.mistake_type === 'hold_losers')
+    return { sentence: "You'll <em>sell your winners the moment they smile at you</em>, and <mark>hold your losers</mark> until they've taken everything — then tell yourself it was bad luck.", credit: "Disposition effect + loss aversion. The most expensive combination in retail investing." };
+
+  if (answers.drawdown_reaction === 'panic_sell' && s_time >= 4)
+    return { sentence: "You believe you're a long-term investor. But the moment the market drops 20%, <mark>your hands will move faster than your thesis</mark> — and you'll call it risk management.", credit: "Stated horizon vs. emotional override. The gap costs most investors 3–4% annually." };
+
+  if (s_conv >= 4 && positionPct > 25)
+    return { sentence: "Your conviction is real. Your position sizing treats it as <mark>infallible</mark>. <em>One wrong call at that size</em> doesn't set you back — it resets you.", credit: "Overconfidence + concentration risk. The combination that ends portfolios, not just trades." };
+
+  if (answers.regret_style === 'chase' && answers.drawdown_reaction === 'panic_sell')
+    return { sentence: "You'll chase the stocks that already ran, <mark>panic-sell the ones that dip</mark>, and wonder why you always seem to buy high and sell low — <em>with complete certainty you're doing the right thing each time</em>.", credit: "FOMO + myopic risk aversion. The retail investor's signature loss pattern." };
+
+  if (s_fam <= 2 && positionPct > 15)
+    return { sentence: "You're putting <em>real money</em> into businesses you haven't studied, sizing positions as if you have an edge — <mark>and the market will be patient until it isn't</mark>.", credit: "Research deficit + position size mismatch. Knowledge is your only durable edge." };
+
+  if (answers.conviction_style === 'capitulate' && answers.investing_style === 'value')
+    return { sentence: "You want to be a contrarian value investor. But when the experts disagree with you, <mark>you fold</mark>. <em>Contrarianism that collapses under social pressure</em> is just consensus with extra steps.", credit: "Authority bias vs. value investing requirement. The framework you chose demands the behaviour you avoid." };
+
+  if (s_time >= 4 && s_loss <= 2)
+    return { sentence: "You think in decades on paper. But your <mark>nervous system doesn't know that</mark> — it only knows the number on the screen, right now, going the wrong way. <em>That's the real test.</em>", credit: "Temporal discounting vs. emotional reactivity. Knowing your horizon means nothing if you can't hold it." };
+
+  if (answers.mistake_type === 'oversize' && s_conv >= 4)
+    return { sentence: "The higher your conviction, <em>the bigger the position</em> — and the bigger the position, <mark>the less rational the exit will be</mark>. You don't have a conviction problem. You have a sizing problem dressed up as one.", credit: "Overconfidence bias in position construction. Conviction and correct sizing are independent variables." };
+
+  // Default — based on composite
+  const dims = getPartialDimensions(answers);
+  if (dims.emotionalCtrl < 40)
+    return { sentence: "<mark>Your emotions are your most expensive advisor.</mark> They'll be loudest exactly when the correct action is silence — and they'll make you feel certain you're right.", credit: "Emotional override is the leading cause of underperformance vs. simply holding an index." };
+
+  return { sentence: "The version of yourself that <em>answers these questions calmly</em> and the version that watches real money move in real time <mark>are not the same person</mark>. The gap between them is your actual risk.", credit: "Self-assessment optimism bias. Every investor overestimates their composure until they're in it." };
+}
+
+// ══════════════════════════════════════════════════════════
+// BLIND SPOT MIRROR DATA
+// ══════════════════════════════════════════════════════════
+
+function buildBlindSpots(answers, positionPct) {
+  const spots = [];
+
+  // Loss reaction
+  const lossScore = getScore('loss_reaction', answers.loss_reaction);
+  if (lossScore <= 2) {
+    spots.push({
+      topic: 'When your position drops 20%',
+      stated: { label:'What you said', text:'You\'d feel devastated or frustrated — but you\'d eventually deal with it.' },
+      actual: { label:'What investors like you do', text:'<strong>68% sell within 5 days</strong> of a 20%+ drawdown, locking in the loss permanently. The pain of watching overrides the thesis.' },
+      gap: 'The gap: <strong>selling turns a paper loss into a real one</strong>. Most recovered within 12 months. The ones who sold didn\'t.'
+    });
+  }
+
+  // Gain reaction
+  if (answers.gain_reaction === 'sell_all' || answers.gain_reaction === 'sell_half') {
+    spots.push({
+      topic: 'When your position doubles',
+      stated: { label:'What you said', text:'You\'d take profit — lock in the win before it disappears.' },
+      actual: { label:'What the data says', text:'<strong>The top 10% of trades</strong> in most portfolios are held for 3+ years. Selling at 2× means missing the 5×, 10×, and the compounding that makes portfolios.' },
+      gap: 'The gap: <strong>selling winners is the single largest drag</strong> on long-run retail investor returns. Not losses — early exits.'
+    });
+  }
+
+  // FOMO
+  if (answers.regret_style === 'chase' || answers.regret_style === 'obsess') {
+    spots.push({
+      topic: 'When you miss a stock that doubles',
+      stated: { label:'What you said', text:'You\'d chase it — buy in now — or beat yourself up about it for a long time.' },
+      actual: { label:'What researchers find', text:'Stocks bought after a 100%+ run <strong>underperform the market by 4.2% on average</strong> in the following 12 months. The doubling already happened.' },
+      gap: 'The gap: <strong>FOMO buys are almost always wrong</strong> at the exact moment they feel most urgent.'
+    });
+  }
+
+  // Overconfidence on sizing
+  if (positionPct > 25) {
+    spots.push({
+      topic: 'How much you\'d put in one idea',
+      stated: { label:'What you said', text:`You\'d allocate ${positionPct}% to a single high-conviction position.` },
+      actual: { label:'What fund managers do', text:'<strong>Professional fund managers cap single positions at 3–8%</strong>, even with research teams, access, and years of experience. Your information edge is lower. Your sizing is higher.' },
+      gap: 'The gap: <strong>position sizing determines survival</strong>. A correct thesis in a 40% position that drops 60% before recovery still ruins a portfolio.'
+    });
+  }
+
+  // Authority bias
+  if (answers.conviction_style === 'capitulate') {
+    spots.push({
+      topic: 'When experts disagree with you',
+      stated: { label:'What you said', text:'You\'d reconsider your position — expertise deserves deference.' },
+      actual: { label:'What the evidence shows', text:'<strong>Analyst consensus is wrong at market turning points</strong> — the exact moments that matter most. The crowd is most confident at tops and most bearish at bottoms.' },
+      gap: 'The gap: <strong>deferring to consensus at inflection points</strong> means buying high and selling low with authoritative justification.'
+    });
+  }
+
+  // Research deficit
+  if (getScore('familiarity', answers.familiarity) <= 2) {
+    spots.push({
+      topic: 'How well you understand what you buy',
+      stated: { label:'What you said', text:'You\'d invest in something based on a tip or surface familiarity — without reading the financials.' },
+      actual: { label:'What happens next', text:'<strong>Stocks bought without fundamental understanding</strong> are sold on emotion, not analysis. There\'s no thesis to hold to — so the first piece of bad news triggers a sale.' },
+      gap: 'The gap: <strong>without understanding, every drawdown feels like a crisis</strong>. With it, most drawdowns feel like an opportunity.'
+    });
+  }
+
+  // Fallback
+  if (spots.length === 0) {
+    spots.push({
+      topic: 'Your self-assessment vs. live conditions',
+      stated: { label:'How you answered', text:'Your responses show measured, rational behaviour under hypothetical stress scenarios.' },
+      actual: { label:'What research consistently finds', text:'<strong>98% of investors rate their own temperament above average</strong>. Self-reported composure and actual trading behaviour diverge significantly under real drawdown conditions.' },
+      gap: 'The gap: <strong>the only way to know which version of yourself you are</strong> is to invest with real money and watch yourself do it.'
+    });
+  }
+
+  return spots.slice(0, 4);
+}
+
+// ══════════════════════════════════════════════════════════
+// DIMENSION VERDICTS (second-person, felt language)
+// ══════════════════════════════════════════════════════════
+
+function buildVerdicts(dims, answers, positionPct) {
+  const { emotionalCtrl, independentThk, riskCapacity, researchDepth, positionDisc, styleCohesion } = dims;
+
+  function verdictText(score, low, mid, high) {
+    if (score < 35) return low;
+    if (score < 65) return mid;
+    return high;
+  }
+
+  return [
+    {
+      name: 'Emotional Control', score: emotionalCtrl, color: '#c0392b',
+      text: verdictText(emotionalCtrl,
+        `When real money moves against you, <strong>your nervous system fires before your analysis does</strong>. You have approximately 4–8 hours before you act on emotion rather than thesis. Pre-commitment rules aren't optional for you — they're the difference between strategy and reaction.`,
+        `You feel losses — but you don't immediately act on them. This is <strong>rarer than you think</strong>. Most investors have already sold by the time you're still thinking. Your window of rationality under pressure is genuinely wider than average.`,
+        `You've decoupled emotional discomfort from decision-making in a way that most retail investors never achieve. <strong>Price movement is information to you, not instruction.</strong> This is the psychological trait most correlated with long-run outperformance.`
+      )
+    },
+    {
+      name: 'Independent Thinking', score: independentThk, color: '#a855f7',
+      text: verdictText(independentThk,
+        `You give significant weight to what other people — especially experts — think. This feels like humility. It often isn't. <strong>The market already knows what the consensus knows.</strong> The edge only exists where your analysis diverges from it.`,
+        `You can hold your own view under moderate pressure, but <strong>sustained disagreement with respected voices will eventually wear you down</strong>. This means your best trades will feel uncomfortable for longer than you expect — and you need to know that in advance.`,
+        `You can hold a position against significant opposition — and remain curious rather than defensive about the disagreement. <strong>This is the rarest and most valuable trait in investing.</strong> The market pays for the opinion no one else holds yet.`
+      )
+    },
+    {
+      name: 'Risk Capacity', score: riskCapacity, color: '#22c55e',
+      text: verdictText(riskCapacity,
+        `The capital you're investing is <strong>not truly discretionary</strong>. This changes everything. When money you might need becomes money you're losing, the psychological pressure is categorically different — and your decision-making will reflect it. Start smaller than you think you should.`,
+        `You can absorb a significant drawdown without a financial crisis — but it would create real stress. <strong>Stress is the enemy of good decisions.</strong> Position sizing for your comfort zone, not your capacity ceiling, is the right approach until your situation changes.`,
+        `You have genuine financial durability. A 40% portfolio decline doesn't change your life. This is <strong>an extraordinary structural advantage</strong> most retail investors never have — it buys you the time that turns good ideas into great outcomes.`
+      )
+    },
+    {
+      name: 'Research Depth', score: researchDepth, color: '#3b82f6',
+      text: verdictText(researchDepth,
+        `You're investing without the foundation that makes conviction defensible. <strong>When the stock drops 20%, you'll have no thesis to return to</strong> — just a number going the wrong way and a feeling. Read one annual report before you put any real money in. One.`,
+        `You understand enough to have a view, but not enough to hold it under real pressure. <strong>The gap between "I understand how they earn" and "I've read the filing" is where conviction breaks down</strong> during drawdowns. Narrow it deliberately.`,
+        `Your research process gives you something rare: a real basis for conviction. <strong>When the stock moves against you, you have something to return to</strong> — the original thesis. Most investors don't. This is your actual edge.`
+      )
+    },
+    {
+      name: 'Position Discipline', score: positionDisc, color: '#C9A84C',
+      text: positionPct <= 8
+        ? `Allocating ${positionPct}% per position is genuinely disciplined. <strong>This sizing means no single idea can ruin your portfolio</strong> — and it forces you to have many good ideas rather than betting the thesis on one. Professional-grade discipline.`
+        : positionPct <= 20
+        ? `${positionPct}% per position is within defensible range for a focused investor. <strong>The risk is that conviction pressure will push you higher</strong> — when you're most excited about an idea is exactly when you're most likely to oversize. Set the limit before you're excited.`
+        : `${positionPct}% in a single position means <strong>one wrong call at this size is a portfolio event, not a trade</strong>. The question isn't whether your conviction is real — it's whether your conviction is infallible. No investor's is.`
+    },
+    {
+      name: 'Style Alignment', score: styleCohesion, color: '#06b6d4',
+      text: verdictText(styleCohesion,
+        `There's a mismatch between your natural temperament and the framework you've chosen. <strong>Under stress, you won't execute a methodology that doesn't match how you think</strong>. This isn't a failure — it's information. Find the approach that fits your psychology before you find the stocks.`,
+        `Your framework fits your temperament reasonably well — not perfectly. <strong>The gaps will show under prolonged drawdowns</strong>, when the emotional pressure of the strategy doesn't match your emotional architecture. Know where those gaps are before you're inside one.`,
+        `Your chosen methodology and your psychological profile are well-aligned. <strong>This is more important than it sounds</strong>: a good strategy executed with conviction beats a great strategy abandoned under pressure. You're unlikely to abandon this one.`
+      )
+    },
+  ];
+}
+
+// ══════════════════════════════════════════════════════════
+// CRASH SIMULATION DATA
+// ══════════════════════════════════════════════════════════
+
+const CRASH_SCENARIOS = {
+  covid: {
+    name: 'COVID Crash', label: 'Mar 2020', color: '#c0392b',
+    dates: ['Feb 19','Feb 26','Mar 4','Mar 9','Mar 12','Mar 16','Mar 18','Mar 23','Apr 6','Apr 17','May 1','Jun 1','Aug 18'],
+    spx:   [100, 88, 90, 80, 72, 66, 68, 60, 70, 78, 84, 92, 100],
+    peak: 2, trough: 7, peak_label:'Peak', trough_label:'-34% in 33 days',
+    recovery_days: 148,
+    description: 'The fastest 30% decline in market history. February 19 to March 23, 2020.'
+  },
+  gfc: {
+    name: 'Financial Crisis', label: '2008–09', color: '#f97316',
+    dates: ['Oct 07','Jan 08','Apr 08','Jul 08','Oct 08','Jan 09','Mar 09','Jul 09','Jan 10','Jul 10','Jan 11','Jul 11','Jan 12'],
+    spx:   [100, 91, 94, 80, 57, 52, 48, 62, 74, 82, 90, 88, 96],
+    peak: 0, trough: 6, peak_label:'Peak', trough_label:'-57% over 17 months',
+    recovery_days: 1258,
+    description: 'The 2008 Global Financial Crisis. A slow, grinding, 17-month decline.'
+  },
+  dotcom: {
+    name: 'Dot-com Bust', label: '2000–02', color: '#a855f7',
+    dates: ['Mar 00','Jun 00','Sep 00','Dec 00','Mar 01','Jun 01','Sep 01','Dec 01','Mar 02','Jun 02','Sep 02','Dec 02','Mar 03'],
+    spx:   [100, 91, 83, 74, 73, 75, 65, 73, 72, 66, 56, 60, 63],
+    peak: 0, trough: 10, peak_label:'Peak', trough_label:'-49% over 30 months',
+    recovery_days: 1827,
+    description: 'The dot-com collapse. A slow bleed that took 7 years to fully recover.'
+  }
+};
+
+function getCrashBehavior(answers, scenarioKey) {
+  const scenario = CRASH_SCENARIOS[scenarioKey];
+  const s_loss = getScore('loss_reaction', answers.loss_reaction);
+  const s_draw = getScore('drawdown_reaction', answers.drawdown_reaction);
+  const s_risk = getScore('risk_capacity', answers.risk_capacity);
+  const avg = (s_loss + s_draw + s_risk) / 3;
+
+  const portfolioStart = 50000;
+  let sellPoint, sellLabel, held, sold, recovered;
+
+  if (answers.drawdown_reaction === 'panic_sell' || (s_loss <= 1 && s_draw <= 2)) {
+    // Panic seller — exits at ~80% of peak (20% down)
+    const sellIdx = scenario.spx.findIndex(v => v <= 80);
+    const exitPct = scenario.spx[Math.max(0, sellIdx)] / 100;
+    sellPoint = Math.max(0, sellIdx);
+    sellLabel = `Your profile: exit at ${Math.round((1-exitPct)*100)}% drawdown`;
+    sold = Math.round(portfolioStart * exitPct);
+    held = Math.round(portfolioStart * (scenario.spx[scenario.spx.length-1]/100));
+    recovered = 0;
+    return { sellPoint, sellLabel, sold, held, recovered, behavior: 'panic', cost: held - sold, exitPct: Math.round((1-exitPct)*100) };
+  }
+
+  if (answers.drawdown_reaction === 'wait_and_see' || s_draw <= 2) {
+    // Late seller — exits near the trough
+    const sellIdx = Math.floor(scenario.trough * 0.8);
+    const exitPct = scenario.spx[sellIdx] / 100;
+    sellPoint = sellIdx;
+    sellLabel = `Your profile: exit at ${Math.round((1-exitPct)*100)}% drawdown`;
+    sold = Math.round(portfolioStart * exitPct);
+    held = Math.round(portfolioStart * (scenario.spx[scenario.spx.length-1]/100));
+    return { sellPoint, sellLabel, sold, held, recovered: 0, behavior: 'late_sell', cost: held - sold, exitPct: Math.round((1-exitPct)*100) };
+  }
+
+  if (answers.drawdown_reaction === 'buy_dip') {
+    // Buyer — adds at trough
+    const troughPct = scenario.spx[scenario.trough] / 100;
+    const extraBought = portfolioStart * 0.2; // adds 20% more
+    const finalRatio = scenario.spx[scenario.spx.length-1] / scenario.spx[scenario.trough];
+    held = Math.round((portfolioStart * (scenario.spx[scenario.spx.length-1]/100)) + (extraBought * finalRatio));
+    sold = Math.round(portfolioStart * (scenario.spx[scenario.spx.length-1]/100));
+    return { sellPoint: -1, sellLabel: 'Your profile: held + added at trough', sold, held, recovered: 0, behavior: 'buyer', cost: held - sold, exitPct: 0 };
+  }
+
+  // Holder — stays through it all
+  held = Math.round(portfolioStart * (scenario.spx[scenario.spx.length-1]/100));
+  return { sellPoint: -1, sellLabel: 'Your profile: held through the full drawdown', sold: portfolioStart, held, recovered: 0, behavior: 'hold', cost: 0, exitPct: 0 };
+}
+
+function getCrashVerdict(behavior, answers, scenario, cost) {
+  const fmt = n => '$' + Math.abs(Math.round(n)).toLocaleString();
+  const name = CRASH_SCENARIOS[scenario].name;
+  if (behavior === 'panic')
+    return `During the <strong>${name}</strong>, your profile suggests you would have sold near the early drawdown — before the bottom. Investors who sold and stayed out <strong>missed an average recovery of ${fmt(cost)}</strong> on a $50,000 position. The pain of watching was real. The cost of acting on it was larger.`;
+  if (behavior === 'late_sell')
+    return `During the <strong>${name}</strong>, your profile suggests you would have held through significant pain before eventually selling — near the trough. This is the worst of both outcomes: you endured the emotional damage of the drawdown, then locked in the loss at the bottom. The full recovery was <strong>${fmt(cost)}</strong> away.`;
+  if (behavior === 'buyer')
+    return `During the <strong>${name}</strong>, your profile suggests you would have held and added capital near the trough. This is the behaviour that defines generational wealth-building. Your hypothetical gain from buying vs. simply holding was <strong>${fmt(cost)}</strong> on a $50K position.`;
+  return `During the <strong>${name}</strong>, your profile suggests you would have held through the full drawdown without acting. This is harder than it sounds — most investors did not. Holding through the ${name} and doing nothing would have resulted in <strong>full recovery plus gains</strong>. Inaction was the correct action.`;
+}
+
+
 
 function detectContradiction(answers) {
   const s_loss = getScore('loss_reaction', answers.loss_reaction);
@@ -561,6 +1230,9 @@ function buildProfile() {
   const rules = buildRules(a, composite, s_fam, s_time, positionPct, suggestedPos, maxDrawdown);
   const contradiction = detectContradiction(a);
   const readingList = READING_MAP[a.investing_style] || READING_MAP.growth;
+  const brutalSentence = buildBrutalSentence(a, positionPct);
+  const blindSpots = buildBlindSpots(a, positionPct);
+  const verdicts = buildVerdicts({ emotionalCtrl, independentThk, riskCapacity, researchDepth, positionDisc, styleCohesion }, a, positionPct);
 
   return {
     archetype, archetypeColor, archetypeTagline, stabilityMsg, stabilityColor,
@@ -572,6 +1244,8 @@ function buildProfile() {
     famScore: s_fam, composite, contradiction, readingList,
     investingStyle: STYLE_MAP[a.investing_style] || 'Developing',
     compositeScore: Math.round(composite / 5 * 100),
+    brutalSentence, blindSpots, verdicts,
+    answers: a,
   };
 }
 
@@ -646,8 +1320,97 @@ function renderIntro() {
 }
 
 // ══════════════════════════════════════════════════════════
-// QUESTION SCREEN
+// ARCHETYPE METER (live blurred name in dot row)
 // ══════════════════════════════════════════════════════════
+
+function renderArchetypeMeter(stepIdx) {
+  const arch = getPartialArchetype(state.answers);
+  const progress = Math.round((stepIdx / QUESTIONS.length) * 100);
+  const meterEl = el('div', { class:'archetype-meter' },
+    el('span', { class:'meter-label' }, 'Profile'),
+    el('div', { class:'meter-pill' },
+      el('div', { class:`meter-archetype-name${stepIdx >= 5 ? ' revealed' : ''}`, style:`color:${arch.color}` }, arch.name),
+      el('div', { class:'meter-bar-track' },
+        el('div', { class:'meter-bar-fill', style:`width:${progress}%;background:${arch.color}` }),
+      ),
+    ),
+  );
+  return meterEl;
+}
+
+// ══════════════════════════════════════════════════════════
+// PHASE TRANSITION SCREEN
+// ══════════════════════════════════════════════════════════
+
+function renderPhaseTransition(type) {
+  const arch = getPartialArchetype(state.answers);
+
+  if (type === 'SENTIMENT_DONE') {
+    const insight = getSentimentInsight(state.answers);
+    const dims = getPartialDimensions(state.answers);
+    return el('div', { class:'phase-transition' },
+      el('div', { class:'pt-phase-tag' }, 'Phase 01 Complete'),
+      el('div', { class:'pt-check', style:'background:rgba(201,168,76,0.1);color:var(--gold)' }, '✓'),
+      el('h2', { class:'pt-headline' }, 'Sentiment ', el('em', null, 'mapped.')),
+      el('p', { class:'pt-sub' }, 'Five questions in. Your emotional architecture is taking shape.'),
+      el('div', { class:'pt-insight' },
+        el('div', { class:'pt-insight-label' }, 'Early Signal'),
+        (() => { const d = el('div', { class:'pt-insight-text' }); d.innerHTML = `<strong>${insight.headline}</strong> ${insight.body}`; return d; })(),
+      ),
+      el('div', { class:'pt-score-reveal' },
+        el('div', { class:'pt-score-cell' },
+          el('div', { class:'pt-score-val', style:'color:#c0392b' }, dims.emotionalCtrl),
+          el('div', { class:'pt-score-label' }, 'Emotional Control'),
+        ),
+        el('div', { class:'pt-score-cell' },
+          el('div', { class:'pt-score-val', style:'color:#a855f7' }, dims.independentThk),
+          el('div', { class:'pt-score-label' }, 'Independent Thinking'),
+        ),
+        el('div', { class:'pt-score-cell' },
+          el('div', { class:'pt-score-val', style:`color:${arch.color}` }, arch.name.split(' ')[1] || '?'),
+          el('div', { class:'pt-score-label' }, 'Leaning Toward'),
+        ),
+      ),
+      el('div', { class:'pt-next-label' }, 'Phase 02 — Capital Filter'),
+      el('p', { class:'pt-sub', style:'margin-bottom:24px' }, 'Four questions on position sizing, research depth, time horizon, and financial capacity.'),
+      el('button', { class:'btn-primary', onClick: () => { state.phase_transition = null; render(); } }, 'Continue →'),
+    );
+  }
+
+  if (type === 'FILTER_DONE') {
+    const insight = getFilterInsight(state.answers);
+    const dims = getPartialDimensions(state.answers);
+    return el('div', { class:'phase-transition' },
+      el('div', { class:'pt-phase-tag' }, 'Phase 02 Complete'),
+      el('div', { class:'pt-check', style:`background:${arch.color}1a;color:${arch.color}` }, '✓'),
+      el('h2', { class:'pt-headline' }, 'Capital capacity ', el('em', null, 'calibrated.')),
+      el('p', { class:'pt-sub' }, 'Nine questions answered. Your financial profile is now visible alongside your psychology.'),
+      el('div', { class:'pt-insight' },
+        el('div', { class:'pt-insight-label' }, 'Emerging Profile'),
+        (() => { const d = el('div', { class:'pt-insight-text' }); d.innerHTML = `<strong>${insight.headline}</strong><br>${insight.body}`; return d; })(),
+      ),
+      el('div', { class:'pt-score-reveal' },
+        el('div', { class:'pt-score-cell' },
+          el('div', { class:'pt-score-val', style:'color:#22c55e' }, dims.riskCapacity),
+          el('div', { class:'pt-score-label' }, 'Risk Capacity'),
+        ),
+        el('div', { class:'pt-score-cell' },
+          el('div', { class:'pt-score-val', style:`color:${arch.color}` }, arch.name),
+          el('div', { class:'pt-score-label' }, 'Current Profile'),
+        ),
+        el('div', { class:'pt-score-cell' },
+          el('div', { class:'pt-score-val', style:'color:var(--text-dim)' }, '3'),
+          el('div', { class:'pt-score-label' }, 'Questions Left'),
+        ),
+      ),
+      el('div', { class:'pt-next-label' }, 'Phase 03 — Framework'),
+      el('p', { class:'pt-sub', style:'margin-bottom:24px' }, 'Three final questions to lock your investing philosophy, starting territory, and dominant failure mode.'),
+      el('button', { class:'btn-primary', onClick: () => { state.phase_transition = null; render(); } }, 'Final Phase →'),
+    );
+  }
+}
+
+
 
 function renderQuestion(q, stepIdx) {
   const totalSteps = QUESTIONS.length;
@@ -671,6 +1434,9 @@ function renderQuestion(q, stepIdx) {
     el('span', { class:'step-label' }, `${stepIdx + 1} / ${totalSteps}`)
   );
 
+  // Live archetype meter (visible from step 1 onward, name revealed after step 5)
+  const meterEl = stepIdx > 0 ? renderArchetypeMeter(stepIdx) : null;
+
   // Why button
   const whyId = `why-${q.id}`;
   const whyBox = el('div', { class:'q-why-box', id:whyId }, Q_WHY[q.id] || '');
@@ -680,7 +1446,9 @@ function renderQuestion(q, stepIdx) {
     whyBtn.textContent = whyBox.classList.contains('visible') ? '↑ close' : '? why are you asking this';
   });
 
-  const children = [phaseHeader, dotRow, el('h2', { class:'question' }, q.question), el('p', { class:'subtext' }, q.subtext), whyBtn, whyBox];
+  const children = [phaseHeader, dotRow];
+  if (meterEl) children.push(meterEl);
+  children.push(el('h2', { class:'question' }, q.question), el('p', { class:'subtext' }, q.subtext), whyBtn, whyBox);
 
   // Contradiction check mid-quiz
   if (stepIdx >= 6) {
@@ -695,6 +1463,12 @@ function renderQuestion(q, stepIdx) {
     }
   }
 
+  // Auto-advance helper: flash selection then advance after 320ms
+  function autoAdvance(btn, cls, val) {
+    btn.classList.add('selecting');
+    setTimeout(() => advance(val), 320);
+  }
+
   if (q.type === 'sentiment_scale') {
     children.push(el('div', { class:'options-col' },
       ...(q.options || []).map(o => {
@@ -703,7 +1477,7 @@ function renderQuestion(q, stepIdx) {
           el('div', null, el('div', { class:'opt-label' }, o.label), el('div', { class:'opt-sub' }, o.sub)),
           el('div', { class:'opt-dot' }),
         );
-        btn.addEventListener('click', () => advance(o.value));
+        btn.addEventListener('click', () => autoAdvance(btn, 'selecting', o.value));
         return btn;
       })
     ));
@@ -717,7 +1491,7 @@ function renderQuestion(q, stepIdx) {
           el('div', { class:'opt-label' }, o.label),
           el('div', { class:'opt-sub' }, o.sub),
         );
-        btn.addEventListener('click', () => advance(o.value));
+        btn.addEventListener('click', () => autoAdvance(btn, 'selecting', o.value));
         return btn;
       })
     ));
@@ -750,10 +1524,475 @@ function renderQuestion(q, stepIdx) {
 }
 
 // ══════════════════════════════════════════════════════════
+// CINEMATIC REVEAL SCREEN
+// ══════════════════════════════════════════════════════════
+
+function showCinematicReveal(p, onDone) {
+  const screen = document.createElement('div');
+  screen.id = 'reveal-screen';
+
+  const tag = document.createElement('div');
+  tag.className = 'rv-tag';
+  tag.textContent = 'InsightInvest · Assessment Complete';
+
+  const name = document.createElement('div');
+  name.className = 'rv-archetype-name';
+  name.style.color = p.archetypeColor;
+  name.textContent = p.archetype;
+
+  const line = document.createElement('div');
+  line.className = 'rv-line';
+
+  const tagline = document.createElement('div');
+  tagline.className = 'rv-tagline';
+  tagline.textContent = p.archetypeTagline;
+
+  const sentWrap = document.createElement('div');
+  sentWrap.className = 'rv-sentence-wrap';
+  const sent = document.createElement('div');
+  sent.className = 'rv-sentence';
+  sent.innerHTML = p.brutalSentence.sentence;
+  sentWrap.appendChild(sent);
+
+  const cont = document.createElement('button');
+  cont.className = 'rv-continue';
+  cont.textContent = 'See full profile →';
+  cont.addEventListener('click', () => {
+    screen.classList.add('exit');
+    setTimeout(() => { screen.remove(); onDone(); }, 700);
+  });
+
+  screen.append(tag, name, line, tagline, sentWrap, cont);
+  document.body.appendChild(screen);
+}
+
+// ══════════════════════════════════════════════════════════
 // RESULTS SCREEN
 // ══════════════════════════════════════════════════════════
 
 function renderResult(p) {
+  const warningBox = p.positionPct > 25
+    ? el('div', { class:'warning-box' }, el('div', { class:'warning-text' }, `⚠  You selected ${p.positionPct}% per position. Your profile-calibrated maximum is ${p.suggestedPosition}%. The gap between these numbers is where most retail investors experience irreversible losses.`))
+    : null;
+
+  // Waitlist
+  const nameInput  = el('input', { class:'waitlist-input', type:'text',  placeholder:'Your name' });
+  const emailInput = el('input', { class:'waitlist-input', type:'email', placeholder:'Email address' });
+  const phoneInput = el('input', { class:'waitlist-input', type:'tel',   placeholder:'WhatsApp / Phone (optional)' });
+  const successMsg = el('div', { class:'waitlist-success' }, "✓ You're on the list. I'll be in touch personally.");
+  const errorMsg   = el('div', { class:'waitlist-success', style:'color:var(--red);display:none;' }, '✗ Something went wrong.');
+  const submitBtn  = el('button', { class:'waitlist-submit' }, 'Join the Waitlist →');
+  submitBtn.addEventListener('click', async () => {
+    const name = nameInput.value.trim(), email = emailInput.value.trim();
+    if (!name)  { nameInput.style.borderColor = 'var(--red)'; nameInput.focus(); return; }
+    if (!email) { emailInput.style.borderColor = 'var(--red)'; emailInput.focus(); return; }
+    submitBtn.textContent = 'Submitting...'; submitBtn.disabled = true; submitBtn.style.opacity = '0.6';
+    try {
+      const res = await fetch('https://formspree.io/f/xykngrlp', { method:'POST', headers:{'Accept':'application/json','Content-Type':'application/json'}, body: JSON.stringify({ name, email, phone:phoneInput.value.trim(), archetype:p.archetype, horizon:p.horizon, style:p.investingStyle, composite:p.compositeScore, _subject:`New Investor Profile — ${p.archetype} · ${p.compositeScore}/100 · ${name}` }) });
+      if (res.ok) { submitBtn.style.display = 'none'; successMsg.style.display = 'block'; }
+      else { submitBtn.textContent = 'Join the Waitlist →'; submitBtn.disabled = false; submitBtn.style.opacity = '1'; errorMsg.style.display = 'block'; }
+    } catch { submitBtn.textContent = 'Join the Waitlist →'; submitBtn.disabled = false; submitBtn.style.opacity = '1'; errorMsg.style.display = 'block'; }
+  });
+
+  // Reminder
+  const reminderEmailInput = el('input', { class:'reminder-input', type:'email', placeholder:'email@example.com' });
+  const reminderSuccess = el('div', { class:'reminder-success' }, '✓ Reminder set for 6 months from today.');
+  const reminderBtn = el('button', { class:'reminder-submit' }, 'Set Reminder →');
+  reminderBtn.addEventListener('click', async () => {
+    const email = reminderEmailInput.value.trim();
+    if (!email) { reminderEmailInput.style.borderColor = 'var(--red)'; return; }
+    reminderBtn.textContent = '...';
+    try { await fetch('https://formspree.io/f/xykngrlp', { method:'POST', headers:{'Accept':'application/json','Content-Type':'application/json'}, body: JSON.stringify({ email, type:'reminder', archetype:p.archetype, composite:p.compositeScore, _subject:`Recalibration Reminder — ${p.archetype} · ${email}` }) }); } catch {}
+    reminderBtn.style.display = 'none'; reminderSuccess.style.display = 'block';
+  });
+
+  // ── BRUTAL SENTENCE (at top of full report)
+  const brutalEl = el('div', { class:'brutal-wrap' },
+    el('div', { class:'brutal-eyebrow' }, 'Your Investor Signature'),
+    (() => { const d = el('div', { class:'brutal-sentence' }); d.innerHTML = p.brutalSentence.sentence; return d; })(),
+    el('div', { class:'brutal-credit' }, p.brutalSentence.credit),
+    (() => {
+      const btn = el('button', { class:'brutal-share-btn' }, '⤴ Copy this sentence');
+      btn.addEventListener('click', () => {
+        const plain = el('div'); plain.innerHTML = p.brutalSentence.sentence; 
+        const text = plain.textContent + ' — ' + p.brutalSentence.credit + ' (InsightInvest)';
+        navigator.clipboard.writeText(text).then(() => { btn.textContent = '✓ Copied'; setTimeout(() => btn.textContent = '⤴ Copy this sentence', 2000); });
+      });
+      return btn;
+    })(),
+  );
+
+  // ── CRASH SIMULATION
+  let activeCrashScenario = 'covid';
+  const crashChartWrap = el('div', { class:'crash-chart-area' }, el('canvas', { id:'crashChart' }));
+  const crashOutcome = el('div', { class:'crash-outcome' },
+    el('div', { class:'crash-outcome-cell', id:'crash-start' }, el('div', { class:'crash-outcome-label' }, 'Starting value'), el('div', { class:'crash-outcome-val', style:'color:var(--text)' }, '$50,000'), el('div', { class:'crash-outcome-sub' }, 'Hypothetical portfolio')),
+    el('div', { class:'crash-outcome-cell', id:'crash-you' }, el('div', { class:'crash-outcome-label' }, 'Your outcome'), el('div', { class:'crash-outcome-val crash-you-val', id:'crash-you-val' }, '–'), el('div', { class:'crash-outcome-sub', id:'crash-you-sub' }, '–')),
+    el('div', { class:'crash-outcome-cell', id:'crash-held' }, el('div', { class:'crash-outcome-label' }, 'If you had held'), el('div', { class:'crash-outcome-val crash-held-val', id:'crash-held-val' }, '–'), el('div', { class:'crash-outcome-sub', id:'crash-held-sub' }, '–')),
+  );
+  const crashVerdict = el('div', { class:'crash-verdict' },
+    el('div', { class:'crash-verdict-label' }, 'What this means for you'),
+    el('div', { class:'crash-verdict-text', id:'crash-verdict-text' }, ''),
+  );
+
+  const scenarioBtns = Object.entries(CRASH_SCENARIOS).map(([key, sc]) => {
+    const btn = el('button', { class:`crash-scenario-btn${key === 'covid' ? ' active' : ''}` }, sc.name);
+    btn.addEventListener('click', () => {
+      activeCrashScenario = key;
+      document.querySelectorAll('.crash-scenario-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderCrashChart(p.answers, key);
+    });
+    return btn;
+  });
+
+  const crashWrap = el('div', { class:'crash-wrap' },
+    el('div', { class:'crash-header' },
+      el('div', { class:'crash-header-left' },
+        el('div', { class:'crash-eyebrow' }, 'Live Scenario · You Were There'),
+        el('div', { class:'crash-headline' }, 'Market Crash Simulator'),
+        el('div', { class:'crash-sub' }, 'Based on your answers — here is what you would have done, and what it would have cost you.'),
+      ),
+      el('div', { class:'crash-scenarios' }, ...scenarioBtns),
+    ),
+    crashChartWrap,
+    crashOutcome,
+    crashVerdict,
+  );
+
+  // ── DIMENSION VERDICTS
+  const verdictsEl = el('div', { class:'verdicts-grid' },
+    ...p.verdicts.map(v => {
+      const scoreColor = v.score < 35 ? '#c0392b' : v.score < 65 ? '#C9A84C' : '#22c55e';
+      const row = el('div', { class:'verdict-row' },
+        el('div', { class:'verdict-accent', style:`background:${v.color}` }),
+        el('div', { class:'verdict-body' },
+          el('div', { class:'verdict-dim-name' },
+            v.name,
+            el('span', { class:'verdict-score-pill', style:`color:${scoreColor};background:${scoreColor}18;border:1px solid ${scoreColor}33` }, `${v.score}/100`),
+          ),
+          (() => { const d = el('div', { class:'verdict-text' }); d.innerHTML = v.text; return d; })(),
+        )
+      );
+      return row;
+    })
+  );
+
+  // ── BLIND SPOT MIRROR
+  const mirrorRows = p.blindSpots.map(spot => {
+    const gapEl = el('div', { class:'mirror-gap-row' },
+      el('span', { class:'mirror-gap-icon' }, '△'),
+      (() => { const d = el('div', { class:'mirror-gap-text' }); d.innerHTML = spot.gap; return d; })(),
+    );
+    const statedEl = el('div', { class:'mirror-cell stated' },
+      el('div', { class:'mirror-cell-label' }, spot.stated.label),
+      (() => { const d = el('div', { class:'mirror-cell-text' }); d.innerHTML = spot.stated.text; return d; })(),
+    );
+    const actualEl = el('div', { class:'mirror-cell actual' },
+      el('div', { class:'mirror-cell-label' }, spot.actual.label),
+      (() => { const d = el('div', { class:'mirror-cell-text' }); d.innerHTML = spot.actual.text; return d; })(),
+    );
+    return el('div', null,
+      el('div', { class:'mirror-row' }, statedEl, actualEl),
+      gapEl,
+    );
+  });
+
+  const mirrorEl = el('div', { class:'mirror-wrap' },
+    el('div', { class:'mirror-header' },
+      el('div', { class:'mirror-header-left' },
+        el('div', { class:'mirror-eyebrow' }, 'Blind Spot Mirror'),
+        el('div', { class:'mirror-headline' }, 'What you said vs. what investors like you actually do'),
+        el('div', { class:'mirror-sub' }, 'The gap between these two columns is where portfolios are won and lost.'),
+      ),
+    ),
+    el('div', { class:'mirror-col-heads' },
+      el('div', { class:'mirror-col-head', style:'color:var(--blue)' }, 'What you said'),
+      el('div', { class:'mirror-col-head', style:'color:var(--red)' }, 'What happens in reality'),
+    ),
+    el('div', { class:'mirror-rows' }, ...mirrorRows),
+  );
+
+  const result = el('div', null,
+    // ── Archetype header (compact — the cinematic already did the big reveal)
+    el('div', { class:'result-eyebrow' }, 'Full Calibration Report'),
+    el('div', { class:'archetype-reveal', style:`border-left-color:${p.archetypeColor}` },
+      el('div', { class:'archetype-label' }, 'Your Investor Archetype'),
+      el('div', { class:'archetype-name', style:`color:${p.archetypeColor}` }, p.archetype),
+      el('div', { class:'archetype-stability', style:`color:${p.stabilityColor};border-color:${p.stabilityColor}33;background:${p.stabilityColor}0d` }, el('span', null, '◈'), p.stabilityMsg),
+    ),
+
+    // ── Brutal sentence
+    el('div', { class:'section-label' }, 'Your Investor Signature'),
+    brutalEl,
+
+    // ── Crash simulation
+    el('div', { class:'section-label' }, 'Market Crash Simulation'),
+    crashWrap,
+
+    // Contradiction
+    p.contradiction ? el('div', { class:'warning-box', style:'border-top:1px solid rgba(192,57,43,0.3);margin-bottom:2px' }, el('div', { class:'warning-text', style:'color:#f97316' }, '⚡ ' + p.contradiction)) : null,
+
+    // ── Core metrics
+    el('div', { class:'section-label' }, 'Core Metrics'),
+    el('div', { class:'stats-grid' },
+      ...[
+        { label:'Max Drawdown Tolerance', value:p.maxDrawdown, note:'Before emotional override likely' },
+        { label:'Position Size Limit', value:`≤ ${p.suggestedPosition}%`, note:'Per single equity position' },
+        { label:'Time Horizon', value:p.horizon, note:null },
+        { label:'Investing Style', value:p.investingStyle, note:'Self-identified framework' },
+        { label:'Research Depth', value:p.famScore <= 2 ? '⚠ Needs work' : p.famScore <= 3 ? 'Developing' : 'Strong', note:p.famScore <= 2 ? 'Read an annual report first' : 'Good foundation' },
+        { label:'Composite Score', value:`${p.compositeScore}`, note:'/100 across six dimensions' },
+      ].map(({ label, value, note }) =>
+        el('div', { class:'stat-cell' },
+          el('span', { class:'stat-cell-label' }, label),
+          el('div', { class:'stat-cell-value' }, value),
+          note ? el('div', { class:'stat-cell-note' }, note) : null,
+        )
+      )
+    ),
+
+    // ── Dimension verdicts (replaces radar as primary)
+    el('div', { class:'section-label' }, 'Your Six Dimensions — In Plain English'),
+    verdictsEl,
+
+    // ── Radar (secondary, smaller role)
+    el('div', { class:'section-label' }, 'Dimension Profile'),
+    el('div', { class:'radar-wrap' },
+      el('span', { class:'radar-title' }, 'Six-Dimension Investor Radar'),
+      el('div', { class:'radar-container' },
+        el('canvas', { id:'radarCanvas', height:'240' }),
+        el('div', { class:'radar-legend' },
+          ...Object.entries({ 'Emotional Control':{val:p.dimensions.emotionalCtrl,color:'#c0392b'}, 'Independent Thinking':{val:p.dimensions.independentThk,color:'#a855f7'}, 'Risk Capacity':{val:p.dimensions.riskCapacity,color:'#22c55e'}, 'Research Depth':{val:p.dimensions.researchDepth,color:'#3b82f6'}, 'Position Discipline':{val:p.dimensions.positionDisc,color:'#C9A84C'}, 'Style Alignment':{val:p.dimensions.styleCohesion,color:'#06b6d4'} }).map(([name,{val,color}]) =>
+            el('div', { class:'radar-leg-item' },
+              el('div', { class:'radar-leg-dot', style:`background:${color}` }),
+              el('div', null, el('div', { class:'radar-leg-name' }, name), el('div', { class:'radar-leg-val' }, val))
+            )
+          )
+        )
+      )
+    ),
+
+    // ── Blind spot mirror (replaces bias bar list)
+    el('div', { class:'section-label' }, 'Blind Spot Mirror'),
+    mirrorEl,
+
+    // ── Compound simulator
+    el('div', { class:'section-label' }, 'Compound Outcome Simulator'),
+    el('div', { class:'simulator-wrap', id:'simWrap' },
+      el('span', { class:'simulator-title' }, 'Portfolio growth projection — adjust variables to see impact'),
+      el('div', { class:'simulator-controls' },
+        el('div', { class:'sim-control-group' }, el('div', { class:'sim-control-label' }, 'Initial investment', el('span', { id:'simAmtLabel' }, '$10,000')), (() => { const r = el('input', { type:'range', min:'1000', max:'100000', step:'1000', value:'10000' }); r.id='simAmt'; return r; })()),
+        el('div', { class:'sim-control-group' }, el('div', { class:'sim-control-label' }, 'Annual return', el('span', { id:'simRetLabel' }, '9%')), (() => { const r = el('input', { type:'range', min:'3', max:'25', step:'1', value:'9' }); r.id='simRet'; return r; })()),
+        el('div', { class:'sim-control-group' }, el('div', { class:'sim-control-label' }, 'Monthly contribution', el('span', { id:'simContLabel' }, '$500')), (() => { const r = el('input', { type:'range', min:'0', max:'5000', step:'100', value:'500' }); r.id='simCont'; return r; })()),
+        el('div', { class:'sim-control-group' }, el('div', { class:'sim-control-label' }, 'Time horizon', el('span', { id:'simYrsLabel' }, '20 years')), (() => { const r = el('input', { type:'range', min:'1', max:'40', step:'1', value:'20' }); r.id='simYrs'; return r; })()),
+      ),
+      el('div', { class:'sim-chart-wrap' }, el('canvas', { id:'simChart' })),
+      el('div', { class:'sim-result-row' },
+        el('div', { class:'sim-result-cell' }, el('div', { class:'sim-result-label' }, 'Final value'), el('div', { class:'sim-result-val', id:'simFinal' }, '-')),
+        el('div', { class:'sim-result-cell' }, el('div', { class:'sim-result-label' }, 'Total invested'), el('div', { class:'sim-result-val', id:'simInvested' }, '-')),
+        el('div', { class:'sim-result-cell' }, el('div', { class:'sim-result-label' }, 'Total gain'), el('div', { class:'sim-result-val', id:'simGain' }, '-')),
+      ),
+    ),
+
+    // ── Portfolio doughnut
+    el('div', { class:'section-label' }, 'Starting Portfolio Model'),
+    el('div', { class:'portfolio-wrap' },
+      el('div', { class:'portfolio-container' },
+        el('div', { class:'portfolio-chart-wrap' }, el('canvas', { id:'portfolioChart', width:'220', height:'220' }), el('div', { class:'portfolio-center' }, el('div', { class:'portfolio-center-val', id:'portfolioCenterVal' }, p.allocation[0].pct+'%'), el('div', { class:'portfolio-center-label', id:'portfolioCenterLabel' }, p.allocation[0].asset.split(' ')[0]))),
+        el('div', { class:'portfolio-legend' }, ...p.allocation.map((a,i) =>
+          el('div', { class:'portfolio-leg-row', id:`leg-${i}` },
+            el('div', { class:'portfolio-leg-bar', style:`background:${a.color}` }),
+            el('div', { class:'portfolio-leg-pct', style:`color:${a.color}` }, a.pct+'%'),
+            el('div', { class:'portfolio-leg-info' }, el('div', { class:'portfolio-leg-class' }, a.asset), el('div', { class:'portfolio-leg-why' }, a.why))
+          )
+        )),
+      )
+    ),
+
+    warningBox,
+
+    // ── Equity
+    el('div', { class:'section-label' }, 'Recommended Starting Territory'),
+    el('div', { class:'equity-box' },
+      el('div', { class:'equity-eyebrow' }, 'Best Match For Your Profile'),
+      el('div', { class:'equity-name' }, p.equity.label),
+      el('p', { class:'equity-why' }, p.equity.why),
+      el('div', { class:'equity-tags' }, ...p.equity.examples.map(ex => el('span', { class:'equity-tag' }, ex))),
+    ),
+
+    // ── Rules
+    el('div', { class:'section-label' }, 'Your Personal Framework'),
+    el('div', { class:'rules-box', style:`border-left:3px solid ${p.archetypeColor}` },
+      el('div', { class:'rules-eyebrow' }, 'Rules Calibrated to Your Profile'),
+      ...p.rules.map(r => { const t = el('span', { class:'rule-text' }); t.innerHTML = r.text; return el('div', { class:'rule-row' }, el('span', { class:'rule-num', style:`color:${p.archetypeColor}` }, r.num), t); }),
+    ),
+
+    // ── Learning path
+    el('div', { class:'section-label' }, 'Personalised Learning Path'),
+    el('div', { class:'path-grid' }, ...p.learningPath.map((item,i) =>
+      el('div', { class:'path-row' }, el('div', { class:'path-step' }, `0${i+1}`), el('div', { class:'path-content' }, el('div', { class:'path-title' }, item.title), el('div', { class:'path-sub' }, item.sub)), el('span', { class:'path-tag', style:`color:${item.tagColor};background:${item.tagBg}` }, item.tag))
+    )),
+
+    // ── Reading list
+    el('div', { class:'section-label' }, 'Reading List for Your Archetype'),
+    el('div', { class:'reading-grid' }, ...p.readingList.map(r =>
+      el('div', { class:'reading-row' }, el('span', { class:'reading-type', style:`color:${r.typeColor};background:${r.typeBg}` }, r.type), el('div', { class:'reading-content' }, el('div', { class:'reading-title' }, r.title), el('div', { class:'reading-author' }, r.author)))
+    )),
+
+    // ── Insight
+    el('div', { class:'insight-box' },
+      el('div', { class:'insight-eyebrow' }, 'A Note on Self-Assessment'),
+      el('p', { class:'insight-text' }, 'This profile reflects how you described yourself under ideal conditions. Real investing happens under stress, with real money, in real time. ', el('strong', null, 'Save this page. Revisit after your first live loss.'))
+    ),
+
+    // ── Reminder
+    el('div', { class:'reminder-box' },
+      el('div', { class:'reminder-text' }, el('strong', null, 'Set a recalibration reminder.'), ' Markets change. You change. Get a prompt to retake this in 6 months.'),
+      reminderEmailInput, reminderBtn, reminderSuccess,
+    ),
+
+    // ── Share card
+    el('div', { class:'section-label' }, 'Your Result Card'),
+    el('div', { class:'share-card-wrap' },
+      el('canvas', { id:'shareCardCanvas', height:'280' }),
+      el('div', { class:'share-card-actions' },
+        el('button', { class:'btn-share-action primary', onClick: () => downloadShareCard(p) }, '↓ Download Card'),
+        el('button', { class:'btn-share-action', onClick: () => exportProfile(p) }, '↓ Full Report (.txt)'),
+        el('button', { class:'btn-share-action', onClick: () => shareProfile(p) }, '⤴ Copy Share Link'),
+      ),
+    ),
+
+    // ── Waitlist
+    el('div', { class:'waitlist-box' },
+      el('div', { class:'waitlist-eyebrow' }, 'Limited Availability'),
+      el('h3', { class:'waitlist-headline' }, 'Want me to personally walk through your profile?'),
+      el('p', { class:'waitlist-sub' }, "I work with a small number of people directly. If you want a 1-on-1 session based on your calibration above — your specific archetype, biases, and starting territory — join the waitlist. I'll reach out personally."),
+      el('div', { class:'waitlist-form' }, nameInput, emailInput, phoneInput, submitBtn, successMsg, errorMsg),
+    ),
+
+    el('div', { class:'result-cta' },
+      el('button', { class:'btn-ghost', onClick: () => { state = { step:-1, answers:{}, slider:10, profile:null, phase_transition:null }; clearProgress(); render(); } }, '↺ Recalibrate'),
+      el('span', { class:'result-note' }, 'Save this page · Revisit after your first live trade'),
+    ),
+  );
+
+  // Init all charts after DOM ready
+  setTimeout(() => {
+    drawRadar(p.dimensions, p.archetypeColor);
+    initSimulator();
+    initPortfolioChart(p.allocation);
+    initScrollReveal();
+    drawShareCard(p);
+    renderCrashChart(p.answers, 'covid');
+  }, 80);
+
+  return result;
+}
+
+// ══════════════════════════════════════════════════════════
+// CRASH CHART RENDERER
+// ══════════════════════════════════════════════════════════
+
+let crashChartInstance = null;
+
+function renderCrashChart(answers, scenarioKey) {
+  const sc = CRASH_SCENARIOS[scenarioKey];
+  const beh = getCrashBehavior(answers, scenarioKey);
+  const canvas = document.getElementById('crashChart');
+  if (!canvas) return;
+  if (crashChartInstance) { crashChartInstance.destroy(); crashChartInstance = null; }
+
+  const fmt = n => '$' + Math.round(n).toLocaleString();
+  const portfolioData = sc.spx.map(v => Math.round(50000 * v / 100));
+
+  // Build "your path" dataset — diverges at sell point
+  const yourPath = portfolioData.map((v, i) => {
+    if (beh.behavior === 'buyer') return v + (i >= sc.trough ? Math.round(10000 * sc.spx[i]/sc.spx[sc.trough]) : 0);
+    if (beh.sellPoint < 0) return v;
+    if (i <= beh.sellPoint) return v;
+    return portfolioData[beh.sellPoint]; // stayed in cash after selling
+  });
+
+  crashChartInstance = new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels: sc.dates,
+      datasets: [
+        {
+          label: 'S&P 500 (indexed to $50K)',
+          data: portfolioData,
+          borderColor: '#3a3d4a',
+          borderWidth: 1.5,
+          borderDash: [4,3],
+          fill: false,
+          tension: 0.3,
+          pointRadius: 0,
+        },
+        {
+          label: 'Your Path',
+          data: yourPath,
+          borderColor: sc.color,
+          backgroundColor: sc.color + '12',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.3,
+          pointRadius: (ctx) => ctx.dataIndex === beh.sellPoint && beh.sellPoint >= 0 ? 5 : 0,
+          pointBackgroundColor: sc.color,
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode:'index', intersect:false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#13141a', borderColor: '#1e2028', borderWidth: 1,
+          titleColor: '#8a8fa0', bodyColor: '#dde1eb',
+          callbacks: { label: ctx => ` ${ctx.dataset.label}: ${fmt(ctx.raw)}` }
+        },
+        annotation: beh.sellPoint >= 0 ? {
+          annotations: {
+            sellLine: {
+              type: 'line', xMin: beh.sellPoint, xMax: beh.sellPoint,
+              borderColor: sc.color + '80', borderWidth: 1, borderDash: [4,3],
+            }
+          }
+        } : {}
+      },
+      scales: {
+        x: { grid:{ color:'#1c1e26' }, ticks:{ color:'#3a3d4a', font:{ family:"'JetBrains Mono',monospace", size:9 } } },
+        y: { grid:{ color:'#1c1e26' }, ticks:{ color:'#3a3d4a', font:{ family:"'JetBrains Mono',monospace", size:9 }, callback: v => '$'+(v>=1e3?(v/1e3).toFixed(0)+'K':v) } }
+      },
+      animation: { duration: 700, easing: 'easeInOutQuart' },
+    }
+  });
+
+  // Update outcome cells
+  const youVal = document.getElementById('crash-you-val');
+  const youSub = document.getElementById('crash-you-sub');
+  const heldVal = document.getElementById('crash-held-val');
+  const heldSub = document.getElementById('crash-held-sub');
+  const verdictText = document.getElementById('crash-verdict-text');
+
+  if (youVal) {
+    const yourFinal = yourPath[yourPath.length - 1];
+    const color = yourFinal >= 50000 ? '#22c55e' : '#c0392b';
+    youVal.textContent = fmt(yourFinal);
+    youVal.style.color = color;
+    youSub.textContent = beh.behavior === 'buyer' ? 'Held + added at trough' : beh.sellPoint >= 0 ? `Sold at ${beh.exitPct}% drawdown, held cash` : 'Held through the full crash';
+  }
+  if (heldVal) {
+    heldVal.textContent = fmt(beh.held);
+    heldVal.style.color = '#22c55e';
+    heldSub.textContent = `${sc.recovery_days} days to full recovery`;
+  }
+  if (verdictText) {
+    verdictText.innerHTML = getCrashVerdict(beh.behavior, answers, scenarioKey, beh.cost);
+  }
+}
+
   const warningBox = p.positionPct > 25
     ? el('div', { class:'warning-box' },
         el('div', { class:'warning-text' },
@@ -805,238 +2044,6 @@ function renderResult(p) {
     reminderSuccess.style.display = 'block';
   });
 
-  const result = el('div', null,
-
-    // ── Archetype
-    el('div', { class:'result-eyebrow' }, 'Assessment Complete · Calibration Report'),
-    el('div', { class:'archetype-reveal', style:`border-left-color:${p.archetypeColor}` },
-      el('div', { class:'archetype-label' }, 'Your Investor Archetype'),
-      el('div', { class:'archetype-name', style:`color:${p.archetypeColor}` }, p.archetype),
-      el('div', { class:'archetype-stability', style:`color:${p.stabilityColor};border-color:${p.stabilityColor}33;background:${p.stabilityColor}0d` },
-        el('span', null, '◈'), p.stabilityMsg
-      ),
-      el('p', { class:'archetype-tagline' }, p.archetypeTagline),
-    ),
-
-    // Contradiction alert
-    p.contradiction ? el('div', { class:'warning-box', style:'border-top:1px solid rgba(192,57,43,0.3)' },
-      el('div', { class:'warning-text', style:'color:#f97316' }, '⚡ ' + p.contradiction)
-    ) : null,
-
-    // ── Core metrics
-    el('div', { class:'section-label' }, 'Core Metrics'),
-    el('div', { class:'stats-grid' },
-      ...[
-        { label:'Max Drawdown Tolerance', value:p.maxDrawdown, note:'Before emotional override likely' },
-        { label:'Position Size Limit', value:`≤ ${p.suggestedPosition}%`, note:'Per single equity position' },
-        { label:'Time Horizon', value:p.horizon, note:null },
-        { label:'Investing Style', value:p.investingStyle, note:'Self-identified framework' },
-        { label:'Research Depth', value:p.famScore <= 2 ? '⚠ Needs work' : p.famScore <= 3 ? 'Developing' : 'Strong', note:p.famScore <= 2 ? 'Read an annual report first' : 'Good foundation' },
-        { label:'Composite Score', value:`${p.compositeScore}`, note:'/100 across six dimensions' },
-      ].map(({ label, value, note }) =>
-        el('div', { class:'stat-cell' },
-          el('span', { class:'stat-cell-label' }, label),
-          el('div', { class:'stat-cell-value' }, value),
-          note ? el('div', { class:'stat-cell-note' }, note) : null,
-        )
-      )
-    ),
-
-    // ── Radar
-    el('div', { class:'section-label' }, 'Psychological Dimensions'),
-    el('div', { class:'radar-wrap' },
-      el('span', { class:'radar-title' }, 'Six-Dimension Investor Profile'),
-      el('div', { class:'radar-container' },
-        el('canvas', { id:'radarCanvas', height:'240' }),
-        el('div', { class:'radar-legend' },
-          ...Object.entries({
-            'Emotional Control':    { val:p.dimensions.emotionalCtrl,  color:'#c0392b' },
-            'Independent Thinking': { val:p.dimensions.independentThk, color:'#a855f7' },
-            'Risk Capacity':        { val:p.dimensions.riskCapacity,   color:'#22c55e' },
-            'Research Depth':       { val:p.dimensions.researchDepth,  color:'#3b82f6' },
-            'Position Discipline':  { val:p.dimensions.positionDisc,   color:'#C9A84C' },
-            'Style Alignment':      { val:p.dimensions.styleCohesion,  color:'#06b6d4' },
-          }).map(([name, { val, color }]) =>
-            el('div', { class:'radar-leg-item' },
-              el('div', { class:'radar-leg-dot', style:`background:${color}` }),
-              el('div', null,
-                el('div', { class:'radar-leg-name' }, name),
-                el('div', { class:'radar-leg-val' }, val),
-              )
-            )
-          )
-        )
-      )
-    ),
-
-    // ── Outcome simulator
-    el('div', { class:'section-label' }, 'Compound Outcome Simulator'),
-    el('div', { class:'simulator-wrap', id:'simWrap' },
-      el('span', { class:'simulator-title' }, 'Portfolio growth projection — adjust variables to see impact'),
-      el('div', { class:'simulator-controls' },
-        el('div', { class:'sim-control-group' },
-          el('div', { class:'sim-control-label' }, 'Initial investment', el('span', { id:'simAmtLabel' }, '$10,000')),
-          (() => { const r = el('input', { type:'range', min:'1000', max:'100000', step:'1000', value:'10000' }); r.id='simAmt'; return r; })(),
-        ),
-        el('div', { class:'sim-control-group' },
-          el('div', { class:'sim-control-label' }, 'Annual return', el('span', { id:'simRetLabel' }, '9%')),
-          (() => { const r = el('input', { type:'range', min:'3', max:'25', step:'1', value:'9' }); r.id='simRet'; return r; })(),
-        ),
-        el('div', { class:'sim-control-group' },
-          el('div', { class:'sim-control-label' }, 'Monthly contribution', el('span', { id:'simContLabel' }, '$500')),
-          (() => { const r = el('input', { type:'range', min:'0', max:'5000', step:'100', value:'500' }); r.id='simCont'; return r; })(),
-        ),
-        el('div', { class:'sim-control-group' },
-          el('div', { class:'sim-control-label' }, 'Time horizon', el('span', { id:'simYrsLabel' }, '20 years')),
-          (() => { const r = el('input', { type:'range', min:'1', max:'40', step:'1', value:'20' }); r.id='simYrs'; return r; })(),
-        ),
-      ),
-      el('div', { class:'sim-chart-wrap' }, el('canvas', { id:'simChart' })),
-      el('div', { class:'sim-result-row' },
-        el('div', { class:'sim-result-cell' }, el('div', { class:'sim-result-label' }, 'Final value'), el('div', { class:'sim-result-val', id:'simFinal' }, '-')),
-        el('div', { class:'sim-result-cell' }, el('div', { class:'sim-result-label' }, 'Total invested'), el('div', { class:'sim-result-val', id:'simInvested' }, '-')),
-        el('div', { class:'sim-result-cell' }, el('div', { class:'sim-result-label' }, 'Total gain'), el('div', { class:'sim-result-val', id:'simGain' }, '-')),
-      ),
-    ),
-
-    // ── Behavioral biases
-    el('div', { class:'section-label' }, 'Behavioral Analysis'),
-    el('div', { class:'bias-grid' },
-      ...p.biases.map(b =>
-        el('div', { class:'bias-row' },
-          el('div', { class:'bias-icon', style:`background:${b.color}22` }),
-          el('div', { class:'bias-content' },
-            el('div', { class:'bias-name' }, b.name),
-            el('div', { class:'bias-desc' }, b.desc),
-          ),
-          el('div', { class:'bias-bar-wrap' },
-            el('div', { class:'bias-bar-label' }, b.severity + '%'),
-            el('div', { class:'bias-bar' }, el('div', { class:'bias-bar-fill', style:`background:${b.color}`, 'data-width':b.severity })),
-          )
-        )
-      )
-    ),
-
-    // ── Portfolio doughnut
-    el('div', { class:'section-label' }, 'Starting Portfolio Model'),
-    el('div', { class:'portfolio-wrap' },
-      el('div', { class:'portfolio-container' },
-        el('div', { class:'portfolio-chart-wrap' },
-          el('canvas', { id:'portfolioChart', width:'220', height:'220' }),
-          el('div', { class:'portfolio-center' },
-            el('div', { class:'portfolio-center-val', id:'portfolioCenterVal' }, p.allocation[0].pct + '%'),
-            el('div', { class:'portfolio-center-label', id:'portfolioCenterLabel' }, p.allocation[0].asset.split(' ')[0]),
-          ),
-        ),
-        el('div', { class:'portfolio-legend' },
-          ...p.allocation.map((a, i) =>
-            el('div', { class:'portfolio-leg-row', id:`leg-${i}` },
-              el('div', { class:'portfolio-leg-bar', style:`background:${a.color}` }),
-              el('div', { class:'portfolio-leg-pct', style:`color:${a.color}` }, a.pct + '%'),
-              el('div', { class:'portfolio-leg-info' },
-                el('div', { class:'portfolio-leg-class' }, a.asset),
-                el('div', { class:'portfolio-leg-why' }, a.why),
-              )
-            )
-          )
-        ),
-      )
-    ),
-
-    warningBox,
-
-    // ── Equity recommendation
-    el('div', { class:'section-label' }, 'Recommended Starting Territory'),
-    el('div', { class:'equity-box' },
-      el('div', { class:'equity-eyebrow' }, 'Best Match For Your Profile'),
-      el('div', { class:'equity-name' }, p.equity.label),
-      el('p',   { class:'equity-why'  }, p.equity.why),
-      el('div', { class:'equity-tags' }, ...p.equity.examples.map(ex => el('span', { class:'equity-tag' }, ex))),
-    ),
-
-    // ── Rules
-    el('div', { class:'section-label' }, 'Your Personal Framework'),
-    el('div', { class:'rules-box', style:`border-left:3px solid ${p.archetypeColor}` },
-      el('div', { class:'rules-eyebrow' }, 'Rules Calibrated to Your Profile'),
-      ...p.rules.map(r => {
-        const ruleText = el('span', { class:'rule-text' });
-        ruleText.innerHTML = r.text;
-        return el('div', { class:'rule-row' }, el('span', { class:'rule-num', style:`color:${p.archetypeColor}` }, r.num), ruleText);
-      }),
-    ),
-
-    // ── Learning path
-    el('div', { class:'section-label' }, 'Personalised Learning Path'),
-    el('div', { class:'path-grid' },
-      ...p.learningPath.map((item, i) =>
-        el('div', { class:'path-row' },
-          el('div', { class:'path-step' }, `0${i+1}`),
-          el('div', { class:'path-content' }, el('div', { class:'path-title' }, item.title), el('div', { class:'path-sub' }, item.sub)),
-          el('span', { class:'path-tag', style:`color:${item.tagColor};background:${item.tagBg}` }, item.tag),
-        )
-      )
-    ),
-
-    // ── Reading list
-    el('div', { class:'section-label' }, 'Reading List for Your Archetype'),
-    el('div', { class:'reading-grid' },
-      ...p.readingList.map(r =>
-        el('div', { class:'reading-row' },
-          el('span', { class:'reading-type', style:`color:${r.typeColor};background:${r.typeBg}` }, r.type),
-          el('div', { class:'reading-content' },
-            el('div', { class:'reading-title' }, r.title),
-            el('div', { class:'reading-author' }, r.author),
-          ),
-        )
-      )
-    ),
-
-    // ── Insight
-    el('div', { class:'insight-box' },
-      el('div', { class:'insight-eyebrow' }, 'A Note on Self-Assessment'),
-      el('p', { class:'insight-text' },
-        'This profile reflects how you described yourself under ideal conditions. Real investing happens under stress, with real money, in real time. The distance between this profile and your actual behaviour in a drawdown is the most important thing to discover. ',
-        el('strong', null, 'Save this page. Revisit after your first live loss.')
-      )
-    ),
-
-    // ── Reminder opt-in
-    el('div', { class:'reminder-box' },
-      el('div', { class:'reminder-text' }, el('strong', null, 'Set a recalibration reminder.'), ' Markets change. You change. Get a prompt to retake this in 6 months.'),
-      reminderEmailInput, reminderBtn, reminderSuccess,
-    ),
-
-    // ── PDF Export
-    el('div', { class:'export-row' },
-      el('button', { class:'btn-export', onClick: () => exportProfile(p) }, '↓ Download Profile Summary'),
-      el('button', { class:'btn-export', onClick: () => shareProfile(p) }, '⤴ Copy Share Link'),
-    ),
-
-    // ── Waitlist
-    el('div', { class:'waitlist-box' },
-      el('div', { class:'waitlist-eyebrow' }, 'Limited Availability'),
-      el('h3',  { class:'waitlist-headline' }, 'Want me to personally walk through your profile?'),
-      el('p',   { class:'waitlist-sub' }, "I work with a small number of people directly. If you want a 1-on-1 session based on your calibration above — your specific archetype, biases, and starting territory — join the waitlist. I'll reach out personally."),
-      el('div', { class:'waitlist-form' }, nameInput, emailInput, phoneInput, submitBtn, successMsg, errorMsg),
-    ),
-
-    el('div', { class:'result-cta' },
-      el('button', { class:'btn-ghost', onClick: () => { state = { step:-1, answers:{}, slider:10, profile:null }; clearProgress(); render(); } }, '↺ Recalibrate'),
-      el('span', { class:'result-note' }, 'Save this page · Revisit after your first live trade'),
-    ),
-  );
-
-  // Init charts after DOM
-  setTimeout(() => {
-    drawRadar(p.dimensions, p.archetypeColor);
-    initSimulator();
-    initPortfolioChart(p.allocation);
-    animateBiasBar();
-    initScrollReveal();
-  }, 80);
-
-  return result;
-}
 
 // ══════════════════════════════════════════════════════════
 // RADAR CHART (animated)
@@ -1271,8 +2278,106 @@ function animateBiasBar() {
 }
 
 // ══════════════════════════════════════════════════════════
-// SCROLL REVEAL
+// SHARE CARD CANVAS
 // ══════════════════════════════════════════════════════════
+
+function drawShareCard(p) {
+  const canvas = document.getElementById('shareCardCanvas');
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const W = canvas.offsetWidth || 660;
+  const H = 280;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  // Background
+  ctx.fillStyle = '#07080a';
+  ctx.fillRect(0, 0, W, H);
+
+  // Gold top line
+  ctx.fillStyle = p.archetypeColor;
+  ctx.fillRect(0, 0, W, 2);
+
+  // Left accent bar
+  ctx.fillStyle = p.archetypeColor + '33';
+  ctx.fillRect(0, 0, 3, H);
+  ctx.fillStyle = p.archetypeColor;
+  ctx.fillRect(0, 0, 3, H * 0.4);
+
+  // Grid lines
+  ctx.strokeStyle = '#1c1e26';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < W; x += 80) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+  }
+
+  // Eyebrow
+  ctx.font = '500 10px "JetBrains Mono", monospace';
+  ctx.fillStyle = '#3a3d4a';
+  ctx.letterSpacing = '0.18em';
+  ctx.fillText('INSIGHTINVEST · INVESTOR PROFILE', 28, 38);
+
+  // Archetype name
+  ctx.font = '400 52px "DM Serif Display", serif';
+  ctx.fillStyle = p.archetypeColor;
+  ctx.fillText(p.archetype, 28, 110);
+
+  // Tagline — wrapped
+  ctx.font = '300 13px "DM Sans", sans-serif';
+  ctx.fillStyle = '#6a6f82';
+  const words = p.archetypeTagline.split(' ');
+  let line = '', y = 138, maxW = W - 56;
+  for (const word of words) {
+    const test = line + word + ' ';
+    if (ctx.measureText(test).width > maxW && line) {
+      ctx.fillText(line.trim(), 28, y); line = word + ' '; y += 18;
+      if (y > 175) { ctx.fillText('...', 28, y); break; }
+    } else { line = test; }
+  }
+  if (y <= 175) ctx.fillText(line.trim(), 28, y);
+
+  // Divider
+  ctx.strokeStyle = '#1c1e26'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(28, 200); ctx.lineTo(W - 28, 200); ctx.stroke();
+
+  // Stats row
+  const stats = [
+    { label:'COMPOSITE SCORE', value:`${p.compositeScore}/100` },
+    { label:'DRAWDOWN TOLERANCE', value:p.maxDrawdown },
+    { label:'POSITION LIMIT', value:`≤${p.suggestedPosition}%` },
+    { label:'STYLE', value:p.investingStyle.split(' ')[0] },
+  ];
+  const colW = (W - 56) / stats.length;
+  stats.forEach((s, i) => {
+    const x = 28 + i * colW;
+    ctx.font = '400 20px "DM Serif Display", serif';
+    ctx.fillStyle = '#dde1eb';
+    ctx.fillText(s.value, x, 232);
+    ctx.font = '400 9px "JetBrains Mono", monospace';
+    ctx.fillStyle = '#3a3d4a';
+    ctx.fillText(s.label, x, 252);
+  });
+
+  // Watermark
+  ctx.font = '400 9px "JetBrains Mono", monospace';
+  ctx.fillStyle = '#2a2d38';
+  ctx.textAlign = 'right';
+  ctx.fillText('leiholding.com', W - 20, H - 14);
+  ctx.textAlign = 'left';
+}
+
+function downloadShareCard(p) {
+  const canvas = document.getElementById('shareCardCanvas');
+  if (!canvas) return;
+  const link = document.createElement('a');
+  link.download = `${p.archetype.toLowerCase().replace(/\s+/g,'-')}-investor-profile.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+
 
 function initScrollReveal() {
   const obs = new IntersectionObserver((entries) => {
@@ -1370,6 +2475,18 @@ function advance(val) {
   if (!q) return;
   state.answers[q.id] = val;
   saveProgress();
+
+  // Check if this step triggers a phase transition
+  if (PHASE_TRANSITIONS[state.step]) {
+    const transitionType = PHASE_TRANSITIONS[state.step];
+    state.step++;
+    state.phase_transition = transitionType;
+    const card = document.getElementById('card');
+    card.classList.add('fade-out');
+    setTimeout(() => render(), 220);
+    return;
+  }
+
   const card = document.getElementById('card');
   card.classList.add('fade-out');
   setTimeout(() => {
@@ -1390,9 +2507,39 @@ function render() {
   } else { progressWrap.style.display = 'none'; }
 
   let content;
-  if      (state.step === -1)             content = renderIntro();
-  else if (state.step < QUESTIONS.length) content = renderQuestion(QUESTIONS[state.step], state.step);
-  else                                    content = renderResult(state.profile);
+  if (state.step === -1) {
+    content = renderIntro();
+  } else if (state.phase_transition) {
+    // Render transition screen, then clear the flag so next render() shows the question
+    const transitionType = state.phase_transition;
+    state.phase_transition = null;
+    const pt = renderPhaseTransition(transitionType);
+    card.innerHTML = '';
+    card.classList.remove('fade-out');
+    card.classList.add('slide-in');
+    card.appendChild(pt);
+    setTimeout(() => card.classList.remove('slide-in'), 300);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    updateResumeButton();
+    return;
+  } else if (state.step < QUESTIONS.length) {
+    content = renderQuestion(QUESTIONS[state.step], state.step);
+  } else {
+    // Show cinematic reveal first, then render results into card
+    const profileData = state.profile;
+    showCinematicReveal(profileData, () => {
+      const resultContent = renderResult(profileData);
+      card.innerHTML = '';
+      card.classList.remove('fade-out');
+      card.classList.add('slide-in');
+      card.appendChild(resultContent);
+      setTimeout(() => card.classList.remove('slide-in'), 300);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    card.innerHTML = '';
+    updateResumeButton();
+    return;
+  }
 
   card.innerHTML = '';
   card.classList.remove('fade-out');
@@ -1404,6 +2551,7 @@ function render() {
 
   if (simChartInstance && state.step !== QUESTIONS.length) { simChartInstance.destroy(); simChartInstance = null; }
   if (portfolioChartInstance && state.step !== QUESTIONS.length) { portfolioChartInstance.destroy(); portfolioChartInstance = null; }
+  if (crashChartInstance && state.step !== QUESTIONS.length) { crashChartInstance.destroy(); crashChartInstance = null; }
 }
 
 // Init
