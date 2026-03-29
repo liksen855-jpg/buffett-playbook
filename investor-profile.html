@@ -6,22 +6,24 @@
   <title>Investor Profile — InsightInvest</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
       --gold:       #C9A84C;
       --gold-dim:   #7a5f28;
-      --gold-glow:  rgba(201,168,76,0.12);
-      --bg:         #08090b;
-      --bg2:        #0e0f13;
-      --surface:    #13141a;
-      --surface2:   #1a1c24;
-      --border:     #1e2028;
-      --border2:    #262830;
+      --gold-glow:  rgba(201,168,76,0.10);
+      --gold-glow2: rgba(201,168,76,0.18);
+      --bg:         #07080a;
+      --bg2:        #0c0d11;
+      --surface:    #111318;
+      --surface2:   #171920;
+      --border:     #1c1e26;
+      --border2:    #252830;
       --text:       #dde1eb;
       --text-dim:   #8a8fa0;
-      --text-faint: #3e4252;
+      --text-faint: #3a3d4a;
       --red:        #c0392b;
       --red-dim:    rgba(192,57,43,0.15);
       --blue:       #3b82f6;
@@ -33,653 +35,296 @@
       --cyan:       #06b6d4;
     }
 
-    html, body {
-      min-height: 100%;
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'DM Sans', system-ui, sans-serif;
-      font-size: 15px;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
+    html, body { min-height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', system-ui, sans-serif; font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
 
-    /* grain */
     body::before {
       content: '';
       position: fixed; inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");
-      pointer-events: none; z-index: 0; opacity: 0.6;
+      pointer-events: none; z-index: 0; opacity: 0.5;
     }
 
-    /* gold top bar */
     body::after {
       content: '';
       position: fixed; top: 0; left: 0; right: 0; height: 1px;
       background: linear-gradient(90deg, transparent 0%, var(--gold) 35%, var(--gold) 65%, transparent 100%);
-      z-index: 200; opacity: 0.6;
+      z-index: 200; opacity: 0.55;
     }
 
-    /* progress */
-    #progress-wrap {
-      position: fixed; top: 0; left: 0; right: 0; height: 2px;
-      z-index: 201; display: none;
-    }
-    #progress-bar {
-      height: 100%; width: 0%;
-      background: linear-gradient(90deg, var(--gold-dim), var(--gold));
-      transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
-    }
+    /* ── PROGRESS ── */
+    #progress-wrap { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 201; display: none; }
+    #progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--gold-dim), var(--gold)); transition: width 0.6s cubic-bezier(0.4,0,0.2,1); }
 
-    /* NAV */
+    /* ── NAV ── */
     #siteNav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 150;
-      background: rgba(8,9,11,0.88); backdrop-filter: blur(20px);
+      background: rgba(7,8,10,0.9); backdrop-filter: blur(24px);
       border-bottom: 1px solid var(--border);
       padding: 0 32px; height: 48px;
       display: flex; align-items: center;
     }
-    .nav-inner {
-      max-width: 760px; margin: 0 auto; width: 100%;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .nav-logo {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px; font-weight: 500;
-      color: var(--gold); letter-spacing: 0.12em;
-      text-transform: uppercase; text-decoration: none;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .nav-badge {
-      font-size: 9px; color: var(--text-dim);
-      background: var(--surface); border: 1px solid var(--border2);
-      padding: 3px 10px; letter-spacing: 0.1em;
-      font-family: 'JetBrains Mono', monospace;
-    }
+    .nav-inner { max-width: 760px; margin: 0 auto; width: 100%; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; color: var(--gold); letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+    .nav-badge { font-size: 9px; color: var(--text-dim); background: var(--surface); border: 1px solid var(--border2); padding: 3px 10px; letter-spacing: 0.1em; font-family: 'JetBrains Mono', monospace; }
+    .nav-resume { font-size: 9px; color: var(--gold); background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.25); padding: 3px 12px; letter-spacing: 0.1em; font-family: 'JetBrains Mono', monospace; cursor: pointer; display: none; transition: background 0.15s; }
+    .nav-resume:hover { background: rgba(201,168,76,0.15); }
 
-    /* APP */
-    #app {
-      min-height: 100vh;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: flex-start;
-      padding: 96px 20px 100px;
-      position: relative; z-index: 1;
-    }
+    /* ── APP ── */
+    #app { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 88px 20px 100px; position: relative; z-index: 1; }
 
-    .card {
-      width: 100%; max-width: 660px;
-      transition: opacity 0.26s ease, transform 0.26s ease;
-    }
-    .card.fade-out { opacity: 0; transform: translateY(8px); }
+    .card { width: 100%; max-width: 660px; transition: opacity 0.22s ease, transform 0.22s ease; }
+    .card.fade-out { opacity: 0; transform: translateY(10px); }
+    .card.slide-in { animation: slideIn 0.28s cubic-bezier(0.16,1,0.3,1) forwards; }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: translateX(0); } }
 
-    /* EYEBROW */
-    .eyebrow {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px; font-weight: 400;
-      letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--gold); margin-bottom: 24px;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .eyebrow::before {
-      content: '';
-      display: inline-block; width: 20px; height: 1px;
-      background: var(--gold); opacity: 0.6;
-    }
+    /* ── EYEBROW ── */
+    .eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+    .eyebrow::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--gold); opacity: 0.6; }
 
-    /* HERO */
-    h1.hero {
-      font-family: 'DM Serif Display', Georgia, serif;
-      font-size: clamp(30px, 5vw, 48px);
-      font-weight: 400; line-height: 1.1;
-      color: var(--text); margin-bottom: 20px;
-      letter-spacing: -0.01em;
-    }
+    /* ── HERO ── */
+    h1.hero { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(30px, 5vw, 48px); font-weight: 400; line-height: 1.1; color: var(--text); margin-bottom: 20px; letter-spacing: -0.01em; }
     h1.hero em { font-style: italic; color: var(--gold); }
+    p.lead { font-size: 15px; font-weight: 300; color: var(--text-dim); line-height: 1.75; margin-bottom: 36px; max-width: 500px; }
 
-    p.lead {
-      font-size: 15px; font-weight: 300;
-      color: var(--text-dim); line-height: 1.75;
-      margin-bottom: 36px; max-width: 500px;
-    }
+    /* ── INTRO STATS ── */
+    .intro-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); margin-bottom: 40px; border: 1px solid var(--border); }
+    .intro-cell { background: var(--surface); padding: 18px 16px; }
+    .intro-cell-val { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--text); margin-bottom: 4px; line-height: 1; }
+    .intro-cell-desc { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; line-height: 1.5; white-space: pre-line; }
 
-    /* INTRO STATS */
-    .intro-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 1px; background: var(--border);
-      margin-bottom: 40px; border: 1px solid var(--border);
-    }
-    .intro-cell {
-      background: var(--surface); padding: 18px 16px;
-    }
-    .intro-cell-val {
-      font-family: 'DM Serif Display', serif;
-      font-size: 22px; color: var(--text);
-      margin-bottom: 4px; line-height: 1;
-    }
-    .intro-cell-desc {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9px; color: var(--text-dim);
-      letter-spacing: 0.1em; text-transform: uppercase;
-      line-height: 1.5;
-    }
-
-    /* PHASE PROGRESS (top of question) */
-    .phase-header {
-      display: flex; align-items: center; gap: 0;
-      margin-bottom: 32px; background: var(--surface);
-      border: 1px solid var(--border);
-    }
-    .phase-seg {
-      flex: 1; padding: 10px 14px;
-      border-right: 1px solid var(--border);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9px; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--text-faint);
-      transition: color 0.2s, background 0.2s;
-    }
+    /* ── PHASE HEADER ── */
+    .phase-header { display: flex; align-items: center; gap: 0; margin-bottom: 32px; background: var(--surface); border: 1px solid var(--border); }
+    .phase-seg { flex: 1; padding: 10px 14px; border-right: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); transition: color 0.2s, background 0.2s; }
     .phase-seg:last-child { border-right: none; }
     .phase-seg.active { color: var(--gold); background: var(--gold-glow); }
     .phase-seg.done { color: var(--text-dim); }
-    .phase-seg .seg-num {
-      display: block; margin-bottom: 2px;
-      font-size: 8px; opacity: 0.5;
-    }
-    .step-dot-row {
-      display: flex; align-items: center; gap: 6px;
-      margin-bottom: 32px;
-    }
-    .step-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--border2); transition: all 0.25s;
-    }
+    .phase-seg .seg-num { display: block; margin-bottom: 2px; font-size: 8px; opacity: 0.5; }
+
+    .step-dot-row { display: flex; align-items: center; gap: 6px; margin-bottom: 32px; }
+    .step-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border2); transition: all 0.25s; }
     .step-dot.done { background: var(--gold-dim); }
     .step-dot.active { background: var(--gold); box-shadow: 0 0 8px var(--gold-dim); }
-    .step-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px; color: var(--text-dim);
-      margin-left: auto; letter-spacing: 0.08em;
-    }
+    .step-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-dim); margin-left: auto; letter-spacing: 0.08em; }
 
-    /* QUESTION */
-    h2.question {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(20px, 3.5vw, 28px);
-      font-weight: 400; line-height: 1.3;
-      color: var(--text); margin-bottom: 8px;
-      letter-spacing: -0.01em;
-    }
-    p.subtext {
-      font-size: 13px; font-weight: 300;
-      color: var(--text-dim); font-style: italic;
-      margin-bottom: 28px; line-height: 1.6;
-    }
+    /* ── QUESTION ── */
+    h2.question { font-family: 'DM Serif Display', serif; font-size: clamp(20px, 3.5vw, 28px); font-weight: 400; line-height: 1.3; color: var(--text); margin-bottom: 8px; letter-spacing: -0.01em; }
+    p.subtext { font-size: 13px; font-weight: 300; color: var(--text-dim); font-style: italic; margin-bottom: 28px; line-height: 1.6; }
 
-    /* OPTIONS */
+    .q-why-btn { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-faint); letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid var(--border2); background: transparent; cursor: pointer; padding: 4px 10px; margin-bottom: 24px; transition: color 0.15s, border-color 0.15s; display: inline-block; }
+    .q-why-btn:hover { color: var(--gold); border-color: var(--gold-dim); }
+    .q-why-box { background: var(--gold-glow); border: 1px solid rgba(201,168,76,0.15); border-left: 2px solid var(--gold); padding: 12px 16px; font-size: 12px; font-weight: 300; color: var(--text-dim); line-height: 1.65; font-style: italic; margin-bottom: 20px; display: none; }
+    .q-why-box.visible { display: block; animation: fadeUp 0.2s ease; }
+    @keyframes fadeUp { from { opacity:0; transform: translateY(4px); } to { opacity:1; transform: translateY(0); } }
+
+    /* ── OPTIONS ── */
     .options-col { display: flex; flex-direction: column; gap: 6px; }
-
-    .opt-row {
-      width: 100%; background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text); padding: 14px 18px;
-      cursor: pointer; font-family: 'DM Sans', sans-serif;
-      text-align: left;
-      display: flex; justify-content: space-between; align-items: center;
-      transition: background 0.15s, border-color 0.15s;
-    }
-    .opt-row:hover  { border-color: var(--gold-dim); background: var(--gold-glow); }
-    .opt-row.active { border-color: var(--gold); background: var(--gold-glow); }
+    .opt-row { width: 100%; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 14px 18px; cursor: pointer; font-family: 'DM Sans', sans-serif; text-align: left; display: flex; justify-content: space-between; align-items: center; transition: background 0.15s, border-color 0.15s, transform 0.12s; }
+    .opt-row:hover { border-color: var(--gold-dim); background: var(--gold-glow); transform: translateX(2px); }
+    .opt-row.active { border-color: var(--gold); background: var(--gold-glow2); }
     .opt-label { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
     .opt-row.active .opt-label { color: var(--gold); }
     .opt-sub { font-size: 12px; color: var(--text-dim); font-weight: 300; }
-    .opt-dot {
-      width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
-      margin-left: 16px; border: 1px solid var(--text-faint);
-      background: transparent; transition: all 0.15s;
-    }
+    .opt-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-left: 16px; border: 1px solid var(--text-faint); background: transparent; transition: all 0.15s; }
     .opt-row.active .opt-dot { background: var(--gold); border-color: var(--gold); }
 
     .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-    .opt-card {
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--text); padding: 16px 14px;
-      cursor: pointer; font-family: 'DM Sans', sans-serif;
-      text-align: left; transition: background 0.15s, border-color 0.15s;
-    }
-    .opt-card:hover  { border-color: var(--gold-dim); background: var(--gold-glow); }
-    .opt-card.active { border-color: var(--gold); background: var(--gold-glow); }
+    .opt-card { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 16px 14px; cursor: pointer; font-family: 'DM Sans', sans-serif; text-align: left; transition: background 0.15s, border-color 0.15s, transform 0.12s; }
+    .opt-card:hover { border-color: var(--gold-dim); background: var(--gold-glow); transform: translateY(-1px); }
+    .opt-card.active { border-color: var(--gold); background: var(--gold-glow2); }
     .opt-card .opt-label { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
     .opt-card.active .opt-label { color: var(--gold); }
     .opt-card .opt-sub { font-size: 11px; color: var(--text-dim); font-weight: 300; line-height: 1.5; }
 
-    /* SLIDER */
-    .slider-display {
-      text-align: center; padding: 28px 0 20px;
-      border: 1px solid var(--border); background: var(--surface);
-      margin-bottom: 16px;
-    }
-    .slider-big {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(56px, 14vw, 88px);
-      color: var(--gold); font-weight: 400; line-height: 1;
-    }
-    .slider-unit {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px; color: var(--text-dim);
-      letter-spacing: 0.12em; text-transform: uppercase;
-      margin-top: 8px;
-    }
-    .slider-hint {
-      text-align: center; font-size: 12px; font-weight: 300;
-      font-style: italic; margin: 8px 0 20px;
-      min-height: 20px; transition: color 0.2s;
-    }
-    input[type=range] {
-      -webkit-appearance: none; width: 100%;
-      height: 1px; background: var(--border2);
-      outline: none; margin-bottom: 12px;
-      display: block; cursor: pointer;
-    }
-    input[type=range]::-webkit-slider-thumb {
-      -webkit-appearance: none; width: 16px; height: 16px;
-      background: var(--gold); border-radius: 0;
-      cursor: pointer; box-shadow: 0 0 10px rgba(201,168,76,0.4);
-    }
-    input[type=range]::-moz-range-thumb {
-      width: 16px; height: 16px; background: var(--gold);
-      border-radius: 0; border: none; cursor: pointer;
-    }
-    .slider-labels {
-      display: flex; justify-content: space-between;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9px; color: var(--text-faint);
-      letter-spacing: 0.08em; margin-bottom: 24px;
-    }
+    /* ── SLIDER ── */
+    .slider-display { text-align: center; padding: 28px 0 20px; border: 1px solid var(--border); background: var(--surface); margin-bottom: 16px; position: relative; overflow: hidden; }
+    .slider-display::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--gold); opacity: 0.2; }
+    .slider-big { font-family: 'DM Serif Display', serif; font-size: clamp(56px, 14vw, 88px); color: var(--gold); font-weight: 400; line-height: 1; transition: color 0.3s; }
+    .slider-unit { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 8px; }
+    .slider-hint { text-align: center; font-size: 12px; font-weight: 300; font-style: italic; margin: 8px 0 20px; min-height: 20px; transition: color 0.3s; }
+    input[type=range] { -webkit-appearance: none; width: 100%; height: 1px; background: var(--border2); outline: none; margin-bottom: 12px; display: block; cursor: pointer; }
+    input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; background: var(--gold); border-radius: 0; cursor: pointer; box-shadow: 0 0 12px rgba(201,168,76,0.4); transition: box-shadow 0.2s; }
+    input[type=range]:hover::-webkit-slider-thumb { box-shadow: 0 0 20px rgba(201,168,76,0.6); }
+    input[type=range]::-moz-range-thumb { width: 16px; height: 16px; background: var(--gold); border-radius: 0; border: none; cursor: pointer; }
+    .slider-labels { display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-faint); letter-spacing: 0.08em; margin-bottom: 24px; }
 
-    /* BUTTONS */
-    .btn-primary {
-      background: transparent; border: 1px solid var(--gold);
-      color: var(--gold); padding: 13px 32px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px; font-weight: 500;
-      letter-spacing: 0.15em; text-transform: uppercase;
-      cursor: pointer; transition: background 0.18s, color 0.18s;
-    }
-    .btn-primary:hover { background: var(--gold); color: var(--bg); }
-
-    .btn-ghost {
-      background: transparent; border: 1px solid var(--border2);
-      color: var(--text-dim); padding: 11px 22px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px; letter-spacing: 0.12em;
-      text-transform: uppercase; cursor: pointer;
-      transition: border-color 0.18s, color 0.18s;
-    }
+    /* ── BUTTONS ── */
+    .btn-primary { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 13px 32px; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; transition: background 0.18s, color 0.18s, box-shadow 0.18s; }
+    .btn-primary:hover { background: var(--gold); color: var(--bg); box-shadow: 0 0 24px rgba(201,168,76,0.25); }
+    .btn-ghost { background: transparent; border: 1px solid var(--border2); color: var(--text-dim); padding: 11px 22px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: border-color 0.18s, color 0.18s; }
     .btn-ghost:hover { border-color: var(--text-dim); color: var(--text); }
 
-    /* ════════════════════════════════
+    /* ── CONTRADICTION ALERT ── */
+    .contradiction-box { background: rgba(192,57,43,0.08); border: 1px solid rgba(192,57,43,0.3); border-left: 3px solid var(--red); padding: 14px 18px; margin-bottom: 24px; animation: fadeUp 0.3s ease; }
+    .contradiction-title { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--red); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 6px; }
+    .contradiction-text { font-size: 12px; font-weight: 300; color: #e07070; line-height: 1.65; }
+
+    /* ══════════════════════════════════
        RESULTS PAGE
-    ════════════════════════════════ */
-    .result-header { margin-bottom: 40px; }
-    .result-eyebrow {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px; letter-spacing: 0.18em;
-      text-transform: uppercase; color: var(--gold);
-      margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
-    }
-    .result-eyebrow::before {
-      content:''; width:20px; height:1px; background:var(--gold); opacity:0.6;
-    }
+    ══════════════════════════════════ */
+    .result-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+    .result-eyebrow::before { content:''; width:20px; height:1px; background:var(--gold); opacity:0.6; }
 
-    .archetype-reveal {
-      padding: 32px 28px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--gold);
-      margin-bottom: 2px;
-    }
-    .archetype-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9px; letter-spacing: 0.18em;
-      text-transform: uppercase; color: var(--text-dim);
-      margin-bottom: 10px;
-    }
-    .archetype-name {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(32px, 6vw, 52px);
-      font-weight: 400; line-height: 1.05;
-      margin-bottom: 16px; letter-spacing: -0.01em;
-    }
-    .archetype-tagline {
-      font-size: 13px; font-weight: 300; font-style: italic;
-      color: var(--text-dim); line-height: 1.7;
-      max-width: 520px; margin-bottom: 0;
-    }
+    .archetype-reveal { padding: 32px 28px; background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--gold); margin-bottom: 2px; }
+    .archetype-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 10px; }
+    .archetype-name { font-family: 'DM Serif Display', serif; font-size: clamp(32px, 6vw, 52px); font-weight: 400; line-height: 1.05; margin-bottom: 16px; letter-spacing: -0.01em; }
+    .archetype-tagline { font-size: 13px; font-weight: 300; font-style: italic; color: var(--text-dim); line-height: 1.7; max-width: 520px; margin-bottom: 0; }
 
-    /* SECTION LABEL */
-    .section-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9px; letter-spacing: 0.2em;
-      text-transform: uppercase; color: var(--text-faint);
-      margin: 32px 0 14px;
-      display: flex; align-items: center; gap: 12px;
-    }
-    .section-label::after {
-      content: ''; flex: 1; height: 1px;
-      background: var(--border); display: block;
-    }
+    /* Stability badge */
+    .archetype-stability { display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 16px; padding: 5px 12px; border: 1px solid; }
 
-    /* STATS GRID */
-    .stats-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 1px; background: var(--border); margin-bottom: 2px;
-    }
-    .stat-cell {
-      background: var(--surface); padding: 20px 16px;
-    }
-    .stat-cell-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9px; color: var(--text-faint);
-      letter-spacing: 0.14em; text-transform: uppercase;
-      margin-bottom: 10px; display: block;
-    }
-    .stat-cell-value {
-      font-family: 'DM Serif Display', serif;
-      font-size: 24px; font-weight: 400;
-      color: var(--text); line-height: 1; margin-bottom: 4px;
-    }
-    .stat-cell-note {
-      font-size: 11px; font-weight: 300;
-      color: var(--text-dim); margin-top: 4px;
-    }
+    .section-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-faint); margin: 32px 0 14px; display: flex; align-items: center; gap: 12px; }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); display: block; }
 
-    /* RADAR CHART */
-    .radar-wrap {
-      background: var(--surface); border: 1px solid var(--border);
-      padding: 28px 20px; margin-bottom: 2px;
-    }
-    .radar-title {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9px; letter-spacing: 0.16em;
-      color: var(--text-dim); text-transform: uppercase;
-      margin-bottom: 20px; display: block;
-    }
-    .radar-container {
-      display: grid; grid-template-columns: 1fr 200px;
-      gap: 24px; align-items: center;
-    }
+    /* ── STATS ── */
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); margin-bottom: 2px; }
+    .stat-cell { background: var(--surface); padding: 20px 16px; }
+    .stat-cell-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-faint); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 10px; display: block; }
+    .stat-cell-value { font-family: 'DM Serif Display', serif; font-size: 24px; font-weight: 400; color: var(--text); line-height: 1; margin-bottom: 4px; }
+    .stat-cell-note { font-size: 11px; font-weight: 300; color: var(--text-dim); margin-top: 4px; }
+
+    /* ── RADAR ── */
+    .radar-wrap { background: var(--surface); border: 1px solid var(--border); padding: 28px 20px; margin-bottom: 2px; }
+    .radar-title { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.16em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 20px; display: block; }
+    .radar-container { display: grid; grid-template-columns: 1fr 200px; gap: 24px; align-items: center; }
     #radarCanvas { width: 100%; display: block; }
     .radar-legend { display: flex; flex-direction: column; gap: 10px; }
     .radar-leg-item { display: flex; align-items: flex-start; gap: 10px; }
-    .radar-leg-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      flex-shrink: 0; margin-top: 4px;
-    }
-    .radar-leg-name {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9px; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--text-dim);
-      margin-bottom: 2px;
-    }
-    .radar-leg-val {
-      font-family: 'DM Serif Display', serif;
-      font-size: 16px; color: var(--text);
-    }
+    .radar-leg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+    .radar-leg-name { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 2px; }
+    .radar-leg-val { font-family: 'DM Serif Display', serif; font-size: 16px; color: var(--text); }
 
-    /* BEHAVIORAL BIASES */
-    .bias-grid {
-      display: flex; flex-direction: column; gap: 1px;
-      background: var(--border); margin-bottom: 2px;
-    }
-    .bias-row {
-      background: var(--surface); padding: 14px 18px;
-      display: flex; align-items: center; gap: 16px;
-    }
-    .bias-icon {
-      width: 32px; height: 32px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 14px; flex-shrink: 0;
-    }
+    /* ── OUTCOME SIMULATOR ── */
+    .simulator-wrap { background: var(--surface); border: 1px solid var(--border); padding: 24px 20px; margin-bottom: 2px; }
+    .simulator-title { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.16em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 20px; display: block; }
+    .simulator-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+    .sim-control-group { display: flex; flex-direction: column; gap: 8px; }
+    .sim-control-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; display: flex; justify-content: space-between; }
+    .sim-control-label span { color: var(--gold); }
+    .sim-chart-wrap { position: relative; height: 220px; }
+    .sim-result-row { display: flex; gap: 1px; background: var(--border); margin-top: 16px; }
+    .sim-result-cell { flex: 1; background: var(--bg2); padding: 12px 14px; }
+    .sim-result-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-faint); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+    .sim-result-val { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--gold); }
+
+    /* ── BIASES ── */
+    .bias-grid { display: flex; flex-direction: column; gap: 1px; background: var(--border); margin-bottom: 2px; }
+    .bias-row { background: var(--surface); padding: 14px 18px; display: flex; align-items: center; gap: 16px; }
+    .bias-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
     .bias-content { flex: 1; }
-    .bias-name {
-      font-size: 13px; font-weight: 500; color: var(--text);
-      margin-bottom: 2px;
-    }
-    .bias-desc {
-      font-size: 11px; font-weight: 300; color: var(--text-dim);
-      line-height: 1.5;
-    }
-    .bias-bar-wrap {
-      width: 80px; flex-shrink: 0;
-    }
-    .bias-bar-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9px; color: var(--text-faint);
-      text-align: right; margin-bottom: 4px;
-    }
-    .bias-bar {
-      height: 3px; background: var(--border2); border-radius: 2px;
-    }
-    .bias-bar-fill {
-      height: 100%; border-radius: 2px;
-      transition: width 1s ease;
-    }
+    .bias-name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+    .bias-desc { font-size: 11px; font-weight: 300; color: var(--text-dim); line-height: 1.5; }
+    .bias-bar-wrap { width: 80px; flex-shrink: 0; }
+    .bias-bar-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-faint); text-align: right; margin-bottom: 4px; }
+    .bias-bar { height: 3px; background: var(--border2); border-radius: 2px; }
+    .bias-bar-fill { height: 100%; border-radius: 2px; width: 0%; transition: width 1.4s cubic-bezier(0.16,1,0.3,1); }
 
-    /* PORTFOLIO MODEL */
-    .alloc-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 1px; background: var(--border); margin-bottom: 2px;
-    }
-    .alloc-cell {
-      background: var(--surface); padding: 16px;
-      display: flex; align-items: center; gap: 14px;
-    }
-    .alloc-bar-vert {
-      width: 3px; height: 48px; border-radius: 2px; flex-shrink: 0;
-    }
-    .alloc-pct {
-      font-family: 'DM Serif Display', serif;
-      font-size: 28px; font-weight: 400; line-height: 1;
-      color: var(--text);
-    }
-    .alloc-info {}
-    .alloc-class {
-      font-size: 13px; font-weight: 500; color: var(--text);
-      margin-bottom: 2px;
-    }
-    .alloc-why {
-      font-size: 11px; font-weight: 300;
-      color: var(--text-dim); line-height: 1.4;
-    }
+    /* ── PORTFOLIO CHART ── */
+    .portfolio-wrap { background: var(--surface); border: 1px solid var(--border); padding: 24px 20px; margin-bottom: 2px; }
+    .portfolio-container { display: grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: center; }
+    .portfolio-chart-wrap { position: relative; width: 220px; height: 220px; }
+    .portfolio-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; pointer-events: none; }
+    .portfolio-center-val { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--text); line-height: 1; }
+    .portfolio-center-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px; }
+    .portfolio-legend { display: flex; flex-direction: column; gap: 10px; }
+    .portfolio-leg-row { display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 8px 10px; border: 1px solid transparent; transition: border-color 0.15s, background 0.15s; border-radius: 2px; }
+    .portfolio-leg-row:hover { border-color: var(--border2); background: var(--surface2); }
+    .portfolio-leg-bar { width: 3px; height: 36px; flex-shrink: 0; border-radius: 1px; }
+    .portfolio-leg-pct { font-family: 'DM Serif Display', serif; font-size: 22px; line-height: 1; min-width: 48px; }
+    .portfolio-leg-info {}
+    .portfolio-leg-class { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 1px; }
+    .portfolio-leg-why { font-size: 10px; font-weight: 300; color: var(--text-dim); line-height: 1.4; }
 
-    /* EQUITY BOX */
-    .equity-box {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-top: 2px solid var(--gold);
-      padding: 22px; margin-bottom: 2px;
-    }
-    .equity-eyebrow {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9px; color: var(--gold);
-      letter-spacing: 0.16em; text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-    .equity-name {
-      font-family: 'DM Serif Display', serif;
-      font-size: 20px; color: var(--text);
-      margin-bottom: 8px;
-    }
-    .equity-why {
-      font-size: 13px; font-weight: 300;
-      color: var(--text-dim); line-height: 1.65;
-      margin-bottom: 14px; font-style: italic;
-    }
+    /* ── EQUITY BOX ── */
+    .equity-box { background: var(--surface); border: 1px solid var(--border); border-top: 2px solid var(--gold); padding: 22px; margin-bottom: 2px; }
+    .equity-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--gold); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 10px; }
+    .equity-name { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--text); margin-bottom: 8px; }
+    .equity-why { font-size: 13px; font-weight: 300; color: var(--text-dim); line-height: 1.65; margin-bottom: 14px; font-style: italic; }
     .equity-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-    .equity-tag {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px; color: var(--gold);
-      border: 1px solid rgba(201,168,76,0.25);
-      padding: 3px 10px; letter-spacing: 0.06em;
-    }
+    .equity-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--gold); border: 1px solid rgba(201,168,76,0.25); padding: 3px 10px; letter-spacing: 0.06em; }
 
-    /* FRAMEWORK RULES */
-    .rules-box {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 22px; margin-bottom: 2px;
-    }
-    .rules-eyebrow {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9px; color: var(--text-dim);
-      letter-spacing: 0.16em; text-transform: uppercase;
-      margin-bottom: 18px;
-    }
-    .rule-row {
-      display: flex; gap: 16px;
-      padding: 12px 0; border-bottom: 1px solid var(--border);
-      align-items: flex-start;
-    }
+    /* ── RULES ── */
+    .rules-box { background: var(--surface); border: 1px solid var(--border); padding: 22px; margin-bottom: 2px; }
+    .rules-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-dim); letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 18px; }
+    .rule-row { display: flex; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
     .rule-row:last-child { border-bottom: none; }
-    .rule-num {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px; flex-shrink: 0; margin-top: 2px;
-      font-weight: 400;
-    }
+    .rule-num { font-family: 'JetBrains Mono', monospace; font-size: 10px; flex-shrink: 0; margin-top: 2px; font-weight: 400; }
     .rule-text { font-size: 13px; font-weight: 300; color: var(--text-dim); line-height: 1.65; }
     .rule-text strong { color: var(--text); font-weight: 500; }
 
-    /* LEARNING PATH */
-    .path-grid {
-      display: flex; flex-direction: column; gap: 1px;
-      background: var(--border); margin-bottom: 2px;
-    }
-    .path-row {
-      background: var(--surface); padding: 14px 18px;
-      display: flex; align-items: center; gap: 14px;
-    }
-    .path-step {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px; color: var(--text-faint);
-      min-width: 24px;
-    }
+    /* ── LEARNING PATH ── */
+    .path-grid { display: flex; flex-direction: column; gap: 1px; background: var(--border); margin-bottom: 2px; }
+    .path-row { background: var(--surface); padding: 14px 18px; display: flex; align-items: center; gap: 14px; transition: background 0.15s; }
+    .path-row:hover { background: var(--surface2); }
+    .path-step { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-faint); min-width: 24px; }
     .path-content { flex: 1; }
-    .path-title {
-      font-size: 13px; font-weight: 500; color: var(--text);
-      margin-bottom: 1px;
-    }
-    .path-sub {
-      font-size: 11px; font-weight: 300;
-      color: var(--text-dim);
-    }
-    .path-tag {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9px; padding: 3px 8px;
-      border-radius: 2px; letter-spacing: 0.08em;
-      text-transform: uppercase; white-space: nowrap;
-    }
+    .path-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 1px; }
+    .path-sub { font-size: 11px; font-weight: 300; color: var(--text-dim); }
+    .path-tag { font-family: 'JetBrains Mono', monospace; font-size: 9px; padding: 3px 8px; border-radius: 2px; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
 
-    /* WARNING */
-    .warning-box {
-      background: var(--red-dim);
-      border: 1px solid rgba(192,57,43,0.3); border-top: none;
-      padding: 14px 18px; margin-bottom: 2px;
-    }
-    .warning-text {
-      font-size: 12px; font-weight: 300;
-      color: #e07070; line-height: 1.65;
-    }
+    /* ── READING LIST ── */
+    .reading-grid { display: flex; flex-direction: column; gap: 1px; background: var(--border); margin-bottom: 2px; }
+    .reading-row { background: var(--surface); padding: 14px 18px; display: flex; align-items: flex-start; gap: 14px; }
+    .reading-type { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; white-space: nowrap; margin-top: 2px; }
+    .reading-content {}
+    .reading-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+    .reading-author { font-size: 11px; font-weight: 300; color: var(--text-dim); }
 
-    /* INSIGHT BOX */
-    .insight-box {
-      background: rgba(201,168,76,0.04);
-      border: 1px solid rgba(201,168,76,0.2);
-      padding: 20px; margin-bottom: 2px;
-    }
-    .insight-eyebrow {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9px; color: var(--gold);
-      letter-spacing: 0.14em; text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-    .insight-text {
-      font-size: 13px; font-weight: 300;
-      color: var(--text-dim); line-height: 1.7;
-    }
+    /* ── WARNING ── */
+    .warning-box { background: var(--red-dim); border: 1px solid rgba(192,57,43,0.3); border-top: none; padding: 14px 18px; margin-bottom: 2px; }
+    .warning-text { font-size: 12px; font-weight: 300; color: #e07070; line-height: 1.65; }
+
+    /* ── INSIGHT ── */
+    .insight-box { background: rgba(201,168,76,0.04); border: 1px solid rgba(201,168,76,0.2); padding: 20px; margin-bottom: 2px; }
+    .insight-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--gold); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 8px; }
+    .insight-text { font-size: 13px; font-weight: 300; color: var(--text-dim); line-height: 1.7; }
     .insight-text strong { color: var(--text); font-weight: 500; }
 
-    /* WAITLIST */
-    .waitlist-box {
-      background: var(--surface2);
-      border: 1px solid rgba(201,168,76,0.3);
-      padding: 28px; margin-top: 2px;
-    }
-    .waitlist-eyebrow {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9px; color: var(--gold);
-      letter-spacing: 0.18em; text-transform: uppercase;
-      margin-bottom: 12px;
-    }
-    .waitlist-headline {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(18px, 3vw, 24px);
-      font-weight: 400; line-height: 1.2;
-      color: var(--text); margin-bottom: 8px;
-    }
-    .waitlist-sub {
-      font-size: 13px; font-weight: 300;
-      color: var(--text-dim); line-height: 1.7;
-      margin-bottom: 22px;
-    }
+    /* ── PDF EXPORT BTN ── */
+    .export-row { display: flex; gap: 10px; margin-bottom: 2px; }
+    .btn-export { background: transparent; border: 1px solid var(--border2); color: var(--text-dim); padding: 11px 22px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: border-color 0.18s, color 0.18s; flex: 1; }
+    .btn-export:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+    /* ── REMINDER OPT-IN ── */
+    .reminder-box { background: var(--surface); border: 1px solid var(--border); padding: 18px 20px; margin-bottom: 2px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .reminder-text { flex: 1; font-size: 12px; font-weight: 300; color: var(--text-dim); line-height: 1.6; min-width: 200px; }
+    .reminder-text strong { color: var(--text); font-weight: 500; }
+    .reminder-input { background: var(--bg); border: 1px solid var(--border2); color: var(--text); padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 300; outline: none; width: 200px; transition: border-color 0.15s; }
+    .reminder-input:focus { border-color: var(--gold-dim); }
+    .reminder-input::placeholder { color: var(--text-faint); }
+    .reminder-submit { background: transparent; border: 1px solid var(--gold-dim); color: var(--gold); padding: 10px 18px; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; white-space: nowrap; transition: background 0.15s; }
+    .reminder-submit:hover { background: var(--gold-glow); }
+    .reminder-success { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--gold); display: none; }
+
+    /* ── WAITLIST ── */
+    .waitlist-box { background: var(--surface2); border: 1px solid rgba(201,168,76,0.3); padding: 28px; margin-top: 2px; }
+    .waitlist-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--gold); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 12px; }
+    .waitlist-headline { font-family: 'DM Serif Display', serif; font-size: clamp(18px, 3vw, 24px); font-weight: 400; line-height: 1.2; color: var(--text); margin-bottom: 8px; }
+    .waitlist-sub { font-size: 13px; font-weight: 300; color: var(--text-dim); line-height: 1.7; margin-bottom: 22px; }
     .waitlist-form { display: flex; flex-direction: column; gap: 8px; }
-    .waitlist-input {
-      background: var(--bg); border: 1px solid var(--border2);
-      color: var(--text); padding: 13px 16px;
-      font-family: 'DM Sans', sans-serif; font-size: 14px;
-      font-weight: 300; outline: none; transition: border-color 0.15s;
-      width: 100%;
-    }
+    .waitlist-input { background: var(--bg); border: 1px solid var(--border2); color: var(--text); padding: 13px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300; outline: none; transition: border-color 0.15s; width: 100%; }
     .waitlist-input:focus { border-color: var(--gold-dim); }
     .waitlist-input::placeholder { color: var(--text-faint); }
-    .waitlist-submit {
-      background: var(--gold); border: none;
-      color: var(--bg); padding: 13px 24px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px; font-weight: 500;
-      letter-spacing: 0.15em; text-transform: uppercase;
-      cursor: pointer; transition: opacity 0.18s;
-      align-self: flex-start;
-    }
+    .waitlist-submit { background: var(--gold); border: none; color: var(--bg); padding: 13px 24px; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; transition: opacity 0.18s; align-self: flex-start; }
     .waitlist-submit:hover { opacity: 0.85; }
-    .waitlist-success {
-      display: none; font-size: 13px; font-weight: 300;
-      color: var(--gold); font-style: italic; padding: 12px 0;
-    }
+    .waitlist-success { display: none; font-size: 13px; font-weight: 300; color: var(--gold); font-style: italic; padding: 12px 0; }
 
-    /* RESULT CTA */
-    .result-cta {
-      margin-top: 36px; display: flex;
-      gap: 16px; align-items: center; flex-wrap: wrap;
-    }
-    .result-note {
-      font-size: 11px; font-weight: 300;
-      color: var(--text-faint); font-style: italic;
-    }
+    .result-cta { margin-top: 36px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+    .result-note { font-size: 11px; font-weight: 300; color: var(--text-faint); font-style: italic; }
 
-    /* FOOTER */
-    footer {
-      position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9px; color: var(--text-faint);
-      letter-spacing: 0.14em; text-transform: uppercase;
-      z-index: 1; white-space: nowrap;
-    }
+    /* ── SCROLL REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    footer { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-faint); letter-spacing: 0.14em; text-transform: uppercase; z-index: 1; white-space: nowrap; }
 
     @media (max-width: 560px) {
       .options-grid { grid-template-columns: 1fr; }
-      .stats-grid   { grid-template-columns: 1fr 1fr; }
-      .intro-grid   { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .intro-grid { grid-template-columns: 1fr; }
       .radar-container { grid-template-columns: 1fr; }
-      .alloc-grid   { grid-template-columns: 1fr; }
+      .portfolio-container { grid-template-columns: 1fr; }
       .radar-legend { flex-direction: row; flex-wrap: wrap; }
+      .simulator-controls { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -691,231 +336,144 @@
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
       Insight Invest
     </a>
-    <span class="nav-badge">Investor Profile</span>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button class="nav-resume" id="navResume" onclick="resumeProgress()">↺ Resume</button>
+      <span class="nav-badge">Investor Profile</span>
+    </div>
   </div>
 </div>
 
 <div id="progress-wrap"><div id="progress-bar"></div></div>
-
-<div id="app">
-  <div class="card" id="card"></div>
-</div>
-
+<div id="app"><div class="card" id="card"></div></div>
 <footer>InsightInvest · leiholding.com</footer>
 
 <script>
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 // DATA
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 
-const PHASE_COLORS = {
-  SENTIMENT: '#c0392b',
-  FILTER:    '#C9A84C',
-  FRAMEWORK: '#22c55e',
+const PHASE_COLORS = { SENTIMENT: '#c0392b', FILTER: '#C9A84C', FRAMEWORK: '#22c55e' };
+
+const Q_WHY = {
+  loss_reaction:    'Research shows that losses feel roughly 2.5× more painful than equivalent gains feel good. How you respond to this question predicts your behaviour in a real drawdown better than almost anything else you could tell us.',
+  gain_reaction:    'The disposition effect — the tendency to sell winners too early — is one of the most documented and costly investor biases. This question reveals whether you are likely to let your winners run.',
+  drawdown_reaction:'Most investors say they are long-term until they experience a 25% single-day move. This question bypasses your rational answer to get your instinctive one.',
+  regret_style:     'Regret for inaction ("I didn\'t buy") and regret for action ("I bought and it fell") shape completely different risk-taking patterns. Understanding yours helps you build pre-commitment rules before you need them.',
+  conviction_style: 'The ability to hold a well-researched position against expert consensus is one of the rarest and most valuable edges in investing. Most retail investors systematically defer when they shouldn\'t.',
+  position_size:    'Position sizing is the single variable that most directly determines your risk of ruin. A correct thesis in an oversized position can still permanently impair your capital if the drawdown exceeds your capacity to hold.',
+  familiarity:      'Peter Lynch called this "invest in what you know." The edge isn\'t just familiarity — it\'s the speed and accuracy of detecting when something has fundamentally changed.',
+  time_horizon:     'Time is the retail investor\'s only genuine structural advantage over institutions. A fund manager faces quarterly redemptions; you don\'t. Most investors waste this edge by thinking short-term.',
+  risk_capacity:    'Risk tolerance and risk capacity are not the same thing. Tolerance is psychological; capacity is financial. High tolerance with low capacity is the most dangerous combination in investing.',
+  investing_style:  'Framework mismatch — trading a growth methodology with a value temperament, or vice versa — is a reliable predictor of abandonment under stress. Your methodology must match your psychology.',
+  first_equity_type:'Your first investment should sit inside your existing circle of competence. Domain familiarity reduces research time, improves pattern recognition, and makes conviction more durable under pressure.',
+  mistake_type:     'Knowing your dominant failure mode before you experience it is the only way to pre-build the circuit breaker that stops it from happening in live conditions.',
+};
+
+const READING_MAP = {
+  value: [
+    { type: 'Book', title: 'The Intelligent Investor', author: 'Benjamin Graham', typeColor: '#C9A84C', typeBg: 'rgba(201,168,76,0.1)' },
+    { type: 'Book', title: 'You Can Be a Stock Market Genius', author: 'Joel Greenblatt', typeColor: '#3b82f6', typeBg: 'rgba(59,130,246,0.12)' },
+    { type: 'Podcast', title: 'Value Investing with Legends', author: 'Columbia Business School', typeColor: '#22c55e', typeBg: 'rgba(34,197,94,0.12)' },
+  ],
+  growth: [
+    { type: 'Book', title: 'The Little Book That Still Beats the Market', author: 'Joel Greenblatt', typeColor: '#C9A84C', typeBg: 'rgba(201,168,76,0.1)' },
+    { type: 'Book', title: '100 Baggers', author: 'Christopher Mayer', typeColor: '#3b82f6', typeBg: 'rgba(59,130,246,0.12)' },
+    { type: 'Podcast', title: 'Invest Like the Best', author: 'Patrick O\'Shaughnessy', typeColor: '#22c55e', typeBg: 'rgba(34,197,94,0.12)' },
+  ],
+  macro: [
+    { type: 'Book', title: 'Principles for Navigating Big Debt Crises', author: 'Ray Dalio', typeColor: '#C9A84C', typeBg: 'rgba(201,168,76,0.1)' },
+    { type: 'Book', title: 'The Alchemy of Finance', author: 'George Soros', typeColor: '#3b82f6', typeBg: 'rgba(59,130,246,0.12)' },
+    { type: 'Podcast', title: 'Macro Voices', author: 'Erik Townsend', typeColor: '#22c55e', typeBg: 'rgba(34,197,94,0.12)' },
+  ],
+  income: [
+    { type: 'Book', title: 'The Little Book of Big Dividends', author: 'Charles Carlson', typeColor: '#C9A84C', typeBg: 'rgba(201,168,76,0.1)' },
+    { type: 'Book', title: 'Get Rich with Dividends', author: 'Marc Lichtenfeld', typeColor: '#3b82f6', typeBg: 'rgba(59,130,246,0.12)' },
+    { type: 'Podcast', title: 'Dividend Cafe', author: 'David Bahnsen', typeColor: '#22c55e', typeBg: 'rgba(34,197,94,0.12)' },
+  ],
 };
 
 const QUESTIONS = [
-  // ── PHASE 01: SENTIMENT (5 questions) ──────────────
-  {
-    id: 'loss_reaction', phase: 'SENTIMENT',
-    question: 'You invested $10,000. Two weeks later, it\'s worth zero.',
-    subtext: 'Close your eyes. Sit with that for a moment. Now — what do you feel?',
-    type: 'sentiment_scale',
-    options: [
-      { value: 'devastated',  label: 'Devastated',   sub: 'I\'d lose sleep for weeks. It would consume me.', score: 1 },
-      { value: 'frustrated',  label: 'Frustrated',   sub: 'I\'d be angry, but I\'d eventually move on.',      score: 2 },
-      { value: 'accepting',   label: 'Accepting',    sub: 'I expected this was possible. I\'d process it.',   score: 3 },
-      { value: 'curious',     label: 'Analytical',   sub: 'I\'d immediately want to understand exactly why.', score: 4 },
-      { value: 'indifferent', label: 'Indifferent',  sub: 'It was tuition. I\'d be back at it tomorrow.',     score: 5 },
-    ]
-  },
-  {
-    id: 'gain_reaction', phase: 'SENTIMENT',
-    question: 'That same $10,000 just became $25,000 in three months.',
-    subtext: 'No fundamental change in the company. Just market enthusiasm. What\'s your instinct?',
-    type: 'choice',
-    options: [
-      { value: 'sell_all',  label: 'Sell everything', sub: 'Lock in the win before it disappears.',          score: 1 },
-      { value: 'sell_half', label: 'Trim — sell half', sub: 'Secure profit, keep meaningful exposure.',       score: 3 },
-      { value: 'hold',      label: 'Hold unchanged',  sub: 'The thesis hasn\'t changed. Patience.',          score: 4 },
-      { value: 'buy_more',  label: 'Add more',        sub: 'It\'s working. I\'d increase conviction.',       score: 5 },
-    ]
-  },
-  {
-    id: 'drawdown_reaction', phase: 'SENTIMENT',
-    question: 'Your position drops 25% in a single day. No news. Just price.',
-    subtext: 'Your reaction to unexplained volatility reveals your true temperament.',
-    type: 'choice',
-    options: [
-      { value: 'panic_sell',   label: 'Sell immediately',    sub: 'Cut before it gets worse.',                score: 1 },
-      { value: 'wait_and_see', label: 'Watch and wait',       sub: 'Check back tomorrow. Maybe it recovers.',  score: 2 },
-      { value: 'research',     label: 'Research immediately', sub: 'Need full context before any decision.',   score: 4 },
-      { value: 'buy_dip',      label: 'Buy more',             sub: 'Same thesis, 25% better price. Add.',     score: 5 },
-    ]
-  },
-  {
-    id: 'regret_style', phase: 'SENTIMENT',
-    question: 'You didn\'t buy a stock you researched. It doubles without you.',
-    subtext: 'The psychology of regret shapes your future decision quality more than you think.',
-    type: 'choice',
-    options: [
-      { value: 'chase',    label: 'Buy in now — FOMO wins',     sub: 'I can\'t watch it keep running without me.',    score: 1 },
-      { value: 'reassess', label: 'Re-evaluate the thesis',     sub: 'Does new information change the case?',         score: 4 },
-      { value: 'accept',   label: 'Accept it and move on',      sub: 'There will be other opportunities.',            score: 5 },
-      { value: 'obsess',   label: 'I\'d beat myself up badly',  sub: 'Missed trades haunt me longer than losses.',    score: 2 },
-    ]
-  },
-  {
-    id: 'conviction_style', phase: 'SENTIMENT',
-    question: 'You\'re deeply convicted on an idea. Respected analysts disagree publicly.',
-    subtext: 'Independent thinking vs. social proof — this defines your edge (or lack of it).',
-    type: 'choice',
-    options: [
-      { value: 'capitulate', label: 'Reconsider — they know more', sub: 'Expertise deserves deference.',              score: 1 },
-      { value: 'partial',    label: 'Reduce size, stay in',        sub: 'Hedge the disagreement.',                    score: 3 },
-      { value: 'hold_firm',  label: 'Stress-test, then hold firm', sub: 'Check the work. If valid, stay.',            score: 5 },
-      { value: 'ignore',     label: 'Ignore — I don\'t care',      sub: 'Others\' views are noise.',                  score: 4 },
-    ]
-  },
-
-  // ── PHASE 02: FILTER (4 questions) ─────────────────
-  {
-    id: 'position_size', phase: 'FILTER',
-    question: 'What % of your portfolio would you put into a single high-conviction idea?',
-    subtext: 'Your answer here determines your risk of ruin. No right answer — only the honest one.',
-    type: 'slider',
-  },
-  {
-    id: 'familiarity', phase: 'FILTER',
-    question: 'Before buying, how well do you understand the business?',
-    subtext: 'Buffett calls it your circle of competence. Honesty here is your edge.',
-    type: 'choice',
-    options: [
-      { value: 'none',     label: 'Someone said it was good',  sub: 'Tip-driven. No independent research.',           score: 1 },
-      { value: 'surface',  label: 'I recognize the name',      sub: 'I use the product but haven\'t read a filing.',  score: 2 },
-      { value: 'moderate', label: 'I understand how they earn', sub: 'Revenue model, margins, key risks — roughly.',  score: 3 },
-      { value: 'deep',     label: 'I\'ve done the full work',   sub: 'Reports, competitors, moat, bear case.',         score: 5 },
-    ]
-  },
-  {
-    id: 'time_horizon', phase: 'FILTER',
-    question: 'When do you expect to need this capital back?',
-    subtext: 'Time horizon is the single most underrated edge available to retail investors.',
-    type: 'choice',
-    options: [
-      { value: 'under_6m', label: 'Under 6 months', sub: 'Could need this money soon.',          score: 1 },
-      { value: '1_2y',     label: '1–2 years',      sub: 'Medium-term. Some flexibility.',       score: 3 },
-      { value: '3_5y',     label: '3–5 years',      sub: 'Building something intentionally.',    score: 4 },
-      { value: '5y_plus',  label: '5+ years',        sub: 'Genuinely thinking in decades.',      score: 5 },
-    ]
-  },
-  {
-    id: 'risk_capacity', phase: 'FILTER',
-    question: 'If your entire portfolio dropped 40%, what is your actual financial situation?',
-    subtext: 'Capacity is not tolerance. Can you afford to ride it out — or do you need this money?',
-    type: 'choice',
-    options: [
-      { value: 'need_it',      label: 'I would need some of it',    sub: 'This is not truly discretionary capital.',   score: 1 },
-      { value: 'uncomfortable', label: 'Uncomfortable but survivable', sub: 'I could hold but it would be stressful.', score: 2 },
-      { value: 'fine',         label: 'Completely fine — I\'d hold', sub: 'This is genuinely long-term capital.',      score: 4 },
-      { value: 'buy_more',     label: 'I\'d have dry powder ready',  sub: 'I keep cash specifically for these moments.', score: 5 },
-    ]
-  },
-
-  // ── PHASE 03: FRAMEWORK (3 questions) ──────────────
-  {
-    id: 'investing_style', phase: 'FRAMEWORK',
-    question: 'Which investing philosophy resonates most with how you think?',
-    subtext: 'Your framework must match your temperament — otherwise you won\'t execute it under stress.',
-    type: 'choice',
-    options: [
-      { value: 'value',   label: 'Value — buy what\'s underpriced', sub: 'Margin of safety, patience, mean reversion.', score: 3 },
-      { value: 'growth',  label: 'Growth — buy the best business',   sub: 'Quality compounds, price follows.',           score: 4 },
-      { value: 'macro',   label: 'Macro — trade the environment',     sub: 'Rates, cycles, geopolitics as the signal.',  score: 5 },
-      { value: 'income',  label: 'Income — steady cash generation',   sub: 'Dividends, REITs, bonds — predictability.', score: 2 },
-    ]
-  },
-  {
-    id: 'first_equity_type', phase: 'FRAMEWORK',
-    question: 'What kind of company would you feel most comfortable researching first?',
-    subtext: 'Your natural domain advantage — lean into it.',
-    type: 'choice',
-    options: [
-      { value: 'consumer', label: 'Consumer brands I use daily', sub: 'Nike, McDonald\'s, Grab — familiar territory.',  score: 3 },
-      { value: 'tech',     label: 'Technology platforms',        sub: 'Microsoft, TSMC, Palantir — high compounding.',  score: 4 },
-      { value: 'income',   label: 'Dividend / REIT / Income',   sub: 'Stable distributions, less volatility.',         score: 2 },
-      { value: 'global',   label: 'Global macro plays',         sub: 'EM, commodities, geopolitical dislocations.',     score: 5 },
-    ]
-  },
-  {
-    id: 'mistake_type', phase: 'FRAMEWORK',
-    question: 'Which mistake do you think you\'re more prone to making?',
-    subtext: 'Knowing your failure mode is the beginning of managing it.',
-    type: 'choice',
-    options: [
-      { value: 'sell_early',   label: 'Selling too early (FOMO loss)', sub: 'I take profits and watch them run without me.',   score: 2 },
-      { value: 'hold_losers',  label: 'Holding losers too long',        sub: 'I refuse to admit I was wrong.',                 score: 1 },
-      { value: 'oversize',     label: 'Oversizing when excited',        sub: 'High conviction makes me reckless on size.',     score: 3 },
-      { value: 'under_research', label: 'Not researching enough',       sub: 'I act on conviction before completing the work.', score: 4 },
-    ]
-  },
+  { id:'loss_reaction', phase:'SENTIMENT', question:"You invested $10,000. Two weeks later, it's worth zero.", subtext:"Close your eyes. Sit with that for a moment. Now — what do you feel?", type:'sentiment_scale', options:[{value:'devastated',label:'Devastated',sub:"I'd lose sleep for weeks. It would consume me.",score:1},{value:'frustrated',label:'Frustrated',sub:"I'd be angry, but I'd eventually move on.",score:2},{value:'accepting',label:'Accepting',sub:"I expected this was possible. I'd process it.",score:3},{value:'curious',label:'Analytical',sub:"I'd immediately want to understand exactly why.",score:4},{value:'indifferent',label:'Indifferent',sub:"It was tuition. I'd be back at it tomorrow.",score:5}]},
+  { id:'gain_reaction', phase:'SENTIMENT', question:"That same $10,000 just became $25,000 in three months.", subtext:"No fundamental change in the company. Just market enthusiasm. What's your instinct?", type:'choice', options:[{value:'sell_all',label:'Sell everything',sub:'Lock in the win before it disappears.',score:1},{value:'sell_half',label:'Trim — sell half',sub:'Secure profit, keep meaningful exposure.',score:3},{value:'hold',label:'Hold unchanged',sub:"The thesis hasn't changed. Patience.",score:4},{value:'buy_more',label:'Add more',sub:"It's working. I'd increase conviction.",score:5}]},
+  { id:'drawdown_reaction', phase:'SENTIMENT', question:"Your position drops 25% in a single day. No news. Just price.", subtext:"Your reaction to unexplained volatility reveals your true temperament.", type:'choice', options:[{value:'panic_sell',label:'Sell immediately',sub:'Cut before it gets worse.',score:1},{value:'wait_and_see',label:'Watch and wait',sub:'Check back tomorrow. Maybe it recovers.',score:2},{value:'research',label:'Research immediately',sub:'Need full context before any decision.',score:4},{value:'buy_dip',label:'Buy more',sub:'Same thesis, 25% better price. Add.',score:5}]},
+  { id:'regret_style', phase:'SENTIMENT', question:"You didn't buy a stock you researched. It doubles without you.", subtext:"The psychology of regret shapes your future decision quality more than you think.", type:'choice', options:[{value:'chase',label:"Buy in now — FOMO wins",sub:"I can't watch it keep running without me.",score:1},{value:'reassess',label:'Re-evaluate the thesis',sub:'Does new information change the case?',score:4},{value:'accept',label:'Accept it and move on',sub:'There will be other opportunities.',score:5},{value:'obsess',label:"I'd beat myself up badly",sub:'Missed trades haunt me longer than losses.',score:2}]},
+  { id:'conviction_style', phase:'SENTIMENT', question:"You're deeply convicted on an idea. Respected analysts disagree publicly.", subtext:"Independent thinking vs. social proof — this defines your edge (or lack of it).", type:'choice', options:[{value:'capitulate',label:'Reconsider — they know more',sub:'Expertise deserves deference.',score:1},{value:'partial',label:'Reduce size, stay in',sub:'Hedge the disagreement.',score:3},{value:'hold_firm',label:'Stress-test, then hold firm',sub:'Check the work. If valid, stay.',score:5},{value:'ignore',label:"Ignore — I don't care",sub:"Others' views are noise.",score:4}]},
+  { id:'position_size', phase:'FILTER', question:"What % of your portfolio would you put into a single high-conviction idea?", subtext:"Your answer here determines your risk of ruin. No right answer — only the honest one.", type:'slider' },
+  { id:'familiarity', phase:'FILTER', question:"Before buying, how well do you understand the business?", subtext:"Buffett calls it your circle of competence. Honesty here is your edge.", type:'choice', options:[{value:'none',label:'Someone said it was good',sub:'Tip-driven. No independent research.',score:1},{value:'surface',label:'I recognize the name',sub:"I use the product but haven't read a filing.",score:2},{value:'moderate',label:'I understand how they earn',sub:'Revenue model, margins, key risks — roughly.',score:3},{value:'deep',label:"I've done the full work",sub:'Reports, competitors, moat, bear case.',score:5}]},
+  { id:'time_horizon', phase:'FILTER', question:"When do you expect to need this capital back?", subtext:"Time horizon is the single most underrated edge available to retail investors.", type:'choice', options:[{value:'under_6m',label:'Under 6 months',sub:'Could need this money soon.',score:1},{value:'1_2y',label:'1–2 years',sub:'Medium-term. Some flexibility.',score:3},{value:'3_5y',label:'3–5 years',sub:'Building something intentionally.',score:4},{value:'5y_plus',label:'5+ years',sub:'Genuinely thinking in decades.',score:5}]},
+  { id:'risk_capacity', phase:'FILTER', question:"If your entire portfolio dropped 40%, what is your actual financial situation?", subtext:"Capacity is not tolerance. Can you afford to ride it out — or do you need this money?", type:'choice', options:[{value:'need_it',label:'I would need some of it',sub:'This is not truly discretionary capital.',score:1},{value:'uncomfortable',label:'Uncomfortable but survivable',sub:'I could hold but it would be stressful.',score:2},{value:'fine',label:"Completely fine — I'd hold",sub:'This is genuinely long-term capital.',score:4},{value:'buy_more',label:"I'd have dry powder ready",sub:'I keep cash specifically for these moments.',score:5}]},
+  { id:'investing_style', phase:'FRAMEWORK', question:"Which investing philosophy resonates most with how you think?", subtext:"Your framework must match your temperament — otherwise you won't execute it under stress.", type:'choice', options:[{value:'value',label:"Value — buy what's underpriced",sub:'Margin of safety, patience, mean reversion.',score:3},{value:'growth',label:'Growth — buy the best business',sub:'Quality compounds, price follows.',score:4},{value:'macro',label:'Macro — trade the environment',sub:'Rates, cycles, geopolitics as the signal.',score:5},{value:'income',label:'Income — steady cash generation',sub:'Dividends, REITs, bonds — predictability.',score:2}]},
+  { id:'first_equity_type', phase:'FRAMEWORK', question:"What kind of company would you feel most comfortable researching first?", subtext:"Your natural domain advantage — lean into it.", type:'choice', options:[{value:'consumer',label:'Consumer brands I use daily',sub:"Nike, McDonald's, Grab — familiar territory.",score:3},{value:'tech',label:'Technology platforms',sub:'Microsoft, TSMC, Palantir — high compounding.',score:4},{value:'income',label:'Dividend / REIT / Income',sub:'Stable distributions, less volatility.',score:2},{value:'global',label:'Global macro plays',sub:'EM, commodities, geopolitical dislocations.',score:5}]},
+  { id:'mistake_type', phase:'FRAMEWORK', question:"Which mistake do you think you're more prone to making?", subtext:"Knowing your failure mode is the beginning of managing it.", type:'choice', options:[{value:'sell_early',label:'Selling too early (FOMO loss)',sub:"I take profits and watch them run without me.",score:2},{value:'hold_losers',label:'Holding losers too long',sub:"I refuse to admit I was wrong.",score:1},{value:'oversize',label:'Oversizing when excited',sub:'High conviction makes me reckless on size.',score:3},{value:'under_research',label:'Not researching enough',sub:'I act on conviction before completing the work.',score:4}]},
 ];
 
-// ═══════════════════════════════════════════════════════
-// REFERENCE MAPS
-// ═══════════════════════════════════════════════════════
-
 const EQUITY_MAP = {
-  consumer: {
-    label: 'Consumer Brands',
-    examples: ['McDonald\'s (MCD)', 'Nike (NKE)', 'Maybank (1155)', 'Coca-Cola (KO)'],
-    why: 'You already understand how these businesses generate value. Daily familiarity with the product is a genuine informational edge that institutions underestimate.'
-  },
-  tech: {
-    label: 'Technology Platforms',
-    examples: ['Microsoft (MSFT)', 'Alphabet (GOOGL)', 'TSMC (TSM)', 'Sea Ltd (SE)'],
-    why: 'High operating leverage, network effects, and reinvestment opportunities create exceptional long-run compounding. Volatility is the entry price.'
-  },
-  income: {
-    label: 'Dividend & REIT Income',
-    examples: ['Realty Income (O)', 'IGB REIT', 'Vanguard HY Div (VYM)', 'CIMB (1023)'],
-    why: 'Visible cash flows reduce psychological pressure and enforce discipline. Your temperament suits income-producing assets that reward patience.'
-  },
-  global: {
-    label: 'Macro & Global Dislocations',
-    examples: ['Commodities (GLD, USO)', 'EM ETFs (VWO)', 'Energy (XLE)', 'FX-driven opportunities'],
-    why: 'Your risk appetite and macro thinking style make asymmetric global opportunities your natural hunting ground. Position sizing is everything here.'
-  },
+  consumer: { label:'Consumer Brands', examples:["McDonald's (MCD)","Nike (NKE)","Coca-Cola (KO)","P&G (PG)"], why:"You already understand how these businesses generate value. Daily familiarity with the product is a genuine informational edge that institutions underestimate." },
+  tech:     { label:'Technology Platforms', examples:["Microsoft (MSFT)","Alphabet (GOOGL)","TSMC (TSM)","Sea Ltd (SE)"], why:"High operating leverage, network effects, and reinvestment opportunities create exceptional long-run compounding. Volatility is the entry price." },
+  income:   { label:'Dividend & REIT Income', examples:["Realty Income (O)","Vanguard HY Div (VYM)","IGB REIT","CIMB (1023)"], why:"Visible cash flows reduce psychological pressure and enforce discipline. Your temperament suits income-producing assets that reward patience." },
+  global:   { label:'Macro & Global Dislocations', examples:["Commodities (GLD, USO)","EM ETFs (VWO)","Energy (XLE)","FX-driven opportunities"], why:"Your risk appetite and macro thinking style make asymmetric global opportunities your natural hunting ground. Position sizing is everything here." },
 };
+const HORIZON_MAP = { under_6m:'Under 6 months', '1_2y':'1–2 years', '3_5y':'3–5 years', '5y_plus':'5+ year horizon' };
+const STYLE_MAP = { value:'Value Investor', growth:'Growth Investor', macro:'Macro Operator', income:'Income Investor' };
 
-const HORIZON_MAP = {
-  under_6m: 'Under 6 months',
-  '1_2y':   '1–2 years',
-  '3_5y':   '3–5 years',
-  '5y_plus':'5+ year horizon',
-};
+// ══════════════════════════════════════════════════════════
+// STATE & PERSISTENCE
+// ══════════════════════════════════════════════════════════
 
-const STYLE_MAP = {
-  value:  'Value Investor',
-  growth: 'Growth Investor',
-  macro:  'Macro Operator',
-  income: 'Income Investor',
-};
+let state = { step:-1, answers:{}, slider:10, profile:null };
 
-// ═══════════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════════
+function saveProgress() {
+  try { localStorage.setItem('ii_state', JSON.stringify({ step:state.step, answers:state.answers, slider:state.slider })); } catch(e){}
+  updateResumeButton();
+}
 
-let state = {
-  step: -1,
-  answers: {},
-  slider: 10,
-  profile: null,
-};
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem('ii_state');
+    if (!raw) return false;
+    const s = JSON.parse(raw);
+    if (s.step >= 0) { state.step = s.step; state.answers = s.answers || {}; state.slider = s.slider || 10; return true; }
+  } catch(e) {}
+  return false;
+}
 
-// ═══════════════════════════════════════════════════════
+function clearProgress() {
+  try { localStorage.removeItem('ii_state'); } catch(e){}
+}
+
+function resumeProgress() {
+  if (loadProgress()) render();
+}
+
+function updateResumeButton() {
+  const btn = document.getElementById('navResume');
+  if (!btn) return;
+  try {
+    const raw = localStorage.getItem('ii_state');
+    if (raw) { const s = JSON.parse(raw); btn.style.display = (s.step >= 0 && s.step < QUESTIONS.length) ? 'block' : 'none'; }
+    else { btn.style.display = 'none'; }
+  } catch(e) { btn.style.display = 'none'; }
+}
+
+// ══════════════════════════════════════════════════════════
+// CONTRADICTION DETECTION
+// ══════════════════════════════════════════════════════════
+
+function detectContradiction(answers) {
+  const s_loss = getScore('loss_reaction', answers.loss_reaction);
+  const s_risk  = getScore('risk_capacity', answers.risk_capacity);
+  const s_time  = getScore('time_horizon', answers.time_horizon);
+  const s_draw  = getScore('drawdown_reaction', answers.drawdown_reaction);
+
+  if (s_loss <= 2 && s_risk >= 4) return "Your emotional response to losses is very high, but your stated financial capacity suggests you can ride drawdowns comfortably. This gap — between how you feel and how you're positioned — is exactly where most investors make their worst decisions. You may need stricter pre-commitment rules than a financially resilient investor would.";
+  if (s_draw === 1 && s_time >= 4) return "You selected 5+ year horizon, but your instinct under a 25% drawdown was to sell immediately. These are in direct conflict. Long-horizon investing requires the ability to hold through precisely these moments. Consider whether your time horizon reflects your actual capacity — or your aspiration.";
+  if (answers.conviction_style === 'capitulate' && answers.investing_style === 'value') return "Value investing requires holding contrarian positions against expert consensus — it is structurally incompatible with deferring to authority. You've identified both as your style. One of these needs to change, or your methodology will break down precisely when the opportunity is greatest.";
+  return null;
+}
+
+// ══════════════════════════════════════════════════════════
 // SCORING ENGINE
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 
 function getScore(qid, val) {
   const q = QUESTIONS.find(q => q.id === qid);
@@ -926,22 +484,19 @@ function getScore(qid, val) {
 
 function buildProfile() {
   const a = state.answers;
-
-  // ── Raw scores ──────────────────────────────────────
-  const s_loss      = getScore('loss_reaction',    a.loss_reaction);
-  const s_gain      = getScore('gain_reaction',    a.gain_reaction);
-  const s_draw      = getScore('drawdown_reaction',a.drawdown_reaction);
-  const s_regret    = getScore('regret_style',     a.regret_style);
-  const s_conv      = getScore('conviction_style', a.conviction_style);
-  const s_fam       = getScore('familiarity',      a.familiarity);
-  const s_time      = getScore('time_horizon',     a.time_horizon);
-  const s_risk      = getScore('risk_capacity',    a.risk_capacity);
-  const s_style     = getScore('investing_style',  a.investing_style);
-  const s_equity    = getScore('first_equity_type',a.first_equity_type);
-  const s_mistake   = getScore('mistake_type',     a.mistake_type);
+  const s_loss = getScore('loss_reaction', a.loss_reaction);
+  const s_gain = getScore('gain_reaction', a.gain_reaction);
+  const s_draw = getScore('drawdown_reaction', a.drawdown_reaction);
+  const s_regret = getScore('regret_style', a.regret_style);
+  const s_conv = getScore('conviction_style', a.conviction_style);
+  const s_fam = getScore('familiarity', a.familiarity);
+  const s_time = getScore('time_horizon', a.time_horizon);
+  const s_risk = getScore('risk_capacity', a.risk_capacity);
+  const s_style = getScore('investing_style', a.investing_style);
+  const s_equity = getScore('first_equity_type', a.first_equity_type);
+  const s_mistake = getScore('mistake_type', a.mistake_type);
   const positionPct = Number(state.slider) || 10;
 
-  // ── Composite dimensions (0–100 scale) ─────────────
   const emotionalCtrl  = Math.round(((s_loss + s_gain + s_draw) / 15) * 100);
   const independentThk = Math.round(((s_regret + s_conv) / 10) * 100);
   const riskCapacity   = Math.round(((s_risk + s_time) / 10) * 100);
@@ -949,152 +504,104 @@ function buildProfile() {
   const positionDisc   = positionPct <= 5 ? 90 : positionPct <= 15 ? 75 : positionPct <= 25 ? 55 : positionPct <= 40 ? 35 : 15;
   const styleCohesion  = Math.round((s_style / 5) * 100);
 
-  // ── Composite overall ────────────────────────────────
-  const composite = (
-    emotionalCtrl  * 0.25 +
-    independentThk * 0.15 +
-    riskCapacity   * 0.25 +
-    researchDepth  * 0.15 +
-    positionDisc   * 0.10 +
-    styleCohesion  * 0.10
-  ) / 100 * 5;
+  const composite = (emotionalCtrl * 0.25 + independentThk * 0.15 + riskCapacity * 0.25 + researchDepth * 0.15 + positionDisc * 0.10 + styleCohesion * 0.10) / 100 * 5;
 
-  // ── Archetype ──────────────────────────────────────
-  let archetype, archetypeColor, archetypeTagline, archetypeIcon;
-
+  // Archetype with stability score
+  let archetype, archetypeColor, archetypeTagline, stabilityMsg, stabilityColor;
+  const band = 0.5;
   if (composite < 1.5) {
-    archetype = 'The Protector';
-    archetypeColor = '#3b82f6';
+    archetype = 'The Protector'; archetypeColor = '#3b82f6';
     archetypeTagline = 'Capital preservation is your first and strongest instinct. You experience losses more acutely than gains — a documented psychological reality known as loss aversion. Your edge is discipline and the avoidance of permanent loss. Start here: protect the downside. The upside takes care of itself.';
-    archetypeIcon = '🛡';
   } else if (composite < 2.5) {
-    archetype = 'The Pragmatist';
-    archetypeColor = '#a855f7';
-    archetypeTagline = 'You are measured, cautious, but open to calculated risk when the odds are in your favour. You won\'t reach for yield recklessly. You won\'t leave good returns on the table either. The pragmatist\'s challenge: moving from caution to conviction when the thesis is genuinely strong.';
-    archetypeIcon = '⚖';
+    archetype = 'The Pragmatist'; archetypeColor = '#a855f7';
+    archetypeTagline = "You are measured, cautious, but open to calculated risk when the odds are in your favour. You won't reach for yield recklessly. You won't leave good returns on the table either. The pragmatist's challenge: moving from caution to conviction when the thesis is genuinely strong.";
   } else if (composite < 3.5) {
-    archetype = 'The Builder';
-    archetypeColor = '#C9A84C';
-    archetypeTagline = 'You think in compounding horizons. Short-term noise doesn\'t move you — you\'re building something. Your temperament maps closest to the Buffett model: buy quality, pay a fair price, give it time. The builder\'s challenge: patience when good ideas take longer than expected.';
-    archetypeIcon = '🏗';
+    archetype = 'The Builder'; archetypeColor = '#C9A84C';
+    archetypeTagline = "You think in compounding horizons. Short-term noise doesn't move you — you're building something. Your temperament maps closest to the Buffett model: buy quality, pay a fair price, give it time. The builder's challenge: patience when good ideas take longer than expected.";
   } else if (composite < 4.2) {
-    archetype = 'The Operator';
-    archetypeColor = '#22c55e';
-    archetypeTagline = 'You think in cycles, catalysts, and frameworks. You understand that position sizing and entry timing matter as much as stock selection. Your toolkit is growing. The operator\'s challenge: not confusing activity with edge — discipline over frequency.';
-    archetypeIcon = '⚡';
+    archetype = 'The Operator'; archetypeColor = '#22c55e';
+    archetypeTagline = "You think in cycles, catalysts, and frameworks. You understand that position sizing and entry timing matter as much as stock selection. Your toolkit is growing. The operator's challenge: not confusing activity with edge — discipline over frequency.";
   } else {
-    archetype = 'The Asymmetrist';
-    archetypeColor = '#f97316';
-    archetypeTagline = 'You have genuine risk appetite and the temperament to hold through significant pain. You are drawn to situations where potential gain vastly outweighs potential loss — the structural asymmetry that defines elite investing. Your challenge: not letting conviction become arrogance.';
-    archetypeIcon = '◈';
+    archetype = 'The Asymmetrist'; archetypeColor = '#f97316';
+    archetypeTagline = 'You have genuine risk appetite and the temperament to hold through significant pain. You are drawn to situations where potential gain vastly outweighs potential loss. Your challenge: not letting conviction become arrogance.';
   }
 
-  // ── Behavioral biases ──────────────────────────────
-  const biases = [];
-  if (s_loss <= 2)
-    biases.push({ name: 'Loss Aversion', desc: 'You weight losses more heavily than equivalent gains. This can cause premature exits and holding through denial.', severity: 100 - emotionalCtrl, color: '#c0392b' });
-  if (a.gain_reaction === 'sell_all' || a.gain_reaction === 'sell_half')
-    biases.push({ name: 'Disposition Effect', desc: 'You are inclined to sell winners too early and potentially hold losers too long — one of the most documented and costly investor biases.', severity: 72, color: '#f97316' });
-  if (a.regret_style === 'chase' || a.regret_style === 'obsess')
-    biases.push({ name: 'FOMO / Regret Aversion', desc: 'Fear of missing out drives you toward chasing performance rather than waiting for your own setups.', severity: 78, color: '#a855f7' });
-  if (a.conviction_style === 'capitulate')
-    biases.push({ name: 'Authority Bias', desc: 'You give disproportionate weight to expert opinion, which can override valid independent analysis.', severity: 65, color: '#3b82f6' });
-  if (a.drawdown_reaction === 'panic_sell')
-    biases.push({ name: 'Myopic Risk Aversion', desc: 'Short-term price pain triggers action that violates your longer-term thesis. The cure is pre-committing to exit rules before entering.', severity: 85, color: '#c0392b' });
-  if (positionPct > 30)
-    biases.push({ name: 'Overconfidence', desc: `Allocating ${positionPct}% to a single idea suggests high conviction that may not always be warranted. Overconfidence is the most common killer of retail investor portfolios.`, severity: Math.min(95, 50 + positionPct), color: '#f97316' });
-  if (a.mistake_type === 'hold_losers')
-    biases.push({ name: 'Sunk Cost Fallacy', desc: 'You identified a tendency to hold losers too long — refusing to accept a bad decision is a permanent feature of human psychology you must explicitly manage.', severity: 70, color: '#c0392b' });
-  if (biases.length === 0)
-    biases.push({ name: 'Well-Calibrated Responses', desc: 'Your answers show low signature of common behavioral biases. This may reflect genuine psychological resilience, or responses that reflect ideal rather than actual behavior. Monitor yourself in live conditions.', severity: 20, color: '#22c55e' });
+  // Stability
+  const distToEdge = Math.min(Math.abs(composite - Math.floor(composite + 0.5)), 0.5);
+  if (distToEdge < 0.15) {
+    stabilityMsg = 'Borderline profile — minor changes in behaviour shift your archetype'; stabilityColor = '#f97316';
+  } else if (distToEdge < 0.3) {
+    stabilityMsg = 'Moderate conviction — profile is directionally clear'; stabilityColor = '#C9A84C';
+  } else {
+    stabilityMsg = 'Stable profile — responses are internally consistent'; stabilityColor = '#22c55e';
+  }
 
-  // ── Portfolio allocation model ──────────────────────
+  // Biases
+  const biases = [];
+  if (s_loss <= 2) biases.push({ name:'Loss Aversion', desc:'You weight losses more heavily than equivalent gains. This can cause premature exits and holding through denial.', severity:100-emotionalCtrl, color:'#c0392b' });
+  if (a.gain_reaction === 'sell_all' || a.gain_reaction === 'sell_half') biases.push({ name:'Disposition Effect', desc:'You are inclined to sell winners too early and potentially hold losers too long — one of the most documented and costly investor biases.', severity:72, color:'#f97316' });
+  if (a.regret_style === 'chase' || a.regret_style === 'obsess') biases.push({ name:'FOMO / Regret Aversion', desc:'Fear of missing out drives you toward chasing performance rather than waiting for your own setups.', severity:78, color:'#a855f7' });
+  if (a.conviction_style === 'capitulate') biases.push({ name:'Authority Bias', desc:'You give disproportionate weight to expert opinion, which can override valid independent analysis.', severity:65, color:'#3b82f6' });
+  if (a.drawdown_reaction === 'panic_sell') biases.push({ name:'Myopic Risk Aversion', desc:'Short-term price pain triggers action that violates your longer-term thesis. The cure is pre-committing to exit rules before entering.', severity:85, color:'#c0392b' });
+  if (positionPct > 30) biases.push({ name:'Overconfidence', desc:`Allocating ${positionPct}% to a single idea suggests high conviction that may not always be warranted. Overconfidence is the most common killer of retail investor portfolios.`, severity:Math.min(95, 50+positionPct), color:'#f97316' });
+  if (a.mistake_type === 'hold_losers') biases.push({ name:'Sunk Cost Fallacy', desc:"You identified a tendency to hold losers too long — refusing to accept a bad decision is a permanent feature of human psychology you must explicitly manage.", severity:70, color:'#c0392b' });
+  if (biases.length === 0) biases.push({ name:'Well-Calibrated Responses', desc:'Your answers show low signature of common behavioral biases. Monitor yourself in live conditions.', severity:20, color:'#22c55e' });
+
+  // Portfolio allocation
   let allocation;
   const riskScore = (s_risk + s_time) / 2;
-  if (riskScore <= 1.5)
-    allocation = [
-      { asset: 'Cash / Money Market', pct: 40, color: '#3b82f6', why: 'Capital preservation first' },
-      { asset: 'Government Bonds', pct: 30, color: '#06b6d4', why: 'Low-risk yield, liquidity' },
-      { asset: 'Broad Equity ETF', pct: 20, color: '#C9A84C', why: 'Inflation protection, growth' },
-      { asset: 'Individual Stocks', pct: 10, color: '#22c55e', why: 'Begin building the skill' },
-    ];
-  else if (riskScore <= 2.5)
-    allocation = [
-      { asset: 'Broad Equity ETF', pct: 40, color: '#C9A84C', why: 'Core diversified foundation' },
-      { asset: 'Bonds / Fixed Income', pct: 25, color: '#06b6d4', why: 'Ballast, rebalancing reserve' },
-      { asset: 'Individual Stocks', pct: 25, color: '#22c55e', why: 'Selective high-conviction ideas' },
-      { asset: 'Cash', pct: 10, color: '#3b82f6', why: 'Optionality for dislocations' },
-    ];
-  else if (riskScore <= 3.5)
-    allocation = [
-      { asset: 'Individual Stocks', pct: 45, color: '#22c55e', why: 'Core conviction positions' },
-      { asset: 'Broad Equity ETF', pct: 25, color: '#C9A84C', why: 'Passive exposure, diversification' },
-      { asset: 'Alternatives / Macro', pct: 20, color: '#a855f7', why: 'Uncorrelated return streams' },
-      { asset: 'Cash Reserve', pct: 10, color: '#3b82f6', why: 'Opportunity fund for crashes' },
-    ];
-  else
-    allocation = [
-      { asset: 'Individual Stocks', pct: 55, color: '#22c55e', why: 'High-conviction concentrated positions' },
-      { asset: 'Asymmetric / Macro', pct: 25, color: '#f97316', why: 'Tail opportunities — geopolitical, event-driven' },
-      { asset: 'Broad ETF', pct: 15, color: '#C9A84C', why: 'Core holding, never touch' },
-      { asset: 'Cash / Dry Powder', pct: 5, color: '#3b82f6', why: 'Minimal — fully deployed bias' },
-    ];
+  if (riskScore <= 1.5) allocation = [{asset:'Cash / Money Market',pct:40,color:'#3b82f6',why:'Capital preservation first'},{asset:'Government Bonds',pct:30,color:'#06b6d4',why:'Low-risk yield, liquidity'},{asset:'Broad Equity ETF',pct:20,color:'#C9A84C',why:'Inflation protection, growth'},{asset:'Individual Stocks',pct:10,color:'#22c55e',why:'Begin building the skill'}];
+  else if (riskScore <= 2.5) allocation = [{asset:'Broad Equity ETF',pct:40,color:'#C9A84C',why:'Core diversified foundation'},{asset:'Bonds / Fixed Income',pct:25,color:'#06b6d4',why:'Ballast, rebalancing reserve'},{asset:'Individual Stocks',pct:25,color:'#22c55e',why:'Selective high-conviction ideas'},{asset:'Cash',pct:10,color:'#3b82f6',why:'Optionality for dislocations'}];
+  else if (riskScore <= 3.5) allocation = [{asset:'Individual Stocks',pct:45,color:'#22c55e',why:'Core conviction positions'},{asset:'Broad Equity ETF',pct:25,color:'#C9A84C',why:'Passive exposure, diversification'},{asset:'Alternatives / Macro',pct:20,color:'#a855f7',why:'Uncorrelated return streams'},{asset:'Cash Reserve',pct:10,color:'#3b82f6',why:'Opportunity fund for crashes'}];
+  else allocation = [{asset:'Individual Stocks',pct:55,color:'#22c55e',why:'High-conviction concentrated positions'},{asset:'Asymmetric / Macro',pct:25,color:'#f97316',why:'Tail opportunities — event-driven'},{asset:'Broad ETF',pct:15,color:'#C9A84C',why:'Core holding, never touch'},{asset:'Cash / Dry Powder',pct:5,color:'#3b82f6',why:'Minimal — fully deployed bias'}];
 
-  // ── Learning path ───────────────────────────────────
   const learningPath = buildLearningPath(composite, s_fam, s_style, a.first_equity_type);
-
-  // ── Rules ───────────────────────────────────────────
   const maxDrawdown = emotionalCtrl < 40 ? '5–10%' : emotionalCtrl < 60 ? '10–20%' : emotionalCtrl < 80 ? '20–35%' : '35–50%+';
   const suggestedPos = Math.max(5, Math.min(25, Math.round((composite / 5) * 25)));
-
   const rules = buildRules(a, composite, s_fam, s_time, positionPct, suggestedPos, maxDrawdown);
+  const contradiction = detectContradiction(a);
+  const readingList = READING_MAP[a.investing_style] || READING_MAP.growth;
 
   return {
-    archetype, archetypeColor, archetypeTagline, archetypeIcon,
+    archetype, archetypeColor, archetypeTagline, stabilityMsg, stabilityColor,
     dimensions: { emotionalCtrl, independentThk, riskCapacity, researchDepth, positionDisc, styleCohesion },
     biases, allocation, learningPath, rules,
     maxDrawdown, suggestedPosition: suggestedPos, positionPct,
     horizon: HORIZON_MAP[a.time_horizon] || 'Medium-term',
     equity: EQUITY_MAP[a.first_equity_type] || EQUITY_MAP.consumer,
-    famScore: s_fam, composite,
+    famScore: s_fam, composite, contradiction, readingList,
     investingStyle: STYLE_MAP[a.investing_style] || 'Developing',
+    compositeScore: Math.round(composite / 5 * 100),
   };
 }
 
 function buildLearningPath(composite, famScore, styleScore, equityType) {
   const paths = [];
-  if (famScore <= 2) paths.push({ title: 'Module 1.5 — Reading Financial Statements', sub: 'Your most urgent gap. Before any live money, read one full annual report.', tag: 'START HERE', tagColor: '#c0392b', tagBg: 'rgba(192,57,43,0.15)' });
-  paths.push({ title: 'Module 1.1 — Money, Value & Time', sub: 'Compound growth and opportunity cost form the foundation of every decision.', tag: 'FOUNDATION', tagColor: '#C9A84C', tagBg: 'rgba(201,168,76,0.1)' });
-  paths.push({ title: 'Module 1.3 — Interest Rates: The Master Variable', sub: 'Every asset class is priced relative to the risk-free rate. Non-negotiable knowledge.', tag: 'CRITICAL', tagColor: '#3b82f6', tagBg: 'rgba(59,130,246,0.12)' });
-  if (equityType === 'tech' || equityType === 'global')
-    paths.push({ title: 'Module 3.1 — Central Banks & Liquidity', sub: 'For your preferred territory, macro awareness is a genuine edge.', tag: 'TIER 3', tagColor: '#a855f7', tagBg: 'rgba(168,85,247,0.12)' });
-  if (composite >= 3)
-    paths.push({ title: 'Module 2.1 — Equity Valuation Fundamentals', sub: 'P/E, DCF, FCF yield — the quantitative tools for your thesis building.', tag: 'NEXT', tagColor: '#22c55e', tagBg: 'rgba(34,197,94,0.12)' });
-  paths.push({ title: 'Module 2.2 — Behavioral Finance', sub: 'Addresses the specific biases flagged in your profile above.', tag: 'PERSONAL', tagColor: '#f97316', tagBg: 'rgba(249,115,22,0.12)' });
+  if (famScore <= 2) paths.push({ title:'Module 1.5 — Reading Financial Statements', sub:'Your most urgent gap. Before any live money, read one full annual report.', tag:'START HERE', tagColor:'#c0392b', tagBg:'rgba(192,57,43,0.15)' });
+  paths.push({ title:'Module 1.1 — Money, Value & Time', sub:'Compound growth and opportunity cost form the foundation of every decision.', tag:'FOUNDATION', tagColor:'#C9A84C', tagBg:'rgba(201,168,76,0.1)' });
+  paths.push({ title:'Module 1.3 — Interest Rates: The Master Variable', sub:'Every asset class is priced relative to the risk-free rate. Non-negotiable knowledge.', tag:'CRITICAL', tagColor:'#3b82f6', tagBg:'rgba(59,130,246,0.12)' });
+  if (equityType === 'tech' || equityType === 'global') paths.push({ title:'Module 3.1 — Central Banks & Liquidity', sub:'For your preferred territory, macro awareness is a genuine edge.', tag:'TIER 3', tagColor:'#a855f7', tagBg:'rgba(168,85,247,0.12)' });
+  if (composite >= 3) paths.push({ title:'Module 2.1 — Equity Valuation Fundamentals', sub:'P/E, DCF, FCF yield — the quantitative tools for your thesis building.', tag:'NEXT', tagColor:'#22c55e', tagBg:'rgba(34,197,94,0.12)' });
+  paths.push({ title:'Module 2.2 — Behavioral Finance', sub:'Addresses the specific biases flagged in your profile above.', tag:'PERSONAL', tagColor:'#f97316', tagBg:'rgba(249,115,22,0.12)' });
   return paths.slice(0, 5);
 }
 
 function buildRules(a, composite, famScore, timeScore, posPct, suggestedPos, maxDD) {
   const rules = [];
-  rules.push({ num: '01', text: '<strong>Circle of competence first.</strong> Only invest in businesses you can explain clearly to a non-investor. Complexity you don\'t understand is not depth — it\'s risk.' });
-  rules.push({ num: '02', text: `<strong>Hard exit rule:</strong> Pre-define your maximum acceptable loss before entering any position — ${maxDD} based on your emotional profile. Write it down. Commit before you own a single share.` });
-  rules.push({ num: '03', text: `<strong>Position sizing discipline:</strong> Your profile suggests ≤${suggestedPos}% per position. Your chosen size was ${posPct}%. ${posPct > suggestedPos ? 'The gap between these is your risk budget — manage it deliberately.' : 'This is disciplined. Maintain it under conviction pressure.'}` });
-  if (a.conviction_style === 'capitulate')
-    rules.push({ num: '04', text: '<strong>Independent thesis documentation.</strong> Write your full investment case before reading any analyst reports. This prevents authority bias from colonising your original thinking.' });
-  else
-    rules.push({ num: '04', text: `<strong>Minimum holding intention: ${HORIZON_MAP[a.time_horizon] || 'medium-term'}.</strong> Set this as your default before you buy. Most investment mistakes happen when short-term thinking overrides the original long-term thesis.` });
-  if (famScore <= 2)
-    rules.push({ num: '05', text: '<strong>Read at least one full annual report before placing real capital.</strong> Not a summary. Not an article. The actual 10-K or annual report. One is enough to change your relationship with financial analysis permanently.' });
-  else
-    rules.push({ num: '05', text: '<strong>Leverage your existing familiarity.</strong> Your strongest investment ideas should come from your own domain of knowledge first. Institutional investors cannot replicate the edge of direct industry or product experience.' });
-  if (a.drawdown_reaction === 'panic_sell' || a.regret_style === 'chase')
-    rules.push({ num: '06', text: '<strong>Pre-commitment contract.</strong> For every position, write down in advance: the price at which you\'d sell at a loss, and the conditions under which you\'d sell the winner. Make these decisions when calm — never in the middle of a move.' });
+  rules.push({ num:'01', text:"<strong>Circle of competence first.</strong> Only invest in businesses you can explain clearly to a non-investor. Complexity you don't understand is not depth — it's risk." });
+  rules.push({ num:'02', text:`<strong>Hard exit rule:</strong> Pre-define your maximum acceptable loss before entering any position — ${maxDD} based on your emotional profile. Write it down. Commit before you own a single share.` });
+  rules.push({ num:'03', text:`<strong>Position sizing discipline:</strong> Your profile suggests ≤${suggestedPos}% per position. Your chosen size was ${posPct}%. ${posPct > suggestedPos ? 'The gap between these is your risk budget — manage it deliberately.' : 'This is disciplined. Maintain it under conviction pressure.'}` });
+  if (a.conviction_style === 'capitulate') rules.push({ num:'04', text:"<strong>Independent thesis documentation.</strong> Write your full investment case before reading any analyst reports. This prevents authority bias from colonising your original thinking." });
+  else rules.push({ num:'04', text:`<strong>Minimum holding intention: ${HORIZON_MAP[a.time_horizon] || 'medium-term'}.</strong> Set this as your default before you buy. Most investment mistakes happen when short-term thinking overrides the original long-term thesis.` });
+  if (famScore <= 2) rules.push({ num:'05', text:"<strong>Read at least one full annual report before placing real capital.</strong> Not a summary. Not an article. The actual 10-K or annual report. One is enough to change your relationship with financial analysis permanently." });
+  else rules.push({ num:'05', text:"<strong>Leverage your existing familiarity.</strong> Your strongest investment ideas should come from your own domain of knowledge first. Institutional investors cannot replicate the edge of direct industry or product experience." });
+  if (a.drawdown_reaction === 'panic_sell' || a.regret_style === 'chase') rules.push({ num:'06', text:"<strong>Pre-commitment contract.</strong> For every position, write down in advance: the price at which you'd sell at a loss, and the conditions under which you'd sell the winner. Make these decisions when calm — never in the middle of a move." });
   return rules;
 }
 
-// ═══════════════════════════════════════════════════════
-// RENDER HELPERS
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
+// ELEMENT BUILDER
+// ══════════════════════════════════════════════════════════
 
 function el(tag, attrs, ...children) {
   const e = document.createElement(tag);
@@ -1106,93 +613,95 @@ function el(tag, attrs, ...children) {
   });
   children.flat().forEach(c => {
     if (c == null) return;
-    if (c instanceof Node) { e.appendChild(c); } else { e.appendChild(document.createTextNode(String(c))); }
+    if (c instanceof Node) e.appendChild(c);
+    else e.appendChild(document.createTextNode(String(c)));
   });
   return e;
 }
 
-function phaseOf(stepIdx) {
-  if (stepIdx < 0) return null;
-  return QUESTIONS[stepIdx]?.phase;
-}
-
-// ═══════════════════════════════════════════════════════
-// SCREEN: INTRO
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
+// INTRO SCREEN
+// ══════════════════════════════════════════════════════════
 
 function renderIntro() {
   return el('div', null,
-    el('div', { class: 'eyebrow' }, 'InsightInvest · Investor Profile'),
-    el('h1', { class: 'hero' },
+    el('div', { class:'eyebrow' }, 'InsightInvest · Investor Profile'),
+    el('h1', { class:'hero' },
       'Before you invest a single dollar —', el('br', null),
       el('em', null, 'know yourself first.')
     ),
-    el('p', { class: 'lead' },
+    el('p', { class:'lead' },
       'This assessment maps your psychological architecture as an investor — emotional responses, risk capacity, behavioral biases, and decision patterns — to build a personalised framework specific to you.'
     ),
-    el('div', { class: 'intro-grid' },
-      ...[
-        ['12', 'calibration\nquestions'],
-        ['3', 'scoring\ndimensions'],
-        ['1', 'investor\nprofile'],
-      ].map(([val, desc]) =>
-        el('div', { class: 'intro-cell' },
-          el('div', { class: 'intro-cell-val' }, val),
-          el('div', { class: 'intro-cell-desc' }, desc),
+    el('div', { class:'intro-grid' },
+      ...[ ['12','calibration\nquestions'], ['3','scoring\ndimensions'], ['1','investor\nprofile'] ].map(([val,desc]) =>
+        el('div', { class:'intro-cell' },
+          el('div', { class:'intro-cell-val' }, val),
+          el('div', { class:'intro-cell-desc' }, desc),
         )
       )
     ),
-    el('button', { class: 'btn-primary', onClick: () => { state.step = 0; render(); } }, 'Begin Assessment →'),
+    el('button', { class:'btn-primary', onClick: () => { state.step = 0; render(); } }, 'Begin Assessment →'),
   );
 }
 
-// ═══════════════════════════════════════════════════════
-// SCREEN: QUESTION
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
+// QUESTION SCREEN
+// ══════════════════════════════════════════════════════════
 
 function renderQuestion(q, stepIdx) {
-  const phaseColor = PHASE_COLORS[q.phase] || '#C9A84C';
   const totalSteps = QUESTIONS.length;
-
-  // Phase progress header
-  const phases = ['SENTIMENT', 'FILTER', 'FRAMEWORK'];
+  const phases = ['SENTIMENT','FILTER','FRAMEWORK'];
   const phaseRanges = [[0,4],[5,8],[9,11]];
-  const phaseHeader = el('div', { class: 'phase-header' },
+
+  const phaseHeader = el('div', { class:'phase-header' },
     ...phases.map((ph, i) => {
-      const [start, end] = phaseRanges[i];
-      const isDone = stepIdx > end;
-      const isActive = stepIdx >= start && stepIdx <= end;
-      const seg = el('div', { class: `phase-seg${isActive ? ' active' : isDone ? ' done' : ''}` },
-        el('span', { class: 'seg-num' }, `0${i+1}`),
-        ph
+      const [start,end] = phaseRanges[i];
+      const isDone = stepIdx > end, isActive = stepIdx >= start && stepIdx <= end;
+      return el('div', { class:`phase-seg${isActive?' active':isDone?' done':''}` },
+        el('span', { class:'seg-num' }, `0${i+1}`), ph
       );
-      return seg;
     })
   );
 
-  // Step dots
-  const dotRow = el('div', { class: 'step-dot-row' },
-    ...Array.from({ length: totalSteps }, (_, i) =>
-      el('div', { class: `step-dot${i < stepIdx ? ' done' : i === stepIdx ? ' active' : ''}` })
+  const dotRow = el('div', { class:'step-dot-row' },
+    ...Array.from({ length:totalSteps }, (_,i) =>
+      el('div', { class:`step-dot${i < stepIdx?' done':i === stepIdx?' active':''}` })
     ),
-    el('span', { class: 'step-label' }, `${stepIdx + 1} / ${totalSteps}`)
+    el('span', { class:'step-label' }, `${stepIdx + 1} / ${totalSteps}`)
   );
 
-  const children = [phaseHeader, dotRow,
-    el('h2', { class: 'question' }, q.question),
-    el('p',  { class: 'subtext'  }, q.subtext),
-  ];
+  // Why button
+  const whyId = `why-${q.id}`;
+  const whyBox = el('div', { class:'q-why-box', id:whyId }, Q_WHY[q.id] || '');
+  const whyBtn = el('button', { class:'q-why-btn' }, '? why are you asking this');
+  whyBtn.addEventListener('click', () => {
+    whyBox.classList.toggle('visible');
+    whyBtn.textContent = whyBox.classList.contains('visible') ? '↑ close' : '? why are you asking this';
+  });
+
+  const children = [phaseHeader, dotRow, el('h2', { class:'question' }, q.question), el('p', { class:'subtext' }, q.subtext), whyBtn, whyBox];
+
+  // Contradiction check mid-quiz
+  if (stepIdx >= 6) {
+    const contradiction = detectContradiction(state.answers);
+    if (contradiction) {
+      children.push(
+        el('div', { class:'contradiction-box' },
+          el('div', { class:'contradiction-title' }, '⚠ Internal Inconsistency Detected'),
+          el('div', { class:'contradiction-text' }, contradiction),
+        )
+      );
+    }
+  }
 
   if (q.type === 'sentiment_scale') {
-    children.push(el('div', { class: 'options-col' },
+    children.push(el('div', { class:'options-col' },
       ...(q.options || []).map(o => {
         const active = state.answers[q.id] === o.value;
-        const btn = el('button', { class: `opt-row${active ? ' active' : ''}` },
-          el('div', null,
-            el('div', { class: 'opt-label' }, o.label),
-            el('div', { class: 'opt-sub' }, o.sub),
-          ),
-          el('div', { class: 'opt-dot' }),
+        const btn = el('button', { class:`opt-row${active?' active':''}` },
+          el('div', null, el('div', { class:'opt-label' }, o.label), el('div', { class:'opt-sub' }, o.sub)),
+          el('div', { class:'opt-dot' }),
         );
         btn.addEventListener('click', () => advance(o.value));
         return btn;
@@ -1201,12 +710,12 @@ function renderQuestion(q, stepIdx) {
   }
 
   if (q.type === 'choice') {
-    children.push(el('div', { class: 'options-grid' },
+    children.push(el('div', { class:'options-grid' },
       ...(q.options || []).map(o => {
         const active = state.answers[q.id] === o.value;
-        const btn = el('button', { class: `opt-card${active ? ' active' : ''}` },
-          el('div', { class: 'opt-label' }, o.label),
-          el('div', { class: 'opt-sub' }, o.sub),
+        const btn = el('button', { class:`opt-card${active?' active':''}` },
+          el('div', { class:'opt-label' }, o.label),
+          el('div', { class:'opt-sub' }, o.sub),
         );
         btn.addEventListener('click', () => advance(o.value));
         return btn;
@@ -1215,9 +724,8 @@ function renderQuestion(q, stepIdx) {
   }
 
   if (q.type === 'slider') {
-    const valueDisplay = el('div', { class: 'slider-big' }, `${state.slider}%`);
-    const hint = el('div', { class: 'slider-hint', style: 'color:var(--gold)' }, '');
-
+    const valueDisplay = el('div', { class:'slider-big' }, `${state.slider}%`);
+    const hint = el('div', { class:'slider-hint', style:'color:var(--gold)' }, '');
     function updateHint(v) {
       if      (v <= 3)  { hint.textContent = 'Ultra-conservative — exceptional capital preservation discipline.'; hint.style.color = '#3b82f6'; }
       else if (v <= 8)  { hint.textContent = 'Disciplined — well-diversified across high-conviction ideas.'; hint.style.color = '#06b6d4'; }
@@ -1227,138 +735,133 @@ function renderQuestion(q, stepIdx) {
       else              { hint.textContent = '⚠ Extreme risk — this level of concentration has destroyed most portfolios.'; hint.style.color = '#c0392b'; }
     }
     updateHint(state.slider);
-
-    const range = el('input', { type: 'range', min: '1', max: '100', value: state.slider });
-    range.addEventListener('input', () => {
-      state.slider = Number(range.value);
-      valueDisplay.textContent = `${state.slider}%`;
-      updateHint(state.slider);
-    });
-
+    const range = el('input', { type:'range', min:'1', max:'100', value:state.slider });
+    range.addEventListener('input', () => { state.slider = Number(range.value); valueDisplay.textContent = `${state.slider}%`; updateHint(state.slider); });
     children.push(
-      el('div', { class: 'slider-display' }, valueDisplay, el('div', { class: 'slider-unit' }, 'per position')),
+      el('div', { class:'slider-display' }, valueDisplay, el('div', { class:'slider-unit' }, 'per position')),
       range,
-      el('div', { class: 'slider-labels' }, el('span', null, '1%'), el('span', null, '50%'), el('span', null, '100%')),
+      el('div', { class:'slider-labels' }, el('span',null,'1%'), el('span',null,'50%'), el('span',null,'100%')),
       hint,
-      el('button', { class: 'btn-primary', onClick: () => advance(state.slider) }, 'Confirm →'),
+      el('button', { class:'btn-primary', onClick: () => advance(state.slider) }, 'Confirm →'),
     );
   }
 
   return el('div', null, ...children);
 }
 
-// ═══════════════════════════════════════════════════════
-// SCREEN: RESULT
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
+// RESULTS SCREEN
+// ══════════════════════════════════════════════════════════
 
 function renderResult(p) {
   const warningBox = p.positionPct > 25
-    ? el('div', { class: 'warning-box' },
-        el('div', { class: 'warning-text' },
-          `⚠  You selected ${p.positionPct}% per position. Your profile-calibrated maximum is ${p.suggestedPosition}%. The gap between these numbers is where most retail investors experience irreversible losses. Consider starting at ${p.suggestedPosition}% until you have tracked at least 2 full market cycles.`
+    ? el('div', { class:'warning-box' },
+        el('div', { class:'warning-text' },
+          `⚠  You selected ${p.positionPct}% per position. Your profile-calibrated maximum is ${p.suggestedPosition}%. The gap between these numbers is where most retail investors experience irreversible losses.`
         )
       )
     : null;
 
-  const nameInput  = el('input', { class: 'waitlist-input', type: 'text',  placeholder: 'Your name', autocomplete: 'name' });
-  const emailInput = el('input', { class: 'waitlist-input', type: 'email', placeholder: 'Email address', autocomplete: 'email' });
-  const phoneInput = el('input', { class: 'waitlist-input', type: 'tel',   placeholder: 'WhatsApp / Phone (optional)', autocomplete: 'tel' });
-  const successMsg = el('div', { class: 'waitlist-success' }, '✓ You\'re on the list. I\'ll be in touch personally.');
-  const errorMsg   = el('div', { class: 'waitlist-success', style: 'color:var(--red);display:none;' }, '✗ Something went wrong. Please try again.');
-  const submitBtn  = el('button', { class: 'waitlist-submit' }, 'Join the Waitlist →');
+  // Waitlist form
+  const nameInput  = el('input', { class:'waitlist-input', type:'text',  placeholder:'Your name' });
+  const emailInput = el('input', { class:'waitlist-input', type:'email', placeholder:'Email address' });
+  const phoneInput = el('input', { class:'waitlist-input', type:'tel',   placeholder:'WhatsApp / Phone (optional)' });
+  const successMsg = el('div', { class:'waitlist-success' }, "✓ You're on the list. I'll be in touch personally.");
+  const errorMsg   = el('div', { class:'waitlist-success', style:'color:var(--red);display:none;' }, '✗ Something went wrong. Please try again.');
+  const submitBtn  = el('button', { class:'waitlist-submit' }, 'Join the Waitlist →');
   submitBtn.addEventListener('click', async () => {
-    const name  = nameInput.value.trim();
-    const email = emailInput.value.trim();
+    const name = nameInput.value.trim(), email = emailInput.value.trim();
     if (!name)  { nameInput.style.borderColor  = 'var(--red)'; nameInput.focus(); return; }
     if (!email) { emailInput.style.borderColor = 'var(--red)'; emailInput.focus(); return; }
-
-    submitBtn.textContent = 'Submitting...';
-    submitBtn.disabled = true;
-    submitBtn.style.opacity = '0.6';
+    submitBtn.textContent = 'Submitting...'; submitBtn.disabled = true; submitBtn.style.opacity = '0.6';
     errorMsg.style.display = 'none';
-
     try {
       const res = await fetch('https://formspree.io/f/xykngrlp', {
-        method: 'POST',
-        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name,
-          email,
-          phone:     phoneInput.value.trim(),
-          archetype: p.archetype,
-          horizon:   p.horizon,
-          style:     p.investingStyle,
-          composite: Math.round(p.composite / 5 * 100),
-          _subject:  'New Investor Profile — ' + p.archetype + ' · ' + name,
-        }),
+        method:'POST', headers:{'Accept':'application/json','Content-Type':'application/json'},
+        body: JSON.stringify({ name, email, phone:phoneInput.value.trim(), archetype:p.archetype, horizon:p.horizon, style:p.investingStyle, composite:p.compositeScore, _subject:`New Investor Profile — ${p.archetype} · ${p.compositeScore}/100 · ${name}` }),
       });
-      if (res.ok) {
-        submitBtn.style.display  = 'none';
-        successMsg.style.display = 'block';
-      } else {
-        const data = await res.json();
-        submitBtn.textContent = 'Join the Waitlist →';
-        submitBtn.disabled = false;
-        submitBtn.style.opacity = '1';
-        errorMsg.style.display = 'block';
-      }
-    } catch (err) {
-      submitBtn.textContent = 'Join the Waitlist →';
-      submitBtn.disabled = false;
-      submitBtn.style.opacity = '1';
-      errorMsg.style.display = 'block';
+      if (res.ok) { submitBtn.style.display = 'none'; successMsg.style.display = 'block'; }
+      else { submitBtn.textContent = 'Join the Waitlist →'; submitBtn.disabled = false; submitBtn.style.opacity = '1'; errorMsg.style.display = 'block'; }
+    } catch {
+      submitBtn.textContent = 'Join the Waitlist →'; submitBtn.disabled = false; submitBtn.style.opacity = '1'; errorMsg.style.display = 'block';
     }
+  });
+
+  // Reminder opt-in
+  const reminderEmailInput = el('input', { class:'reminder-input', type:'email', placeholder:'email@example.com' });
+  const reminderSuccess = el('div', { class:'reminder-success' }, '✓ Reminder set for 6 months from today.');
+  const reminderBtn = el('button', { class:'reminder-submit' }, 'Set Reminder →');
+  reminderBtn.addEventListener('click', async () => {
+    const email = reminderEmailInput.value.trim();
+    if (!email) { reminderEmailInput.style.borderColor = 'var(--red)'; return; }
+    reminderBtn.textContent = '...';
+    try {
+      await fetch('https://formspree.io/f/xykngrlp', {
+        method:'POST', headers:{'Accept':'application/json','Content-Type':'application/json'},
+        body: JSON.stringify({ email, type:'reminder', archetype:p.archetype, composite:p.compositeScore, _subject:`Recalibration Reminder — ${p.archetype} · ${email}` }),
+      });
+    } catch {}
+    reminderBtn.style.display = 'none';
+    reminderSuccess.style.display = 'block';
   });
 
   const result = el('div', null,
 
-    // ── Archetype ────────────────────────────────────
-    el('div', { class: 'result-eyebrow' }, 'Assessment Complete · Calibration Report'),
-    el('div', { class: 'archetype-reveal', style: `border-left-color:${p.archetypeColor}` },
-      el('div', { class: 'archetype-label' }, 'Your Investor Archetype'),
-      el('div', { class: 'archetype-name', style: `color:${p.archetypeColor}` }, p.archetype),
-      el('p',   { class: 'archetype-tagline' }, p.archetypeTagline),
+    // ── Archetype
+    el('div', { class:'result-eyebrow' }, 'Assessment Complete · Calibration Report'),
+    el('div', { class:'archetype-reveal', style:`border-left-color:${p.archetypeColor}` },
+      el('div', { class:'archetype-label' }, 'Your Investor Archetype'),
+      el('div', { class:'archetype-name', style:`color:${p.archetypeColor}` }, p.archetype),
+      el('div', { class:'archetype-stability', style:`color:${p.stabilityColor};border-color:${p.stabilityColor}33;background:${p.stabilityColor}0d` },
+        el('span', null, '◈'), p.stabilityMsg
+      ),
+      el('p', { class:'archetype-tagline' }, p.archetypeTagline),
     ),
 
-    // ── Core metrics ─────────────────────────────────
-    el('div', { class: 'section-label' }, 'Core Metrics'),
-    el('div', { class: 'stats-grid' },
+    // Contradiction alert
+    p.contradiction ? el('div', { class:'warning-box', style:'border-top:1px solid rgba(192,57,43,0.3)' },
+      el('div', { class:'warning-text', style:'color:#f97316' }, '⚡ ' + p.contradiction)
+    ) : null,
+
+    // ── Core metrics
+    el('div', { class:'section-label' }, 'Core Metrics'),
+    el('div', { class:'stats-grid' },
       ...[
-        { label: 'Max Drawdown Tolerance', value: p.maxDrawdown, note: 'Before emotional override likely' },
-        { label: 'Position Size Limit',    value: `≤ ${p.suggestedPosition}%`, note: 'Per single equity position' },
-        { label: 'Time Horizon',           value: p.horizon, note: null },
-        { label: 'Investing Style',        value: p.investingStyle, note: 'Self-identified framework' },
-        { label: 'Research Depth',         value: p.famScore <= 2 ? '⚠ Needs work' : p.famScore <= 3 ? 'Developing' : 'Strong', note: p.famScore <= 2 ? 'Read an annual report first' : 'Good foundation' },
-        { label: 'Psychological Profile',  value: `${Math.round(p.composite / 5 * 100)}`, note: '/100 composite risk score' },
+        { label:'Max Drawdown Tolerance', value:p.maxDrawdown, note:'Before emotional override likely' },
+        { label:'Position Size Limit', value:`≤ ${p.suggestedPosition}%`, note:'Per single equity position' },
+        { label:'Time Horizon', value:p.horizon, note:null },
+        { label:'Investing Style', value:p.investingStyle, note:'Self-identified framework' },
+        { label:'Research Depth', value:p.famScore <= 2 ? '⚠ Needs work' : p.famScore <= 3 ? 'Developing' : 'Strong', note:p.famScore <= 2 ? 'Read an annual report first' : 'Good foundation' },
+        { label:'Composite Score', value:`${p.compositeScore}`, note:'/100 across six dimensions' },
       ].map(({ label, value, note }) =>
-        el('div', { class: 'stat-cell' },
-          el('span', { class: 'stat-cell-label' }, label),
-          el('div',  { class: 'stat-cell-value' }, value),
-          note ? el('div', { class: 'stat-cell-note' }, note) : null,
+        el('div', { class:'stat-cell' },
+          el('span', { class:'stat-cell-label' }, label),
+          el('div', { class:'stat-cell-value' }, value),
+          note ? el('div', { class:'stat-cell-note' }, note) : null,
         )
       )
     ),
 
-    // ── Radar chart ──────────────────────────────────
-    el('div', { class: 'section-label' }, 'Psychological Dimensions'),
-    el('div', { class: 'radar-wrap' },
-      el('span', { class: 'radar-title' }, 'Six-Dimension Investor Profile'),
-      el('div', { class: 'radar-container' },
-        el('canvas', { id: 'radarCanvas', height: '240' }),
-        el('div', { class: 'radar-legend' },
+    // ── Radar
+    el('div', { class:'section-label' }, 'Psychological Dimensions'),
+    el('div', { class:'radar-wrap' },
+      el('span', { class:'radar-title' }, 'Six-Dimension Investor Profile'),
+      el('div', { class:'radar-container' },
+        el('canvas', { id:'radarCanvas', height:'240' }),
+        el('div', { class:'radar-legend' },
           ...Object.entries({
-            'Emotional Control':    { val: p.dimensions.emotionalCtrl,  color: '#c0392b' },
-            'Independent Thinking': { val: p.dimensions.independentThk, color: '#a855f7' },
-            'Risk Capacity':        { val: p.dimensions.riskCapacity,   color: '#22c55e' },
-            'Research Depth':       { val: p.dimensions.researchDepth,  color: '#3b82f6' },
-            'Position Discipline':  { val: p.dimensions.positionDisc,   color: '#C9A84C' },
-            'Style Alignment':      { val: p.dimensions.styleCohesion,  color: '#06b6d4' },
+            'Emotional Control':    { val:p.dimensions.emotionalCtrl,  color:'#c0392b' },
+            'Independent Thinking': { val:p.dimensions.independentThk, color:'#a855f7' },
+            'Risk Capacity':        { val:p.dimensions.riskCapacity,   color:'#22c55e' },
+            'Research Depth':       { val:p.dimensions.researchDepth,  color:'#3b82f6' },
+            'Position Discipline':  { val:p.dimensions.positionDisc,   color:'#C9A84C' },
+            'Style Alignment':      { val:p.dimensions.styleCohesion,  color:'#06b6d4' },
           }).map(([name, { val, color }]) =>
-            el('div', { class: 'radar-leg-item' },
-              el('div', { class: 'radar-leg-dot', style: `background:${color}` }),
+            el('div', { class:'radar-leg-item' },
+              el('div', { class:'radar-leg-dot', style:`background:${color}` }),
               el('div', null,
-                el('div', { class: 'radar-leg-name' }, name),
-                el('div', { class: 'radar-leg-val' }, val),
+                el('div', { class:'radar-leg-name' }, name),
+                el('div', { class:'radar-leg-val' }, val),
               )
             )
           )
@@ -1366,119 +869,178 @@ function renderResult(p) {
       )
     ),
 
-    // ── Behavioral biases ────────────────────────────
-    el('div', { class: 'section-label' }, 'Behavioral Analysis'),
-    el('div', { class: 'bias-grid' },
+    // ── Outcome simulator
+    el('div', { class:'section-label' }, 'Compound Outcome Simulator'),
+    el('div', { class:'simulator-wrap', id:'simWrap' },
+      el('span', { class:'simulator-title' }, 'Portfolio growth projection — adjust variables to see impact'),
+      el('div', { class:'simulator-controls' },
+        el('div', { class:'sim-control-group' },
+          el('div', { class:'sim-control-label' }, 'Initial investment', el('span', { id:'simAmtLabel' }, '$10,000')),
+          (() => { const r = el('input', { type:'range', min:'1000', max:'100000', step:'1000', value:'10000' }); r.id='simAmt'; return r; })(),
+        ),
+        el('div', { class:'sim-control-group' },
+          el('div', { class:'sim-control-label' }, 'Annual return', el('span', { id:'simRetLabel' }, '9%')),
+          (() => { const r = el('input', { type:'range', min:'3', max:'25', step:'1', value:'9' }); r.id='simRet'; return r; })(),
+        ),
+        el('div', { class:'sim-control-group' },
+          el('div', { class:'sim-control-label' }, 'Monthly contribution', el('span', { id:'simContLabel' }, '$500')),
+          (() => { const r = el('input', { type:'range', min:'0', max:'5000', step:'100', value:'500' }); r.id='simCont'; return r; })(),
+        ),
+        el('div', { class:'sim-control-group' },
+          el('div', { class:'sim-control-label' }, 'Time horizon', el('span', { id:'simYrsLabel' }, '20 years')),
+          (() => { const r = el('input', { type:'range', min:'1', max:'40', step:'1', value:'20' }); r.id='simYrs'; return r; })(),
+        ),
+      ),
+      el('div', { class:'sim-chart-wrap' }, el('canvas', { id:'simChart' })),
+      el('div', { class:'sim-result-row' },
+        el('div', { class:'sim-result-cell' }, el('div', { class:'sim-result-label' }, 'Final value'), el('div', { class:'sim-result-val', id:'simFinal' }, '-')),
+        el('div', { class:'sim-result-cell' }, el('div', { class:'sim-result-label' }, 'Total invested'), el('div', { class:'sim-result-val', id:'simInvested' }, '-')),
+        el('div', { class:'sim-result-cell' }, el('div', { class:'sim-result-label' }, 'Total gain'), el('div', { class:'sim-result-val', id:'simGain' }, '-')),
+      ),
+    ),
+
+    // ── Behavioral biases
+    el('div', { class:'section-label' }, 'Behavioral Analysis'),
+    el('div', { class:'bias-grid' },
       ...p.biases.map(b =>
-        el('div', { class: 'bias-row' },
-          el('div', { class: 'bias-icon', style: `background:${b.color}22` }),
-          el('div', { class: 'bias-content' },
-            el('div', { class: 'bias-name' }, b.name),
-            el('div', { class: 'bias-desc' }, b.desc),
+        el('div', { class:'bias-row' },
+          el('div', { class:'bias-icon', style:`background:${b.color}22` }),
+          el('div', { class:'bias-content' },
+            el('div', { class:'bias-name' }, b.name),
+            el('div', { class:'bias-desc' }, b.desc),
           ),
-          el('div', { class: 'bias-bar-wrap' },
-            el('div', { class: 'bias-bar-label' }, b.severity + '%'),
-            el('div', { class: 'bias-bar' },
-              el('div', { class: 'bias-bar-fill', style: `width:${b.severity}%;background:${b.color}` }),
-            )
+          el('div', { class:'bias-bar-wrap' },
+            el('div', { class:'bias-bar-label' }, b.severity + '%'),
+            el('div', { class:'bias-bar' }, el('div', { class:'bias-bar-fill', style:`background:${b.color}`, 'data-width':b.severity })),
           )
         )
       )
     ),
 
-    // ── Portfolio allocation ──────────────────────────
-    el('div', { class: 'section-label' }, 'Starting Portfolio Model'),
-    el('div', { class: 'alloc-grid' },
-      ...p.allocation.map(a =>
-        el('div', { class: 'alloc-cell' },
-          el('div', { class: 'alloc-bar-vert', style: `background:${a.color}` }),
-          el('div', null,
-            el('div', { class: 'alloc-pct', style: `color:${a.color}` }, a.pct + '%'),
-            el('div', null,
-              el('div', { class: 'alloc-class' }, a.asset),
-              el('div', { class: 'alloc-why' }, a.why),
+    // ── Portfolio doughnut
+    el('div', { class:'section-label' }, 'Starting Portfolio Model'),
+    el('div', { class:'portfolio-wrap' },
+      el('div', { class:'portfolio-container' },
+        el('div', { class:'portfolio-chart-wrap' },
+          el('canvas', { id:'portfolioChart', width:'220', height:'220' }),
+          el('div', { class:'portfolio-center' },
+            el('div', { class:'portfolio-center-val', id:'portfolioCenterVal' }, p.allocation[0].pct + '%'),
+            el('div', { class:'portfolio-center-label', id:'portfolioCenterLabel' }, p.allocation[0].asset.split(' ')[0]),
+          ),
+        ),
+        el('div', { class:'portfolio-legend' },
+          ...p.allocation.map((a, i) =>
+            el('div', { class:'portfolio-leg-row', id:`leg-${i}` },
+              el('div', { class:'portfolio-leg-bar', style:`background:${a.color}` }),
+              el('div', { class:'portfolio-leg-pct', style:`color:${a.color}` }, a.pct + '%'),
+              el('div', { class:'portfolio-leg-info' },
+                el('div', { class:'portfolio-leg-class' }, a.asset),
+                el('div', { class:'portfolio-leg-why' }, a.why),
+              )
             )
           )
-        )
+        ),
       )
     ),
 
     warningBox,
 
-    // ── Equity recommendation ─────────────────────────
-    el('div', { class: 'section-label' }, 'Recommended Starting Territory'),
-    el('div', { class: 'equity-box' },
-      el('div', { class: 'equity-eyebrow' }, 'Best Match For Your Profile'),
-      el('div', { class: 'equity-name' }, p.equity.label),
-      el('p',   { class: 'equity-why'  }, p.equity.why),
-      el('div', { class: 'equity-tags' }, ...p.equity.examples.map(ex => el('span', { class: 'equity-tag' }, ex))),
+    // ── Equity recommendation
+    el('div', { class:'section-label' }, 'Recommended Starting Territory'),
+    el('div', { class:'equity-box' },
+      el('div', { class:'equity-eyebrow' }, 'Best Match For Your Profile'),
+      el('div', { class:'equity-name' }, p.equity.label),
+      el('p',   { class:'equity-why'  }, p.equity.why),
+      el('div', { class:'equity-tags' }, ...p.equity.examples.map(ex => el('span', { class:'equity-tag' }, ex))),
     ),
 
-    // ── Framework rules ───────────────────────────────
-    el('div', { class: 'section-label' }, 'Your Personal Framework'),
-    el('div', { class: 'rules-box', style: `border-left:3px solid ${p.archetypeColor}` },
-      el('div', { class: 'rules-eyebrow' }, 'Rules Calibrated to Your Profile'),
+    // ── Rules
+    el('div', { class:'section-label' }, 'Your Personal Framework'),
+    el('div', { class:'rules-box', style:`border-left:3px solid ${p.archetypeColor}` },
+      el('div', { class:'rules-eyebrow' }, 'Rules Calibrated to Your Profile'),
       ...p.rules.map(r => {
-        const ruleText = el('span', { class: 'rule-text' });
+        const ruleText = el('span', { class:'rule-text' });
         ruleText.innerHTML = r.text;
-        return el('div', { class: 'rule-row' },
-          el('span', { class: 'rule-num', style: `color:${p.archetypeColor}` }, r.num),
-          ruleText,
-        );
+        return el('div', { class:'rule-row' }, el('span', { class:'rule-num', style:`color:${p.archetypeColor}` }, r.num), ruleText);
       }),
     ),
 
-    // ── Learning path ─────────────────────────────────
-    el('div', { class: 'section-label' }, 'Personalised Learning Path'),
-    el('div', { class: 'path-grid' },
+    // ── Learning path
+    el('div', { class:'section-label' }, 'Personalised Learning Path'),
+    el('div', { class:'path-grid' },
       ...p.learningPath.map((item, i) =>
-        el('div', { class: 'path-row' },
-          el('div', { class: 'path-step' }, `0${i+1}`),
-          el('div', { class: 'path-content' },
-            el('div', { class: 'path-title' }, item.title),
-            el('div', { class: 'path-sub'   }, item.sub),
-          ),
-          el('span', { class: 'path-tag', style: `color:${item.tagColor};background:${item.tagBg}` }, item.tag),
+        el('div', { class:'path-row' },
+          el('div', { class:'path-step' }, `0${i+1}`),
+          el('div', { class:'path-content' }, el('div', { class:'path-title' }, item.title), el('div', { class:'path-sub' }, item.sub)),
+          el('span', { class:'path-tag', style:`color:${item.tagColor};background:${item.tagBg}` }, item.tag),
         )
       )
     ),
 
-    // ── Insight box ───────────────────────────────────
-    el('div', { class: 'insight-box' },
-      el('div', { class: 'insight-eyebrow' }, 'A Note on Self-Assessment'),
-      el('p', { class: 'insight-text' },
-        'This profile reflects how you described yourself under ideal conditions. Real investing happens under stress, with real money, in real time. The distance between this profile and your actual behaviour in a drawdown is the most important thing to discover — and the only way to discover it is to invest with small amounts first, observe yourself rigorously, and recalibrate. ',
+    // ── Reading list
+    el('div', { class:'section-label' }, 'Reading List for Your Archetype'),
+    el('div', { class:'reading-grid' },
+      ...p.readingList.map(r =>
+        el('div', { class:'reading-row' },
+          el('span', { class:'reading-type', style:`color:${r.typeColor};background:${r.typeBg}` }, r.type),
+          el('div', { class:'reading-content' },
+            el('div', { class:'reading-title' }, r.title),
+            el('div', { class:'reading-author' }, r.author),
+          ),
+        )
+      )
+    ),
+
+    // ── Insight
+    el('div', { class:'insight-box' },
+      el('div', { class:'insight-eyebrow' }, 'A Note on Self-Assessment'),
+      el('p', { class:'insight-text' },
+        'This profile reflects how you described yourself under ideal conditions. Real investing happens under stress, with real money, in real time. The distance between this profile and your actual behaviour in a drawdown is the most important thing to discover. ',
         el('strong', null, 'Save this page. Revisit after your first live loss.')
       )
     ),
 
-    // ── Waitlist ──────────────────────────────────────
-    el('div', { class: 'waitlist-box' },
-      el('div', { class: 'waitlist-eyebrow' }, 'Limited Availability'),
-      el('h3',  { class: 'waitlist-headline' }, 'Want me to personally walk through your profile?'),
-      el('p',   { class: 'waitlist-sub' },
-        'I work with a small number of people directly. If you want a 1-on-1 session based on your calibration above — your specific archetype, biases, and starting territory — join the waitlist. I\'ll reach out personally.'
-      ),
-      el('div', { class: 'waitlist-form' }, nameInput, emailInput, phoneInput, submitBtn, successMsg, errorMsg),
+    // ── Reminder opt-in
+    el('div', { class:'reminder-box' },
+      el('div', { class:'reminder-text' }, el('strong', null, 'Set a recalibration reminder.'), ' Markets change. You change. Get a prompt to retake this in 6 months.'),
+      reminderEmailInput, reminderBtn, reminderSuccess,
     ),
 
-    // ── CTA ───────────────────────────────────────────
-    el('div', { class: 'result-cta' },
-      el('button', { class: 'btn-ghost', onClick: () => { state = { step:-1, answers:{}, slider:10, profile:null }; render(); } }, '↺ Recalibrate'),
-      el('span', { class: 'result-note' }, 'Save this page · Revisit after your first live trade'),
+    // ── PDF Export
+    el('div', { class:'export-row' },
+      el('button', { class:'btn-export', onClick: () => exportProfile(p) }, '↓ Download Profile Summary'),
+      el('button', { class:'btn-export', onClick: () => shareProfile(p) }, '⤴ Copy Share Link'),
+    ),
+
+    // ── Waitlist
+    el('div', { class:'waitlist-box' },
+      el('div', { class:'waitlist-eyebrow' }, 'Limited Availability'),
+      el('h3',  { class:'waitlist-headline' }, 'Want me to personally walk through your profile?'),
+      el('p',   { class:'waitlist-sub' }, "I work with a small number of people directly. If you want a 1-on-1 session based on your calibration above — your specific archetype, biases, and starting territory — join the waitlist. I'll reach out personally."),
+      el('div', { class:'waitlist-form' }, nameInput, emailInput, phoneInput, submitBtn, successMsg, errorMsg),
+    ),
+
+    el('div', { class:'result-cta' },
+      el('button', { class:'btn-ghost', onClick: () => { state = { step:-1, answers:{}, slider:10, profile:null }; clearProgress(); render(); } }, '↺ Recalibrate'),
+      el('span', { class:'result-note' }, 'Save this page · Revisit after your first live trade'),
     ),
   );
 
-  // Draw radar after DOM insert
-  setTimeout(() => drawRadar(p.dimensions, p.archetypeColor), 80);
+  // Init charts after DOM
+  setTimeout(() => {
+    drawRadar(p.dimensions, p.archetypeColor);
+    initSimulator();
+    initPortfolioChart(p.allocation);
+    animateBiasBar();
+    initScrollReveal();
+  }, 80);
+
   return result;
 }
 
-
-
-// ═══════════════════════════════════════════════════════
-// RADAR CHART
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
+// RADAR CHART (animated)
+// ══════════════════════════════════════════════════════════
 
 function drawRadar(dims, color) {
   const canvas = document.getElementById('radarCanvas');
@@ -1486,108 +1048,346 @@ function drawRadar(dims, color) {
   const ctx = canvas.getContext('2d');
   const dpr = window.devicePixelRatio || 1;
   const size = canvas.offsetWidth || 240;
-  canvas.width  = size * dpr;
-  canvas.height = 240 * dpr;
+  canvas.width = size * dpr; canvas.height = 240 * dpr;
   ctx.scale(dpr, dpr);
-
-  const W = size, H = 240;
-  const cx = W / 2, cy = H / 2;
-  const R = Math.min(cx, cy) - 28;
-
-  const labels = ['Emotional\nControl', 'Independent\nThinking', 'Risk\nCapacity', 'Research\nDepth', 'Position\nDiscipline', 'Style\nAlignment'];
+  const W = size, H = 240, cx = W / 2, cy = H / 2, R = Math.min(cx, cy) - 28;
+  const labels = ['Emotional\nControl','Independent\nThinking','Risk\nCapacity','Research\nDepth','Position\nDiscipline','Style\nAlignment'];
   const values = [dims.emotionalCtrl, dims.independentThk, dims.riskCapacity, dims.researchDepth, dims.positionDisc, dims.styleCohesion].map(v => v / 100);
   const n = labels.length;
 
-  function point(i, r) {
+  function pt(i, r) {
     const angle = (Math.PI * 2 * i / n) - Math.PI / 2;
     return [cx + r * Math.cos(angle), cy + r * Math.sin(angle)];
   }
 
-  // Grid rings
-  [0.2, 0.4, 0.6, 0.8, 1.0].forEach(scale => {
-    ctx.beginPath();
+  let progress = 0;
+  function draw(prog) {
+    ctx.clearRect(0, 0, W, H);
+    [0.2,0.4,0.6,0.8,1.0].forEach(scale => {
+      ctx.beginPath();
+      for (let i = 0; i < n; i++) {
+        const [x,y] = pt(i, R * scale);
+        i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+      }
+      ctx.closePath();
+      ctx.strokeStyle = scale === 1.0 ? '#262830' : '#1e2028'; ctx.lineWidth = 1; ctx.stroke();
+    });
     for (let i = 0; i < n; i++) {
-      const [x, y] = point(i, R * scale);
-      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      const [x,y] = pt(i, R);
+      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(x,y);
+      ctx.strokeStyle = '#1e2028'; ctx.lineWidth = 1; ctx.stroke();
     }
+    const animVals = values.map(v => v * prog);
+    ctx.beginPath();
+    animVals.forEach((v, i) => {
+      const [x,y] = pt(i, R * v);
+      i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    });
     ctx.closePath();
-    ctx.strokeStyle = scale === 1.0 ? '#262830' : '#1e2028';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-  });
-
-  // Axis spokes
-  for (let i = 0; i < n; i++) {
-    const [x, y] = point(i, R);
-    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(x, y);
-    ctx.strokeStyle = '#1e2028'; ctx.lineWidth = 1; ctx.stroke();
+    ctx.fillStyle = color + '22'; ctx.fill();
+    ctx.strokeStyle = color; ctx.lineWidth = 1.5; ctx.stroke();
+    animVals.forEach((v, i) => {
+      const [x,y] = pt(i, R * v);
+      ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2);
+      ctx.fillStyle = color; ctx.fill();
+    });
+    ctx.font = '9px JetBrains Mono, monospace'; ctx.fillStyle = '#555c72'; ctx.textAlign = 'center';
+    labels.forEach((label, i) => {
+      const [x,y] = pt(i, R + 20);
+      label.split('\n').forEach((line, li) => ctx.fillText(line, x, y + li * 12));
+    });
   }
 
-  // Fill
-  ctx.beginPath();
-  values.forEach((v, i) => {
-    const [x, y] = point(i, R * v);
-    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-  });
-  ctx.closePath();
-  ctx.fillStyle = color + '22';
-  ctx.fill();
-  ctx.strokeStyle = color;
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
+  function animate() {
+    progress = Math.min(1, progress + 0.04);
+    draw(progress);
+    if (progress < 1) requestAnimationFrame(animate);
+  }
+  animate();
+}
 
-  // Dots
-  values.forEach((v, i) => {
-    const [x, y] = point(i, R * v);
-    ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2);
-    ctx.fillStyle = color; ctx.fill();
-  });
+// ══════════════════════════════════════════════════════════
+// PORTFOLIO DOUGHNUT CHART
+// ══════════════════════════════════════════════════════════
 
-  // Labels
-  ctx.font = '9px JetBrains Mono, monospace';
-  ctx.fillStyle = '#555c72';
-  ctx.textAlign = 'center';
-  labels.forEach((label, i) => {
-    const [x, y] = point(i, R + 20);
-    const lines = label.split('\n');
-    lines.forEach((line, li) => ctx.fillText(line, x, y + li * 12));
+let portfolioChartInstance = null;
+
+function initPortfolioChart(allocation) {
+  const canvas = document.getElementById('portfolioChart');
+  if (!canvas) return;
+  if (portfolioChartInstance) { portfolioChartInstance.destroy(); portfolioChartInstance = null; }
+
+  portfolioChartInstance = new Chart(canvas, {
+    type: 'doughnut',
+    data: {
+      labels: allocation.map(a => a.asset),
+      datasets: [{
+        data: allocation.map(a => a.pct),
+        backgroundColor: allocation.map(a => a.color + 'cc'),
+        borderColor: allocation.map(a => a.color),
+        borderWidth: 1,
+        hoverBackgroundColor: allocation.map(a => a.color),
+        hoverBorderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: false,
+      cutout: '72%',
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      onHover: (event, elements) => {
+        const centerVal = document.getElementById('portfolioCenterVal');
+        const centerLabel = document.getElementById('portfolioCenterLabel');
+        if (!centerVal || !centerLabel) return;
+        if (elements && elements.length > 0) {
+          const idx = elements[0].index;
+          centerVal.textContent = allocation[idx].pct + '%';
+          centerLabel.textContent = allocation[idx].asset.split(' ')[0];
+          centerVal.style.color = allocation[idx].color;
+        } else {
+          centerVal.textContent = allocation[0].pct + '%';
+          centerLabel.textContent = allocation[0].asset.split(' ')[0];
+          centerVal.style.color = 'var(--text)';
+        }
+      },
+      animation: { animateRotate: true, animateScale: true, duration: 900, easing: 'easeInOutQuart' },
+    }
   });
 }
 
-// ═══════════════════════════════════════════════════════
-// ADVANCE & RENDER
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
+// COMPOUND OUTCOME SIMULATOR
+// ══════════════════════════════════════════════════════════
+
+let simChartInstance = null;
+
+function initSimulator() {
+  const amtEl = document.getElementById('simAmt');
+  const retEl = document.getElementById('simRet');
+  const contEl = document.getElementById('simCont');
+  const yrsEl = document.getElementById('simYrs');
+  if (!amtEl) return;
+
+  function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
+
+  function calcAndRender() {
+    const initial = Number(amtEl.value);
+    const rate    = Number(retEl.value) / 100;
+    const monthly = Number(contEl.value);
+    const years   = Number(yrsEl.value);
+
+    document.getElementById('simAmtLabel').textContent = fmt(initial);
+    document.getElementById('simRetLabel').textContent = retEl.value + '%';
+    document.getElementById('simContLabel').textContent = fmt(monthly);
+    document.getElementById('simYrsLabel').textContent = years + ' years';
+
+    const labels = [], portfolioData = [], investedData = [];
+    for (let y = 0; y <= years; y++) {
+      const monthlyRate = rate / 12;
+      const months = y * 12;
+      const fv = initial * Math.pow(1 + monthlyRate, months) + monthly * (Math.pow(1 + monthlyRate, months) - 1) / monthlyRate;
+      labels.push(y === 0 ? 'Now' : `Y${y}`);
+      portfolioData.push(Math.round(fv));
+      investedData.push(Math.round(initial + monthly * months));
+    }
+
+    const finalVal = portfolioData[portfolioData.length - 1];
+    const totalInvested = investedData[investedData.length - 1];
+    document.getElementById('simFinal').textContent = fmt(finalVal);
+    document.getElementById('simInvested').textContent = fmt(totalInvested);
+    document.getElementById('simGain').textContent = fmt(finalVal - totalInvested);
+
+    const canvas = document.getElementById('simChart');
+    if (!canvas) return;
+    if (simChartInstance) { simChartInstance.destroy(); simChartInstance = null; }
+
+    simChartInstance = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Portfolio Value',
+            data: portfolioData,
+            borderColor: '#C9A84C',
+            backgroundColor: 'rgba(201,168,76,0.08)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.4,
+            pointRadius: 0,
+            pointHoverRadius: 4,
+            pointHoverBackgroundColor: '#C9A84C',
+          },
+          {
+            label: 'Total Invested',
+            data: investedData,
+            borderColor: '#3a3d4a',
+            borderWidth: 1,
+            borderDash: [4,3],
+            fill: false,
+            tension: 0,
+            pointRadius: 0,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode:'index', intersect:false },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#13141a',
+            borderColor: '#1e2028',
+            borderWidth: 1,
+            titleColor: '#8a8fa0',
+            bodyColor: '#dde1eb',
+            callbacks: { label: ctx => ` ${ctx.dataset.label}: ${fmt(ctx.raw)}` }
+          }
+        },
+        scales: {
+          x: { grid: { color:'#1c1e26', drawBorder:false }, ticks: { color:'#3a3d4a', font:{ family:"'JetBrains Mono', monospace", size:9 }, maxTicksLimit:8 } },
+          y: { grid: { color:'#1c1e26', drawBorder:false }, ticks: { color:'#3a3d4a', font:{ family:"'JetBrains Mono', monospace", size:9 }, callback: v => '$' + (v >= 1e6 ? (v/1e6).toFixed(1)+'M' : v >= 1e3 ? (v/1e3).toFixed(0)+'K' : v) } }
+        },
+        animation: { duration: 600, easing: 'easeInOutQuart' },
+      }
+    });
+  }
+
+  [amtEl, retEl, contEl, yrsEl].forEach(el => el.addEventListener('input', calcAndRender));
+  calcAndRender();
+}
+
+// ══════════════════════════════════════════════════════════
+// BIAS BAR ANIMATION
+// ══════════════════════════════════════════════════════════
+
+function animateBiasBar() {
+  setTimeout(() => {
+    document.querySelectorAll('.bias-bar-fill').forEach((bar, i) => {
+      const w = bar.getAttribute('data-width') || 0;
+      setTimeout(() => { bar.style.width = w + '%'; }, i * 180);
+    });
+  }, 300);
+}
+
+// ══════════════════════════════════════════════════════════
+// SCROLL REVEAL
+// ══════════════════════════════════════════════════════════
+
+function initScrollReveal() {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+}
+
+// ══════════════════════════════════════════════════════════
+// EXPORT & SHARE
+// ══════════════════════════════════════════════════════════
+
+function exportProfile(p) {
+  const content = `INSIGHTINVEST — INVESTOR PROFILE REPORT
+Generated: ${new Date().toLocaleDateString()}
+
+════════════════════════════════════════
+ARCHETYPE: ${p.archetype}
+Composite Score: ${p.compositeScore}/100
+════════════════════════════════════════
+
+${p.archetypeTagline}
+
+STABILITY: ${p.stabilityMsg}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CORE METRICS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Max Drawdown Tolerance: ${p.maxDrawdown}
+Position Size Limit: ≤ ${p.suggestedPosition}%
+Time Horizon: ${p.horizon}
+Investing Style: ${p.investingStyle}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PSYCHOLOGICAL DIMENSIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Emotional Control:     ${p.dimensions.emotionalCtrl}/100
+Independent Thinking:  ${p.dimensions.independentThk}/100
+Risk Capacity:         ${p.dimensions.riskCapacity}/100
+Research Depth:        ${p.dimensions.researchDepth}/100
+Position Discipline:   ${p.dimensions.positionDisc}/100
+Style Alignment:       ${p.dimensions.styleCohesion}/100
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BEHAVIORAL BIASES IDENTIFIED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${p.biases.map(b => `${b.name} (${b.severity}%)\n${b.desc}`).join('\n\n')}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STARTING PORTFOLIO MODEL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${p.allocation.map(a => `${a.pct}% — ${a.asset}: ${a.why}`).join('\n')}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+YOUR PERSONAL FRAMEWORK RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${p.rules.map(r => `${r.num}. ${r.text.replace(/<[^>]+>/g,'')}`).join('\n\n')}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RECOMMENDED READING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${p.readingList.map(r => `${r.type}: ${r.title} — ${r.author}`).join('\n')}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+IMPORTANT: This profile reflects how you described yourself under ideal conditions.
+Real investing happens under stress, with real money, in real time.
+Save this report. Revisit after your first live loss.
+
+InsightInvest · leiholding.com`;
+
+  const blob = new Blob([content], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `investor-profile-${p.archetype.toLowerCase().replace(/\s+/g,'-')}.txt`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function shareProfile(p) {
+  const text = `My InsightInvest profile: ${p.archetype} · ${p.compositeScore}/100 · ${p.investingStyle} — insightinvest.leiholding.com`;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.querySelector('.btn-export:last-child');
+      if (btn) { const orig = btn.textContent; btn.textContent = '✓ Copied!'; setTimeout(() => { btn.textContent = orig; }, 2000); }
+    });
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// NAVIGATION & RENDER
+// ══════════════════════════════════════════════════════════
 
 function advance(val) {
   const q = QUESTIONS[state.step];
   if (!q) return;
   state.answers[q.id] = val;
-
+  saveProgress();
   const card = document.getElementById('card');
   card.classList.add('fade-out');
-
   setTimeout(() => {
-    if (state.step < QUESTIONS.length - 1) {
-      state.step++;
-    } else {
-      state.profile = buildProfile();
-      state.step = QUESTIONS.length;
-    }
+    if (state.step < QUESTIONS.length - 1) state.step++;
+    else { state.profile = buildProfile(); state.step = QUESTIONS.length; clearProgress(); }
     render();
-  }, 260);
+  }, 220);
 }
 
 function render() {
-  const card        = document.getElementById('card');
+  const card = document.getElementById('card');
   const progressWrap = document.getElementById('progress-wrap');
   const progressBar  = document.getElementById('progress-bar');
 
   if (state.step > 0 && state.step < QUESTIONS.length) {
     progressWrap.style.display = 'block';
     progressBar.style.width = `${(state.step / QUESTIONS.length) * 100}%`;
-  } else {
-    progressWrap.style.display = 'none';
-  }
+  } else { progressWrap.style.display = 'none'; }
 
   let content;
   if      (state.step === -1)             content = renderIntro();
@@ -1596,10 +1396,18 @@ function render() {
 
   card.innerHTML = '';
   card.classList.remove('fade-out');
+  card.classList.add('slide-in');
   card.appendChild(content);
+  setTimeout(() => card.classList.remove('slide-in'), 300);
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  updateResumeButton();
+
+  if (simChartInstance && state.step !== QUESTIONS.length) { simChartInstance.destroy(); simChartInstance = null; }
+  if (portfolioChartInstance && state.step !== QUESTIONS.length) { portfolioChartInstance.destroy(); portfolioChartInstance = null; }
 }
 
+// Init
+updateResumeButton();
 render();
 </script>
 </body>
