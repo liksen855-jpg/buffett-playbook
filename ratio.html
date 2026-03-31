@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gold-Silver Ratio Analysis — Leiholding Research</title>
+<meta name="description" content="10-year gold-silver ratio divergence study. Historical spread analysis, gap events, closure timing and temporal patterns. 2,553 trading days of data.">
+<meta name="robots" content="index, follow">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --black:    #000000;
+    --bg:       #0a0a0a;
+    --surface:  #111111;
+    --panel:    #161616;
+    --border:   #2a2a2a;
+    --border2:  #333333;
+    --orange:   #ff6600;
+    --orange2:  #ff8833;
+    --yellow:   #ffcc00;
+    --red:      #ff3333;
+    --green:    #00cc44;
+    --blue:     #0099ff;
+    --cyan:     #00cccc;
+    --white:    #ffffff;
+    --text:     #e0e0e0;
+    --muted:    #888888;
+    --dim:      #555555;
+    --gold:     #ffaa00;
+    --silver:   #b0b8c8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Mono', monospace;
+    background: var(--black);
+    color: var(--text);
+    font-size: 12px;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+
+  /* TOP TICKER BAR */
+  .ticker-bar {
+    background: var(--orange);
+    color: var(--black);
+    font-weight: 700;
+    font-size: 11px;
+    padding: 3px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .ticker-track {
+    display: inline-block;
+    animation: ticker 40s linear infinite;
+  }
+  .ticker-track span { margin: 0 32px; }
+  .ticker-track .up   { color: #003300; }
+  .ticker-track .down { color: #660000; }
+  @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+  /* HEADER */
+  .header {
+    background: var(--bg);
+    border-bottom: 2px solid var(--orange);
+    padding: 0;
+  }
+  .header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 16px 24px 0;
+  }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .bbg-logo {
+    background: var(--orange);
+    color: var(--black);
+    font-weight: 700;
+    font-size: 13px;
+    padding: 4px 8px;
+    letter-spacing: 1px;
+  }
+  .header-title h1 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .header-title .sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .header-meta {
+    text-align: right;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .header-meta .ts {
+    color: var(--orange);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  /* NAV TABS */
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    margin-top: 0;
+  }
+  .nav-tab {
+    padding: 8px 18px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--muted);
+    border-right: 1px solid var(--border);
+    cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+    background: transparent;
+    border-top: none;
+    border-bottom: none;
+    border-left: none;
+  }
+  .nav-tab.active {
+    color: var(--orange);
+    background: var(--surface);
+    border-bottom: 2px solid var(--orange);
+    margin-bottom: -2px;
+  }
+
+  /* MAIN LAYOUT */
+  .main {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px 48px;
+  }
+
+  /* KPI ROW */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    border-bottom: 1px solid var(--border);
+  }
+  .kpi-cell {
+    padding: 14px 16px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border2);
+    background: var(--surface);
+  }
+  .kpi-cell:last-child { border-right: none; }
+  .kpi-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .kpi-value {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .kpi-sub {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .kpi-delta {
+    font-size: 10px;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  .orange { color: var(--orange); }
+  .yellow { color: var(--yellow); }
+  .red    { color: var(--red); }
+  .green  { color: var(--green); }
+  .blue   { color: var(--blue); }
+  .cyan   { color: var(--cyan); }
+  .gold-c { color: var(--gold); }
+  .silver-c { color: var(--silver); }
+  .white  { color: var(--white); }
+  .muted  { color: var(--muted); }
+
+  /* TWO-PANEL GRID */
+  .grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* CHART PANEL */
+  .chart-panel {
+    padding: 20px;
+    border-right: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .panel-title {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--orange);
+  }
+  .panel-subtitle {
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .chart-wrap { position: relative; height: 300px; }
+
+  /* SIDE STATS PANEL */
+  .side-panel {
+    background: var(--surface);
+    padding: 0;
+  }
+  .side-section {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .side-section-title {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--orange);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-row .key { color: var(--muted); }
+  .stat-row .val { font-weight: 600; font-family: 'IBM Plex Mono', monospace; }
+
+  /* MAIN CONTENT AREA */
+  .content-area {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* SECTION */
+  .section {
+    padding: 20px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .section:nth-child(even) { border-right: none; }
+  .section.full-width {
+    grid-column: 1 / -1;
+    border-right: none;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-code {
+    background: var(--orange);
+    color: var(--black);
+    font-size: 9px;
+    font-weight: 800;
+    padding: 2px 6px;
+    letter-spacing: 1px;
+  }
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--white);
+  }
+
+  /* TABLES */
+  table { width: 100%; border-collapse: collapse; }
+  thead tr { background: var(--panel); }
+  th {
+    text-align: left;
+    padding: 7px 10px;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--muted);
+    border-bottom: 2px solid var(--orange);
+    white-space: nowrap;
+  }
+  th.r, td.r { text-align: right; }
+  td {
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,102,0,0.04); }
+  .bold { font-weight: 700; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  /* BADGES */
+  .badge {
+    display: inline-block;
+    padding: 2px 6px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
+  .badge-closed { background: rgba(0,204,68,0.15); color: var(--green); border: 1px solid rgba(0,204,68,0.3); }
+  .badge-open   { background: rgba(255,51,51,0.15); color: var(--red);   border: 1px solid rgba(255,51,51,0.3); }
+
+  /* ALERT BOXES */
+  .alert {
+    border-left: 3px solid var(--orange);
+    background: rgba(255,102,0,0.06);
+    padding: 10px 14px;
+    margin: 10px 0;
+    font-size: 11px;
+  }
+  .alert.red    { border-color: var(--red);   background: rgba(255,51,51,0.06); }
+  .alert.green  { border-color: var(--green); background: rgba(0,204,68,0.06); }
+  .alert.blue   { border-color: var(--blue);  background: rgba(0,153,255,0.06); }
+  .alert.yellow { border-color: var(--yellow); background: rgba(255,204,0,0.06); }
+  .alert-head {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 5px;
+  }
+  .alert.red .alert-head    { color: var(--red); }
+  .alert.green .alert-head  { color: var(--green); }
+  .alert.blue .alert-head   { color: var(--blue); }
+  .alert.yellow .alert-head { color: var(--yellow); }
+  .alert .alert-head        { color: var(--orange); }
+  .alert-body {
+    color: var(--muted);
+    line-height: 1.6;
+    font-size: 11px;
+  }
+  .alert-body strong { color: var(--text); }
+
+  /* MINI STATS GRID */
+  .mini-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin: 12px 0;
+  }
+  .mini-stat {
+    background: var(--panel);
+    padding: 10px 12px;
+  }
+  .mini-stat .ms-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .mini-stat .ms-value {
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  /* BAR */
+  .bar-wrap {
+    background: var(--border);
+    height: 4px;
+    border-radius: 0;
+    overflow: hidden;
+    margin-top: 3px;
+  }
+  .bar-fill {
+    height: 100%;
+    background: var(--orange);
+  }
+
+  /* MONTHLY TABLE VISUAL */
+  .ratio-month-row { display: flex; align-items: center; gap: 10px; padding: 4px 0; border-bottom: 1px solid var(--border); font-size: 11px; }
+  .ratio-month-row:last-child { border-bottom: none; }
+  .m-name { width: 28px; color: var(--muted); font-weight: 600; }
+  .m-val  { width: 46px; text-align: right; color: var(--text); font-family: 'IBM Plex Mono', monospace; }
+  .m-bar  { flex: 1; }
+
+  /* DISTRIBUTION */
+  .dist-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+  }
+  .dist-row:last-child { border-bottom: none; }
+  .dist-label { width: 80px; color: var(--muted); }
+  .dist-count { width: 28px; text-align: right; font-weight: 700; color: var(--white); }
+  .dist-pct   { width: 44px; text-align: right; color: var(--muted); font-size: 10px; }
+  .dist-bar   { flex: 1; }
+
+  /* FOOTER */
+  .footer {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 20px 24px;
+    border-top: 2px solid var(--border);
+    font-size: 10px;
+    color: var(--dim);
+  }
+  .footer-title {
+    color: var(--orange);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 8px;
+    font-size: 10px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  .footer-item { font-size: 10px; line-height: 1.8; }
+  .footer-item span { color: var(--muted); }
+  .disclaimer {
+    color: var(--dim);
+    font-size: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* SCAN LINE OVERLAY */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+    z-index: 9999;
+  }
+
+  /* FLICKER EFFECT ON LOAD */
+  @keyframes flicker { 0%,100%{opacity:1} 50%{opacity:0.97} 75%{opacity:0.99} }
+  body { animation: flicker 0.15s ease-in-out; }
+
+  @media (max-width: 900px) {
+    .kpi-row { grid-template-columns: repeat(3,1fr); }
+    .grid-2col { grid-template-columns: 1fr; }
+    .content-area { grid-template-columns: 1fr; }
+    .section { border-right: none; }
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--orange); }
+
+  /* SIGNAL METER */
+  .signal-zones { display:flex; flex-direction:column; gap:2px; }
+  .sz {
+    padding: 8px 14px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    border-left: 3px solid transparent;
+  }
+  .sz span { font-weight: 400; font-size: 9px; opacity: 0.8; }
+  .sz-strong-buy { background: rgba(255,51,51,0.08); border-color: var(--red); color: var(--red); }
+  .sz-buy        { background: rgba(255,102,0,0.08); border-color: var(--orange); color: var(--orange); }
+  .sz-neutral    { background: rgba(136,136,136,0.08); border-color: var(--muted); color: var(--muted); }
+  .sz-caution    { background: rgba(0,204,204,0.08); border-color: var(--cyan); color: var(--cyan); }
+  .sz-rotate     { background: rgba(0,153,255,0.08); border-color: var(--blue); color: var(--blue); }
+  .active-zone   {
+    background: rgba(0,153,255,0.18) !important;
+    border-color: var(--blue) !important;
+    box-shadow: 0 0 0 1px rgba(0,153,255,0.3);
+    animation: pulse-blue 2s ease-in-out infinite;
+  }
+  @keyframes pulse-blue { 0%,100%{opacity:1} 50%{opacity:0.75} }
+
+  /* SIGNAL BADGES */
+  .badge-strong-buy { background:rgba(255,51,51,0.15);   color:var(--red);    border:1px solid rgba(255,51,51,0.3); }
+  .badge-buy        { background:rgba(255,102,0,0.15);   color:var(--orange); border:1px solid rgba(255,102,0,0.3); }
+  .badge-neutral    { background:rgba(136,136,136,0.15); color:var(--muted);  border:1px solid rgba(136,136,136,0.3); }
+  .badge-caution    { background:rgba(0,204,204,0.15);   color:var(--cyan);   border:1px solid rgba(0,204,204,0.3); }
+  .badge-rotate     { background:rgba(0,153,255,0.15);   color:var(--blue);   border:1px solid rgba(0,153,255,0.3); }
+
+  /* INSTRUMENT CARDS */
+  .instrument-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 12px 14px;
+  }
+  .instrument-card.orange-card { border-color: var(--orange); background: rgba(255,102,0,0.06); }
+  .inst-ticker { font-size: 14px; font-weight: 700; color: var(--orange); margin-bottom: 4px; }
+  .instrument-card.orange-card .inst-ticker { color: var(--yellow); }
+  .inst-name { font-size: 10px; font-weight: 600; color: var(--white); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
+  .inst-desc { font-size: 10px; color: var(--muted); line-height: 1.6; }
+
+  /* BACKTEST KPI STRIP */
+  .bt-kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+  .bt-kpi {
+    padding: 12px 14px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .bt-kpi:last-child { border-right: none; }
+
+  /* BADGE WIN/LOSS */
+  .badge-win  { background:rgba(0,204,68,0.15);  color:var(--green); border:1px solid rgba(0,204,68,0.3); }
+  .badge-loss { background:rgba(255,51,51,0.15); color:var(--red);   border:1px solid rgba(255,51,51,0.3); }
+  .badge-type-a { background:rgba(0,153,255,0.12); color:var(--blue);   border:1px solid rgba(0,153,255,0.3); }
+  .badge-type-b { background:rgba(255,204,0,0.12); color:var(--yellow); border:1px solid rgba(255,204,0,0.3); }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!--  PASTE YOUR SITE NAV / HEADER HERE                          -->
+<!-- ============================================================ -->
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-track" id="ticker">
+    <span>GC=F <span class="up">$4,526.00 ▲+0.82%</span></span>
+    <span>SI=F <span class="up">$70.32 ▲+1.14%</span></span>
+    <span>GOLD/SILVER RATIO <span class="up">64.36 ▼-1.79σ vs 10Y AVG</span></span>
+    <span>2016–2026 MEAN <span>80.94</span> · 20YR AVG ~65</span>
+    <span>10Y MEDIAN <span>80.98</span></span>
+    <span>10Y HIGH <span class="down">125.89</span> COVID-19 2020-03-18</span>
+    <span>10Y LOW <span class="up">44.14</span> 2026-01-26</span>
+    <span>SILVER JAN 2026 HIGH <span class="down">$115.08</span> · NOW OFF 39%</span>
+    <span>ELEVATED EPISODES <span>17/17 CLOSED WITHIN DATASET</span></span>
+    <span>AVG CLOSURE <span>21 DAYS</span></span>
+    <span>MEDIAN CLOSURE <span>9 DAYS</span></span>
+    <span>GC=F <span class="up">$4,526.00 ▲+0.82%</span></span>
+    <span>SI=F <span class="up">$70.32 ▲+1.14%</span></span>
+    <span>GOLD/SILVER RATIO <span class="up">64.36 ▼-1.79σ vs 10Y AVG</span></span>
+    <span>2016–2026 MEAN <span>80.94</span> · 20YR AVG ~65</span>
+    <span>10Y MEDIAN <span>80.98</span></span>
+    <span>10Y HIGH <span class="down">125.89</span> COVID-19 2020-03-18</span>
+    <span>10Y LOW <span class="up">44.14</span> 2026-01-26</span>
+    <span>SILVER JAN 2026 HIGH <span class="down">$115.08</span> · NOW OFF 39%</span>
+    <span>ELEVATED EPISODES <span>17/17 CLOSED WITHIN DATASET</span></span>
+    <span>AVG CLOSURE <span>21 DAYS</span></span>
+    <span>MEDIAN CLOSURE <span>9 DAYS</span></span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="header-brand">
+        <div class="bbg-logo">BBG</div>
+        <div class="header-title">
+          <h1>Gold-Silver Ratio — 10-Year Divergence Study</h1>
+          <div class="sub">Historical spread analysis · Gap events · Closure timing · Temporal patterns · GC=F / SI=F</div>
+        </div>
+      </div>
+      <div class="header-meta">
+        <div class="ts">AS OF 2026-03-30 17:00 EST</div>
+        <div style="margin-top:3px">PERIOD: 2016-02-02 — 2026-03-30</div>
+        <div>2,553 TRADING DAYS · YAHOO FINANCE FUTURES</div>
+        <div>GENERATED: 2026-03-31</div>
+      </div>
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-tab active">OVERVIEW</button>
+      <button class="nav-tab">DIVERGENCE</button>
+      <button class="nav-tab">SEASONALITY</button>
+      <button class="nav-tab">ANNUAL</button>
+      <button class="nav-tab">METHODOLOGY</button>
+    </div>
+  </div>
+</div>
+
+<!-- KPI STRIP -->
+<div class="main">
+<div class="kpi-row">
+  <div class="kpi-cell">
+    <div class="kpi-label">2016–2026 MEAN RATIO</div>
+    <div class="kpi-value orange">80.94</div>
+    <div class="kpi-sub">ELEVATED VS. 20YR AVG (~65)</div>
+  </div>
+  <div class="kpi-cell">
+    <div class="kpi-label">10Y PEAK RATIO</div>
+    <div class="kpi-value red">125.89</div>
+    <div class="kpi-delta red">↑ 2020-03-18 · COVID PANIC</div>
+  </div>
+  <div class="kpi-cell">
+    <div class="kpi-label">CURRENT RATIO</div>
+    <div class="kpi-value green">64.36</div>
+    <div class="kpi-delta green">▼ −1.79σ VS 10Y MEAN</div>
+  </div>
+  <div class="kpi-cell">
+    <div class="kpi-label">GOLD (GC=F)</div>
+    <div class="kpi-value gold-c">$4,526</div>
+    <div class="kpi-sub">10Y RANGE: $1,127 – $5,318</div>
+  </div>
+  <div class="kpi-cell">
+    <div class="kpi-label">SILVER (SI=F)</div>
+    <div class="kpi-value silver-c">$70.32</div>
+    <div class="kpi-sub">OFF 39% FROM JAN 2026 HIGH ($115.08)</div>
+  </div>
+  <div class="kpi-cell" style="border-right:none">
+    <div class="kpi-label">ELEVATED EPISODES</div>
+    <div class="kpi-value yellow">17</div>
+    <div class="kpi-delta green">ALL CLOSED WITHIN DATASET</div>
+  </div>
+</div>
+
+<!-- ACCURACY NOTICE -->
+<div style="border:1px solid rgba(255,102,0,0.35); background:rgba(255,102,0,0.05); padding:12px 16px; margin-bottom:0; border-bottom:none; font-size:10px; display:grid; grid-template-columns: repeat(3,1fr); gap:16px;">
+  <div><span style="color:var(--orange); font-weight:700; text-transform:uppercase; letter-spacing:0.8px">⚠ PERIOD-SPECIFIC MEAN:</span> <span style="color:var(--muted)">The 10yr mean of ~81 reflects a structurally elevated 2016–2026 window (driven by the 2020 COVID spike). Longer-term 20yr+ averages sit in the <strong style="color:var(--text)">50–70 range</strong>. Context matters when framing "normal."</span></div>
+  <div><span style="color:var(--orange); font-weight:700; text-transform:uppercase; letter-spacing:0.8px">⚠ CLOSURE RATE:</span> <span style="color:var(--muted)">All 17 episodes closed within this observation window — partly a function of dataset length and threshold definition. Mean reversion is a <strong style="color:var(--text)">tendency, not a guarantee</strong>; ratios can stay elevated for months.</span></div>
+  <div><span style="color:var(--orange); font-weight:700; text-transform:uppercase; letter-spacing:0.8px">⚠ SILVER DRAWDOWN:</span> <span style="color:var(--muted)">The ~39% decline from the Jan/Feb 2026 high (<strong style="color:var(--text)">$115.08</strong>) to current (<strong style="color:var(--text)">$70.32</strong>) is a post-rally correction within an ongoing structural bull market, not necessarily a return to prior equilibrium.</span></div>
+</div>
+
+<!-- CHART + SIDE PANEL -->
+<div class="grid-2col">
+  <div class="chart-panel">
+    <div class="panel-header">
+      <div>
+        <div class="panel-title">GOLD/SILVER RATIO — MONTHLY AVG (2016–2026)</div>
+        <div class="panel-subtitle" style="margin-top:4px">RED = ABOVE ELEVATED THRESHOLD (86.17) · GREEN = BELOW 70 · DASHED ORANGE = 20YR AVG (~65)</div>
+      </div>
+      <div style="font-size:10px; color:var(--muted); text-align:right">
+        <span style="color:var(--red)">■</span> ABOVE 86.17
+        <span style="color:var(--gold); margin-left:10px">■</span> NORMAL
+        <span style="color:var(--green); margin-left:10px">■</span> BELOW 70
+        <span style="color:var(--orange); margin-left:10px">– –</span> 20YR AVG
+      </div>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="ratioChart"></canvas>
+    </div>
+  </div>
+
+  <div class="side-panel">
+    <div class="side-section">
+      <div class="side-section-title">DESCRIPTIVE STATISTICS (2016–2026)</div>
+      <div class="stat-row"><span class="key">MEAN (10YR)</span><span class="val orange">80.94</span></div>
+      <div class="stat-row"><span class="key">MEDIAN (10YR)</span><span class="val orange">80.98</span></div>
+      <div class="stat-row"><span class="key">20YR HIST AVG</span><span class="val cyan">~65</span></div>
+      <div class="stat-row"><span class="key">STD DEV</span><span class="val white">9.24</span></div>
+      <div class="stat-row"><span class="key">25TH PERCENTILE</span><span class="val white">75.48</span></div>
+      <div class="stat-row"><span class="key">75TH PERCENTILE</span><span class="val white">86.17</span></div>
+      <div class="stat-row"><span class="key">10Y LOW</span><span class="val green">44.14</span></div>
+      <div class="stat-row"><span class="key">10Y HIGH</span><span class="val red">125.89</span></div>
+      <div class="stat-row"><span class="key">CURRENT (2026-03-30)</span><span class="val green">64.36</span></div>
+    </div>
+    <div class="side-section">
+      <div class="side-section-title">GAP CLOSURE METRICS</div>
+      <div class="stat-row"><span class="key">TOTAL EPISODES</span><span class="val white">17</span></div>
+      <div class="stat-row"><span class="key">CLOSED IN DATASET</span><span class="val green">17 / 17</span></div>
+      <div class="stat-row"><span class="key">AVG CLOSURE</span><span class="val orange">21 DAYS</span></div>
+      <div class="stat-row"><span class="key">MEDIAN CLOSURE</span><span class="val orange">9 DAYS</span></div>
+      <div class="stat-row"><span class="key">FASTEST CLOSE</span><span class="val green">1 DAY</span></div>
+      <div class="stat-row"><span class="key">SLOWEST CLOSE</span><span class="val red">125 DAYS</span></div>
+    </div>
+    <div class="side-section">
+      <div class="side-section-title">CLOSURE TIME DISTRIBUTION</div>
+      <div class="dist-row">
+        <div class="dist-label">≤ 7 DAYS</div>
+        <div class="dist-count green">8</div>
+        <div class="dist-pct">47.1%</div>
+        <div class="dist-bar"><div class="bar-wrap"><div class="bar-fill" style="width:100%; background:var(--green)"></div></div></div>
+      </div>
+      <div class="dist-row">
+        <div class="dist-label">8–30 DAYS</div>
+        <div class="dist-count orange">7</div>
+        <div class="dist-pct">41.2%</div>
+        <div class="dist-bar"><div class="bar-wrap"><div class="bar-fill" style="width:88%; background:var(--orange)"></div></div></div>
+      </div>
+      <div class="dist-row">
+        <div class="dist-label">31–90 DAYS</div>
+        <div class="dist-count muted">0</div>
+        <div class="dist-pct muted">0.0%</div>
+        <div class="dist-bar"><div class="bar-wrap"><div class="bar-fill" style="width:0%"></div></div></div>
+      </div>
+      <div class="dist-row">
+        <div class="dist-label">91–180 DAYS</div>
+        <div class="dist-count red">2</div>
+        <div class="dist-pct">11.8%</div>
+        <div class="dist-bar"><div class="bar-wrap"><div class="bar-fill" style="width:25%; background:var(--red)"></div></div></div>
+      </div>
+      <div class="dist-row">
+        <div class="dist-label">&gt; 180 DAYS</div>
+        <div class="dist-count muted">0</div>
+        <div class="dist-pct muted">0.0%</div>
+        <div class="dist-bar"><div class="bar-wrap"><div class="bar-fill" style="width:0%"></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DIVERGENCE EVENTS TABLE -->
+<div class="section full-width" style="border-right:none">
+  <div class="section-header">
+    <span class="section-code">02</span>
+    <span class="section-title">SIGNIFICANT DIVERGENCE EPISODES</span>
+    <span class="muted" style="font-size:10px; margin-left:auto">THRESHOLD: 75TH PERCENTILE (86.17) · ≥5 CONSECUTIVE TRADING DAYS · SORTED BY PEAK RATIO · CLOSURE = RETURN TO ENTRY LEVEL</span>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px">
+    <div class="alert red">
+      <div class="alert-head">LARGEST GAP — COVID-19 PANIC (2020-03-18): 125.89:1</div>
+      <div class="alert-body">Gold held at <strong>$1,477</strong> while silver collapsed to <strong>$11.73</strong> — dollar spread of <strong>$1,465.57</strong>. Exceeded the prior modern-era high of ~97 (1991 Gulf War). Silver sold as industrial metal in a liquidity panic; gold held as safe-haven. Gap took <strong>125 calendar days</strong> to close — demonstrating extreme divergences can persist months before reversing.</div>
+    </div>
+    <div class="alert blue">
+      <div class="alert-head">SECOND-LARGEST — TARIFF SHOCK (2025-04-21): 104.82:1</div>
+      <div class="alert-body">Gold surged to <strong>$3,406</strong> on safe-haven demand while silver lagged on industrial demand concerns from tariff-induced slowdown fears. Gold-price-led divergence — silver was not at historically cheap absolute prices. Closed in <strong>93 calendar days</strong> by July 2025.</div>
+    </div>
+  </div>
+
+  <table>
+    <thead><tr>
+      <th>#</th>
+      <th>EPISODE START</th>
+      <th>PEAK DATE</th>
+      <th class="r">PEAK RATIO</th>
+      <th class="r">ENTRY</th>
+      <th class="r">GOLD @ PEAK</th>
+      <th class="r">SILVER @ PEAK</th>
+      <th>CLOSED DATE</th>
+      <th class="r">DURATION</th>
+      <th>STATUS</th>
+    </tr></thead>
+    <tbody>
+      <tr><td class="muted">01</td><td>2020-01-09</td><td>2020-03-18</td><td class="r bold red">125.89</td><td class="r">86.88</td><td class="r gold-c">$1,477.30</td><td class="r silver-c">$11.73</td><td>2020-07-21</td><td class="r red">125 d</td><td><span class="badge badge-closed">CLOSED</span></td></tr>
+      <tr><td class="muted">02</td><td>2024-12-13</td><td>2025-04-21</td><td class="r bold red">104.82</td><td class="r">86.64</td><td class="r gold-c">$3,406.20</td><td class="r silver-c">$32.50</td><td>2025-07-23</td><td class="r red">93 d</td><td><span class="badge badge-closed">CLOSED</span></td></tr>
+      <tr><td class="muted">03</td><td>2022-06-28</td><td>2022-09-01</td><td class="r bold orange">96.67</td><td class="r">87.39</td><td class="r gold-c">$1,696.60</td><td class="r silver-c">$17.55</td><td>2022-09-14</td><td class="r">13 d</td><td><span class="badge badge-closed">CLOSED</span></td></tr>
+      <tr><td class="muted">04</td><td>2019-05-06</td><td>2019-07-05</td><td class="r bold orange">93.63</td><td class="r">86.27</td><td class="r gold-c">$1,396.70</td><td class="r silver-c">$14.92</td><td>2019-07-24</td><td class="r">19 d</td><td><span class="badge badge-closed">CLOSED</span></td></tr>
+      <tr><td class="muted">05</td><td>2023-02-24</td><td>2023-03-10</td><td class="r bold">91.39</td><td class="r">86.94</td><td class="r gold-c">$1,862.00</td><td class="r silver-c">$20.38</td><td>2023-03-14</td><td class="r green">4 d</td><td><span class="badge badge-closed">CLOSED</span></td></tr>
+      <tr><td class="muted">06</td><td>2023-12-29</td><td>2024-02-07</td><td class="r bold">91.35</td><td class="r">86.46</td><td class="r gold-c">$2,035.20</td><td class="r silver-c">$22.28</td><td>2024-02-16</td><td class="r green">9 d</td><td><span class="badge badge-closed">CLOSED</span></td></tr>
+      <tr><td class="muted">07</td><td>2022-10-11</td><td>2022-10-14</td><td class="r bold">91.13</td><td class="r">86.41</td><td class="r gold-c">$1,641.70</td><td class="r silver-c">$18.01</td><td>2022-10-24</td><td class="r green">10 d</td><td><span class="badge badge-closed">CLOSED</span></td></tr>
+      <tr><td class="muted">08</td><td>2024-02-20</td><td>2024-02-28</td><td class="r bold">90.72</td><td class="r">87.75</td><td class="r gold-c">$2,033.00</td><td class="r silver-c">$22.41</td><td>2024-03-13</td><td class="r green">14 d</td><td><span class="badge badge-closed">CLOSED</span></td></tr>
+      <tr><td class="muted">09</td><td>2019-07-25</td><td>2019-08-06</td><td class="r bold">89.75</td><td class="r">86.54</td><td class="r gold-c">$1,472.40</td><td class="r silver-c">$16.41</td><td>2019-08-27</td><td class="r green">21 d</td><td><span class="badge badge-closed">CLOSED</span></td></tr>
+      <tr><td class="muted">10</td><td>2024-08-30</td><td>2024-09-06</td><td class="r bold">89.67</td><td class="r">86.80</td><td class="r gold-c">$2,493.50</td><td class="r silver-c">$27.81</td><td>2024-09-12</td><td class="r green">6 d</td><td><span class="badge badge-closed">CLOSED</span></td></tr>
+      <tr><td class="muted">11</td><td>2024-03-19</td><td>2024-04-01</td><td class="r bold">89.62</td><td class="r">86.38</td><td class="r gold-c">$2,236.50</td><td class="r silver-c">$24.95</td><td>2024-04-03</td><td class="r green">2 d</td><td><span class="badge badge-closed">CLOSED</span></td></tr>
+      <tr><td class="muted">12</td><td>2024-08-05</td><td>2024-08-14</td><td class="r bold">89.51</td><td class="r">88.70</td><td class="r gold-c">$2,439.40</td><td class="r silver-c">$27.25</td><td>2024-08-15</td><td class="r green">1 d</td><td><span class="badge badge-closed">CLOSED</span></td></tr>
+      <tr><td class="muted">13</td><td>2022-09-23</td><td>2022-09-29</td><td class="r bold">89.11</td><td class="r">87.33</td><td class="r gold-c">$1,658.50</td><td class="r silver-c">$18.61</td><td>2022-10-03</td><td class="r green">4 d</td><td><span class="badge badge-closed">CLOSED</span></td></tr>
+      <tr><td class="muted">14</td><td>2019-11-29</td><td>2019-12-06</td><td class="r bold">88.53</td><td class="r">86.37</td><td class="r gold-c">$1,459.10</td><td class="r silver-c">$16.48</td><td>2019-12-20</td><td class="r green">14 d</td><td><span class="badge badge-closed">CLOSED</span></td></tr>
+      <tr><td class="muted">15</td><td>2025-09-15</td><td>2025-09-17</td><td class="r bold">88.25</td><td class="r">86.61</td><td class="r gold-c">$3,681.80</td><td class="r silver-c">$41.72</td><td>2025-09-19</td><td class="r green">2 d</td><td><span class="badge badge-closed">CLOSED</span></td></tr>
+      <tr><td class="muted">16</td><td>2024-11-21</td><td>2024-11-27</td><td class="r bold">87.67</td><td class="r">86.44</td><td class="r gold-c">$2,639.90</td><td class="r silver-c">$30.11</td><td>2024-12-03</td><td class="r green">6 d</td><td><span class="badge badge-closed">CLOSED</span></td></tr>
+      <tr><td class="muted">17</td><td>2019-11-07</td><td>2019-11-12</td><td class="r bold">87.07</td><td class="r">86.28</td><td class="r gold-c">$1,452.10</td><td class="r silver-c">$16.68</td><td>2019-11-19</td><td class="r green">7 d</td><td><span class="badge badge-closed">CLOSED</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SEASONALITY + ANNUAL TABLE -->
+<div class="content-area">
+
+  <!-- SEASONAL -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-code">05</span>
+      <span class="section-title">SEASONAL &amp; TEMPORAL PATTERNS</span>
+    </div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px">
+      <div>
+        <div style="font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:0.8px; margin-bottom:10px">AVG RATIO BY CALENDAR MONTH</div>
+        <div class="ratio-month-row"><div class="m-name">JAN</div><div class="m-val">78.11</div><div class="m-bar"><div class="bar-wrap"><div class="bar-fill" style="width:28%"></div></div></div></div>
+        <div class="ratio-month-row"><div class="m-name">FEB</div><div class="m-val">79.31</div><div class="m-bar"><div class="bar-wrap"><div class="bar-fill" style="width:32%"></div></div></div></div>
+        <div class="ratio-month-row"><div class="m-name">MAR</div><div class="m-val">81.32</div><div class="m-bar"><div class="bar-wrap"><div class="bar-fill" style="width:39%"></div></div></div></div>
+        <div class="ratio-month-row"><div class="m-name">APR</div><div class="m-val orange bold">83.82</div><div class="m-bar"><div class="bar-wrap"><div class="bar-fill" style="width:60%; background:var(--orange)"></div></div></div></div>
+        <div class="ratio-month-row"><div class="m-name">MAY</div><div class="m-val orange bold">83.43</div><div class="m-bar"><div class="bar-wrap"><div class="bar-fill" style="width:58%; background:var(--orange)"></div></div></div></div>
+        <div class="ratio-month-row"><div class="m-name">JUN</div><div class="m-val">82.09</div><div class="m-bar"><div class="bar-wrap"><div class="bar-fill" style="width:48%"></div></div></div></div>
+        <div class="ratio-month-row"><div class="m-name">JUL</div><div class="m-val">81.53</div><div class="m-bar"><div class="bar-wrap"><div class="bar-fill" style="width:44%"></div></div></div></div>
+        <div class="ratio-month-row"><div class="m-name">AUG</div><div class="m-val">80.64</div><div class="m-bar"><div class="bar-wrap"><div class="bar-fill" style="width:40%"></div></div></div></div>
+        <div class="ratio-month-row"><div class="m-name">SEP</div><div class="m-val">80.71</div><div class="m-bar"><div class="bar-wrap"><div class="bar-fill" style="width:40%"></div></div></div></div>
+        <div class="ratio-month-row"><div class="m-name">OCT</div><div class="m-val">81.01</div><div class="m-bar"><div class="bar-wrap"><div class="bar-fill" style="width:41%"></div></div></div></div>
+        <div class="ratio-month-row"><div class="m-name">NOV</div><div class="m-val">80.36</div><div class="m-bar"><div class="bar-wrap"><div class="bar-fill" style="width:38%"></div></div></div></div>
+        <div class="ratio-month-row"><div class="m-name">DEC</div><div class="m-val green">78.82</div><div class="m-bar"><div class="bar-wrap"><div class="bar-fill" style="width:24%; background:var(--green)"></div></div></div></div>
+      </div>
+      <div>
+        <div class="alert" style="margin-top:0">
+          <div class="alert-head">APR–MAY AVERAGE PREMIUM</div>
+          <div class="alert-body">Apr (~83.8) and May (~83.4) show the highest monthly averages — ~5 pts above the Dec–Feb lows. Likely reflects gold's seasonal demand window and silver's industrial softness in early spring. These are averages across 10 years; individual years show significant variation.</div>
+        </div>
+        <div class="alert green" style="margin-top:8px">
+          <div class="alert-head">DEC–FEB COMPRESSION</div>
+          <div class="alert-body">Dec (~78.8) and Jan (~78.1) show the lowest avg ratios. Silver tends to benefit from industrial/tech demand planning and year-end risk-on positioning into the new year.</div>
+        </div>
+        <div class="alert blue" style="margin-top:8px">
+          <div class="alert-head">SEP PEAK CLUSTERING</div>
+          <div class="alert-body">4 of 17 divergence peaks occurred in September — more than any other single month. Late-summer liquidity and Q4 positioning may be recurring catalysts. Note: 17 events is too small a sample to treat this as a reliable seasonal signal.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANNUAL -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-code">06</span>
+      <span class="section-title">ANNUAL RATIO SNAPSHOT</span>
+    </div>
+    <table>
+      <thead><tr>
+        <th>YEAR</th>
+        <th class="r">MIN</th>
+        <th class="r">MAX</th>
+        <th class="r">AVG</th>
+        <th class="r">YE GOLD</th>
+        <th class="r">YE SILVER</th>
+        <th class="r">YE RATIO</th>
+      </tr></thead>
+      <tbody>
+        <tr><td class="bold">2016</td><td class="r">65.64</td><td class="r">83.51</td><td class="r">72.96</td><td class="r gold-c">$1,150</td><td class="r silver-c">$15.94</td><td class="r bold">72.16</td></tr>
+        <tr><td class="bold">2017</td><td class="r">67.72</td><td class="r">79.58</td><td class="r">73.98</td><td class="r gold-c">$1,306</td><td class="r silver-c">$17.06</td><td class="r bold">76.57</td></tr>
+        <tr><td class="bold">2018</td><td class="r">75.70</td><td class="r">86.58</td><td class="r">81.16</td><td class="r gold-c">$1,278</td><td class="r silver-c">$15.43</td><td class="r bold">82.83</td></tr>
+        <tr><td class="bold">2019</td><td class="r">79.95</td><td class="r orange">93.63</td><td class="r">86.27</td><td class="r gold-c">$1,520</td><td class="r silver-c">$17.83</td><td class="r bold">85.23</td></tr>
+        <tr><td class="bold">2020</td><td class="r">69.09</td><td class="r red bold">125.89</td><td class="r">88.70</td><td class="r gold-c">$1,893</td><td class="r silver-c">$26.33</td><td class="r bold">71.89</td></tr>
+        <tr><td class="bold">2021</td><td class="r green">63.30</td><td class="r">81.95</td><td class="r">71.80</td><td class="r gold-c">$1,828</td><td class="r silver-c">$23.33</td><td class="r bold">78.34</td></tr>
+        <tr><td class="bold">2022</td><td class="r">74.56</td><td class="r orange">96.67</td><td class="r">83.27</td><td class="r gold-c">$1,820</td><td class="r silver-c">$23.86</td><td class="r bold">76.26</td></tr>
+        <tr><td class="bold">2023</td><td class="r">76.47</td><td class="r orange">91.39</td><td class="r">83.18</td><td class="r gold-c">$2,062</td><td class="r silver-c">$23.85</td><td class="r bold">86.46</td></tr>
+        <tr><td class="bold">2024</td><td class="r">72.67</td><td class="r orange">91.35</td><td class="r">84.77</td><td class="r gold-c">$2,629</td><td class="r silver-c">$28.94</td><td class="r bold orange">90.85</td></tr>
+        <tr><td class="bold">2025</td><td class="r green">56.48</td><td class="r red">104.82</td><td class="r">87.82</td><td class="r gold-c">$4,326</td><td class="r silver-c">$70.13</td><td class="r bold green">61.68</td></tr>
+        <tr style="background:rgba(255,102,0,0.06)"><td class="bold orange">2026</td><td class="r green bold">44.14</td><td class="r">66.48</td><td class="r orange">59.02</td><td class="r gold-c">$4,526</td><td class="r silver-c">$70.32</td><td class="r bold green">64.36</td></tr>
+      </tbody>
+    </table>
+    <div class="alert" style="margin-top:14px">
+      <div class="alert-head">SECULAR EXPANSION (2016–2024) THEN SHARP CONTRACTION (2025–2026)</div>
+      <div class="alert-body">The annual avg ratio rose steadily from <strong>~73 (2016–17)</strong> to <strong>~88 (2024)</strong> as silver underperformed. That trend reversed sharply: 2025 averaged ~87.8 but ended at 61.7, and 2026 YTD averages ~59 with a current level of <strong>64.4</strong>. The Jan 2026 low of 44.1 was the lowest in this dataset — but ratios in the 40s have appeared in longer records (2011 silver bull market reached ~32, and the 20yr avg is ~65).</div>
+    </div>
+  </div>
+</div>
+
+<!-- HISTORICAL CONTEXT -->
+<div class="section full-width" style="border-right:none; border-bottom:1px solid var(--border)">
+  <div class="section-header">
+    <span class="section-code">08</span>
+    <span class="section-title">HISTORICAL CONTEXT — HOW INVESTORS HAVE INTERPRETED THIS RATIO</span>
+    <span class="muted" style="font-size:10px; margin-left:auto">FOR EDUCATIONAL &amp; RESEARCH PURPOSES ONLY · NOT FINANCIAL ADVICE · PAST PATTERNS DO NOT PREDICT FUTURE OUTCOMES</span>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:20px">
+    <div class="alert blue">
+      <div class="alert-head">TYPE A · ROUTINE RATIO FLUCTUATION (15 OF 17 EPISODES)</div>
+      <div class="alert-body">15 of 17 elevated-ratio episodes in this dataset resolved within <strong>1–21 days</strong>. These shorter episodes coincided with periods where gold temporarily outperformed silver before returning to a more historically typical relationship. No macro catalyst was identifiable in most cases.</div>
+    </div>
+    <div class="alert red">
+      <div class="alert-head">TYPE B · MACRO-DRIVEN DISLOCATION (2 OF 17 EPISODES)</div>
+      <div class="alert-body">2 episodes took <strong>93–125 days</strong> to resolve — the COVID-19 panic (2020) and the 2025 tariff shock. Both were associated with broader macroeconomic dislocations where the ratio moved significantly beyond historical norms before eventually returning toward prior levels.</div>
+    </div>
+    <div class="alert" style="border-color:var(--yellow); background:rgba(255,204,0,0.06)">
+      <div class="alert-head" style="color:var(--yellow)">WHAT THE BIMODAL PATTERN SHOWS</div>
+      <div class="alert-body">The dataset shows a clear bimodal pattern in episode duration — either very fast resolution (≤30 days, 88% of episodes) or very slow (90–125 days, 12%). There are <strong>zero episodes</strong> in the 31–90 day range. This is a descriptive observation from 17 events; small sample sizes limit statistical conclusions.</div>
+    </div>
+  </div>
+
+  <!-- RATIO CONTEXT TABLE -->
+  <div>
+    <div class="side-section-title" style="margin-bottom:10px">RATIO CONTEXT — HISTORICAL REFERENCE RANGES (DESCRIPTIVE ONLY)</div>
+    <table>
+      <thead><tr>
+        <th>RATIO RANGE</th>
+        <th>Z-SCORE VS 10YR MEAN</th>
+        <th>HISTORICAL OCCURRENCE IN DATASET</th>
+        <th>OBSERVED CONTEXT</th>
+        <th>20YR PERSPECTIVE</th>
+      </tr></thead>
+      <tbody>
+        <tr><td class="bold red">&gt; 95</td><td class="red">+1.5σ</td><td>Rare — only 2 of 17 episodes peaked here</td><td>Associated with major macro dislocations (COVID, tariff shock)</td><td>Historically extreme within any time horizon</td></tr>
+        <tr><td class="bold orange">86 – 95</td><td class="orange">+0.5 – 1.5σ</td><td>15 episodes peaked in this range</td><td>Gold outperforming silver beyond the 75th percentile threshold</td><td>Elevated vs. 20yr avg of ~65</td></tr>
+        <tr><td class="bold muted">75 – 86</td><td class="muted">±0.5σ</td><td>Most common range — majority of trading days</td><td>Within the typical 2016–2026 band; no notable divergence</td><td>Above the 20yr avg (~65)</td></tr>
+        <tr><td class="bold cyan">65 – 75</td><td class="cyan">−0.5 – −1.5σ</td><td>Observed in 2016–17 and late 2021</td><td>Silver outperforming gold; below 10yr mean</td><td>Near or slightly below the 20yr avg</td></tr>
+        <tr style="background:rgba(0,153,255,0.04)"><td class="bold blue">&lt; 65</td><td class="blue">&lt; −1.5σ</td><td>Current level (64.36) — decade low in this dataset</td><td>Silver at its strongest relative to gold in 10yr window; $115.08 high Jan 2026, now off 39%</td><td>Close to the 20yr historical avg (~65) — not extreme in longer context</td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:12px; padding:10px 14px; border:1px solid rgba(255,102,0,0.3); background:rgba(255,102,0,0.05); font-size:10px; color:var(--muted)">
+      <span style="color:var(--orange); font-weight:700">⚠ IMPORTANT:</span> The table above is a descriptive summary of historical observations only. It does not constitute a trading signal, recommendation, or forecast. The 10-year mean of ~81 is specific to the 2016–2026 window — longer-term averages sit closer to 50–70. Any decision to buy, sell, or hold any asset should be made with the guidance of a licensed financial professional.
+    </div>
+  </div>
+</div>
+
+<!-- KEY FINDINGS -->
+<div class="section full-width" style="border-right:none; border-bottom:none">
+  <div class="section-header">
+    <span class="section-code">07</span>
+    <span class="section-title">KEY FINDINGS</span>
+    <span class="muted" style="font-size:10px; margin-left:auto">DESCRIPTIVE OF PAST BEHAVIOR · NO PREDICTIVE GUARANTEE FOR FUTURE OUTCOMES</span>
+  </div>
+  <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:12px">
+    <div class="alert red">
+      <div class="alert-head">01 · COVID-19 LARGEST DIVERGENCE IN DATASET</div>
+      <div class="alert-body">The 125.89 ratio on 2020-03-18 was the highest recorded in this 10-year window. Silver traded at <strong>$11.73</strong> while gold held at $1,477. The <strong>$1,465.57</strong> dollar spread was the widest in modern history for this dataset. The gap took <strong>125 days</strong> to close — not the rapid snap-back seen in smaller episodes.</div>
+    </div>
+    <div class="alert blue">
+      <div class="alert-head">02 · 2025 TARIFF SHOCK — SECOND STRUCTURAL EPISODE</div>
+      <div class="alert-body">The April 2025 spike to <strong>104.82</strong> was gold-price-led (surging above $3,400) rather than silver-crash-driven. Silver was not at historically cheap absolute prices — the high ratio reflected gold's extreme safe-haven premium. Closed in <strong>93 days</strong>.</div>
+    </div>
+    <div class="alert green">
+      <div class="alert-head">03 · CURRENT 64.4 — 10YR LOW WITHIN ELEVATED WINDOW</div>
+      <div class="alert-body">At −1.8σ below the 2016–2026 mean, this is the lowest recorded in this dataset. However the 10yr mean (~81) was itself elevated. Compared to the 20yr avg (~65), the current ratio of ~64 is below average but not extreme. Silver's ~39% drawdown from the Jan 2026 high (<strong>$115.08 → $70.32</strong>) is a correction within an ongoing bull market.</div>
+    </div>
+    <div class="alert yellow">
+      <div class="alert-head">04 · MEAN REVERSION — TENDENCY, NOT GUARANTEE</div>
+      <div class="alert-body">High-ratio episodes showed strong mean-reversion — 88% resolved within 30 days, all 17 eventually closed. However, "mean reversion" does not specify timing, direction, or magnitude. The ratio can remain dislocated for months. These patterns are <strong>informative for context</strong> but should not be interpreted as predictive signals.</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end .main -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-title">DATA SOURCE &amp; METHODOLOGY</div>
+  <div class="footer-grid">
+    <div class="footer-item">
+      <div><span>INSTRUMENTS:</span> Yahoo Finance front-month futures — GC=F (gold) and SI=F (silver). Prices reflect futures, not spot.</div>
+      <div><span>COVERAGE:</span> 2016-02-02 to 2026-03-30 (2,553 trading days). Pre-2016 data excluded.</div>
+    </div>
+    <div class="footer-item">
+      <div><span>DIVERGENCE DEFINITION:</span> Ratio &gt; 75th percentile (86.2) sustained ≥5 trading days. Different thresholds yield different episode counts.</div>
+      <div><span>CLOSURE DEFINITION:</span> Ratio returning to the episode's entry level — not to any historical mean. Episodes appearing closed near dataset end may not have fully mean-reverted.</div>
+    </div>
+    <div class="footer-item">
+      <div><span>NO STRATEGY BACKTESTING IN CORE ANALYSIS:</span> The ratio study documents behavior only. The backtest (Section 09) is a separate simulation with stated assumptions.</div>
+      <div><span>FUTURES ROLL EFFECTS:</span> Front-month contract rolls can create 1–2 day price discontinuities not representative of continuous price action.</div>
+    </div>
+  </div>
+  <div class="disclaimer">THIS REPORT IS FOR INFORMATIONAL AND EDUCATIONAL PURPOSES ONLY. IT DOES NOT CONSTITUTE INVESTMENT ADVICE, A SOLICITATION, OR A RECOMMENDATION TO BUY OR SELL ANY FINANCIAL INSTRUMENT OR ASSET. ALL DATA IS SOURCED FROM PUBLICLY AVAILABLE FUTURES PRICING AND IS PROVIDED WITHOUT WARRANTY. PAST PRICE RELATIONSHIPS AND HISTORICAL PATTERNS DO NOT GUARANTEE FUTURE PERFORMANCE OR OUTCOMES. PRECIOUS METALS TRADING INVOLVES SIGNIFICANT RISK OF LOSS. ALWAYS CONSULT A LICENSED FINANCIAL ADVISOR BEFORE MAKING ANY INVESTMENT DECISION.</div>
+</div>
+
+<script>
+const labels = ['2016-02','2016-03','2016-04','2016-05','2016-06','2016-07','2016-08','2016-09','2016-10','2016-11','2016-12','2017-01','2017-02','2017-03','2017-04','2017-05','2017-06','2017-07','2017-08','2017-09','2017-10','2017-11','2017-12','2018-01','2018-02','2018-03','2018-04','2018-05','2018-06','2018-07','2018-08','2018-09','2018-10','2018-11','2018-12','2019-01','2019-02','2019-03','2019-04','2019-05','2019-06','2019-07','2019-08','2019-09','2019-10','2019-11','2019-12','2020-01','2020-02','2020-03','2020-04','2020-05','2020-06','2020-07','2020-08','2020-09','2020-10','2020-11','2020-12','2021-01','2021-02','2021-03','2021-04','2021-05','2021-06','2021-07','2021-08','2021-09','2021-10','2021-11','2021-12','2022-01','2022-02','2022-03','2022-04','2022-05','2022-06','2022-07','2022-08','2022-09','2022-10','2022-11','2022-12','2023-01','2023-02','2023-03','2023-04','2023-05','2023-06','2023-07','2023-08','2023-09','2023-10','2023-11','2023-12','2024-01','2024-02','2024-03','2024-04','2024-05','2024-06','2024-07','2024-08','2024-09','2024-10','2024-11','2024-12','2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03'];
+const values = [79.45,80.77,76.32,74.57,74.02,66.98,68.63,68.71,71.81,71.27,70.2,70.67,69.03,70.02,70.54,74.5,74.63,76.71,75.89,75.66,75.67,75.56,78.46,77.8,80.41,80.78,80.44,79.35,77.65,78.92,80.45,84.38,83.67,85.26,85.13,82.81,83.66,85.4,85.81,87.96,90.75,89.96,87.58,83.51,84.91,85.95,86.52,87.15,89.6,108.34,111.58,104.35,97.14,89.15,72.74,74.68,78.2,77.45,74.16,72.09,66.14,67.01,68.45,67.12,67.82,70.28,74.56,76.69,75.94,75.27,79.67,78.41,78.95,76.7,78.57,84.59,85.41,91.43,90.07,89.45,86.13,82.06,76.96,80.1,84.69,87.2,79.76,82.12,83.05,80.67,81.76,82.76,85.84,84.49,85.0,88.7,89.39,88.15,84.88,80.22,78.57,80.63,86.64,85.66,83.01,85.26,86.48,88.32,89.07,89.03,99.93,100.32,93.13,88.72,88.42,86.13,83.55,80.96,67.23,52.98,61.51,62.51];
+
+const ctx = document.getElementById('ratioChart').getContext('2d');
+
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [
+      {
+        label: 'Gold/Silver Ratio',
+        data: values,
+        borderWidth: 1.5,
+        pointRadius: 0,
+        pointHoverRadius: 4,
+        pointHoverBackgroundColor: '#ff6600',
+        fill: true,
+        backgroundColor: (ctx) => {
+          const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 300);
+          gradient.addColorStop(0, 'rgba(255,102,0,0.12)');
+          gradient.addColorStop(1, 'rgba(255,102,0,0)');
+          return gradient;
+        },
+        tension: 0.3,
+        segment: {
+          borderColor: ctx => {
+            const v = values[ctx.p0DataIndex];
+            return v > 86.17 ? '#ff3333' : v < 70 ? '#00cc44' : '#ff6600';
+          }
+        }
+      },
+      {
+        label: 'Divergence (86.17)',
+        data: new Array(labels.length).fill(86.17),
+        borderColor: 'rgba(255,51,51,0.5)',
+        borderWidth: 1,
+        borderDash: [5,4],
+        pointRadius: 0,
+        fill: false
+      },
+      {
+        label: 'Median (81.0)',
+        data: new Array(labels.length).fill(80.98),
+        borderColor: 'rgba(0,153,255,0.4)',
+        borderWidth: 1,
+        borderDash: [3,4],
+        pointRadius: 0,
+        fill: false
+      },
+      {
+        label: '20yr Hist Avg (~65)',
+        data: new Array(labels.length).fill(65),
+        borderColor: 'rgba(255,102,0,0.45)',
+        borderWidth: 1.5,
+        borderDash: [3,5],
+        pointRadius: 0,
+        fill: false
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { intersect: false, mode: 'index' },
+    plugins: {
+      legend: {
+        labels: {
+          color: '#888888',
+          font: { size: 10, family: 'IBM Plex Mono' },
+          boxWidth: 20,
+          padding: 16
+        }
+      },
+      tooltip: {
+        backgroundColor: '#111111',
+        borderColor: '#ff6600',
+        borderWidth: 1,
+        titleColor: '#ff6600',
+        bodyColor: '#888888',
+        titleFont: { size: 11, family: 'IBM Plex Mono' },
+        bodyFont: { size: 11, family: 'IBM Plex Mono' },
+        callbacks: {
+          label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2)}`
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: '#555555',
+          maxTicksLimit: 12,
+          font: { size: 10, family: 'IBM Plex Mono' }
+        },
+        grid: { color: 'rgba(255,255,255,0.03)' },
+        border: { color: '#2a2a2a' }
+      },
+      y: {
+        ticks: {
+          color: '#555555',
+          font: { size: 10, family: 'IBM Plex Mono' }
+        },
+        grid: { color: 'rgba(255,255,255,0.04)' },
+        border: { color: '#2a2a2a' },
+        title: {
+          display: true,
+          text: 'RATIO',
+          color: '#555',
+          font: { size: 10, family: 'IBM Plex Mono' }
+        }
+      }
+    }
+  }
+});
+</script>
+
+<!-- ============================================================ -->
+<!--  PASTE YOUR SITE FOOTER HERE                                -->
+<!-- ============================================================ -->
+
+</body>
+</html>
