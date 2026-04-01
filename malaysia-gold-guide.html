@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Gold in Malaysia — 2026 Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --cream: #F9F6F0;
+  --cream-dark: #EEE9DF;
+  --ink: #18140F;
+  --ink-light: #3D3830;
+  --ink-muted: #7A7268;
+  --ink-faint: #BDB6AB;
+  --gold: #8C6D2F;
+  --gold-light: #B8944A;
+  --gold-pale: #E2D0A8;
+  --green: #2E6648;
+  --red: #7A2E2E;
+  --line: rgba(24,20,15,0.09);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 1.25rem 5vw;
+  display: flex; justify-content: space-between; align-items: center;
+  background: rgba(249,246,240,0.94);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+  opacity: 0; transform: translateY(-8px);
+  transition: opacity 0.4s, transform 0.4s;
+}
+nav.show { opacity: 1; transform: translateY(0); }
+.nav-mark { font-family: 'Libre Baskerville', serif; font-size: 0.95rem; font-weight: 700; letter-spacing: 0.04em; color: var(--gold); }
+.nav-links { display: flex; gap: 2.5rem; list-style: none; }
+.nav-links a { font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-muted); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--ink); }
+@media (max-width: 640px) { .nav-links { display: none; } }
+
+/* HERO */
+.hero {
+  min-height: 100vh; padding: 18vh 5vw 10vh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  border-bottom: 1px solid var(--line);
+}
+.hero-kicker { font-size: 0.58rem; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold); margin-bottom: 2.5rem; opacity: 0; animation: up 0.7s 0.1s forwards; }
+.hero-h1 { font-family: 'Libre Baskerville', serif; font-size: clamp(2.8rem, 7.5vw, 7rem); font-weight: 400; line-height: 1.05; color: var(--ink); margin-bottom: 2rem; opacity: 0; animation: up 0.8s 0.25s forwards; }
+.hero-h1 em { font-style: italic; color: var(--gold); }
+.hero-desc { font-family: 'Libre Baskerville', serif; font-size: clamp(0.95rem, 1.4vw, 1.15rem); font-weight: 400; font-style: italic; color: var(--ink-muted); max-width: 500px; line-height: 1.85; margin-bottom: 4rem; opacity: 0; animation: up 0.8s 0.4s forwards; }
+.hero-nums { display: flex; gap: 3.5rem; flex-wrap: wrap; opacity: 0; animation: up 0.8s 0.55s forwards; }
+.hero-num-val { font-family: 'Libre Baskerville', serif; font-size: 2rem; font-weight: 700; color: var(--gold); display: block; line-height: 1; }
+.hero-num-label { font-size: 0.53rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-muted); display: block; margin-top: 0.45rem; }
+
+/* SECTIONS */
+section { padding: 7rem 5vw; border-bottom: 1px solid var(--line); max-width: 1200px; margin: 0 auto; }
+section.full { max-width: none; }
+.kicker { font-size: 0.56rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; display: block; }
+.section-h { font-family: 'Libre Baskerville', serif; font-size: clamp(1.7rem, 3.8vw, 3rem); font-weight: 400; line-height: 1.2; color: var(--ink); margin-bottom: 1rem; }
+.section-h em { font-style: italic; color: var(--gold); }
+.section-lead { font-family: 'Libre Baskerville', serif; font-size: 1.05rem; font-weight: 400; color: var(--ink-light); max-width: 580px; line-height: 1.9; margin-bottom: 4rem; font-style: italic; }
+.rule { width: 36px; height: 1px; background: var(--gold-light); margin: 2rem 0; }
+
+/* SPREAD BARS */
+.spread-item { display: grid; grid-template-columns: 188px 1fr 80px; align-items: center; gap: 1.5rem; padding: 1rem 0; border-bottom: 1px solid var(--line); }
+.spread-item:last-child { border-bottom: none; }
+.spread-label { font-size: 0.7rem; color: var(--ink-light); letter-spacing: 0.01em; }
+.spread-track { background: var(--cream-dark); height: 2px; }
+.spread-fill { height: 100%; width: 0; transition: width 1.1s cubic-bezier(0.16,1,0.3,1); }
+.fill-low { background: var(--green); }
+.fill-mid { background: var(--gold-light); }
+.fill-high { background: var(--red); }
+.spread-val { font-size: 0.7rem; text-align: right; font-weight: 400; }
+.val-low { color: var(--green); }
+.val-mid { color: var(--gold); }
+.val-high { color: var(--red); }
+@media (max-width: 600px) { .spread-item { grid-template-columns: 130px 1fr 60px; gap: 0.8rem; } .spread-label { font-size: 0.62rem; } }
+
+/* CALLOUT (kept for potential future use, just hidden) */
+.callout { display: none; }
+
+/* TABLE */
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table { width: 100%; border-collapse: collapse; min-width: 860px; }
+thead th { font-size: 0.53rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ink-muted); font-weight: 400; padding: 0 1rem 1rem 0; text-align: left; border-bottom: 1px solid var(--ink-faint); white-space: nowrap; }
+tbody tr { border-bottom: 1px solid var(--line); transition: background 0.15s; }
+tbody tr:hover { background: rgba(140,109,47,0.04); }
+tbody tr.row-top { background: rgba(140,109,47,0.05); }
+tbody tr.row-warn { background: rgba(122,46,46,0.04); }
+td { padding: 1.1rem 1rem 1.1rem 0; font-size: 0.68rem; color: var(--ink-light); vertical-align: top; line-height: 1.65; }
+td:first-child { font-family: 'Libre Baskerville', serif; font-size: 0.9rem; font-weight: 400; color: var(--ink); }
+.tag { display: inline-block; font-size: 0.5rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.15rem 0.45rem; margin-top: 0.3rem; }
+.tag-yes   { color: var(--green); border: 1px solid rgba(46,102,72,0.28); }
+.tag-no    { color: var(--ink-muted); border: 1px solid var(--line); }
+.tag-warn  { color: var(--red); border: 1px solid rgba(122,46,46,0.3); }
+.tag-top   { color: var(--gold); border: 1px solid rgba(140,109,47,0.4); }
+.ret { font-family: 'Libre Baskerville', serif; font-size: 0.95rem; font-weight: 700; color: var(--gold); }
+
+/* INSIGHTS */
+.insights { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; border: 1px solid var(--line); margin-top: 1rem; }
+@media (max-width: 860px) { .insights { grid-template-columns: 1fr; } }
+.insight { padding: 3rem 2.5rem; border-right: 1px solid var(--line); }
+.insight:last-child { border-right: none; }
+@media (max-width: 860px) { .insight { border-right: none; border-bottom: 1px solid var(--line); } .insight:last-child { border-bottom: none; } }
+.insight-n { font-family: 'Libre Baskerville', serif; font-size: 3.5rem; font-weight: 400; color: var(--gold-pale); line-height: 1; margin-bottom: 1.5rem; display: block; }
+.insight-title { font-family: 'Libre Baskerville', serif; font-size: 1.1rem; font-weight: 700; color: var(--ink); margin-bottom: 1rem; line-height: 1.35; }
+.insight-body { font-family: 'Libre Baskerville', serif; font-size: 0.9rem; font-weight: 400; color: var(--ink-light); line-height: 1.9; font-style: italic; }
+.insight-body strong { color: var(--gold); font-style: normal; font-weight: 700; }
+.insight-num { font-family: 'Libre Baskerville', serif; font-size: 1.8rem; font-weight: 700; color: var(--red); display: block; margin: 0.8rem 0; line-height: 1; font-style: normal; }
+
+/* TIMELINE */
+.timeline { margin-top: 1rem; border-top: 1px solid var(--line); }
+.tl-row { display: grid; grid-template-columns: 140px 1fr; gap: 2rem; padding: 1.8rem 0; border-bottom: 1px solid var(--line); align-items: baseline; }
+.tl-row:last-child { border-bottom: none; }
+@media (max-width: 600px) { .tl-row { grid-template-columns: 1fr; gap: 0.5rem; } }
+.tl-date { font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+.tl-text { font-family: 'Libre Baskerville', serif; font-size: 0.95rem; font-weight: 400; color: var(--ink-light); line-height: 1.8; font-style: italic; }
+.tl-text strong { color: var(--ink); font-style: normal; font-weight: 700; }
+
+/* WARNINGS */
+.warn-item { padding: 2rem 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 220px 1fr; gap: 2.5rem; align-items: baseline; }
+.warn-item:last-child { border-bottom: none; }
+@media (max-width: 700px) { .warn-item { grid-template-columns: 1fr; gap: 0.6rem; } }
+.warn-title { font-family: 'Libre Baskerville', serif; font-size: 0.95rem; font-weight: 700; color: var(--ink); }
+.warn-body { font-family: 'Libre Baskerville', serif; font-size: 0.92rem; font-weight: 400; color: var(--ink-light); line-height: 1.9; font-style: italic; }
+.warn-body strong { color: var(--ink); font-style: normal; font-weight: 700; }
+
+/* PICKS */
+.picks-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 1rem; }
+@media (max-width: 860px) { .picks-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 500px) { .picks-grid { grid-template-columns: 1fr; } }
+.pick { background: var(--cream); padding: 2.5rem 2rem; transition: background 0.2s; }
+.pick:hover { background: var(--cream-dark); }
+.pick.avoid { background: rgba(122,46,46,0.03); }
+.pick.avoid:hover { background: rgba(122,46,46,0.06); }
+.pick-goal { font-size: 0.53rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 1rem; }
+.pick.avoid .pick-goal { color: rgba(122,46,46,0.65); }
+.pick-name { font-family: 'Libre Baskerville', serif; font-size: 1.05rem; font-weight: 700; color: var(--ink); margin-bottom: 0.8rem; line-height: 1.3; }
+.pick.avoid .pick-name { color: var(--red); }
+.pick-why { font-family: 'Libre Baskerville', serif; font-size: 0.85rem; font-weight: 400; color: var(--ink-muted); line-height: 1.85; font-style: italic; }
+
+/* FOOTER */
+footer { padding: 5rem 5vw; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 2rem; max-width: 1200px; margin: 0 auto; }
+.footer-name { font-family: 'Libre Baskerville', serif; font-size: 1.6rem; font-weight: 700; color: var(--gold); letter-spacing: 0.02em; }
+.footer-sub { font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-muted); margin-top: 0.5rem; }
+.footer-note { font-family: 'Libre Baskerville', serif; font-size: 0.78rem; color: var(--ink-faint); max-width: 380px; text-align: right; line-height: 1.75; font-weight: 400; font-style: italic; }
+
+/* ANIMATIONS */
+@keyframes up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.fade { opacity: 0; transform: translateY(14px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+.fade.in { opacity: 1; transform: none; }
+.fade.d1 { transition-delay: 0.1s; }
+.fade.d2 { transition-delay: 0.18s; }
+.fade.d3 { transition-delay: 0.26s; }
+
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--cream-dark); }
+::-webkit-scrollbar-thumb { background: var(--gold-light); }
+</style>
+</head>
+<body>
+
+<nav id="mainnav">
+  <span class="nav-mark">Gold · Malaysia</span>
+  <ul class="nav-links">
+    <li><a href="#cost">Cost</a></li>
+    <li><a href="#data">Data</a></li>
+    <li><a href="#findings">Findings</a></li>
+    <li><a href="#warnings">Warnings</a></li>
+    <li><a href="#picks">Picks</a></li>
+  </ul>
+</nav>
+
+<section class="hero" style="max-width:none;">
+  <p class="hero-kicker">Malaysia · Gold Investment · Full Breakdown 2026</p>
+  <h1 class="hero-h1">Every way to<br/>invest in <em>gold</em><br/>from Malaysia.</h1>
+  <p class="hero-desc">Bank accounts, ETFs, apps, physical dealers — compared on fees, spreads, Shariah status, and real 5-year returns. Know what you're paying before you buy.</p>
+  <div class="hero-nums">
+    <div><span class="hero-num-val">US$5,589</span><span class="hero-num-label">Gold ATH · 28 Jan 2026</span></div>
+    <div><span class="hero-num-val">+153%</span><span class="hero-num-label">5-Year MYR Return</span></div>
+    <div><span class="hero-num-val">RM 620</span><span class="hero-num-label">Per Gram · Apr 2026</span></div>
+    <div><span class="hero-num-val">~20%</span><span class="hero-num-label">CAGR Before Costs</span></div>
+  </div>
+</section>
+
+<section id="cost" class="full">
+  <span class="kicker fade">The hidden cost</span>
+  <h2 class="section-h fade d1">Spread is the <em>real</em> fee.</h2>
+  <p class="section-lead fade d2">Most accounts advertise zero annual fees. But every vehicle charges a spread — the gap between what you pay to buy and what you receive when you sell. That's your actual cost of entry and exit.</p>
+
+  <div id="spreadChart" class="fade d3">
+    <div class="spread-item"><span class="spread-label">TradePlus ETF (0828EA)</span><div class="spread-track"><div class="spread-fill fill-low" data-w="2%"></div></div><span class="spread-val val-low">~0.1–0.5%</span></div>
+    <div class="spread-item"><span class="spread-label">Bursa Gold Dinar</span><div class="spread-track"><div class="spread-fill fill-low" data-w="12%"></div></div><span class="spread-val val-low">~1.2%</span></div>
+    <div class="spread-item"><span class="spread-label">CIMB eGIA (online)</span><div class="spread-track"><div class="spread-fill fill-low" data-w="13%"></div></div><span class="spread-val val-low">~1.2%</span></div>
+    <div class="spread-item"><span class="spread-label">Public Bank eGIA</span><div class="spread-track"><div class="spread-fill fill-mid" data-w="40%"></div></div><span class="spread-val val-mid">~3.8%</span></div>
+    <div class="spread-item"><span class="spread-label">Maybank MIGA-i</span><div class="spread-track"><div class="spread-fill fill-mid" data-w="54%"></div></div><span class="spread-val val-mid">~5.1%</span></div>
+    <div class="spread-item"><span class="spread-label">Public Gold (100g bar)</span><div class="spread-track"><div class="spread-fill fill-high" data-w="72%"></div></div><span class="spread-val val-high">~7.0%</span></div>
+    <div class="spread-item"><span class="spread-label">Public Gold (10g bar)</span><div class="spread-track"><div class="spread-fill fill-high" data-w="90%"></div></div><span class="spread-val val-high">~9.0%</span></div>
+    <div class="spread-item"><span class="spread-label">Gold Jewellery (916)</span><div class="spread-track"><div class="spread-fill fill-high" data-w="100%"></div></div><span class="spread-val val-high">15–25%</span></div>
+  </div>
+
+
+
+</section>
+
+<section id="data" class="full">
+  <span class="kicker fade">Full comparison</span>
+  <h2 class="section-h fade d1">Every vehicle, <em>every number.</em></h2>
+  <p class="section-lead fade d2">All major gold investment vehicles available to Malaysian retail investors as of April 2026. Highlighted rows are recommended options.</p>
+
+  <div class="table-scroll fade d3">
+    <table>
+      <thead>
+        <tr>
+          <th>Vehicle</th><th>Min. Buy-In</th><th>Annual Fee</th><th>Spread</th><th>Shariah</th><th>5-Yr Return</th><th>Physical</th><th>Key Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="row-top">
+          <td>TradePlus Shariah Gold ETF (0828EA)<br/><span class="tag tag-top">Top Pick</span></td>
+          <td>~RM 6</td><td>~0.30% TER</td><td>Market-based</td>
+          <td><span class="tag tag-yes">Yes</span></td>
+          <td><span class="ret">153%</span></td><td>No</td>
+          <td>Lowest long-term cost. Singapore vault. Needs CDS account. 3.3% NAV premium in early 2026.</td>
+        </tr>
+        <tr class="row-top">
+          <td>Bursa Gold Dinar (BGD)<br/><span class="tag tag-top">Top Pick</span></td>
+          <td>RM 10</td><td>0.50% p.a.</td><td>~1.2%</td>
+          <td><span class="tag tag-yes">Yes</span></td>
+          <td><span class="ret">~148–152%</span></td><td>Yes (4.25g dinar)</td>
+          <td>24/7 app trading. Bursa-regulated. Best spread of all non-ETF options.</td>
+        </tr>
+        <tr>
+          <td>Maybank MIGA-i<br/><span class="tag tag-yes">Islamic</span></td>
+          <td>RM 10</td><td>0.5% (waived)</td><td>~5.1%</td>
+          <td><span class="tag tag-yes">Yes</span></td>
+          <td><span class="ret">~148–152%</span></td><td>Yes (fees apply)</td>
+          <td>Tier-1 bank security. Physical redemption triggers minting + courier charges (RM25 for 1g bar).</td>
+        </tr>
+        <tr>
+          <td>CIMB eGIA</td>
+          <td>1g (~RM 610)</td><td>RM 5 if &lt;5g/yr</td><td>~1.2% online</td>
+          <td><span class="tag tag-no">No</span></td>
+          <td><span class="ret">~147–151%</span></td><td>No</td>
+          <td>Best online spread among major banks. Low-balance penalty. No physical delivery.</td>
+        </tr>
+        <tr>
+          <td>Public Bank eGIA</td>
+          <td>0.1g (~RM 60)</td><td>Waived</td><td>~3.8%</td>
+          <td><span class="tag tag-no">No</span></td>
+          <td><span class="ret">~148–152%</span></td><td>No</td>
+          <td>Lowest buy-in of any bank. No physical delivery on eGIA product.</td>
+        </tr>
+        <tr>
+          <td>KFH Gold Account-i<br/><span class="tag tag-yes">AAOIFI</span></td>
+          <td>10g</td><td>—</td><td>Varies</td>
+          <td><span class="tag tag-yes">Yes</span></td>
+          <td><span class="ret">Similar</span></td><td>Yes</td>
+          <td>Best-in-class Shariah integrity. Physical gold present at point of transaction (Bai' As-Sarf).</td>
+        </tr>
+        <tr>
+          <td>Bank Islam BIGA-i<br/><span class="tag tag-yes">Wakalah</span></td>
+          <td>—</td><td>0.8% (waived)</td><td>Varies</td>
+          <td><span class="tag tag-yes">Yes</span></td>
+          <td><span class="ret">Similar</span></td><td>Yes (bars + dinars)</td>
+          <td>Unique dinar conversion. Physical conversion: RM50 (1g) to RM2,000 (1kg) + mandatory Takaful.</td>
+        </tr>
+        <tr>
+          <td>UOB Gold Savings Account</td>
+          <td>5g</td><td>Confirm with bank</td><td>Low</td>
+          <td><span class="tag tag-no">No</span></td>
+          <td><span class="ret">Similar</span></td><td>No</td>
+          <td>Conventional account. Verify current fee structure directly with UOB Malaysia before opening.</td>
+        </tr>
+        <tr>
+          <td>Bursa Gold Futures (FGLD)</td>
+          <td>~RM 7,500 margin</td><td>Broker commission</td><td>0.1–0.42%</td>
+          <td><span class="tag tag-no">No</span></td>
+          <td><span class="ret">Leveraged</span></td><td>No</td>
+          <td>Sophisticated investors only. 40 troy oz per contract. USD-denominated, MYR-settled.</td>
+        </tr>
+        <tr>
+          <td>Wahed Invest</td>
+          <td>Low</td><td>0.49–0.79% wrap</td><td>—</td>
+          <td><span class="tag tag-yes">Yes</span></td>
+          <td><span class="ret">Similar</span></td><td>No</td>
+          <td>Royal Mint Physical Gold ETC. Robo-advisor model. Good for passive Shariah exposure.</td>
+        </tr>
+        <tr>
+          <td>Luno (PAXG)</td>
+          <td>Low</td><td>0.13–0.60%/trade</td><td>Variable</td>
+          <td><span class="tag tag-yes">Yes</span></td>
+          <td><span class="ret">Similar</span></td><td>No</td>
+          <td>1 PAXG = 1 troy oz physical gold. Crypto exchange adds platform risk layer.</td>
+        </tr>
+        <tr>
+          <td>Public Gold (GAP)</td>
+          <td>RM 100</td><td>None</td><td>6–9%</td>
+          <td><span class="tag tag-yes">Yes</span></td>
+          <td><span class="ret">~140–145%</span></td><td>Yes</td>
+          <td>Widest spread. No counterparty risk once in hand. Largest private dealer in Malaysia.</td>
+        </tr>
+        <tr>
+          <td>Kijang Emas (BNM)</td>
+          <td>~RM 3,500+ (¼ oz)</td><td>None</td><td>Varies</td>
+          <td><span class="tag tag-yes">Yes</span></td>
+          <td><span class="ret">Similar</span></td><td>Yes</td>
+          <td>Malaysia's sovereign 99.99% gold coin. Benchmark for trust. Best suited for HNWI.</td>
+        </tr>
+        <tr class="row-warn">
+          <td>916 Gold Jewellery</td>
+          <td>Varies</td><td>None</td><td>15–25%</td>
+          <td><span class="tag tag-yes">Yes</span></td>
+          <td><span class="ret">Lower</span></td><td>Yes</td>
+          <td>Making charges lost immediately. Widest buyback spread. Not an investment vehicle.</td>
+        </tr>
+        <tr>
+          <td>RHB Gold &amp; General Fund</td>
+          <td>RM 1,000</td><td>1.80% p.a.</td><td>NAV-based</td>
+          <td><span class="tag tag-no">No</span></td>
+          <td><span class="ret">30.29% ann.*</span></td><td>No</td>
+          <td>Mining stocks + ETFs. High fee vs TradePlus ETF. *5-year annualised.</td>
+        </tr>
+        <tr>
+          <td>Public e-Emas Gold Fund</td>
+          <td>Varies</td><td>0.85% p.a.</td><td>NAV-based</td>
+          <td><span class="tag tag-no">No</span></td>
+          <td><span class="ret">20.16% (3yr)</span></td><td>No</td>
+          <td>90% gold spot / 10% cash. TradePlus ETF is cheaper and more efficient.</td>
+        </tr>
+        <tr class="row-warn">
+          <td>HelloGold</td>
+          <td>—</td><td>—</td><td>—</td>
+          <td><span class="tag tag-warn">Closed</span></td>
+          <td>—</td><td>No</td>
+          <td>Ceased consumer operations Feb 2023. Users given less than one week notice. Do not use.</td>
+        </tr>
+        <tr class="row-warn">
+          <td>Quantum Metal (QM)</td>
+          <td>RM 10</td><td>3.5% (GAE)</td><td>Moderate</td>
+          <td><span class="tag tag-warn">Expired 2023</span></td>
+          <td><span class="ret" style="color:var(--red)">High risk</span></td><td>Claimed</td>
+          <td>SC cease-and-desist Mar 2024. ISRA cert expired Apr 2023. Late payments. Avoid entirely.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:0.58rem;color:var(--ink-faint);margin-top:1.5rem;line-height:1.8;font-style:italic;">Sources: official bank PDS documents, Bursa Malaysia, CIMB Clicks (31 Mar 2026), Public Bank online rates, TradingView, Morningstar, BNM/SC public statements, academic research. Spreads are approximate and fluctuate daily.</p>
+</section>
+
+<section id="findings" class="full">
+  <span class="kicker fade">Key findings</span>
+  <h2 class="section-h fade d1">Three things most <em>investors miss.</em></h2>
+  <p class="section-lead fade d2">Counter-intuitive findings from a full audit of 2021–2026 data across all vehicle categories.</p>
+
+  <div class="insights fade d3">
+    <div class="insight">
+      <span class="insight-n">01</span>
+      <h3 class="insight-title">The "Cheap App" Fallacy</h3>
+      <p class="insight-body">Platforms and accounts that advertise zero fees are not free. Every vehicle charges a spread on entry and exit. A bank account with a 4–5% round-trip spread costs more over time than an ETF with a 0.30% annual fee — especially for buy-and-hold investors. <strong>Bursa Gold Dinar and TradePlus ETF are far more cost-efficient</strong> for small investors than most bank accounts appear.
+      </p>
+    </div>
+    <div class="insight">
+      <span class="insight-n">02</span>
+      <h3 class="insight-title">The Shariah Compliance Mirage</h3>
+      <p class="insight-body">Shariah labels are not permanent. Quantum Metal's ISRA certification expired April 2023 — yet marketing continues to use compliance language. Always verify against the current BNM register and active Shariah board audit, not historical marketing materials.
+        <span class="insight-num">SC Action</span>
+        Cease-and-desist issued March 2024.
+      </p>
+    </div>
+    <div class="insight">
+      <span class="insight-n">03</span>
+      <h3 class="insight-title">Equity Over Metal</h3>
+      <p class="insight-body">During the 2025–2026 gold surge, <strong>jewelry retailer stocks outperformed physical gold</strong> on a risk-adjusted basis. Poh Kong rose 23%. Tomei hit all-time highs of RM2.11. Their inventory appreciates with spot price while consumer demand surges simultaneously.
+        <span class="insight-num">+23%</span>
+        Poh Kong in late 2025–2026.
+      </p>
+    </div>
+  </div>
+
+  <div class="rule" style="margin-top:4rem;"></div>
+  <h3 class="section-h fade" style="font-size:1.5rem;margin:2rem 0;">Platform risk — <em>what happened.</em></h3>
+  <div class="timeline fade">
+    <div class="tl-row"><span class="tl-date">Late 2023</span><p class="tl-text"><strong>Quantum Metal begins late investor payments.</strong> First sign of taqabudh violations — the Shariah principle requiring immediate physical settlement.</p></div>
+    <div class="tl-row"><span class="tl-date">Feb 2023</span><p class="tl-text"><strong>HelloGold shuts down.</strong> Consumer business closed in Malaysia and Thailand. Users given less than one week to withdraw. Cites "no longer commercially viable."</p></div>
+    <div class="tl-row"><span class="tl-date">Apr 2023</span><p class="tl-text"><strong>Quantum Metal's ISRA certification expires.</strong> Not renewed. Company continues marketing as Shariah-compliant without valid certification.</p></div>
+    <div class="tl-row"><span class="tl-date">Mar 2024</span><p class="tl-text"><strong>Securities Commission issues cease-and-desist</strong> against Quantum Metal Exchange Inc. for offering shares to the public without registration.</p></div>
+    <div class="tl-row"><span class="tl-date">2026</span><p class="tl-text"><strong>Bursa Gold Dinar and TradePlus ETF emerge as the two most transparent and cost-efficient retail vehicles</strong> — both regulated by Bursa Malaysia and the Securities Commission.</p></div>
+  </div>
+</section>
+
+<section id="warnings" class="full">
+  <span class="kicker fade">What to watch</span>
+  <h2 class="section-h fade d1">The fine print <em>nobody reads.</em></h2>
+  <p class="section-lead fade d2">Every vehicle has a structural catch. These are the risks the product brochures leave out.</p>
+
+  <div class="fade d3">
+    <div class="warn-item"><h4 class="warn-title">Quantum Metal</h4><p class="warn-body">Regulatory and Shariah violations. SC cease-and-desist issued. ISRA cert expired. Late payments to investors. <strong>BNM explicitly states it is not licensed for gold investment products.</strong> Avoid entirely.</p></div>
+    <div class="warn-item"><h4 class="warn-title">HelloGold</h4><p class="warn-body">Closed since February 2023. Even physically-backed, audited platforms can fail operationally. The gold was real — the business model wasn't sustainable. <strong>Non-bank digital platforms carry inherent solvency risk.</strong></p></div>
+    <div class="warn-item"><h4 class="warn-title">Physical Redemption Costs</h4><p class="warn-body">Maybank MIGA-i physical redemption costs RM25 for a 1g bar. Bank Islam BIGA-i charges RM50–RM2,000 plus mandatory Takaful. <strong>Always model full conversion costs before choosing physical redemption.</strong></p></div>
+    <div class="warn-item"><h4 class="warn-title">Gold Jewellery</h4><p class="warn-body">Making charges are lost immediately on purchase. Buyback spreads run 15–25%. The companies that sell jewellery (Poh Kong, Tomei) are the better trade — they have operational leverage to the price. <strong>Jewellery is a consumption item, not an investment vehicle.</strong></p></div>
+    <div class="warn-item"><h4 class="warn-title">Unit Trust Fees</h4><p class="warn-body">RHB Gold Fund charges 1.80% p.a. vs TradePlus ETF's 0.30% TER. A 1.5%+ annual drag compounds significantly over 10 years. <strong>Active gold funds rarely outperform the underlying metal enough to justify the extra cost.</strong></p></div>
+    <div class="warn-item"><h4 class="warn-title">ETF Premium to NAV</h4><p class="warn-body">TradePlus Shariah Gold ETF traded at a 3.3% premium to its NAV in early 2026 — peak domestic demand. <strong>Buying at peak premium means overpaying for the same underlying gold.</strong> Monitor the premium before transacting.</p></div>
+  </div>
+</section>
+
+<section id="picks" class="full">
+  <span class="kicker fade">The verdict</span>
+  <h2 class="section-h fade d1">Match your goal to <em>the right vehicle.</em></h2>
+  <p class="section-lead fade d2">No single vehicle wins for everyone. The best choice depends on capital size, time horizon, and tolerance for complexity.</p>
+
+  <div class="picks-grid fade d3">
+    <div class="pick">
+      <p class="pick-goal">Small capital · Shariah · Hands-off</p>
+      <h3 class="pick-name">Bursa Gold Dinar</h3>
+      <p class="pick-why">RM10 entry. 1.2% spread. Regulated by Bursa. 24/7 app trading. Physical dinar delivery possible. No punitive minimum holding fees.</p>
+    </div>
+    <div class="pick">
+      <p class="pick-goal">Lowest long-term cost · Shariah</p>
+      <h3 class="pick-name">TradePlus ETF (0828EA)</h3>
+      <p class="pick-why">0.30% TER. Physically backed in Singapore. 5-year return 153%. Best for buy-and-hold investors via any Bursa broker.</p>
+    </div>
+    <div class="pick">
+      <p class="pick-goal">Bank trust · Islamic · Physical option</p>
+      <h3 class="pick-name">Maybank MIGA-i</h3>
+      <p class="pick-why">RM10 min. Tier-1 bank security. Physical redemption available. Shariah under Musawamah + Wakalah. Note ~5% spread in current market environment.</p>
+    </div>
+    <div class="pick">
+      <p class="pick-goal">Highest Shariah integrity</p>
+      <h3 class="pick-name">KFH Gold Account-i</h3>
+      <p class="pick-why">Physical gold present during transaction. AAOIFI-benchmarked. Consistently rated best-in-class for compliance. Minimum 10 grams.</p>
+    </div>
+    <div class="pick">
+      <p class="pick-goal">Physical tangibility</p>
+      <h3 class="pick-name">Public Gold + storage</h3>
+      <p class="pick-why">Largest private dealer. No counterparty risk once in hand. Accept 6–9% spread as the cost of tangibility. Ensure LBMA-approved products.</p>
+    </div>
+    <div class="pick avoid">
+      <p class="pick-goal">Avoid entirely</p>
+      <h3 class="pick-name">Quantum Metal · HelloGold</h3>
+      <p class="pick-why">QM: regulatory + Shariah violations, SC cease-and-desist 2024, ISRA cert expired. HelloGold: ceased operations February 2023.</p>
+    </div>
+  </div>
+
+  <div style="border-top:1px solid var(--line);margin-top:4rem;padding-top:2.5rem;">
+    <p class="section-lead" style="margin-bottom:0;font-size:0.95rem;">Gold is a wealth-preservation tool. All vehicles track the same underlying price — your real edge is minimising the cost of carry over time.</p>
+  </div>
+</section>
+
+<footer>
+  <div>
+    <div class="footer-name">Gold · Malaysia</div>
+    <div class="footer-sub">Full Breakdown · April 2026</div>
+  </div>
+  <p class="footer-note">Not financial advice. Data from official bank PDS documents, Bursa Malaysia, regulatory statements, and academic research as of April 2026. Prices and fees change daily — verify on official sites before transacting. Consult a licensed financial adviser for personal decisions.</p>
+</footer>
+
+<script>
+  const nav = document.getElementById('mainnav');
+  window.addEventListener('scroll', () => { nav.classList.toggle('show', window.scrollY > 80); });
+
+  const fades = document.querySelectorAll('.fade');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  fades.forEach(el => io.observe(el));
+
+  const chart = document.getElementById('spreadChart');
+  let fired = false;
+  const io2 = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting && !fired) {
+      fired = true;
+      document.querySelectorAll('.spread-fill').forEach((bar, i) => {
+        setTimeout(() => { bar.style.width = bar.dataset.w; }, i * 100);
+      });
+    }
+  }, { threshold: 0.3 });
+  if (chart) io2.observe(chart);
+</script>
+</body>
+</html>
