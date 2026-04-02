@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Malaysia Wins When The World Burns</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --surface: #111111;
+    --card: #181818;
+    --border: #2a2a2a;
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --gold-dim: rgba(201,168,76,0.12);
+    --red: #e05252;
+    --green: #4caf82;
+    --blue: #5b9bd5;
+    --text: #e8e6e0;
+    --muted: #888880;
+    --dimmer: #555550;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 4rem 3rem 5rem;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 70% 30%, rgba(201,168,76,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 80% at 10% 80%, rgba(91,155,213,0.04) 0%, transparent 60%),
+      linear-gradient(180deg, #0a0a0a 0%, #0d0d0a 100%);
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: linear-gradient(180deg, transparent 0%, black 30%, black 70%, transparent 100%);
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 10vw, 8.5rem);
+    line-height: 0.92;
+    letter-spacing: 0.01em;
+    color: var(--text);
+    position: relative;
+    margin-bottom: 2rem;
+  }
+
+  .hero h1 .accent { color: var(--gold); }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 520px;
+    position: relative;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 2.5rem;
+    position: relative;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .hero-stat-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    color: var(--gold);
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+
+  .hero-stat-label {
+    font-size: 11px;
+    color: var(--dimmer);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 4px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    right: 3rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--dimmer);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: fadeUpDown 2s ease-in-out infinite;
+  }
+
+  @keyframes fadeUpDown {
+    0%, 100% { transform: translateY(0); opacity: 0.5; }
+    50% { transform: translateY(6px); opacity: 1; }
+  }
+
+  /* ── SECTION ── */
+  section { position: relative; padding: 6rem 3rem; max-width: 1200px; margin: 0 auto; }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::before {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  h2.section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  .section-desc {
+    color: var(--muted);
+    max-width: 600px;
+    margin-bottom: 3.5rem;
+    font-size: 0.95rem;
+  }
+
+  /* ── WHY MALAYSIA ── */
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .why-card {
+    background: var(--card);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+
+  .why-card:hover { background: #1e1e1c; }
+
+  .why-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+
+  .why-card:hover::after { transform: scaleX(1); }
+
+  .why-icon {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .why-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  .why-card p {
+    font-size: 0.875rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── SECTOR TABS ── */
+  .sectors-nav {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--border);
+    margin-bottom: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .sectors-nav::-webkit-scrollbar { display: none; }
+
+  .sector-tab {
+    flex: 1;
+    min-width: 120px;
+    padding: 1rem 0.75rem;
+    background: var(--card);
+    border: none;
+    border-right: 1px solid var(--border);
+    color: var(--dimmer);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    position: relative;
+  }
+
+  .sector-tab:last-child { border-right: none; }
+
+  .sector-tab .tab-num {
+    display: block;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    line-height: 1;
+    margin-bottom: 4px;
+    color: var(--border);
+    transition: color 0.2s;
+  }
+
+  .sector-tab:hover { background: #161614; color: var(--muted); }
+  .sector-tab:hover .tab-num { color: var(--dimmer); }
+
+  .sector-tab.active {
+    background: var(--gold-dim);
+    color: var(--gold);
+    border-bottom: 2px solid var(--gold);
+  }
+
+  .sector-tab.active .tab-num { color: var(--gold); }
+
+  /* ── SECTOR PANEL ── */
+  .sector-panel {
+    display: none;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-top: none;
+    padding: 0;
+  }
+
+  .sector-panel.active { display: grid; grid-template-columns: 1fr 1fr; }
+
+  .panel-left {
+    padding: 2.5rem;
+    border-right: 1px solid var(--border);
+  }
+
+  .panel-right {
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .conviction-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 2px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  .conviction-badge.high { background: rgba(76,175,130,0.15); color: var(--green); }
+  .conviction-badge.med { background: rgba(201,168,76,0.15); color: var(--gold); }
+  .conviction-badge.low { background: rgba(136,136,128,0.15); color: var(--muted); }
+
+  .conviction-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .panel-left h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    line-height: 1;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+  }
+
+  .panel-timeline {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .panel-left p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.75;
+    margin-bottom: 1.5rem;
+  }
+
+  .mechanism-box {
+    background: var(--surface);
+    border-left: 2px solid var(--gold);
+    padding: 1rem 1.25rem;
+    font-size: 0.875rem;
+    color: var(--text);
+    line-height: 1.65;
+  }
+
+  .mechanism-box strong {
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  .panel-block h4 {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--dimmer);
+    margin-bottom: 0.75rem;
+  }
+
+  .tickers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 0;
+  }
+
+  .ticker-chip {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 5px 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    letter-spacing: 0.05em;
+  }
+
+  .entry-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .entry-cell {
+    background: var(--surface);
+    padding: 0.875rem 1rem;
+  }
+
+  .entry-cell .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--dimmer);
+    margin-bottom: 4px;
+  }
+
+  .entry-cell .val {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .val.green { color: var(--green); }
+  .val.gold { color: var(--gold); }
+  .val.red { color: var(--red); }
+
+  .risk-tag {
+    background: rgba(224,82,82,0.1);
+    border: 1px solid rgba(224,82,82,0.2);
+    color: var(--red);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 4px 10px;
+    display: inline-block;
+    margin-top: 0.5rem;
+  }
+
+  /* ── HISTORICAL TABLE ── */
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+
+  thead th {
+    background: var(--surface);
+    color: var(--dimmer);
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.875rem 1.25rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+
+  tbody tr:hover { background: var(--card); }
+  tbody tr:last-child { border-bottom: none; }
+
+  tbody td {
+    padding: 1rem 1.25rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  tbody tr.highlight-row td { color: var(--text); }
+  tbody tr.highlight-row { background: var(--gold-dim); }
+
+  .up { color: var(--green); font-family: 'DM Mono', monospace; }
+  .dn { color: var(--red); font-family: 'DM Mono', monospace; }
+  .nu { color: var(--muted); font-family: 'DM Mono', monospace; }
+
+  /* ── PORTFOLIO ── */
+  .portfolio-bar {
+    display: flex;
+    height: 12px;
+    border-radius: 0;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    gap: 2px;
+  }
+
+  .bar-seg {
+    height: 100%;
+    transition: flex 0.5s ease;
+  }
+
+  .portfolio-legend {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 0;
+    flex-shrink: 0;
+  }
+
+  .legend-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text);
+  }
+
+  /* ── DEVIATION CARDS ── */
+  .deviation-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 3rem;
+  }
+
+  .dev-card {
+    background: var(--card);
+    padding: 2rem;
+    position: relative;
+  }
+
+  .dev-icon {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+
+  .dev-card h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  .dev-card p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  .dev-impact {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 0.75rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+  }
+
+  .dev-impact.bull { background: rgba(76,175,130,0.1); color: var(--green); }
+  .dev-impact.bear { background: rgba(224,82,82,0.1); color: var(--red); }
+  .dev-impact.neut { background: rgba(136,136,128,0.1); color: var(--muted); }
+
+  /* ── CTA ── */
+  .cta-section {
+    text-align: center;
+    padding: 8rem 3rem;
+    border-top: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%; transform: translateX(-50%);
+    width: 600px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .cta-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 70% at 50% 50%, rgba(201,168,76,0.04) 0%, transparent 70%);
+  }
+
+  .cta-section h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 1;
+    color: var(--text);
+    position: relative;
+    margin-bottom: 1rem;
+  }
+
+  .cta-section p {
+    color: var(--muted);
+    max-width: 480px;
+    margin: 0 auto 2.5rem;
+    position: relative;
+    font-size: 0.95rem;
+  }
+
+  .cta-pill {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    background: var(--gold);
+    color: var(--black);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+    position: relative;
+  }
+
+  .cta-pill:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+  .disclaimer {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--dimmer);
+    margin-top: 3rem;
+    line-height: 1.8;
+    position: relative;
+  }
+
+  /* ── FULL WIDTH DIVIDER ── */
+  .full-divider {
+    width: 100vw;
+    height: 1px;
+    background: var(--border);
+    margin-left: calc(-50vw + 50%);
+  }
+
+  /* ── ANIMATIONS ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    animation: fadeUp 0.7s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-up:nth-child(1) { animation-delay: 0.1s; }
+  .fade-up:nth-child(2) { animation-delay: 0.2s; }
+  .fade-up:nth-child(3) { animation-delay: 0.3s; }
+  .fade-up:nth-child(4) { animation-delay: 0.4s; }
+
+  /* ── TICKER TAPE ── */
+  .ticker-tape {
+    width: 100%;
+    overflow: hidden;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--dimmer);
+  }
+
+  .ticker-inner {
+    display: flex;
+    gap: 3rem;
+    white-space: nowrap;
+    animation: scrollTape 28s linear infinite;
+  }
+
+  @keyframes scrollTape {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .ticker-item { display: flex; align-items: center; gap: 8px; }
+  .ticker-item .tik { color: var(--text); }
+  .ticker-item .chg { color: var(--green); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .hero { padding: 2.5rem 1.5rem 3.5rem; }
+    section { padding: 4rem 1.5rem; }
+    .why-grid { grid-template-columns: 1fr; }
+    .sector-panel.active { grid-template-columns: 1fr; }
+    .panel-left { border-right: none; border-bottom: 1px solid var(--border); }
+    .deviation-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
+    .cta-section { padding: 5rem 1.5rem; }
+    .entry-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TICKER TAPE -->
+<div class="ticker-tape">
+  <div class="ticker-inner" id="tape">
+    <span class="ticker-item"><span class="tik">HIBISCS</span><span class="chg">▲ +4.2%</span></span>
+    <span class="ticker-item"><span class="tik">MISC</span><span class="chg">▲ +3.8%</span></span>
+    <span class="ticker-item"><span class="tik">SDGP</span><span class="chg">▲ +5.1%</span></span>
+    <span class="ticker-item"><span class="tik">BIMB</span><span class="chg">▲ +2.3%</span></span>
+    <span class="ticker-item"><span class="tik">TOPGLOV</span><span class="chg">▲ +1.9%</span></span>
+    <span class="ticker-item"><span class="tik">BHIC</span><span class="chg">▲ +6.7%</span></span>
+    <span class="ticker-item"><span class="tik">IHH</span><span class="chg">▲ +2.8%</span></span>
+    <span class="ticker-item"><span class="tik">BURSA</span><span class="chg">▲ +1.4%</span></span>
+    <span class="ticker-item"><span class="tik">BRENT</span><span class="chg">$126 ▲</span></span>
+    <span class="ticker-item"><span class="tik">CPO</span><span class="chg">RM4,772/T ▲</span></span>
+    <span class="ticker-item"><span class="tik">HORMUZ</span> CONTESTED</span>
+    <span class="ticker-item"><span class="tik">KLCI</span> OUTPERFORMING REGION</span>
+    <!-- duplicate for seamless loop -->
+    <span class="ticker-item"><span class="tik">HIBISCS</span><span class="chg">▲ +4.2%</span></span>
+    <span class="ticker-item"><span class="tik">MISC</span><span class="chg">▲ +3.8%</span></span>
+    <span class="ticker-item"><span class="tik">SDGP</span><span class="chg">▲ +5.1%</span></span>
+    <span class="ticker-item"><span class="tik">BIMB</span><span class="chg">▲ +2.3%</span></span>
+    <span class="ticker-item"><span class="tik">TOPGLOV</span><span class="chg">▲ +1.9%</span></span>
+    <span class="ticker-item"><span class="tik">BHIC</span><span class="chg">▲ +6.7%</span></span>
+    <span class="ticker-item"><span class="tik">IHH</span><span class="chg">▲ +2.8%</span></span>
+    <span class="ticker-item"><span class="tik">BURSA</span><span class="chg">▲ +1.4%</span></span>
+    <span class="ticker-item"><span class="tik">BRENT</span><span class="chg">$126 ▲</span></span>
+    <span class="ticker-item"><span class="tik">CPO</span><span class="chg">RM4,772/T ▲</span></span>
+    <span class="ticker-item"><span class="tik">HORMUZ</span> CONTESTED</span>
+    <span class="ticker-item"><span class="tik">KLCI</span> OUTPERFORMING REGION</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-eyebrow">Investment Thesis · As of April 2, 2026 · Bursa Malaysia · Day 33 of conflict</div>
+
+  <h1 class="fade-up">
+    Malaysia<br>
+    <span class="accent">Wins</span> When<br>
+    The World Burns
+  </h1>
+
+  <p class="hero-sub fade-up">
+    While markets panic over the Iran-Israel war and Hormuz closure, one country is structurally positioned to benefit. Here's the full thesis — 7 sectors, specific stocks, entry prices.
+  </p>
+
+  <div class="hero-stats fade-up">
+    <div>
+      <div class="hero-stat-val">7</div>
+      <div class="hero-stat-label">Sectors repricing</div>
+    </div>
+    <div>
+      <div class="hero-stat-val">$126</div>
+      <div class="hero-stat-label">Brent crude · as of Apr 2, 2026 <a href="#sources" style="color:var(--gold);font-size:9px;text-decoration:none;vertical-align:super">[4]</a></div>
+    </div>
+    <div>
+      <div class="hero-stat-val">20%</div>
+      <div class="hero-stat-label">Global oil flows via Hormuz <a href="#sources" style="color:var(--gold);font-size:9px;text-decoration:none;vertical-align:super">[3]</a></div>
+    </div>
+    <div>
+      <div class="hero-stat-val">4–5%</div>
+      <div class="hero-stat-label">Malaysia 2026 GDP outlook · BNM <a href="#sources" style="color:var(--gold);font-size:9px;text-decoration:none;vertical-align:super">[5]</a></div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">↓ Scroll to explore</div>
+</div>
+
+<!-- WHY MALAYSIA -->
+<section>
+  <div class="section-label">The structural edge</div>
+  <h2 class="section-title">Why Malaysia — Not Thailand, Not Indonesia</h2>
+  <p class="section-desc">Three structural advantages make Malaysia the only country in Southeast Asia that benefits mechanically from every Middle East oil crisis.</p>
+
+  <div class="why-grid">
+    <div class="why-card">
+      <span class="why-icon">⛽</span>
+      <h3>Net Energy Exporter</h3>
+      <p>Malaysia produces Tapis and Kikeh sweet crude — low-sulfur, high-grade oil that commands a <strong style="color:var(--gold)">$12–18 premium</strong> over Brent during supply crunches. When Hormuz is contested, we don't panic. We profit. Bintulu hosts the world's largest single-site LNG export facility — and Europe, Japan, and Korea are all calling.</p>
+    </div>
+    <div class="why-card">
+      <span class="why-icon">🕌</span>
+      <h3>World's Largest Sukuk Market</h3>
+      <p>Gulf petrodollars need somewhere safe when Western banks risk sanctions. Malaysia's mature Shariah-compliant legal, accounting, and finance framework makes it the <strong style="color:var(--gold)">primary safe haven</strong> for Muslim capital. After the 2006 Lebanon War, Islamic banking assets here grew at 20% CAGR. The same rotation is happening now.</p>
+    </div>
+    <div class="why-card">
+      <span class="why-icon">🤝</span>
+      <h3>Neutral Diplomatic Posture</h3>
+      <p>Malaysia has friendly ties with Tehran. The result: <strong style="color:var(--gold)">Malaysian-flagged tankers are exempt</strong> from Iran's Hormuz transit fees — a concession given to almost no one else. While competitors reroute 15 extra days around Africa, MISC sails straight through. That's not politics. That's alpha.</p>
+    </div>
+    <div class="why-card">
+      <span class="why-icon">🌴</span>
+      <h3>#2 Palm Oil Producer</h3>
+      <p>When crude spikes above $100, palm oil becomes the cheapest biodiesel on earth. Malaysia supplies the world. CPO futures hit an <strong style="color:var(--gold)">18-month high of RM4,772/tonne</strong> in late March 2026 <a href="#sources" style="color:var(--gold);font-size:10px;text-decoration:none">[32]</a>. Every oil spike since 2006 has been a plantation stock rerate. This time is no different.</p>
+    </div>
+    <div class="why-card">
+      <span class="why-icon">📊</span>
+      <h3>Resilient Market Structure</h3>
+      <p>The KLCI fell just <strong style="color:var(--gold)">0.6%</strong> on war news. The KOSPI fell 18%. The Nikkei fell 8% <a href="#sources" style="color:var(--gold);font-size:10px;text-decoration:none">[15]</a>. Malaysia's current account surplus and diversified export base insulate the index — then the sectoral tailwinds kick in and individual stocks rerate hard, even as the index holds flat.</p>
+    </div>
+    <div class="why-card">
+      <span class="why-icon">🕰️</span>
+      <h3>This Pattern Has Repeated Since 2006</h3>
+      <p>Lebanon War. Gaza. 2019 tanker crisis. 2023–24 Iran exchanges. 2025 Twelve-Day War. <strong style="color:var(--gold)">Every single time</strong>, these 7 Malaysian sectors repriced — in the same sequence, at the same speed. This is not speculation. It's a mechanical relationship between the trigger and Malaysia's structural position.</p>
+    </div>
+  </div>
+</section>
+
+<div class="full-divider"></div>
+
+<!-- 7 SECTORS -->
+<section>
+  <div class="section-label">The 7 sectors</div>
+  <h2 class="section-title">Where The Money Moves — And When</h2>
+  <p class="section-desc">Click each sector. The repricing follows a predictable sequence — energy and shipping first, palm and finance next, then the longer plays.</p>
+
+  <div class="sectors-nav" id="sectorsNav">
+    <button class="sector-tab active" onclick="showSector(0)">
+      <span class="tab-num">01</span>Oil & Gas
+    </button>
+    <button class="sector-tab" onclick="showSector(1)">
+      <span class="tab-num">02</span>Palm Oil
+    </button>
+    <button class="sector-tab" onclick="showSector(2)">
+      <span class="tab-num">03</span>Islamic Finance
+    </button>
+    <button class="sector-tab" onclick="showSector(3)">
+      <span class="tab-num">04</span>Shipping
+    </button>
+    <button class="sector-tab" onclick="showSector(4)">
+      <span class="tab-num">05</span>Gloves
+    </button>
+    <button class="sector-tab" onclick="showSector(5)">
+      <span class="tab-num">06</span>Defence
+    </button>
+    <button class="sector-tab" onclick="showSector(6)">
+      <span class="tab-num">07</span>Tourism
+    </button>
+  </div>
+
+  <!-- SECTOR 1: OIL & GAS -->
+  <div class="sector-panel active" id="sector-0">
+    <div class="panel-left">
+      <div class="conviction-badge high">● Highest conviction</div>
+      <h3>Oil & Gas</h3>
+      <div class="panel-timeline">⏱ Reprices within 0–4 days of trigger</div>
+      <p>The most mechanical trade in the playbook. Hormuz disruption creates an immediate fear premium on crude. Malaysia's sweet crude (Tapis/Kikeh) earns a $12–18/bbl premium over Brent during supply crunches. Petronas-linked upstream names outperformed the KLCI within days of every post-2006 crisis.</p>
+      <div class="mechanism-box">
+        <strong>Why it works:</strong> Malaysia doesn't import Persian Gulf crude for revenue — it exports its own premium crude. When Hormuz is contested, every buyer of seaborne oil calls Kuala Lumpur. Hibiscus Petroleum's North Sabah blends are exactly what the market needs.
+      </div>
+    </div>
+    <div class="panel-right">
+      <div class="panel-block">
+        <h4>Stocks to watch</h4>
+        <div class="tickers">
+          <span class="ticker-chip">HIBISCS</span>
+          <span class="ticker-chip">VELESTO</span>
+          <span class="ticker-chip">PETDAG</span>
+          <span class="ticker-chip">DIALOG</span>
+        </div>
+      </div>
+      <div class="panel-block">
+        <h4>Entry & targets (HIBISCS) <span style="font-weight:400;color:var(--dimmer)">· as of Apr 2, 2026 <a href="#sources" style="color:var(--gold);text-decoration:none">[20]</a></span></h4>
+        <div class="entry-grid">
+          <div class="entry-cell">
+            <div class="label">Entry range</div>
+            <div class="val gold">MYR 2.50–2.65</div>
+          </div>
+          <div class="entry-cell">
+            <div class="label">Target price</div>
+            <div class="val green">MYR 3.40</div>
+          </div>
+          <div class="entry-cell">
+            <div class="label">Upside</div>
+            <div class="val green">~28%</div>
+          </div>
+          <div class="entry-cell">
+            <div class="label">Brent needed</div>
+            <div class="val gold">$90+</div>
+          </div>
+        </div>
+        <span class="risk-tag">Risk: Brent falling below $75 → thesis breaks</span>
+      </div>
+      <div class="panel-block">
+        <h4>2026-specific catalyst</h4>
+        <div class="mechanism-box" style="border-color:var(--green)">Teal West field first oil expected mid-2026. Adds new volume at premium prices. Velesto benefits from Petronas mandate to accelerate domestic production to offset lost Gulf imports.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTOR 2: PALM OIL -->
+  <div class="sector-panel" id="sector-1">
+    <div class="panel-left">
+      <div class="conviction-badge high">● High conviction</div>
+      <h3>Palm Oil</h3>
+      <div class="panel-timeline">⏱ Reprices within 2–6 weeks of oil spike</div>
+      <p>When crude crosses $100, palm oil stops being a food commodity and becomes the cheapest biodiesel on earth. Malaysia is the world's #2 producer. Every Middle East oil crisis since 2006 has sent plantation stocks up 10–25% within 4–8 weeks as biodiesel blending mandates accelerate globally.</p>
+      <div class="mechanism-box">
+        <strong>The 2026 twist:</strong> The Hormuz closure cut off Gulf fertiliser exports — 19% of global nitrogen, 36% of urea. Fertiliser prices in Malaysia surged 100–150%. This means a 2027 palm supply squeeze is already being priced in by traders front-running CPO futures.
+      </div>
+    </div>
+    <div class="panel-right">
+      <div class="panel-block">
+        <h4>Stocks to watch</h4>
+        <div class="tickers">
+          <span class="ticker-chip">SDGP</span>
+          <span class="ticker-chip">IOI</span>
+          <span class="ticker-chip">KLK</span>
+        </div>
+      </div>
+      <div class="panel-block">
+        <h4>Entry & targets (SD Guthrie · <span style="font-family:'DM Mono',monospace;font-size:10px">SDGP · Bursa: 5285</span>) <span style="font-weight:400;color:var(--dimmer)">· as of Apr 2, 2026 <a href="#sources" style="color:var(--gold);text-decoration:none">[26]</a></span></h4>
+        <div class="entry-grid">
+          <div class="entry-cell">
+            <div class="label">Entry range</div>
+            <div class="val gold">MYR 4.30–4.45</div>
+          </div>
+          <div class="entry-cell">
+            <div class="label">Target price</div>
+            <div class="val green">MYR 5.20</div>
+          </div>
+          <div class="entry-cell">
+            <div class="label">CPO trigger</div>
+            <div class="val gold">RM4,500/T</div>
+          </div>
+          <div class="entry-cell">
+            <div class="label">CPO as of Apr 2</div>
+            <div class="val green">RM4,772/T ✓</div>
+          </div>
+        </div>
+        <span class="risk-tag">Risk: Indonesia B50 biodiesel program delays remove price floor</span>
+      </div>
+      <div class="panel-block">
+        <h4>Floor price mechanism</h4>
+        <div class="mechanism-box" style="border-color:var(--green)">Indonesia's B50 program commitment — 50% biodiesel blend — creates hard demand floor even when crude is volatile. Indonesia tightening export availability globally while absorbing domestically = structurally higher CPO.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTOR 3: ISLAMIC FINANCE -->
+  <div class="sector-panel" id="sector-2">
+    <div class="panel-left">
+      <div class="conviction-badge high">● High conviction</div>
+      <h3>Islamic Finance</h3>
+      <div class="panel-timeline">⏱ Capital flows accelerate over 2–8 weeks</div>
+      <p>When the US and Iran are at war, Gulf billionaires and sovereign wealth funds don't want their money in Western banks — any account could be frozen, any wire could be sanctioned. They need a Shariah-compliant, politically neutral destination. Malaysia is the only market with the scale, legal infrastructure, and credibility to absorb these flows.</p>
+      <div class="mechanism-box">
+        <strong>Historical proof:</strong> After the 2006 Lebanon War, Malaysian Islamic banking assets grew at 20% CAGR over 3 years. Kuwait Finance House and Al Rajhi expanded Malaysian operations. The same institutions are moving capital right now.
+      </div>
+    </div>
+    <div class="panel-right">
+      <div class="panel-block">
+        <h4>Stocks to watch</h4>
+        <div class="tickers">
+          <span class="ticker-chip">BIMB</span>
+          <span class="ticker-chip">MAYBANK</span>
+          <span class="ticker-chip">CIMB</span>
+          <span class="ticker-chip">BURSA</span>
+          <span class="ticker-chip">AEON Bank</span>
+        </div>
+      </div>
+      <div class="panel-block">
+        <h4>Entry & targets <span style="font-weight:400;color:var(--dimmer)">· as of Apr 2, 2026 <a href="#sources" style="color:var(--gold);text-decoration:none">[42][63]</a></span></h4>
+        <div class="entry-grid">
+          <div class="entry-cell">
+            <div class="label">BIMB entry</div>
+            <div class="val gold">MYR 3.50–3.65</div>
+          </div>
+          <div class="entry-cell">
+            <div class="label">BIMB target</div>
+            <div class="val green">MYR 4.40</div>
+          </div>
+          <div class="entry-cell">
+            <div class="label">BURSA entry</div>
+            <div class="val gold">MYR 8.35–8.50</div>
+          </div>
+          <div class="entry-cell">
+            <div class="label">BURSA target</div>
+            <div class="val green">MYR 9.75</div>
+          </div>
+        </div>
+        <span class="risk-tag">Risk: Sudden ringgit weakness from other shocks</span>
+      </div>
+      <div class="panel-block">
+        <h4>The 2026 accelerant</h4>
+        <div class="mechanism-box" style="border-color:var(--blue)">Digital Islamic banks (AEON Bank) mean GCC capital no longer needs physical branch networks to move. Flows that used to take weeks now take days. The traditional "lag" in Islamic finance repricing is compressing — this is structurally faster than any prior cycle.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTOR 4: SHIPPING -->
+  <div class="sector-panel" id="sector-3">
+    <div class="panel-left">
+      <div class="conviction-badge high">● Highest conviction</div>
+      <h3>Shipping & Logistics</h3>
+      <div class="panel-timeline">⏱ Reprices within days — same speed as oil</div>
+      <p>War Risk surcharges hit $4,000 per container in some corridors. Every shipping company on earth is rerouting around Africa — except Malaysian ones. MISC sails directly through Hormuz. That's 15 days of voyage time saved per trip. At LNG charter rates, that's a massive cost advantage that falls straight to the bottom line.</p>
+      <div class="mechanism-box">
+        <strong>The exemption:</strong> Iran granted Malaysian-flagged tankers free passage through Hormuz due to diplomatic ties. 88% of Hormuz transits are now shadow fleet or Iranian-linked — the "selective blockade" makes this exemption extraordinarily valuable. MISC has access to a shipping lane its rivals don't.
+      </div>
+    </div>
+    <div class="panel-right">
+      <div class="panel-block">
+        <h4>Stocks to watch</h4>
+        <div class="tickers">
+          <span class="ticker-chip">MISC</span>
+          <span class="ticker-chip">WPRTS</span>
+          <span class="ticker-chip">BIPORT</span>
+          <span class="ticker-chip">MTT</span>
+        </div>
+      </div>
+      <div class="panel-block">
+        <h4>Entry & targets (MISC) <span style="font-weight:400;color:var(--dimmer)">· as of Apr 2, 2026 <a href="#sources" style="color:var(--gold);text-decoration:none">[8]</a></span></h4>
+        <div class="entry-grid">
+          <div class="entry-cell">
+            <div class="label">Entry range</div>
+            <div class="val gold">MYR 8.20–8.40</div>
+          </div>
+          <div class="entry-cell">
+            <div class="label">Target price</div>
+            <div class="val green">MYR 10.50</div>
+          </div>
+          <div class="entry-cell">
+            <div class="label">Upside</div>
+            <div class="val green">~27%</div>
+          </div>
+          <div class="entry-cell">
+            <div class="label">Timeline</div>
+            <div class="val gold">Days</div>
+          </div>
+        </div>
+        <span class="risk-tag">Risk: Exemption revoked if diplomatic ties shift</span>
+      </div>
+      <div class="panel-block">
+        <h4>Port play</h4>
+        <div class="mechanism-box" style="border-color:var(--green)">Port Klang and Tanjung Pelepas transshipment volumes rising as global shippers use Malaysia as a stable regional base. Share of total exports grew from 19% (2019) to 23% (2025). Bintulu Port critical for LNG exports to Japan and Korea — runs at maximum capacity.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTOR 5: GLOVES -->
+  <div class="sector-panel" id="sector-4">
+    <div class="panel-left">
+      <div class="conviction-badge med">● Medium conviction</div>
+      <h3>Glove Manufacturers</h3>
+      <div class="panel-timeline">⏱ Supply dynamics play out over 4–12 weeks</div>
+      <p>This is the counterintuitive one. Gloves aren't booming because of a pandemic. They're repricing because of supply destruction. The raw material for nitrile gloves (NBR) is petroleum-derived — and the Hormuz blockade has cut global naphtha supply, wiping out an estimated 25% of global glove capacity.</p>
+      <div class="mechanism-box">
+        <strong>Who wins:</strong> NBR suppliers now demand 20–30% prepayments. Smaller Chinese and Southeast Asian producers can't afford it — they're exiting the market. Top Glove and Hartalega have the balance sheets to absorb it and take their customers. Supply destruction = pricing power for the survivors.
+      </div>
+    </div>
+    <div class="panel-right">
+      <div class="panel-block">
+        <h4>Stocks to watch</h4>
+        <div class="tickers">
+          <span class="ticker-chip">TOPGLOV</span>
+          <span class="ticker-chip">HARTA</span>
+          <span class="ticker-chip">KOSSAN</span>
+        </div>
+      </div>
+      <div class="panel-block">
+        <h4>Entry & targets (Top Glove) <span style="font-weight:400;color:var(--dimmer)">· as of Apr 2, 2026 <a href="#sources" style="color:var(--gold);text-decoration:none">[49]</a></span></h4>
+        <div class="entry-grid">
+          <div class="entry-cell">
+            <div class="label">Entry range</div>
+            <div class="val gold">MYR 0.55–0.60</div>
+          </div>
+          <div class="entry-cell">
+            <div class="label">Target price</div>
+            <div class="val green">MYR 0.85</div>
+          </div>
+          <div class="entry-cell">
+            <div class="label">Upside</div>
+            <div class="val green">~48%</div>
+          </div>
+          <div class="entry-cell">
+            <div class="label">Hold period</div>
+            <div class="val gold">4–12 weeks</div>
+          </div>
+        </div>
+        <span class="risk-tag">Risk: Nitrile price overshooting margin recovery</span>
+      </div>
+      <div class="panel-block">
+        <h4>Entry trigger</h4>
+        <div class="mechanism-box">Wait for ASP (average selling price) confirmation post cost stabilisation. This is a tactical position, not a core hold. Enter when you see volume recovery data alongside input cost stabilisation signals.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTOR 6: DEFENCE -->
+  <div class="sector-panel" id="sector-5">
+    <div class="panel-left">
+      <div class="conviction-badge low">● Lower conviction</div>
+      <h3>Defence</h3>
+      <div class="panel-timeline">⏱ Contract flow takes 3–12 months to crystallise</div>
+      <p>Malaysia isn't fighting. But this war exposed how vulnerable global shipping lanes are — and the government is responding. The 13th Malaysia Plan (13MP) now prioritises Royal Malaysian Navy modernisation and littoral surveillance. Boustead Heavy Industries holds the key naval contracts.</p>
+      <div class="mechanism-box">
+        <strong>The play:</strong> Littoral Mission Vessel (LMV) program acceleration + fleet maintenance contracts = long-term revenue visibility for BHIC. These stocks are illiquid and volatile — but the contract pipeline is real, and sentiment re-rates on every headline about naval spending.
+      </div>
+    </div>
+    <div class="panel-right">
+      <div class="panel-block">
+        <h4>Stocks to watch</h4>
+        <div class="tickers">
+          <span class="ticker-chip">BHIC</span>
+        </div>
+      </div>
+      <div class="panel-block">
+        <h4>How to position</h4>
+        <div class="entry-grid">
+          <div class="entry-cell">
+            <div class="label">Conviction</div>
+            <div class="val gold">Lower</div>
+          </div>
+          <div class="entry-cell">
+            <div class="label">Position size</div>
+            <div class="val gold">Small / tactical</div>
+          </div>
+          <div class="entry-cell">
+            <div class="label">Trigger</div>
+            <div class="val gold" style="font-size:0.75rem">Contract announce</div>
+          </div>
+          <div class="entry-cell">
+            <div class="label">Hold</div>
+            <div class="val gold">6–12+ months</div>
+          </div>
+        </div>
+        <span class="risk-tag">Risk: Illiquid stock — difficult to exit quickly</span>
+      </div>
+      <div class="panel-block">
+        <h4>Watch for</h4>
+        <div class="mechanism-box">Monitor for 13MP budget allocation announcements, Mindef tender notices, or regional procurement news. The sector moves on headlines before contracts are finalised — position before the announcement, not after.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTOR 7: TOURISM -->
+  <div class="sector-panel" id="sector-6">
+    <div class="panel-left">
+      <div class="conviction-badge low">● Medium conviction (long game)</div>
+      <h3>Tourism</h3>
+      <div class="panel-timeline">⏱ Demand shift visible over 3–9 months</div>
+      <p>Middle East arrivals to Malaysia fell 40.3% in March 2026. But overall tourist numbers went up — because visitors from China, Indonesia, and India flooded in. People who planned to go to Dubai, Tel Aviv, or Amman are choosing Kuala Lumpur, Langkawi, and Penang instead. Malaysia is the world's #1 Muslim-friendly destination.</p>
+      <div class="mechanism-box">
+        <strong>The medical tourism kicker:</strong> IHH Healthcare saw 18% more foreign patients year-on-year. Patients who previously flew to Israeli hospitals or Dubai clinics for treatment are now coming to KL instead. This is a secular, multi-year trend accelerated by the war.
+      </div>
+    </div>
+    <div class="panel-right">
+      <div class="panel-block">
+        <h4>Stocks to watch</h4>
+        <div class="tickers">
+          <span class="ticker-chip">IHH</span>
+          <span class="ticker-chip">GENM</span>
+          <span class="ticker-chip">CAPITALA</span>
+        </div>
+      </div>
+      <div class="panel-block">
+        <h4>Entry & targets (IHH) <span style="font-weight:400;color:var(--dimmer)">· as of Apr 2, 2026 <a href="#sources" style="color:var(--gold);text-decoration:none">[32]</a></span></h4>
+        <div class="entry-grid">
+          <div class="entry-cell">
+            <div class="label">Entry range</div>
+            <div class="val gold">MYR 8.80–8.95</div>
+          </div>
+          <div class="entry-cell">
+            <div class="label">Target price</div>
+            <div class="val green">MYR 11.20</div>
+          </div>
+          <div class="entry-cell">
+            <div class="label">YoY patient growth</div>
+            <div class="val green">+18%</div>
+          </div>
+          <div class="entry-cell">
+            <div class="label">Hold period</div>
+            <div class="val gold">6–12 months</div>
+          </div>
+        </div>
+        <span class="risk-tag">Risk: Domestic policy shifts, MYR appreciation</span>
+      </div>
+      <div class="panel-block">
+        <h4>Tracking signals</h4>
+        <div class="mechanism-box">Monitor: Tourism Malaysia monthly arrival data, hotel occupancy rates in KL/Penang/Langkawi, AirAsia intra-Asia route loads. The data lags 6–8 weeks — position before the headline, not after it prints.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="full-divider"></div>
+
+<!-- HISTORICAL CONTEXT -->
+<section>
+  <div class="section-label">Historical mapping</div>
+  <h2 class="section-title">Every Crisis, Same Pattern</h2>
+  <p class="section-desc">This has played out six times since 2006. The triggers change. Malaysia's structural response doesn't.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Conflict</th>
+          <th>Brent peak</th>
+          <th>KLCI reaction</th>
+          <th>KOSPI</th>
+          <th>Nikkei</th>
+          <th>Key Malaysia driver</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2006 Lebanon War</td>
+          <td class="nu">$78</td>
+          <td class="dn">-1.5%</td>
+          <td class="dn">-3.2%</td>
+          <td class="dn">-2.1%</td>
+          <td style="color:var(--text)">MIFC Islamic Finance launch</td>
+        </tr>
+        <tr>
+          <td>2014 Gaza Escalation</td>
+          <td class="nu">$115</td>
+          <td class="dn">-0.8%</td>
+          <td class="dn">-5.1%</td>
+          <td class="dn">-3.4%</td>
+          <td style="color:var(--text)">Record CPO prices</td>
+        </tr>
+        <tr>
+          <td>2019 Tanker Crisis</td>
+          <td class="nu">$75</td>
+          <td class="dn">-0.4%</td>
+          <td class="dn">-4.8%</td>
+          <td class="dn">-2.9%</td>
+          <td style="color:var(--text)">MISC freight premium</td>
+        </tr>
+        <tr>
+          <td>2022 Ukraine War*</td>
+          <td class="nu">$139</td>
+          <td class="up">+2.1%</td>
+          <td class="dn">-8.4%</td>
+          <td class="dn">-6.2%</td>
+          <td style="color:var(--text)">Global commodity supercycle</td>
+        </tr>
+        <tr>
+          <td>2025 Twelve-Day War</td>
+          <td class="nu">$98</td>
+          <td class="dn">-0.3%</td>
+          <td class="dn">-9.1%</td>
+          <td class="dn">-4.7%</td>
+          <td style="color:var(--text)">LNG rerouting premium</td>
+        </tr>
+        <tr class="highlight-row">
+          <td><strong>2026 Iran-Israel War ← NOW</strong></td>
+          <td class="up">$126</td>
+          <td class="dn">-0.6%</td>
+          <td class="dn">-18.0%</td>
+          <td class="dn">-8.0%</td>
+          <td><strong>Hormuz closure + All 7 sectors</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:0.8rem;color:var(--dimmer);margin-top:1rem;font-family:'DM Mono',monospace;">* Ukraine included for commodity repricing comparison. Not a Middle East event.</p>
+</section>
+
+<div class="full-divider"></div>
+
+<!-- PORTFOLIO ALLOCATION -->
+<section>
+  <div class="section-label">Portfolio construction</div>
+  <h2 class="section-title">How To Size The Trade</h2>
+  <p class="section-desc">Not all 7 sectors are equal. This is how to weight them based on conviction and timeline.</p>
+
+  <div class="portfolio-bar">
+    <div class="bar-seg" style="flex:40;background:var(--gold)"></div>
+    <div class="bar-seg" style="flex:10;background:rgba(201,168,76,0.4)"></div>
+    <div class="bar-seg" style="flex:25;background:var(--blue)"></div>
+    <div class="bar-seg" style="flex:10;background:rgba(91,155,213,0.4)"></div>
+    <div class="bar-seg" style="flex:15;background:var(--dimmer)"></div>
+  </div>
+
+  <div class="portfolio-legend" style="margin-bottom:3rem">
+    <div class="legend-item">
+      <div class="legend-dot" style="background:var(--gold)"></div>
+      <span>Energy (O&G + Shipping)</span>
+      <span class="legend-val">~40%</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:rgba(201,168,76,0.4)"></div>
+      <span>Palm Oil</span>
+      <span class="legend-val">~10%</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:var(--blue)"></div>
+      <span>Islamic Finance</span>
+      <span class="legend-val">~25%</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:rgba(91,155,213,0.4)"></div>
+      <span>Gloves (tactical)</span>
+      <span class="legend-val">~10%</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:var(--dimmer)"></div>
+      <span>Defence + Tourism (long)</span>
+      <span class="legend-val">~15%</span>
+    </div>
+  </div>
+
+  <div class="why-grid" style="grid-template-columns:1fr 1fr">
+    <div class="why-card">
+      <h3 style="margin-bottom:1rem;color:var(--gold)">Sequence your entries</h3>
+      <p style="font-size:0.875rem">
+        <strong style="color:var(--text);display:block;margin-bottom:4px">T+0 to T+4 days</strong> Oil & Gas + Shipping. These reprice on news. Enter immediately on conflict escalation signals.<br><br>
+        <strong style="color:var(--text);display:block;margin-bottom:4px">T+2 to T+6 weeks</strong> Palm Oil + Gloves. Wait for CPO to confirm above RM4,500/T and NBR supply data.<br><br>
+        <strong style="color:var(--text);display:block;margin-bottom:4px">T+1 to T+3 months</strong> Islamic Finance. Layer in on ringgit dips — FX flows amplify returns.<br><br>
+        <strong style="color:var(--text);display:block;margin-bottom:4px">T+6 months+</strong> Defence + Tourism. Set positions and wait for contract/arrival data confirmation.
+      </p>
+    </div>
+    <div class="why-card">
+      <h3 style="margin-bottom:1rem;color:var(--red)">Risk management</h3>
+      <p style="font-size:0.875rem">
+        <strong style="color:var(--text);display:block;margin-bottom:4px">De-escalation risk is real.</strong> A US-Iran ceasefire could unwind oil and shipping premiums 10–15% within days. The fastest plays carry the highest reversal risk.<br><br>
+        <strong style="color:var(--text);display:block;margin-bottom:4px">Set hard stops.</strong> HIBISCS: below MYR 2.30. MISC: below MYR 7.80. SDGP: below MYR 4.00. Exit these immediately on credible ceasefire signals.<br><br>
+        <strong style="color:var(--text);display:block;margin-bottom:4px">Use ETFs as a hedge.</strong> Bursa-listed energy and palm ETFs give liquidity if you need to exit faster than individual stocks allow.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="full-divider"></div>
+
+<!-- DEVIATIONS -->
+<section>
+  <div class="section-label">What's different in 2026</div>
+  <h2 class="section-title">This Cycle Is More Severe Than Any Prior One</h2>
+  <p class="section-desc">The pattern holds — but the 2026 escalation has features that amplify the Malaysia trade more than any previous conflict.</p>
+
+  <div class="deviation-grid">
+    <div class="dev-card">
+      <div class="dev-icon">🔒</div>
+      <h4>The "Soft Closure" Is Hard</h4>
+      <p>Iran's 2026 Hormuz strategy uses shadow fleet dominance — 88% of transits are now shadow fleet or Iranian-linked. This is technically superior to the 2019 tanker attacks. The selective blockade is enforced. This makes the Malaysian exemption the most valuable it has ever been in any prior conflict. <a href="#sources" style="color:var(--gold);font-size:10px;text-decoration:none">[8][13]</a></p>
+      <span class="dev-impact bull">● Bullish for Malaysia</span>
+    </div>
+    <div class="dev-card">
+      <div class="dev-icon">⚡</div>
+      <h4>Digital Islamic Finance Speeds Up Flows</h4>
+      <p>GCC capital used to move through physical branch networks, taking weeks to redeploy. AEON Bank and digital sukuk platforms mean capital flows happen in days. The traditional "lag" in the Islamic finance safe-haven trade is compressing. Inflows are faster than any historical precedent.</p>
+      <span class="dev-impact bull">● Bullish for Malaysia</span>
+    </div>
+    <div class="dev-card">
+      <div class="dev-icon">⚠️</div>
+      <h4>Ceasefire Volatility Is High</h4>
+      <p>The US wants de-escalation (domestic gas price pressure). Israel wants regime collapse. This divergence means ceasefire rumours will cause sharp 10–15% reversals in oil and shipping premiums — and then potentially resume. Fastest plays need active monitoring, not passive holding.</p>
+      <span class="dev-impact bear">● Risk: Sharp reversals</span>
+    </div>
+    <div class="dev-card">
+      <div class="dev-icon">🌱</div>
+      <h4>Fertiliser Shock Extends The Palm Play</h4>
+      <p>Gulf states supply 19% of global nitrogen and 36% of urea. The Hormuz closure caused 100–150% fertiliser price surges in Malaysia. Traders are already front-running a 2027 palm supply contraction. This means the CPO repricing trade has a longer tail than any prior conflict provided. <a href="#sources" style="color:var(--gold);font-size:10px;text-decoration:none">[21]</a></p>
+      <span class="dev-impact bull">● Bullish for palm</span>
+    </div>
+    <div class="dev-card">
+      <div class="dev-icon">💊</div>
+      <h4>Medical Tourism Is A New Vector</h4>
+      <p>In prior conflicts, tourism was a pure "redirection" trade — leisure travellers avoiding the Levant. In 2026, medical tourists who previously flew to Israeli or Dubai hospitals are choosing KL instead. IHH Healthcare's 18% YoY patient growth adds a healthcare dimension to the tourism play that didn't exist in 2014 or 2019. <a href="#sources" style="color:var(--gold);font-size:10px;text-decoration:none">[32][59]</a></p>
+      <span class="dev-impact bull">● New alpha stream</span>
+    </div>
+    <div class="dev-card">
+      <div class="dev-icon">🔍</div>
+      <h4>Watch: US-China Sanctions Spillover</h4>
+      <p>If secondary US sanctions on Chinese entities dealing with Iran escalate, Malaysia's neutral positioning could be tested — particularly if Chinese-linked trade flows through Malaysian ports attract scrutiny. No major disruption yet, but this is the one geopolitical risk that could break the thesis.</p>
+      <span class="dev-impact neut">● Monitor closely</span>
+    </div>
+  </div>
+</section>
+
+<!-- SOURCES -->
+<div id="sources" style="border-top:1px solid var(--border);background:var(--surface)">
+  <div style="max-width:1200px;margin:0 auto;padding:3rem">
+    <button onclick="toggleSources()" id="sources-btn" style="display:flex;align-items:center;gap:12px;background:none;border:none;cursor:pointer;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;padding:0;margin-bottom:0">
+      <span style="color:var(--gold)">+</span> Sources & Verification — Click to expand
+    </button>
+    <div id="sources-body" style="display:none;margin-top:2rem">
+      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.7">All data points in this thesis are sourced from publicly available reporting accessed on April 2, 2026. Primary sources are listed below by the reference numbers used inline. All prices are as of April 2, 2026.</p>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);border:1px solid var(--border)">
+
+        <div style="background:var(--card);padding:1.25rem 1.5rem">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:0.15em;margin-bottom:8px">[1] CONFLICT TIMELINE</div>
+          <p style="font-size:0.8rem;color:var(--muted);line-height:1.6">Day 33 brief on US-Israeli strikes on Iran.<br><a href="https://english.news.cn/20260402/0099b03d14b14193a8e0964048918ba2/c.html" target="_blank" style="color:var(--blue);font-size:0.75rem">Xinhua · Apr 2, 2026</a></p>
+        </div>
+
+        <div style="background:var(--card);padding:1.25rem 1.5rem">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:0.15em;margin-bottom:8px">[3] HORMUZ SHIPPING UPDATE</div>
+          <p style="font-size:0.8rem;color:var(--muted);line-height:1.6">Iran War Shipping Update — April 1, 2026. Documents 20M bbl/day at risk via Hormuz closure.<br><a href="https://www.unitedagainstnucleariran.com/blog/iran-war-shipping-update-april-1-2026" target="_blank" style="color:var(--blue);font-size:0.75rem">United Against Nuclear Iran · Apr 1, 2026</a></p>
+        </div>
+
+        <div style="background:var(--card);padding:1.25rem 1.5rem">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:0.15em;margin-bottom:8px">[4] CRUDE OIL Q2 OUTLOOK · $126 BRENT</div>
+          <p style="font-size:0.8rem;color:var(--muted);line-height:1.6">Q2 2026 crude oil outlook with Hormuz risk dominating WTI/Brent price forecasts.<br><a href="https://www.stonex.com/en/insights/crude-oil-q2-2026-outlook-hormuz-risks-dominate-wti-price-forecasts-2026-03-30/" target="_blank" style="color:var(--blue);font-size:0.75rem">StoneX · Mar 30, 2026</a></p>
+        </div>
+
+        <div style="background:var(--card);padding:1.25rem 1.5rem">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:0.15em;margin-bottom:8px">[5] MALAYSIA GDP OUTLOOK 4–5%</div>
+          <p style="font-size:0.8rem;color:var(--muted);line-height:1.6">Malaysia raises 2026 growth outlook; sees Iran war impact as contained. Source for BNM GDP revision.<br><a href="https://www.straitstimes.com/business/economy/malaysia-raises-2026-growth-outlook-sees-iran-war-impact-contained" target="_blank" style="color:var(--blue);font-size:0.75rem">Straits Times · Apr 2, 2026</a></p>
+        </div>
+
+        <div style="background:var(--card);padding:1.25rem 1.5rem">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:0.15em;margin-bottom:8px">[8] MISC / HORMUZ EXEMPTION</div>
+          <p style="font-size:0.8rem;color:var(--muted);line-height:1.6">Malaysian Transport Minister confirms: Malaysia's oil tankers exempt from Hormuz transit fees due to friendly ties with Iran. Primary source for the shipping "diplomatic alpha" thesis.<br><a href="https://m.aastocks.com/en/usq/news/comment.aspx?source=AAFN&id=NOW.1514880&catg=1" target="_blank" style="color:var(--blue);font-size:0.75rem">AASTOCKS/AAFNNews · Apr 2, 2026</a></p>
+        </div>
+
+        <div style="background:var(--card);padding:1.25rem 1.5rem">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:0.15em;margin-bottom:8px">[9] GLOBAL FUNDS → MALAYSIA</div>
+          <p style="font-size:0.8rem;color:var(--muted);line-height:1.6">Global funds look to Malaysia as Iran war shakes up Asian assets. Documents capital rotation thesis.<br><a href="https://www.freemalaysiatoday.com/category/highlight/2026/03/17/global-funds-look-to-malaysia-as-iran-war-shakes-up-asian-assets" target="_blank" style="color:var(--blue);font-size:0.75rem">Free Malaysia Today · Mar 17, 2026</a></p>
+        </div>
+
+        <div style="background:var(--card);padding:1.25rem 1.5rem">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:0.15em;margin-bottom:8px">[13] SHADOW FLEET — 88% FIGURE</div>
+          <p style="font-size:0.8rem;color:var(--muted);line-height:1.6">Live updates: Trump addresses nation on Iran war — Hormuz shadow fleet dominance documented.<br><a href="https://www.cbsnews.com/live-updates/iran-war-trump-nato-tehran-threatens-us-tech-companies-strait-of-hormuz/" target="_blank" style="color:var(--blue);font-size:0.75rem">CBS News · Apr 2, 2026</a></p>
+        </div>
+
+        <div style="background:var(--card);padding:1.25rem 1.5rem">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:0.15em;margin-bottom:8px">[15] BURSA/KLCI MARKET DATA</div>
+          <p style="font-size:0.8rem;color:var(--muted);line-height:1.6">Bursa Malaysia ends broadly lower as sentiment dampened by Middle East conflict. Source for KLCI -0.6%, KOSPI -18%, Nikkei -8% figures.<br><a href="https://www.malaymail.com/news/money/2026/03/02/bursa-malaysia-ends-broadly-lower-as-sentiment-dampened-by-middle-east-conflict/211043" target="_blank" style="color:var(--blue);font-size:0.75rem">Malay Mail · Mar 2, 2026</a></p>
+        </div>
+
+        <div style="background:var(--card);padding:1.25rem 1.5rem">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:0.15em;margin-bottom:8px">[20] HIBISCS ENTRY PRICE · INVESTOR PRES</div>
+          <p style="font-size:0.8rem;color:var(--muted);line-height:1.6">Hibiscus Petroleum March 2026 Investor Presentation — source for North Sabah blends, Teal West catalyst, and entry price range.<br><a href="https://www.hibiscuspetroleum.com/wp-content/uploads/2026/03/2026-Hibiscus-Investor-Presentation-Mar-R1.pdf" target="_blank" style="color:var(--blue);font-size:0.75rem">Hibiscus Petroleum · Mar 2026</a></p>
+        </div>
+
+        <div style="background:var(--card);padding:1.25rem 1.5rem">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:0.15em;margin-bottom:8px">[21] FERTILISER SHOCK — 100–150% SURGE</div>
+          <p style="font-size:0.8rem;color:var(--muted);line-height:1.6">2026 Strait of Hormuz Crisis: Impact on Malaysia oil & food prices — documents nitrogen/urea figures and fertiliser price surge in Malaysia.<br><a href="https://mahersaham.com/blogs/strait-of-hormuz-crisis-impact-malaysia" target="_blank" style="color:var(--blue);font-size:0.75rem">Mahersaham · Apr 2, 2026</a></p>
+        </div>
+
+        <div style="background:var(--card);padding:1.25rem 1.5rem">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:0.15em;margin-bottom:8px">[26] PALM OIL +9% / CPO RM4,772 / SDGP ENTRY</div>
+          <p style="font-size:0.8rem;color:var(--muted);line-height:1.6">Palm oil prices jump 9% as Middle East tensions push crude above $100. Source for POGO spread, B50 floor, and SD Guthrie entry levels.<br><a href="https://www.ecofinagency.com/news/0903-53610-palm-oil-prices-jump-9-as-middle-east-tensions-push-crude-above-100" target="_blank" style="color:var(--blue);font-size:0.75rem">Ecofin Agency · Apr 2026</a></p>
+        </div>
+
+        <div style="background:var(--card);padding:1.25rem 1.5rem">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:0.15em;margin-bottom:8px">[32] IHH +18% / MOOMOO MARKET PLAYBOOK</div>
+          <p style="font-size:0.8rem;color:var(--muted);line-height:1.6">Navigating the Storm: Malaysia's Market Defense Playbook — source for IHH 18% patient growth, Top Glove entry, CPO 18-month high.<br><a href="https://www.moomoo.com/news/post/67767797?futusource=nnq_personal_guest" target="_blank" style="color:var(--blue);font-size:0.75rem">Moomoo · Apr 2, 2026</a></p>
+        </div>
+
+        <div style="background:var(--card);padding:1.25rem 1.5rem">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:0.15em;margin-bottom:8px">[42] ISLAMIC FINANCE LEADERSHIP / AEON BANK</div>
+          <p style="font-size:0.8rem;color:var(--muted);line-height:1.6">Malaysia's Strategic Path to Global Islamic Finance Leadership — source for BIMB, AEON Bank, digital Islamic bank thesis and BIMB entry price.<br><a href="https://amro-asia.org/malaysias-strategic-path-to-global-islamic-finance-leadership" target="_blank" style="color:var(--blue);font-size:0.75rem">AMRO-Asia · Apr 2, 2026</a></p>
+        </div>
+
+        <div style="background:var(--card);padding:1.25rem 1.5rem">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:0.15em;margin-bottom:8px">[49] GLOVE SECTOR / NBR SUPPLY DESTRUCTION</div>
+          <p style="font-size:0.8rem;color:var(--muted);line-height:1.6">Glove Sector: Middle East Conflict May Accelerate Market Equilibrium — primary source for 25% global capacity reduction, NBR prepayment demands, Top Glove entry thesis.<br><a href="https://www.kleverstock.live/news-detail-page/20260401/Glove-Sector-Middle-East-Conflict-May-Accelerate-Market-Equilibrium/64147" target="_blank" style="color:var(--blue);font-size:0.75rem">KleverStock · Apr 1, 2026</a></p>
+        </div>
+
+        <div style="background:var(--card);padding:1.25rem 1.5rem">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:0.15em;margin-bottom:8px">[55] MALAYSIAN VESSELS CLEARED — HORMUZ</div>
+          <p style="font-size:0.8rem;color:var(--muted);line-height:1.6">Malaysian Vessels Cleared to Pass Strait of Hormuz — confirms the diplomatic exemption that underpins the MISC shipping alpha thesis.<br><a href="https://www.supplychainbrain.com/articles/43749-malaysian-vessels-cleared-to-pass-strait-of-hormuz" target="_blank" style="color:var(--blue);font-size:0.75rem">SupplyChainBrain · Apr 2, 2026</a></p>
+        </div>
+
+        <div style="background:var(--card);padding:1.25rem 1.5rem">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:0.15em;margin-bottom:8px">[58][59] TOURISM — ARRIVALS DATA</div>
+          <p style="font-size:0.8rem;color:var(--muted);line-height:1.6">Malaysian tourism sector remains resilient despite Mideast conflict + Malaysia records higher tourist arrivals in March despite Middle East turmoil.<br><a href="https://www.malaymail.com/news/malaysia/2026/04/01/its-going-up-up-up-malaysia-records-higher-tourist-arrivals-in-march-despite-middle-east-turmoil/214649" target="_blank" style="color:var(--blue);font-size:0.75rem">Malay Mail · Apr 1, 2026</a></p>
+        </div>
+
+      </div>
+      <p style="font-size:0.75rem;color:var(--dimmer);margin-top:1rem;font-family:'DM Mono',monospace;line-height:1.8">Full bibliography of 66 sources available in the original research PDF. Numbers above correspond to inline citation markers throughout this page. All URLs accessed April 2, 2026.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="cta-bg"></div>
+  <h2>Malaysia Has Never Been<br>Better Positioned<br>For A Global Crisis</h2>
+  <p>Seven sectors. One thesis. Sixty years of strategic infrastructure paying off. This is a repeatable, mechanical trade — not speculation.</p>
+  <div style="position:relative;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+    <a href="#" class="cta-pill" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑ Back to top</a>
+  </div>
+  <div class="disclaimer">
+    All prices and market data as of April 2, 2026. SD Guthrie (formerly Sime Darby Plantation) trades on Bursa Malaysia as <strong style="color:var(--dimmer)">SDGP · Code 5285</strong>.<br>
+    This material is for informational purposes only and does not constitute financial or investment advice.<br>
+    Always conduct your own research and consult a licensed financial advisor before making any investment decision.<br>
+    Past sectoral patterns do not guarantee future returns. All prices in MYR unless stated otherwise.<br>
+    <a href="#sources" style="color:var(--gold);text-decoration:none" onclick="document.getElementById('sources-body').style.display='block';document.getElementById('sources-btn').innerHTML='<span style=color:var(--gold)>−</span> Sources & Verification — Click to collapse'">→ View sources & citations</a>
+  </div>
+</div>
+
+<script>
+function showSector(idx) {
+  document.querySelectorAll('.sector-panel').forEach((p, i) => {
+    p.classList.toggle('active', i === idx);
+  });
+  document.querySelectorAll('.sector-tab').forEach((t, i) => {
+    t.classList.toggle('active', i === idx);
+  });
+}
+
+function toggleSources() {
+  const body = document.getElementById('sources-body');
+  const btn = document.getElementById('sources-btn');
+  const open = body.style.display === 'block';
+  body.style.display = open ? 'none' : 'block';
+  btn.innerHTML = open
+    ? '<span style="color:var(--gold)">+</span> Sources & Verification — Click to expand'
+    : '<span style="color:var(--gold)">−</span> Sources & Verification — Click to collapse';
+}
+
+// Intersection observer for fade-in on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.why-card, .dev-card').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+  observer.observe(el);
+});
+</script>
+
+</body>
+</html>
