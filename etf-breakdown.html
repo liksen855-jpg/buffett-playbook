@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ETF Crash Playbook — IGV · MCHI · VTV</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #181818;
+    --border: rgba(255,255,255,0.07);
+    --border-strong: rgba(255,255,255,0.14);
+    --text: #f0ede8;
+    --muted: #6b6b6b;
+    --subtle: #2a2a2a;
+    --igv: #3b82f6;
+    --igv-dim: rgba(59,130,246,0.12);
+    --igv-glow: rgba(59,130,246,0.25);
+    --mchi: #f59e0b;
+    --mchi-dim: rgba(245,158,11,0.12);
+    --mchi-glow: rgba(245,158,11,0.25);
+    --vtv: #22c55e;
+    --vtv-dim: rgba(34,197,94,0.12);
+    --vtv-glow: rgba(34,197,94,0.25);
+    --red: #ef4444;
+    --red-dim: rgba(239,68,68,0.1);
+    --green: #22c55e;
+    --green-dim: rgba(34,197,94,0.1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* NOISE TEXTURE */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 60px 24px 100px; }
+
+  /* HEADER */
+  .header { margin-bottom: 64px; }
+  .header-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .header-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 1px;
+    background: var(--muted);
+  }
+  .header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 8vw, 96px);
+    line-height: 0.92;
+    letter-spacing: 0.01em;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+  .header h1 span { color: var(--muted); }
+  .header-desc {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 560px;
+    font-weight: 300;
+  }
+  .header-stats {
+    display: flex;
+    gap: 32px;
+    margin-top: 36px;
+    padding-top: 36px;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .hstat { display: flex; flex-direction: column; gap: 4px; }
+  .hstat-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; }
+  .hstat-value { font-size: 22px; font-weight: 500; color: var(--text); }
+  .hstat-value.red { color: var(--red); }
+  .hstat-value.green { color: var(--green); }
+
+  /* NAV TABS */
+  .tabs { display: flex; gap: 2px; margin-bottom: 40px; background: var(--surface); border-radius: 10px; padding: 4px; border: 1px solid var(--border); }
+  .tab {
+    flex: 1;
+    padding: 10px 16px;
+    border-radius: 7px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--text); }
+  .tab[data-etf="igv"].active { background: var(--igv-dim); color: var(--igv); }
+  .tab[data-etf="mchi"].active { background: var(--mchi-dim); color: var(--mchi); }
+  .tab[data-etf="vtv"].active { background: var(--vtv-dim); color: var(--vtv); }
+
+  /* PANELS */
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadeUp 0.3s ease; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* PANEL HERO */
+  .panel-hero {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    gap: 24px;
+    margin-bottom: 32px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .panel-ticker {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+  .panel-ticker.igv { color: var(--igv); }
+  .panel-ticker.mchi { color: var(--mchi); }
+  .panel-ticker.vtv { color: var(--vtv); }
+  .panel-name { font-size: 13px; color: var(--muted); margin-top: 4px; font-weight: 300; }
+  .conviction-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 8px;
+  }
+  .conviction-tag.igv { color: var(--igv); border-color: var(--igv-glow); background: var(--igv-dim); }
+  .conviction-tag.mchi { color: var(--mchi); border-color: var(--mchi-glow); background: var(--mchi-dim); }
+  .conviction-tag.vtv { color: var(--vtv); border-color: var(--vtv-glow); background: var(--vtv-dim); }
+
+  /* METRICS ROW */
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 24px; }
+  .metric {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .metric-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; margin-bottom: 6px; }
+  .metric-val { font-size: 20px; font-weight: 500; }
+  .metric-val.red { color: var(--red); }
+  .metric-val.green { color: var(--green); }
+  .metric-val.neutral { color: var(--text); }
+
+  /* GRID 2COL */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+
+  /* SECTION CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 12px;
+  }
+  .card-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  /* THESIS */
+  .thesis-text {
+    font-size: 14px;
+    line-height: 1.85;
+    color: #c8c5c0;
+    font-weight: 300;
+  }
+  .thesis-text strong { color: var(--text); font-weight: 500; }
+
+  /* ASYMMETRY */
+  .asym-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .asym-up {
+    background: var(--green-dim);
+    border: 1px solid rgba(34,197,94,0.2);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+  .asym-down {
+    background: var(--red-dim);
+    border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+  .asym-lbl { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+  .asym-lbl.up { color: rgba(34,197,94,0.7); }
+  .asym-lbl.dn { color: rgba(239,68,68,0.7); }
+  .asym-num { font-family: 'Bebas Neue', sans-serif; font-size: 42px; line-height: 1; }
+  .asym-num.up { color: var(--green); }
+  .asym-num.dn { color: var(--red); }
+  .asym-sub { font-size: 12px; color: var(--muted); margin-top: 4px; font-weight: 300; }
+
+  /* RATIO BAR */
+  .ratio-wrap { margin-top: 4px; }
+  .ratio-title { font-size: 13px; color: var(--text); font-weight: 500; margin-bottom: 10px; }
+  .ratio-bar { height: 6px; border-radius: 3px; background: var(--subtle); overflow: hidden; display: flex; }
+  .ratio-fill-up { background: var(--green); height: 100%; border-radius: 3px 0 0 3px; }
+  .ratio-fill-dn { background: var(--red); height: 100%; border-radius: 0 3px 3px 0; }
+  .ratio-labels { display: flex; justify-content: space-between; margin-top: 6px; font-family: 'DM Mono', monospace; font-size: 11px; }
+  .ratio-labels .up { color: var(--green); }
+  .ratio-labels .dn { color: var(--red); }
+
+  /* HOLDINGS BAR LIST */
+  .bar-list { display: flex; flex-direction: column; gap: 10px; }
+  .bar-row { display: flex; align-items: center; gap: 12px; }
+  .bar-name { font-size: 12px; color: var(--text); width: 150px; flex-shrink: 0; font-weight: 300; }
+  .bar-track { flex: 1; height: 5px; background: var(--subtle); border-radius: 3px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; }
+  .bar-fill.igv { background: var(--igv); }
+  .bar-fill.mchi { background: var(--mchi); }
+  .bar-fill.vtv { background: var(--vtv); }
+  .bar-pct { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); width: 38px; text-align: right; flex-shrink: 0; }
+
+  /* CATALYST / RISK LIST */
+  .item-list { display: flex; flex-direction: column; gap: 12px; }
+  .item-row { display: flex; gap: 12px; align-items: flex-start; }
+  .item-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+  .item-dot.igv { background: var(--igv); }
+  .item-dot.mchi { background: var(--mchi); }
+  .item-dot.vtv { background: var(--vtv); }
+  .item-dot.risk { background: var(--red); }
+  .item-text { font-size: 13px; color: #b8b5b0; line-height: 1.7; font-weight: 300; }
+  .item-text strong { color: var(--text); font-weight: 500; }
+
+  /* VALUATION TABLE */
+  .val-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .val-cell { background: var(--surface2); border-radius: 6px; padding: 12px 14px; }
+  .val-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; margin-bottom: 4px; }
+  .val-value { font-size: 16px; font-weight: 500; }
+  .val-value.green { color: var(--green); }
+  .val-value.red { color: var(--red); }
+  .val-value.neutral { color: var(--text); }
+
+  /* FOOTNOTE */
+  .footnote { margin-top: 12px; font-size: 11px; color: var(--muted); font-weight: 300; }
+
+  /* ASK BUTTONS */
+  .ask-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+  .ask-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border-strong);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .ask-btn:hover { border-color: var(--text); color: var(--text); background: var(--surface2); }
+
+  /* NFA */
+  .nfa {
+    margin-top: 60px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.8;
+  }
+
+  @media (max-width: 640px) {
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+    .grid2 { grid-template-columns: 1fr; }
+    .asym-grid { grid-template-columns: 1fr 1fr; }
+    .val-grid { grid-template-columns: repeat(2, 1fr); }
+    .panel-hero { grid-template-columns: 1fr; }
+    .panel-ticker { font-size: 52px; }
+    .bar-name { width: 110px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-eyebrow">April 2026 · Market Crash Playbook</div>
+    <h1>Three ETFs.<br><span>Buy the</span> panic.</h1>
+    <p class="header-desc">When fear takes over and everyone dumps everything, strong assets go on sale. Here's the deep breakdown — valuation, asymmetry, catalysts, and risk — for three ETFs ranked by conviction.</p>
+    <div class="header-stats">
+      <div class="hstat"><div class="hstat-label">IGV YTD</div><div class="hstat-value red">−24%</div></div>
+      <div class="hstat"><div class="hstat-label">MCHI YTD</div><div class="hstat-value red">−7.0%</div></div>
+      <div class="hstat"><div class="hstat-label">VTV YTD</div><div class="hstat-value green">+3.7%</div></div>
+      <div class="hstat"><div class="hstat-label">S&P 500 Fwd P/E</div><div class="hstat-value">22x+</div></div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" data-etf="igv" onclick="switchTab('igv')">IGV &nbsp;#1</button>
+    <button class="tab" data-etf="mchi" onclick="switchTab('mchi')">MCHI &nbsp;#2</button>
+    <button class="tab" data-etf="vtv" onclick="switchTab('vtv')">VTV &nbsp;#3</button>
+  </div>
+
+  <!-- ===== IGV ===== -->
+  <div id="panel-igv" class="panel active">
+    <div class="panel-hero">
+      <div>
+        <div class="panel-ticker igv">IGV</div>
+        <div class="panel-name">iShares Expanded Tech-Software Sector ETF &nbsp;·&nbsp; ~100–118 holdings &nbsp;·&nbsp; Pure software play</div>
+      </div>
+      <div class="conviction-tag igv">#1 Highest conviction</div>
+    </div>
+
+    <div class="metrics">
+      <div class="metric"><div class="metric-label">Price</div><div class="metric-val neutral">~$80.30</div></div>
+      <div class="metric"><div class="metric-label">YTD return</div><div class="metric-val red">−24%</div></div>
+      <div class="metric"><div class="metric-label">Fwd EPS growth</div><div class="metric-val green">+15–20%</div></div>
+      <div class="metric"><div class="metric-label">Dividend yield</div><div class="metric-val neutral">~0%</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">The thesis</div>
+      <p class="thesis-text">Software just posted its <strong>worst quarterly drawdown since Q4 2008</strong> — down 24% — on a single fear: that AI will kill enterprise software budgets. That thesis is backwards. AI demands implementation layers, cloud orchestration, cybersecurity tooling, and integration middleware. <strong>These are IGV companies.</strong> Every dollar of AI capex flows through the software stack these firms own. The sell-off has fully priced in the worst case. The actual outcome — <strong>accelerating AI-driven demand</strong> — is not in the price at all. Forward earnings are still growing 15–20%. This is textbook asymmetry: the pessimism is baked in; the upside is free optionality.</p>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-label">Asymmetric setup</div>
+        <div class="asym-grid">
+          <div class="asym-up">
+            <div class="asym-lbl up">Upside</div>
+            <div class="asym-num up">40–60%</div>
+            <div class="asym-sub">Mean reversion in 12–18 months</div>
+          </div>
+          <div class="asym-down">
+            <div class="asym-lbl dn">Downside</div>
+            <div class="asym-num dn">10–15%</div>
+            <div class="asym-sub">Support near 2025 lows</div>
+          </div>
+        </div>
+        <div class="ratio-wrap">
+          <div class="ratio-title">Risk/reward: 3-to-1 in your favour</div>
+          <div class="ratio-bar">
+            <div class="ratio-fill-up" style="width:75%"></div>
+            <div class="ratio-fill-dn" style="width:25%"></div>
+          </div>
+          <div class="ratio-labels"><span class="up">↑ Upside 40–60%</span><span class="dn">↓ Downside 10–15%</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label">Top holdings</div>
+        <div class="bar-list">
+          <div class="bar-row"><span class="bar-name">PLTR · Palantir</span><div class="bar-track"><div class="bar-fill igv" style="width:100%"></div></div><span class="bar-pct">8.92%</span></div>
+          <div class="bar-row"><span class="bar-name">MSFT · Microsoft</span><div class="bar-track"><div class="bar-fill igv" style="width:94%"></div></div><span class="bar-pct">8.40%</span></div>
+          <div class="bar-row"><span class="bar-name">ORCL · Oracle</span><div class="bar-track"><div class="bar-fill igv" style="width:92%"></div></div><span class="bar-pct">8.18%</span></div>
+          <div class="bar-row"><span class="bar-name">CRM · Salesforce</span><div class="bar-track"><div class="bar-fill igv" style="width:83%"></div></div><span class="bar-pct">7.39%</span></div>
+          <div class="bar-row"><span class="bar-name">PANW · Palo Alto</span><div class="bar-track"><div class="bar-fill igv" style="width:62%"></div></div><span class="bar-pct">5.56%</span></div>
+          <div class="bar-row"><span class="bar-name">INTU · Intuit</span><div class="bar-track"><div class="bar-fill igv" style="width:52%"></div></div><span class="bar-pct">4.63%</span></div>
+          <div class="bar-row"><span class="bar-name">APP · AppLovin</span><div class="bar-track"><div class="bar-fill igv" style="width:49%"></div></div><span class="bar-pct">4.41%</span></div>
+          <div class="bar-row"><span class="bar-name">CRWD · CrowdStrike</span><div class="bar-track"><div class="bar-fill igv" style="width:48%"></div></div><span class="bar-pct">4.29%</span></div>
+          <div class="bar-row"><span class="bar-name">NOW · ServiceNow</span><div class="bar-track"><div class="bar-fill igv" style="width:48%"></div></div><span class="bar-pct">4.25%</span></div>
+          <div class="bar-row"><span class="bar-name">ADBE · Adobe</span><div class="bar-track"><div class="bar-fill igv" style="width:48%"></div></div><span class="bar-pct">4.25%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-label">Key catalysts</div>
+        <div class="item-list">
+          <div class="item-row"><div class="item-dot igv"></div><div class="item-text"><strong>AI implementation surge</strong> — every AI deployment needs the integration, security, and cloud tooling IGV companies own. Spending is accelerating.</div></div>
+          <div class="item-row"><div class="item-dot igv"></div><div class="item-text"><strong>Resilient enterprise budgets</strong> — CIOs are ring-fencing AI transformation spend. That's exactly where IGV revenue sits.</div></div>
+          <div class="item-row"><div class="item-dot igv"></div><div class="item-text"><strong>Historical mean reversion</strong> — every prior software correction of this magnitude (2022, 2018, 2008) saw 40–80% recoveries within 18 months.</div></div>
+          <div class="item-row"><div class="item-dot igv"></div><div class="item-text"><strong>Derating is complete</strong> — forward multiples near prior capitulation lows. Next move is re-rating on earnings delivery.</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label">Risks to watch</div>
+        <div class="item-list">
+          <div class="item-row"><div class="item-dot risk"></div><div class="item-text">Prolonged high rates delay enterprise capex and extend multiple compression further</div></div>
+          <div class="item-row"><div class="item-dot risk"></div><div class="item-text">AI genuinely cannibalises SaaS seats (Copilot replacing lower-tier subscriptions) — thesis breaks on sustained revenue misses</div></div>
+          <div class="item-row"><div class="item-dot risk"></div><div class="item-text">Broader tech regulation creating new compliance costs that compress operating margins</div></div>
+          <div class="item-row"><div class="item-dot risk"></div><div class="item-text">No dividend cushion — pure price return. If thesis takes 24+ months, opportunity cost is high</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MCHI ===== -->
+  <div id="panel-mchi" class="panel">
+    <div class="panel-hero">
+      <div>
+        <div class="panel-ticker mchi">MCHI</div>
+        <div class="panel-name">iShares MSCI China ETF &nbsp;·&nbsp; ~579 constituents &nbsp;·&nbsp; Large/mid-cap A, H & Red Chip</div>
+      </div>
+      <div class="conviction-tag mchi">#2 High conviction</div>
+    </div>
+
+    <div class="metrics">
+      <div class="metric"><div class="metric-label">Price</div><div class="metric-val neutral">~$55.90</div></div>
+      <div class="metric"><div class="metric-label">YTD return</div><div class="metric-val red">−7.0%</div></div>
+      <div class="metric"><div class="metric-label">Forward P/E</div><div class="metric-val green">~11.0x</div></div>
+      <div class="metric"><div class="metric-label">Dividend yield</div><div class="metric-val green">~2.2%</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">The thesis</div>
+      <p class="thesis-text">MCHI is trading at a forward P/E of <strong>11x and a price-to-book of 1.51</strong> — levels that historically only appear when the market has fully priced in catastrophe. The catastrophe (property drag, geopolitical tension, slow recovery) <strong>is already in the price.</strong> What is not in the price is any form of policy pivot, stimulus, or sentiment normalisation. The asymmetry is structural: the <strong>left tail is truncated</strong> because despair is already embedded in valuation. The right tail is fat because policy leverage in China is enormous — any incremental positive triggers rapid multiple expansion back toward long-term averages of <strong>16–18x earnings.</strong></p>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-label">Asymmetric setup</div>
+        <div class="asym-grid">
+          <div class="asym-up">
+            <div class="asym-lbl up">Upside</div>
+            <div class="asym-num up">30–50%</div>
+            <div class="asym-sub">Re-rate from 11x → 16–18x P/E</div>
+          </div>
+          <div class="asym-down">
+            <div class="asym-lbl dn">Downside</div>
+            <div class="asym-num dn">10–12%</div>
+            <div class="asym-sub">Renewed risk-off / USD strength</div>
+          </div>
+        </div>
+        <div class="ratio-wrap">
+          <div class="ratio-title">Risk/reward: ~3.5-to-1 in your favour</div>
+          <div class="ratio-bar">
+            <div class="ratio-fill-up" style="width:78%"></div>
+            <div class="ratio-fill-dn" style="width:22%"></div>
+          </div>
+          <div class="ratio-labels"><span class="up">↑ Upside 30–50%</span><span class="dn">↓ Downside 10–12%</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label">Top holdings</div>
+        <div class="bar-list">
+          <div class="bar-row"><span class="bar-name">700 · Tencent</span><div class="bar-track"><div class="bar-fill mchi" style="width:100%"></div></div><span class="bar-pct">15.09%</span></div>
+          <div class="bar-row"><span class="bar-name">9988 · Alibaba</span><div class="bar-track"><div class="bar-fill mchi" style="width:65%"></div></div><span class="bar-pct">9.83%</span></div>
+          <div class="bar-row"><span class="bar-name">939 · China Construction</span><div class="bar-track"><div class="bar-fill mchi" style="width:26%"></div></div><span class="bar-pct">3.91%</span></div>
+          <div class="bar-row"><span class="bar-name">PDD · PDD Holdings</span><div class="bar-track"><div class="bar-fill mchi" style="width:18%"></div></div><span class="bar-pct">2.71%</span></div>
+          <div class="bar-row"><span class="bar-name">1810 · Xiaomi</span><div class="bar-track"><div class="bar-fill mchi" style="width:17%"></div></div><span class="bar-pct">2.56%</span></div>
+          <div class="bar-row"><span class="bar-name">1398 · ICBC</span><div class="bar-track"><div class="bar-fill mchi" style="width:14%"></div></div><span class="bar-pct">2.18%</span></div>
+          <div class="bar-row"><span class="bar-name">2318 · Ping An Insurance</span><div class="bar-track"><div class="bar-fill mchi" style="width:13%"></div></div><span class="bar-pct">1.95%</span></div>
+          <div class="bar-row"><span class="bar-name">3690 · Meituan</span><div class="bar-track"><div class="bar-fill mchi" style="width:13%"></div></div><span class="bar-pct">1.92%</span></div>
+          <div class="bar-row"><span class="bar-name">1211 · BYD</span><div class="bar-track"><div class="bar-fill mchi" style="width:12%"></div></div><span class="bar-pct">1.85%</span></div>
+          <div class="bar-row"><span class="bar-name">3988 · Bank of China</span><div class="bar-track"><div class="bar-fill mchi" style="width:11%"></div></div><span class="bar-pct">1.73%</span></div>
+        </div>
+        <div class="footnote" style="margin-top:10px;">Tencent + Alibaba alone account for ~25% of the fund — heavily concentrated in China's two largest internet platforms</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Valuation vs. history</div>
+      <div class="val-grid">
+        <div class="val-cell"><div class="val-label">Trailing P/E</div><div class="val-value neutral">13.9x</div></div>
+        <div class="val-cell"><div class="val-label">Forward P/E</div><div class="val-value green">11.0x</div></div>
+        <div class="val-cell"><div class="val-label">Price / book</div><div class="val-value green">1.51x</div></div>
+        <div class="val-cell"><div class="val-label">LT avg P/E</div><div class="val-value neutral">16–18x</div></div>
+        <div class="val-cell"><div class="val-label">Discount to avg</div><div class="val-value green">~35%</div></div>
+        <div class="val-cell"><div class="val-label">Dividend yield</div><div class="val-value green">2.16%</div></div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-label">Key catalysts</div>
+        <div class="item-list">
+          <div class="item-row"><div class="item-dot mchi"></div><div class="item-text"><strong>Policy stimulus</strong> — Beijing has enormous fiscal and monetary levers untouched. Any deployment triggers rapid re-rating from a deeply depressed base.</div></div>
+          <div class="item-row"><div class="item-dot mchi"></div><div class="item-text"><strong>China+1 re-shoring</strong> — global supply chain diversification is driving manufacturing investment into China by multinationals hedging other EM risks.</div></div>
+          <div class="item-row"><div class="item-dot mchi"></div><div class="item-text"><strong>Institutional underweight unwinding</strong> — China is the largest single underweight in global EM portfolios. Any normalisation triggers massive inflows.</div></div>
+          <div class="item-row"><div class="item-dot mchi"></div><div class="item-text"><strong>2.2% yield cushion</strong> — paid to wait while the thesis develops. Unlike zero-yield growth plays, you're compensated for patience.</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label">Risks to watch</div>
+        <div class="item-list">
+          <div class="item-row"><div class="item-dot risk"></div><div class="item-text">US-China geopolitical escalation (Taiwan, tariffs, sanctions) — the tail risk that invalidates the thesis rapidly</div></div>
+          <div class="item-row"><div class="item-dot risk"></div><div class="item-text">Property sector contagion spreading further into the banking system — watch Evergrande / Country Garden resolution</div></div>
+          <div class="item-row"><div class="item-dot risk"></div><div class="item-text">Renewed USD strength driving EM outflows and RMB currency pressure</div></div>
+          <div class="item-row"><div class="item-dot risk"></div><div class="item-text">Regulatory crackdowns on Alibaba and Tencent resuming — the two largest holdings in the fund</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== VTV ===== -->
+  <div id="panel-vtv" class="panel">
+    <div class="panel-hero">
+      <div>
+        <div class="panel-ticker vtv">VTV</div>
+        <div class="panel-name">Vanguard Value ETF &nbsp;·&nbsp; CRSP US Large Cap Value Index &nbsp;·&nbsp; ~340 holdings &nbsp;·&nbsp; 0.04% ER</div>
+      </div>
+      <div class="conviction-tag vtv">#3 Moderate conviction</div>
+    </div>
+
+    <div class="metrics">
+      <div class="metric"><div class="metric-label">Price</div><div class="metric-val neutral">~$197</div></div>
+      <div class="metric"><div class="metric-label">YTD return</div><div class="metric-val green">+3.7%</div></div>
+      <div class="metric"><div class="metric-label">Forward P/E</div><div class="metric-val green">~16x</div></div>
+      <div class="metric"><div class="metric-label">Dividend yield</div><div class="metric-val green">~2.4%</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">The thesis</div>
+      <p class="thesis-text">The value-growth valuation spread is near <strong>historic extremes</strong> — growth trades at 22x+ forward earnings while value sits in the mid-teens. Every prior time this spread reached these levels (2000, 2007, 2020), value outperformed growth by <strong>20–35% over the following 12–24 months.</strong> VTV is not a catch-up trade. It is a <strong>regime shift</strong>: capital is structurally rotating away from overvalued growth into profitable, dividend-paying, balance-sheet-strong companies. The rotation has already begun — VTV is up 3.7% YTD while tech is down double digits. <strong>You're early, not late.</strong></p>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-label">Asymmetric setup</div>
+        <div class="asym-grid">
+          <div class="asym-up">
+            <div class="asym-lbl up">Outperformance</div>
+            <div class="asym-num up">20–35%</div>
+            <div class="asym-sub">vs. growth over 12–24 months</div>
+          </div>
+          <div class="asym-down">
+            <div class="asym-lbl dn">Max drawdown</div>
+            <div class="asym-num dn">~5%</div>
+            <div class="asym-sub">Dividends + defensives as floor</div>
+          </div>
+        </div>
+        <div class="ratio-wrap">
+          <div class="ratio-title">Short left tail. Long right tail.</div>
+          <div class="ratio-bar">
+            <div class="ratio-fill-up" style="width:85%"></div>
+            <div class="ratio-fill-dn" style="width:15%"></div>
+          </div>
+          <div class="ratio-labels"><span class="up">↑ Outperformance 20–35%</span><span class="dn">↓ Drawdown ~5%</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label">Sector breakdown</div>
+        <div class="bar-list">
+          <div class="bar-row"><span class="bar-name">BRK.B · Berkshire</span><div class="bar-track"><div class="bar-fill vtv" style="width:100%"></div></div><span class="bar-pct">3.08%</span></div>
+          <div class="bar-row"><span class="bar-name">JPM · JPMorgan</span><div class="bar-track"><div class="bar-fill vtv" style="width:97%"></div></div><span class="bar-pct">3.00%</span></div>
+          <div class="bar-row"><span class="bar-name">XOM · Exxon Mobil</span><div class="bar-track"><div class="bar-fill vtv" style="width:81%"></div></div><span class="bar-pct">2.51%</span></div>
+          <div class="bar-row"><span class="bar-name">JNJ · Johnson & Johnson</span><div class="bar-track"><div class="bar-fill vtv" style="width:76%"></div></div><span class="bar-pct">2.34%</span></div>
+          <div class="bar-row"><span class="bar-name">WMT · Walmart</span><div class="bar-track"><div class="bar-fill vtv" style="width:71%"></div></div><span class="bar-pct">2.19%</span></div>
+          <div class="bar-row"><span class="bar-name">MU · Micron Technology</span><div class="bar-track"><div class="bar-fill vtv" style="width:59%"></div></div><span class="bar-pct">1.81%</span></div>
+          <div class="bar-row"><span class="bar-name">ABBV · AbbVie</span><div class="bar-track"><div class="bar-fill vtv" style="width:52%"></div></div><span class="bar-pct">1.60%</span></div>
+          <div class="bar-row"><span class="bar-name">PG · Procter & Gamble</span><div class="bar-track"><div class="bar-fill vtv" style="width:50%"></div></div><span class="bar-pct">1.53%</span></div>
+          <div class="bar-row"><span class="bar-name">HD · Home Depot</span><div class="bar-track"><div class="bar-fill vtv" style="width:48%"></div></div><span class="bar-pct">1.48%</span></div>
+          <div class="bar-row"><span class="bar-name">CVX · Chevron</span><div class="bar-track"><div class="bar-fill vtv" style="width:45%"></div></div><span class="bar-pct">1.40%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-label">Valuation vs. S&P 500</div>
+        <div class="val-grid">
+          <div class="val-cell"><div class="val-label">VTV fwd P/E</div><div class="val-value green">~16x</div></div>
+          <div class="val-cell"><div class="val-label">S&P 500 fwd P/E</div><div class="val-value red">~22x</div></div>
+          <div class="val-cell"><div class="val-label">Discount to S&P</div><div class="val-value green">~27%</div></div>
+          <div class="val-cell"><div class="val-label">VTV dividend</div><div class="val-value green">~2.4%</div></div>
+          <div class="val-cell"><div class="val-label">S&P dividend</div><div class="val-value neutral">~1.3%</div></div>
+          <div class="val-cell"><div class="val-label">Expense ratio</div><div class="val-value green">0.04%</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label">Key catalysts</div>
+        <div class="item-list">
+          <div class="item-row"><div class="item-dot vtv"></div><div class="item-text"><strong>Rotation already underway</strong> — multi-billion dollar inflows into value in Q1 2026. VTV is the primary institutional destination vehicle.</div></div>
+          <div class="item-row"><div class="item-dot vtv"></div><div class="item-text"><strong>Higher-for-longer rates</strong> — financials (22% of VTV) benefit directly. Net interest margins expand. This actively hurts growth stocks.</div></div>
+          <div class="item-row"><div class="item-dot vtv"></div><div class="item-text"><strong>Dividend compounding</strong> — 2.4% yield reinvested adds meaningful return on top of price appreciation. A floor IGV and MCHI don't offer.</div></div>
+          <div class="item-row"><div class="item-dot vtv"></div><div class="item-text"><strong>Defensive moat</strong> — healthcare, staples, and utilities (~37% combined) provide recession-resistant revenue that holds in a macro downturn.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Risks to watch</div>
+      <div class="item-list">
+        <div class="item-row"><div class="item-dot risk"></div><div class="item-text">A renewed AI-driven tech rally reverses the rotation — growth dominance resuming delays the value spread compression thesis by 12–24 months</div></div>
+        <div class="item-row"><div class="item-dot risk"></div><div class="item-text">Deep recession disproportionately hits financials and industrials (40%+ of VTV) — credit cycle turning is the key watch item</div></div>
+        <div class="item-row"><div class="item-dot risk"></div><div class="item-text">Faster-than-expected Fed rate cuts compress bank net interest margins — removes the key earnings tailwind for the largest sector weight</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nfa">
+    Not financial advice &nbsp;·&nbsp; All data as of early April 2026 &nbsp;·&nbsp; Do your own research &nbsp;·&nbsp; Past performance is not indicative of future results
+  </div>
+
+</div>
+
+<script>
+function switchTab(etf) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`.tab[data-etf="${etf}"]`).classList.add('active');
+  document.getElementById(`panel-${etf}`).classList.add('active');
+}
+</script>
+</body>
+</html>
