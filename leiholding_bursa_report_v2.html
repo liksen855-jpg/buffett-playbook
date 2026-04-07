@@ -1,0 +1,384 @@
+<style>
+  .lh { font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; background: #0A0A0A; color: #EDE8DC; max-width: 880px; margin: 0 auto; padding: 0; border-radius: 4px; overflow: hidden; font-weight: 400; }
+  .lh * { box-sizing: border-box; }
+  .lh-mono { font-family: 'JetBrains Mono', 'SF Mono', 'Menlo', monospace; }
+
+  .lh-masthead { padding: 28px 48px 20px; border-bottom: 0.5px solid rgba(237, 232, 220, 0.15); display: flex; justify-content: space-between; align-items: baseline; }
+  .lh-logo { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 3px; color: #EDE8DC; text-transform: uppercase; }
+  .lh-logo-mark { display: inline-block; width: 8px; height: 8px; background: #C9A961; margin-right: 12px; transform: translateY(-1px); }
+  .lh-issue { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 2px; color: #888177; text-transform: uppercase; }
+
+  .lh-hero { padding: 64px 48px 48px; border-bottom: 0.5px solid rgba(237, 232, 220, 0.15); }
+  .lh-kicker { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 3px; color: #C9A961; text-transform: uppercase; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; }
+  .lh-kicker::before { content: ''; width: 24px; height: 1px; background: #C9A961; display: inline-block; }
+  .lh-title { font-family: 'Inter', sans-serif; font-size: 38px; line-height: 1.15; font-weight: 500; color: #EDE8DC; margin: 0 0 24px; letter-spacing: -0.8px; max-width: 720px; }
+  .lh-title .accent { color: #C9A961; }
+  .lh-dek { font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.65; color: #A8A299; max-width: 600px; margin: 0; font-weight: 400; }
+
+  .lh-hero-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 48px; border-top: 0.5px solid rgba(237, 232, 220, 0.15); }
+  .lh-stat { padding: 28px 24px 24px 0; border-right: 0.5px solid rgba(237, 232, 220, 0.15); }
+  .lh-stat:last-child { border-right: none; padding-right: 0; padding-left: 24px; }
+  .lh-stat:nth-child(2) { padding-left: 24px; }
+  .lh-stat-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 2px; color: #888177; text-transform: uppercase; margin-bottom: 14px; }
+  .lh-stat-num { font-family: 'Inter', sans-serif; font-size: 44px; line-height: 1; font-weight: 500; color: #EDE8DC; letter-spacing: -2px; }
+  .lh-stat-num.gold { color: #C9A961; }
+  .lh-stat-sub { font-size: 12px; color: #A8A299; margin-top: 10px; line-height: 1.4; font-weight: 400; }
+
+  .lh-section { padding: 56px 48px; border-bottom: 0.5px solid rgba(237, 232, 220, 0.15); }
+  .lh-section-num { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 3px; color: #C9A961; margin-bottom: 10px; text-transform: uppercase; }
+  .lh-section-title { font-family: 'Inter', sans-serif; font-size: 26px; line-height: 1.2; font-weight: 500; color: #EDE8DC; margin: 0 0 14px; letter-spacing: -0.6px; max-width: 660px; }
+  .lh-section-intro { font-size: 15px; line-height: 1.65; color: #A8A299; max-width: 620px; margin: 0 0 32px; font-weight: 400; }
+
+  .lh-dist { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 24px 0; }
+  .lh-dist-cell { padding: 24px 20px; background: rgba(237, 232, 220, 0.03); border: 0.5px solid rgba(237, 232, 220, 0.08); }
+  .lh-dist-cell.hot { background: rgba(201, 169, 97, 0.08); border-color: rgba(201, 169, 97, 0.3); }
+  .lh-dist-range { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: #888177; text-transform: uppercase; margin-bottom: 14px; }
+  .lh-dist-cell.hot .lh-dist-range { color: #C9A961; }
+  .lh-dist-num { font-family: 'Inter', sans-serif; font-size: 36px; line-height: 1; color: #EDE8DC; font-weight: 500; letter-spacing: -1.5px; }
+  .lh-dist-cell.hot .lh-dist-num { color: #C9A961; }
+  .lh-dist-pct { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #A8A299; margin-top: 8px; }
+
+  .lh-table-full { margin: 8px 0 0; }
+  .lh-thead { display: grid; grid-template-columns: 36px 1.6fr 60px 80px 80px 80px; gap: 16px; padding: 14px 0; border-bottom: 0.5px solid rgba(237, 232, 220, 0.25); font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1.5px; color: #888177; text-transform: uppercase; }
+  .lh-thead div:nth-child(n+3) { text-align: right; }
+  .lh-trow { display: grid; grid-template-columns: 36px 1.6fr 60px 80px 80px 80px; gap: 16px; align-items: center; padding: 16px 0; border-bottom: 0.5px solid rgba(237, 232, 220, 0.08); }
+  .lh-trow:last-child { border-bottom: none; }
+  .lh-trank { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #888177; }
+  .lh-tname { font-family: 'Inter', sans-serif; font-size: 16px; color: #EDE8DC; font-weight: 500; letter-spacing: -0.2px; }
+  .lh-tbar { height: 2px; background: rgba(237, 232, 220, 0.08); position: relative; margin-top: 8px; }
+  .lh-tbar-fill { height: 100%; background: #C9A961; position: absolute; left: 0; top: 0; }
+  .lh-tbar-fill.mid { background: rgba(201, 169, 97, 0.55); }
+  .lh-tbar-fill.ok { background: rgba(201, 169, 97, 0.3); }
+  .lh-tcount { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #888177; text-align: right; }
+  .lh-tnum { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; text-align: right; color: #A8A299; }
+  .lh-tnum.bad { color: #E8B4B4; }
+  .lh-tnum.mid { color: #C9A961; }
+  .lh-tnum.ok { color: #A8D8A8; }
+  .lh-tnum.muted { color: #888177; }
+
+  .lh-tnote { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #666058; margin-top: 16px; letter-spacing: 0.5px; }
+
+  .lh-three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 8px 0; }
+  .lh-three-card { padding: 28px 24px; background: rgba(237, 232, 220, 0.03); border: 0.5px solid rgba(237, 232, 220, 0.1); }
+  .lh-three-rank { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 2px; color: #C9A961; text-transform: uppercase; margin-bottom: 18px; }
+  .lh-three-name { font-family: 'Inter', sans-serif; font-size: 20px; color: #EDE8DC; margin: 0 0 18px; font-weight: 500; line-height: 1.15; letter-spacing: -0.4px; }
+  .lh-three-dd { font-family: 'Inter', sans-serif; font-size: 42px; line-height: 1; color: #C9A961; margin: 0 0 18px; font-weight: 500; letter-spacing: -1.8px; }
+  .lh-three-stats { display: flex; gap: 16px; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 0.5px solid rgba(237, 232, 220, 0.1); }
+  .lh-three-stat { flex: 1; }
+  .lh-three-stat-label { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 1.5px; color: #666058; text-transform: uppercase; margin-bottom: 4px; }
+  .lh-three-stat-val { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #EDE8DC; font-weight: 500; }
+  .lh-three-desc { font-size: 13px; line-height: 1.6; color: #A8A299; margin: 0; font-weight: 400; }
+  .lh-three-desc strong { color: #EDE8DC; font-weight: 500; }
+  .lh-three-worst { margin-top: 16px; padding-top: 16px; border-top: 0.5px solid rgba(237, 232, 220, 0.1); }
+  .lh-three-worst-label { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 1.5px; color: #666058; text-transform: uppercase; margin-bottom: 10px; }
+  .lh-three-worst-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 11px; }
+  .lh-three-worst-name { color: #EDE8DC; font-family: 'Inter', sans-serif; font-weight: 400; }
+  .lh-three-worst-dd { font-family: 'JetBrains Mono', monospace; color: #E8B4B4; font-weight: 500; }
+
+  .lh-pullquote { padding: 36px 44px; background: rgba(201, 169, 97, 0.06); border-left: 2px solid #C9A961; margin: 32px 0 0; }
+  .lh-pullquote-tag { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 2px; color: #C9A961; text-transform: uppercase; margin-bottom: 14px; }
+  .lh-pullquote-text { font-family: 'Inter', sans-serif; font-size: 19px; line-height: 1.5; color: #EDE8DC; margin: 0; font-weight: 500; letter-spacing: -0.3px; }
+  .lh-pullquote-text strong { color: #C9A961; font-weight: 500; }
+
+  .lh-wipeout { margin: 8px 0; }
+  .lh-wipeout-head { display: grid; grid-template-columns: 1fr 100px 100px 100px; gap: 12px; padding: 14px 0; border-bottom: 0.5px solid rgba(237, 232, 220, 0.25); font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #888177; letter-spacing: 1.5px; text-transform: uppercase; }
+  .lh-wipeout-head div:not(:first-child) { text-align: right; }
+  .lh-wipeout-row { display: grid; grid-template-columns: 1fr 100px 100px 100px; gap: 12px; padding: 16px 0; border-bottom: 0.5px solid rgba(237, 232, 220, 0.08); align-items: baseline; }
+  .lh-wipeout-name { font-family: 'Inter', sans-serif; font-size: 15px; color: #EDE8DC; font-weight: 500; letter-spacing: -0.2px; }
+  .lh-wipeout-num { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #A8A299; text-align: right; }
+  .lh-wipeout-dd { font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 500; color: #E8B4B4; text-align: right; }
+
+  .lh-insight { padding: 32px 36px; background: rgba(237, 232, 220, 0.025); border: 0.5px solid rgba(237, 232, 220, 0.1); margin-bottom: 16px; }
+  .lh-insight-num { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 2px; color: #C9A961; text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 12px; }
+  .lh-insight-num::before { content: ''; width: 20px; height: 1px; background: #C9A961; }
+  .lh-insight-head { font-family: 'Inter', sans-serif; font-size: 19px; line-height: 1.3; color: #EDE8DC; margin: 0 0 14px; font-weight: 500; letter-spacing: -0.4px; }
+  .lh-insight-body { font-size: 14px; line-height: 1.7; color: #A8A299; margin: 0; font-weight: 400; }
+  .lh-insight-body strong { color: #EDE8DC; font-weight: 500; }
+
+  .lh-method { padding: 44px 48px 36px; background: rgba(237, 232, 220, 0.02); }
+  .lh-method-title { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 3px; color: #888177; text-transform: uppercase; margin: 0 0 28px; }
+  .lh-method-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 40px; }
+  .lh-method-item { font-size: 12px; line-height: 1.6; color: #A8A299; font-weight: 400; }
+  .lh-method-item strong { display: block; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #C9A961; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; font-weight: 500; }
+
+  .lh-foot { padding: 28px 48px; border-top: 0.5px solid rgba(237, 232, 220, 0.15); display: flex; justify-content: space-between; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #666058; letter-spacing: 1px; text-transform: uppercase; }
+  .lh-foot-mark { color: #C9A961; }
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<div class="lh">
+
+  <div class="lh-masthead">
+    <div class="lh-logo"><span class="lh-logo-mark"></span>LEIHOLDING</div>
+    <div class="lh-issue">research · vol 01</div>
+  </div>
+
+  <div class="lh-hero">
+    <div class="lh-kicker">bursa malaysia · 5-year drawdown study</div>
+    <h1 class="lh-title">Two out of three Malaysian stocks <span class="accent">lost half their value</span></h1>
+    <p class="lh-dek">An analysis of 987 listed companies on Bursa Malaysia from April 2021 to April 2026 — what the headline index hides, and which sectors buried the money.</p>
+
+    <div class="lh-hero-stats">
+      <div class="lh-stat">
+        <div class="lh-stat-label">companies analysed</div>
+        <div class="lh-stat-num">987</div>
+        <div class="lh-stat-sub">of 1,014 listed across Main, ACE, LEAP</div>
+      </div>
+      <div class="lh-stat">
+        <div class="lh-stat-label">median drawdown</div>
+        <div class="lh-stat-num gold">−62%</div>
+        <div class="lh-stat-sub">peak to trough, typical stock</div>
+      </div>
+      <div class="lh-stat">
+        <div class="lh-stat-label">lost more than half</div>
+        <div class="lh-stat-num gold">67.8%</div>
+        <div class="lh-stat-sub">670 of 987 companies</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lh-section">
+    <div class="lh-section-num">i · the distribution</div>
+    <h2 class="lh-section-title">The shape of the pain</h2>
+    <p class="lh-section-intro">The KLCI tells you Bursa was flat to up over 5 years. The distribution of individual stocks tells a very different story — and the largest bucket is not the mild one.</p>
+
+    <div class="lh-dist">
+      <div class="lh-dist-cell">
+        <div class="lh-dist-range">0 – 25%</div>
+        <div class="lh-dist-num">71</div>
+        <div class="lh-dist-pct">7.2% of universe</div>
+      </div>
+      <div class="lh-dist-cell">
+        <div class="lh-dist-range">25 – 50%</div>
+        <div class="lh-dist-num">236</div>
+        <div class="lh-dist-pct">23.9% of universe</div>
+      </div>
+      <div class="lh-dist-cell hot">
+        <div class="lh-dist-range">50 – 75%</div>
+        <div class="lh-dist-num">348</div>
+        <div class="lh-dist-pct">35.3% of universe</div>
+      </div>
+      <div class="lh-dist-cell hot">
+        <div class="lh-dist-range">75 – 100%</div>
+        <div class="lh-dist-num">332</div>
+        <div class="lh-dist-pct">33.6% of universe</div>
+      </div>
+    </div>
+
+    <div class="lh-pullquote">
+      <div class="lh-pullquote-tag">the asymmetry</div>
+      <p class="lh-pullquote-text">One in three Bursa stocks didn't just drop — they <strong>collapsed</strong>. Only 7% escaped with what you'd call a normal market drawdown.</p>
+    </div>
+  </div>
+
+  <div class="lh-section">
+    <div class="lh-section-num">ii · sector ranking</div>
+    <h2 class="lh-section-title">Where the money went to die</h2>
+    <p class="lh-section-intro">Eleven sectors with five or more listed companies, sorted from worst to best by median drawdown. The gap from top to bottom is 43 percentage points — meaning sector selection mattered far more than stock picking.</p>
+
+    <div class="lh-table-full">
+      <div class="lh-thead">
+        <div>rank</div>
+        <div>sector</div>
+        <div>n</div>
+        <div>mean</div>
+        <div>median</div>
+        <div>&gt;50%</div>
+      </div>
+      <div class="lh-trow"><div class="lh-trank">01</div><div><div class="lh-tname">Technology</div><div class="lh-tbar"><div class="lh-tbar-fill" style="width: 98%;"></div></div></div><div class="lh-tcount">121</div><div class="lh-tnum bad">−75.7%</div><div class="lh-tnum bad">−78.7%</div><div class="lh-tnum bad">90.1%</div></div>
+      <div class="lh-trow"><div class="lh-trank">02</div><div><div class="lh-tname">Healthcare</div><div class="lh-tbar"><div class="lh-tbar-fill" style="width: 94%;"></div></div></div><div class="lh-tcount">29</div><div class="lh-tnum bad">−70.1%</div><div class="lh-tnum bad">−75.0%</div><div class="lh-tnum bad">72.4%</div></div>
+      <div class="lh-trow"><div class="lh-trank">03</div><div><div class="lh-tname">Communication Services</div><div class="lh-tbar"><div class="lh-tbar-fill" style="width: 92%;"></div></div></div><div class="lh-tcount">23</div><div class="lh-tnum bad">−69.1%</div><div class="lh-tnum bad">−73.9%</div><div class="lh-tnum bad">73.9%</div></div>
+      <div class="lh-trow"><div class="lh-trank">04</div><div><div class="lh-tname">Basic Materials</div><div class="lh-tbar"><div class="lh-tbar-fill" style="width: 90%;"></div></div></div><div class="lh-tcount">100</div><div class="lh-tnum bad">−68.1%</div><div class="lh-tnum bad">−72.4%</div><div class="lh-tnum bad">78.0%</div></div>
+      <div class="lh-trow"><div class="lh-trank">05</div><div><div class="lh-tname">Industrials</div><div class="lh-tbar"><div class="lh-tbar-fill" style="width: 83%;"></div></div></div><div class="lh-tcount">266</div><div class="lh-tnum bad">−65.6%</div><div class="lh-tnum bad">−66.2%</div><div class="lh-tnum bad">74.4%</div></div>
+      <div class="lh-trow"><div class="lh-trank">06</div><div><div class="lh-tname">Consumer Cyclical</div><div class="lh-tbar"><div class="lh-tbar-fill mid" style="width: 77%;"></div></div></div><div class="lh-tcount">132</div><div class="lh-tnum mid">−61.9%</div><div class="lh-tnum mid">−61.7%</div><div class="lh-tnum mid">67.4%</div></div>
+      <div class="lh-trow"><div class="lh-trank">07</div><div><div class="lh-tname">Energy</div><div class="lh-tbar"><div class="lh-tbar-fill mid" style="width: 75%;"></div></div></div><div class="lh-tcount">27</div><div class="lh-tnum mid">−60.8%</div><div class="lh-tnum mid">−60.1%</div><div class="lh-tnum bad">81.5%</div></div>
+      <div class="lh-trow"><div class="lh-trank">08</div><div><div class="lh-tname">Real Estate</div><div class="lh-tbar"><div class="lh-tbar-fill mid" style="width: 63%;"></div></div></div><div class="lh-tcount">106</div><div class="lh-tnum mid">−50.4%</div><div class="lh-tnum mid">−50.6%</div><div class="lh-tnum mid">50.0%</div></div>
+      <div class="lh-trow"><div class="lh-trank">09</div><div><div class="lh-tname">Consumer Defensive</div><div class="lh-tbar"><div class="lh-tbar-fill mid" style="width: 62%;"></div></div></div><div class="lh-tcount">114</div><div class="lh-tnum mid">−50.2%</div><div class="lh-tnum mid">−50.0%</div><div class="lh-tnum mid">49.1%</div></div>
+      <div class="lh-trow"><div class="lh-trank">10</div><div><div class="lh-tname">Utilities</div><div class="lh-tbar"><div class="lh-tbar-fill ok" style="width: 60%;"></div></div></div><div class="lh-tcount">12</div><div class="lh-tnum ok">−46.9%</div><div class="lh-tnum ok">−47.9%</div><div class="lh-tnum mid">50.0%</div></div>
+      <div class="lh-trow"><div class="lh-trank">11</div><div><div class="lh-tname">Financial Services</div><div class="lh-tbar"><div class="lh-tbar-fill ok" style="width: 44%;"></div></div></div><div class="lh-tcount">39</div><div class="lh-tnum ok">−41.2%</div><div class="lh-tnum ok">−35.4%</div><div class="lh-tnum ok">28.2%</div></div>
+    </div>
+    <p class="lh-tnote">n = number of companies in the sector. Universe excludes sectors with fewer than 5 listings.</p>
+  </div>
+
+  <div class="lh-section">
+    <div class="lh-section-num">iii · the three worst</div>
+    <h2 class="lh-section-title">Sectors to avoid, in detail</h2>
+    <p class="lh-section-intro">The top of the leaderboard, with the five worst-performing stocks in each sector named.</p>
+
+    <div class="lh-three">
+      <div class="lh-three-card">
+        <div class="lh-three-rank">№ 01 · technology</div>
+        <h3 class="lh-three-name">Technology</h3>
+        <div class="lh-three-dd">−78.7%</div>
+        <div class="lh-three-stats">
+          <div class="lh-three-stat"><div class="lh-three-stat-label">companies</div><div class="lh-three-stat-val">121</div></div>
+          <div class="lh-three-stat"><div class="lh-three-stat-label">&gt;50%</div><div class="lh-three-stat-val">90.1%</div></div>
+          <div class="lh-three-stat"><div class="lh-three-stat-label">&gt;75%</div><div class="lh-three-stat-val">57.9%</div></div>
+        </div>
+        <p class="lh-three-desc"><strong>Nine of every ten tech stocks</strong> lost more than half. Mostly semiconductors, electronics OSAT, and IT services shells.</p>
+        <div class="lh-three-worst">
+          <div class="lh-three-worst-label">five worst stocks</div>
+          <div class="lh-three-worst-row"><span class="lh-three-worst-name">MMAG Holdings</span><span class="lh-three-worst-dd">−99.2%</span></div>
+          <div class="lh-three-worst-row"><span class="lh-three-worst-name">Pertama Digital</span><span class="lh-three-worst-dd">−98.9%</span></div>
+          <div class="lh-three-worst-row"><span class="lh-three-worst-name">Metronic Global</span><span class="lh-three-worst-dd">−98.9%</span></div>
+          <div class="lh-three-worst-row"><span class="lh-three-worst-name">SMTrack</span><span class="lh-three-worst-dd">−98.3%</span></div>
+          <div class="lh-three-worst-row"><span class="lh-three-worst-name">Mcom Holdings</span><span class="lh-three-worst-dd">−98.3%</span></div>
+        </div>
+      </div>
+
+      <div class="lh-three-card">
+        <div class="lh-three-rank">№ 02 · healthcare</div>
+        <h3 class="lh-three-name">Healthcare</h3>
+        <div class="lh-three-dd">−75.0%</div>
+        <div class="lh-three-stats">
+          <div class="lh-three-stat"><div class="lh-three-stat-label">companies</div><div class="lh-three-stat-val">29</div></div>
+          <div class="lh-three-stat"><div class="lh-three-stat-label">&gt;50%</div><div class="lh-three-stat-val">72.4%</div></div>
+          <div class="lh-three-stat"><div class="lh-three-stat-label">&gt;75%</div><div class="lh-three-stat-val">48.3%</div></div>
+        </div>
+        <p class="lh-three-desc">Don't blame healthcare. <strong>Four of the five worst names are rubber glove makers</strong> — the COVID bubble popping, not an industry in decline.</p>
+        <div class="lh-three-worst">
+          <div class="lh-three-worst-label">five worst stocks</div>
+          <div class="lh-three-worst-row"><span class="lh-three-worst-name">LKL International</span><span class="lh-three-worst-dd">−99.3%</span></div>
+          <div class="lh-three-worst-row"><span class="lh-three-worst-name">Careplus Group</span><span class="lh-three-worst-dd">−97.8%</span></div>
+          <div class="lh-three-worst-row"><span class="lh-three-worst-name">BCM Alliance</span><span class="lh-three-worst-dd">−97.1%</span></div>
+          <div class="lh-three-worst-row"><span class="lh-three-worst-name">One Glove Group</span><span class="lh-three-worst-dd">−96.0%</span></div>
+          <div class="lh-three-worst-row"><span class="lh-three-worst-name">Supermax Corporation</span><span class="lh-three-worst-dd">−95.1%</span></div>
+        </div>
+      </div>
+
+      <div class="lh-three-card">
+        <div class="lh-three-rank">№ 03 · comms</div>
+        <h3 class="lh-three-name">Comms Services</h3>
+        <div class="lh-three-dd">−73.9%</div>
+        <div class="lh-three-stats">
+          <div class="lh-three-stat"><div class="lh-three-stat-label">companies</div><div class="lh-three-stat-val">23</div></div>
+          <div class="lh-three-stat"><div class="lh-three-stat-label">&gt;50%</div><div class="lh-three-stat-val">73.9%</div></div>
+          <div class="lh-three-stat"><div class="lh-three-stat-label">&gt;75%</div><div class="lh-three-stat-val">47.8%</div></div>
+        </div>
+        <p class="lh-three-desc">Two stories stacked — legacy telecom resellers killed by WhatsApp, plus pay-TV disruption. <strong>Astro lost 95%</strong>.</p>
+        <div class="lh-three-worst">
+          <div class="lh-three-worst-label">five worst stocks</div>
+          <div class="lh-three-worst-row"><span class="lh-three-worst-name">mTouche Technology</span><span class="lh-three-worst-dd">−97.7%</span></div>
+          <div class="lh-three-worst-row"><span class="lh-three-worst-name">Asia Media Group</span><span class="lh-three-worst-dd">−95.6%</span></div>
+          <div class="lh-three-worst-row"><span class="lh-three-worst-name">Green Packet</span><span class="lh-three-worst-dd">−94.8%</span></div>
+          <div class="lh-three-worst-row"><span class="lh-three-worst-name">Astro Malaysia</span><span class="lh-three-worst-dd">−94.8%</span></div>
+          <div class="lh-three-worst-row"><span class="lh-three-worst-name">PUC</span><span class="lh-three-worst-dd">−94.7%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lh-pullquote">
+      <div class="lh-pullquote-tag">the reframe</div>
+      <p class="lh-pullquote-text">The headline "avoid healthcare" is wrong. Strip out the five glove makers and the sector sits mid-pack. The accurate warning is <strong>"avoid the post-COVID bubble names"</strong> — a single-industry story masquerading as a whole sector.</p>
+    </div>
+  </div>
+
+  <div class="lh-section">
+    <div class="lh-section-num">iv · sub-sector breakdown</div>
+    <h2 class="lh-section-title">The ten worst industries</h2>
+    <p class="lh-section-intro">A more granular look. Industries are GICS sub-sectors — a narrower cut than sectors. All ten worst sit inside three themes: rubber gloves, semiconductors and electronics, and IT services.</p>
+
+    <div class="lh-table-full">
+      <div class="lh-thead" style="grid-template-columns: 36px 1.6fr 60px 100px 100px 80px;">
+        <div>rank</div>
+        <div>industry</div>
+        <div>n</div>
+        <div>median</div>
+        <div>&gt;75%</div>
+        <div></div>
+      </div>
+      <div class="lh-trow" style="grid-template-columns: 36px 1.6fr 60px 100px 100px 80px;"><div class="lh-trank">01</div><div><div class="lh-tname">Medical Instruments &amp; Supplies</div></div><div class="lh-tcount">10</div><div class="lh-tnum bad">−94.5%</div><div class="lh-tnum bad">90.0%</div><div></div></div>
+      <div class="lh-trow" style="grid-template-columns: 36px 1.6fr 60px 100px 100px 80px;"><div class="lh-trank">02</div><div><div class="lh-tname">Communication Equipment</div></div><div class="lh-tcount">5</div><div class="lh-tnum bad">−92.8%</div><div class="lh-tnum bad">80.0%</div><div></div></div>
+      <div class="lh-trow" style="grid-template-columns: 36px 1.6fr 60px 100px 100px 80px;"><div class="lh-trank">03</div><div><div class="lh-tname">Electronic Components</div></div><div class="lh-tcount">17</div><div class="lh-tnum bad">−85.1%</div><div class="lh-tnum bad">70.6%</div><div></div></div>
+      <div class="lh-trow" style="grid-template-columns: 36px 1.6fr 60px 100px 100px 80px;"><div class="lh-trank">04</div><div><div class="lh-tname">Semiconductors</div></div><div class="lh-tcount">7</div><div class="lh-tnum bad">−82.9%</div><div class="lh-tnum bad">71.4%</div><div></div></div>
+      <div class="lh-trow" style="grid-template-columns: 36px 1.6fr 60px 100px 100px 80px;"><div class="lh-trank">05</div><div><div class="lh-tname">Specialty Chemicals</div></div><div class="lh-tcount">23</div><div class="lh-tnum bad">−81.4%</div><div class="lh-tnum bad">60.9%</div><div></div></div>
+      <div class="lh-trow" style="grid-template-columns: 36px 1.6fr 60px 100px 100px 80px;"><div class="lh-trank">06</div><div><div class="lh-tname">Tools &amp; Accessories</div></div><div class="lh-tcount">8</div><div class="lh-tnum bad">−80.9%</div><div class="lh-tnum bad">62.5%</div><div></div></div>
+      <div class="lh-trow" style="grid-template-columns: 36px 1.6fr 60px 100px 100px 80px;"><div class="lh-trank">07</div><div><div class="lh-tname">Information Technology Services</div></div><div class="lh-tcount">29</div><div class="lh-tnum bad">−80.3%</div><div class="lh-tnum bad">55.2%</div><div></div></div>
+      <div class="lh-trow" style="grid-template-columns: 36px 1.6fr 60px 100px 100px 80px;"><div class="lh-trank">08</div><div><div class="lh-tname">Specialty Industrial Machinery</div></div><div class="lh-tcount">17</div><div class="lh-tnum bad">−80.0%</div><div class="lh-tnum bad">52.9%</div><div></div></div>
+      <div class="lh-trow" style="grid-template-columns: 36px 1.6fr 60px 100px 100px 80px;"><div class="lh-trank">09</div><div><div class="lh-tname">Education &amp; Training Services</div></div><div class="lh-tcount">5</div><div class="lh-tnum bad">−80.0%</div><div class="lh-tnum bad">60.0%</div><div></div></div>
+      <div class="lh-trow" style="grid-template-columns: 36px 1.6fr 60px 100px 100px 80px;"><div class="lh-trank">10</div><div><div class="lh-tname">Semiconductor Equipment &amp; Materials</div></div><div class="lh-tcount">13</div><div class="lh-tnum bad">−79.0%</div><div class="lh-tnum bad">76.9%</div><div></div></div>
+    </div>
+    <p class="lh-tnote">n = companies in the industry. Filtered to industries with at least 5 listings.</p>
+  </div>
+
+  <div class="lh-section">
+    <div class="lh-section-num">v · the ten biggest wipeouts</div>
+    <h2 class="lh-section-title">What RM 10,000 became</h2>
+    <p class="lh-section-intro">Real peaks, real troughs. All still trading — Bursa's half-sen minimum tick is the only reason these aren't at zero.</p>
+
+    <div class="lh-wipeout">
+      <div class="lh-wipeout-head">
+        <div>company</div>
+        <div>peak (rm)</div>
+        <div>trough (rm)</div>
+        <div>drawdown</div>
+      </div>
+      <div class="lh-wipeout-row"><div class="lh-wipeout-name">Hong Seng Consolidated</div><div class="lh-wipeout-num">1.920</div><div class="lh-wipeout-num">0.005</div><div class="lh-wipeout-dd">−99.7%</div></div>
+      <div class="lh-wipeout-row"><div class="lh-wipeout-name">Hextar Technologies Solutions</div><div class="lh-wipeout-num">1.830</div><div class="lh-wipeout-num">0.005</div><div class="lh-wipeout-dd">−99.7%</div></div>
+      <div class="lh-wipeout-row"><div class="lh-wipeout-name">Meridian</div><div class="lh-wipeout-num">1.400</div><div class="lh-wipeout-num">0.010</div><div class="lh-wipeout-dd">−99.3%</div></div>
+      <div class="lh-wipeout-row"><div class="lh-wipeout-name">Reneuco</div><div class="lh-wipeout-num">2.100</div><div class="lh-wipeout-num">0.015</div><div class="lh-wipeout-dd">−99.3%</div></div>
+      <div class="lh-wipeout-row"><div class="lh-wipeout-name">LKL International</div><div class="lh-wipeout-num">4.140</div><div class="lh-wipeout-num">0.030</div><div class="lh-wipeout-dd">−99.3%</div></div>
+      <div class="lh-wipeout-row"><div class="lh-wipeout-name">MMAG Holdings</div><div class="lh-wipeout-num">3.050</div><div class="lh-wipeout-num">0.025</div><div class="lh-wipeout-dd">−99.2%</div></div>
+      <div class="lh-wipeout-row"><div class="lh-wipeout-name">Techna-X</div><div class="lh-wipeout-num">2.900</div><div class="lh-wipeout-num">0.025</div><div class="lh-wipeout-dd">−99.1%</div></div>
+      <div class="lh-wipeout-row"><div class="lh-wipeout-name">Focus Dynamics Group</div><div class="lh-wipeout-num">0.500</div><div class="lh-wipeout-num">0.005</div><div class="lh-wipeout-dd">−99.0%</div></div>
+      <div class="lh-wipeout-row"><div class="lh-wipeout-name">Advance Information Marketing</div><div class="lh-wipeout-num">1.458</div><div class="lh-wipeout-num">0.015</div><div class="lh-wipeout-dd">−99.0%</div></div>
+      <div class="lh-wipeout-row"><div class="lh-wipeout-name">Euro Holdings</div><div class="lh-wipeout-num">4.380</div><div class="lh-wipeout-num">0.045</div><div class="lh-wipeout-dd">−99.0%</div></div>
+    </div>
+  </div>
+
+  <div class="lh-section">
+    <div class="lh-section-num">vi · asymmetric insights</div>
+    <h2 class="lh-section-title">What you won't read anywhere else</h2>
+    <p class="lh-section-intro">Five conclusions drawn from running the numbers at this scale — observations that don't appear in Malaysian retail finance media because nobody else has done the work.</p>
+
+    <div class="lh-insight">
+      <div class="lh-insight-num">insight 01 · the sector gap</div>
+      <h3 class="lh-insight-head">Sector selection beat stock picking by a 2-to-1 margin</h3>
+      <p class="lh-insight-body">The gap between the worst sector (Technology, −78.7%) and the best (Financial Services, −35.4%) was 43 percentage points. A random pick from financials would have had <strong>less than half the drawdown</strong> of a random pick from tech. Which sector you chose dominated which stock you chose — the opposite of how most retail investors think about the problem.</p>
+    </div>
+
+    <div class="lh-insight">
+      <div class="lh-insight-num">insight 02 · the energy paradox</div>
+      <h3 class="lh-insight-head">Energy hurt everyone but destroyed no one</h3>
+      <p class="lh-insight-body">Energy had only −60% median drawdown but <strong>81.5% of energy stocks crossed the 50% threshold</strong> — the second-highest hit rate after Tech. The pattern: broad-based but capped. Almost everyone got hurt, few got destroyed. Commodity cycles don't go to zero the way shell companies do.</p>
+    </div>
+
+    <div class="lh-insight">
+      <div class="lh-insight-num">insight 03 · what bursa's "tech" actually means</div>
+      <h3 class="lh-insight-head">Malaysia's tech sector isn't really tech</h3>
+      <p class="lh-insight-body">It's the global semiconductor supply chain dressed up in technology labels — Inari, ViTrox, Greatech, Pentamaster, Frontken, MPI. When the chip cycle turned in 2022, the entire cluster fell together. <strong>Five of the ten worst industries</strong> sit inside this single supply chain. Malaysia is a cyclical hardware play wearing growth-tech clothing.</p>
+    </div>
+
+    <div class="lh-insight">
+      <div class="lh-insight-num">insight 04 · the klci illusion</div>
+      <h3 class="lh-insight-head">The index and the stocks lived in different universes</h3>
+      <p class="lh-insight-body">The KLCI looks fine because it holds 30 names heavily weighted toward Financials and Utilities — exactly the two sectors that survived. The median Bursa stock outside the KLCI had a completely different five years. <strong>"The market" and "the stocks" diverged</strong>, and the index masked the carnage.</p>
+    </div>
+
+    <div class="lh-insight">
+      <div class="lh-insight-num">insight 05 · the floor that isn't zero</div>
+      <h3 class="lh-insight-head">Bursa's worst case is a trading rule, not resilience</h3>
+      <p class="lh-insight-body">None of the 987 stocks reached zero, but ten sit at RM 0.005 — Bursa's minimum tick size. For practical purposes, these stocks are worthless. The −99.7% floor isn't a feature of Malaysian markets being resilient; it's just the lowest price the exchange allows. <strong>Take the rule away and they'd be at zero</strong>.</p>
+    </div>
+  </div>
+
+  <div class="lh-method">
+    <div class="lh-method-title">vii · methodology</div>
+    <div class="lh-method-grid">
+      <div class="lh-method-item"><strong>Universe</strong>1,014 tickers from Bursa Malaysia's official List of Companies PDF, January 2025. Main, ACE, and LEAP Markets. Excludes ETFs, bonds, and sukuk.</div>
+      <div class="lh-method-item"><strong>Window</strong>6 April 2021 → 6 April 2026. Companies that listed mid-window are measured from their first trading day.</div>
+      <div class="lh-method-item"><strong>Data source</strong>Yahoo Finance daily closes via the yfinance API. 97% of universe fetched successfully. 27 tickers (mostly LEAP) excluded from analysis.</div>
+      <div class="lh-method-item"><strong>Drawdown formula</strong>Maximum drawdown = (trough − peak) ÷ peak, where trough is the lowest close after the peak. Bounded at −100% by construction.</div>
+      <div class="lh-method-item"><strong>Sector classification</strong>GICS-style tags via Yahoo Finance. Spot-verified against iSaham's Bursa-native taxonomy — Technology bucket matches within 3%.</div>
+      <div class="lh-method-item"><strong>Not captured</strong>Close prices only, unadjusted for dividends. Excludes companies delisted before January 2025 — a survivorship bias that understates true severity.</div>
+    </div>
+  </div>
+
+  <div class="lh-foot">
+    <div>leiholding · research vol 01</div>
+    <div class="lh-foot-mark">◆</div>
+    <div>april 2026</div>
+  </div>
+
+</div>
