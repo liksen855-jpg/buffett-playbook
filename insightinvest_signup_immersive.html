@@ -1,0 +1,349 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Syne:wght@400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08090c;--bg2:#0e1016;--bg3:#14161e;--surface:#1a1d28;
+  --border:#252838;--text:#9ca3b8;--text-bright:#e8ecf4;--text-dim:#555c72;
+  --gold:#c9a84c;--gold-light:#e4cc7a;--gold-dim:#8a7234;
+  --blue:#4a7cff;--green:#3dd68c;--red:#ff5c5c;--cyan:#38d9d9;
+}
+body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+.page{max-width:700px;margin:0 auto;padding:0 0 80px}
+
+/* HERO */
+.hero{padding:64px 40px 56px;position:relative;border-bottom:1px solid var(--border)}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:28px}
+.hero-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(42px,7vw,72px);font-weight:300;color:var(--text-bright);line-height:1.05;letter-spacing:-.02em;margin-bottom:24px}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero-sub{font-size:15px;color:var(--text);line-height:1.75;max-width:520px;margin-bottom:32px}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-top:40px}
+.hstat{background:var(--bg2);padding:18px 16px;text-align:center}
+.hstat-val{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;color:var(--text-bright);line-height:1}
+.hstat-lbl{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;color:var(--text-dim);text-transform:uppercase;margin-top:4px}
+
+/* BEFORE/AFTER */
+.transform-section{padding:56px 40px;border-bottom:1px solid var(--border);background:var(--bg2)}
+.section-tag{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:8px;margin-bottom:20px}
+.section-tag::before{content:'';width:24px;height:1px;background:var(--gold-dim)}
+.transform-h2{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,4vw,40px);font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:36px}
+.transform-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border)}
+.transform-col{background:var(--bg3);padding:28px 24px}
+.transform-col-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.transform-col.before .transform-col-label{color:var(--text-dim)}
+.transform-col.after .transform-col-label{color:var(--gold)}
+.transform-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;line-height:1.5}
+.transform-item:last-child{border-bottom:none}
+.transform-item .ico{font-family:'IBM Plex Mono',monospace;font-size:11px;min-width:14px;margin-top:1px}
+.before .ico{color:var(--text-dim)}
+.after .ico{color:var(--gold)}
+.after .transform-item{color:var(--text-bright)}
+
+/* TEASE - module preview */
+.tease-section{padding:56px 40px;border-bottom:1px solid var(--border)}
+.tease-h2{font-family:'Cormorant Garamond',serif;font-size:clamp(24px,3.5vw,36px);font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:10px}
+.tease-sub{font-size:14px;color:var(--text-dim);margin-bottom:32px;line-height:1.6}
+.tease-card{background:var(--bg2);border:1px solid var(--border);padding:28px 28px;margin-bottom:2px;position:relative;overflow:hidden;transition:border-color .3s}
+.tease-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);opacity:0;transition:opacity .3s}
+.tease-card:hover{border-color:var(--gold-dim)}
+.tease-card:hover::before{opacity:1}
+.tease-card-code{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.15em;color:var(--blue);text-transform:uppercase;margin-bottom:10px}
+.tease-card-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;color:var(--text-bright);margin-bottom:10px}
+.tease-card-insight{font-size:13px;color:var(--text);line-height:1.75}
+.tease-card-insight strong{color:var(--text-bright);font-weight:500}
+.insight-pill{display:inline-flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold-dim);padding:4px 10px;margin-top:14px}
+
+/* TIERS */
+.tiers-section{padding:56px 40px;border-bottom:1px solid var(--border)}
+.tiers-h2{font-family:'Cormorant Garamond',serif;font-size:clamp(24px,3.5vw,36px);font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:32px}
+.tier{border:1px solid var(--border);margin-bottom:2px;overflow:hidden}
+.tier-hdr{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;cursor:pointer;background:var(--bg2);transition:background .2s;user-select:none}
+.tier-hdr:hover{background:var(--bg3)}
+.tier-hdr-left{display:flex;align-items:center;gap:16px}
+.tier-badge{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);min-width:52px}
+.tier-name{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text-bright)}
+.tier-meta{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:.08em}
+.tier-arr{font-size:10px;color:var(--text-dim);transition:transform .2s}
+.tier-arr.open{transform:rotate(180deg)}
+.tier-body{display:none;border-top:1px solid var(--border);background:var(--bg3);padding:0 24px}
+.tier-body.open{display:block}
+.mod-row{display:flex;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
+.mod-row:last-child{border-bottom:none}
+.mod-code{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--blue);min-width:28px}
+.mod-title{font-size:13px;color:var(--text);flex:1}
+.mod-count{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-dim);white-space:nowrap}
+
+/* 1-ON-1 */
+.oto-section{padding:56px 40px;border-bottom:1px solid var(--border);background:var(--bg2)}
+.oto-h2{font-family:'Cormorant Garamond',serif;font-size:clamp(24px,3.5vw,36px);font-weight:400;color:var(--text-bright);margin-bottom:10px}
+.oto-sub{font-size:14px;color:var(--text);line-height:1.7;margin-bottom:28px;max-width:500px}
+.oto-sessions{border:1px solid var(--border)}
+.oto-row{display:flex;align-items:flex-start;gap:16px;padding:18px 24px;border-bottom:1px solid var(--border);transition:background .2s}
+.oto-row:last-child{border-bottom:none}
+.oto-row:hover{background:var(--bg3)}
+.oto-num{font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:300;color:var(--border);min-width:36px;line-height:1;transition:color .3s}
+.oto-row:hover .oto-num{color:var(--gold-dim)}
+.oto-title{font-size:14px;font-weight:600;color:var(--text-bright);margin-bottom:3px}
+.oto-desc{font-size:12px;color:var(--text-dim);line-height:1.5}
+
+/* FAQ */
+.faq-section{padding:56px 40px;border-bottom:1px solid var(--border)}
+.faq-h2{font-family:'Cormorant Garamond',serif;font-size:clamp(24px,3.5vw,36px);font-weight:400;color:var(--text-bright);margin-bottom:32px}
+.faq-item{border-bottom:1px solid var(--border);padding:18px 0}
+.faq-q{font-size:14px;font-weight:600;color:var(--text-bright);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;user-select:none}
+.faq-q:hover{color:var(--gold)}
+.faq-arr{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-dim);transition:transform .2s;flex-shrink:0}
+.faq-arr.open{transform:rotate(180deg)}
+.faq-a{font-size:13px;color:var(--text);line-height:1.75;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .2s}
+.faq-a.open{max-height:200px;padding-top:14px}
+
+/* CTA */
+.cta-section{padding:64px 40px 56px;background:var(--bg)}
+.cta-h2{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,48px);font-weight:300;color:var(--text-bright);line-height:1.1;margin-bottom:8px}
+.cta-h2 em{font-style:italic;color:var(--gold)}
+.cta-sub{font-size:14px;color:var(--text-dim);margin-bottom:36px;line-height:1.6}
+.cta-btn{display:block;text-align:center;background:var(--gold);color:var(--bg);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:18px 40px;text-decoration:none;border:none;cursor:pointer;width:100%;transition:background .2s;margin-bottom:16px}
+.cta-btn:hover{background:var(--gold-light)}
+.trust-row{display:flex;gap:20px;flex-wrap:wrap}
+.trust{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-dim);display:flex;align-items:center;gap:6px;letter-spacing:.06em}
+.trust-check{color:var(--green)}
+
+.footer-note{padding:32px 40px;border-top:1px solid var(--border);font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:.06em;text-align:center;line-height:1.8}
+.footer-note a{color:var(--text-dim);text-decoration:none}
+.footer-note a:hover{color:var(--gold)}
+
+.spots-bar{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.spots-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 1.5s ease-in-out infinite}
+.spots-text{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase}
+</style>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag"><span class="hero-dot"></span> Enrolment open · Limited spots</div>
+    <h1>Stop following headlines.<br>Start <em>seeing the money.</em></h1>
+    <p class="hero-sub">Most investors lose not because they lack intelligence — but because they were never taught how markets really work. This changes that. Tiers 2, 3 & 4 of the InsightInvest curriculum, plus 5 private strategy sessions.</p>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-val">16</div><div class="hstat-lbl">Modules</div></div>
+      <div class="hstat"><div class="hstat-val">3</div><div class="hstat-lbl">Tiers</div></div>
+      <div class="hstat"><div class="hstat-val">5</div><div class="hstat-lbl">1-on-1s</div></div>
+      <div class="hstat"><div class="hstat-val">~40h</div><div class="hstat-lbl">Content</div></div>
+    </div>
+  </div>
+
+  <!-- BEFORE / AFTER -->
+  <div class="transform-section">
+    <div class="section-tag">The transformation</div>
+    <h2 class="transform-h2">Where you are now.<br>Where this takes you.</h2>
+    <div class="transform-grid">
+      <div class="transform-col before">
+        <div class="transform-col-label">Before</div>
+        <div class="transform-item"><span class="ico">×</span><span>Watching the news, reacting late</span></div>
+        <div class="transform-item"><span class="ico">×</span><span>No framework for when to buy or sell</span></div>
+        <div class="transform-item"><span class="ico">×</span><span>Gut feel disguised as analysis</span></div>
+        <div class="transform-item"><span class="ico">×</span><span>Cutting winners, holding losers</span></div>
+        <div class="transform-item"><span class="ico">×</span><span>Ignoring macro until it hits you</span></div>
+        <div class="transform-item"><span class="ico">×</span><span>Portfolio built on hope, not thesis</span></div>
+      </div>
+      <div class="transform-col after">
+        <div class="transform-col-label">After</div>
+        <div class="transform-item"><span class="ico">→</span><span>Reading Fed decisions for what they mean</span></div>
+        <div class="transform-item"><span class="ico">→</span><span>Building trade theses with real catalysts</span></div>
+        <div class="transform-item"><span class="ico">→</span><span>Thinking in second-order effects</span></div>
+        <div class="transform-item"><span class="ico">→</span><span>Pre-defined exits, no emotional decisions</span></div>
+        <div class="transform-item"><span class="ico">→</span><span>Macro as your edge, not your blind spot</span></div>
+        <div class="transform-item"><span class="ico">→</span><span>Every position built on a written thesis</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODULE TEASERS -->
+  <div class="tease-section">
+    <div class="section-tag">A taste of what's inside</div>
+    <h2 class="tease-h2">The ideas that will change how you think.</h2>
+    <p class="tease-sub">Every module is built around one question: what do elite investors know that you don't yet?</p>
+
+    <div class="tease-card">
+      <div class="tease-card-code">Module 3.1 · Central Banks & Liquidity</div>
+      <div class="tease-card-title">Most investors watch the news. This module teaches you to watch the money.</div>
+      <div class="tease-card-insight">Central banks don't just set interest rates — they control the liquidity that inflates and deflates every asset class on earth. <strong>Druckenmiller's rule: don't fight the Fed.</strong> After this module, you'll understand exactly why — and how to read a Fed statement for what it actually signals, not what the headlines say.</div>
+      <div class="insight-pill">Flagship module · 10 lessons</div>
+    </div>
+
+    <div class="tease-card">
+      <div class="tease-card-code">Module 3.5 · Trade Thesis Framework</div>
+      <div class="tease-card-title">A hunch is not a thesis. This module teaches you the difference.</div>
+      <div class="tease-card-insight">Every rigorous trade has six components: Setup · Catalyst · Edge · Timeline · Target · Invalidation. <strong>Most retail investors have none of them.</strong> This is the operational module — how to turn macro analysis into a structured, accountable position you can defend and exit with discipline.</div>
+      <div class="insight-pill">Operational flagship · 12 lessons</div>
+    </div>
+
+    <div class="tease-card">
+      <div class="tease-card-code">Module 4.1 · Investing Like Druckenmiller</div>
+      <div class="tease-card-title">The greatest macro investor alive. This is how he actually thinks.</div>
+      <div class="tease-card-insight">Liquidity first. Top-down always. Size up massively when conviction is high. <strong>Never average down a losing position.</strong> This module extracts Druckenmiller's operating framework — the one responsible for 30 years without a losing year — and applies it to current market conditions.</div>
+      <div class="insight-pill">Premium module · 10 lessons</div>
+    </div>
+
+    <div class="tease-card">
+      <div class="tease-card-code">Module 2.2 · Behavioral Finance</div>
+      <div class="tease-card-title">Your brain is working against you. Here's the proof.</div>
+      <div class="tease-card-insight">Loss aversion. Recency bias. The disposition effect. Confirmation bias. <strong>These aren't personality flaws — they're hardwired cognitive patterns</strong> that cause even sophisticated investors to systematically underperform. Understanding them is the prerequisite to overcoming them.</div>
+      <div class="insight-pill">Universal · 8 lessons</div>
+    </div>
+  </div>
+
+  <!-- TIERS -->
+  <div class="tiers-section">
+    <div class="section-tag">Full curriculum</div>
+    <h2 class="tiers-h2">16 modules. Built in sequence.<br>No skipping ahead cold.</h2>
+
+    <div class="tier">
+      <div class="tier-hdr" onclick="toggleTier(this)">
+        <div class="tier-hdr-left">
+          <span class="tier-badge">Tier 2</span>
+          <div><div class="tier-name">The Investor</div><div class="tier-meta">Intermediate · 6 modules · ~14h</div></div>
+        </div>
+        <span class="tier-arr">▼</span>
+      </div>
+      <div class="tier-body">
+        <div class="mod-row"><span class="mod-code">2.1</span><span class="mod-title">Equity Valuation Fundamentals</span><span class="mod-count">8 lessons</span></div>
+        <div class="mod-row"><span class="mod-code">2.2</span><span class="mod-title">Behavioral Finance & Investor Psychology</span><span class="mod-count">8 lessons</span></div>
+        <div class="mod-row"><span class="mod-code">2.3</span><span class="mod-title">Portfolio Construction & Risk Management</span><span class="mod-count">9 lessons</span></div>
+        <div class="mod-row"><span class="mod-code">2.4</span><span class="mod-title">Investing Strategies Compared</span><span class="mod-count">8 lessons</span></div>
+        <div class="mod-row"><span class="mod-code">2.5</span><span class="mod-title">Understanding ETFs & Index Funds</span><span class="mod-count">8 lessons</span></div>
+        <div class="mod-row"><span class="mod-code">2.6</span><span class="mod-title">Options & Derivatives Basics</span><span class="mod-count">8 lessons</span></div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="tier-hdr" onclick="toggleTier(this)">
+        <div class="tier-hdr-left">
+          <span class="tier-badge">Tier 3</span>
+          <div><div class="tier-name">The Market Operator</div><div class="tier-meta">Advanced · 6 modules · ~18h</div></div>
+        </div>
+        <span class="tier-arr">▼</span>
+      </div>
+      <div class="tier-body">
+        <div class="mod-row"><span class="mod-code">3.1</span><span class="mod-title">Central Banks & Liquidity</span><span class="mod-count">10 lessons</span></div>
+        <div class="mod-row"><span class="mod-code">3.2</span><span class="mod-title">The Macro Triangle: Rates, Inflation & Growth</span><span class="mod-count">8 lessons</span></div>
+        <div class="mod-row"><span class="mod-code">3.3</span><span class="mod-title">Geopolitics & Markets</span><span class="mod-count">9 lessons</span></div>
+        <div class="mod-row"><span class="mod-code">3.4</span><span class="mod-title">Currency Markets & FX Dynamics</span><span class="mod-count">8 lessons</span></div>
+        <div class="mod-row"><span class="mod-code">3.5</span><span class="mod-title">Building a Trade Thesis Framework</span><span class="mod-count">12 lessons</span></div>
+        <div class="mod-row"><span class="mod-code">3.6</span><span class="mod-title">Sector Analysis & Rotation</span><span class="mod-count">9 lessons</span></div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="tier-hdr" onclick="toggleTier(this)">
+        <div class="tier-hdr-left">
+          <span class="tier-badge">Tier 4</span>
+          <div><div class="tier-name">The Strategist</div><div class="tier-meta">Expert · 4 modules · ~10h</div></div>
+        </div>
+        <span class="tier-arr">▼</span>
+      </div>
+      <div class="tier-body">
+        <div class="mod-row"><span class="mod-code">4.1</span><span class="mod-title">Investing Like Druckenmiller</span><span class="mod-count">10 lessons</span></div>
+        <div class="mod-row"><span class="mod-code">4.2</span><span class="mod-title">Investing Like Buffett</span><span class="mod-count">10 lessons</span></div>
+        <div class="mod-row"><span class="mod-code">4.3</span><span class="mod-title">Asymmetric Investing: Finding Lopsided Bets</span><span class="mod-count">10 lessons</span></div>
+        <div class="mod-row"><span class="mod-code">4.4</span><span class="mod-title">Managing Through a Full Market Cycle</span><span class="mod-count">10 lessons</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1-ON-1 -->
+  <div class="oto-section">
+    <div class="section-tag">Private sessions</div>
+    <h2 class="oto-h2">5 × 1-on-1 strategy sessions</h2>
+    <p class="oto-sub">60 minutes each. Your portfolio, your questions — not a script. Every session ends with a written summary: frameworks discussed, what to watch, specific action items.</p>
+    <div class="oto-sessions">
+      <div class="oto-row">
+        <div class="oto-num">01</div>
+        <div><div class="oto-title">Portfolio review & blind spots</div><div class="oto-desc">Full diagnostic — positioning, exposures, what you might not be seeing</div></div>
+      </div>
+      <div class="oto-row">
+        <div class="oto-num">02</div>
+        <div><div class="oto-title">Macro positioning for your timeline</div><div class="oto-desc">Map current macro regime to your specific portfolio and time horizon</div></div>
+      </div>
+      <div class="oto-row">
+        <div class="oto-num">03</div>
+        <div><div class="oto-title">Build a live trade thesis together</div><div class="oto-desc">Walk through the 6-component framework using a real current opportunity</div></div>
+      </div>
+      <div class="oto-row">
+        <div class="oto-num">04</div>
+        <div><div class="oto-title">Risk & asymmetry framework</div><div class="oto-desc">Position sizing, invalidation triggers, how to find lopsided bets</div></div>
+      </div>
+      <div class="oto-row">
+        <div class="oto-num">05</div>
+        <div><div class="oto-title">Capstone: full cycle strategy</div><div class="oto-desc">Review your complete portfolio thesis. Where are you in the cycle? What comes next?</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq-section">
+    <div class="section-tag">Common questions</div>
+    <h2 class="faq-h2">What people ask before enrolling.</h2>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Is this for beginners or experienced investors? <span class="faq-arr">▼</span></div>
+      <div class="faq-a">This package starts at Tier 2, which assumes you've completed (or have the equivalent of) Tier 1 foundations — basic financial literacy. If you understand what stocks and bonds are and have some investing experience, you're in the right place. If you're completely new, Tier 1 is the starting point. The 1-on-1 sessions will be calibrated exactly to where you are.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How is this different from YouTube or free content? <span class="faq-arr">▼</span></div>
+      <div class="faq-a">Free content gives you fragments. This is a structured system with prerequisite logic — each module builds on the last. The difference is the same as reading random Wikipedia articles vs. a well-sequenced textbook. Plus, no YouTube channel sits with you for 5 hours to walk through your actual portfolio and tell you specifically where your blind spots are.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How long do I have access to the modules? <span class="faq-arr">▼</span></div>
+      <div class="faq-a">Access is yours to keep. The modules don't expire. Markets change — you'll likely want to revisit Tier 3 and 4 material as macro conditions shift. That's intentional.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">When do the 1-on-1 sessions happen? <span class="faq-arr">▼</span></div>
+      <div class="faq-a">After payment, you'll receive a scheduling link to book sessions at your convenience. Sessions are spread across your learning journey — not all at the start. The final capstone session is most valuable after you've completed Tier 3.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Is this financial advice? <span class="faq-arr">▼</span></div>
+      <div class="faq-a">No. InsightInvest is education — frameworks, tools, and thinking models. The 1-on-1 sessions are thinking-partner conversations, not managed advice. No commissions, no products, no conflicts of interest.</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <div class="spots-bar"><span class="spots-dot"></span><span class="spots-text">Limited spots · 1-on-1 sessions book fast</span></div>
+    <h2 class="cta-h2">The market won't wait.<br><em>Neither should you.</em></h2>
+    <p class="cta-sub">One payment. Lifetime access to Tiers 2, 3 & 4. Five private strategy sessions. Everything you need to stop reacting and start thinking in systems.</p>
+    <a class="cta-btn" href="https://buy.stripe.com/4gMdRb9b6fXgcUG10T8og03" target="_blank">Enrol now — secure checkout →</a>
+    <div class="trust-row">
+      <span class="trust"><span class="trust-check">✓</span> Stripe-secured payment</span>
+      <span class="trust"><span class="trust-check">✓</span> Instant module access</span>
+      <span class="trust"><span class="trust-check">✓</span> One-time · no recurring fees</span>
+      <span class="trust"><span class="trust-check">✓</span> No conflicts of interest</span>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Insight Invest · <a href="https://www.leiholding.com">leiholding.com</a><br>
+    Educational content only · Not financial advice · © 2026
+  </div>
+
+</div>
+
+<script>
+function toggleTier(hdr){
+  const body=hdr.nextElementSibling;
+  const arr=hdr.querySelector('.tier-arr');
+  const open=body.classList.contains('open');
+  body.classList.toggle('open',!open);
+  arr.classList.toggle('open',!open);
+}
+function toggleFaq(el){
+  const ans=el.nextElementSibling;
+  const arr=el.querySelector('.faq-arr');
+  const open=ans.classList.contains('open');
+  ans.classList.toggle('open',!open);
+  arr.classList.toggle('open',!open);
+}
+</script>
