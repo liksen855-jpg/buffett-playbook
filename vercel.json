@@ -1,8 +1,10 @@
 {
-  "rewrites": [
-    {
-      "source": "/mecon/:path*",
-      "destination": "https://mecon2.vercel.app/:path*"
-    }
+  "version": 2,
+  "routes": [
+    { "src": "/pchem", "dest": "/pchem.html" },
+    { "src": "/mecon/(.*)", "dest": "https://mecon2.vercel.app/$1" },
+    { "src": "/mecon", "dest": "https://mecon2.vercel.app/" },
+    { "src": "/", "dest": "/index.html" },
+    { "src": "/(.*)", "dest": "/$1.html" }
   ]
 }
