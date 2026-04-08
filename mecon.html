@@ -22,76 +22,7 @@
   <script>
   (function() {
     const HASH = '#/work-with-me';
-
-    const STEPS = [
-      {
-        id: 'type',
-        q: 'What best describes what you\u2019re looking for?',
-        hint: 'Pick the closest fit \u2014 we can discuss specifics after.',
-        type: 'choice',
-        options: [
-          'Macro or sector research report',
-          'Ongoing consulting / advisory',
-          'Workshop or training session',
-          'Custom data dashboard or tool',
-          'Something else / not sure yet'
-        ]
-      },
-      {
-        id: 'context',
-        q: 'Tell me a bit about the context.',
-        hint: 'Who are you, and what\u2019s the organisation or project?',
-        type: 'textarea',
-        placeholder: 'e.g. \u201cWe\u2019re a fund looking at Malaysian equities and need a quarterly macro brief\u2026\u201d'
-      },
-      {
-        id: 'timeline',
-        q: 'What\u2019s your timeline?',
-        hint: 'A rough idea is fine.',
-        type: 'choice',
-        options: [
-          'As soon as possible',
-          'Within the next month',
-          '1\u20133 months from now',
-          'No fixed timeline yet'
-        ]
-      },
-      {
-        id: 'budget',
-        q: 'Do you have a budget in mind?',
-        hint: 'Helps me understand scope \u2014 no commitment needed.',
-        type: 'choice',
-        options: [
-          'Under RM 5,000',
-          'RM 5,000 \u2013 20,000',
-          'RM 20,000 \u2013 50,000',
-          'Above RM 50,000',
-          'Not sure yet'
-        ]
-      },
-      {
-        id: 'heard',
-        q: 'How did you find MECON?',
-        hint: 'Just curious.',
-        type: 'choice',
-        options: [
-          'LinkedIn',
-          'Referral / word of mouth',
-          'Search / web',
-          'Social media',
-          'Other'
-        ]
-      },
-      {
-        id: 'contact',
-        q: 'Last step \u2014 how do I reach you?',
-        hint: 'I\u2019ll be in touch within 48 hours.',
-        type: 'contact'
-      }
-    ];
-
-    let answers = {};
-    let currentStep = 0;
+    const FORM_URL = 'https://forms.gle/L5FNXooCBDAZgjSk8';
 
     function injectStyles() {
       const s = document.createElement('style');
@@ -101,156 +32,103 @@
           overflow-y: auto; overflow-x: hidden;
           background-color: hsl(var(--background, 220 20% 97%));
           color: hsl(var(--foreground, 220 20% 8%));
-          --qm: 'IBM Plex Mono', monospace;
-          --qd: 'Syne', sans-serif;
-          --qa: hsl(188 55% 32%);
-          --qr: rgba(128,128,128,.12);
-          --qu: rgba(128,128,128,.46);
-          --qc: rgba(128,128,128,.06);
-          --qh: rgba(128,128,128,.1);
+          --wm: 'IBM Plex Mono', monospace;
+          --wd: 'Syne', sans-serif;
+          --wa: hsl(188 55% 32%);
+          --wr: rgba(128,128,128,.12);
+          --wu: rgba(128,128,128,.46);
         }
-        #wwm-overlay.active { display: flex; flex-direction: column; }
+        #wwm-overlay.active { display: block; }
         body:has(#wwm-overlay.active) #root { visibility: hidden; }
 
-        .q-topbar {
+        .w-page {
+          min-height: 100vh; max-width: 760px; margin: 0 auto;
+          padding: 0 2.5rem; display: flex; flex-direction: column;
+        }
+        .w-topbar {
           display: flex; align-items: center; justify-content: space-between;
-          padding: 1.35rem 2.5rem; border-bottom: 1px solid var(--qr); flex-shrink: 0;
+          padding: 1.5rem 0; border-bottom: 1px solid var(--wr);
         }
-        .q-back {
-          display: inline-flex; align-items: center; gap: 6px;
-          font-family: var(--qm); font-size: 11px; letter-spacing: .04em;
-          color: var(--qu); cursor: pointer; background: none; border: none; padding: 0;
-          transition: color .18s;
+        .w-back {
+          display: inline-flex; align-items: center; gap: 7px;
+          font-family: var(--wm); font-size: 11px; letter-spacing: .04em;
+          color: var(--wu); cursor: pointer; background: none; border: none;
+          padding: 0; transition: color .18s;
         }
-        .q-back:hover { color: var(--qa); }
-        .q-back svg { transition: transform .18s; }
-        .q-back:hover svg { transform: translateX(-3px); }
-        .q-brand { font-family: var(--qm); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--qu); }
+        .w-back:hover { color: var(--wa); }
+        .w-back svg { transition: transform .18s; }
+        .w-back:hover svg { transform: translateX(-3px); }
+        .w-brand { font-family: var(--wm); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--wu); }
 
-        .q-progress-wrap { height: 2px; background: var(--qr); flex-shrink: 0; }
-        .q-progress-bar { height: 100%; background: var(--qa); transition: width .4s cubic-bezier(.4,0,.2,1); }
-
-        .q-main {
-          flex: 1; display: flex; align-items: center; justify-content: center;
-          padding: 3rem 2rem;
+        .w-hero { padding: 5.5rem 0 4rem; }
+        .w-kicker {
+          font-family: var(--wm); font-size: 10.5px; letter-spacing: .18em;
+          text-transform: uppercase; color: var(--wa);
+          display: flex; align-items: center; gap: 10px; margin-bottom: 2rem;
         }
-        .q-card { width: 100%; max-width: 560px; }
-
-        @keyframes q-in {
-          from { opacity: 0; transform: translateX(16px); }
-          to   { opacity: 1; transform: translateX(0); }
+        .w-kicker::before { content: ''; width: 24px; height: 1px; background: var(--wa); display: block; }
+        .w-headline {
+          font-family: var(--wd); font-size: clamp(2.4rem, 5.5vw, 3.8rem);
+          font-weight: 700; line-height: 1.05; letter-spacing: -.03em; margin-bottom: 2rem;
         }
-        .q-card { animation: q-in .3s cubic-bezier(.22,.68,0,1.05) both; }
-
-        .q-step-label {
-          font-family: var(--qm); font-size: 10px; letter-spacing: .14em;
-          text-transform: uppercase; color: var(--qu); margin-bottom: 1.5rem;
-        }
-        .q-question {
-          font-family: var(--qd); font-size: clamp(1.4rem, 3vw, 1.9rem);
-          font-weight: 700; line-height: 1.15; letter-spacing: -.025em; margin-bottom: .55rem;
-        }
-        .q-hint {
-          font-family: var(--qm); font-size: 11.5px; color: var(--qu);
-          margin-bottom: 2rem; line-height: 1.5;
+        .w-headline em { font-style: normal; color: var(--wa); }
+        .w-body {
+          font-family: var(--wd); font-size: 1.05rem; font-weight: 400;
+          line-height: 1.72; color: var(--wu); max-width: 500px;
         }
 
-        .q-options { display: flex; flex-direction: column; gap: .5rem; margin-bottom: 2rem; }
-        .q-option {
-          display: flex; align-items: center; gap: 1rem;
-          padding: .85rem 1rem; border: 1px solid var(--qr); border-radius: 6px;
-          cursor: pointer; font-family: var(--qd); font-size: .9rem; font-weight: 500;
-          background: var(--qc); transition: border-color .15s, background .15s; user-select: none;
+        .w-services { border-top: 1px solid var(--wr); padding: 3.5rem 0; }
+        .w-services-label {
+          font-family: var(--wm); font-size: 10px; letter-spacing: .14em;
+          text-transform: uppercase; color: var(--wu); margin-bottom: 1.8rem;
         }
-        .q-option:hover { border-color: var(--qa); background: var(--qh); }
-        .q-option.sel { border-color: var(--qa); background: color-mix(in srgb, var(--qa) 8%, transparent); }
-        .q-dot {
-          width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid var(--qr);
-          flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-          transition: border-color .15s, background .15s;
+        .w-row {
+          display: flex; align-items: baseline; gap: 1.5rem;
+          padding: 1rem 0; border-bottom: 1px solid var(--wr);
+          transition: padding-left .2s; cursor: default;
         }
-        .q-option.sel .q-dot { border-color: var(--qa); background: var(--qa); }
-        .q-option.sel .q-dot::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #fff; }
+        .w-row:first-of-type { border-top: 1px solid var(--wr); }
+        .w-row:hover { padding-left: 8px; }
+        .w-num { font-family: var(--wm); font-size: 10px; color: var(--wu); min-width: 20px; }
+        .w-name { font-family: var(--wd); font-size: .95rem; font-weight: 600; letter-spacing: -.01em; flex: 1; }
+        .w-desc { font-family: var(--wm); font-size: 11px; color: var(--wu); text-align: right; max-width: 210px; line-height: 1.5; }
 
-        .q-textarea {
-          width: 100%; box-sizing: border-box; min-height: 110px;
-          padding: .9rem 1rem; border: 1px solid var(--qr); border-radius: 6px;
-          background: var(--qc); color: inherit; font-family: var(--qd); font-size: .9rem;
-          line-height: 1.6; resize: vertical; outline: none; transition: border-color .15s;
-          margin-bottom: 2rem;
+        .w-cta {
+          border-top: 1px solid var(--wr); padding: 4rem 0 5.5rem;
+          display: flex; align-items: flex-end;
+          justify-content: space-between; gap: 2rem; flex-wrap: wrap;
+          margin-top: auto;
         }
-        .q-textarea:focus { border-color: var(--qa); }
-        .q-textarea::placeholder { color: var(--qu); }
-
-        .q-fields { display: flex; flex-direction: column; gap: .7rem; margin-bottom: 2rem; }
-        .q-field-label {
-          font-family: var(--qm); font-size: 10px; letter-spacing: .12em;
-          text-transform: uppercase; color: var(--qu); margin-bottom: .25rem;
+        .w-cta-text {
+          font-family: var(--wd); font-size: clamp(1.3rem, 3vw, 1.9rem);
+          font-weight: 600; line-height: 1.25; letter-spacing: -.02em;
         }
-        .q-input {
-          width: 100%; box-sizing: border-box; padding: .8rem 1rem;
-          border: 1px solid var(--qr); border-radius: 6px; background: var(--qc);
-          color: inherit; font-family: var(--qd); font-size: .9rem; outline: none;
-          transition: border-color .15s;
-        }
-        .q-input:focus { border-color: var(--qa); }
-        .q-input::placeholder { color: var(--qu); }
-        .q-input.err { border-color: hsl(0 65% 55%); }
-
-        .q-actions { display: flex; align-items: center; justify-content: space-between; }
-        .q-next {
-          display: inline-flex; align-items: center; gap: 8px;
-          padding: 11px 22px; background: var(--qa); color: #fff;
-          font-family: var(--qd); font-size: .875rem; font-weight: 600;
+        .w-cta-text span { color: var(--wu); font-weight: 400; }
+        .w-btn {
+          display: inline-flex; align-items: center; gap: 9px;
+          padding: 13px 26px; background: var(--wa); color: #fff;
+          font-family: var(--wd); font-size: .875rem; font-weight: 600;
           border: none; border-radius: 4px; cursor: pointer;
+          text-decoration: none; white-space: nowrap;
           transition: opacity .2s, transform .15s;
         }
-        .q-next:hover { opacity: .88; transform: translateY(-1px); }
-        .q-next:active { transform: translateY(0); }
-        .q-prev {
-          display: inline-flex; align-items: center; gap: 5px;
-          background: none; border: none; color: var(--qu);
-          font-family: var(--qm); font-size: 11px; cursor: pointer;
-          padding: 11px 0; transition: color .15s;
-        }
-        .q-prev:hover { color: inherit; }
-        .q-errmsg {
-          font-family: var(--qm); font-size: 11px; color: hsl(0 65% 55%);
-          margin-top: -.6rem; margin-bottom: 1rem; display: none;
-        }
+        .w-btn:hover { opacity: .88; transform: translateY(-2px); }
+        .w-btn:active { transform: translateY(0); }
 
-        .q-done {
-          flex: 1; display: flex; align-items: center; justify-content: center;
-          padding: 3rem 2rem; text-align: center;
+        @keyframes w-up {
+          from { opacity: 0; transform: translateY(14px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
-        .q-done-inner { max-width: 420px; }
-        .q-done-tick {
-          width: 48px; height: 48px; border-radius: 50%;
-          background: color-mix(in srgb, var(--qa) 12%, transparent);
-          display: flex; align-items: center; justify-content: center;
-          margin: 0 auto 1.6rem;
-        }
-        .q-done-title {
-          font-family: var(--qd); font-size: 1.8rem; font-weight: 700;
-          letter-spacing: -.025em; margin-bottom: .7rem;
-        }
-        .q-done-body {
-          font-family: var(--qm); font-size: 12px; color: var(--qu);
-          line-height: 1.75; margin-bottom: 2rem;
-        }
-        .q-done-back {
-          display: inline-flex; align-items: center; gap: 6px;
-          font-family: var(--qm); font-size: 11px; color: var(--qu);
-          cursor: pointer; background: none; border: none; padding: 0;
-          transition: color .15s;
-        }
-        .q-done-back:hover { color: var(--qa); }
+        .w-topbar { animation: w-up .4s cubic-bezier(.22,.68,0,1.05) .04s both; }
+        .w-hero    { animation: w-up .4s cubic-bezier(.22,.68,0,1.05) .10s both; }
+        .w-services{ animation: w-up .4s cubic-bezier(.22,.68,0,1.05) .17s both; }
+        .w-cta     { animation: w-up .4s cubic-bezier(.22,.68,0,1.05) .24s both; }
 
         #wwm-nav-item { list-style: none; }
         #wwm-nav-btn {
           display: flex; align-items: center; gap: 8px; width: 100%;
-          padding: 8px; border-radius: 6px; font-size: .875rem; cursor: pointer;
-          border: none; background: none; color: inherit;
+          padding: 8px; border-radius: 6px; font-size: .875rem;
+          cursor: pointer; border: none; background: none; color: inherit;
           transition: background .15s; text-align: left;
         }
         #wwm-nav-btn:hover,
@@ -260,146 +138,54 @@
       document.head.appendChild(s);
     }
 
-    function stepHTML(i) {
-      const step = STEPS[i];
-      let body = '';
-
-      if (step.type === 'choice') {
-        body = `<div class="q-options">` +
-          step.options.map(o => {
-            const sel = answers[step.id] === o ? ' sel' : '';
-            return `<div class="q-option${sel}" data-val="${o.replace(/"/g,'&quot;')}"><span class="q-dot"></span>${o}</div>`;
-          }).join('') + `</div>`;
-      } else if (step.type === 'textarea') {
-        body = `<textarea class="q-textarea" placeholder="${step.placeholder}" maxlength="600">${answers[step.id]||''}</textarea>`;
-      } else if (step.type === 'contact') {
-        body = `<div class="q-fields">
-          <div><div class="q-field-label">Full name</div>
-            <input class="q-input" id="q-name" type="text" placeholder="Your name" value="${answers.name||''}" autocomplete="name"></div>
-          <div><div class="q-field-label">Email</div>
-            <input class="q-input" id="q-email" type="email" placeholder="you@example.com" value="${answers.email||''}" autocomplete="email"></div>
-          <div><div class="q-field-label">Phone / WhatsApp</div>
-            <input class="q-input" id="q-phone" type="tel" placeholder="+60 12 345 6789" value="${answers.phone||''}" autocomplete="tel"></div>
-        </div>`;
-      }
-
-      const isLast = i === STEPS.length - 1;
-      const nextArrow = isLast
-        ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 12 20 18"/><polyline points="4 6 4 18"/></svg>`
-        : `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>`;
-
-      return `
-        <div class="q-step-label">${String(i+1).padStart(2,'0')} / ${String(STEPS.length).padStart(2,'0')}</div>
-        <h2 class="q-question">${step.q}</h2>
-        <p class="q-hint">${step.hint}</p>
-        ${body}
-        <p class="q-errmsg" id="q-err"></p>
-        <div class="q-actions">
-          ${i > 0
-            ? `<button class="q-prev" id="q-prev"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>Back</button>`
-            : `<span></span>`}
-          <button class="q-next" id="q-next">${isLast ? 'Submit' : 'Continue'} ${nextArrow}</button>
-        </div>`;
-    }
-
-    function renderStep(i) {
-      currentStep = i;
-      const main = document.getElementById('q-main');
-      const bar  = document.getElementById('q-bar');
-      if (!main || !bar) return;
-
-      bar.style.width = (i / STEPS.length * 100) + '%';
-
-      if (i >= STEPS.length) {
-        bar.style.width = '100%';
-        main.innerHTML = `
-          <div class="q-done">
-            <div class="q-done-inner">
-              <div class="q-done-tick">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="hsl(188 55% 32%)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 13 4 10"/><polyline points="4 13 9 18 20 8"/></svg>
-              </div>
-              <h2 class="q-done-title">Received.</h2>
-              <p class="q-done-body">I\u2019ll review your answers and reach out within 48\u00a0hours.<br>Looking forward to the conversation.</p>
-              <button class="q-done-back" id="q-done-back">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-                Back to dashboard
-              </button>
-            </div>
-          </div>`;
-        document.getElementById('q-done-back').onclick = () => { window.location.hash = '#/'; };
-        return;
-      }
-
-      main.innerHTML = `<div class="q-card">${stepHTML(i)}</div>`;
-
-      main.querySelectorAll('.q-option').forEach(el => {
-        el.onclick = () => {
-          main.querySelectorAll('.q-option').forEach(o => o.classList.remove('sel'));
-          el.classList.add('sel');
-          answers[STEPS[i].id] = el.dataset.val;
-        };
-      });
-
-      const prev = document.getElementById('q-prev');
-      if (prev) prev.onclick = () => renderStep(i - 1);
-      document.getElementById('q-next').onclick = () => advance(i);
-    }
-
-    function advance(i) {
-      const step = STEPS[i];
-      const errEl = document.getElementById('q-err');
-
-      if (step.type === 'choice') {
-        if (!answers[step.id]) { showErr(null, errEl, 'Please select an option to continue.'); return; }
-      } else if (step.type === 'textarea') {
-        const val = (document.querySelector('.q-textarea')||{}).value?.trim();
-        if (!val) { showErr(null, errEl, 'Please add a short description.'); return; }
-        answers[step.id] = val;
-      } else if (step.type === 'contact') {
-        const name  = document.getElementById('q-name').value.trim();
-        const email = document.getElementById('q-email').value.trim();
-        const phone = document.getElementById('q-phone').value.trim();
-        if (!name)                              { showErr('q-name',  errEl, 'Please enter your name.'); return; }
-        if (!email || !/\S+@\S+\.\S+/.test(email)) { showErr('q-email', errEl, 'Please enter a valid email.'); return; }
-        if (!phone)                             { showErr('q-phone', errEl, 'Please enter a phone or WhatsApp number.'); return; }
-        answers.name = name; answers.email = email; answers.phone = phone;
-      }
-
-      errEl.style.display = 'none';
-      renderStep(i + 1);
-    }
-
-    function showErr(fieldId, errEl, msg) {
-      document.querySelectorAll('.q-input').forEach(el => el.classList.remove('err'));
-      if (fieldId) { const f = document.getElementById(fieldId); if (f) f.classList.add('err'); }
-      errEl.textContent = msg;
-      errEl.style.display = 'block';
-    }
-
     function buildOverlay() {
       const div = document.createElement('div');
       div.id = 'wwm-overlay';
       div.innerHTML = `
-        <div class="q-topbar">
-          <button class="q-back" id="q-topback">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-            Dashboard
-          </button>
-          <span class="q-brand">MECON</span>
-        </div>
-        <div class="q-progress-wrap"><div class="q-progress-bar" id="q-bar"></div></div>
-        <div class="q-main" id="q-main"></div>`;
+        <div class="w-page">
+          <div class="w-topbar">
+            <button class="w-back" id="w-back">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+              Dashboard
+            </button>
+            <span class="w-brand">MECON</span>
+          </div>
+
+          <div class="w-hero">
+            <p class="w-kicker">Collaboration</p>
+            <h1 class="w-headline">If you think we<br>can build something<br><em>together</em> —</h1>
+            <p class="w-body">Workshops, consulting, macro analysis, research reports, data products.<br>If there's a fit, I'd like to hear about it.</p>
+          </div>
+
+          <div class="w-services">
+            <p class="w-services-label">What I work on</p>
+            <div class="w-row"><span class="w-num">01</span><span class="w-name">Macro &amp; Sector Analysis</span><span class="w-desc">GDP, trade, inflation — Malaysia &amp; Southeast Asia</span></div>
+            <div class="w-row"><span class="w-num">02</span><span class="w-name">Research Reports</span><span class="w-desc">Investor briefs, policy notes, economic outlooks</span></div>
+            <div class="w-row"><span class="w-num">03</span><span class="w-name">Consulting</span><span class="w-desc">Strategy, market entry, data advisory</span></div>
+            <div class="w-row"><span class="w-num">04</span><span class="w-name">Workshops &amp; Training</span><span class="w-desc">Economic literacy, indicator frameworks</span></div>
+            <div class="w-row"><span class="w-num">05</span><span class="w-name">Data Products</span><span class="w-desc">Custom dashboards, analytics tools</span></div>
+          </div>
+
+          <div class="w-cta">
+            <p class="w-cta-text">Let's figure out<br><span>if there's a fit.</span></p>
+            <a class="w-btn" href="${FORM_URL}" target="_blank" rel="noopener">
+              Get in touch
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>`;
       document.body.appendChild(div);
-      div.querySelector('#q-topback').onclick = () => { window.location.hash = '#/'; };
+      div.querySelector('#w-back').onclick = () => { window.location.hash = '#/'; };
     }
 
     function showOverlay() {
       const el = document.getElementById('wwm-overlay');
       if (!el) return;
-      answers = {};
       el.classList.add('active');
       el.scrollTop = 0;
-      renderStep(0);
+      // re-trigger staggered animations
+      const targets = el.querySelectorAll('.w-topbar,.w-hero,.w-services,.w-cta');
+      targets.forEach(n => { n.style.animation = 'none'; n.offsetHeight; n.style.animation = ''; });
     }
 
     function hideOverlay() {
