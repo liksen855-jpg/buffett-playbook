@@ -17,6 +17,382 @@
   </head>
   <body>
     <div id="root"></div>
+  <script>
+  // Work With Me — injected section
+  (function() {
+    const HASH = '#/work-with-me';
+
+    function injectStyles() {
+      const style = document.createElement('style');
+      style.textContent = `
+        #wwm-overlay {
+          display: none;
+          position: fixed;
+          inset: 0;
+          z-index: 9999;
+          background: var(--background, #fff);
+          overflow-y: auto;
+          font-family: 'Outfit', 'DM Sans', sans-serif;
+        }
+        #wwm-overlay.active { display: flex; flex-direction: column; }
+        .wwm-inner {
+          flex: 1;
+          max-width: 900px;
+          margin: 0 auto;
+          padding: 3rem 2rem 6rem;
+          width: 100%;
+        }
+        .wwm-back {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 12px;
+          opacity: 0.55;
+          cursor: pointer;
+          margin-bottom: 2.5rem;
+          transition: opacity .2s;
+          background: none;
+          border: none;
+          color: inherit;
+          padding: 0;
+        }
+        .wwm-back:hover { opacity: 1; }
+        .wwm-eyebrow {
+          font-size: 10px;
+          letter-spacing: .14em;
+          text-transform: uppercase;
+          opacity: .45;
+          margin-bottom: .75rem;
+        }
+        .wwm-title {
+          font-size: clamp(2rem, 5vw, 3.25rem);
+          font-weight: 700;
+          line-height: 1.1;
+          letter-spacing: -.03em;
+          margin-bottom: 1.25rem;
+        }
+        .wwm-subtitle {
+          font-size: 1.05rem;
+          opacity: .65;
+          max-width: 540px;
+          line-height: 1.65;
+          margin-bottom: 3rem;
+        }
+        .wwm-divider {
+          height: 1px;
+          background: currentColor;
+          opacity: .1;
+          margin: 3rem 0;
+        }
+        .wwm-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+          gap: 1.25rem;
+          margin-bottom: 3rem;
+        }
+        .wwm-card {
+          border: 1px solid currentColor;
+          border-radius: 10px;
+          padding: 1.5rem;
+          opacity: .9;
+          transition: opacity .2s, transform .15s;
+        }
+        .wwm-card:hover { opacity: 1; transform: translateY(-2px); }
+        .wwm-card-icon {
+          font-size: 1.5rem;
+          margin-bottom: .75rem;
+        }
+        .wwm-card-title {
+          font-size: .8rem;
+          font-weight: 700;
+          letter-spacing: .06em;
+          text-transform: uppercase;
+          opacity: .5;
+          margin-bottom: .4rem;
+        }
+        .wwm-card-body {
+          font-size: .875rem;
+          line-height: 1.6;
+          opacity: .75;
+        }
+        .wwm-section-heading {
+          font-size: .7rem;
+          letter-spacing: .12em;
+          text-transform: uppercase;
+          opacity: .4;
+          margin-bottom: 1rem;
+          margin-top: 2.5rem;
+        }
+        .wwm-tag-row {
+          display: flex;
+          flex-wrap: wrap;
+          gap: .5rem;
+          margin-bottom: 2rem;
+        }
+        .wwm-tag {
+          font-size: .75rem;
+          padding: 4px 12px;
+          border-radius: 999px;
+          border: 1px solid currentColor;
+          opacity: .55;
+        }
+        .wwm-contact-box {
+          border: 1px solid currentColor;
+          border-radius: 12px;
+          padding: 2rem;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+        }
+        .wwm-contact-label {
+          font-size: .7rem;
+          text-transform: uppercase;
+          letter-spacing: .1em;
+          opacity: .45;
+          margin-bottom: .2rem;
+        }
+        .wwm-contact-value {
+          font-size: 1rem;
+          font-weight: 600;
+          opacity: .9;
+        }
+        .wwm-contact-row {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+          gap: 1.25rem;
+        }
+        .wwm-contact-item {}
+        .wwm-cta {
+          margin-top: 1.5rem;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 22px;
+          border-radius: 8px;
+          font-size: .85rem;
+          font-weight: 600;
+          cursor: pointer;
+          border: 1px solid;
+          background: none;
+          color: inherit;
+          transition: opacity .2s, transform .1s;
+          text-decoration: none;
+        }
+        .wwm-cta:hover { opacity: .75; transform: translateY(-1px); }
+        @keyframes wwmFadeUp {
+          from { opacity: 0; transform: translateY(18px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .wwm-inner > * { animation: wwmFadeUp .45s ease both; }
+        .wwm-inner > *:nth-child(1) { animation-delay: 0s; }
+        .wwm-inner > *:nth-child(2) { animation-delay: .06s; }
+        .wwm-inner > *:nth-child(3) { animation-delay: .12s; }
+        .wwm-inner > *:nth-child(4) { animation-delay: .18s; }
+        .wwm-inner > *:nth-child(5) { animation-delay: .22s; }
+        .wwm-inner > *:nth-child(6) { animation-delay: .26s; }
+        .wwm-inner > *:nth-child(7) { animation-delay: .30s; }
+        .wwm-inner > *:nth-child(8) { animation-delay: .34s; }
+        /* Sidebar injection */
+        #wwm-nav-item {
+          list-style: none;
+        }
+        #wwm-nav-btn {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          width: 100%;
+          padding: 8px;
+          border-radius: 6px;
+          font-size: .875rem;
+          cursor: pointer;
+          border: none;
+          background: none;
+          color: inherit;
+          transition: background .15s;
+          text-align: left;
+        }
+        #wwm-nav-btn:hover,
+        #wwm-nav-btn.active {
+          background: var(--sidebar-accent, rgba(128,128,128,.12));
+        }
+        #wwm-nav-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+      `;
+      document.head.appendChild(style);
+    }
+
+    function buildOverlay() {
+      const div = document.createElement('div');
+      div.id = 'wwm-overlay';
+      div.innerHTML = `
+        <div class="wwm-inner">
+          <button class="wwm-back" onclick="window.location.hash='#/'">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Back to dashboard
+          </button>
+
+          <p class="wwm-eyebrow">Open for collaboration</p>
+          <h1 class="wwm-title">Work<br>with me.</h1>
+          <p class="wwm-subtitle">
+            I build data-driven products, economic intelligence tools, and analytical dashboards.
+            If you need someone who understands both the data and the design, let's talk.
+          </p>
+
+          <div class="wwm-divider"></div>
+
+          <p class="wwm-section-heading">What I offer</p>
+          <div class="wwm-grid">
+            <div class="wwm-card">
+              <div class="wwm-card-icon">📊</div>
+              <div class="wwm-card-title">Economic Research</div>
+              <div class="wwm-card-body">Macro &amp; micro analysis for Malaysia and Southeast Asia. Sector deep-dives, investment thesis, and policy impact assessment.</div>
+            </div>
+            <div class="wwm-card">
+              <div class="wwm-card-icon">🛠️</div>
+              <div class="wwm-card-title">Dashboard Development</div>
+              <div class="wwm-card-body">Custom data visualization tools and interactive analytics platforms — from concept to production-ready web app.</div>
+            </div>
+            <div class="wwm-card">
+              <div class="wwm-card-icon">🔗</div>
+              <div class="wwm-card-title">Data Pipeline &amp; APIs</div>
+              <div class="wwm-card-body">End-to-end data ingestion from official sources (DOSM, BNM, MATRADE), automated refresh pipelines, and REST APIs.</div>
+            </div>
+            <div class="wwm-card">
+              <div class="wwm-card-icon">📝</div>
+              <div class="wwm-card-title">Writing &amp; Reports</div>
+              <div class="wwm-card-body">Structured economic commentary, investor briefs, and strategy documents grounded in live data.</div>
+            </div>
+            <div class="wwm-card">
+              <div class="wwm-card-icon">🤝</div>
+              <div class="wwm-card-title">Consulting</div>
+              <div class="wwm-card-body">Advisory for teams building fintech, proptech, or policy products in Malaysia — market entry, data strategy, regulatory context.</div>
+            </div>
+            <div class="wwm-card">
+              <div class="wwm-card-icon">🎓</div>
+              <div class="wwm-card-title">Training &amp; Workshops</div>
+              <div class="wwm-card-body">Data literacy, economic indicators, and dashboard design workshops for analysts and product teams.</div>
+            </div>
+          </div>
+
+          <div class="wwm-divider"></div>
+
+          <p class="wwm-section-heading">Industries &amp; domains</p>
+          <div class="wwm-tag-row">
+            <span class="wwm-tag">Investment Management</span>
+            <span class="wwm-tag">Government &amp; Policy</span>
+            <span class="wwm-tag">Banking &amp; Finance</span>
+            <span class="wwm-tag">Real Estate</span>
+            <span class="wwm-tag">E-commerce &amp; Retail</span>
+            <span class="wwm-tag">Logistics &amp; Trade</span>
+            <span class="wwm-tag">Energy &amp; Commodities</span>
+            <span class="wwm-tag">Startups</span>
+            <span class="wwm-tag">Research Institutions</span>
+          </div>
+
+          <div class="wwm-divider"></div>
+
+          <p class="wwm-section-heading">Get in touch</p>
+          <div class="wwm-contact-box">
+            <div class="wwm-contact-row">
+              <div class="wwm-contact-item">
+                <div class="wwm-contact-label">Email</div>
+                <div class="wwm-contact-value">hello@mecon.my</div>
+              </div>
+              <div class="wwm-contact-item">
+                <div class="wwm-contact-label">Location</div>
+                <div class="wwm-contact-value">Kuala Lumpur, Malaysia</div>
+              </div>
+              <div class="wwm-contact-item">
+                <div class="wwm-contact-label">Availability</div>
+                <div class="wwm-contact-value">Open to projects</div>
+              </div>
+            </div>
+            <a class="wwm-cta" href="mailto:hello@mecon.my">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              Send me a message
+            </a>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(div);
+    }
+
+    function showOverlay() {
+      const el = document.getElementById('wwm-overlay');
+      if (el) {
+        el.classList.add('active');
+        // Re-trigger animation by cloning inner
+        const inner = el.querySelector('.wwm-inner');
+        if (inner) {
+          const clone = inner.cloneNode(true);
+          inner.parentNode.replaceChild(clone, inner);
+          // Re-attach back button listener
+          const back = clone.querySelector('.wwm-back');
+          if (back) back.onclick = () => { window.location.hash = '#/'; };
+        }
+      }
+    }
+
+    function hideOverlay() {
+      const el = document.getElementById('wwm-overlay');
+      if (el) el.classList.remove('active');
+    }
+
+    function injectNavItem() {
+      // Find the sidebar nav lists
+      const allLists = document.querySelectorAll('[data-sidebar="menu"]');
+      if (!allLists.length || document.getElementById('wwm-nav-item')) return;
+
+      // Use last visible list
+      const target = allLists[allLists.length - 1];
+      const li = document.createElement('li');
+      li.id = 'wwm-nav-item';
+      li.innerHTML = `
+        <button id="wwm-nav-btn" title="Work with Me">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="20" height="14" x="2" y="5" rx="2"/>
+            <path d="M2 10h20"/>
+          </svg>
+          <span>Work with Me</span>
+        </button>
+      `;
+      li.querySelector('#wwm-nav-btn').onclick = () => {
+        window.location.hash = HASH;
+      };
+      target.appendChild(li);
+    }
+
+    function onHashChange() {
+      if (window.location.hash === HASH) {
+        showOverlay();
+        document.getElementById('wwm-nav-btn') && document.getElementById('wwm-nav-btn').classList.add('active');
+      } else {
+        hideOverlay();
+        document.getElementById('wwm-nav-btn') && document.getElementById('wwm-nav-btn').classList.remove('active');
+      }
+    }
+
+    function init() {
+      injectStyles();
+      buildOverlay();
+      // Try injecting nav now and retry until sidebar is ready
+      let tries = 0;
+      const tryNav = setInterval(() => {
+        injectNavItem();
+        tries++;
+        if (document.getElementById('wwm-nav-item') || tries > 40) clearInterval(tryNav);
+      }, 250);
+      window.addEventListener('hashchange', onHashChange);
+      onHashChange();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      setTimeout(init, 100);
+    }
+  })();
+  </script>
+
   <script data-pplx-inline-edit>
 (function(){
   if(window===window.top)return;
