@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>Inflation & Purchasing Power — Insight Invest</title>
+  <title>Reading Financial Statements — Insight Invest</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
    :root{--bg:#08090c;--bg2:#0e1016;--bg3:#14161e;--surface:#1a1d28;--border:#252838;--text:#9ca3b8;--text-bright:#e8ecf4;--text-dim:#555c72;--gold:#c9a84c;--gold-light:#e4cc7a;--gold-dim:#8a7234;--blue:#4a7cff;--green:#3dd68c;--red:#ff5c5c;--cyan:#38d9d9;}
@@ -14,27 +14,15 @@
    body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;}
    nav{position:fixed;top:0;left:0;right:0;padding:20px 48px;display:flex;align-items:center;justify-content:space-between;z-index:100;background:linear-gradient(180deg,var(--bg) 0%,transparent 100%);transition:all 0.4s;}
    nav.scrolled{background:#08090cee;backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 48px;}
-   .nav-logo{display:flex;align-items:center;gap:14px;text-decoration:none;}
-   .nav-logo-mark{width:38px;height:38px;border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;}
-   .nav-logo-mark::before{content:'I';font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--gold);}
-   .nav-logo-text{font-family:'Syne',sans-serif;font-size:15px;font-weight:600;color:var(--text-bright);letter-spacing:0.12em;text-transform:uppercase;}
-   .nav-links{display:flex;gap:36px;align-items:center;}
-   .nav-links a{font-size:12px;font-weight:500;color:var(--text-dim);text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.3s;position:relative;}
-   .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--gold);transition:width 0.3s;}
-   .nav-links a:hover{color:var(--gold);}.nav-links a:hover::after{width:100%;}
-   .nav-cta{padding:10px 24px!important;border:1px solid var(--gold-dim)!important;color:var(--gold)!important;font-size:11px!important;letter-spacing:0.14em!important;transition:all 0.3s!important;}
-   .nav-cta:hover{background:var(--gold)!important;color:var(--bg)!important;}
-   .reveal{opacity:0;transform:translateY(40px);transition:all 0.8s cubic-bezier(0.22,1,0.36,1);}
-   .reveal.visible{opacity:1;transform:translateY(0);}
-   .mod-breadcrumb{display:flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);padding:100px 48px 0;}
-   .mod-breadcrumb a{color:var(--text-dim);text-decoration:none;transition:color 0.2s;}.mod-breadcrumb a:hover{color:var(--gold);}.mod-breadcrumb span{opacity:0.4;}
-   .mod-hero{padding:36px 48px 64px;position:relative;overflow:hidden;border-bottom:1px solid var(--border);}
-   .mod-hero::before{content:attr(data-watermark);position:absolute;right:48px;top:10px;font-family:'Cormorant Garamond',serif;font-size:160px;font-weight:300;color:var(--border);opacity:0.35;line-height:1;user-select:none;pointer-events:none;white-space:nowrap;}
+   .nav-logo{display:flex;align-items:center;gap:14px;text-decoration:none;}.nav-logo-mark{width:38px;height:38px;border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;}.nav-logo-mark::before{content:'I';font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--gold);}.nav-logo-text{font-family:'Syne',sans-serif;font-size:15px;font-weight:600;color:var(--text-bright);letter-spacing:0.12em;text-transform:uppercase;}
+   .nav-links{display:flex;gap:36px;align-items:center;}.nav-links a{font-size:12px;font-weight:500;color:var(--text-dim);text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.3s;position:relative;}.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--gold);transition:width 0.3s;}.nav-links a:hover{color:var(--gold);}.nav-links a:hover::after{width:100%;}
+   .nav-cta{padding:10px 24px!important;border:1px solid var(--gold-dim)!important;color:var(--gold)!important;font-size:11px!important;letter-spacing:0.14em!important;transition:all 0.3s!important;}.nav-cta:hover{background:var(--gold)!important;color:var(--bg)!important;}
+   .reveal{opacity:0;transform:translateY(40px);transition:all 0.8s cubic-bezier(0.22,1,0.36,1);}.reveal.visible{opacity:1;transform:translateY(0);}
+   .mod-breadcrumb{display:flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);padding:100px 48px 0;}.mod-breadcrumb a{color:var(--text-dim);text-decoration:none;transition:color 0.2s;}.mod-breadcrumb a:hover{color:var(--gold);}.mod-breadcrumb span{opacity:0.4;}
+   .mod-hero{padding:36px 48px 64px;position:relative;overflow:hidden;border-bottom:1px solid var(--border);}.mod-hero::before{content:attr(data-watermark);position:absolute;right:48px;top:10px;font-family:'Cormorant Garamond',serif;font-size:160px;font-weight:300;color:var(--border);opacity:0.35;line-height:1;user-select:none;pointer-events:none;white-space:nowrap;}
    .mod-code{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--blue);text-transform:uppercase;margin-bottom:16px;}
    .mod-hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,4.5vw,64px);font-weight:400;color:var(--text-bright);line-height:1.1;margin-bottom:20px;}
-   .mod-hero-meta{display:flex;align-items:center;gap:24px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:0.08em;}
-   .mod-hero-meta span{display:flex;align-items:center;gap:6px;}
-   .mod-hero-meta svg{width:13px;height:13px;opacity:0.6;}
+   .mod-hero-meta{display:flex;align-items:center;gap:24px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:0.08em;}.mod-hero-meta span{display:flex;align-items:center;gap:6px;}.mod-hero-meta svg{width:13px;height:13px;opacity:0.6;}
    .mod-desc{max-width:680px;font-family:'Syne',sans-serif;font-size:16px;color:var(--text);line-height:1.7;margin-bottom:28px;}
    .mod-progress-bar{position:fixed;top:0;left:0;width:0%;height:2px;background:var(--blue);z-index:999;transition:width 0.1s linear;}
    .mod-layout{display:grid;grid-template-columns:1fr 300px;gap:0;max-width:1400px;margin:0 auto;padding:0 48px;align-items:start;}
@@ -45,179 +33,111 @@
    .mod-section h2{font-family:'Cormorant Garamond',serif;font-size:clamp(24px,2.5vw,36px);font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:20px;}
    .mod-section p{font-size:15px;line-height:1.75;color:var(--text);margin-bottom:16px;max-width:700px;}
    .mod-section h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;color:var(--text-bright);margin:32px 0 12px;}
-   .key-concept{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--blue);padding:24px 28px;margin:32px 0;max-width:700px;}
-   .key-concept-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.15em;color:var(--blue);text-transform:uppercase;margin-bottom:10px;}
-   .key-concept p{margin-bottom:0;font-size:14px;}
-   .insight-box{background:linear-gradient(135deg,rgba(201,168,76,0.06),rgba(201,168,76,0.02));border:1px solid var(--gold-dim);padding:24px 28px;margin:32px 0;max-width:700px;}
-   .insight-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.15em;color:var(--gold);text-transform:uppercase;margin-bottom:10px;}
-   .insight-box p{margin-bottom:0;font-size:14px;}
-   .asymmetric-box{background:linear-gradient(135deg,rgba(56,217,217,0.05),rgba(56,217,217,0.01));border:1px solid rgba(56,217,217,0.25);padding:24px 28px;margin:32px 0;max-width:700px;position:relative;overflow:hidden;}
-   .asymmetric-box::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(180deg,var(--cyan),transparent);}
-   .asymmetric-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.18em;color:var(--cyan);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
-   .asymmetric-label::after{content:'◆';font-size:7px;}
-   .asymmetric-box p{margin-bottom:8px;font-size:14px;color:var(--text);}
-   .asymmetric-box p:last-child{margin-bottom:0;}
-   .legend-quote{background:var(--bg3);border-left:3px solid var(--gold);padding:24px 28px;margin:32px 0;max-width:700px;position:relative;}
-   .legend-quote-mark{font-family:'Cormorant Garamond',serif;font-size:64px;font-weight:300;color:var(--gold-dim);opacity:0.4;position:absolute;top:-8px;left:24px;line-height:1;}
-   .legend-quote-text{font-family:'Cormorant Garamond',serif;font-size:19px;font-style:italic;color:var(--text-bright);line-height:1.55;margin-bottom:14px;padding-top:16px;}
-   .legend-quote-attr{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:0.15em;text-transform:uppercase;}
-   .formula-box{background:var(--bg3);border:1px solid var(--border);padding:20px 24px;margin:24px 0;font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--text-bright);max-width:700px;}
-   .formula-label{font-size:10px;letter-spacing:0.15em;color:var(--text-dim);text-transform:uppercase;margin-bottom:8px;}
-   .example-list{list-style:none;padding:0;margin:20px 0;max-width:700px;}
-   .example-list li{padding:10px 0 10px 20px;border-bottom:1px solid var(--border);font-size:14px;color:var(--text);line-height:1.6;position:relative;}
-   .example-list li::before{content:'→';position:absolute;left:0;color:var(--blue);font-family:'IBM Plex Mono',monospace;}
-   .example-list li:last-child{border-bottom:none;}
-   .tool-container{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:32px;margin:40px 0;max-width:700px;}
-   .tool-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;color:var(--text-bright);margin-bottom:6px;}
-   .tool-subtitle{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:0.08em;margin-bottom:28px;}
-   .tool-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
-   .tool-field{display:flex;flex-direction:column;gap:8px;}
-   .tool-field label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text-dim);text-transform:uppercase;}
-   .tool-field input,.tool-field select{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:10px 14px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text-bright);outline:none;transition:border-color 0.2s;-webkit-appearance:none;}
-   .tool-field input:focus,.tool-field select:focus{border-color:var(--blue);}
-   .tool-btn{background:var(--blue);color:#fff;border:none;border-radius:6px;padding:12px 28px;cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.05em;transition:opacity 0.2s;margin-top:8px;}
-   .tool-btn:hover{opacity:0.85;}
-   .tool-result{margin-top:24px;padding:20px 24px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);display:none;}
-   .tool-result.visible{display:block;}
-   .diagram-container{max-width:700px;margin:40px 0;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:32px;}
-   .diagram-title{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.15em;color:var(--text-dim);text-transform:uppercase;margin-bottom:24px;}
+   .key-concept{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--blue);padding:24px 28px;margin:32px 0;max-width:700px;}.key-concept-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.15em;color:var(--blue);text-transform:uppercase;margin-bottom:10px;}.key-concept p{margin-bottom:0;font-size:14px;}
+   .insight-box{background:linear-gradient(135deg,rgba(201,168,76,0.06),rgba(201,168,76,0.02));border:1px solid var(--gold-dim);padding:24px 28px;margin:32px 0;max-width:700px;}.insight-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.15em;color:var(--gold);text-transform:uppercase;margin-bottom:10px;}.insight-box p{margin-bottom:0;font-size:14px;}
+   .asymmetric-box{background:linear-gradient(135deg,rgba(56,217,217,0.05),rgba(56,217,217,0.01));border:1px solid rgba(56,217,217,0.25);padding:24px 28px;margin:32px 0;max-width:700px;position:relative;overflow:hidden;}.asymmetric-box::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(180deg,var(--cyan),transparent);}.asymmetric-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.18em;color:var(--cyan);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;}.asymmetric-label::after{content:'◆';font-size:7px;}.asymmetric-box p{margin-bottom:8px;font-size:14px;color:var(--text);}.asymmetric-box p:last-child{margin-bottom:0;}
+   .legend-quote{background:var(--bg3);border-left:3px solid var(--gold);padding:24px 28px;margin:32px 0;max-width:700px;position:relative;}.legend-quote-mark{font-family:'Cormorant Garamond',serif;font-size:64px;font-weight:300;color:var(--gold-dim);opacity:0.4;position:absolute;top:-8px;left:24px;line-height:1;}.legend-quote-text{font-family:'Cormorant Garamond',serif;font-size:19px;font-style:italic;color:var(--text-bright);line-height:1.55;margin-bottom:14px;padding-top:16px;}.legend-quote-attr{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:0.15em;text-transform:uppercase;}
+   .formula-box{background:var(--bg3);border:1px solid var(--border);padding:20px 24px;margin:24px 0;font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--text-bright);max-width:700px;}.formula-label{font-size:10px;letter-spacing:0.15em;color:var(--text-dim);text-transform:uppercase;margin-bottom:8px;}
+   .example-list{list-style:none;padding:0;margin:20px 0;max-width:700px;}.example-list li{padding:10px 0 10px 20px;border-bottom:1px solid var(--border);font-size:14px;color:var(--text);line-height:1.6;position:relative;}.example-list li::before{content:'→';position:absolute;left:0;color:var(--blue);font-family:'IBM Plex Mono',monospace;}.example-list li:last-child{border-bottom:none;}
+   .tool-container{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:32px;margin:40px 0;max-width:700px;}.tool-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;color:var(--text-bright);margin-bottom:6px;}.tool-subtitle{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:0.08em;margin-bottom:28px;}
+   .tool-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}.tool-field{display:flex;flex-direction:column;gap:8px;}.tool-field label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text-dim);text-transform:uppercase;}
+   .tool-field input,.tool-field select{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:10px 14px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text-bright);outline:none;transition:border-color 0.2s;-webkit-appearance:none;}.tool-field input:focus,.tool-field select:focus{border-color:var(--blue);}
+   .tool-btn{background:var(--blue);color:#fff;border:none;border-radius:6px;padding:12px 28px;cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.05em;transition:opacity 0.2s;margin-top:8px;}.tool-btn:hover{opacity:0.85;}
+   .tool-result{margin-top:24px;padding:20px 24px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);display:none;}.tool-result.visible{display:block;}
+   .diagram-container{max-width:700px;margin:40px 0;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:32px;}.diagram-title{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.15em;color:var(--text-dim);text-transform:uppercase;margin-bottom:24px;}
    svg.diagram{width:100%;overflow:visible;}
-   .compare-table{width:100%;border-collapse:collapse;margin:24px 0;max-width:700px;}
-   .compare-table th{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text-dim);text-transform:uppercase;padding:12px 16px;border-bottom:1px solid var(--border);text-align:left;}
-   .compare-table td{padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text);line-height:1.5;vertical-align:top;}
-   .compare-table tr:last-child td{border-bottom:none;}
-   .compare-table tr:hover td{background:var(--bg3);}
-   .compare-table .td-highlight{color:var(--text-bright);font-weight:600;}
-   .compare-table .td-win{color:var(--green);font-weight:500;}
-   .compare-table .td-lose{color:var(--red);font-weight:500;}
+   .compare-table{width:100%;border-collapse:collapse;margin:24px 0;max-width:700px;}.compare-table th{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text-dim);text-transform:uppercase;padding:12px 16px;border-bottom:1px solid var(--border);text-align:left;}.compare-table td{padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text);line-height:1.5;vertical-align:top;}.compare-table tr:last-child td{border-bottom:none;}.compare-table tr:hover td{background:var(--bg3);}.compare-table .td-highlight{color:var(--text-bright);font-weight:600;}
 
-   /* ── NEW: Quadrant grid ── */
-   .quad-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);max-width:700px;margin:28px 0;}
-   .quad-cell{background:var(--bg2);padding:24px;position:relative;}
-   .quad-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:10px;}
-   .quad-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--text-bright);margin-bottom:10px;line-height:1.2;}
-   .quad-desc{font-size:12px;color:var(--text);line-height:1.65;margin-bottom:12px;}
-   .quad-wins{font-size:11px;line-height:1.6;}
-   .quad-corner{position:absolute;top:12px;right:14px;font-family:'IBM Plex Mono',monospace;font-size:9px;opacity:0.4;}
+   /* ── Thesis-first template ── */
+   .thesis-template{max-width:700px;margin:28px 0;background:var(--bg2);border:1px solid var(--border);overflow:hidden;}
+   .thesis-header{padding:16px 20px;background:var(--bg3);border-bottom:1px solid var(--border);font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:0.18em;text-transform:uppercase;}
+   .thesis-step{display:grid;grid-template-columns:28px 1fr;gap:0;border-bottom:1px solid var(--border);}
+   .thesis-step:last-child{border-bottom:none;}
+   .thesis-step-num{padding:16px 0 16px 16px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gold-dim);border-right:1px solid var(--border);}
+   .thesis-step-body{padding:16px 20px;}
+   .thesis-step-title{font-size:13px;font-weight:700;color:var(--text-bright);margin-bottom:5px;}
+   .thesis-step-desc{font-size:12px;color:var(--text);line-height:1.65;}
+   .thesis-step-example{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--cyan);margin-top:8px;padding:8px 12px;background:rgba(56,217,217,0.05);border-left:2px solid var(--cyan);}
 
-   /* ── NEW: Leading indicators panel ── */
-   .indicators-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:700px;margin:24px 0;}
-   .ind-card{background:var(--bg3);border:1px solid var(--border);padding:18px;}
-   .ind-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
-   .ind-name{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-bright);letter-spacing:0.1em;text-transform:uppercase;}
-   .ind-lead{font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 8px;border-radius:2px;}
-   .lead-fast{background:rgba(61,214,140,0.12);color:var(--green);border:1px solid rgba(61,214,140,0.3);}
-   .lead-medium{background:rgba(74,124,255,0.12);color:var(--blue);border:1px solid rgba(74,124,255,0.3);}
-   .lead-slow{background:rgba(255,92,92,0.12);color:var(--red);border:1px solid rgba(255,92,92,0.3);}
-   .ind-desc{font-size:12px;color:var(--text);line-height:1.6;}
+   /* ── QoE checklist ── */
+   .qoe-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:700px;margin:24px 0;}
+   .qoe-item{background:var(--bg3);border:1px solid var(--border);padding:16px;}
+   .qoe-num{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:0.15em;margin-bottom:8px;}
+   .qoe-flag{font-size:13px;font-weight:700;color:var(--text-bright);margin-bottom:6px;}
+   .qoe-how{font-size:11px;color:var(--text);line-height:1.6;}
+   .qoe-signal{font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 8px;margin-top:8px;display:inline-block;}
+   .signal-red{background:rgba(255,92,92,0.1);color:var(--red);border:1px solid rgba(255,92,92,0.25);}
+   .signal-gold{background:rgba(201,168,76,0.1);color:var(--gold);border:1px solid rgba(201,168,76,0.25);}
+   .signal-green{background:rgba(61,214,140,0.1);color:var(--green);border:1px solid rgba(61,214,140,0.25);}
 
-   /* ── NEW: Inflation screener tool ── */
-   .screener-result{background:var(--bg2);border:1px solid var(--border);max-width:700px;margin:28px 0;}
-   .screener-result-header{padding:16px 20px;border-bottom:1px solid var(--border);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.15em;color:var(--text-dim);text-transform:uppercase;}
-   .screener-row{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);}
-   .screener-row:last-child{border-bottom:none;}
-   .screener-factor{font-size:13px;color:var(--text-bright);font-weight:500;}
-   .screener-score{display:flex;gap:4px;}
-   .score-dot{width:10px;height:10px;border-radius:50%;}
-   .score-dot.filled-green{background:var(--green);}
-   .score-dot.filled-gold{background:var(--gold);}
-   .score-dot.filled-red{background:var(--red);}
-   .score-dot.empty{background:var(--border);}
-   .screener-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;}
+   /* ── Lie methods ── */
+   .lie-cards{display:flex;flex-direction:column;gap:0;max-width:700px;margin:24px 0;border:1px solid var(--border);}
+   .lie-card{padding:24px;border-bottom:1px solid var(--border);}
+   .lie-card:last-child{border-bottom:none;}
+   .lie-card-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+   .lie-num{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--red);background:rgba(255,92,92,0.1);border:1px solid rgba(255,92,92,0.3);padding:3px 10px;}
+   .lie-title{font-size:14px;font-weight:700;color:var(--text-bright);}
+   .lie-desc{font-size:13px;color:var(--text);line-height:1.7;margin-bottom:12px;}
+   .lie-fingerprint{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--cyan);padding:10px 14px;background:rgba(56,217,217,0.05);border-left:2px solid var(--cyan);}
+   .lie-case{font-size:12px;color:var(--text-dim);margin-top:8px;font-style:italic;}
+
+   /* ── Case study cards ── */
+   .case-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:700px;margin:24px 0;}
+   .case-card{background:var(--bg3);border:1px solid var(--border);padding:20px;position:relative;overflow:hidden;}
+   .case-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+   .case-fraud::after{background:var(--red);}
+   .case-value::after{background:var(--green);}
+   .case-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;}
+   .case-company{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--text-bright);margin-bottom:4px;}
+   .case-year{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-dim);margin-bottom:12px;}
+   .case-lesson{font-size:12px;color:var(--text);line-height:1.65;}
+   .case-signal{font-family:'IBM Plex Mono',monospace;font-size:10px;margin-top:10px;padding:4px 10px;display:inline-block;}
+
+   /* ── Master metric table ── */
+   .master-table{width:100%;border-collapse:collapse;margin:24px 0;max-width:700px;}
+   .master-table th{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;color:var(--text-dim);text-transform:uppercase;padding:12px 16px;border-bottom:1px solid var(--border);text-align:left;background:var(--bg3);}
+   .master-table td{padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text);line-height:1.5;vertical-align:top;}
+   .master-table tr:last-child td{border-bottom:none;}
+   .master-table tr:hover td{background:var(--bg3);}
+   .master-table .td-h{color:var(--text-bright);font-weight:600;}
+   .master-table .td-metric{color:var(--gold);font-family:'IBM Plex Mono',monospace;font-size:12px;}
 
    /* ── QUIZ ── */
    .quiz-container{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:32px;margin:40px 0;max-width:700px;}
-   .quiz-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;}
-   .quiz-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;color:var(--text-bright);}
-   .quiz-progress{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:0.1em;}
-   .quiz-progress-track{height:2px;background:var(--border);border-radius:2px;margin-bottom:28px;}
-   .quiz-progress-fill{height:100%;background:var(--blue);border-radius:2px;transition:width 0.4s ease;}
+   .quiz-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;}.quiz-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;color:var(--text-bright);}.quiz-progress{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:0.1em;}
+   .quiz-progress-track{height:2px;background:var(--border);border-radius:2px;margin-bottom:28px;}.quiz-progress-fill{height:100%;background:var(--blue);border-radius:2px;transition:width 0.4s ease;}
    .quiz-q{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;color:var(--text-bright);line-height:1.4;margin-bottom:24px;}
-   .quiz-options{display:flex;flex-direction:column;gap:10px;}
-   .quiz-opt{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 18px;cursor:pointer;transition:all 0.2s;font-size:14px;color:var(--text);line-height:1.5;text-align:left;}
-   .quiz-opt:hover:not(.answered){border-color:var(--blue);color:var(--text-bright);}
-   .quiz-opt.correct{border-color:var(--green);background:rgba(61,214,140,0.08);color:var(--green);}
-   .quiz-opt.wrong{border-color:var(--red);background:rgba(255,92,92,0.08);color:var(--red);}
-   .quiz-feedback{margin-top:20px;padding:16px 20px;border-radius:8px;font-size:14px;line-height:1.6;display:none;}
-   .quiz-feedback.show{display:block;}
-   .quiz-feedback.correct-fb{background:rgba(61,214,140,0.08);border:1px solid rgba(61,214,140,0.3);color:var(--green);}
-   .quiz-feedback.wrong-fb{background:rgba(255,92,92,0.08);border:1px solid rgba(255,92,92,0.3);color:#ff8a8a;}
-   .quiz-next{margin-top:20px;background:none;border:1px solid var(--border);border-radius:6px;padding:10px 24px;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text);letter-spacing:0.1em;text-transform:uppercase;transition:all 0.2s;display:none;}
-   .quiz-next.show{display:inline-block;}
-   .quiz-next:hover{border-color:var(--blue);color:var(--blue);}
-   .quiz-score{text-align:center;padding:40px 0 20px;display:none;}
-   .quiz-score.show{display:block;}
-   .quiz-score-num{font-family:'Cormorant Garamond',serif;font-size:72px;font-weight:300;color:var(--text-bright);line-height:1;}
-   .quiz-score-label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:0.1em;text-transform:uppercase;margin-top:8px;margin-bottom:24px;}
-   .quiz-score-msg{font-size:15px;color:var(--text);line-height:1.6;margin-bottom:28px;}
-   .quiz-restart{background:var(--blue);color:#fff;border:none;border-radius:6px;padding:12px 28px;cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.05em;transition:opacity 0.2s;}
-   .quiz-restart:hover{opacity:0.85;}
-   .sidebar-toc{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:24px;}
-   .sidebar-toc-title{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.15em;color:var(--text-dim);text-transform:uppercase;margin-bottom:16px;}
-   .toc-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer;font-size:13px;color:var(--text);transition:color 0.2s;}
-   .toc-item:last-child{border-bottom:none;}
-   .toc-item:hover{color:var(--text-bright);}
-   .toc-item.active{color:var(--blue);}
-   .toc-num{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-dim);min-width:20px;}
-   .sidebar-next{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:24px;}
-   .sidebar-next-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.15em;color:var(--text-dim);text-transform:uppercase;margin-bottom:12px;}
-   .sidebar-next-title{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--text-bright);margin-bottom:10px;}
-   .sidebar-next a{display:inline-flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--blue);text-decoration:none;letter-spacing:0.08em;transition:gap 0.2s;}
-   .sidebar-next a:hover{gap:10px;}
-   .sidebar-key-stats{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;}
-   .sidebar-stat{padding:12px 0;border-bottom:1px solid var(--border);}
-   .sidebar-stat:last-child{border-bottom:none;}
-   .sidebar-stat-label{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;}
-   .sidebar-stat-value{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--text-bright);font-weight:400;}
-   .mod-nav-bar{border-top:1px solid var(--border);padding:40px 48px;display:flex;justify-content:space-between;align-items:center;}
-   .mod-nav-btn{display:flex;flex-direction:column;gap:4px;text-decoration:none;max-width:240px;}
-   .mod-nav-dir{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.15em;color:var(--text-dim);text-transform:uppercase;}
-   .mod-nav-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text-bright);transition:color 0.2s;}
-   .mod-nav-btn:hover .mod-nav-title{color:var(--blue);}
-   footer{padding:60px 48px 40px;background:var(--bg);border-top:1px solid var(--border);}
-   .footer-grid{display:flex;justify-content:space-between;max-width:1400px;margin:0 auto;padding-bottom:40px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:40px;}
-   .footer-brand{max-width:280px;}
-   .footer-brand-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:600;color:var(--text-bright);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;}
-   .footer-brand-desc{font-size:13px;color:var(--text-dim);line-height:1.7;}
-   .footer-col-title{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;color:var(--text-dim);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:16px;}
-   .footer-col a{display:block;font-size:13px;color:var(--text);text-decoration:none;padding:4px 0;transition:color 0.3s;}
-   .footer-col a:hover{color:var(--gold);}
-   .footer-bottom{max-width:1400px;margin:24px auto 0;display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-dim);flex-wrap:wrap;gap:12px;}
+   .quiz-options{display:flex;flex-direction:column;gap:10px;}.quiz-opt{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 18px;cursor:pointer;transition:all 0.2s;font-size:14px;color:var(--text);line-height:1.5;text-align:left;}.quiz-opt:hover:not(.answered){border-color:var(--blue);color:var(--text-bright);}.quiz-opt.correct{border-color:var(--green);background:rgba(61,214,140,0.08);color:var(--green);}.quiz-opt.wrong{border-color:var(--red);background:rgba(255,92,92,0.08);color:var(--red);}
+   .quiz-feedback{margin-top:20px;padding:16px 20px;border-radius:8px;font-size:14px;line-height:1.6;display:none;}.quiz-feedback.show{display:block;}.quiz-feedback.correct-fb{background:rgba(61,214,140,0.08);border:1px solid rgba(61,214,140,0.3);color:var(--green);}.quiz-feedback.wrong-fb{background:rgba(255,92,92,0.08);border:1px solid rgba(255,92,92,0.3);color:#ff8a8a;}
+   .quiz-next{margin-top:20px;background:none;border:1px solid var(--border);border-radius:6px;padding:10px 24px;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text);letter-spacing:0.1em;text-transform:uppercase;transition:all 0.2s;display:none;}.quiz-next.show{display:inline-block;}.quiz-next:hover{border-color:var(--blue);color:var(--blue);}
+   .quiz-score{text-align:center;padding:40px 0 20px;display:none;}.quiz-score.show{display:block;}.quiz-score-num{font-family:'Cormorant Garamond',serif;font-size:72px;font-weight:300;color:var(--text-bright);line-height:1;}.quiz-score-label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:0.1em;text-transform:uppercase;margin-top:8px;margin-bottom:24px;}.quiz-score-msg{font-size:15px;color:var(--text);line-height:1.6;margin-bottom:28px;}.quiz-restart{background:var(--blue);color:#fff;border:none;border-radius:6px;padding:12px 28px;cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.05em;transition:opacity 0.2s;}.quiz-restart:hover{opacity:0.85;}
+   .sidebar-toc{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:24px;}.sidebar-toc-title{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.15em;color:var(--text-dim);text-transform:uppercase;margin-bottom:16px;}
+   .toc-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer;font-size:13px;color:var(--text);transition:color 0.2s;}.toc-item:last-child{border-bottom:none;}.toc-item:hover{color:var(--text-bright);}.toc-item.active{color:var(--blue);}.toc-num{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-dim);min-width:20px;}
+   .sidebar-next{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:24px;}.sidebar-next-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.15em;color:var(--text-dim);text-transform:uppercase;margin-bottom:12px;}.sidebar-next-title{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--text-bright);margin-bottom:10px;}.sidebar-next a{display:inline-flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--blue);text-decoration:none;letter-spacing:0.08em;transition:gap 0.2s;}.sidebar-next a:hover{gap:10px;}
+   .sidebar-key-stats{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;}.sidebar-stat{padding:12px 0;border-bottom:1px solid var(--border);}.sidebar-stat:last-child{border-bottom:none;}.sidebar-stat-label{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;}.sidebar-stat-value{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--text-bright);font-weight:400;}
+   .mod-nav-bar{border-top:1px solid var(--border);padding:40px 48px;display:flex;justify-content:space-between;align-items:center;}.mod-nav-btn{display:flex;flex-direction:column;gap:4px;text-decoration:none;max-width:240px;}.mod-nav-dir{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.15em;color:var(--text-dim);text-transform:uppercase;}.mod-nav-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text-bright);transition:color 0.2s;}.mod-nav-btn:hover .mod-nav-title{color:var(--blue);}
+   footer{padding:60px 48px 40px;background:var(--bg);border-top:1px solid var(--border);}.footer-grid{display:flex;justify-content:space-between;max-width:1400px;margin:0 auto;padding-bottom:40px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:40px;}.footer-brand{max-width:280px;}.footer-brand-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:600;color:var(--text-bright);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;}.footer-brand-desc{font-size:13px;color:var(--text-dim);line-height:1.7;}.footer-col-title{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;color:var(--text-dim);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:16px;}.footer-col a{display:block;font-size:13px;color:var(--text);text-decoration:none;padding:4px 0;transition:color 0.3s;}.footer-col a:hover{color:var(--gold);}.footer-bottom{max-width:1400px;margin:24px auto 0;display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-dim);flex-wrap:wrap;gap:12px;}
    @media(max-width:1100px){nav{padding:16px 24px;}.nav-links{display:none;}}
-   @media(max-width:900px){
-    .mod-layout{grid-template-columns:1fr;padding:0 24px;}
-    .mod-content{padding:48px 0;border-right:none;border-bottom:1px solid var(--border);}
-    .mod-sidebar{padding:40px 0;position:static;}
-    .mod-hero{padding:28px 24px 48px;}.mod-hero::before{display:none;}
-    .mod-breadcrumb{padding:90px 24px 0;}
-    .tool-row{grid-template-columns:1fr;}
-    .mod-nav-bar{padding:32px 24px;flex-direction:column;gap:24px;align-items:flex-start;}
-    .quad-grid{grid-template-columns:1fr;}
-    .indicators-grid{grid-template-columns:1fr;}
-    footer{padding:48px 24px 32px;}
-   }
+   @media(max-width:900px){.mod-layout{grid-template-columns:1fr;padding:0 24px;}.mod-content{padding:48px 0;border-right:none;border-bottom:1px solid var(--border);}.mod-sidebar{padding:40px 0;position:static;}.mod-hero{padding:28px 24px 48px;}.mod-hero::before{display:none;}.mod-breadcrumb{padding:90px 24px 0;}.tool-row{grid-template-columns:1fr;}.mod-nav-bar{padding:32px 24px;flex-direction:column;gap:24px;align-items:flex-start;}.qoe-grid{grid-template-columns:1fr;}.case-grid{grid-template-columns:1fr;}footer{padding:48px 24px 32px;}}
   </style>
 </head>
 <body>
   <div class="mod-progress-bar" id="readingProgress"></div>
   <nav id="navbar">
     <a class="nav-logo" href="/"><div class="nav-logo-mark"></div><span class="nav-logo-text">Insight Invest</span></a>
-    <div class="nav-links">
-      <a href="/#pillars">What We Cover</a><a href="/#macro">Macro</a><a href="/curriculum">Learn</a>
-      <a class="nav-cta" href="/#reports">Access Reports</a>
-    </div>
+    <div class="nav-links"><a href="/#pillars">What We Cover</a><a href="/#macro">Macro</a><a href="/curriculum">Learn</a><a class="nav-cta" href="/#reports">Access Reports</a></div>
   </nav>
   <div class="mod-breadcrumb">
     <a href="/">Insight Invest</a><span>/</span><a href="/curriculum">Curriculum</a><span>/</span>
     <a href="/tier-1">Tier 1 · Foundation</a><span>/</span>
-    <span style="color:var(--text);">1.4 · Inflation &amp; Purchasing Power</span>
+    <span style="color:var(--text);">1.5 · Reading Financial Statements</span>
   </div>
-  <div class="mod-hero" data-watermark="1.4">
-    <div class="mod-code">Module 1.4 · Tier 1: Foundation · 70 min</div>
-    <h1>Inflation &amp;<br>Purchasing Power</h1>
-    <p class="mod-desc">How inflation is measured, what drives it, and the four macro quadrant framework that separates retail investors from the professionals who get paid to position for it. Inflation is not a threat to avoid — it is a regime to map and exploit.</p>
+  <div class="mod-hero" data-watermark="1.5">
+    <div class="mod-code">Module 1.5 · Tier 1: Foundation · 80 min</div>
+    <h1>Reading Financial<br>Statements</h1>
+    <p class="mod-desc">The three financial statements every investor must read — plus the forensic frameworks professionals actually use: Ackman's thesis-first reading method, the 8-point quality of earnings checklist, the three ways companies lie, and real case studies from Enron to Amazon.</p>
     <div class="mod-hero-meta">
-      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 70 min</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 80 min</span>
       <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Article · 2 Tools · 10-Q Quiz</span>
     </div>
   </div>
@@ -225,356 +145,429 @@
   <div class="mod-layout">
    <div class="mod-content">
 
-    <!-- S1: What is Inflation -->
+    <!-- S1: Three Financial Statements -->
     <div class="mod-section reveal" id="s1">
       <div class="mod-section-tag">Section 01</div>
-      <h2>What Is Inflation?</h2>
-      <p>Inflation is the rate at which the general level of prices rises over time — equivalently, the rate at which the purchasing power of money declines. It is not one price rising; it is the broad price level shifting upward across an economy.</p>
-      <p>The commonly cited measure is the Consumer Price Index (CPI), which tracks a basket of goods and services representing typical household spending. But CPI is only one measure — and arguably the most politically managed one. Investors need to know all four:</p>
-
-      <table class="compare-table">
-        <thead><tr><th>Measure</th><th>What It Tracks</th><th>Key Limitation</th><th>Investor Use</th></tr></thead>
-        <tbody>
-          <tr><td class="td-highlight">CPI</td><td>Consumer goods basket</td><td>Excludes volatile food/energy (Core CPI); subject to methodological changes</td><td>Most widely quoted; market reaction benchmark</td></tr>
-          <tr><td class="td-highlight">PPI</td><td>Producer/wholesale prices</td><td>Leads CPI by 1–3 months; not a direct consumer measure</td><td>Best forward signal for where CPI is going</td></tr>
-          <tr><td class="td-highlight">PCE Deflator</td><td>Personal consumption expenditure</td><td>Fed's preferred measure — harder to follow; different basket weights</td><td>What the Fed actually targets for policy decisions</td></tr>
-          <tr><td class="td-highlight">Breakeven Rate</td><td>Bond market inflation expectation (TIPS spread)</td><td>Market-implied, reflects sentiment as much as fundamentals</td><td>Best real-time forward indicator — money is on the line</td></tr>
-        </tbody>
-      </table>
-
-      <div class="insight-box">
-        <div class="insight-label">The Professional Edge</div>
-        <p>The inflation breakeven rate — derived from the yield gap between nominal Treasury yields and TIPS (inflation-protected bonds) — is the market's real-time forecast of future inflation. It is more predictive than any government survey because it represents actual capital at risk. When the 5yr/5yr forward breakeven moves, institutional desks reprice every rate-sensitive asset within minutes. Watch it weekly.</p>
-      </div>
-    </div>
-
-    <!-- S2: Three Drivers -->
-    <div class="mod-section reveal" id="s2">
-      <div class="mod-section-tag">Section 02</div>
-      <h2>The Three Drivers of Inflation</h2>
-      <p>Inflation is not a single phenomenon — it has distinct causes that require different policy responses and create different investment opportunities. Knowing <em>which type</em> of inflation you are in is as important as knowing the inflation rate itself.</p>
-
+      <h2>The Three Financial Statements</h2>
+      <p>Every public company is required to publish three financial statements. Together, they tell the complete story of a business — what it earned, what it owns, and how cash moves through it. Read any one in isolation and you will be misled. Read all three together, cross-referencing them, and you see the business clearly.</p>
       <div class="diagram-container">
-        <div class="diagram-title">Inflation Causation Framework</div>
-        <svg class="diagram" viewBox="0 0 620 220" xmlns="http://www.w3.org/2000/svg">
-          <defs><marker id="arr2" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M1,1 L7,4 L1,7" fill="none" stroke="#c9a84c" stroke-width="1.2"/></marker></defs>
-          <rect x="10" y="20" width="175" height="150" rx="8" fill="rgba(61,214,140,0.07)" stroke="#252838"/>
-          <text x="97" y="48" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#3dd68c" letter-spacing="1.5">DEMAND-PULL</text>
-          <text x="97" y="68" text-anchor="middle" font-family="Cormorant Garamond" font-size="14" fill="#9ca3b8">Too much money</text>
-          <text x="97" y="86" text-anchor="middle" font-family="Cormorant Garamond" font-size="14" fill="#9ca3b8">chasing too few goods</text>
-          <text x="97" y="112" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">Stimulus, low rates,</text>
-          <text x="97" y="128" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">wage growth,</text>
-          <text x="97" y="144" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">credit expansion</text>
-          <rect x="225" y="20" width="170" height="150" rx="8" fill="rgba(255,92,92,0.07)" stroke="#252838"/>
-          <text x="310" y="48" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#ff5c5c" letter-spacing="1.5">COST-PUSH</text>
-          <text x="310" y="68" text-anchor="middle" font-family="Cormorant Garamond" font-size="14" fill="#9ca3b8">Rising input costs</text>
-          <text x="310" y="86" text-anchor="middle" font-family="Cormorant Garamond" font-size="14" fill="#9ca3b8">force higher prices</text>
-          <text x="310" y="112" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">Oil shocks, supply</text>
-          <text x="310" y="128" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">chain disruptions,</text>
-          <text x="310" y="144" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">wage-price spirals</text>
-          <rect x="440" y="20" width="170" height="150" rx="8" fill="rgba(201,168,76,0.07)" stroke="#252838"/>
-          <text x="525" y="48" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#c9a84c" letter-spacing="1.5">BUILT-IN</text>
-          <text x="525" y="68" text-anchor="middle" font-family="Cormorant Garamond" font-size="14" fill="#9ca3b8">Expectation becomes</text>
-          <text x="525" y="86" text-anchor="middle" font-family="Cormorant Garamond" font-size="14" fill="#9ca3b8">self-fulfilling reality</text>
-          <text x="525" y="112" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">Workers demand higher</text>
-          <text x="525" y="128" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">wages; firms raise</text>
-          <text x="525" y="144" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">prices preemptively</text>
-          <text x="310" y="196" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#c9a84c" letter-spacing="3">↓ INFLATION ↓</text>
+        <div class="diagram-title">The Three Statements &amp; How They Connect</div>
+        <svg class="diagram" viewBox="0 0 640 240" xmlns="http://www.w3.org/2000/svg">
+          <defs><marker id="arr_gold" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M1,1 L7,4 L1,7" fill="none" stroke="#c9a84c" stroke-width="1.2"/></marker></defs>
+          <rect x="10" y="20" width="185" height="190" rx="8" fill="rgba(74,124,255,0.08)" stroke="#4a7cff" stroke-width="1.5"/>
+          <text x="102" y="46" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#4a7cff" letter-spacing="1.5">INCOME STATEMENT</text>
+          <text x="102" y="68" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">Revenue</text>
+          <text x="102" y="86" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#555c72">− Cost of Goods Sold</text>
+          <text x="102" y="104" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">= Gross Profit</text>
+          <text x="102" y="122" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#555c72">− Operating Expenses</text>
+          <text x="102" y="140" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">= EBIT</text>
+          <text x="102" y="158" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#555c72">− Interest / Tax</text>
+          <text x="102" y="180" text-anchor="middle" font-family="Cormorant Garamond" font-size="14" fill="#e8ecf4" font-weight="500">= Net Income</text>
+          <path d="M195 120 L225 120" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#arr_gold)"/>
+          <text x="200" y="110" font-family="IBM Plex Mono" font-size="8" fill="#555c72">Net Inc.</text>
+          <rect x="228" y="20" width="185" height="190" rx="8" fill="rgba(61,214,140,0.08)" stroke="#3dd68c" stroke-width="1.5"/>
+          <text x="320" y="46" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#3dd68c" letter-spacing="1.5">BALANCE SHEET</text>
+          <text x="320" y="68" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">Assets</text>
+          <text x="320" y="84" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">Cash &amp; Receivables</text>
+          <text x="320" y="100" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">PP&amp;E, Intangibles</text>
+          <text x="320" y="122" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">Liabilities</text>
+          <text x="320" y="138" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">Debt, Payables</text>
+          <text x="320" y="160" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">Shareholders' Equity</text>
+          <text x="320" y="176" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">Retained Earnings</text>
+          <text x="320" y="196" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#e8ecf4">Assets = Liab + Equity</text>
+          <path d="M413 120 L443 120" stroke="#c9a84c" stroke-width="1.5" marker-end="url(#arr_gold)"/>
+          <text x="418" y="110" font-family="IBM Plex Mono" font-size="8" fill="#555c72">Cash</text>
+          <rect x="446" y="20" width="185" height="190" rx="8" fill="rgba(201,168,76,0.08)" stroke="#c9a84c" stroke-width="1.5"/>
+          <text x="538" y="46" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#c9a84c" letter-spacing="1.5">CASH FLOW</text>
+          <text x="538" y="62" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#c9a84c" letter-spacing="1.5">STATEMENT</text>
+          <text x="538" y="84" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">Operating Activities</text>
+          <text x="538" y="100" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">Cash from core business</text>
+          <text x="538" y="122" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">Investing Activities</text>
+          <text x="538" y="138" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">CapEx, acquisitions</text>
+          <text x="538" y="160" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">Financing Activities</text>
+          <text x="538" y="176" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">Debt, dividends, buybacks</text>
+          <text x="538" y="200" text-anchor="middle" font-family="Cormorant Garamond" font-size="14" fill="#e8ecf4" font-weight="500">= Free Cash Flow</text>
         </svg>
       </div>
-
-      <h3>Why the Driver Matters for Your Portfolio</h3>
-      <p>Demand-pull inflation responds to tighter monetary policy — rate hikes reduce spending and cool the economy. Cost-push inflation from supply shocks is much harder to fix with rates. Raising rates does not create more oil or fix supply chains — it just kills demand, which means economic contraction without necessarily solving the inflation. Built-in (expectations-driven) inflation is the most dangerous because it is self-reinforcing, requiring the central bank to break expectations by inflicting severe economic pain — exactly what Volcker did in 1979–82 with rates reaching 20%.</p>
-
-      <div class="asymmetric-box">
-        <div class="asymmetric-label">Asymmetric Edge — Diagnosing the Type</div>
-        <p>The inflation <em>type</em> determines which assets win. Demand-pull inflation (too much money) = central bank will tighten aggressively = position for rate hikes (short bonds, overweight financials, reduce growth stock duration). Cost-push inflation from an oil shock = monetary tightening won't fix supply = buy the commodity producers causing the inflation (the Iran/oil thesis, the rubber comeback thesis — these are cost-push trades). Built-in inflation (wage-price spiral locked in) = long multi-year inflation = buy commodity royalties, real estate, infrastructure — assets with pricing power that compound over a decade. The same "inflation" word covers three completely different investment theses.</p>
+      <div class="key-concept">
+        <div class="key-concept-label">The Cross-Reference Rule</div>
+        <p>The three statements tell three versions of the same story. If the income statement says profits are growing but the cash flow statement shows cash is declining, something is wrong. If the balance sheet shows debt rising while the income statement shows stable profits, ask why. Inconsistency between statements is the first signal of accounting manipulation — or a business in trouble.</p>
       </div>
     </div>
 
-    <!-- S3: Inflation Impact Calculator -->
+    <!-- S2: Income Statement -->
+    <div class="mod-section reveal" id="s2">
+      <div class="mod-section-tag">Section 02</div>
+      <h2>The Income Statement: Measuring Profitability</h2>
+      <p>The income statement (P&amp;L) measures revenue and expenses over a period, culminating in net income. But net income is not the same as cash — and this distinction is the source of most accounting manipulation. Revenue can be recognised before cash arrives; expenses can be deferred.</p>
+
+      <h3>The Key Metrics Investors Actually Use</h3>
+      <ul class="example-list">
+        <li><strong>Gross Margin:</strong> (Revenue − COGS) ÷ Revenue. Measures core product economics. Software at 70%+ vs. retail at 25% tells you entirely different things about the business model and competitive moat.</li>
+        <li><strong>Operating Margin (EBIT margin):</strong> Operating profit ÷ Revenue. Profitability after all operational costs but before financing. Useful for comparing companies across capital structures.</li>
+        <li><strong>EBITDA:</strong> Earnings before interest, tax, depreciation, amortization. A proxy for cash earnings — though aggressively abused. D&amp;A for capital-intensive businesses represents real economic depreciation; adding it back overstates true economics.</li>
+        <li><strong>Net Margin:</strong> Net income ÷ Revenue. Industry-dependent benchmark: tech 20–30%, retail 2–5%, banking 10–15%. Compare within sector, not across.</li>
+      </ul>
+
+      <div class="insight-box">
+        <div class="insight-label">What Analysts Actually Watch</div>
+        <p>Revenue growth rate, gross margin trend (expanding or compressing quarter-over-quarter), and operating leverage (does revenue growth convert to disproportionately higher operating profit?). A company growing revenue at 20% with expanding margins and operating leverage is a fundamentally different investment from one growing at the same rate with compressing margins. One is a quality compounder; the other is buying revenue.</p>
+      </div>
+    </div>
+
+    <!-- S3: Balance Sheet + Tool -->
     <div class="mod-section reveal" id="s3">
-      <div class="mod-section-tag">Interactive Tool · 01</div>
-      <h2>Real Purchasing Power Calculator</h2>
-      <p>Calculate the real value of your money, your required investment return to stay ahead of inflation, and visualise the divergence between nominal, real, and cash values over time.</p>
+      <div class="mod-section-tag">Section 03</div>
+      <h2>The Balance Sheet: Measuring Financial Health</h2>
+      <p>The balance sheet is a snapshot of what a company owns (assets) and owes (liabilities) at a specific date. The fundamental equation: <strong>Assets = Liabilities + Shareholders' Equity</strong>. This must always balance.</p>
+
+      <h3>What Investors Look For</h3>
+      <ul class="example-list">
+        <li><strong>Cash position:</strong> How much runway? Growing or shrinking? Cash is optionality — Berkshire's $160B+ cash hoard is a strategic weapon, not a failure to deploy capital.</li>
+        <li><strong>Debt-to-equity ratio:</strong> How leveraged? High debt amplifies returns in good times and accelerates distress in bad ones. Capital-intensive businesses naturally carry more debt than asset-light companies — compare within industry.</li>
+        <li><strong>Working capital:</strong> Current assets minus current liabilities. Negative working capital can signal liquidity stress — or, in Amazon's case, that suppliers finance the business at zero cost.</li>
+        <li><strong>Goodwill:</strong> Large goodwill balances from acquisitions warrant scrutiny. They represent the premium paid above book value. Impairments are often the first sign of a bad acquisition materialising years later.</li>
+      </ul>
 
       <div class="tool-container">
-        <div class="tool-title">Inflation Impact Engine</div>
-        <div class="tool-subtitle">Find out what your money is really worth after inflation strips it away</div>
+        <div class="tool-title">Balance Sheet Health Analyser</div>
+        <div class="tool-subtitle">Enter company financials to calculate key ratios and stress signals</div>
         <div class="tool-row">
-          <div class="tool-field"><label>Today's Amount (USD)</label><input type="number" id="inf_amount" value="100000"/></div>
-          <div class="tool-field"><label>Annual Inflation Rate (%)</label><input type="number" id="inf_rate" value="3.5" step="0.5" min="0" max="20"/></div>
+          <div class="tool-field"><label>Total Assets ($M)</label><input type="number" id="bs_assets" value="50000"/></div>
+          <div class="tool-field"><label>Total Liabilities ($M)</label><input type="number" id="bs_liab" value="28000"/></div>
         </div>
         <div class="tool-row">
-          <div class="tool-field"><label>Time Horizon (years)</label><input type="number" id="inf_years" value="20" min="1" max="50"/></div>
-          <div class="tool-field"><label>Investment Return (%)</label><input type="number" id="inf_return" value="8" step="0.5"/></div>
+          <div class="tool-field"><label>Current Assets ($M)</label><input type="number" id="bs_curr_assets" value="12000"/></div>
+          <div class="tool-field"><label>Current Liabilities ($M)</label><input type="number" id="bs_curr_liab" value="8000"/></div>
         </div>
-        <button class="tool-btn" onclick="calcInflation()">Calculate Real Value</button>
-        <div class="tool-result" id="inf_result">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;" id="inf_cards"></div>
-          <canvas id="inf_chart" height="180"></canvas>
+        <div class="tool-row">
+          <div class="tool-field"><label>Cash &amp; Equivalents ($M)</label><input type="number" id="bs_cash" value="4000"/></div>
+          <div class="tool-field"><label>Total Debt ($M)</label><input type="number" id="bs_debt" value="15000"/></div>
+        </div>
+        <button class="tool-btn" onclick="analyzeBS()">Analyze Balance Sheet</button>
+        <div class="tool-result" id="bs_result">
+          <div id="bs_cards" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"></div>
+          <div id="bs_interpretation" style="margin-top:16px;font-size:13px;color:var(--text);line-height:1.7;padding:16px;background:var(--bg2);border:1px solid var(--border);"></div>
         </div>
       </div>
     </div>
 
-    <!-- S4: Asset Inflation Sensitivity -->
+    <!-- S4: Cash Flow Statement -->
     <div class="mod-section reveal" id="s4">
-      <div class="mod-section-tag">Section 03</div>
-      <h2>How Inflation Distorts Investment Decisions</h2>
-      <p>Inflation does not affect all investments equally. Understanding the inflation sensitivity of different asset classes is fundamental to portfolio construction — and the hierarchy is not intuitive.</p>
+      <div class="mod-section-tag">Section 04</div>
+      <h2>The Cash Flow Statement: The Truth Teller</h2>
+      <p>If the income statement can be massaged with accounting choices, the cash flow statement is harder to fake. Cash either arrived in the bank account or it did not. This is why experienced investors weight it most heavily — and why fraudulent companies often collapse when someone finally cross-references the cash flow against the income statement.</p>
+
+      <h3>Free Cash Flow — The Most Important Number</h3>
+      <div class="formula-box">
+        <div class="formula-label">Free Cash Flow Formula</div>
+        FCF = Operating Cash Flow − Capital Expenditure<br><br>
+        <span style="color:var(--text-dim);font-size:12px;">What remains after maintaining &amp; growing the business — available for dividends, buybacks, debt repayment, or reinvestment. Buffett calls this "owner's earnings."</span>
+      </div>
+      <p>A company can report strong net income while generating negative free cash flow — a red flag that often precedes financial distress. Conversely, companies with modest net income but strong FCF conversion are frequently undervalued by earnings-focused analysts. Amazon reported GAAP losses for much of its first decade. Its FCF was growing explosively. The market misread it; Bezos knew exactly what he was building.</p>
+
+      <div class="key-concept">
+        <div class="key-concept-label">FCF Yield: The Investor's Filter</div>
+        <p>FCF Yield = Free Cash Flow ÷ Market Capitalization. The return in actual cash terms for every dollar of market value. A company with 8% FCF yield is generating 8 cents of real cash for every dollar of its market cap — a useful sanity check against headline earnings multiples. Compare this to the risk-free rate: if FCF yield is lower than a 10-year Treasury, you are not being adequately compensated for equity risk.</p>
+      </div>
+
+      <h3>Reading the Three Sections</h3>
+      <ul class="example-list">
+        <li><strong>Operating activities (CFO):</strong> Cash from the core business. Should consistently exceed net income in a healthy business. If CFO &lt; Net income, ask why — often signals earnings quality problems.</li>
+        <li><strong>Investing activities (CFI):</strong> Cash spent on CapEx, acquisitions, investments. Negative is normal and healthy — it means the company is investing in growth. Excessive CapEx relative to depreciation may signal overcapitalisation.</li>
+        <li><strong>Financing activities (CFF):</strong> Debt raises/repayments, share issuance/buybacks, dividends. Net borrowing during downturns to fund operations is a warning. Share buybacks at peak valuations are capital destruction.</li>
+      </ul>
+    </div>
+
+    <!-- S5: Red Flags -->
+    <div class="mod-section reveal" id="s5">
+      <div class="mod-section-tag">Section 05</div>
+      <h2>Red Flags: What to Look For</h2>
+      <p>Financial statements contain signals that most retail investors miss entirely. These are the most important warning signs — each one has appeared in every major accounting scandal in history.</p>
 
       <table class="compare-table">
-        <thead><tr><th>Asset Class</th><th>Inflation Sensitivity</th><th>Why</th><th>Historical Behaviour</th></tr></thead>
+        <thead><tr><th>Red Flag</th><th>Where to Find It</th><th>What It May Signal</th></tr></thead>
         <tbody>
-          <tr><td class="td-highlight">Cash / Savings</td><td class="td-lose">Very negative</td><td>Nominal value fixed; real value erodes at the inflation rate</td><td>Guaranteed real loss in any inflationary regime</td></tr>
-          <tr><td class="td-highlight">Fixed Rate Bonds</td><td class="td-lose">Negative</td><td>Fixed coupons worth less in real terms; prices fall as rates rise</td><td>2022: worst bond year in over 100 years</td></tr>
-          <tr><td class="td-highlight">Equities (broad)</td><td style="color:var(--gold);font-weight:500;">Mixed</td><td>Revenue grows with inflation; margins squeezed by input costs</td><td>Good long-run hedge; poor short-term in tightening cycles</td></tr>
-          <tr><td class="td-highlight">Equities (pricing power)</td><td class="td-win">Positive</td><td>Companies that pass costs on protect real margins</td><td>Luxury, healthcare, utilities with regulated pricing outperform</td></tr>
-          <tr><td class="td-highlight">Real Estate</td><td class="td-win">Positive</td><td>Property values and rents rise with inflation</td><td>Strong inflation hedge historically; rate-sensitive near-term</td></tr>
-          <tr><td class="td-highlight">Commodities</td><td class="td-win">Very positive</td><td>Often the direct cause of inflation; supply-constrained</td><td>Oil, metals, agriculture surge in inflationary regimes</td></tr>
-          <tr><td class="td-highlight">TIPS / iBonds</td><td class="td-win">Built-in protection</td><td>Principal adjusts with CPI — inflation literally increases your return</td><td>Direct hedge by design; outperform in unexpected inflation spikes</td></tr>
+          <tr><td class="td-highlight">Net income ≫ Free cash flow</td><td>Compare IS to CFS</td><td>Aggressive revenue recognition; earnings manipulation</td></tr>
+          <tr><td class="td-highlight">Rising A/R vs revenue</td><td>Balance sheet / IS trend</td><td>Customers not paying; channel stuffing; premature recognition</td></tr>
+          <tr><td class="td-highlight">Goodwill &gt; 50% of assets</td><td>Balance sheet</td><td>Serial acquirer at risk of impairment write-downs</td></tr>
+          <tr><td class="td-highlight">Declining gross margin</td><td>Income statement trend</td><td>Pricing power erosion; competition intensifying</td></tr>
+          <tr><td class="td-highlight">Debt rising faster than EBITDA</td><td>Balance sheet + IS</td><td>Deteriorating debt service; leverage trap forming</td></tr>
+          <tr><td class="td-highlight">Heavy "adjusted" earnings reliance</td><td>Press releases / footnotes</td><td>Management hiding recurring costs as "one-time"</td></tr>
+          <tr><td class="td-highlight">CFO consistently below net income</td><td>Cash flow statement</td><td>Core earnings quality issue — real cash not materialising</td></tr>
+          <tr><td class="td-highlight">Auditor change or qualification</td><td>Annual report / 10-K</td><td>Serious — auditors rarely resign without cause</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- S6: ACKMAN'S THESIS-FIRST METHOD (NEW) -->
+    <div class="mod-section reveal" id="s6">
+      <div class="mod-section-tag">Section 06 · Asymmetric Framework</div>
+      <h2>Ackman's Thesis-First Reading Method</h2>
+      <p>Most investors read financial statements cover-to-cover looking for something interesting. Bill Ackman — who has run some of the highest-conviction investment theses in hedge fund history — reads them in an entirely different order: he builds the thesis first, then reads the statements as evidence for or against it.</p>
+
+      <div class="legend-quote">
+        <div class="legend-quote-mark">"</div>
+        <div class="legend-quote-text">Before I invest, I build a thesis about why a business is fundamentally mispriced. Then I read every financial statement looking for evidence that destroys that thesis. If I can't find it, the position size goes up.</div>
+        <div class="legend-quote-attr">— Bill Ackman, Pershing Square Capital Management</div>
+      </div>
+
+      <p>This reversal is not trivial. When you read statements without a thesis, you are a passive recipient of whatever management wants to show you — and management controls the presentation. When you read with a thesis, every line item becomes a test: does this support my view or refute it? You become an active interrogator, not a passive reader.</p>
+
+      <div class="thesis-template">
+        <div class="thesis-header">The 6-Step Thesis-First Reading Protocol</div>
+        <div class="thesis-step">
+          <div class="thesis-step-num">01</div>
+          <div class="thesis-step-body">
+            <div class="thesis-step-title">State the Thesis Before Opening Any Document</div>
+            <div class="thesis-step-desc">Write one sentence: what is the market getting wrong about this business? Be specific. "The market is pricing this as a cyclical industrial, but 85% of revenue is recurring subscription income that compresses in downturns much less than the stock price implies."</div>
+            <div class="thesis-step-example">Example: "Bursa X is priced for zero growth because the headline EPS is distorted by a one-time impairment — the core operating business is growing at 15% annually and the market hasn't noticed."</div>
+          </div>
+        </div>
+        <div class="thesis-step">
+          <div class="thesis-step-num">02</div>
+          <div class="thesis-step-body">
+            <div class="thesis-step-title">Identify the Single Number That Makes or Breaks the Thesis</div>
+            <div class="thesis-step-desc">Every thesis has one metric that is the load-bearing pillar. If you're thesis is pricing power, the load-bearing metric is gross margin trend. If it's recurring revenue, it's net revenue retention. If it's cheap valuation, it's FCF yield. Find that one number and look for it first.</div>
+          </div>
+        </div>
+        <div class="thesis-step">
+          <div class="thesis-step-num">03</div>
+          <div class="thesis-step-body">
+            <div class="thesis-step-title">Read the Cash Flow Statement Before the Income Statement</div>
+            <div class="thesis-step-desc">The income statement is management's chosen narrative. The cash flow statement is the physical reality. Always start with cash — if CFO is consistently below net income, your thesis may be built on reported earnings that don't materialise in cash. If CFO is consistently above net income, the business is better than it looks.</div>
+          </div>
+        </div>
+        <div class="thesis-step">
+          <div class="thesis-step-num">04</div>
+          <div class="thesis-step-body">
+            <div class="thesis-step-title">Look for the Kill Condition in the Notes</div>
+            <div class="thesis-step-desc">The footnotes to financial statements contain the information management buries. Litigation disclosures, related-party transactions, debt covenant details, revenue recognition policy changes. If your thesis can be destroyed by a disclosure you haven't read, you haven't done the work. Read the footnotes specifically looking for what would prove you wrong.</div>
+          </div>
+        </div>
+        <div class="thesis-step">
+          <div class="thesis-step-num">05</div>
+          <div class="thesis-step-body">
+            <div class="thesis-step-title">Read the Proxy Statement for Management Alignment</div>
+            <div class="thesis-step-desc">How is management compensated? What metrics trigger their bonuses? How much stock do they own vs. how much have they sold? If management is being incentivised on revenue growth while shareholders need margin improvement, those incentives will produce revenue — not returns. Incentive misalignment eventually shows up in the financial statements.</div>
+          </div>
+        </div>
+        <div class="thesis-step">
+          <div class="thesis-step-num">06</div>
+          <div class="thesis-step-body">
+            <div class="thesis-step-title">The Decision Rule: If You Can't Destroy It, Size Up</div>
+            <div class="thesis-step-desc">After exhaustive thesis-testing, if you cannot find the evidence that would kill your thesis, you have genuine edge. The position size should reflect that conviction. Ackman's highest-conviction positions (Chipotle, Canadian Pacific, Hilton) involved months of this process before a single share was bought.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S7: Quality of Earnings Checklist (NEW) -->
+    <div class="mod-section reveal" id="s7">
+      <div class="mod-section-tag">Section 07 · Asymmetric Framework</div>
+      <h2>The 8-Point Quality of Earnings Checklist</h2>
+      <p>Reported EPS is a management choice, not a fact. GAAP provides enormous discretion in how revenue is recognised, expenses are timed, and assets are valued. The Quality of Earnings (QoE) analysis — used by every acquirer and short-seller — cuts through the accounting to find the underlying economic reality.</p>
+
+      <div class="asymmetric-box">
+        <div class="asymmetric-label">Asymmetric Edge</div>
+        <p>When institutional acquirers buy companies, they spend millions on QoE analysis before closing. When short-sellers build conviction, they run the same analysis. Both groups are asking: are reported earnings backed by real cash? Is revenue growing because demand is growing or because accounting is generous? The 8-point checklist below makes this institutional process accessible to any investor willing to spend an extra hour per company.</p>
+      </div>
+
+      <div class="qoe-grid">
+        <div class="qoe-item">
+          <div class="qoe-num">CHECK 01</div>
+          <div class="qoe-flag">FCF vs Net Income Convergence</div>
+          <div class="qoe-how">Over 3–5 years, does operating cash flow track net income? A quality business converts earnings to cash at 90%+. Persistent divergence (income high, cash low) = accounting-dependent earnings.</div>
+          <span class="qoe-signal signal-red">RED FLAG if persistent gap</span>
+        </div>
+        <div class="qoe-item">
+          <div class="qoe-num">CHECK 02</div>
+          <div class="qoe-flag">Revenue Quality: Volume vs. One-Time</div>
+          <div class="qoe-how">Is revenue growth driven by unit volume growth or by one-time contract recognition, channel stuffing, or pricing games? Compare revenue growth to unit shipment or customer count growth — divergence is a warning.</div>
+          <span class="qoe-signal signal-gold">INVESTIGATE if diverges</span>
+        </div>
+        <div class="qoe-item">
+          <div class="qoe-num">CHECK 03</div>
+          <div class="qoe-flag">Accounts Receivable vs Revenue Trend</div>
+          <div class="qoe-how">A/R should grow in line with revenue. A/R growing significantly faster than revenue means revenue is being recognised before cash is collected — the classic early sign of channel stuffing or revenue inflation.</div>
+          <span class="qoe-signal signal-red">RED FLAG if A/R outpaces revenue</span>
+        </div>
+        <div class="qoe-item">
+          <div class="qoe-num">CHECK 04</div>
+          <div class="qoe-flag">Gross Margin Stability</div>
+          <div class="qoe-how">Gross margin compression across consecutive quarters means either pricing power is eroding, input costs are rising faster than pass-through, or revenue recognition is becoming more aggressive. Compare to stated margin improvement thesis.</div>
+          <span class="qoe-signal signal-red">RED FLAG if compressing 3+ quarters</span>
+        </div>
+        <div class="qoe-item">
+          <div class="qoe-num">CHECK 05</div>
+          <div class="qoe-flag">SG&amp;A vs Revenue Growth</div>
+          <div class="qoe-how">A quality, scalable business sees SG&amp;A grow slower than revenue (operating leverage). If SG&amp;A grows faster than revenue, the business model isn't scaling — and profitability improvement is a thesis that may never materialise.</div>
+          <span class="qoe-signal signal-gold">WATCH for 2+ consecutive quarters</span>
+        </div>
+        <div class="qoe-item">
+          <div class="qoe-num">CHECK 06</div>
+          <div class="qoe-flag">D&amp;A Policy Aggressiveness</div>
+          <div class="qoe-how">Extending depreciation lives reduces reported D&amp;A, boosting EBITDA and net income. Compare the company's depreciation schedule against industry peers and against the actual age of its assets. Understated D&amp;A = inflated earnings.</div>
+          <span class="qoe-signal signal-gold">COMPARE to industry peers</span>
+        </div>
+        <div class="qoe-item">
+          <div class="qoe-num">CHECK 07</div>
+          <div class="qoe-flag">Tax Rate Sustainability</div>
+          <div class="qoe-how">An unusually low effective tax rate (boosted by deferred tax assets, tax credits, offshore structures) may not persist. Normalise the earnings to a sustainable tax rate — sometimes this cuts reported EPS by 15–25%.</div>
+          <span class="qoe-signal signal-red">RED FLAG if &lt;15% effective rate</span>
+        </div>
+        <div class="qoe-item">
+          <div class="qoe-num">CHECK 08</div>
+          <div class="qoe-flag">Off-Balance Sheet Obligations</div>
+          <div class="qoe-how">Operating leases, pension obligations, contingent liabilities, and special purpose entities can hide real debt. Read footnotes for these disclosures. Enron's collapse was built entirely on off-balance sheet vehicles — the income statement looked fine until it didn't.</div>
+          <span class="qoe-signal signal-red">RED FLAG — always check footnotes</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- S8: The Three Ways Companies Lie (NEW) -->
+    <div class="mod-section reveal" id="s8">
+      <div class="mod-section-tag">Section 08 · Forensic Finance</div>
+      <h2>The Three Ways Companies Lie With Accounting</h2>
+      <p>Financial fraud is not random. It follows three structural patterns that appear across every major accounting scandal from Enron to Luckin Coffee. Understanding the mechanism — and its specific fingerprint in the statements — is what makes forensic accounting a repeatable skill, not a matter of luck.</p>
+
+      <div class="lie-cards">
+        <div class="lie-card">
+          <div class="lie-card-header">
+            <span class="lie-num">LIE TYPE 01</span>
+            <span class="lie-title">Revenue Recognition Games</span>
+          </div>
+          <div class="lie-desc">Revenue is booked before it is earned or reliably collectible. This inflates the income statement while creating either: (a) accounts receivable that never convert to cash, or (b) deferred revenue that creates future obligations. The income statement looks strong; the cash flow and balance sheet tell a different story.</div>
+          <div class="lie-fingerprint">FINGERPRINT: A/R growing 2×+ faster than revenue · Days Sales Outstanding rising each quarter · Large "contract asset" or "unbilled receivable" balances · Operating cash flow persistently below net income</div>
+          <div class="lie-case">Real cases: Enron (mark-to-market on long-term energy contracts booked at inception), Luckin Coffee (2020 — fabricated same-store sales by inflating transaction counts), MicroStrategy historical periods (software license timing)</div>
+        </div>
+        <div class="lie-card">
+          <div class="lie-card-header">
+            <span class="lie-num">LIE TYPE 02</span>
+            <span class="lie-title">Expense Capitalisation</span>
+          </div>
+          <div class="lie-desc">Costs that should hit the income statement (reducing current-period earnings) are instead moved to the balance sheet as "capital assets" to be depreciated over time. This makes current profitability look better while inflating the asset base. The effect unwinds as the capitalised costs eventually hit the income statement — often via impairment charges years later.</div>
+          <div class="lie-fingerprint">FINGERPRINT: Capitalised software or development costs growing much faster than revenue · PP&amp;E growing without corresponding increase in capacity or output · Large "other assets" line with minimal disclosure · High CapEx with thin operating cash flow</div>
+          <div class="lie-case">Real cases: WorldCom (2002) — capitalised $3.8B in operating expenses as capital assets to inflate earnings. This was discovered when the ratio of CapEx to revenues was compared against peers and made no physical sense.</div>
+        </div>
+        <div class="lie-card">
+          <div class="lie-card-header">
+            <span class="lie-num">LIE TYPE 03</span>
+            <span class="lie-title">Working Capital Manipulation</span>
+          </div>
+          <div class="lie-desc">The company artificially inflates reported free cash flow near reporting dates by: (a) extending accounts payable (delaying supplier payments), (b) aggressively collecting receivables (pulling future cash into the current period), or (c) drawing down inventory. The result is temporarily better-looking cash flow that reverses in subsequent quarters.</div>
+          <div class="lie-fingerprint">FINGERPRINT: DPO (days payable outstanding) rising consistently · DSO (days sales outstanding) falling sharply then recovering · Large swing in working capital around quarter-end · Inventory declining despite rising sales — possible channel stuffing upstream</div>
+          <div class="lie-case">Real cases: Valeant Pharmaceuticals (2015) — Ackman was long this stock when the channel stuffing allegations broke. The inventory and receivables signals in the financial statements had been visible for months before the scandal confirmed them publicly.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S9: The Master Metric per Business Type (NEW) -->
+    <div class="mod-section reveal" id="s9">
+      <div class="mod-section-tag">Section 09 · Applied Framework</div>
+      <h2>The Master Metric: One Number That Determines Everything</h2>
+      <p>Every business type has one number that drives everything else. When you understand what that number is before reading the statements, you can cut directly to what matters and ignore the noise management wants you to focus on.</p>
+
+      <table class="master-table">
+        <thead><tr><th>Business Type</th><th>Master Metric</th><th>Why It's Primary</th><th>Red Flag Level</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="td-h">SaaS / Subscription</td>
+            <td class="td-metric">Net Revenue Retention (NRR)</td>
+            <td>NRR &gt;120% = growth without new customers. &lt;100% = existing customers shrinking — regardless of new sales. This single number determines whether the business compounds or deteriorates.</td>
+            <td style="color:var(--red);">Below 100% = value trap</td>
+          </tr>
+          <tr>
+            <td class="td-h">Retail / Consumer</td>
+            <td class="td-metric">Same-Store Sales Growth (SSSG)</td>
+            <td>Strips out the effect of new store openings. Declining SSSG while total revenue grows = the company is opening stores to mask deteriorating unit economics.</td>
+            <td style="color:var(--red);">Negative SSSG &gt; 2 quarters</td>
+          </tr>
+          <tr>
+            <td class="td-h">Insurance</td>
+            <td class="td-metric">Combined Ratio</td>
+            <td>Claims paid + expenses ÷ premiums collected. Below 100% = underwriting profit. Above 100% = paying out more than it collects — only sustainable if investment income compensates.</td>
+            <td style="color:var(--red);">Above 105% = structural problem</td>
+          </tr>
+          <tr>
+            <td class="td-h">Commodity Producer</td>
+            <td class="td-metric">Cost per Unit vs. Spot Price</td>
+            <td>The spread between production cost and market price IS the business. A miner with $800/oz all-in cost vs $1,900 gold spot has 137% operating margin. This collapses when spot falls or costs rise.</td>
+            <td style="color:var(--gold);">Spread &lt;30% = margin risk</td>
+          </tr>
+          <tr>
+            <td class="td-h">Bank / Financial</td>
+            <td class="td-metric">Net Interest Margin (NIM)</td>
+            <td>Spread between lending rates earned and deposit rates paid. NIM compression = profitability compression across the entire loan book. Directly correlated with rate environment.</td>
+            <td style="color:var(--gold);">Compression &gt;30bps QoQ</td>
+          </tr>
+          <tr>
+            <td class="td-h">Platform / Marketplace</td>
+            <td class="td-metric">Gross Merchandise Value (GMV) + Take Rate</td>
+            <td>Total transaction volume × percentage the platform captures. A rising GMV with falling take rate means the platform is losing pricing power to merchants. A falling GMV with rising take rate is unsustainable.</td>
+            <td style="color:var(--red);">Take rate falling &gt;50bps annually</td>
+          </tr>
+          <tr>
+            <td class="td-h">Real Estate (REIT)</td>
+            <td class="td-metric">Funds From Operations (FFO) per share</td>
+            <td>Net income adjusted for depreciation (real estate doesn't actually depreciate in value the way GAAP assumes) and gains/losses on sales. FFO is the true recurring cash earnings of a REIT.</td>
+            <td style="color:var(--red);">FFO declining while NAV rising = dividend at risk</td>
+          </tr>
         </tbody>
       </table>
 
-      <div class="key-concept">
-        <div class="key-concept-label">The Hyperinflation Lesson</div>
-        <p>Germany's Weimar Republic (1921–23) saw inflation peak at 29,500% per month. Zimbabwe in 2008 reached 89.7 sextillion percent annually. In both cases, real assets — land, gold, foreign currency — survived. Cash and government bonds became worthless. These are extreme cases — but they demonstrate the fundamental principle at any inflation level: in inflation, real assets preserve, paper assets erode.</p>
-      </div>
-    </div>
-
-    <!-- S5: 2021–2023 Case Study -->
-    <div class="mod-section reveal" id="s5">
-      <div class="mod-section-tag">Section 04 · Case Study</div>
-      <h2>The 2021–2023 Inflation Cycle</h2>
-      <p>The post-COVID inflation episode was the most significant inflationary event in 40 years — and a textbook example of all three inflation drivers operating simultaneously, which is exactly what made it so difficult to defeat.</p>
-      <ul class="example-list">
-        <li><strong>Demand-pull component:</strong> $5+ trillion in US fiscal stimulus (CARES Act, ARP) flooded the economy with cash while supply was constrained. Demand surged; supply could not respond. This was inflation by design.</li>
-        <li><strong>Cost-push component:</strong> Global supply chain disruption, semiconductor shortages, shipping bottlenecks — then the 2022 Ukraine-Russia war driving energy and food prices sharply higher. These are structural supply shocks that rate hikes cannot directly fix.</li>
-        <li><strong>Built-in component:</strong> Labour markets tightened (the Great Resignation), workers demanded higher wages, firms passed costs to consumers. Shelter CPI — which has an 18-month lag because rents reset annually — became the stickiest driver and the hardest to kill.</li>
-      </ul>
-      <p>The Fed's response: 525 basis points of rate hikes in 16 months — the fastest tightening cycle since Volcker. CPI peaked at 9.1% in June 2022 and declined toward 3% by 2024. The lag between monetary tightening and inflation response is typically 12–18 months, which is why central banks must act before inflation becomes entrenched — and why they invariably overshoot on both sides.</p>
-
-      <div class="insight-box">
-        <div class="insight-label">The Trade Thesis Connection</div>
-        <p>Understanding the inflation cycle creates tradeable insights. In 2021, recognising that demand-pull inflation was building ahead of Fed action meant positioning in commodities, energy stocks, and real assets before the institutional herd caught on. In early 2022, anticipating aggressive rate hikes meant avoiding long-duration bonds and high-multiple growth stocks. The same inflation framework that looks like dry economics in a textbook is live market alpha when applied in real time.</p>
-      </div>
-    </div>
-
-    <!-- S6: FOUR MACRO QUADRANTS (NEW) -->
-    <div class="mod-section reveal" id="s6">
-      <div class="mod-section-tag">Section 05 · Asymmetric Framework</div>
-      <h2>Dalio's Four Macro Quadrants: The Complete Portfolio Map</h2>
-      <p>The single most important upgrade to a standard inflation curriculum. Ray Dalio's All-Weather framework maps every economic environment on two axes: the direction of <strong>growth</strong> (rising or falling) and the direction of <strong>inflation</strong> (rising or falling). The intersection produces four quadrants — and each quadrant has a distinct set of asset class winners and losers based on 100 years of evidence.</p>
-      <p>This is not theoretical. Dalio built Bridgewater's All-Weather fund explicitly to hold exposure across all four quadrants simultaneously — so that portfolio performance is never dependent on correctly predicting which regime is coming. Most retail investors are unknowingly concentrated in a single quadrant. When it ends, so does their outperformance.</p>
-
-      <div class="legend-quote">
-        <div class="legend-quote-mark">"</div>
-        <div class="legend-quote-text">There are only a few things that move markets: growth and inflation. Everything else is noise. If you understand those two variables, you can position for almost anything that happens.</div>
-        <div class="legend-quote-attr">— Ray Dalio, Bridgewater Associates</div>
-      </div>
-
-      <div class="quad-grid">
-        <div class="quad-cell">
-          <div class="quad-corner">Q1</div>
-          <div class="quad-label" style="color:var(--green);">↑ Growth &nbsp; ↑ Inflation</div>
-          <div class="quad-title">Inflationary Boom</div>
-          <div class="quad-desc">Economy growing, inflation rising. Central bank is behind the curve or deliberately accommodating. Credit expanding. Nominal assets rise but real returns compressed by inflation. Late-cycle environment. The 2021 playbook.</div>
-          <div class="quad-wins" style="color:var(--green);">✓ Commodities · Energy stocks · Banks · Emerging markets · Inflation-linked bonds (TIPS) · Real estate</div>
-          <div class="quad-wins" style="color:var(--red);margin-top:6px;">✗ Long-duration bonds · Cash · Fixed income broadly</div>
-        </div>
-        <div class="quad-cell">
-          <div class="quad-corner">Q2</div>
-          <div class="quad-label" style="color:var(--cyan);">↑ Growth &nbsp; ↓ Inflation</div>
-          <div class="quad-title">Goldilocks</div>
-          <div class="quad-desc">The ideal investment environment. Growing economy, contained inflation, accommodative or neutral central bank. Equity bull markets are born and sustained here. 2013–2019, the post-GFC decade, fits this template almost perfectly.</div>
-          <div class="quad-wins" style="color:var(--green);">✓ Growth equities · Technology · Credit / high yield · Real estate · Broad equity exposure</div>
-          <div class="quad-wins" style="color:var(--red);margin-top:6px;">✗ Gold (relative) · Commodities · Defensive equities</div>
-        </div>
-        <div class="quad-cell">
-          <div class="quad-corner">Q3</div>
-          <div class="quad-label" style="color:var(--red);">↓ Growth &nbsp; ↑ Inflation</div>
-          <div class="quad-title">Stagflation — The Worst</div>
-          <div class="quad-desc">The most destructive macro regime for traditional portfolios. Growth is slowing or negative while inflation remains elevated. The central bank is trapped — it cannot cut (inflation too high) or hike further (growth too weak). There is no good policy option. The 1970s US playbook. Both stocks and bonds fall.</div>
-          <div class="quad-wins" style="color:var(--green);">✓ Gold · Oil &amp; hard commodities · Commodity producers · TIPS · Short nominal bonds</div>
-          <div class="quad-wins" style="color:var(--red);margin-top:6px;">✗ Almost everything else — equities, long bonds, credit, real estate</div>
-        </div>
-        <div class="quad-cell">
-          <div class="quad-corner">Q4</div>
-          <div class="quad-label" style="color:var(--blue);">↓ Growth &nbsp; ↓ Inflation</div>
-          <div class="quad-title">Deflationary Contraction</div>
-          <div class="quad-desc">Growth falling, prices falling. The central bank's nightmare — deflation makes debt burdens rise in real terms, which can trigger self-reinforcing decline. Policy response: aggressive money printing (QE). The 2008–2009 template. Short-lived by design — central banks always fight this with maximum force.</div>
-          <div class="quad-wins" style="color:var(--green);">✓ Cash (temporarily) · Long-duration government bonds · Gold · Short equities (briefly)</div>
-          <div class="quad-wins" style="color:var(--red);margin-top:6px;">✗ Equities · Credit · Real estate · Commodities</div>
-        </div>
-      </div>
-
       <div class="asymmetric-box">
-        <div class="asymmetric-label">Asymmetric Edge — Mapping Your Current Quadrant</div>
-        <p><strong>The two-variable diagnostic:</strong> Every week, ask two questions: Is economic growth accelerating or decelerating? Is inflation running above or below 2%? The intersection maps directly to a quadrant. Your portfolio should be sized toward the quadrant you're in — and beginning to position for the quadrant you're transitioning to.</p>
-        <p><strong>The transition is where the money is made:</strong> Q2 (Goldilocks) → Q1 (Inflationary Boom): start buying commodities and energy before the consensus sees inflation building. Q1 → Q3 (Stagflation): the critical move — sell equities broadly, concentrate in gold and commodity producers. Q3 → Q4 (Deflation): the pivot — buy long-duration bonds before the Fed cuts. Q4 → Q2: the recovery trade — buy equities aggressively during the depths of the deflationary bust, before growth resumes.</p>
-        <p><strong>Malaysian lens:</strong> In 2022–23, Malaysia was in Q1 transitioning to Q3 — fuel subsidy pressures keeping inflation structurally elevated while global growth slowed. PCHEM's surge with oil prices, the ringgit weakness, and BNM's cautious tightening all map precisely onto this quadrant framework.</p>
+        <div class="asymmetric-label">Asymmetric Edge — Thesis-Statement Alignment</div>
+        <p>The power of knowing the master metric: before opening any annual report, you know which single number you are going to look at first. If that number is strong and the market has ignored it (usually because it's buried), you have potential mispricing. If that number is deteriorating and the headline EPS is still being managed to look strong, you have the short thesis. Neither insight requires reading 200 pages of filings — you know where to look before you start.</p>
       </div>
     </div>
 
-    <!-- S7: Leading Inflation Indicators (NEW) -->
-    <div class="mod-section reveal" id="s7">
-      <div class="mod-section-tag">Section 06 · Asymmetric Framework</div>
-      <h2>Leading vs. Lagging Inflation Indicators</h2>
-      <p>The CPI print that makes headlines is a <em>lagging</em> indicator — it tells you what inflation was 1–3 months ago. By the time the consensus is reacting to a high CPI print, the investment opportunity is already partially priced in. Professionals watch the indicators that <em>predict</em> where CPI will be in 3–6 months.</p>
-
-      <div class="indicators-grid">
-        <div class="ind-card">
-          <div class="ind-card-top">
-            <div class="ind-name">ISM Prices Paid</div>
-            <span class="ind-lead lead-fast">2–3 MONTHS LEADING</span>
-          </div>
-          <div class="ind-desc">The Institute for Supply Management's survey of manufacturer input cost pressure. When Prices Paid is above 60 and rising, CPI will follow within 2–3 months. It peaked at 92.1 in June 2021 — 12 months before CPI hit 9.1%. Professionals were positioned in commodities and energy while retail was still confused about "transitory."</div>
-        </div>
-        <div class="ind-card">
-          <div class="ind-card-top">
-            <div class="ind-name">5yr/5yr Forward Breakeven</div>
-            <span class="ind-lead lead-fast">REAL-TIME FORWARD</span>
-          </div>
-          <div class="ind-desc">The bond market's estimate of average inflation between years 5 and 10 from now. This is the Fed's actual target anchor. When this rate surges above 2.5%, the Fed will tighten — virtually without exception. When it falls below 1.5%, the Fed will ease. Watch it weekly on the St. Louis Fed FRED database.</div>
-        </div>
-        <div class="ind-card">
-          <div class="ind-card-top">
-            <div class="ind-name">PPI (Producer Prices)</div>
-            <span class="ind-lead lead-medium">1–3 MONTHS LEADING</span>
-          </div>
-          <div class="ind-desc">Wholesale prices at the factory gate — before they reach the consumer. When producers pay more for inputs, they eventually pass it on. PPI leads CPI by 1–3 months. Core PPI (excluding food and energy) is particularly useful for identifying durable pricing pressure vs. transitory commodity shocks.</div>
-        </div>
-        <div class="ind-card">
-          <div class="ind-card-top">
-            <div class="ind-name">Shelter CPI</div>
-            <span class="ind-lead lead-slow">6–18 MONTHS LAGGING</span>
-          </div>
-          <div class="ind-desc">The CPI's shelter component (35% of the index) is the most lagged. It measures rents based on lease renewals, which reset annually. Private market rent data (Zillow, Apartment List) showed rents falling from late 2022 — but this didn't appear in official CPI until 18 months later. Understanding this lag prevents wrong conclusions about "sticky" inflation.</div>
-        </div>
-        <div class="ind-card">
-          <div class="ind-card-top">
-            <div class="ind-name">Average Hourly Earnings</div>
-            <span class="ind-lead lead-medium">CONCURRENT / LAGGING</span>
-          </div>
-          <div class="ind-desc">Wage growth drives built-in inflation. When average hourly earnings run consistently above 4%, it signals wage-price spiral risk. The Fed watches the 3-month annualised rate closely. Above 5% for multiple months = tightening without hesitation. The 2022–23 cycle kept wage growth elevated even as goods inflation fell — this is what made the "last mile" of disinflation so difficult.</div>
-        </div>
-        <div class="ind-card">
-          <div class="ind-card-top">
-            <div class="ind-name">Commodity Spot Prices</div>
-            <span class="ind-lead lead-fast">1–6 MONTHS LEADING</span>
-          </div>
-          <div class="ind-desc">Crude oil prices lead headline CPI by 1–2 months (gasoline price changes are immediate). Copper leads industrial goods inflation. Agricultural commodity prices (wheat, corn, soy) lead food CPI. A sustained 30%+ rise in oil almost always translates to a 1–2% CPI uplift within 2 quarters. Watch the Bloomberg Commodity Index for the broadest signal.</div>
-        </div>
-      </div>
-
-      <div class="asymmetric-box">
-        <div class="asymmetric-label">Asymmetric Edge — The Leading Indicator Dashboard</div>
-        <p>Build a simple monthly checklist: ISM Prices Paid direction (up or down?), forward breakevens (above or below 2.5%?), PPI trend (accelerating or decelerating?), oil price 3-month change, wage growth 3-month annualised rate. If 4 or 5 of these point in the same direction, you are 2–3 months ahead of the consensus CPI print. That is where the asymmetric trade lives — before the headline number confirms what the leading indicators already told you.</p>
-      </div>
-    </div>
-
-    <!-- S8: Inflation Beneficiary Screener Tool (NEW) -->
-    <div class="mod-section reveal" id="s8">
-      <div class="mod-section-tag">Interactive Tool · 02</div>
-      <h2>Inflation Beneficiary Business Screener</h2>
-      <p>Not all equities are equal in an inflationary regime. Use this framework — based on Ackman's quality screening methodology — to score any business on five criteria that determine whether it will protect or destroy purchasing power during an inflationary period.</p>
-
-      <div class="tool-container">
-        <div class="tool-title">Inflation Resilience Screener</div>
-        <div class="tool-subtitle">Score any business on 5 inflation-critical factors — 0 to 5 rating</div>
-
-        <div class="tool-field" style="margin-bottom:16px;">
-          <label>Pricing Power — Can the company pass on cost increases without losing customers?</label>
-          <select id="sc_pricing">
-            <option value="2">Strong (2) — Luxury, brand monopoly, essential product, no close substitutes</option>
-            <option value="1" selected>Moderate (1) — Some pricing power but competitive pressure limits it</option>
-            <option value="0">Weak (0) — Commodity-like, customers switch easily, price-taker not price-setter</option>
-          </select>
-        </div>
-        <div class="tool-field" style="margin-bottom:16px;">
-          <label>Asset Intensity — Do hard assets appreciate with inflation?</label>
-          <select id="sc_assets">
-            <option value="2">Real asset-heavy (2) — Owns land, minerals, infrastructure, commodity reserves</option>
-            <option value="1" selected>Mixed (1) — Some tangible assets but also significant intangibles</option>
-            <option value="0">Asset-light (0) — Primarily software, services, human capital — replacement costs rise</option>
-          </select>
-        </div>
-        <div class="tool-field" style="margin-bottom:16px;">
-          <label>Working Capital Dynamics — Does the business get paid before it spends?</label>
-          <select id="sc_wc">
-            <option value="1">Negative working capital (1) — Collect cash before delivering (retail, SaaS, insurance)</option>
-            <option value="0" selected>Neutral or positive (0) — Standard payment terms, no structural advantage</option>
-          </select>
-        </div>
-        <div class="tool-field" style="margin-bottom:16px;">
-          <label>Supply Chain Length — Exposed to many inflationary input layers?</label>
-          <select id="sc_supply">
-            <option value="1">Short / vertically integrated (1) — Minimal exposure to third-party cost inflation</option>
-            <option value="0" selected>Long / dependent (0) — Many external inputs, multiple inflation exposure points</option>
-          </select>
-        </div>
-        <div class="tool-field" style="margin-bottom:20px;">
-          <label>Debt Structure — Can inflation erode the real burden of existing debt?</label>
-          <select id="sc_debt">
-            <option value="1">Fixed-rate, long-duration debt (1) — Inflation erodes the real value of what they owe</option>
-            <option value="0" selected>Floating rate or no leverage (0) — Debt costs rise with inflation; no debt = neutral</option>
-          </select>
-        </div>
-        <button class="tool-btn" onclick="runScreener()">Score This Business</button>
-        <div class="tool-result" id="sc_result">
-          <div id="sc_score_display"></div>
-          <div class="screener-result" style="margin-top:16px;" id="sc_breakdown"></div>
-          <div id="sc_verdict" style="margin-top:16px;font-size:13px;color:var(--text);line-height:1.75;padding:16px;background:var(--bg2);border:1px solid var(--border);"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- S9: Stagflation Deep Dive (NEW) -->
-    <div class="mod-section reveal" id="s9">
-      <div class="mod-section-tag">Section 07 · The Danger Zone</div>
-      <h2>Stagflation: The Portfolio Killer Most Investors Are Unprepared For</h2>
-      <p>Stagflation is the least understood and most destructive macro regime for a traditional portfolio. It happens infrequently enough that most investors have never experienced it — but understanding it in advance is the difference between preserving wealth and losing 40–60% in real terms.</p>
-
-      <div class="legend-quote">
-        <div class="legend-quote-mark">"</div>
-        <div class="legend-quote-text">In stagflation, almost everything goes down together. The only hedge is to have been right before it started — to have built the position when it was still uncomfortable and early.</div>
-        <div class="legend-quote-attr">— Howard Marks, Oaktree Capital</div>
-      </div>
-
-      <h3>Why Traditional Portfolios Have No Defence</h3>
-      <p>The standard 60/40 portfolio (60% equities, 40% bonds) is built for the Goldilocks quadrant. In stagflation, it fails completely:</p>
-      <ul class="example-list">
-        <li><strong>Equities fail</strong> because slowing growth compresses earnings while rising inflation compresses multiple valuations simultaneously. Double compression. The S&P fell −47% in real terms during the 1973–74 stagflationary episode.</li>
-        <li><strong>Bonds fail</strong> because the central bank cannot cut rates to support bond prices — inflation is too high. Long-duration bonds are effectively trapped: too much inflation to allow easing, too much economic weakness to sustain high rates indefinitely.</li>
-        <li><strong>Cash fails</strong> because its real value is destroyed by the inflation component of stagflation.</li>
-        <li><strong>Only hard assets survive</strong>: oil, gold, agricultural land, commodity producers, royalty streams. These are the assets that win in stagflation — not because they are great investments in absolute terms, but because everything else is worse.</li>
-      </ul>
-
-      <h3>The 1970s Case Study — The Playbook</h3>
-      <p>The 1973–1980 stagflationary decade in the US produced the definitive playbook. The triggers: OPEC oil embargo (cost-push), Nixon's fiscal expansion (demand-pull), and wage-price controls that entrenched expectations. What happened:</p>
-      <ul class="example-list">
-        <li><strong>Oil companies:</strong> Exxon, Chevron rose 300–500% in the decade while the S&P fell in real terms</li>
-        <li><strong>Gold:</strong> Rose from $35/oz (when Nixon ended Bretton Woods in 1971) to $850/oz by 1980 — a 24x nominal gain</li>
-        <li><strong>Agricultural land:</strong> Surged as food prices spiked globally</li>
-        <li><strong>Equities broadly:</strong> Lost 47% of real value 1973–74, then recovered nominally but barely kept pace with inflation through the decade</li>
-        <li><strong>Long-duration bonds:</strong> Catastrophic — 30-year yields rose from 6% to 15%, implying ~50% price decline</li>
-      </ul>
-
-      <div class="asymmetric-box">
-        <div class="asymmetric-label">Asymmetric Edge — Positioning Before Stagflation Arrives</div>
-        <p>The stagflation trade must be built early — when the environment still looks like normal inflation and the consensus still believes central banks can engineer a soft landing. By the time stagflation is confirmed, commodity prices have already run 50–100% and the easy money is gone.</p>
-        <p>The early warning checklist: (1) oil prices rising sharply from a supply shock (not demand), (2) core inflation remaining above 4% despite rate hikes, (3) GDP growth forecasts being revised down by 1%+ while inflation forecasts remain elevated, (4) the Fed's language shifting from "we can control inflation" to "we expect a challenging period." When three of four are present, the stagflation rotation — into gold, energy producers, agricultural commodities, short nominal duration — is the asymmetric trade.</p>
-      </div>
-    </div>
-
-    <!-- S10: Quiz -->
+    <!-- S10: Forensic Case Studies (NEW) -->
     <div class="mod-section reveal" id="s10">
-      <div class="mod-section-tag">Knowledge Check</div>
-      <h2>Module 1.4 Assessment</h2>
-      <p>10 questions covering inflation mechanics, the four macro quadrants, leading indicators, the inflation beneficiary screener, and stagflation. The final four are framework-level.</p>
+      <div class="mod-section-tag">Section 10 · Case Studies</div>
+      <h2>Four Case Studies: Fraud, Value, and the Statement Signals That Told the Story</h2>
+      <p>These four cases demonstrate the thesis-first and QoE frameworks in action. Each one contains a financial statement signal that was visible months or years before the market priced it.</p>
 
-      <div class="quiz-container" id="quiz_1_4">
-        <div class="quiz-header"><div class="quiz-title">Module 1.4 · Assessment</div><div class="quiz-progress">1 / 10</div></div>
+      <div class="case-grid">
+        <div class="case-card case-fraud">
+          <div class="case-label" style="color:var(--red);">Case 01 · Fraud</div>
+          <div class="case-company">Enron</div>
+          <div class="case-year">1999–2001</div>
+          <div class="case-lesson">Mark-to-market revenue recognition on multi-year energy contracts created massive income statement revenues with no cash backing. Operating cash flow was consistently below net income for years. The off-balance-sheet SPVs hid $30B+ in debt. The QoE signal: FCF vs net income divergence had been visible since 1997 — three years before the collapse. Anyone cross-referencing the cash flow statement with net income could see the fraud's shadow.</div>
+          <span class="case-signal signal-red">SIGNAL: CFO << Net Income for 4+ years</span>
+        </div>
+        <div class="case-card case-fraud">
+          <div class="case-label" style="color:var(--red);">Case 02 · Fraud</div>
+          <div class="case-company">Luckin Coffee</div>
+          <div class="case-year">2019–2020</div>
+          <div class="case-lesson">Same-store sales were fabricated by inflating transaction counts and average order values. The tell: same-store sales growth that exceeded comparable brands globally, with customer acquisition costs that implausibly declined as growth accelerated. The inventory and accounts receivable figures were internally inconsistent when cross-referenced with stated unit economics. Short-sellers identified the discrepancy 6 months before the scandal broke publicly.</div>
+          <span class="case-signal signal-red">SIGNAL: Unit economics defied physics</span>
+        </div>
+        <div class="case-card case-value">
+          <div class="case-label" style="color:var(--green);">Case 03 · Hidden Value</div>
+          <div class="case-company">Amazon</div>
+          <div class="case-year">2012–2016</div>
+          <div class="case-lesson">Amazon reported GAAP losses for years. Earnings-focused analysts consistently undervalued it. The insight: operating cash flow was massively positive and growing at 30%+ annually, while reported net income was near zero because of aggressive investment and D&amp;A on AWS infrastructure. FCF yield on the actual cash generation was significantly higher than the P/E implied. The market was reading the wrong metric for the wrong business type.</div>
+          <span class="case-signal signal-green">SIGNAL: FCF was the real story</span>
+        </div>
+        <div class="case-card case-fraud">
+          <div class="case-label" style="color:var(--red);">Case 04 · Thesis Destroyed</div>
+          <div class="case-company">Valeant Pharmaceuticals</div>
+          <div class="case-year">2015</div>
+          <div class="case-lesson">Ackman's single largest position. The thesis: Valeant as a capital-allocation platform that could acquire pharma assets and extract value through pricing and cost cuts. The kill condition: the business model depended on continuous acquisitions and aggressive pricing that generated revenue growth without organic business strength. When channel stuffing allegations surfaced, the A/R signal had been building for 8 quarters. The lesson Ackman later described: always test the kill conditions before they test you.</div>
+          <span class="case-signal signal-red">SIGNAL: A/R outpaced revenue for 8 quarters</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- S11: Quiz -->
+    <div class="mod-section reveal" id="s11">
+      <div class="mod-section-tag">Knowledge Check</div>
+      <h2>Module 1.5 Assessment</h2>
+      <p>10 questions covering statement mechanics, the Ackman thesis-first method, quality of earnings signals, the three fraud patterns, and master metrics. The final four are framework-level.</p>
+
+      <div class="quiz-container" id="quiz_1_5">
+        <div class="quiz-header"><div class="quiz-title">Module 1.5 · Assessment</div><div class="quiz-progress">1 / 10</div></div>
         <div class="quiz-progress-track"><div class="quiz-progress-fill" style="width:0%"></div></div>
         <div class="quiz-q-area">
           <div class="quiz-q"></div>
@@ -596,34 +589,35 @@
    <div class="mod-sidebar">
      <div class="sidebar-toc">
        <div class="sidebar-toc-title">Contents</div>
-       <div class="toc-item" data-target="s1"><span class="toc-num">01</span>What Is Inflation?</div>
-       <div class="toc-item" data-target="s2"><span class="toc-num">02</span>Three Drivers</div>
-       <div class="toc-item" data-target="s3"><span class="toc-num">03</span>Purchasing Power Tool</div>
-       <div class="toc-item" data-target="s4"><span class="toc-num">04</span>Asset Inflation Sensitivity</div>
-       <div class="toc-item" data-target="s5"><span class="toc-num">05</span>2021–23 Case Study</div>
-       <div class="toc-item" data-target="s6"><span class="toc-num">06</span>Four Macro Quadrants ★</div>
-       <div class="toc-item" data-target="s7"><span class="toc-num">07</span>Leading Indicators ★</div>
-       <div class="toc-item" data-target="s8"><span class="toc-num">08</span>Beneficiary Screener ★</div>
-       <div class="toc-item" data-target="s9"><span class="toc-num">09</span>Stagflation Deep Dive ★</div>
-       <div class="toc-item" data-target="s10"><span class="toc-num">10</span>Assessment</div>
+       <div class="toc-item" data-target="s1"><span class="toc-num">01</span>Three Statements</div>
+       <div class="toc-item" data-target="s2"><span class="toc-num">02</span>Income Statement</div>
+       <div class="toc-item" data-target="s3"><span class="toc-num">03</span>Balance Sheet + Tool</div>
+       <div class="toc-item" data-target="s4"><span class="toc-num">04</span>Cash Flow Statement</div>
+       <div class="toc-item" data-target="s5"><span class="toc-num">05</span>Red Flags</div>
+       <div class="toc-item" data-target="s6"><span class="toc-num">06</span>Ackman Method ★</div>
+       <div class="toc-item" data-target="s7"><span class="toc-num">07</span>Quality of Earnings ★</div>
+       <div class="toc-item" data-target="s8"><span class="toc-num">08</span>Three Fraud Patterns ★</div>
+       <div class="toc-item" data-target="s9"><span class="toc-num">09</span>Master Metrics ★</div>
+       <div class="toc-item" data-target="s10"><span class="toc-num">10</span>Case Studies ★</div>
+       <div class="toc-item" data-target="s11"><span class="toc-num">11</span>Assessment</div>
      </div>
      <div class="sidebar-key-stats">
-       <div class="sidebar-stat"><div class="sidebar-stat-label">US CPI Peak 2022</div><div class="sidebar-stat-value" style="color:var(--red);">9.1%</div></div>
-       <div class="sidebar-stat"><div class="sidebar-stat-label">Fed Hike Cycle 2022–23</div><div class="sidebar-stat-value">525bps</div></div>
-       <div class="sidebar-stat"><div class="sidebar-stat-label">Weimar Peak Monthly Inflation</div><div class="sidebar-stat-value" style="color:var(--red);">29,500%</div></div>
-       <div class="sidebar-stat"><div class="sidebar-stat-label">Gold 1971–1980 (stagflation)</div><div class="sidebar-stat-value" style="color:var(--gold);">24×</div></div>
+       <div class="sidebar-stat"><div class="sidebar-stat-label">Core financial statements</div><div class="sidebar-stat-value">3</div></div>
+       <div class="sidebar-stat"><div class="sidebar-stat-label">QoE checklist items</div><div class="sidebar-stat-value">8</div></div>
+       <div class="sidebar-stat"><div class="sidebar-stat-label">Most important number</div><div class="sidebar-stat-value">FCF</div></div>
+       <div class="sidebar-stat"><div class="sidebar-stat-label">Enron CFO vs NI gap</div><div class="sidebar-stat-value" style="color:var(--red);">4+ yrs</div></div>
      </div>
      <div class="sidebar-next">
        <div class="sidebar-next-label">Next Module</div>
-       <div class="sidebar-next-title">1.5 · Reading Financial Statements</div>
-       <a href="/tier-1/module-1-5">Continue <span>→</span></a>
+       <div class="sidebar-next-title">1.6 · Asset Classes 101</div>
+       <a href="/tier-1/module-1-6">Continue <span>→</span></a>
      </div>
    </div>
   </div>
 
   <div class="mod-nav-bar">
-    <a class="mod-nav-btn" href="/tier-1/module-1-3"><span class="mod-nav-dir">← Previous</span><span class="mod-nav-title">1.3 · Interest Rates</span></a>
-    <a class="mod-nav-btn" style="text-align:right" href="/tier-1/module-1-5"><span class="mod-nav-dir">Next →</span><span class="mod-nav-title">1.5 · Reading Financial Statements</span></a>
+    <a class="mod-nav-btn" href="/tier-1/module-1-4"><span class="mod-nav-dir">← Previous</span><span class="mod-nav-title">1.4 · Inflation &amp; Purchasing Power</span></a>
+    <a class="mod-nav-btn" style="text-align:right" href="/tier-1/module-1-6"><span class="mod-nav-dir">Next →</span><span class="mod-nav-title">1.6 · Asset Classes 101</span></a>
   </div>
 
   <footer>
@@ -637,7 +631,6 @@
   </footer>
 
   <script>
-  // SCROLL REVEAL
   const revealEls=document.querySelectorAll('.reveal');
   const revObs=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting)en.target.classList.add('visible');});},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
   revealEls.forEach(el=>revObs.observe(el));
@@ -649,7 +642,6 @@
   sections.forEach(s=>tocObs.observe(s));
   tocItems.forEach(t=>{t.addEventListener('click',()=>{const el=document.getElementById(t.dataset.target);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});});});
 
-  // QUIZ ENGINE
   function initQuiz(containerId,questions){
     const c=document.getElementById(containerId);if(!c)return;
     let current=0,score=0,answered=false;
@@ -662,158 +654,91 @@
       c.querySelector('.quiz-q').textContent=q.q;
       const opts=c.querySelector('.quiz-options');opts.innerHTML='';
       q.opts.forEach((opt,i)=>{const btn=document.createElement('button');btn.className='quiz-opt';btn.textContent=opt;btn.onclick=()=>answer(i,q.correct,q.explanation);opts.appendChild(btn);});
-      c.querySelector('.quiz-feedback').className='quiz-feedback';
-      c.querySelector('.quiz-feedback').textContent='';
-      c.querySelector('.quiz-next').className='quiz-next';
-      answered=false;
+      c.querySelector('.quiz-feedback').className='quiz-feedback';c.querySelector('.quiz-feedback').textContent='';c.querySelector('.quiz-next').className='quiz-next';answered=false;
     }
     function answer(chosen,correct,explanation){
       if(answered)return;answered=true;
       const opts=c.querySelectorAll('.quiz-opt');
-      opts[chosen].classList.add(chosen===correct?'correct':'wrong');
-      opts[correct].classList.add('correct');
-      opts.forEach(o=>o.classList.add('answered'));
+      opts[chosen].classList.add(chosen===correct?'correct':'wrong');opts[correct].classList.add('correct');opts.forEach(o=>o.classList.add('answered'));
       if(chosen===correct)score++;
-      const fb=c.querySelector('.quiz-feedback');
-      fb.textContent=(chosen===correct?'✓ Correct. ':'✗ Incorrect. ')+explanation;
-      fb.className='quiz-feedback show '+(chosen===correct?'correct-fb':'wrong-fb');
+      const fb=c.querySelector('.quiz-feedback');fb.textContent=(chosen===correct?'✓ Correct. ':'✗ Incorrect. ')+explanation;fb.className='quiz-feedback show '+(chosen===correct?'correct-fb':'wrong-fb');
       c.querySelector('.quiz-next').className='quiz-next show';
     }
     function showScore(){
       const qArea=c.querySelector('.quiz-q-area');if(qArea)qArea.style.display='none';
-      const sc=c.querySelector('.quiz-score');
-      sc.querySelector('.quiz-score-num').textContent=score+'/'+questions.length;
+      const sc=c.querySelector('.quiz-score');sc.querySelector('.quiz-score-num').textContent=score+'/'+questions.length;
       const pct=Math.round((score/questions.length)*100);
-      let msg=pct>=80?'Strong result. You understand not just inflation mechanics but the macro quadrant framework that makes it investable. Proceed to Module 1.5.'
-        :pct>=60?'Solid foundation. Review the Four Macro Quadrants and Leading Indicators sections — those are the asymmetric layer of this module.'
-        :'Review before proceeding, especially Sections 05–09. Inflation regime identification is foundational to all macro portfolio construction.';
-      sc.querySelector('.quiz-score-msg').textContent=msg;
-      sc.className='quiz-score show';
+      let msg=pct>=80?'Strong result. You can read a financial statement the way professionals do — not just for data, but for evidence. Proceed to Module 1.6.'
+        :pct>=60?'Solid foundation. Review the Ackman method, QoE checklist, and fraud pattern sections — those are the asymmetric layer of this module.'
+        :'Review before proceeding, especially Sections 06–10. Financial statement literacy is the foundation of all equity analysis.';
+      sc.querySelector('.quiz-score-msg').textContent=msg;sc.className='quiz-score show';
     }
     c.querySelector('.quiz-next').addEventListener('click',()=>{current++;render();});
     c.querySelector('.quiz-restart').addEventListener('click',()=>{current=0;score=0;const qArea=c.querySelector('.quiz-q-area');if(qArea)qArea.style.display='';c.querySelector('.quiz-score').className='quiz-score';render();});
     render();
   }
 
-  // INFLATION CALCULATOR
-  function calcInflation(){
-    const amount=parseFloat(document.getElementById('inf_amount').value);
-    const inf=parseFloat(document.getElementById('inf_rate').value)/100;
-    const ret=parseFloat(document.getElementById('inf_return').value)/100;
-    const years=parseInt(document.getElementById('inf_years').value);
-    const nomFV=amount*Math.pow(1+ret,years);
-    const realFV=amount*Math.pow((1+ret)/(1+inf),years);
-    const cashFV=amount*Math.pow(1-inf,years);
-    const requiredReturn=(inf*100).toFixed(1);
-    document.getElementById('inf_cards').innerHTML=[
-      {label:'Real Inflation-Adjusted Value',value:'$'+Math.round(realFV).toLocaleString(),sub:'What your portfolio is actually worth in today\'s purchasing power',color:'var(--green)'},
-      {label:'Nominal Portfolio Value',value:'$'+Math.round(nomFV).toLocaleString(),sub:'What you see on the brokerage statement (before inflation)',color:'var(--text-bright)'},
-      {label:'Cash Real Value (savings)',value:'$'+Math.round(cashFV).toLocaleString(),sub:'What "safe" cash preserves in real purchasing power terms',color:'var(--red)'},
-      {label:'Break-Even Return Required',value:requiredReturn+'%',sub:'Minimum annual return to preserve purchasing power',color:'var(--gold)'},
-    ].map(c=>`<div style="background:var(--bg2);border:1px solid var(--border);padding:16px;"><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.15em;color:var(--text-dim);text-transform:uppercase;margin-bottom:8px;">${c.label}</div><div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;color:${c.color};line-height:1;margin-bottom:6px;">${c.value}</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-dim);line-height:1.5;">${c.sub}</div></div>`).join('');
-    document.getElementById('inf_result').className='tool-result visible';
-    const canvas=document.getElementById('inf_chart');
-    const ctx=canvas.getContext('2d');
-    canvas.width=(canvas.offsetWidth||600)*window.devicePixelRatio;
-    canvas.height=180*window.devicePixelRatio;
-    ctx.scale(window.devicePixelRatio||1,window.devicePixelRatio||1);
-    const W=canvas.offsetWidth||600,H=150;
-    const yrs=Array.from({length:years+1},(_,i)=>i);
-    const realD=yrs.map(y=>amount*Math.pow((1+ret)/(1+inf),y));
-    const cashD=yrs.map(y=>amount*Math.pow(1-inf,y));
-    const nomD=yrs.map(y=>amount*Math.pow(1+ret,y));
-    const maxV=Math.max(...nomD);
-    ctx.strokeStyle='#252838';ctx.lineWidth=1;
-    [0.25,0.5,0.75,1].forEach(f=>{const y=H-(f*H)+10;ctx.beginPath();ctx.moveTo(44,y);ctx.lineTo(W-8,y);ctx.stroke();ctx.fillStyle='#555c72';ctx.font='10px IBM Plex Mono';ctx.fillText('$'+(maxV*f/1000).toFixed(0)+'k',2,y+4);});
-    function drawL(data,color,dash=false){ctx.beginPath();data.forEach((v,i)=>{const x=44+(i/years)*(W-52),y=H-(v/maxV)*H+10;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});ctx.strokeStyle=color;ctx.lineWidth=2;ctx.setLineDash(dash?[5,4]:[]);ctx.stroke();ctx.setLineDash([]);}
-    drawL(nomD,'#4a7cff');drawL(realD,'#3dd68c');drawL(cashD,'#ff5c5c',true);
-    ctx.fillStyle='#4a7cff';ctx.font='10px IBM Plex Mono';ctx.fillText('Nominal',W-54,12);
-    ctx.fillStyle='#3dd68c';ctx.fillText('Real',W-28,26);
-    ctx.fillStyle='#ff5c5c';ctx.fillText('Cash',W-34,40);
-  }
-
-  // INFLATION SCREENER
-  function runScreener(){
-    const pricing=parseInt(document.getElementById('sc_pricing').value);
-    const assets=parseInt(document.getElementById('sc_assets').value);
-    const wc=parseInt(document.getElementById('sc_wc').value);
-    const supply=parseInt(document.getElementById('sc_supply').value);
-    const debt=parseInt(document.getElementById('sc_debt').value);
-    const total=pricing+assets+wc+supply+debt;
-    const maxScore=7;
-
-    // Score display
-    let scoreColor=total>=6?'var(--green)':total>=4?'var(--gold)':total>=2?'var(--blue)':'var(--red)';
-    let verdict,action;
-    if(total>=6){
-      verdict='Strong Inflation Beneficiary — This business has structural advantages that compound during inflationary periods. Multiple pricing power moats protect margins. Real asset appreciation adds balance sheet value. This is the type of business that outperforms in stagflation and inflationary boom environments.';
-      action='Size up in an inflationary regime. Increase position conviction. These businesses are the "commodity royalty / essential monopoly" archetype that wins when everything else struggles.';
-    } else if(total>=4){
-      verdict='Moderate Inflation Resilience — The business has meaningful inflation protection but is not immune. Likely to hold real value in moderate inflation but vulnerable in severe stagflationary episodes. Check whether the weakness is in pricing power (dangerous) or supply chain (manageable).';
-      action='Hold in moderate inflation. Consider reducing in stagflation if the pricing power score is 0. Monitor gross margin trends quarterly as the first sign of inflation erosion.';
-    } else if(total>=2){
-      verdict='Inflation Vulnerable — This business has limited structural protection. Revenue may grow nominally with inflation but margins will likely compress as input costs rise faster than the ability to reprice. Worth owning in Goldilocks; consider underweighting in inflationary regimes.';
-      action='Reduce weighting in inflationary environments. Prioritise exit if pricing power is 0 and cost structure is long. These businesses become value traps in persistent inflation.';
-    } else {
-      verdict='High Inflation Risk — This business is structurally disadvantaged in inflation. Fixed-price contracts, commodity input exposure, no pricing power, and long supply chains combine to create margin destruction. In stagflation, this type of business can lose 40–60% of real value.';
-      action='Avoid or short in inflationary regimes. This profile — no pricing power, long supply chain, floating rate debt, high input intensity — describes businesses that go from profitable to loss-making as inflation persists.';
-    }
-
-    document.getElementById('sc_score_display').innerHTML=
-      '<div style="display:flex;align-items:baseline;gap:12px;margin-bottom:8px;"><div style="font-family:\'Cormorant Garamond\',serif;font-size:48px;font-weight:400;color:'+scoreColor+';">'+total+'<span style="font-size:24px;color:var(--text-dim)">/'+maxScore+'</span></div><div style="font-family:\'IBM Plex Mono\',monospace;font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.12em;">Inflation Resilience Score<br>0 = Fully Exposed · '+maxScore+' = Maximum Protected</div></div>';
-
-    const factors=[
-      {name:'Pricing Power',score:pricing,max:2},
-      {name:'Asset Intensity',score:assets,max:2},
-      {name:'Working Capital',score:wc,max:1},
-      {name:'Supply Chain',score:supply,max:1},
-      {name:'Debt Structure',score:debt,max:1},
+  function analyzeBS(){
+    const assets=parseFloat(document.getElementById('bs_assets').value);
+    const liab=parseFloat(document.getElementById('bs_liab').value);
+    const currA=parseFloat(document.getElementById('bs_curr_assets').value);
+    const currL=parseFloat(document.getElementById('bs_curr_liab').value);
+    const cash=parseFloat(document.getElementById('bs_cash').value);
+    const debt=parseFloat(document.getElementById('bs_debt').value);
+    const equity=assets-liab;
+    const currentRatio=currA/currL;
+    const quickRatio=(cash+(currA*0.3))/currL;
+    const debtToEquity=equity>0?debt/equity:Infinity;
+    const debtToAssets=debt/assets;
+    const netDebt=debt-cash;
+    function gradeR(val,good,ok){if(val>=good)return'var(--green)';if(val>=ok)return'var(--gold)';return'var(--red)';}
+    const cards=[
+      {label:'Shareholders Equity',value:'$'+Math.round(equity).toLocaleString()+'M',sub:'Assets − Liabilities',color:equity>0?'var(--green)':'var(--red)'},
+      {label:'Current Ratio',value:currentRatio.toFixed(2)+'x',sub:'Current assets ÷ liabilities (>1.5 healthy)',color:gradeR(currentRatio,1.5,1.0)},
+      {label:'Debt / Equity',value:isFinite(debtToEquity)?debtToEquity.toFixed(2)+'x':'N/A',sub:'Financial leverage (<1.5 conservative)',color:debtToEquity<1.5?'var(--green)':debtToEquity<3?'var(--gold)':'var(--red)'},
+      {label:'Net Debt',value:'$'+Math.round(netDebt).toLocaleString()+'M',sub:'Total debt minus cash on hand',color:netDebt<0?'var(--green)':netDebt<equity*0.5?'var(--gold)':'var(--red)'},
     ];
-    let breakdownHTML='<div class="screener-result-header">Factor Breakdown</div>';
-    factors.forEach(f=>{
-      const pct=f.max>0?f.score/f.max:0;
-      const dotColor=pct>=1?'filled-green':pct>=0.5?'filled-gold':'filled-red';
-      let dots='';
-      for(let i=0;i<f.max;i++) dots+='<div class="score-dot '+(i<f.score?dotColor:'empty')+'"></div>';
-      breakdownHTML+='<div class="screener-row"><span class="screener-factor">'+f.name+'</span><div class="screener-score">'+dots+'</div><span class="screener-label" style="color:'+(pct>=1?'var(--green)':pct>=0.5?'var(--gold)':'var(--red)')+'">'+f.score+'/'+f.max+'</span></div>';
-    });
-    document.getElementById('sc_breakdown').innerHTML=breakdownHTML;
-    document.getElementById('sc_verdict').innerHTML='<strong style="color:'+scoreColor+'">Assessment: </strong>'+verdict+'<br><br><strong style="color:var(--gold)">Positioning Action: </strong>'+action;
-    document.getElementById('sc_result').className='tool-result visible';
+    document.getElementById('bs_cards').innerHTML=cards.map(c=>`<div style="background:var(--bg2);border:1px solid var(--border);padding:14px;"><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.15em;color:var(--text-dim);text-transform:uppercase;margin-bottom:8px;">${c.label}</div><div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;color:${c.color};line-height:1;margin-bottom:6px;">${c.value}</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-dim);">${c.sub}</div></div>`).join('');
+    let interp='';
+    if(equity<0)interp+='⚠ Warning: Negative equity — liabilities exceed assets. Technically insolvent on book value. ';
+    if(currentRatio<1)interp+='⚠ Liquidity risk: Current ratio below 1.0 — short-term obligations exceed liquid assets. ';
+    if(debtToEquity>3)interp+='⚠ High leverage: D/E above 3× amplifies both upside and distress risk. Appropriate for utilities/banks, dangerous for cyclicals. ';
+    if(interp==='')interp='Balance sheet appears healthy based on these ratios. Verify against industry benchmarks and review trends across 3–5 annual periods — a single snapshot can conceal deterioration.';
+    document.getElementById('bs_interpretation').textContent=interp;
+    document.getElementById('bs_result').className='tool-result visible';
   }
 
-  // QUIZ DATA
-  initQuiz('quiz_1_4',[
-    {q:"The Federal Reserve's preferred inflation measure is:",
-     opts:["CPI (Consumer Price Index)","PPI (Producer Price Index)","PCE Deflator","GDP Deflator"],
-     correct:2,explanation:"The Fed officially targets the PCE (Personal Consumption Expenditure) deflator, not CPI. PCE better captures substitution effects (when consumers switch to cheaper alternatives), has broader coverage, and historically runs 0.3–0.5% below CPI — which matters when the target is 2%."},
-    {q:"Cost-push inflation is caused by:",
-     opts:["Too much consumer demand in the economy","Rising input costs that producers pass through to consumer prices","Government printing excess money","Low interest rates encouraging borrowing"],
-     correct:1,explanation:"Cost-push inflation originates from the supply side — rising production costs (energy, labour, raw materials) passed on to consumers. Crucially, it is harder to fight with rate hikes than demand-pull, because higher rates cannot create more oil or fix supply chains."},
-    {q:"Which asset class historically provides the best direct protection against inflation?",
-     opts:["Long-term government bonds","Cash savings accounts","Commodities and real assets","Short-term treasury bills"],
-     correct:2,explanation:"Commodities (especially energy and agricultural goods) are often the direct cause of inflation — they rise before CPI moves. Real assets like property also protect purchasing power. Fixed-income assets (bonds, cash) are structurally disadvantaged because their nominal values are fixed while inflation erodes purchasing power."},
-    {q:"The inflation 'breakeven rate' (TIPS spread) is best described as:",
-     opts:["The inflation rate at which the Fed will intervene","The bond market's implied forecast of future inflation — backed by real capital at risk","The rate at which purchasing power breaks even with wages","The CPI threshold for a technical recession"],
-     correct:1,explanation:"The breakeven rate is the yield gap between nominal Treasuries and TIPS. It represents actual money betting on future inflation outcomes — more predictive than survey measures because participants bear real losses if wrong. The 5yr/5yr forward breakeven is what the Fed uses to gauge long-term inflation expectations."},
-    {q:"In Dalio's Four Macro Quadrant framework, which environment places both equities and bonds in the 'loses' category simultaneously?",
-     opts:["Goldilocks (rising growth, low inflation)","Stagflation (falling growth, rising inflation)","Deflationary contraction (falling growth, falling inflation)","Inflationary Boom (rising growth, rising inflation)"],
-     correct:1,explanation:"Stagflation is the only quadrant where both traditional asset classes fail simultaneously. Equities suffer from earnings compression (slowing growth) and multiple compression (rising inflation/rates). Bonds suffer because the central bank cannot cut rates to support prices — inflation is too high. Only hard assets (gold, commodities) historically survive."},
-    {q:"ISM Prices Paid peaked at 92.1 in June 2021 — 12 months before CPI hit 9.1% in June 2022. This demonstrates:",
-     opts:["That CPI is more accurate than ISM data","That ISM Prices Paid is a 2–3 month leading indicator for consumer inflation","That inflation is impossible to predict in advance","That supply chain disruptions are the only cause of inflation"],
-     correct:1,explanation:"ISM Prices Paid tracks manufacturer input cost pressure and leads consumer CPI by 2–3 months. In 2021, professionals watching ISM Prices Paid were positioned in commodities and energy a full year before the CPI headline confirmed the inflationary regime. This is the value of leading indicators over lagging confirmation data."},
-    {q:"A business that scores high on inflation resilience has: strong pricing power, real asset ownership, short supply chain, and fixed-rate debt. This profile describes:",
-     opts:["A technology startup with high R&D costs and customer acquisition dependency","A luxury goods company owning its retail stores and sourcing vertically, with fixed-rate bonds outstanding","A retail chain dependent on global supply chains with floating rate credit facilities","A services company with no tangible assets but long-term contracts"],
-     correct:1,explanation:"The ideal inflation-resilient business: brand-based pricing power that customers won't abandon (luxury), owns the real assets that appreciate with inflation (retail stores), controls its supply chain (vertical integration), and benefits from fixed-rate debt being eroded by inflation in real terms. This is the Ackman screening framework applied to inflation resilience."},
-    {q:"Built-in (expectations-driven) inflation is particularly dangerous because:",
-     opts:["It only affects luxury goods","It is self-reinforcing — expected inflation becomes actual inflation through wage and pricing decisions","Central banks have no tools to address it","It causes deflation in the long run"],
-     correct:1,explanation:"When workers expect inflation, they demand higher wages. When firms expect inflation, they raise prices preemptively. These expectations become self-fulfilling, creating a wage-price spiral. Breaking it requires extremely painful tightening — as Volcker demonstrated in 1979–82, accepting 10% unemployment to break the 1970s inflationary expectations."},
-    {q:"During the 1973–1980 US stagflationary decade, gold rose from $35 to $850 per ounce — a 24x gain. The primary reason was:",
-     opts:["Gold became a fashionable investment for wealthy Americans","Negative real interest rates and the breakdown of Bretton Woods made gold the only credible store of value outside fiat currency","Gold production collapsed globally in the 1970s","The US government deliberately supported gold prices"],
-     correct:1,explanation:"The Nixon shock (1971) ended dollar-gold convertibility, removing the last constraint on money printing. Combined with deeply negative real interest rates and collapsing confidence in paper currencies, gold became the only asset with no counterparty risk and no inflation exposure. This is the textbook stagflation trade — and the logic applies identically whenever real rates turn deeply negative."},
-    {q:"The correct early warning checklist for an approaching stagflationary regime includes all of the following EXCEPT:",
-     opts:["Oil prices rising sharply from a supply shock (not demand)","Core inflation remaining above 4% despite multiple rate hikes","GDP growth forecasts being revised up significantly while inflation remains elevated","The Fed's language shifting from confidence to 'challenging period'"],
-     correct:2,explanation:"Stagflation requires BOTH slowing growth AND persistent inflation. GDP growth forecasts being revised UP contradicts the stagflation thesis — that would indicate an inflationary boom (Q1), not stagflation (Q3). The key warning signs are: supply-driven cost push, sticky core inflation despite tightening, weakening growth forecasts, and central bank uncertainty. Rising GDP forecasts is the opposite signal."}
+  initQuiz('quiz_1_5',[
+    {q:"Which financial statement would you analyze first to determine if a company's profitability is improving over time?",
+     opts:["Balance sheet","Cash flow statement","Income statement","Notes to financial statements"],
+     correct:2,explanation:"The income statement (P&L) shows revenue, expenses, and profit over a period — it is the primary tool for analyzing profitability trends. But always cross-reference it with the cash flow statement to verify that reported earnings are backed by real cash generation."},
+    {q:"Free Cash Flow is calculated as:",
+     opts:["Net income + depreciation","Revenue − total costs","Operating cash flow − capital expenditure","EBITDA − interest − taxes"],
+     correct:2,explanation:"FCF = Operating Cash Flow − CapEx. It represents the cash a business generates after spending what it needs to maintain and grow — what Buffett calls 'owner's earnings.' This is the most important single number in fundamental analysis."},
+    {q:"A company reports strong net income but consistently negative operating cash flow. This most likely indicates:",
+     opts:["Exceptional business performance with high CapEx needs","Aggressive accounting — revenue recognised before cash collected, or expenses deferred","A fast-growing company investing in future growth","All high-growth companies have this pattern temporarily"],
+     correct:1,explanation:"Net income > operating cash flow is the most important red flag in financial analysis. It typically means revenue is recognised before cash actually arrives (rising receivables) or expenses are being capitalised rather than expensed. This is the signature of earnings manipulation — and it appeared in Enron, Luckin Coffee, and WorldCom years before the scandals broke."},
+    {q:"The fundamental accounting equation on the balance sheet is:",
+     opts:["Assets = Revenue − Expenses","Liabilities = Assets + Equity","Assets = Liabilities + Shareholders' Equity","Cash = Assets − Debt"],
+     correct:2,explanation:"Assets = Liabilities + Shareholders' Equity. This must always balance — assets are funded either by borrowed money (liabilities) or by owner capital (equity). Retained earnings from the income statement flow into equity, connecting the three statements."},
+    {q:"Goodwill on the balance sheet represents:",
+     opts:["Brand reputation measured by market research","The premium paid in acquisitions above the fair value of identifiable net assets","Cash set aside for future acquisitions","Intangible patents and intellectual property"],
+     correct:1,explanation:"Goodwill = acquisition price − fair value of identifiable net assets. It represents what the acquirer believed it was paying for synergies, brand value, and future earning power. Large goodwill relative to total assets is a risk — impairment charges recognise that an acquisition overpaid, and these can be sudden and large."},
+    {q:"In Ackman's thesis-first reading method, which section of the annual report should investors read FIRST — before the income statement?",
+     opts:["The CEO letter to shareholders","The cash flow statement","The management discussion and analysis (MD&A)","The auditor's report"],
+     correct:1,explanation:"Ackman's framework: start with the cash flow statement, not the income statement. The income statement reflects management's chosen narrative and accounting discretion. The cash flow statement shows physical reality — cash either arrived or it didn't. If CFO consistently diverges from net income, the income statement narrative may be fiction."},
+    {q:"Accounts receivable growing significantly faster than revenue for multiple quarters most likely signals:",
+     opts:["Strong forward demand that hasn't yet been invoiced","Channel stuffing, premature revenue recognition, or customers struggling to pay","Efficient working capital management","A normal outcome for rapidly growing businesses"],
+     correct:1,explanation:"A/R should grow roughly in line with revenue. When A/R grows 2× faster than revenue, it means: (a) revenue is being recognised before customers have paid, (b) customers are being pushed product they haven't ordered (channel stuffing), or (c) payment terms are being extended to meet revenue targets. All three are quality-of-earnings warnings. This signal appeared in Valeant 8 quarters before the scandal."},
+    {q:"For a SaaS business, the single most important metric to read first in financial statements is:",
+     opts:["Revenue growth rate","Net Revenue Retention (NRR)","EBITDA margin","Customer acquisition cost"],
+     correct:1,explanation:"NRR measures how much existing customers spend relative to the prior period after accounting for expansions, contractions, and churn. NRR above 120% means the business grows without acquiring a single new customer. NRR below 100% means the existing customer base is shrinking — no amount of new customer acquisition can overcome a leaky bucket. This is the master metric that determines whether the business model is structurally sound."},
+    {q:"WorldCom's 2002 fraud involved capitalising $3.8B in operating expenses as capital assets. The financial statement fingerprint of this fraud was:",
+     opts:["Revenue growing faster than cash collections","CapEx growing dramatically relative to revenue and output, with no physical explanation for the asset intensity","Net income consistently below operating cash flow","Declining gross margins despite rising revenue"],
+     correct:1,explanation:"WorldCom moved operating expenses to the balance sheet as 'CapEx.' This inflated operating cash flow (expenses no longer deducted), reduced reported operating costs, and increased reported profits — while CapEx ballooned with no corresponding physical infrastructure. When peer CapEx ratios were compared, WorldCom's was impossible to explain by its actual network scale. This is expense capitalisation — Lie Type 02 in the forensic framework."},
+    {q:"In the Ackman framework, what should an investor do if after exhaustive thesis-testing they cannot find evidence that destroys their investment thesis?",
+     opts:["Reduce position size as a precaution","Abandon the investment — something must be wrong that they haven't found yet","Increase position size — unexplained conviction is the foundation of asymmetric returns","Wait for additional quarters of data before committing"],
+     correct:2,explanation:"Ackman's decision rule: if you cannot destroy the thesis despite actively trying, you have genuine edge — evidence that the market is wrong and you can see what it cannot. The position size should be proportional to that conviction. Ackman's highest-return positions (Chipotle, Canadian Pacific, Hilton) were built on exactly this process: build the thesis, attempt to kill it repeatedly, fail to kill it, size up substantially."}
   ]);
   </script>
 </body>
