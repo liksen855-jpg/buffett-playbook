@@ -30,11 +30,13 @@
           position: fixed;
           inset: 0;
           z-index: 9999;
-          background: var(--background, #fff);
+          background-color: hsl(var(--background, 220 20% 97%));
+          color: hsl(var(--foreground, 220 20% 10%));
           overflow-y: auto;
           font-family: 'Outfit', 'DM Sans', sans-serif;
         }
         #wwm-overlay.active { display: flex; flex-direction: column; }
+        body:has(#wwm-overlay.active) #root { visibility: hidden; }
         .wwm-inner {
           flex: 1;
           max-width: 900px;
