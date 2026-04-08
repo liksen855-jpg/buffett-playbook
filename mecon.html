@@ -17,6 +17,440 @@
   </head>
   <body>
     <div id="root"></div>
+
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <script>
+  (function() {
+    const HASH = '#/work-with-me';
+
+    const STEPS = [
+      {
+        id: 'type',
+        q: 'What best describes what you\u2019re looking for?',
+        hint: 'Pick the closest fit \u2014 we can discuss specifics after.',
+        type: 'choice',
+        options: [
+          'Macro or sector research report',
+          'Ongoing consulting / advisory',
+          'Workshop or training session',
+          'Custom data dashboard or tool',
+          'Something else / not sure yet'
+        ]
+      },
+      {
+        id: 'context',
+        q: 'Tell me a bit about the context.',
+        hint: 'Who are you, and what\u2019s the organisation or project?',
+        type: 'textarea',
+        placeholder: 'e.g. \u201cWe\u2019re a fund looking at Malaysian equities and need a quarterly macro brief\u2026\u201d'
+      },
+      {
+        id: 'timeline',
+        q: 'What\u2019s your timeline?',
+        hint: 'A rough idea is fine.',
+        type: 'choice',
+        options: [
+          'As soon as possible',
+          'Within the next month',
+          '1\u20133 months from now',
+          'No fixed timeline yet'
+        ]
+      },
+      {
+        id: 'budget',
+        q: 'Do you have a budget in mind?',
+        hint: 'Helps me understand scope \u2014 no commitment needed.',
+        type: 'choice',
+        options: [
+          'Under RM 5,000',
+          'RM 5,000 \u2013 20,000',
+          'RM 20,000 \u2013 50,000',
+          'Above RM 50,000',
+          'Not sure yet'
+        ]
+      },
+      {
+        id: 'heard',
+        q: 'How did you find MECON?',
+        hint: 'Just curious.',
+        type: 'choice',
+        options: [
+          'LinkedIn',
+          'Referral / word of mouth',
+          'Search / web',
+          'Social media',
+          'Other'
+        ]
+      },
+      {
+        id: 'contact',
+        q: 'Last step \u2014 how do I reach you?',
+        hint: 'I\u2019ll be in touch within 48 hours.',
+        type: 'contact'
+      }
+    ];
+
+    let answers = {};
+    let currentStep = 0;
+
+    function injectStyles() {
+      const s = document.createElement('style');
+      s.textContent = `
+        #wwm-overlay {
+          display: none; position: fixed; inset: 0; z-index: 9999;
+          overflow-y: auto; overflow-x: hidden;
+          background-color: hsl(var(--background, 220 20% 97%));
+          color: hsl(var(--foreground, 220 20% 8%));
+          --qm: 'IBM Plex Mono', monospace;
+          --qd: 'Syne', sans-serif;
+          --qa: hsl(188 55% 32%);
+          --qr: rgba(128,128,128,.12);
+          --qu: rgba(128,128,128,.46);
+          --qc: rgba(128,128,128,.06);
+          --qh: rgba(128,128,128,.1);
+        }
+        #wwm-overlay.active { display: flex; flex-direction: column; }
+        body:has(#wwm-overlay.active) #root { visibility: hidden; }
+
+        .q-topbar {
+          display: flex; align-items: center; justify-content: space-between;
+          padding: 1.35rem 2.5rem; border-bottom: 1px solid var(--qr); flex-shrink: 0;
+        }
+        .q-back {
+          display: inline-flex; align-items: center; gap: 6px;
+          font-family: var(--qm); font-size: 11px; letter-spacing: .04em;
+          color: var(--qu); cursor: pointer; background: none; border: none; padding: 0;
+          transition: color .18s;
+        }
+        .q-back:hover { color: var(--qa); }
+        .q-back svg { transition: transform .18s; }
+        .q-back:hover svg { transform: translateX(-3px); }
+        .q-brand { font-family: var(--qm); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--qu); }
+
+        .q-progress-wrap { height: 2px; background: var(--qr); flex-shrink: 0; }
+        .q-progress-bar { height: 100%; background: var(--qa); transition: width .4s cubic-bezier(.4,0,.2,1); }
+
+        .q-main {
+          flex: 1; display: flex; align-items: center; justify-content: center;
+          padding: 3rem 2rem;
+        }
+        .q-card { width: 100%; max-width: 560px; }
+
+        @keyframes q-in {
+          from { opacity: 0; transform: translateX(16px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+        .q-card { animation: q-in .3s cubic-bezier(.22,.68,0,1.05) both; }
+
+        .q-step-label {
+          font-family: var(--qm); font-size: 10px; letter-spacing: .14em;
+          text-transform: uppercase; color: var(--qu); margin-bottom: 1.5rem;
+        }
+        .q-question {
+          font-family: var(--qd); font-size: clamp(1.4rem, 3vw, 1.9rem);
+          font-weight: 700; line-height: 1.15; letter-spacing: -.025em; margin-bottom: .55rem;
+        }
+        .q-hint {
+          font-family: var(--qm); font-size: 11.5px; color: var(--qu);
+          margin-bottom: 2rem; line-height: 1.5;
+        }
+
+        .q-options { display: flex; flex-direction: column; gap: .5rem; margin-bottom: 2rem; }
+        .q-option {
+          display: flex; align-items: center; gap: 1rem;
+          padding: .85rem 1rem; border: 1px solid var(--qr); border-radius: 6px;
+          cursor: pointer; font-family: var(--qd); font-size: .9rem; font-weight: 500;
+          background: var(--qc); transition: border-color .15s, background .15s; user-select: none;
+        }
+        .q-option:hover { border-color: var(--qa); background: var(--qh); }
+        .q-option.sel { border-color: var(--qa); background: color-mix(in srgb, var(--qa) 8%, transparent); }
+        .q-dot {
+          width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid var(--qr);
+          flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+          transition: border-color .15s, background .15s;
+        }
+        .q-option.sel .q-dot { border-color: var(--qa); background: var(--qa); }
+        .q-option.sel .q-dot::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #fff; }
+
+        .q-textarea {
+          width: 100%; box-sizing: border-box; min-height: 110px;
+          padding: .9rem 1rem; border: 1px solid var(--qr); border-radius: 6px;
+          background: var(--qc); color: inherit; font-family: var(--qd); font-size: .9rem;
+          line-height: 1.6; resize: vertical; outline: none; transition: border-color .15s;
+          margin-bottom: 2rem;
+        }
+        .q-textarea:focus { border-color: var(--qa); }
+        .q-textarea::placeholder { color: var(--qu); }
+
+        .q-fields { display: flex; flex-direction: column; gap: .7rem; margin-bottom: 2rem; }
+        .q-field-label {
+          font-family: var(--qm); font-size: 10px; letter-spacing: .12em;
+          text-transform: uppercase; color: var(--qu); margin-bottom: .25rem;
+        }
+        .q-input {
+          width: 100%; box-sizing: border-box; padding: .8rem 1rem;
+          border: 1px solid var(--qr); border-radius: 6px; background: var(--qc);
+          color: inherit; font-family: var(--qd); font-size: .9rem; outline: none;
+          transition: border-color .15s;
+        }
+        .q-input:focus { border-color: var(--qa); }
+        .q-input::placeholder { color: var(--qu); }
+        .q-input.err { border-color: hsl(0 65% 55%); }
+
+        .q-actions { display: flex; align-items: center; justify-content: space-between; }
+        .q-next {
+          display: inline-flex; align-items: center; gap: 8px;
+          padding: 11px 22px; background: var(--qa); color: #fff;
+          font-family: var(--qd); font-size: .875rem; font-weight: 600;
+          border: none; border-radius: 4px; cursor: pointer;
+          transition: opacity .2s, transform .15s;
+        }
+        .q-next:hover { opacity: .88; transform: translateY(-1px); }
+        .q-next:active { transform: translateY(0); }
+        .q-prev {
+          display: inline-flex; align-items: center; gap: 5px;
+          background: none; border: none; color: var(--qu);
+          font-family: var(--qm); font-size: 11px; cursor: pointer;
+          padding: 11px 0; transition: color .15s;
+        }
+        .q-prev:hover { color: inherit; }
+        .q-errmsg {
+          font-family: var(--qm); font-size: 11px; color: hsl(0 65% 55%);
+          margin-top: -.6rem; margin-bottom: 1rem; display: none;
+        }
+
+        .q-done {
+          flex: 1; display: flex; align-items: center; justify-content: center;
+          padding: 3rem 2rem; text-align: center;
+        }
+        .q-done-inner { max-width: 420px; }
+        .q-done-tick {
+          width: 48px; height: 48px; border-radius: 50%;
+          background: color-mix(in srgb, var(--qa) 12%, transparent);
+          display: flex; align-items: center; justify-content: center;
+          margin: 0 auto 1.6rem;
+        }
+        .q-done-title {
+          font-family: var(--qd); font-size: 1.8rem; font-weight: 700;
+          letter-spacing: -.025em; margin-bottom: .7rem;
+        }
+        .q-done-body {
+          font-family: var(--qm); font-size: 12px; color: var(--qu);
+          line-height: 1.75; margin-bottom: 2rem;
+        }
+        .q-done-back {
+          display: inline-flex; align-items: center; gap: 6px;
+          font-family: var(--qm); font-size: 11px; color: var(--qu);
+          cursor: pointer; background: none; border: none; padding: 0;
+          transition: color .15s;
+        }
+        .q-done-back:hover { color: var(--qa); }
+
+        #wwm-nav-item { list-style: none; }
+        #wwm-nav-btn {
+          display: flex; align-items: center; gap: 8px; width: 100%;
+          padding: 8px; border-radius: 6px; font-size: .875rem; cursor: pointer;
+          border: none; background: none; color: inherit;
+          transition: background .15s; text-align: left;
+        }
+        #wwm-nav-btn:hover,
+        #wwm-nav-btn.active { background: var(--sidebar-accent, rgba(128,128,128,.12)); }
+        #wwm-nav-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+      `;
+      document.head.appendChild(s);
+    }
+
+    function stepHTML(i) {
+      const step = STEPS[i];
+      let body = '';
+
+      if (step.type === 'choice') {
+        body = `<div class="q-options">` +
+          step.options.map(o => {
+            const sel = answers[step.id] === o ? ' sel' : '';
+            return `<div class="q-option${sel}" data-val="${o.replace(/"/g,'&quot;')}"><span class="q-dot"></span>${o}</div>`;
+          }).join('') + `</div>`;
+      } else if (step.type === 'textarea') {
+        body = `<textarea class="q-textarea" placeholder="${step.placeholder}" maxlength="600">${answers[step.id]||''}</textarea>`;
+      } else if (step.type === 'contact') {
+        body = `<div class="q-fields">
+          <div><div class="q-field-label">Full name</div>
+            <input class="q-input" id="q-name" type="text" placeholder="Your name" value="${answers.name||''}" autocomplete="name"></div>
+          <div><div class="q-field-label">Email</div>
+            <input class="q-input" id="q-email" type="email" placeholder="you@example.com" value="${answers.email||''}" autocomplete="email"></div>
+          <div><div class="q-field-label">Phone / WhatsApp</div>
+            <input class="q-input" id="q-phone" type="tel" placeholder="+60 12 345 6789" value="${answers.phone||''}" autocomplete="tel"></div>
+        </div>`;
+      }
+
+      const isLast = i === STEPS.length - 1;
+      const nextArrow = isLast
+        ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 12 20 18"/><polyline points="4 6 4 18"/></svg>`
+        : `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>`;
+
+      return `
+        <div class="q-step-label">${String(i+1).padStart(2,'0')} / ${String(STEPS.length).padStart(2,'0')}</div>
+        <h2 class="q-question">${step.q}</h2>
+        <p class="q-hint">${step.hint}</p>
+        ${body}
+        <p class="q-errmsg" id="q-err"></p>
+        <div class="q-actions">
+          ${i > 0
+            ? `<button class="q-prev" id="q-prev"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>Back</button>`
+            : `<span></span>`}
+          <button class="q-next" id="q-next">${isLast ? 'Submit' : 'Continue'} ${nextArrow}</button>
+        </div>`;
+    }
+
+    function renderStep(i) {
+      currentStep = i;
+      const main = document.getElementById('q-main');
+      const bar  = document.getElementById('q-bar');
+      if (!main || !bar) return;
+
+      bar.style.width = (i / STEPS.length * 100) + '%';
+
+      if (i >= STEPS.length) {
+        bar.style.width = '100%';
+        main.innerHTML = `
+          <div class="q-done">
+            <div class="q-done-inner">
+              <div class="q-done-tick">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="hsl(188 55% 32%)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 13 4 10"/><polyline points="4 13 9 18 20 8"/></svg>
+              </div>
+              <h2 class="q-done-title">Received.</h2>
+              <p class="q-done-body">I\u2019ll review your answers and reach out within 48\u00a0hours.<br>Looking forward to the conversation.</p>
+              <button class="q-done-back" id="q-done-back">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                Back to dashboard
+              </button>
+            </div>
+          </div>`;
+        document.getElementById('q-done-back').onclick = () => { window.location.hash = '#/'; };
+        return;
+      }
+
+      main.innerHTML = `<div class="q-card">${stepHTML(i)}</div>`;
+
+      main.querySelectorAll('.q-option').forEach(el => {
+        el.onclick = () => {
+          main.querySelectorAll('.q-option').forEach(o => o.classList.remove('sel'));
+          el.classList.add('sel');
+          answers[STEPS[i].id] = el.dataset.val;
+        };
+      });
+
+      const prev = document.getElementById('q-prev');
+      if (prev) prev.onclick = () => renderStep(i - 1);
+      document.getElementById('q-next').onclick = () => advance(i);
+    }
+
+    function advance(i) {
+      const step = STEPS[i];
+      const errEl = document.getElementById('q-err');
+
+      if (step.type === 'choice') {
+        if (!answers[step.id]) { showErr(null, errEl, 'Please select an option to continue.'); return; }
+      } else if (step.type === 'textarea') {
+        const val = (document.querySelector('.q-textarea')||{}).value?.trim();
+        if (!val) { showErr(null, errEl, 'Please add a short description.'); return; }
+        answers[step.id] = val;
+      } else if (step.type === 'contact') {
+        const name  = document.getElementById('q-name').value.trim();
+        const email = document.getElementById('q-email').value.trim();
+        const phone = document.getElementById('q-phone').value.trim();
+        if (!name)                              { showErr('q-name',  errEl, 'Please enter your name.'); return; }
+        if (!email || !/\S+@\S+\.\S+/.test(email)) { showErr('q-email', errEl, 'Please enter a valid email.'); return; }
+        if (!phone)                             { showErr('q-phone', errEl, 'Please enter a phone or WhatsApp number.'); return; }
+        answers.name = name; answers.email = email; answers.phone = phone;
+      }
+
+      errEl.style.display = 'none';
+      renderStep(i + 1);
+    }
+
+    function showErr(fieldId, errEl, msg) {
+      document.querySelectorAll('.q-input').forEach(el => el.classList.remove('err'));
+      if (fieldId) { const f = document.getElementById(fieldId); if (f) f.classList.add('err'); }
+      errEl.textContent = msg;
+      errEl.style.display = 'block';
+    }
+
+    function buildOverlay() {
+      const div = document.createElement('div');
+      div.id = 'wwm-overlay';
+      div.innerHTML = `
+        <div class="q-topbar">
+          <button class="q-back" id="q-topback">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Dashboard
+          </button>
+          <span class="q-brand">MECON</span>
+        </div>
+        <div class="q-progress-wrap"><div class="q-progress-bar" id="q-bar"></div></div>
+        <div class="q-main" id="q-main"></div>`;
+      document.body.appendChild(div);
+      div.querySelector('#q-topback').onclick = () => { window.location.hash = '#/'; };
+    }
+
+    function showOverlay() {
+      const el = document.getElementById('wwm-overlay');
+      if (!el) return;
+      answers = {};
+      el.classList.add('active');
+      el.scrollTop = 0;
+      renderStep(0);
+    }
+
+    function hideOverlay() {
+      const el = document.getElementById('wwm-overlay');
+      if (el) el.classList.remove('active');
+    }
+
+    function injectNavItem() {
+      const lists = document.querySelectorAll('[data-sidebar="menu"]');
+      if (!lists.length || document.getElementById('wwm-nav-item')) return;
+      const li = document.createElement('li');
+      li.id = 'wwm-nav-item';
+      li.innerHTML = `
+        <button id="wwm-nav-btn" title="Work with Me">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          <span>Work with Me</span>
+        </button>`;
+      li.querySelector('#wwm-nav-btn').onclick = () => { window.location.hash = HASH; };
+      lists[lists.length - 1].appendChild(li);
+    }
+
+    function onHashChange() {
+      const active = window.location.hash === HASH;
+      active ? showOverlay() : hideOverlay();
+      const btn = document.getElementById('wwm-nav-btn');
+      if (btn) btn.classList.toggle('active', active);
+    }
+
+    function init() {
+      injectStyles();
+      buildOverlay();
+      let tries = 0;
+      const t = setInterval(() => {
+        injectNavItem();
+        if (document.getElementById('wwm-nav-item') || ++tries > 40) clearInterval(t);
+      }, 250);
+      window.addEventListener('hashchange', onHashChange);
+      onHashChange();
+    }
+
+    document.readyState === 'loading'
+      ? document.addEventListener('DOMContentLoaded', init)
+      : setTimeout(init, 100);
+  })();
+  </script>
+
   <script data-pplx-inline-edit>
 (function(){
   if(window===window.top)return;
