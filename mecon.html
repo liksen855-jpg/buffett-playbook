@@ -134,8 +134,35 @@
         #wwm-nav-btn:hover,
         #wwm-nav-btn.active { background: var(--sidebar-accent, rgba(128,128,128,.12)); }
         #wwm-nav-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+        /* copyright footer */
+        #ii-footer {
+          position: fixed; bottom: 0; left: 0; right: 0; z-index: 9998;
+          padding: 7px 1.5rem;
+          border-top: 1px solid rgba(128,128,128,.1);
+          background-color: hsl(var(--background, 220 20% 97%));
+          display: flex; align-items: center; justify-content: space-between;
+          gap: 1rem; flex-wrap: wrap;
+          font-family: 'IBM Plex Mono', monospace;
+          font-size: 10px; letter-spacing: .04em;
+          color: rgba(128,128,128,.5);
+          pointer-events: none;
+        }
+        #ii-footer strong { font-weight: 500; color: rgba(128,128,128,.7); }
       `;
       document.head.appendChild(s);
+    }
+
+    function injectFooter() {
+      if (document.getElementById('ii-footer')) return;
+      const year = new Date().getFullYear();
+      const footer = document.createElement('div');
+      footer.id = 'ii-footer';
+      footer.innerHTML = `
+        <span>© ${year} <strong>InsightInvest</strong>. All analysis, data, and content on this platform are the exclusive property of InsightInvest. All rights reserved.</span>
+        <span>MECON — Malaysia Economic Dashboard</span>
+      `;
+      document.body.appendChild(footer);
     }
 
     function buildOverlay() {
@@ -222,6 +249,7 @@
     function init() {
       injectStyles();
       buildOverlay();
+      injectFooter();
       let tries = 0;
       const t = setInterval(() => {
         injectNavItem();
