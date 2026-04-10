@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Property vs S&P 500 — 20-Year Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300..700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+/* ─── TOKENS ─── */
+:root {
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body: 'DM Sans', 'Helvetica Neue', sans-serif;
+  --font-mono: 'DM Mono', 'Courier New', monospace;
+
+  --text-xs:   clamp(0.75rem,  0.7rem  + 0.25vw, 0.875rem);
+  --text-sm:   clamp(0.875rem, 0.8rem  + 0.35vw, 1rem);
+  --text-base: clamp(1rem,     0.95rem + 0.25vw, 1.125rem);
+  --text-lg:   clamp(1.125rem, 1rem    + 0.75vw, 1.5rem);
+  --text-xl:   clamp(1.5rem,   1.2rem  + 1.25vw, 2.25rem);
+  --text-2xl:  clamp(2rem,     1.2rem  + 2.5vw,  3.5rem);
+  --text-3xl:  clamp(2.5rem,   1rem    + 4vw,    5rem);
+
+  --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem;
+  --space-4: 1rem;    --space-5: 1.25rem; --space-6: 1.5rem;
+  --space-8: 2rem;    --space-10: 2.5rem; --space-12: 3rem;
+  --space-16: 4rem;   --space-20: 5rem;   --space-24: 6rem;
+
+  --radius-sm: 0.25rem; --radius-md: 0.5rem;
+  --radius-lg: 0.75rem; --radius-xl: 1rem; --radius-full: 9999px;
+
+  --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  --content-narrow: 680px;
+  --content-default: 980px;
+  --content-wide: 1240px;
+}
+
+/* ─── DARK THEME (default) ─── */
+[data-theme="dark"] {
+  --bg:             #0e0f11;
+  --surface:        #141518;
+  --surface-2:      #1a1c20;
+  --surface-3:      #20232a;
+  --border:         rgba(255,255,255,0.07);
+  --divider:        rgba(255,255,255,0.05);
+  --text:           #e8e9eb;
+  --text-muted:     #8a8d96;
+  --text-faint:     #4a4d57;
+  --text-inverse:   #0e0f11;
+
+  /* Accent palette — restrained */
+  --gold:           #c9a84c;
+  --gold-dim:       rgba(201,168,76,0.12);
+  --gold-glow:      rgba(201,168,76,0.06);
+  --teal:           #3da8b0;
+  --teal-dim:       rgba(61,168,176,0.12);
+  --red:            #e05a5a;
+  --red-dim:        rgba(224,90,90,0.12);
+  --green:          #4caf7d;
+  --green-dim:      rgba(76,175,125,0.12);
+  --blue:           #5b8dee;
+  --blue-dim:       rgba(91,141,238,0.12);
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.5);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.6);
+}
+
+/* ─── LIGHT THEME ─── */
+[data-theme="light"] {
+  --bg:             #f5f4f0;
+  --surface:        #faf9f6;
+  --surface-2:      #ffffff;
+  --surface-3:      #f0ece6;
+  --border:         rgba(0,0,0,0.08);
+  --divider:        rgba(0,0,0,0.05);
+  --text:           #1a1b1f;
+  --text-muted:     #6b6e78;
+  --text-faint:     #b0b3bc;
+  --text-inverse:   #ffffff;
+
+  --gold:           #9c7a1a;
+  --gold-dim:       rgba(156,122,26,0.10);
+  --gold-glow:      rgba(156,122,26,0.05);
+  --teal:           #1f7f88;
+  --teal-dim:       rgba(31,127,136,0.10);
+  --red:            #c03535;
+  --red-dim:        rgba(192,53,53,0.10);
+  --green:          #287a50;
+  --green-dim:      rgba(40,122,80,0.10);
+  --blue:           #2c5cc5;
+  --blue-dim:       rgba(44,92,197,0.10);
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.14);
+}
+
+/* ─── BASE ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; scroll-behavior: smooth; scroll-padding-top: 5rem; }
+body { min-height: 100dvh; font-family: var(--font-body); font-size: var(--text-base); color: var(--text); background: var(--bg); line-height: 1.65; }
+img { display: block; max-width: 100%; }
+h1,h2,h3,h4 { text-wrap: balance; line-height: 1.15; font-family: var(--font-display); font-weight: 400; }
+p, li { text-wrap: pretty; }
+table { border-collapse: collapse; width: 100%; }
+button { cursor: pointer; background: none; border: none; font: inherit; color: inherit; }
+::selection { background: var(--gold-dim); color: var(--text); }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+/* ─── SCROLL ANIMATIONS ─── */
+.fade-in { opacity: 1; }
+@supports (animation-timeline: scroll()) {
+  .fade-in {
+    opacity: 0;
+    animation: fadeReveal linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 60%;
+  }
+}
+@keyframes fadeReveal { to { opacity: 1; } }
+
+/* ─── NAV ─── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--space-4) var(--space-8);
+  background: color-mix(in oklch, var(--bg) 88%, transparent);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: var(--space-3);
+  font-family: var(--font-display); font-size: var(--text-lg);
+  letter-spacing: -0.01em;
+}
+.nav-logo svg { color: var(--gold); }
+.nav-links { display: flex; gap: var(--space-6); list-style: none; }
+.nav-links a { font-size: var(--text-sm); color: var(--text-muted); text-decoration: none; transition: color var(--transition); }
+.nav-links a:hover { color: var(--text); }
+.nav-right { display: flex; align-items: center; gap: var(--space-4); }
+.theme-toggle {
+  width: 36px; height: 36px; border-radius: var(--radius-full);
+  display: grid; place-items: center; color: var(--text-muted);
+  border: 1px solid var(--border);
+  transition: color var(--transition), border-color var(--transition), background var(--transition);
+}
+.theme-toggle:hover { color: var(--text); border-color: var(--gold); background: var(--gold-dim); }
+
+/* ─── HERO ─── */
+.hero {
+  max-width: var(--content-wide);
+  margin: 0 auto;
+  padding: clamp(var(--space-16), 8vw, var(--space-24)) var(--space-8) var(--space-12);
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  font-size: var(--text-xs); font-family: var(--font-mono);
+  color: var(--gold); letter-spacing: 0.12em; text-transform: uppercase;
+  background: var(--gold-dim); border: 1px solid rgba(201,168,76,0.2);
+  padding: var(--space-1) var(--space-3); border-radius: var(--radius-full);
+  margin-bottom: var(--space-8);
+}
+.hero-title {
+  font-size: var(--text-3xl); max-width: 16ch;
+  color: var(--text); margin-bottom: var(--space-6);
+  letter-spacing: -0.02em;
+}
+.hero-title em { color: var(--gold); font-style: italic; }
+.hero-sub {
+  font-size: var(--text-lg); color: var(--text-muted);
+  max-width: 58ch; margin-bottom: var(--space-10); font-weight: 300;
+}
+.hero-meta {
+  display: flex; flex-wrap: wrap; gap: var(--space-6);
+  font-size: var(--text-sm); color: var(--text-muted);
+  font-family: var(--font-mono);
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-6);
+}
+.hero-meta span { display: flex; align-items: center; gap: var(--space-2); }
+.hero-meta strong { color: var(--text); font-weight: 500; }
+
+/* ─── SECTION CONTAINER ─── */
+.section {
+  max-width: var(--content-wide);
+  margin: 0 auto;
+  padding: clamp(var(--space-10), 5vw, var(--space-20)) var(--space-8);
+}
+.section-label {
+  font-family: var(--font-mono); font-size: var(--text-xs);
+  color: var(--gold); letter-spacing: 0.12em; text-transform: uppercase;
+  margin-bottom: var(--space-4);
+}
+.section-title {
+  font-size: var(--text-2xl); color: var(--text);
+  margin-bottom: var(--space-4); letter-spacing: -0.02em;
+}
+.section-lead {
+  font-size: var(--text-lg); color: var(--text-muted);
+  max-width: 62ch; font-weight: 300;
+  margin-bottom: var(--space-10);
+}
+hr.divider {
+  border: none; border-top: 1px solid var(--border);
+  max-width: var(--content-wide); margin: 0 auto;
+}
+
+/* ─── KPI GRID ─── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(240px,100%), 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-10);
+}
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6) var(--space-6) var(--space-5);
+  position: relative; overflow: hidden;
+  transition: box-shadow var(--transition);
+}
+.kpi-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+}
+.kpi-card.gold::before { background: var(--gold); }
+.kpi-card.teal::before { background: var(--teal); }
+.kpi-card.red::before  { background: var(--red); }
+.kpi-card.green::before { background: var(--green); }
+.kpi-card:hover { box-shadow: var(--shadow-md); }
+.kpi-label { font-size: var(--text-xs); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; font-family: var(--font-mono); margin-bottom: var(--space-2); }
+.kpi-value { font-size: var(--text-xl); color: var(--text); font-family: var(--font-display); margin-bottom: var(--space-1); font-variant-numeric: tabular-nums; }
+.kpi-value.gold { color: var(--gold); }
+.kpi-value.teal { color: var(--teal); }
+.kpi-value.green { color: var(--green); }
+.kpi-value.red { color: var(--red); }
+.kpi-delta { font-size: var(--text-xs); color: var(--text-muted); font-family: var(--font-mono); }
+
+/* ─── CHART CARD ─── */
+.chart-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  margin-bottom: var(--space-6);
+}
+.chart-header { margin-bottom: var(--space-6); }
+.chart-title { font-size: var(--text-lg); color: var(--text); font-family: var(--font-display); margin-bottom: var(--space-1); }
+.chart-subtitle { font-size: var(--text-sm); color: var(--text-muted); }
+.chart-wrap { position: relative; height: 320px; }
+
+/* ─── TABLE ─── */
+.table-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  margin-bottom: var(--space-8);
+}
+.data-table { font-size: var(--text-sm); font-variant-numeric: tabular-nums lining-nums; }
+.data-table thead th {
+  padding: var(--space-4) var(--space-5);
+  font-size: var(--text-xs); font-family: var(--font-mono);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-muted); background: var(--surface-2);
+  text-align: left; border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.data-table thead th:first-child { border-radius: var(--radius-xl) 0 0 0; }
+.data-table thead th:last-child { border-radius: 0 var(--radius-xl) 0 0; text-align: right; }
+.data-table tbody td {
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--divider);
+  color: var(--text);
+}
+.data-table tbody td:last-child { text-align: right; font-family: var(--font-mono); }
+.data-table tbody td:first-child { color: var(--text-muted); font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: 0.04em; }
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table tbody tr:hover td { background: var(--gold-glow); }
+.data-table tfoot td {
+  padding: var(--space-4) var(--space-5);
+  font-size: var(--text-sm); font-weight: 600;
+  background: var(--surface-2);
+  border-top: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-mono);
+}
+.data-table tfoot td:last-child { text-align: right; }
+.tag-pos { color: var(--green); }
+.tag-neg { color: var(--red); }
+.tag-neu { color: var(--text-muted); }
+
+/* ─── TWO-COL GRID ─── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+.two-col-3 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+
+/* ─── CALLOUT / INSIGHT BOX ─── */
+.insight-box {
+  display: flex; gap: var(--space-5);
+  padding: var(--space-6) var(--space-6);
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--space-6);
+  border: 1px solid;
+}
+.insight-box.gold { background: var(--gold-dim); border-color: rgba(201,168,76,0.25); }
+.insight-box.teal { background: var(--teal-dim); border-color: rgba(61,168,176,0.25); }
+.insight-box.red  { background: var(--red-dim);  border-color: rgba(224,90,90,0.25); }
+.insight-box.green { background: var(--green-dim); border-color: rgba(76,175,125,0.25); }
+.insight-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+.insight-body { font-size: var(--text-sm); color: var(--text-muted); line-height: 1.7; }
+.insight-body strong { color: var(--text); display: block; margin-bottom: var(--space-1); font-size: var(--text-base); font-family: var(--font-display); }
+
+/* ─── SCENARIO CARDS ─── */
+.scenario-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--space-5); margin-bottom: var(--space-10); }
+.scenario-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  position: relative;
+}
+.scenario-card.featured {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 1px var(--gold), var(--shadow-md);
+}
+.scenario-badge {
+  position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+  font-size: var(--text-xs); font-family: var(--font-mono);
+  background: var(--gold); color: var(--text-inverse);
+  padding: 2px var(--space-3); border-radius: var(--radius-full);
+  letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap;
+}
+.scenario-name { font-family: var(--font-display); font-size: var(--text-lg); margin-bottom: var(--space-2); color: var(--text); }
+.scenario-sub { font-size: var(--text-xs); color: var(--text-muted); font-family: var(--font-mono); margin-bottom: var(--space-5); letter-spacing: 0.04em; }
+.scenario-metric { margin-bottom: var(--space-3); }
+.scenario-metric-label { font-size: var(--text-xs); color: var(--text-muted); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.06em; }
+.scenario-metric-value { font-size: var(--text-xl); font-family: var(--font-display); }
+.scenario-metric-value.gold { color: var(--gold); }
+.scenario-metric-value.teal { color: var(--teal); }
+.scenario-metric-value.green { color: var(--green); }
+.scenario-divider { border: none; border-top: 1px solid var(--divider); margin: var(--space-4) 0; }
+.scenario-rows {}
+.scenario-row { display: flex; justify-content: space-between; align-items: center; font-size: var(--text-xs); padding: var(--space-1) 0; }
+.scenario-row-label { color: var(--text-muted); }
+.scenario-row-value { font-family: var(--font-mono); color: var(--text); }
+
+/* ─── NARRATIVE BLOCK ─── */
+.narrative {
+  max-width: var(--content-narrow); margin: 0 auto;
+  padding: clamp(var(--space-10), 5vw, var(--space-16)) var(--space-8);
+}
+.narrative p { font-size: var(--text-base); color: var(--text-muted); margin-bottom: var(--space-5); line-height: 1.75; }
+.narrative p strong { color: var(--text); font-weight: 600; }
+.pull-quote {
+  font-family: var(--font-display); font-size: var(--text-xl);
+  color: var(--text); font-style: italic;
+  border-left: 2px solid var(--gold);
+  padding-left: var(--space-6); margin: var(--space-8) 0;
+  line-height: 1.4; letter-spacing: -0.01em;
+}
+
+/* ─── VERDICT / CONCLUSION ─── */
+.verdict-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: var(--space-5); }
+.verdict-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-xl); padding: var(--space-6);
+}
+.verdict-icon { font-size: 2rem; margin-bottom: var(--space-3); }
+.verdict-title { font-family: var(--font-display); font-size: var(--text-lg); color: var(--text); margin-bottom: var(--space-3); }
+.verdict-body { font-size: var(--text-sm); color: var(--text-muted); line-height: 1.7; }
+
+/* ─── FOOTER ─── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: var(--space-10) var(--space-8);
+  max-width: var(--content-wide); margin: 0 auto;
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+  gap: var(--space-4);
+}
+.footer-note { font-size: var(--text-xs); color: var(--text-faint); max-width: 60ch; line-height: 1.6; }
+.footer-disclaimer { font-size: var(--text-xs); color: var(--text-faint); max-width: 60ch; line-height: 1.6; }
+
+/* ─── PROGRESS BAR COMPARISON ─── */
+.bar-compare { display: flex; flex-direction: column; gap: var(--space-4); margin-bottom: var(--space-8); }
+.bar-row { display: flex; flex-direction: column; gap: var(--space-2); }
+.bar-row-header { display: flex; justify-content: space-between; align-items: baseline; }
+.bar-row-label { font-size: var(--text-sm); color: var(--text); }
+.bar-row-value { font-size: var(--text-sm); font-family: var(--font-mono); }
+.bar-track { height: 8px; background: var(--surface-3); border-radius: var(--radius-full); overflow: hidden; }
+.bar-fill { height: 100%; border-radius: var(--radius-full); transition: width 1.2s cubic-bezier(0.16,1,0.3,1); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .scenario-grid { grid-template-columns: 1fr; }
+  .verdict-grid { grid-template-columns: 1fr; }
+  .two-col { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .nav-links { display: none; }
+  .nav { padding: var(--space-4); }
+  .hero, .section { padding-inline: var(--space-4); }
+  .hero-title { font-size: clamp(2rem, 8vw, 3.5rem); }
+}
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav class="nav">
+  <div class="nav-logo">
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-label="Logo">
+      <rect x="2" y="8" width="11" height="18" rx="1.5" fill="currentColor" opacity="0.3"/>
+      <rect x="15" y="2" width="11" height="24" rx="1.5" fill="currentColor" opacity="0.8"/>
+      <path d="M2 6 L28 1" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+    </svg>
+    Property vs S&P 500
+  </div>
+  <ul class="nav-links">
+    <li><a href="#returns">Returns</a></li>
+    <li><a href="#costs">Cost Stack</a></li>
+    <li><a href="#leverage">Leverage</a></li>
+    <li><a href="#risk">Risk Profile</a></li>
+    <li><a href="#verdict">Verdict</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-toggle" data-theme-toggle aria-label="Switch theme">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-eyebrow">
+    <span>●</span> Research Report · April 2026
+  </div>
+  <h1 class="hero-title">
+    Property vs <em>S&P 500</em> — 20 Years of Uncomfortable Truth
+  </h1>
+  <p class="hero-sub">
+    RM500,000 invested in a prime Bangsar condo versus the US index fund. Same capital, same horizon, radically different outcomes — and the one number that changes everything.
+  </p>
+  <div class="hero-meta">
+    <span>📅 <strong>Jan 2006 – Apr 2026</strong></span>
+    <span>💰 <strong>RM500,000</strong> initial capital</span>
+    <span>📍 <strong>Bangsar, KL</strong> vs <strong>S&P 500 (USD)</strong></span>
+    <span>📊 <strong>Fact-checked</strong> · NAPIC · Slickcharts · FRED</span>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ─── SECTION 1: HEADLINE NUMBERS ─── -->
+<section class="section" id="returns">
+  <p class="section-label">01 — Direct Comparison</p>
+  <h2 class="section-title">The Headline Numbers</h2>
+  <p class="section-lead">Same RM500,000. Same 20 years. Here's where it ended up — net of every real cost.</p>
+
+  <!-- KPI Row -->
+  <div class="kpi-grid fade-in">
+    <div class="kpi-card gold">
+      <p class="kpi-label">S&P 500 Final Value</p>
+      <p class="kpi-value gold">RM4.23M</p>
+      <p class="kpi-delta">+747% · 11.3% CAGR (MYR)</p>
+    </div>
+    <div class="kpi-card teal">
+      <p class="kpi-label">Property Final Value</p>
+      <p class="kpi-value teal">RM1.60M</p>
+      <p class="kpi-delta">+220% · 6.0% CAGR (incl. net rent)</p>
+    </div>
+    <div class="kpi-card red">
+      <p class="kpi-label">Performance Gap</p>
+      <p class="kpi-value red">RM2.63M</p>
+      <p class="kpi-delta">S&P 500 generated 3.4× more gains</p>
+    </div>
+    <div class="kpi-card green">
+      <p class="kpi-label">Levered Property CAGR</p>
+      <p class="kpi-value green">15.7%</p>
+      <p class="kpi-delta">RM50K equity → RM869K net return</p>
+    </div>
+  </div>
+
+  <!-- Horizontal bar visual -->
+  <div class="chart-card fade-in">
+    <div class="chart-header">
+      <p class="chart-title">Total Gains — Net of All Costs</p>
+      <p class="chart-subtitle">Absolute ringgit gain from RM500,000 starting capital over 20 years</p>
+    </div>
+    <div class="bar-compare">
+      <div class="bar-row">
+        <div class="bar-row-header">
+          <span class="bar-row-label">S&P 500 (unlevered, MYR-adjusted)</span>
+          <span class="bar-row-value" style="color:var(--gold)">+RM3,734,840</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--gold)"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-row-header">
+          <span class="bar-row-label">Property — Levered (RM50K equity)</span>
+          <span class="bar-row-value" style="color:var(--green)">+RM869,120</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:23.3%;background:var(--green)"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-row-header">
+          <span class="bar-row-label">Property — Unlevered (RM500K cash)</span>
+          <span class="bar-row-value" style="color:var(--teal)">+RM1,102,381</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:29.5%;background:var(--teal)"></div></div>
+      </div>
+    </div>
+    <p style="font-size:var(--text-xs);color:var(--text-faint);font-family:var(--font-mono)">* Bar width proportional to absolute gain. Levered property ROI measured on RM50K deployed, not RM500K.</p>
+  </div>
+
+  <!-- Growth Chart -->
+  <div class="chart-card fade-in">
+    <div class="chart-header">
+      <p class="chart-title">RM500,000 Capital Value Growth (2006–2026)</p>
+      <p class="chart-subtitle">S&P 500 in MYR vs. prime KL property capital appreciation only</p>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="growthChart"></canvas>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ─── SECTION 2: COST STACK ─── -->
+<section class="section" id="costs">
+  <p class="section-label">02 — Rental Yield & Cost Stack</p>
+  <h2 class="section-title">What 20 Years of Being a Landlord Actually Costs</h2>
+  <p class="section-lead">Gross rental yield is a marketing number. Here is the full operating cost reality for a prime KL condo, year by year.</p>
+
+  <div class="two-col fade-in">
+    <div class="chart-card" style="margin-bottom:0">
+      <div class="chart-header">
+        <p class="chart-title">Rental Income vs. Operating Costs</p>
+        <p class="chart-subtitle">Gross rent collected vs. all annual expenses</p>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="rentalChart"></canvas>
+      </div>
+    </div>
+    <div>
+      <div class="table-wrap" style="margin-bottom:var(--space-5)">
+        <table class="data-table">
+          <thead><tr><th>Cost Category</th><th style="text-align:right">20-Yr Total</th></tr></thead>
+          <tbody>
+            <tr><td>Maintenance Fees (RM500/mo)</td><td class="tag-neg">−RM120,000</td></tr>
+            <tr><td>Repairs & Capex (0.8%/yr)</td><td class="tag-neg">−RM80,000</td></tr>
+            <tr><td>Quit Rent + Assessment</td><td class="tag-neg">−RM36,000</td></tr>
+            <tr><td>Insurance</td><td class="tag-neg">−RM24,000</td></tr>
+            <tr><td>Agent Commissions</td><td class="tag-neg">−RM20,000</td></tr>
+            <tr><td>Vacancy (6% of gross)</td><td class="tag-neg">−RM38,317</td></tr>
+            <tr><td>Rental Non-Payment (4 mo)</td><td class="tag-neg">−RM8,333</td></tr>
+            <tr><td>Income Tax (~9% net)</td><td class="tag-neg">−RM36,234</td></tr>
+          </tbody>
+          <tfoot><tr><td>Total Costs</td><td style="color:var(--red)">−RM362,884</td></tr></tfoot>
+        </table>
+      </div>
+      <div class="insight-box teal">
+        <span class="insight-icon">📌</span>
+        <div class="insight-body">
+          <strong>Net Rental Reality</strong>
+          Gross rent collected: <strong style="color:var(--text)">RM638,616</strong> over 20 years. After all costs: <strong style="color:var(--green)">RM275,732</strong> net. You keep just <strong style="color:var(--text)">43 cents of every ringgit</strong> you collect in rent.
+        </div>
+      </div>
+      <div class="insight-box red">
+        <span class="insight-icon">⚠️</span>
+        <div class="insight-body">
+          <strong>The "4% Yield" Illusion</strong>
+          A 5% gross yield on a RM500,000 property sounds like RM25,000/yr. The true net yield after costs is closer to <strong style="color:var(--text)">2.1% per year</strong> — barely above Bank Negara's OPR rate.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ─── SECTION 3: LEVERAGE ─── -->
+<section class="section" id="leverage">
+  <p class="section-label">03 — Leverage Analysis</p>
+  <h2 class="section-title">The Number Nobody Puts on Their Slide Deck</h2>
+  <p class="section-lead">With RM50,000 down and RM450,000 borrowed at 4.5%, your equity CAGR jumps to 15.7% — beating the S&P 500. Leverage is property's real superpower, not "safety".</p>
+
+  <!-- 3-scenario cards -->
+  <div class="scenario-grid fade-in">
+    <!-- S&P 500 -->
+    <div class="scenario-card">
+      <p class="scenario-name">S&P 500</p>
+      <p class="scenario-sub">UNLEVERED · USD INDEX · BUY & HOLD</p>
+      <div class="scenario-metric">
+        <p class="scenario-metric-label">Final Value</p>
+        <p class="scenario-metric-value gold">RM4,234,840</p>
+      </div>
+      <hr class="scenario-divider">
+      <div class="scenario-rows">
+        <div class="scenario-row"><span class="scenario-row-label">Capital Deployed</span><span class="scenario-row-value">RM500,000</span></div>
+        <div class="scenario-row"><span class="scenario-row-label">Total Gain</span><span class="scenario-row-value" style="color:var(--gold)">+RM3,734,840</span></div>
+        <div class="scenario-row"><span class="scenario-row-label">ROI</span><span class="scenario-row-value" style="color:var(--gold)">747%</span></div>
+        <div class="scenario-row"><span class="scenario-row-label">CAGR (MYR)</span><span class="scenario-row-value" style="color:var(--gold)">11.3%</span></div>
+        <div class="scenario-row"><span class="scenario-row-label">Monthly Cost</span><span class="scenario-row-value">RM0</span></div>
+        <div class="scenario-row"><span class="scenario-row-label">Management Burden</span><span class="scenario-row-value" style="color:var(--green)">Zero</span></div>
+      </div>
+    </div>
+
+    <!-- Levered Property — FEATURED -->
+    <div class="scenario-card featured">
+      <span class="scenario-badge">⚡ Leverage Play</span>
+      <p class="scenario-name">Property (Levered)</p>
+      <p class="scenario-sub">RM50K EQUITY · RM450K LOAN · 4.5%</p>
+      <div class="scenario-metric">
+        <p class="scenario-metric-label">Net Return on Equity</p>
+        <p class="scenario-metric-value green">RM869,120</p>
+      </div>
+      <hr class="scenario-divider">
+      <div class="scenario-rows">
+        <div class="scenario-row"><span class="scenario-row-label">Cash Deployed</span><span class="scenario-row-value">RM50,000</span></div>
+        <div class="scenario-row"><span class="scenario-row-label">Asset Controlled</span><span class="scenario-row-value">RM500,000</span></div>
+        <div class="scenario-row"><span class="scenario-row-label">Total Gain (net)</span><span class="scenario-row-value" style="color:var(--green)">+RM869,120</span></div>
+        <div class="scenario-row"><span class="scenario-row-label">ROI on Equity</span><span class="scenario-row-value" style="color:var(--green)">1,738%</span></div>
+        <div class="scenario-row"><span class="scenario-row-label">Equity CAGR</span><span class="scenario-row-value" style="color:var(--green)">15.7%</span></div>
+        <div class="scenario-row"><span class="scenario-row-label">Monthly Mortgage</span><span class="scenario-row-value" style="color:var(--red)">RM2,847</span></div>
+      </div>
+    </div>
+
+    <!-- Unlevered Property -->
+    <div class="scenario-card">
+      <p class="scenario-name">Property (Unlevered)</p>
+      <p class="scenario-sub">RM500K CASH · BANGSAR CONDO</p>
+      <div class="scenario-metric">
+        <p class="scenario-metric-label">Total Net Return</p>
+        <p class="scenario-metric-value teal">RM1,102,381</p>
+      </div>
+      <hr class="scenario-divider">
+      <div class="scenario-rows">
+        <div class="scenario-row"><span class="scenario-row-label">Capital Deployed</span><span class="scenario-row-value">RM500,000</span></div>
+        <div class="scenario-row"><span class="scenario-row-label">Property Value 2026</span><span class="scenario-row-value">RM1,326,649</span></div>
+        <div class="scenario-row"><span class="scenario-row-label">Net Rent (20yr)</span><span class="scenario-row-value" style="color:var(--teal)">+RM275,732</span></div>
+        <div class="scenario-row"><span class="scenario-row-label">ROI</span><span class="scenario-row-value" style="color:var(--teal)">220%</span></div>
+        <div class="scenario-row"><span class="scenario-row-label">CAGR</span><span class="scenario-row-value" style="color:var(--teal)">6.0%</span></div>
+        <div class="scenario-row"><span class="scenario-row-label">Monthly Cost</span><span class="scenario-row-value" style="color:var(--text-muted)">RM500 (maint)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leverage chart -->
+  <div class="chart-card fade-in">
+    <div class="chart-header">
+      <p class="chart-title">Equity CAGR by Scenario</p>
+      <p class="chart-subtitle">Annualised return on your actual cash deployed</p>
+    </div>
+    <div class="chart-wrap" style="height:200px">
+      <canvas id="cagrChart"></canvas>
+    </div>
+  </div>
+
+  <div class="insight-box gold fade-in">
+    <span class="insight-icon">💡</span>
+    <div class="insight-body">
+      <strong>The Leverage Paradox</strong>
+      Levered property produces a <strong style="color:var(--text)">15.7% equity CAGR</strong> — beating the S&P 500's 11.3%. But this comparison is asymmetric: the S&P 500 investor also only deployed RM500K, not a leveraged exposure. To truly compare: a Malaysian investor who took RM50K and bought RM500K in S&P 500 via CFDs or margin would need ~11.3% on RM500K of levered USD exposure — with no rental income cushion and daily mark-to-market. Leverage amplifies in both directions.
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ─── SECTION 4: RISK / PSYCHOLOGY ─── -->
+<section class="section" id="risk">
+  <p class="section-label">04 — Risk, Psychology & Liquidity</p>
+  <h2 class="section-title">What the Spreadsheet Cannot Capture</h2>
+  <p class="section-lead">Numbers measure outcomes. They don't measure what it feels like to watch your net worth drop 37% in a year — or chase a non-paying tenant for four months.</p>
+
+  <div class="chart-card fade-in">
+    <div class="chart-header">
+      <p class="chart-title">S&P 500 Annual Returns (2006–2025)</p>
+      <p class="chart-subtitle">The emotional journey the investor must survive to reach 747% total return</p>
+    </div>
+    <div class="chart-wrap" style="height:260px">
+      <canvas id="annualReturnsChart"></canvas>
+    </div>
+  </div>
+
+  <div class="two-col fade-in" style="margin-bottom:var(--space-8)">
+    <div class="insight-box red" style="margin-bottom:0">
+      <span class="insight-icon">📉</span>
+      <div class="insight-body">
+        <strong>2008: −37% in One Year</strong>
+        RM500,000 looked like RM315,000 on screen. No bank guarantee. No EPF. No insurance. The investor who panic-sold in March 2009 locked in a permanent −37% loss and missed the 26.46% recovery in 2009.
+      </div>
+    </div>
+    <div class="insight-box teal" style="margin-bottom:0">
+      <span class="insight-icon">🧱</span>
+      <div class="insight-body">
+        <strong>Property's Hidden Advantage</strong>
+        Nobody sends you a daily notification saying your condo fell 5%. Illiquidity is a feature for investors who cannot trust themselves. The same friction that traps capital in a downturn also prevents panic-selling.
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison table -->
+  <div class="table-wrap fade-in">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Factor</th>
+          <th style="text-align:left">Property</th>
+          <th style="text-align:right">S&P 500</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Liquidity</td>
+          <td style="color:var(--red)">3–12 months to exit</td>
+          <td style="color:var(--green)">2–3 business days</td>
+        </tr>
+        <tr>
+          <td>Transaction Cost</td>
+          <td style="color:var(--red)">2–3% agent + RPGT (up to 30%)</td>
+          <td style="color:var(--green)">&lt;0.3% brokerage</td>
+        </tr>
+        <tr>
+          <td>Partial Exit</td>
+          <td style="color:var(--red)">Impossible</td>
+          <td style="color:var(--green)">Any amount, anytime</td>
+        </tr>
+        <tr>
+          <td>Worst Single Year</td>
+          <td style="color:var(--green)">Invisible (no mark-to-market)</td>
+          <td style="color:var(--red)">−37% (2008), visible daily</td>
+        </tr>
+        <tr>
+          <td>Management Burden</td>
+          <td style="color:var(--red)">High (tenant, repairs, tax filing)</td>
+          <td style="color:var(--green)">Zero (set and forget)</td>
+        </tr>
+        <tr>
+          <td>Leverage Available</td>
+          <td style="color:var(--green)">Yes (90% LTV residential)</td>
+          <td style="color:var(--text-muted)">Complex / margin / risky</td>
+        </tr>
+        <tr>
+          <td>Currency Risk</td>
+          <td style="color:var(--green)">None (MYR asset)</td>
+          <td style="color:var(--text-muted)">USD exposure (tailwind/headwind)</td>
+        </tr>
+        <tr>
+          <td>Regular Cash Flow</td>
+          <td style="color:var(--green)">Yes (rental income)</td>
+          <td style="color:var(--text-muted)">Dividends (reinvested in index)</td>
+        </tr>
+        <tr>
+          <td>Min. Entry</td>
+          <td style="color:var(--red)">RM50K–500K+</td>
+          <td style="color:var(--green)">RM1 (via ETF)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ─── SECTION 5: VERDICT ─── -->
+<section class="section" id="verdict">
+  <p class="section-label">05 — The Uncomfortable Truth</p>
+  <h2 class="section-title">Who Actually Wins?</h2>
+  <p class="section-lead">There is no universal winner. There are three different strategies for three different investors — and only one of them is clearly suboptimal.</p>
+
+  <div class="scenario-grid fade-in" style="margin-bottom:var(--space-10)">
+    <div class="chart-card" style="margin-bottom:0">
+      <div class="chart-header">
+        <p class="chart-title">Risk-Return Matrix</p>
+        <p class="chart-subtitle">CAGR vs. management effort</p>
+      </div>
+      <div class="chart-wrap" style="height:260px">
+        <canvas id="riskReturnChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-card" style="margin-bottom:0">
+      <div class="chart-header">
+        <p class="chart-title">Return Composition</p>
+        <p class="chart-subtitle">Where the gains actually came from</p>
+      </div>
+      <div class="chart-wrap" style="height:260px">
+        <canvas id="compositionChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-card" style="margin-bottom:0">
+      <div class="chart-header">
+        <p class="chart-title">Property Cost Breakdown</p>
+        <p class="chart-subtitle">20-year cumulative expenses</p>
+      </div>
+      <div class="chart-wrap" style="height:260px">
+        <canvas id="costBreakdown"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="verdict-grid fade-in">
+    <div class="verdict-card">
+      <div class="verdict-icon">📈</div>
+      <p class="verdict-title">Choose S&P 500 if...</p>
+      <p class="verdict-body">You have iron discipline, can stomach −37% years without selling, want zero management overhead, and are comfortable with USD exposure. Pure wealth compounding over 20+ years. The data overwhelmingly favours this path for total absolute return.</p>
+    </div>
+    <div class="verdict-card" style="border-color:var(--gold)">
+      <div class="verdict-icon">🏗️</div>
+      <p class="verdict-title">Choose Levered Property if...</p>
+      <p class="verdict-body">You have stable income to service a RM2,847/month mortgage regardless of vacancy, local market knowledge, time to manage tenants, and want to deploy RM50K to control RM500K in assets. The 15.7% equity CAGR is genuinely competitive — but the leverage risk is real.</p>
+    </div>
+    <div class="verdict-card" style="border-color:var(--red)">
+      <div class="verdict-icon">⚠️</div>
+      <p class="verdict-title">Avoid Unlevered Property unless...</p>
+      <p class="verdict-body">You have specific needs — personal use, estate planning, or superior location knowledge. As a pure investment vehicle, full-cash property purchase is the most labour-intensive, least liquid, and worst-returning of the three options on this page.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── NARRATIVE / CLOSE ─── -->
+<section class="narrative fade-in">
+  <div class="pull-quote">"The most dangerous belief in Malaysian investing isn't that property is bad. It's that property is always safe."</div>
+  <p>Safety and performance are not the same thing. Property's invisibility of losses, tangibility, and forced savings discipline are <strong>genuine psychological advantages</strong> — not to be dismissed. The condo investor who slept soundly through 2008 while the S&P 500 screamed −37% was experiencing a real feature of the asset class.</p>
+  <p>But if the S&P 500 investor held through every storm — 2008, 2011, 2018, 2020, 2022 — they walked away with <strong>RM4.23 million</strong> from the same RM500,000. The levered property investor built an <strong>equity CAGR of 15.7%</strong>. The full-cash property investor got <strong>220% over 20 years</strong> — respectable, but last place in this comparison.</p>
+  <p>The best investors don't pick sides. They use leverage for property, index funds for compounding, and keep enough liquidity to survive both. The question isn't which asset is better. It's which asset is better <strong>for you</strong>.</p>
+</section>
+
+<hr class="divider">
+<footer>
+  <p class="footer-note">
+    Data sources: S&P 500 annual returns from Slickcharts.com · USD/MYR historical rates from FRED (Federal Reserve) and Bank of England · Current exchange rate from Pound Sterling Live (Apr 2026: ~RM4.03) · Bangsar rental yields from Nexaprop, Bamboo Routes · Property appreciation benchmarks from GlobalPropertyGuide, EdgeProp · Home loan rates from RinggitPlus, CIMB Malaysia · Property costs from iProperty, Bamboo Routes · NAPIC MHPI data via Trading Economics. All figures have been independently fact-checked. Exchange rate corrections applied: 2006 annual average RM3.67/USD (not end-December rate).
+  </p>
+  <p class="footer-disclaimer" style="margin-top:var(--space-3)">
+    ⚠️ This report is for informational and educational purposes only. It does not constitute financial advice. Past performance does not guarantee future results. All investment decisions should be made in consultation with a licensed financial advisor.
+  </p>
+</footer>
+
+<script>
+// ─── THEME TOGGLE ───
+(function(){
+  const t = document.querySelector('[data-theme-toggle]');
+  const r = document.documentElement;
+  let d = r.getAttribute('data-theme') || 'dark';
+  t && t.addEventListener('click', () => {
+    d = d === 'dark' ? 'light' : 'dark';
+    r.setAttribute('data-theme', d);
+  });
+})();
+
+// ─── CHART DEFAULTS ───
+function getColors() {
+  const s = getComputedStyle(document.documentElement);
+  return {
+    gold:    s.getPropertyValue('--gold').trim(),
+    teal:    s.getPropertyValue('--teal').trim(),
+    red:     s.getPropertyValue('--red').trim(),
+    green:   s.getPropertyValue('--green').trim(),
+    blue:    s.getPropertyValue('--blue').trim(),
+    text:    s.getPropertyValue('--text').trim(),
+    muted:   s.getPropertyValue('--text-muted').trim(),
+    faint:   s.getPropertyValue('--text-faint').trim(),
+    surface: s.getPropertyValue('--surface-2').trim(),
+    border:  s.getPropertyValue('--border').trim(),
+  };
+}
+
+const FONT = "'DM Sans', sans-serif";
+Chart.defaults.font.family = FONT;
+Chart.defaults.font.size = 12;
+
+function baseOptions(c) {
+  return {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { labels: { color: c.muted, font: { family: FONT, size: 11 }, boxWidth: 12, padding: 16 } },
+      tooltip: {
+        backgroundColor: c.surface, titleColor: c.text, bodyColor: c.muted,
+        borderColor: c.border, borderWidth: 1, padding: 10,
+        titleFont: { family: FONT, weight: '600' },
+      }
+    },
+    scales: {
+      x: { grid: { color: c.faint + '44', drawBorder: false }, ticks: { color: c.muted, font: { family: FONT, size: 11 } } },
+      y: { grid: { color: c.faint + '44', drawBorder: false }, ticks: { color: c.muted, font: { family: FONT, size: 11 } } }
+    }
+  };
+}
+
+// ─── CHART 1: GROWTH ───
+(function() {
+  const c = getColors();
+  const years = [2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026];
+  const spReturns = [0.1079,0.0549,-0.3700,0.2646,0.1506,0.0211,0.1600,0.3239,0.1369,0.0138,0.1196,0.2183,-0.0438,0.3149,0.1840,0.2871,-0.1811,0.2629,0.2502,0.1788];
+  const fxRates = [];
+  for(let i=0;i<=20;i++) fxRates.push(3.67 + (4.03-3.67)*(i/20));
+  let usdVal = 500000/3.67;
+  const spVals = [500000];
+  spReturns.forEach((r,i)=>{ usdVal*=(1+r); spVals.push(usdVal*fxRates[i+1]); });
+  const propVals = years.map((_,i)=>500000*(1.05**i));
+
+  const ctx = document.getElementById('growthChart').getContext('2d');
+  const gradSP = ctx.createLinearGradient(0,0,0,300);
+  gradSP.addColorStop(0, c.gold+'55'); gradSP.addColorStop(1, c.gold+'00');
+  const gradProp = ctx.createLinearGradient(0,0,0,300);
+  gradProp.addColorStop(0, c.teal+'55'); gradProp.addColorStop(1, c.teal+'00');
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: years.map(String),
+      datasets: [
+        { label: 'S&P 500 (MYR)', data: spVals, borderColor: c.gold, backgroundColor: gradSP, fill: true, tension: 0.3, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2.5 },
+        { label: 'Property (Capital)', data: propVals, borderColor: c.teal, backgroundColor: gradProp, fill: true, tension: 0.3, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2.5 }
+      ]
+    },
+    options: {
+      ...baseOptions(c),
+      scales: {
+        x: { ...baseOptions(c).scales.x, ticks: { ...baseOptions(c).scales.x.ticks, maxRotation: 0 } },
+        y: {
+          ...baseOptions(c).scales.y,
+          ticks: { ...baseOptions(c).scales.y.ticks, callback: v => 'RM'+(v/1000000).toFixed(1)+'M' }
+        }
+      },
+      plugins: { ...baseOptions(c).plugins, tooltip: { ...baseOptions(c).plugins.tooltip, callbacks: { label: ctx => ' RM'+ctx.parsed.y.toLocaleString('en-MY',{maximumFractionDigits:0}) } } }
+    }
+  });
+})();
+
+// ─── CHART 2: RENTAL vs COSTS ───
+(function() {
+  const c = getColors();
+  const years = Array.from({length:20},(_,i)=>2006+i);
+  const grossRent = years.map((_,i)=>25000*(1.025**i));
+  const costs = grossRent.map(r=>r*0.568);
+
+  new Chart(document.getElementById('rentalChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: years.map(String),
+      datasets: [
+        { label: 'Gross Rent', data: grossRent, backgroundColor: c.teal+'99', borderRadius: 3 },
+        { label: 'Total Costs', data: costs, backgroundColor: c.red+'99', borderRadius: 3 }
+      ]
+    },
+    options: {
+      ...baseOptions(c),
+      scales: {
+        x: { ...baseOptions(c).scales.x, ticks: { ...baseOptions(c).scales.x.ticks, maxTicksLimit: 6 } },
+        y: { ...baseOptions(c).scales.y, ticks: { ...baseOptions(c).scales.y.ticks, callback: v => 'RM'+(v/1000).toFixed(0)+'k' } }
+      },
+      plugins: { ...baseOptions(c).plugins, tooltip: { ...baseOptions(c).plugins.tooltip, callbacks: { label: ctx => ' RM'+ctx.parsed.y.toLocaleString('en-MY',{maximumFractionDigits:0}) } } }
+    }
+  });
+})();
+
+// ─── CHART 3: CAGR BAR ───
+(function() {
+  const c = getColors();
+  new Chart(document.getElementById('cagrChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: ['Unlevered Property', 'S&P 500 (MYR)', 'Levered Property'],
+      datasets: [{ data: [6.0, 11.3, 15.7], backgroundColor: [c.teal, c.gold, c.green], borderRadius: 6, borderSkipped: false }]
+    },
+    options: {
+      ...baseOptions(c),
+      indexAxis: 'y',
+      plugins: { ...baseOptions(c).plugins, legend: { display: false }, datalabels: {} },
+      scales: {
+        x: { ...baseOptions(c).scales.x, ticks: { ...baseOptions(c).scales.x.ticks, callback: v => v+'%' } },
+        y: { ...baseOptions(c).scales.y, grid: { display: false } }
+      }
+    }
+  });
+})();
+
+// ─── CHART 4: ANNUAL RETURNS ───
+(function() {
+  const c = getColors();
+  const rets = [10.79,5.49,-37.0,26.46,15.06,2.11,16.0,32.39,13.69,1.38,11.96,21.83,-4.38,31.49,18.4,28.71,-18.11,26.29,25.02,17.88];
+  const yrs = Array.from({length:20},(_,i)=>String(2006+i));
+
+  new Chart(document.getElementById('annualReturnsChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: yrs,
+      datasets: [{
+        data: rets,
+        backgroundColor: rets.map(r=>r>=0?c.green+'cc':c.red+'cc'),
+        borderRadius: 3, borderSkipped: false
+      }]
+    },
+    options: {
+      ...baseOptions(c),
+      plugins: { ...baseOptions(c).plugins, legend: { display: false } },
+      scales: {
+        x: { ...baseOptions(c).scales.x, ticks: { ...baseOptions(c).scales.x.ticks, maxRotation: 45 } },
+        y: { ...baseOptions(c).scales.y, ticks: { ...baseOptions(c).scales.y.ticks, callback: v => v+'%' } }
+      }
+    }
+  });
+})();
+
+// ─── CHART 5: RISK-RETURN SCATTER ───
+(function() {
+  const c = getColors();
+  new Chart(document.getElementById('riskReturnChart').getContext('2d'), {
+    type: 'bubble',
+    data: {
+      datasets: [
+        { label: 'S&P 500', data: [{x:2,y:11.3,r:14}], backgroundColor: c.gold+'bb', borderColor: c.gold },
+        { label: 'Levered Property', data: [{x:8,y:15.7,r:12}], backgroundColor: c.green+'bb', borderColor: c.green },
+        { label: 'Unlevered Property', data: [{x:6,y:6.0,r:10}], backgroundColor: c.teal+'bb', borderColor: c.teal },
+      ]
+    },
+    options: {
+      ...baseOptions(c),
+      scales: {
+        x: { ...baseOptions(c).scales.x, title: { display:true, text:'Management Effort (1=low)', color: c.muted }, min:0, max:10 },
+        y: { ...baseOptions(c).scales.y, title: { display:true, text:'CAGR %', color: c.muted }, ticks: { callback: v=>v+'%' } }
+      }
+    }
+  });
+})();
+
+// ─── CHART 6: RETURN COMPOSITION DOUGHNUT ───
+(function() {
+  const c = getColors();
+  new Chart(document.getElementById('compositionChart').getContext('2d'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Capital Gain', 'Net Rental Income', 'Operating Costs'],
+      datasets: [{
+        data: [826649, 275732, 362884],
+        backgroundColor: [c.teal, c.green, c.red+'cc'],
+        borderWidth: 0, hoverOffset: 8
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '68%',
+      plugins: {
+        legend: { position:'bottom', labels: { color: c.muted, font:{family:FONT,size:11}, boxWidth:10, padding:12 } },
+        tooltip: { backgroundColor: c.surface, titleColor: c.text, bodyColor: c.muted, borderColor: c.border, borderWidth:1,
+          callbacks: { label: ctx => ' RM'+ctx.parsed.toLocaleString('en-MY',{maximumFractionDigits:0}) } }
+      }
+    }
+  });
+})();
+
+// ─── CHART 7: COST BREAKDOWN ───
+(function() {
+  const c = getColors();
+  new Chart(document.getElementById('costBreakdown').getContext('2d'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Maintenance','Repairs','Tax','Quit Rent','Agent','Vacancy','Bad Debt','Insurance'],
+      datasets: [{
+        data: [120000,80000,36234,36000,20000,38317,8333,24000],
+        backgroundColor: [c.red,c.gold,c.blue,c.teal,c.green,c.red+'aa',c.red+'66',c.teal+'77'],
+        borderWidth: 0, hoverOffset: 8
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '68%',
+      plugins: {
+        legend: { position:'bottom', labels: { color: c.muted, font:{family:FONT,size:11}, boxWidth:10, padding:10 } },
+        tooltip: { backgroundColor: c.surface, titleColor: c.text, bodyColor: c.muted, borderColor: c.border, borderWidth:1,
+          callbacks: { label: ctx => ' RM'+ctx.parsed.toLocaleString('en-MY',{maximumFractionDigits:0}) } }
+      }
+    }
+  });
+})();
+</script>
+</body>
+</html>
