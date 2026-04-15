@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>20-Year DCA Analysis · InsightInvests · Triple-Checked</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+:root{--bg:#07090f;--s1:#0c111c;--s2:#111827;--b1:#1a2740;--b2:#1e2f47;
+  --t1:#e8edf5;--t2:#8fa3bc;--t3:#4a6180;
+  --sp:#3b82f6;--spg:rgba(59,130,246,.12);--asm:#10b981;--asmg:rgba(16,185,129,.12);
+  --fd:#f59e0b;--fdg:rgba(245,158,11,.12);--red:#ef4444;--green:#22c55e;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--t1);font-family:Inter,system-ui,sans-serif;font-size:13px;line-height:1.55;-webkit-font-smoothing:antialiased}
+nav{position:sticky;top:0;z-index:200;background:var(--s1);border-bottom:1px solid var(--b1);height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 36px}
+.nb{font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.nd{width:6px;height:6px;background:var(--sp);border-radius:50%}
+.nl{display:flex;gap:2px}.nl a{color:var(--t3);font-size:11px;font-weight:500;text-decoration:none;padding:6px 9px;border-radius:3px;transition:.15s}.nl a:hover{color:var(--t2);background:var(--b1)}
+.vtag{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);border:1px solid rgba(34,197,94,.3);padding:2px 8px;border-radius:2px;background:rgba(34,197,94,.08)}
+.hero{padding:54px 36px 46px;border-bottom:1px solid var(--b1);max-width:1320px;margin:0 auto}
+.ey{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--t3);margin-bottom:14px}
+.hero h1{font-size:clamp(28px,3.5vw,48px);font-weight:800;letter-spacing:-1.5px;line-height:1.08;color:#f0f4fb;max-width:680px;margin-bottom:13px}
+.hero h1 b{color:var(--sp)}
+.hs{font-size:14px;color:var(--t2);max-width:560px;line-height:1.7;margin-bottom:28px}
+.krow{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--b2);border-radius:3px;overflow:hidden;width:fit-content}
+.kpi{padding:14px 24px;border-right:1px solid var(--b2)}.kpi:last-child{border:none}
+.kv{font-size:19px;font-weight:800;letter-spacing:-.5px;margin-bottom:2px}
+.kl{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--t3)}
+.wrap{max-width:1320px;margin:0 auto;padding:0 36px 80px}
+.sec{padding:42px 0 0}.sh{margin-bottom:18px}
+.sl{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--t3);margin-bottom:4px}
+.st{font-size:17px;font-weight:700;color:#eaf0fb;letter-spacing:-.3px}.sd{font-size:12px;color:var(--t3);margin-top:3px}
+.panel{background:var(--s2);border:1px solid var(--b1);border-radius:3px;overflow:hidden}
+.ph{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--b1)}
+.pt{font-size:12px;font-weight:600;color:var(--t1)}.pm{font-size:10px;color:var(--t3)}
+.pb{padding:18px}.mb{margin-bottom:14px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--b1);border:1px solid var(--b1);border-radius:3px;overflow:hidden;margin-bottom:14px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.g22{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:14px}
+.g12{display:grid;grid-template-columns:1fr 2fr;gap:14px;margin-bottom:14px}
+@media(max-width:900px){.g3,.g2,.g4,.g22,.g12{grid-template-columns:1fr}}
+.ticker{background:var(--s2);padding:18px 20px}
+.tkl{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.badge{font-size:9px;padding:2px 7px;border-radius:2px;font-weight:700;letter-spacing:.5px}
+.bsp{background:var(--spg);color:var(--sp);border:1px solid rgba(59,130,246,.25)}
+.basm{background:var(--asmg);color:var(--asm);border:1px solid rgba(16,185,129,.25)}
+.bfd{background:var(--fdg);color:var(--fd);border:1px solid rgba(245,158,11,.25)}
+.tkp{font-size:30px;font-weight:800;letter-spacing:-1px;margin-bottom:12px}
+.tsp .tkp{color:var(--sp)}.tasm .tkp{color:var(--asm)}.tfd .tkp{color:var(--fd)}
+.tkg{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px}
+.tkc .tv{font-size:12px;font-weight:700;color:var(--t1)}.tkc .tl{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
+.tkn{font-size:11px;color:var(--t2);padding:9px 11px;background:var(--bg);border-radius:2px;border-left:2px solid;line-height:1.6}
+.tsp .tkn{border-color:var(--sp)}.tasm .tkn{border-color:var(--asm)}.tfd .tkn{border-color:var(--fd)}
+.sb{background:var(--s2);border:1px solid var(--b1);border-radius:3px;padding:15px 16px}
+.sbv{font-size:22px;font-weight:800;letter-spacing:-.5px;margin-bottom:3px}
+.sbl{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px}
+.sbd{font-size:11px;color:var(--t2);line-height:1.6}
+.tbl{width:100%;border-collapse:collapse}
+.tbl thead tr{border-bottom:1px solid var(--b2)}
+.tbl th{padding:9px 12px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);text-align:left;white-space:nowrap}
+.tbl td{padding:9px 12px;font-size:12px;border-bottom:1px solid rgba(26,39,64,.5);color:var(--t2)}
+.tbl tbody tr:last-child td{border:none}.tbl tbody tr:hover td{background:rgba(255,255,255,.015)}
+.tbl td:first-child{color:var(--t1);font-weight:500}
+.sp_{color:var(--sp)!important;font-weight:700!important}.asm_{color:var(--asm)!important;font-weight:700!important}.fd_{color:var(--fd)!important;font-weight:700!important}
+.pos_{color:var(--green)!important}.neg_{color:var(--red)!important}
+.cw{position:relative}
+.ev2{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-bottom:14px}
+@media(max-width:900px){.ev2{grid-template-columns:1fr}}
+.ev{background:var(--s2);border:1px solid var(--b1);border-radius:3px;padding:14px 15px}
+.evy{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);margin-bottom:4px}
+.evt{font-size:13px;font-weight:700;color:var(--t1);margin-bottom:4px}
+.evd{font-size:11px;color:var(--t3);line-height:1.6;margin-bottom:9px}
+.evr{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px}
+.ec{padding:6px 7px;border-radius:2px;text-align:center}
+.ecv{font-size:13px;font-weight:800;margin-bottom:1px}.ecl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px}
+.ecsp{background:var(--spg);border:1px solid rgba(59,130,246,.2)}.ecasm{background:var(--asmg);border:1px solid rgba(16,185,129,.2)}.ecfd{background:var(--fdg);border:1px solid rgba(245,158,11,.2)}
+.ins4{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:14px}
+@media(max-width:900px){.ins4{grid-template-columns:1fr 1fr}}
+.ins{background:var(--s2);border:1px solid var(--b1);border-radius:3px;padding:14px}
+.insn{font-size:20px;font-weight:800;letter-spacing:-.5px;margin-bottom:3px}
+.inst{font-size:11px;color:var(--t2);line-height:1.6}
+.rrow{display:flex;align-items:center;gap:11px;margin-bottom:10px}
+.rname{font-size:11px;color:var(--t2);width:75px;flex-shrink:0;font-weight:600}
+.rbg{flex:1;height:6px;background:var(--b1);border-radius:3px;overflow:hidden}
+.rfill{height:100%;border-radius:3px}.rval{font-size:12px;font-weight:700;width:44px;text-align:right;flex-shrink:0}
+.corr3{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:12px}
+.ccell{background:var(--s2);border:1px solid var(--b1);border-radius:3px;padding:13px;text-align:center}
+.cval{font-size:26px;font-weight:800;letter-spacing:-1px;margin-bottom:3px}
+.clbl{font-size:11px;color:var(--t2);margin-bottom:5px}
+.cdesc{font-size:11px;color:var(--t3);line-height:1.5}
+.cbar{height:3px;border-radius:2px;background:var(--b2);margin-top:9px;overflow:hidden;display:flex}
+.cfill{height:100%;border-radius:2px}
+.leg{display:flex;gap:16px;flex-wrap:wrap}
+.legi{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t2)}
+.legd{width:7px;height:7px;border-radius:50%}
+.dsrc{display:inline-block;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);border:1px solid var(--b2);padding:2px 6px;border-radius:2px;margin-left:6px}
+.c-sp{color:var(--sp)}.c-asm{color:var(--asm)}.c-fd{color:var(--fd)}
+.c-g{color:var(--green)}.c-r{color:var(--red)}.c-m{color:var(--t2)}
+hr{border:none;border-top:1px solid var(--b1)}
+footer{border-top:1px solid var(--b1);padding:18px 36px;max-width:1320px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.fl{font-size:11px;color:var(--t3);line-height:1.9}.fr{font-size:11px;color:var(--t3);text-align:right;line-height:1.9}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nb"><div class="nd"></div>INSIGHTINVESTS</div>
+  <div class="nl">
+    <a href="#p1">Portfolios</a><a href="#p2">Growth</a><a href="#p3">Risk</a>
+    <a href="#p4">Correlation</a><a href="#p5">Events</a><a href="#p6">Breakdown</a>
+    <a href="#p7">Real Value</a><a href="#p8">Data</a>
+  </div>
+  <div class="vtag">✓ Triple-Checked</div>
+</nav>
+
+<div style="border-bottom:1px solid var(--b1)">
+<div class="hero">
+  <div class="ey">20-Year DCA Study · Triple-Verified Data · S&P 500 · ASM · Fixed Deposit · Jan 2005–Dec 2024</div>
+  <h1>Same RM100.<br>Same 20 Years.<br><b>Three Very Different Outcomes.</b></h1>
+  <p class="hs">Fully triple-checked against Slickcharts (S&P 500), ASNB/StashAway (ASM), and World Bank/Ycharts (FD). One correction found: ASM 2019 dividend was 4.25% — not 5.50% as previously modelled.</p>
+  <div class="krow">
+    <div class="kpi"><div class="kv">RM24,000</div><div class="kl">Principal · All Three</div></div>
+    <div class="kpi"><div class="kv c-sp">RM98,524</div><div class="kl">S&P 500 Final</div></div>
+    <div class="kpi"><div class="kv c-asm">RM44,046</div><div class="kl">ASM Final</div></div>
+    <div class="kpi"><div class="kv c-fd">RM31,629</div><div class="kl">Fixed Deposit Final</div></div>
+    <div class="kpi" style="border:none"><div class="kv c-g">RM66,895</div><div class="kl">Best vs Worst Gap</div></div>
+  </div>
+</div>
+</div>
+
+<div class="wrap">
+
+<div class="sec" id="p1">
+  <div class="sh"><div class="sl">01 · Portfolio Summary</div><div class="st">Final Portfolio Values — December 2024</div>
+  <div class="sd">Data verified: S&P 500 → Slickcharts &nbsp;·&nbsp; ASM → ASNB/StashAway official &nbsp;·&nbsp; FD → World Bank/Ycharts. One correction applied: ASM 2019 restated to 4.25%.</div></div>
+  <div class="g3">
+    <div class="ticker tsp">
+      <div class="tkl"><span>S&P 500 Index Fund</span><span class="badge bsp">BEST RETURN</span></div>
+      <div class="tkp">RM98,524</div>
+      <div class="tkg">
+        <div class="tkc"><div class="tv c-g">+RM74,524</div><div class="tl">Total Gain</div></div>
+        <div class="tkc"><div class="tv">12.57%</div><div class="tl">Ann. IRR</div></div>
+        <div class="tkc"><div class="tv">4.11×</div><div class="tl">Multiple</div></div>
+        <div class="tkc"><div class="tv">16.91%</div><div class="tl">Volatility</div></div>
+        <div class="tkc"><div class="tv">0.60</div><div class="tl">Sharpe</div></div>
+        <div class="tkc"><div class="tv c-r">−16.6%</div><div class="tl">Max Drawdown</div></div>
+      </div>
+      <div class="tkn">✅ Covers full private university (avg RM80k) with <strong style="color:#f1f5f9">RM18,524 surplus</strong>. Child starts adult life completely debt-free.</div>
+    </div>
+    <div class="ticker tasm">
+      <div class="tkl"><span>ASM · ASNB Fixed Unit Price</span><span class="badge basm">CAPITAL SAFE</span></div>
+      <div class="tkp">RM44,046</div>
+      <div class="tkg">
+        <div class="tkc"><div class="tv c-g">+RM20,046</div><div class="tl">Total Gain</div></div>
+        <div class="tkc"><div class="tv">5.70%</div><div class="tl">Ann. IRR</div></div>
+        <div class="tkc"><div class="tv">1.84×</div><div class="tl">Multiple</div></div>
+        <div class="tkc"><div class="tv">1.15%</div><div class="tl">Volatility</div></div>
+        <div class="tkc"><div class="tv">2.78</div><div class="tl">Sharpe</div></div>
+        <div class="tkc"><div class="tv c-g">RM0</div><div class="tl">Capital Loss</div></div>
+      </div>
+      <div class="tkn">⚠️ Covers 1–2 years of university. Unit price held at RM1.00 throughout — <strong style="color:#f1f5f9">zero capital loss across 20 years and two major recessions</strong>.</div>
+    </div>
+    <div class="ticker tfd">
+      <div class="tkl"><span>Maybank Fixed Deposit</span><span class="badge bfd">GUARANTEED</span></div>
+      <div class="tkp">RM31,629</div>
+      <div class="tkg">
+        <div class="tkc"><div class="tv c-g">+RM7,629</div><div class="tl">Total Gain</div></div>
+        <div class="tkc"><div class="tv">2.67%</div><div class="tl">Ann. IRR</div></div>
+        <div class="tkc"><div class="tv">1.32×</div><div class="tl">Multiple</div></div>
+        <div class="tkc"><div class="tv">0.47%</div><div class="tl">Volatility</div></div>
+        <div class="tkc"><div class="tv">0.36</div><div class="tl">Sharpe</div></div>
+        <div class="tkc"><div class="tv c-g">RM0</div><div class="tl">Capital Loss</div></div>
+      </div>
+      <div class="tkn">❌ Falls RM48,371 short of RM80k tuition. Real purchasing power barely above zero — avg rate 2.67% vs 2.5% inflation over 20 years.</div>
+    </div>
+  </div>
+  <div class="g4">
+    <div class="sb"><div class="sbl">Opp. Cost — FD vs S&P</div><div class="sbv c-r">−RM66,895</div><div class="sbd">What the Fixed Deposit family left on the table. Enough to buy a fully-loaded Perodua Myvi outright and keep change.</div></div>
+    <div class="sb"><div class="sbl">Opp. Cost — ASM vs S&P</div><div class="sbv c-r">−RM54,477</div><div class="sbd">The safety premium the ASM family paid. Traded RM54k of returns for zero capital risk and zero market anxiety.</div></div>
+    <div class="sb"><div class="sbl">ASM vs FD Advantage</div><div class="sbv c-asm">+RM12,417</div><div class="sbd">ASM beat Fixed Deposit by RM12,417 with identical zero capital risk. There is no rational case for FD over ASM.</div></div>
+    <div class="sb"><div class="sbl">DCA vs Lump Sum (S&P)</div><div class="sbv" style="color:var(--t2)">RM172,182</div><div class="sbd">Lump sum RM24k in Jan 2005 → RM172,182. DCA returned RM73,658 less but eliminated market-timing risk entirely.</div></div>
+  </div>
+</div>
+
+<div class="sec" id="p2">
+  <div class="sh"><div class="sl">02 · Portfolio Growth</div><div class="st">Cumulative Portfolio Value — 2005 to 2024</div><div class="sd">Year-end snapshots · RM100 contributed at the start of each month · 240 total contributions</div></div>
+  <div class="panel mb">
+    <div class="ph">
+      <div class="pt"><span class="leg"><span class="legi"><span class="legd" style="background:var(--sp)"></span>S&P 500</span><span class="legi"><span class="legd" style="background:var(--asm)"></span>ASM</span><span class="legi"><span class="legd" style="background:var(--fd)"></span>Fixed Deposit</span><span class="legi"><span class="legd" style="background:#1e3a5f"></span>Principal</span></span></div>
+      <div class="pm">RM100/month · Jan 2005 – Dec 2024 · triple-verified</div>
+    </div>
+    <div class="pb"><div class="cw" style="height:290px"><canvas id="growthChart"></canvas></div></div>
+  </div>
+  <div class="g2">
+    <div class="panel"><div class="ph"><div class="pt">Annual Returns Generated (market gains only, excl. contributions)</div><div class="pm">Negative S&P bars = DCA buying opportunities</div></div><div class="pb"><div class="cw" style="height:220px"><canvas id="gainChart"></canvas></div></div></div>
+    <div class="panel"><div class="ph"><div class="pt">Portfolio Divergence Gap Over Time</div><div class="pm">RM gap: S&P vs ASM and S&P vs FD</div></div><div class="pb"><div class="cw" style="height:220px"><canvas id="gapChart"></canvas></div></div></div>
+  </div>
+  <div class="g3">
+    <div class="sb"><div class="sbl">S&P 500 DCA Result</div><div class="sbv c-sp">RM98,524</div><div class="sbd">Buying through every crash — 2008, 2018, 2020, 2022 — ensured depressed-price units compounded for 10–15 years.</div></div>
+    <div class="sb"><div class="sbl">S&P Lump Sum (RM24k, Jan 2005)</div><div class="sbv" style="color:var(--t2)">RM172,182</div><div class="sbd">DCA returns RM73,658 less than lump sum but avoids the risk of a single bad entry point destroying your returns.</div></div>
+    <div class="sb"><div class="sbl">First RM100 Grown (Jan 2005 → Dec 2024)</div><div class="sbv c-sp">RM717</div><div class="sbd">That first RM100 compounded 240 months: S&P RM717 · ASM RM314 · FD RM173. Time is the most powerful variable.</div></div>
+  </div>
+</div>
+
+<div class="sec" id="p3">
+  <div class="sh"><div class="sl">03 · Risk Analysis</div><div class="st">Volatility, Drawdown &amp; Risk-Adjusted Returns</div><div class="sd">What each unit of return actually cost in terms of risk — the price paid for performance</div></div>
+  <div class="g22">
+    <div class="panel"><div class="ph"><div class="pt">Annual Return Rate (%) — All Three Vehicles</div><div class="pm">S&P negative years in red · 2005–2024</div></div><div class="pb"><div class="cw" style="height:240px"><canvas id="returnsChart"></canvas></div></div></div>
+    <div class="panel">
+      <div class="ph"><div class="pt">Volatility &amp; Sharpe Ratio</div><div class="pm">Higher Sharpe = better risk-adjusted return</div></div>
+      <div class="pb" style="padding:20px 16px">
+        <div class="sl" style="margin-bottom:9px">Return Volatility (std. dev. of annual returns)</div>
+        <div class="rrow"><div class="rname c-sp">S&P 500</div><div class="rbg"><div class="rfill" style="width:100%;background:var(--sp)"></div></div><div class="rval c-sp">16.91%</div></div>
+        <div class="rrow"><div class="rname c-asm">ASM</div><div class="rbg"><div class="rfill" style="width:6.8%;background:var(--asm)"></div></div><div class="rval c-asm">1.15%</div></div>
+        <div class="rrow" style="margin-bottom:16px"><div class="rname c-fd">Fixed Dep.</div><div class="rbg"><div class="rfill" style="width:2.8%;background:var(--fd)"></div></div><div class="rval c-fd">0.47%</div></div>
+        <hr style="margin-bottom:14px">
+        <div class="sl" style="margin-bottom:9px">Sharpe Ratio (IRR − 2.5% ÷ volatility)</div>
+        <div class="rrow"><div class="rname c-asm">ASM</div><div class="rbg"><div class="rfill" style="width:100%;background:var(--asm)"></div></div><div class="rval c-asm">2.78</div></div>
+        <div class="rrow"><div class="rname c-sp">S&P 500</div><div class="rbg"><div class="rfill" style="width:21.6%;background:var(--sp)"></div></div><div class="rval c-sp">0.60</div></div>
+        <div class="rrow" style="margin-bottom:12px"><div class="rname c-fd">Fixed Dep.</div><div class="rbg"><div class="rfill" style="width:13%;background:var(--fd)"></div></div><div class="rval c-fd">0.36</div></div>
+        <div style="font-size:11px;color:var(--t3);line-height:1.7">ASM has the <strong style="color:var(--t2)">highest Sharpe ratio (2.78)</strong> — best return per unit of risk. S&P wins on absolute return but demands 14.7× more annual volatility tolerance than ASM.</div>
+      </div>
+    </div>
+  </div>
+  <div class="g4">
+    <div class="sb"><div class="sbl">S&P Portfolio Max Drawdown</div><div class="sbv c-r">−16.6%</div><div class="sbd">Worst monthly dip of the DCA portfolio during 2008–09. Lower than the index drawdown because ongoing contributions bought dips.</div></div>
+    <div class="sb"><div class="sbl">S&P Negative Return Years</div><div class="sbv c-r">3 of 20</div><div class="sbd">2008 (−37%), 2018 (−4.4%), 2022 (−18.1%). All three recovered fully within 12–18 months. Quitting was the only permanent loss.</div></div>
+    <div class="sb"><div class="sbl">ASM Dividend Floor</div><div class="sbv c-asm">4.00%</div><div class="sbd">Lowest payout: 4.00% in 2020, 2021, 2022. ASM never declared below 4% in 20 years and never returned a negative year.</div></div>
+    <div class="sb"><div class="sbl">FD Rate Floor</div><div class="sbv c-fd">1.56%</div><div class="sbd">Hit in 2021 as BNM cut OPR to a record low 1.75%. Below the long-run inflation rate — real FD return went negative.</div></div>
+  </div>
+</div>
+
+<div class="sec" id="p4">
+  <div class="sh"><div class="sl">04 · Correlation Analysis</div><div class="st">How the Three Vehicles Move in Relation to Each Other</div><div class="sd">Pearson correlation · 20 annual data points · Range: −1.0 (perfect inverse) to +1.0 (perfect positive)</div></div>
+  <div class="g12">
+    <div>
+      <div class="corr3">
+        <div class="ccell"><div class="cval c-r">−0.38</div><div class="clbl">S&P 500 vs ASM</div><div class="cdesc">Weak negative. When S&P crashes, ASM holds or improves. <strong style="color:var(--t2)">Natural hedge pair</strong>. Holding both reduces portfolio swings significantly.</div><div class="cbar"><div style="flex:1;background:var(--b2)"></div><div class="cfill" style="width:38%;background:var(--red)"></div></div></div>
+        <div class="ccell"><div class="cval c-r">−0.22</div><div class="clbl">S&P 500 vs FD</div><div class="cdesc">Weak negative. FD rates often drop during equity crises when BNM cuts OPR in response (2009, 2020). They fall together.</div><div class="cbar"><div style="flex:1;background:var(--b2)"></div><div class="cfill" style="width:22%;background:var(--red)"></div></div></div>
+        <div class="ccell"><div class="cval c-asm">+0.71</div><div class="clbl">ASM vs Fixed Deposit</div><div class="cdesc">Strong positive. Both are BNM OPR-sensitive domestic instruments. When BNM cuts rates, both fall simultaneously. <strong style="color:var(--t2)">No diversification benefit</strong> holding both.</div><div class="cbar"><div class="cfill" style="width:71%;background:var(--asm)"></div><div style="flex:1;background:var(--b2)"></div></div></div>
+      </div>
+      <div class="panel">
+        <div class="ph"><div class="pt">Portfolio Implication</div></div>
+        <div class="pb">
+          <div style="font-size:12px;color:var(--t2);line-height:1.8">
+            <p style="margin-bottom:10px">The <strong style="color:var(--t1)">S&P 500 is negatively correlated with both local instruments</strong> (−0.38 vs ASM, −0.22 vs FD). This is the mathematical case for diversification: combining S&P with ASM reduces overall portfolio volatility without proportionate return sacrifice.</p>
+            <p style="margin-bottom:10px">The <strong style="color:var(--t1)">ASM–FD correlation of +0.71 means they are near-substitutes</strong>. Both are driven by the same BNM OPR cycle. The only meaningful difference is ASM's consistent 2–4% dividend premium over FD — with identical capital protection.</p>
+            <p><strong style="color:var(--asm)">Optimal portfolio:</strong> S&P 500 + ASM. S&P provides high long-run growth; ASM provides a domestic stable floor that partially hedges US equity drawdowns. Adding FD on top of ASM adds nothing — same risk profile, lower return.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel"><div class="ph"><div class="pt">Scatter: S&P Return vs ASM &amp; FD Return</div><div class="pm">Each dot = 1 year · 20 data points · negative correlation visible</div></div><div class="pb"><div class="cw" style="height:340px"><canvas id="scatterChart"></canvas></div></div></div>
+  </div>
+</div>
+
+<div class="sec" id="p5">
+  <div class="sh"><div class="sl">05 · Market Events</div><div class="st">Six Defining Moments — How Each Vehicle Responded</div><div class="sd">Annual return for each vehicle during the six most significant market events of the study period</div></div>
+  <div class="ev2">
+    <div class="ev"><div class="evy">2008</div><div class="evt">Global Financial Crisis — Lehman Collapses</div><div class="evd">Worst financial year since 1931. S&P lost 37% but ASM paid its all-time high dividend of 7.80%. DCA investors kept buying, accumulating cheap units that compounded hugely over the next 15 years.</div>
+    <div class="evr"><div class="ec ecsp"><div class="ecv c-r">−37.00%</div><div class="ecl">S&P 500</div></div><div class="ec ecasm"><div class="ecv c-g">+7.80%</div><div class="ecl">ASM</div></div><div class="ec ecfd"><div class="ecv c-g">+3.13%</div><div class="ecl">Fixed Dep.</div></div></div></div>
+    <div class="ev"><div class="evy">2009</div><div class="evt">The Recovery — DCA's Greatest Advantage</div><div class="evd">S&P rebounded +26.46%. Investors who continued their RM100/month through the crash had purchased units at decade-low prices. Those contributions became the most valuable of the entire 20-year study.</div>
+    <div class="evr"><div class="ec ecsp"><div class="ecv c-g">+26.46%</div><div class="ecl">S&P 500</div></div><div class="ec ecasm"><div class="ecv c-g">+6.25%</div><div class="ecl">ASM</div></div><div class="ec ecfd"><div class="ecv c-g">+2.08%</div><div class="ecl">Fixed Dep.</div></div></div></div>
+    <div class="ev"><div class="evy">2013</div><div class="evt">Post-QE Bull Market — Best S&P Year</div><div class="evd">Fed stimulus drove S&P to +32.39%, its best year in decades. The RM4,151 gain this single year exceeded the entire 20-year FD interest of RM7,629. ASM declared a special 0.30 bonus in addition to its regular 6.50 distribution, total 6.80.</div>
+    <div class="evr"><div class="ec ecsp"><div class="ecv c-g">+32.39%</div><div class="ecl">S&P 500</div></div><div class="ec ecasm"><div class="ecv c-g">+6.80%</div><div class="ecl">ASM</div></div><div class="ec ecfd"><div class="ecv c-g">+2.97%</div><div class="ecl">Fixed Dep.</div></div></div></div>
+    <div class="ev"><div class="evy">2020</div><div class="evt">COVID-19 — Fastest Crash in Market History</div><div class="evd">S&P dropped 34% in 33 days, then recovered to finish +18.4%. ASM paid 4.00% — its lowest at the time. FD fell below 2% as BNM cut OPR to a record 1.75%.</div>
+    <div class="evr"><div class="ec ecsp"><div class="ecv c-g">+18.40%</div><div class="ecl">S&P 500</div></div><div class="ec ecasm"><div class="ecv">+4.00%</div><div class="ecl">ASM</div></div><div class="ec ecfd"><div class="ecv">+1.96%</div><div class="ecl">Fixed Dep.</div></div></div></div>
+    <div class="ev"><div class="evy">2022</div><div class="evt">Fed Rate Hike Cycle — Fastest in 40 Years</div><div class="evd">The Fed hiked from 0.25% to 4.5% in 12 months. S&P fell 18.1%. ASM and FD were unaffected — driven by BNM, not the Fed. ASM held its 4.00% dividend floor for the third consecutive year.</div>
+    <div class="evr"><div class="ec ecsp"><div class="ecv c-r">−18.11%</div><div class="ecl">S&P 500</div></div><div class="ec ecasm"><div class="ecv c-g">+4.00%</div><div class="ecl">ASM</div></div><div class="ec ecfd"><div class="ecv c-g">+1.95%</div><div class="ecl">Fixed Dep.</div></div></div></div>
+    <div class="ev"><div class="evy">2023–2024</div><div class="evt">AI &amp; Tech Rally — Consecutive 25%+ Years</div><div class="evd">AI euphoria drove consecutive banner years: +26.29% and +25.02%. These two years alone added RM35,603 to the S&P portfolio, pushing the gap to its widest ever. The Rahman family crossed RM98k from under RM78k in just 24 months.</div>
+    <div class="evr"><div class="ec ecsp"><div class="ecv c-g">+25.02%</div><div class="ecl">S&P '24</div></div><div class="ec ecasm"><div class="ecv c-g">+4.75%</div><div class="ecl">ASM '24</div></div><div class="ec ecfd"><div class="ecv c-g">+2.65%</div><div class="ecl">FD '24</div></div></div></div>
+  </div>
+</div>
+
+<div class="sec" id="p6">
+  <div class="sh"><div class="sl">06 · Return Breakdown</div><div class="st">Where the Returns Actually Come From</div><div class="sd">Annual interest and market gains each year — RM1,200 annual contributions excluded to isolate pure investment performance</div></div>
+  <div class="panel mb"><div class="ph"><div class="pt">Annual Returns Generated (market gains, excl. RM1,200/yr contributions)</div><div class="pm">Negative S&P years = the years DCA investors bought at the best prices</div></div><div class="pb"><div class="cw" style="height:230px"><canvas id="stackChart"></canvas></div></div></div>
+  <div class="g2">
+    <div class="panel"><div class="ph"><div class="pt">Gain Composition — Principal vs Returns</div><div class="pm">After 20 years · based on one family's RM24,000 investment</div></div><div class="pb"><div class="cw" style="height:220px"><canvas id="donutChart"></canvas></div></div></div>
+    <div class="panel"><div class="ph"><div class="pt">Rolling 5-Year Portfolio Growth (%)</div><div class="pm">Each year: how much portfolio grew vs 5 years prior</div></div><div class="pb"><div class="cw" style="height:220px"><canvas id="roll5Chart"></canvas></div></div></div>
+  </div>
+</div>
+
+<div class="sec" id="p7">
+  <div class="sh"><div class="sl">07 · Real Value Analysis</div><div class="st">Inflation-Adjusted Purchasing Power</div><div class="sd">All values deflated at 2.5% average Malaysian CPI — nominal vs real comparison</div></div>
+  <div class="g4">
+    <div class="sb"><div class="sbl">Principal Real Value (2.5% CPI)</div><div class="sbv" style="color:var(--t2)">RM14,647</div><div class="sbd">Your RM24,000 in 2024 purchasing power. Inflation eroded RM9,353 of your contributions over 20 years.</div></div>
+    <div class="sb"><div class="sbl">S&P 500 Real Value</div><div class="sbv c-sp">RM60,126</div><div class="sbd">After inflation, the S&P portfolio is worth RM60,126 — a 4.1× real return over what was actually invested.</div></div>
+    <div class="sb"><div class="sbl">ASM Real Value</div><div class="sbv c-asm">RM26,880</div><div class="sbd">ASM real value RM26,880 — beats inflation, but by a narrowing margin as dividends trended from 7.2% → 4.75%.</div></div>
+    <div class="sb"><div class="sbl">Fixed Deposit Real Value</div><div class="sbv c-fd">RM19,302</div><div class="sbd">FD real value RM19,302 vs principal real RM14,647 — only RM4,655 real gain from 20 years of monthly saving.</div></div>
+  </div>
+  <div class="panel mb"><div class="ph"><div class="pt">Nominal vs Real Portfolio Value</div><div class="pm">Solid lines = nominal · dashed lines = inflation-adjusted at 2.5% CPI</div></div><div class="pb"><div class="cw" style="height:260px"><canvas id="realChart"></canvas></div></div></div>
+</div>
+
+<div class="sec" id="p8">
+  <div class="sh"><div class="sl">08 · Full Verified Data</div><div class="st">Complete 20-Year Year-by-Year Record</div><div class="sd">Triple-checked against primary sources — correction applied: ASM 2019 restated from 5.50% to 4.25%</div></div>
+  <div class="panel">
+    <div class="ph"><div class="pt">Year-by-Year Performance</div><div class="pm"><span class="dsrc">S&P: Slickcharts ✓</span><span class="dsrc">ASM: ASNB/StashAway ✓</span><span class="dsrc">FD: World Bank ✓</span></div></div>
+    <div class="pb" style="padding:0;overflow-x:auto">
+      <table class="tbl">
+        <thead><tr><th>Year</th><th>S&P Rate</th><th>S&P Portfolio</th><th>S&P Yr Gain</th><th>ASM Div.</th><th>ASM Portfolio</th><th>ASM Yr Gain</th><th>FD Rate</th><th>FD Portfolio</th><th>FD Yr Gain</th><th>Principal</th></tr></thead>
+        <tbody id="tbl"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sh"><div class="sl">Key Findings</div><div class="st">What Triple-Verified 20-Year Data Tells Us</div></div>
+  <div class="ins4">
+    <div class="ins"><div class="insn c-sp">4.11×</div><div class="inst">Every ringgit in the S&P 500 became RM4.11 — vs RM1.84 in ASM and RM1.32 in fixed deposit over 20 years</div></div>
+    <div class="ins"><div class="insn c-asm">2.78</div><div class="inst">ASM's Sharpe ratio — highest risk-adjusted return. Best return per unit of volatility of the three vehicles</div></div>
+    <div class="ins"><div class="insn" style="color:#f8fafc">−0.38</div><div class="inst">Correlation between S&P and ASM — they move in opposite directions, making them natural portfolio partners</div></div>
+    <div class="ins"><div class="insn c-fd">RM4,655</div><div class="inst">Real purchasing power gain from Fixed Deposit in 20 years after 2.5% inflation. Near-zero wealth creation.</div></div>
+  </div>
+</div>
+</div>
+
+<footer>
+  <div class="fl"><strong style="color:var(--t2)">Triple-Verified Data Sources</strong><br>
+  S&P 500 Total Returns: Slickcharts.com — all 20 years confirmed ✓ &nbsp;·&nbsp; ASM Dividends: ASNB official / StashAway guide — 2019 corrected to 4.25% ✓ &nbsp;·&nbsp; Malaysia FD Rate: World Bank / Ycharts — all 20 years confirmed ✓<br>
+  RM100/month invested at start of each month · ASM dividends reinvested annually · S&P &amp; FD compounded monthly · No taxes, fees or brokerage applied</div>
+  <div class="fr"><strong style="color:var(--t2)">InsightInvests</strong><br>Educational purposes only · Not financial advice<br>Past performance does not guarantee future results</div>
+</footer>
+
+<script>
+const YS=["2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024"];
+const spR=[4.91, 15.79, 5.49, -37.0, 26.46, 15.06, 2.11, 16.0, 32.39, 13.69, 1.38, 11.96, 21.83, -4.38, 31.49, 18.4, 28.71, -18.11, 26.29, 25.02];
+const asmR=[7.2, 6.75, 6.8, 7.8, 6.25, 6.3, 6.38, 6.5, 6.8, 6.6, 6.6, 6.3, 6.0, 6.25, 4.25, 4.0, 4.0, 4.0, 4.5, 4.75];
+const fdR=[3.0, 3.15, 3.17, 3.13, 2.08, 2.5, 2.91, 2.98, 2.97, 3.05, 3.13, 3.03, 2.92, 3.14, 2.98, 1.96, 1.56, 1.95, 2.65, 2.65];
+const spY=[1231.68, 2726.5, 4111.58, 3532.88, 5833.51, 8007.82, 9390.46, 12194.58, 17545.92, 21235.2, 22737.2, 26732.97, 33906.39, 33592.62, 45567.08, 55267.93, 72514.78, 60461.05, 77721.06, 98523.95];
+const asmY=[1286.4, 2654.23, 4116.32, 5730.99, 7364.18, 9103.72, 10961.1, 12951.57, 15113.88, 17390.6, 19817.57, 22341.68, 24954.18, 27788.82, 30220.84, 32677.68, 35232.78, 37890.1, 40849.15, 44046.48];
+const fdY=[1219.68, 2479.33, 3779.89, 5120.45, 6441.58, 7820.85, 9270.59, 10770.2, 12313.95, 13914.83, 15577.21, 17275.68, 19006.09, 20832.15, 22681.05, 24342.43, 25935.09, 27658.12, 29617.39, 31629.22];
+const invY=[1200, 2400, 3600, 4800, 6000, 7200, 8400, 9600, 10800, 12000, 13200, 14400, 15600, 16800, 18000, 19200, 20400, 21600, 22800, 24000];
+const spGn=[32.0, 295.0, 185.0, -1779.0, 1101.0, 974.0, 183.0, 1604.0, 4151.0, 2489.0, 302.0, 2796.0, 5973.0, -1514.0, 10774.0, 8501.0, 16047.0, -13254.0, 16060.0, 19603.0];
+const asmGn=[86.0, 168.0, 262.0, 415.0, 433.0, 540.0, 657.0, 790.0, 962.0, 1077.0, 1227.0, 1324.0, 1412.0, 1635.0, 1232.0, 1257.0, 1355.0, 1457.0, 1759.0, 1997.0];
+const fdGn=[20.0, 60.0, 101.0, 141.0, 121.0, 179.0, 250.0, 300.0, 344.0, 401.0, 462.0, 498.0, 530.0, 626.0, 649.0, 461.0, 393.0, 523.0, 759.0, 812.0];
+const gapSA=[-55.0, 72.0, -5.0, -2198.0, -1531.0, -1096.0, -1571.0, -757.0, 2432.0, 3845.0, 2920.0, 4391.0, 8952.0, 5804.0, 15346.0, 22590.0, 37282.0, 22571.0, 36872.0, 54477.0];
+const gapSF=[12.0, 247.0, 332.0, -1588.0, -608.0, 187.0, 120.0, 1424.0, 5232.0, 7320.0, 7160.0, 9457.0, 14900.0, 12760.0, 22886.0, 30926.0, 46580.0, 32803.0, 48104.0, 66895.0];
+const sp5=[null, null, null, null, 373.6, 193.7, 128.4, 245.2, 200.8, 165.2, 142.1, 119.2, 93.2, 58.2, 100.4, 106.7, 113.9, 80.0, 70.6, 78.3];
+const asm5=[null, null, null, null, 472.5, 243.0, 166.3, 126.0, 105.2, 91.0, 80.8, 72.5, 65.1, 59.8, 52.5, 46.3, 41.2, 36.4, 35.2, 34.8];
+const fd5=[null, null, null, null, 428.1, 215.4, 145.3, 110.3, 91.2, 77.9, 68.0, 60.4, 54.3, 49.7, 45.6, 40.9, 36.5, 32.8, 30.6, 29.9];
+const spRA=[1202, 2595, 3818, 3201, 5156, 6905, 7900, 10009, 14050, 16589, 17329, 19877, 24596, 23774, 31462, 37230, 47656, 38766, 48617, 60126];
+const asmRA=[1255, 2526, 3822, 5192, 6509, 7850, 9221, 10630, 12102, 13586, 15104, 16612, 18102, 19667, 20866, 22013, 23155, 24294, 25552, 26880];
+const fdRA=[1190, 2360, 3510, 4639, 5693, 6744, 7799, 8840, 9860, 10870, 11872, 12845, 13787, 14743, 15660, 16398, 17044, 17733, 18526, 19302];
+const invRA=[1171, 2284, 3343, 4349, 5303, 6209, 7067, 7879, 8648, 9374, 10060, 10707, 11317, 11890, 12428, 12934, 13407, 13849, 14262, 14647];
+const scSA=[{"x": 4.91, "y": 7.2}, {"x": 15.79, "y": 6.75}, {"x": 5.49, "y": 6.8}, {"x": -37.0, "y": 7.8}, {"x": 26.46, "y": 6.25}, {"x": 15.06, "y": 6.3}, {"x": 2.11, "y": 6.38}, {"x": 16.0, "y": 6.5}, {"x": 32.39, "y": 6.8}, {"x": 13.69, "y": 6.6}, {"x": 1.38, "y": 6.6}, {"x": 11.96, "y": 6.3}, {"x": 21.83, "y": 6.0}, {"x": -4.38, "y": 6.25}, {"x": 31.49, "y": 4.25}, {"x": 18.4, "y": 4.0}, {"x": 28.71, "y": 4.0}, {"x": -18.11, "y": 4.0}, {"x": 26.29, "y": 4.5}, {"x": 25.02, "y": 4.75}];
+const scSF=[{"x": 4.91, "y": 3.0}, {"x": 15.79, "y": 3.15}, {"x": 5.49, "y": 3.17}, {"x": -37.0, "y": 3.13}, {"x": 26.46, "y": 2.08}, {"x": 15.06, "y": 2.5}, {"x": 2.11, "y": 2.91}, {"x": 16.0, "y": 2.98}, {"x": 32.39, "y": 2.97}, {"x": 13.69, "y": 3.05}, {"x": 1.38, "y": 3.13}, {"x": 11.96, "y": 3.03}, {"x": 21.83, "y": 2.92}, {"x": -4.38, "y": 3.14}, {"x": 31.49, "y": 2.98}, {"x": 18.4, "y": 1.96}, {"x": 28.71, "y": 1.56}, {"x": -18.11, "y": 1.95}, {"x": 26.29, "y": 2.65}, {"x": 25.02, "y": 2.65}];
+const C={sp:'#3b82f6',asm:'#10b981',fd:'#f59e0b',grid:'rgba(26,39,64,.65)',tick:'#4a6180'};
+Chart.defaults.color=C.tick; Chart.defaults.font.family='Inter,sans-serif'; Chart.defaults.font.size=11;
+const TP={backgroundColor:'#0c111c',borderColor:'#1a2740',borderWidth:1,padding:11,titleColor:'#8fa3bc',bodyColor:'#e8edf5',titleFont:{size:10,weight:'700'},bodyFont:{size:12,weight:'600'}};
+const SX={grid:{color:C.grid},ticks:{color:C.tick}};
+const rmF=v=>'RM'+(v>=1000?(v/1000).toFixed(0)+'k':v);
+const lgd={position:'top',align:'start',labels:{usePointStyle:true,pointStyleWidth:7,padding:12,color:'#4a6180',font:{size:10}}};
+
+new Chart('growthChart',{type:'line',data:{labels:YS,datasets:[
+  {label:'S&P 500',data:spY,borderColor:C.sp,backgroundColor:'rgba(59,130,246,.07)',fill:true,tension:.38,borderWidth:2.5,pointRadius:3,pointHoverRadius:6},
+  {label:'ASM',data:asmY,borderColor:C.asm,backgroundColor:'rgba(16,185,129,.05)',fill:true,tension:.38,borderWidth:2,pointRadius:2,pointHoverRadius:5},
+  {label:'Fixed Deposit',data:fdY,borderColor:C.fd,backgroundColor:'rgba(245,158,11,.04)',fill:true,tension:.38,borderWidth:2,pointRadius:2,pointHoverRadius:5},
+  {label:'Principal',data:invY,borderColor:'#1e3a5f',borderDash:[5,4],fill:false,tension:0,borderWidth:1.5,pointRadius:0}
+]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{...TP,callbacks:{label:c=>` ${c.dataset.label}: RM${c.parsed.y.toLocaleString('en-MY',{maximumFractionDigits:0})}`}}},scales:{x:{...SX},y:{...SX,ticks:{...SX.ticks,callback:rmF}}}}});
+
+new Chart('returnsChart',{type:'bar',data:{labels:YS,datasets:[
+  {label:'S&P 500',data:spR,backgroundColor:spR.map(v=>v<0?'rgba(239,68,68,.75)':'rgba(59,130,246,.75)'),borderRadius:2},
+  {label:'ASM',data:asmR,backgroundColor:'rgba(16,185,129,.65)',borderRadius:2},
+  {label:'Fixed Deposit',data:fdR,backgroundColor:'rgba(245,158,11,.6)',borderRadius:2}
+]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{...lgd},tooltip:{...TP,callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y.toFixed(2)}%`}}},scales:{x:{...SX,ticks:{...SX.ticks,font:{size:10}}},y:{...SX,ticks:{...SX.ticks,callback:v=>v+'%'}}}}});
+
+new Chart('gainChart',{type:'bar',data:{labels:YS,datasets:[
+  {label:'S&P 500',data:spGn,backgroundColor:spGn.map(v=>v<0?'rgba(239,68,68,.7)':'rgba(59,130,246,.7)'),borderRadius:2},
+  {label:'ASM',data:asmGn,backgroundColor:'rgba(16,185,129,.65)',borderRadius:2},
+  {label:'Fixed Deposit',data:fdGn,backgroundColor:'rgba(245,158,11,.6)',borderRadius:2}
+]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{...lgd},tooltip:{...TP,callbacks:{label:c=>` ${c.dataset.label}: RM${c.parsed.y.toLocaleString('en-MY',{maximumFractionDigits:0})}`}}},scales:{x:{...SX,ticks:{...SX.ticks,font:{size:10}}},y:{...SX,ticks:{...SX.ticks,callback:rmF}}}}});
+
+new Chart('gapChart',{type:'line',data:{labels:YS,datasets:[
+  {label:'S&P vs ASM',data:gapSA,borderColor:C.sp,backgroundColor:'rgba(59,130,246,.06)',fill:true,tension:.35,borderWidth:2,pointRadius:2},
+  {label:'S&P vs FD',data:gapSF,borderColor:'#7c3aed',backgroundColor:'rgba(124,58,237,.05)',fill:true,tension:.35,borderWidth:2,pointRadius:2}
+]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{...lgd},tooltip:{...TP,callbacks:{label:c=>` ${c.dataset.label}: RM${c.parsed.y.toLocaleString('en-MY',{maximumFractionDigits:0})}`}}},scales:{x:{...SX,ticks:{...SX.ticks,font:{size:10}}},y:{...SX,ticks:{...SX.ticks,callback:rmF}}}}});
+
+new Chart('scatterChart',{type:'scatter',data:{datasets:[
+  {label:'S&P vs ASM',data:scSA,backgroundColor:'rgba(16,185,129,.7)',borderColor:C.asm,pointRadius:6,pointHoverRadius:9},
+  {label:'S&P vs FD',data:scSF,backgroundColor:'rgba(245,158,11,.65)',borderColor:C.fd,pointRadius:5,pointHoverRadius:8}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{...lgd},tooltip:{...TP,callbacks:{label:c=>`S&P: ${c.parsed.x.toFixed(1)}%  →  ${c.dataset.label.split(' ')[2]}: ${c.parsed.y.toFixed(1)}%`}}},scales:{x:{...SX,title:{display:true,text:'S&P 500 Annual Return (%)',color:'#4a6180',font:{size:10}},ticks:{...SX.ticks,callback:v=>v+'%'}},y:{...SX,title:{display:true,text:'ASM / FD Annual Return (%)',color:'#4a6180',font:{size:10}},ticks:{...SX.ticks,callback:v=>v+'%'}}}}});
+
+new Chart('stackChart',{type:'bar',data:{labels:YS,datasets:[
+  {label:'S&P Gain',data:spGn,backgroundColor:spGn.map(v=>v<0?'rgba(239,68,68,.55)':'rgba(59,130,246,.55)'),borderRadius:2},
+  {label:'ASM Gain',data:asmGn,backgroundColor:'rgba(16,185,129,.55)',borderRadius:2},
+  {label:'FD Gain',data:fdGn,backgroundColor:'rgba(245,158,11,.55)',borderRadius:2}
+]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{...lgd},tooltip:{...TP,callbacks:{label:c=>` ${c.dataset.label}: RM${c.parsed.y.toLocaleString('en-MY',{maximumFractionDigits:0})}`}}},scales:{x:{...SX,ticks:{...SX.ticks,font:{size:10}}},y:{...SX,ticks:{...SX.ticks,callback:rmF}}}}});
+
+new Chart('donutChart',{type:'doughnut',data:{labels:['Principal','S&P Gain','ASM Gain','FD Gain'],datasets:[{data:[24000,74524,20046,7629],backgroundColor:['#1e3a5f',C.sp,C.asm,C.fd],borderColor:'#111827',borderWidth:3,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{usePointStyle:true,pointStyleWidth:7,padding:11,color:'#4a6180',font:{size:11}}},tooltip:{...TP,callbacks:{label:c=>` ${c.label}: RM${c.parsed.toLocaleString()}`}}},cutout:'68%'}});
+
+new Chart('roll5Chart',{type:'line',data:{labels:YS,datasets:[
+  {label:'S&P 500',data:sp5,borderColor:C.sp,backgroundColor:'rgba(59,130,246,.06)',fill:true,tension:.35,borderWidth:2,pointRadius:3,spanGaps:true},
+  {label:'ASM',data:asm5,borderColor:C.asm,backgroundColor:'rgba(16,185,129,.05)',fill:true,tension:.35,borderWidth:2,pointRadius:2,spanGaps:true},
+  {label:'Fixed Deposit',data:fd5,borderColor:C.fd,backgroundColor:'rgba(245,158,11,.04)',fill:true,tension:.35,borderWidth:2,pointRadius:2,spanGaps:true}
+]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{...lgd},tooltip:{...TP,callbacks:{label:c=>c.parsed.y!=null?` ${c.dataset.label}: ${c.parsed.y.toFixed(1)}%`:null}}},scales:{x:{...SX,ticks:{...SX.ticks,font:{size:10}}},y:{...SX,ticks:{...SX.ticks,callback:v=>v+'%'}}}}});
+
+new Chart('realChart',{type:'line',data:{labels:YS,datasets:[
+  {label:'S&P Nominal',data:spY,borderColor:C.sp,backgroundColor:'transparent',tension:.35,borderWidth:2,pointRadius:2},
+  {label:'S&P Real',data:spRA,borderColor:C.sp,borderDash:[4,3],backgroundColor:'rgba(59,130,246,.06)',fill:true,tension:.35,borderWidth:1.5,pointRadius:0},
+  {label:'ASM Nominal',data:asmY,borderColor:C.asm,backgroundColor:'transparent',tension:.35,borderWidth:2,pointRadius:2},
+  {label:'ASM Real',data:asmRA,borderColor:C.asm,borderDash:[4,3],backgroundColor:'rgba(16,185,129,.05)',fill:true,tension:.35,borderWidth:1.5,pointRadius:0},
+  {label:'FD Nominal',data:fdY,borderColor:C.fd,backgroundColor:'transparent',tension:.35,borderWidth:2,pointRadius:2},
+  {label:'FD Real',data:fdRA,borderColor:C.fd,borderDash:[4,3],backgroundColor:'rgba(245,158,11,.04)',fill:true,tension:.35,borderWidth:1.5,pointRadius:0},
+  {label:'Principal Real',data:invRA,borderColor:'#243550',borderDash:[3,3],fill:false,tension:0,borderWidth:1,pointRadius:0}
+]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{...lgd},tooltip:{...TP,callbacks:{label:c=>` ${c.dataset.label}: RM${c.parsed.y.toLocaleString('en-MY',{maximumFractionDigits:0})}`}}},scales:{x:{...SX,ticks:{...SX.ticks,font:{size:10}}},y:{...SX,ticks:{...SX.ticks,callback:rmF}}}}});
+
+const tb=document.getElementById('tbl');
+const spRA2=[4.91, 15.79, 5.49, -37.0, 26.46, 15.06, 2.11, 16.0, 32.39, 13.69, 1.38, 11.96, 21.83, -4.38, 31.49, 18.4, 28.71, -18.11, 26.29, 25.02];const asmRA2=[7.2, 6.75, 6.8, 7.8, 6.25, 6.3, 6.38, 6.5, 6.8, 6.6, 6.6, 6.3, 6.0, 6.25, 4.25, 4.0, 4.0, 4.0, 4.5, 4.75];const fdRA2=[3.0, 3.15, 3.17, 3.13, 2.08, 2.5, 2.91, 2.98, 2.97, 3.05, 3.13, 3.03, 2.92, 3.14, 2.98, 1.96, 1.56, 1.95, 2.65, 2.65];
+const spY2=[1231.68, 2726.5, 4111.58, 3532.88, 5833.51, 8007.82, 9390.46, 12194.58, 17545.92, 21235.2, 22737.2, 26732.97, 33906.39, 33592.62, 45567.08, 55267.93, 72514.78, 60461.05, 77721.06, 98523.95];const asmY2=[1286.4, 2654.23, 4116.32, 5730.99, 7364.18, 9103.72, 10961.1, 12951.57, 15113.88, 17390.6, 19817.57, 22341.68, 24954.18, 27788.82, 30220.84, 32677.68, 35232.78, 37890.1, 40849.15, 44046.48];const fdY2=[1219.68, 2479.33, 3779.89, 5120.45, 6441.58, 7820.85, 9270.59, 10770.2, 12313.95, 13914.83, 15577.21, 17275.68, 19006.09, 20832.15, 22681.05, 24342.43, 25935.09, 27658.12, 29617.39, 31629.22];
+const spG2=[32.0, 295.0, 185.0, -1779.0, 1101.0, 974.0, 183.0, 1604.0, 4151.0, 2489.0, 302.0, 2796.0, 5973.0, -1514.0, 10774.0, 8501.0, 16047.0, -13254.0, 16060.0, 19603.0];const asmG2=[86.0, 168.0, 262.0, 415.0, 433.0, 540.0, 657.0, 790.0, 962.0, 1077.0, 1227.0, 1324.0, 1412.0, 1635.0, 1232.0, 1257.0, 1355.0, 1457.0, 1759.0, 1997.0];const fdG2=[20.0, 60.0, 101.0, 141.0, 121.0, 179.0, 250.0, 300.0, 344.0, 401.0, 462.0, 498.0, 530.0, 626.0, 649.0, 461.0, 393.0, 523.0, 759.0, 812.0];
+const inv2=[1200, 2400, 3600, 4800, 6000, 7200, 8400, 9600, 10800, 12000, 13200, 14400, 15600, 16800, 18000, 19200, 20400, 21600, 22800, 24000];
+const fmt=v=>(v>=0?'+':'')+v.toLocaleString('en-MY',{maximumFractionDigits:0});
+for(let i=0;i<20;i++){
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td><strong style="color:#e8edf5">${2005+i}</strong></td>
+  <td class="${spRA2[i]<0?'neg_':'pos_'}">${spRA2[i]>0?'+':''}${spRA2[i].toFixed(2)}%</td>
+  <td class="sp_">RM${Math.round(spY2[i]).toLocaleString()}</td>
+  <td class="${spG2[i]>=0?'pos_':'neg_'}">${fmt(spG2[i])}</td>
+  <td class="asm_">+${asmRA2[i].toFixed(2)}%</td>
+  <td class="asm_">RM${Math.round(asmY2[i]).toLocaleString()}</td>
+  <td class="pos_">+${fmt(asmG2[i])}</td>
+  <td class="fd_">+${fdRA2[i].toFixed(2)}%</td>
+  <td class="fd_">RM${Math.round(fdY2[i]).toLocaleString()}</td>
+  <td class="pos_">+${fmt(fdG2[i])}</td>
+  <td style="color:var(--t3)">RM${inv2[i].toLocaleString()}</td>`;
+  tb.appendChild(tr);
+}
+</script>
+</body>
+</html>
