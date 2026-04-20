@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAG 7 Valuation Report — April 17, 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #FAFAF7;
+    --surface: #FFFFFF;
+    --surface-muted: #F4F2EC;
+    --border: rgba(0,0,0,0.08);
+    --border-strong: rgba(0,0,0,0.15);
+    --text: #1a1a1a;
+    --text-secondary: #5F5E5A;
+    --text-muted: #888780;
+    --accent: #185FA5;
+    --green: #0F6E56;
+    --green-bg: #E1F5EE;
+    --red: #A32D2D;
+    --red-bg: #FCEBEB;
+    --amber: #854F0B;
+    --amber-bg: #FAEEDA;
+    --blue-bg: #E6F1FB;
+    --purple: #534AB7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14130F;
+      --surface: #1C1B17;
+      --surface-muted: #23221D;
+      --border: rgba(255,255,255,0.08);
+      --border-strong: rgba(255,255,255,0.15);
+      --text: #EEEDE8;
+      --text-secondary: #B4B2A9;
+      --text-muted: #888780;
+      --accent: #85B7EB;
+      --green: #5DCAA5;
+      --green-bg: rgba(29, 158, 117, 0.15);
+      --red: #F09595;
+      --red-bg: rgba(226, 75, 74, 0.15);
+      --amber: #EF9F27;
+      --amber-bg: rgba(239, 159, 39, 0.15);
+      --blue-bg: rgba(24, 95, 165, 0.2);
+      --purple: #AFA9EC;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 15px;
+    padding: 0;
+    min-height: 100vh;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+  .header {
+    border-bottom: 1px solid var(--border-strong);
+    padding-bottom: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .header h1 { font-size: 28px; font-weight: 500; letter-spacing: -0.02em; margin-bottom: 0.25rem; }
+  .header .meta { font-size: 13px; color: var(--text-secondary); }
+  .header .meta span { display: inline-block; margin-right: 1rem; }
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 18px;
+    margin: 1.5rem 0 2.5rem;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .toc a { color: var(--accent); text-decoration: none; margin-right: 18px; }
+  .toc a:hover { text-decoration: underline; }
+  h2 {
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    margin: 3rem 0 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+  h2:first-of-type { border-top: none; padding-top: 0; }
+  h3 { font-size: 16px; font-weight: 500; margin: 1.25rem 0 0.5rem; }
+  p { margin-bottom: 0.75rem; }
+  p.subtitle { color: var(--text-secondary); font-size: 14px; margin-bottom: 1.5rem; }
+  .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 1.5rem 0; }
+  .metric {
+    background: var(--surface-muted);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .metric-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
+  .metric-value { font-size: 22px; font-weight: 500; }
+  .metric-value.positive { color: var(--green); }
+  .metric-value.negative { color: var(--red); }
+  .badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 8px;
+  }
+  .badge.undervalued { background: var(--green-bg); color: var(--green); }
+  .badge.fair { background: var(--amber-bg); color: var(--amber); }
+  .badge.overvalued { background: var(--red-bg); color: var(--red); }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 1.5rem 0; }
+  @media (max-width: 720px) { .two-col { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .card-title { font-size: 14px; font-weight: 500; margin-bottom: 10px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table td { padding: 5px 0; color: var(--text-secondary); }
+  table td:last-child { text-align: right; color: var(--text); font-weight: 500; }
+  table tr.divider td { border-top: 1px solid var(--border); padding-top: 8px; }
+  table tr.highlight td { font-weight: 500; color: var(--green); border-top: 1px solid var(--border-strong); padding-top: 8px; }
+  .chart-wrap {
+    position: relative;
+    width: 100%;
+    height: 280px;
+    margin: 1rem 0;
+  }
+  .chart-wrap.compact { height: 220px; }
+  .chart-legend {
+    display: flex; flex-wrap: wrap; gap: 18px; margin-bottom: 10px;
+    font-size: 12px; color: var(--text-secondary);
+  }
+  .chart-legend .item { display: flex; align-items: center; gap: 6px; }
+  .chart-legend .line { width: 22px; height: 0; border-top: 2px solid; }
+  .chart-legend .solid { width: 22px; height: 2px; border-radius: 1px; }
+  .mos-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 1rem 0; }
+  .mos-cell { border-radius: 8px; padding: 10px; text-align: center; }
+  .mos-cell .label { font-size: 11px; margin-bottom: 2px; }
+  .mos-cell .value { font-size: 15px; font-weight: 500; }
+  .mos-cell.n0 { background: var(--surface-muted); }
+  .mos-cell.n0 .label { color: var(--text-secondary); }
+  .mos-cell.n5 { background: var(--green-bg); }
+  .mos-cell.n5 .label, .mos-cell.n5 .value { color: var(--green); }
+  .mos-cell.n10 { background: var(--green-bg); }
+  .mos-cell.n10 .label, .mos-cell.n10 .value { color: var(--green); }
+  .mos-cell.n20 { background: #9FE1CB; }
+  .mos-cell.n20 .label, .mos-cell.n20 .value { color: #04342C; }
+  .mos-cell.n30 { background: #5DCAA5; }
+  .mos-cell.n30 .label, .mos-cell.n30 .value { color: #04342C; }
+  @media (prefers-color-scheme: dark) {
+    .mos-cell.n20, .mos-cell.n30 { background: rgba(29, 158, 117, 0.35); }
+    .mos-cell.n20 .label, .mos-cell.n20 .value,
+    .mos-cell.n30 .label, .mos-cell.n30 .value { color: #C0F0D9; }
+  }
+  .why-box {
+    background: var(--blue-bg);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 1.5rem 0;
+  }
+  .why-box .label { font-size: 12px; font-weight: 500; color: var(--accent); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .why-box p { font-size: 14px; color: var(--accent); line-height: 1.6; margin: 0; }
+  blockquote {
+    font-family: Georgia, "Times New Roman", serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--text);
+    border-left: 3px solid var(--accent);
+    padding: 8px 0 8px 16px;
+    margin: 1rem 0;
+  }
+  .overview-table {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 1.5rem 0;
+  }
+  .overview-table table { font-size: 13px; }
+  .overview-table th {
+    text-align: left;
+    font-weight: 500;
+    font-size: 12px;
+    color: var(--text-secondary);
+    padding: 10px 14px;
+    background: var(--surface-muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .overview-table th:not(:first-child) { text-align: right; }
+  .overview-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    font-weight: 400;
+  }
+  .overview-table td:not(:first-child) { text-align: right; }
+  .overview-table tr:last-child td { border-bottom: none; }
+  .overview-table td.ticker { font-weight: 500; font-family: "SF Mono", Menlo, monospace; font-size: 12px; color: var(--text-secondary); }
+  .overview-table td.pos { color: var(--green); font-weight: 500; }
+  .overview-table td.neg { color: var(--red); font-weight: 500; }
+  .overview-table tr.highlight { background: var(--blue-bg); }
+  .overview-table tr.highlight td { font-weight: 500; }
+  .summary-pitch {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 2rem 0 1rem;
+  }
+  .summary-pitch h3 { margin-top: 0; font-size: 18px; }
+  .summary-pitch p { font-size: 15px; line-height: 1.8; }
+  .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-muted); }
+  .stock-header {
+    display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px;
+    padding-bottom: 12px; border-bottom: 1px solid var(--border-strong); margin-bottom: 1.25rem;
+  }
+  .stock-header h2 { margin: 0; padding: 0; border: none; font-size: 24px; }
+  .stock-header .subtitle { font-size: 13px; color: var(--text-secondary); margin: 0; }
+  .mos-note { font-size: 12px; color: var(--text-secondary); margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>MAG 7 valuation report</h1>
+  <div class="meta">
+    <span>Prices as of April 17, 2026 close</span>
+    <span>Fundamentals from latest 10-Q/10-K filings</span>
+    <span>Generated April 19, 2026</span>
+  </div>
+</div>
+
+<div class="toc">
+  Jump to:
+  <a href="#overview">MAG 7 overview</a>
+  <a href="#msft">Microsoft</a>
+  <a href="#meta">Meta</a>
+  <a href="#nvda">Nvidia</a>
+  <a href="#thesis">Summary thesis</a>
+</div>
+
+<section id="overview">
+<h2>The MAG 7 at a glance</h2>
+<p class="subtitle">The seven megacap tech companies driving most of the S&P 500's returns — ranked by upside to blended fair value.</p>
+
+<div class="overview-table">
+<table>
+  <thead>
+    <tr>
+      <th>Company</th>
+      <th>Ticker</th>
+      <th>Price</th>
+      <th>Blended FV</th>
+      <th>Upside</th>
+      <th>Verdict</th>
+      <th>TTM Revenue</th>
+      <th>Market Cap</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="highlight">
+      <td>Microsoft</td><td class="ticker">MSFT</td><td>$420.26</td><td>$554.90</td><td class="pos">+32.0%</td><td>Undervalued</td><td>$305.5B</td><td>$3.14T</td>
+    </tr>
+    <tr class="highlight">
+      <td>Meta Platforms</td><td class="ticker">META</td><td>$678.80</td><td>$771.63</td><td class="pos">+13.7%</td><td>Undervalued</td><td>$201.0B</td><td>$1.74T</td>
+    </tr>
+    <tr class="highlight">
+      <td>Nvidia</td><td class="ticker">NVDA</td><td>$201.68</td><td>$221.79</td><td class="pos">+10.0%</td><td>Fair Value</td><td>$215.9B</td><td>$4.93T</td>
+    </tr>
+    <tr>
+      <td>Amazon</td><td class="ticker">AMZN</td><td>$249.70</td><td>$254.68</td><td class="pos">+2.0%</td><td>Fair Value</td><td>$716.9B</td><td>$2.71T</td>
+    </tr>
+    <tr>
+      <td>Apple</td><td class="ticker">AAPL</td><td>$270.61</td><td>$262.81</td><td class="neg">−2.9%</td><td>Fair Value</td><td>$435.6B</td><td>$4.01T</td>
+    </tr>
+    <tr>
+      <td>Alphabet</td><td class="ticker">GOOGL</td><td>$336.72</td><td>$318.18</td><td class="neg">−5.5%</td><td>Fair Value</td><td>$402.8B</td><td>$4.12T</td>
+    </tr>
+    <tr>
+      <td>Tesla</td><td class="ticker">TSLA</td><td>$400.62</td><td>$351.35</td><td class="neg">−12.3%</td><td>Overvalued</td><td>$94.8B</td><td>$1.42T</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="chart-legend">
+  <div class="item"><span class="solid" style="background: #1D9E75;"></span>Upside to blended fair value (%)</div>
+</div>
+<div class="chart-wrap compact">
+  <canvas id="overview-chart" role="img" aria-label="Horizontal bar chart showing upside to fair value for all seven MAG 7 stocks. Microsoft leads at +32%, followed by Meta +14%, Nvidia +10%, Amazon +2%, Apple -3%, Alphabet -6%, Tesla -12%.">
+  Upside: MSFT 32%, META 14%, NVDA 10%, AMZN 2%, AAPL -3%, GOOGL -6%, TSLA -12%.
+  </canvas>
+</div>
+
+<p style="margin-top: 1.5rem;">The three names with meaningful upside — Microsoft, Meta, and Nvidia — are the focus of this report. The other four are fairly priced to modestly overvalued, with Tesla the only outright sell signal (Morningstar cut its fair value from $400 to $300 in January 2026 after Nvidia's autonomous driving entry).</p>
+</section>
+
+<section id="msft">
+<h2>Microsoft · MSFT</h2>
+<div class="stock-header">
+  <div>
+    <h2>Microsoft</h2>
+    <p class="subtitle">Information Technology · Wide moat · Medium uncertainty</p>
+  </div>
+  <span class="badge undervalued">Undervalued · +32%</span>
+</div>
+
+<div class="metric-grid">
+  <div class="metric"><div class="metric-label">Price (Apr 17)</div><div class="metric-value">$420.26</div></div>
+  <div class="metric"><div class="metric-label">Blended fair value</div><div class="metric-value positive">$554.90</div></div>
+  <div class="metric"><div class="metric-label">Upside to FV</div><div class="metric-value positive">+32.0%</div></div>
+  <div class="metric"><div class="metric-label">Market cap</div><div class="metric-value">$3.14T</div></div>
+</div>
+
+<h3>Price vs fair value — last 12 months</h3>
+<p class="subtitle">The gap widened after MSFT pulled back 22% from its Oct 2025 peak while analyst fair values kept climbing.</p>
+<div class="chart-legend">
+  <div class="item"><span class="solid" style="background: #185FA5;"></span>Stock price</div>
+  <div class="item"><span class="line" style="border-top-style: dashed; border-top-color: #1D9E75;"></span>Morningstar FV ($600)</div>
+  <div class="item"><span class="line" style="border-top-style: dotted; border-top-color: #7F77DD;"></span>Victor's DCF IV ($527)</div>
+  <div class="item"><span class="line" style="border-top-style: dashed; border-top-color: #D85A30;"></span>Blended FV ($555)</div>
+</div>
+<div class="chart-wrap">
+  <canvas id="msft-chart" role="img" aria-label="Line chart of Microsoft stock over 12 months from $395 to peak $540 in October 2025, falling back to $420 by April 2026, with three horizontal fair value lines above.">
+  MSFT price: $395 Apr 2025, peak $540 Oct 2025, current $420 Apr 2026. FVs: Victor $527, Blended $555, Morningstar $600.
+  </canvas>
+</div>
+
+<div class="two-col">
+  <div class="card">
+    <div class="card-title">DCF assumptions</div>
+    <table>
+      <tr><td>TTM Revenue</td><td>$305.5B</td></tr>
+      <tr><td>TTM FCF</td><td>$77.4B</td></tr>
+      <tr><td>FCF margin</td><td>25.3%</td></tr>
+      <tr><td>Discount rate (WACC)</td><td>10.0%</td></tr>
+      <tr><td>Terminal growth</td><td>7.0%</td></tr>
+      <tr><td>Terminal P/FCF</td><td>35.7x</td></tr>
+      <tr><td>Diluted shares</td><td>7.46B</td></tr>
+      <tr><td>Net cash</td><td>$31.9B</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-title">Fair value triangulation</div>
+    <table>
+      <tr><td>Bear DCF (25% wt)</td><td>$505.50</td></tr>
+      <tr><td>Base DCF (50% wt)</td><td>$516.01</td></tr>
+      <tr><td>Bull DCF (25% wt)</td><td>$526.71</td></tr>
+      <tr><td>Forward PS model</td><td>$537.53</td></tr>
+      <tr class="divider"><td>Victor's IV avg</td><td>$526.79</td></tr>
+      <tr><td>Morningstar FV</td><td>$600.00</td></tr>
+      <tr><td>Investing SW FV</td><td>$537.92</td></tr>
+      <tr class="highlight"><td>Blended fair value</td><td>$554.90</td></tr>
+    </table>
+  </div>
+</div>
+
+<h3>Revenue forecast · FY23–FY30 (consensus, $B)</h3>
+<div class="chart-wrap compact">
+  <canvas id="msft-revenue" role="img" aria-label="Bar chart of Microsoft revenue climbing from $212B in FY23 to $591B in FY30, historical in solid blue and forecast in lighter blue.">
+  Revenue: FY23 $212B, FY24 $245B, FY25 $282B, TTM $305B, FY26 $328B, FY27 $378B, FY28 $441B, FY29 $516B, FY30 $591B.
+  </canvas>
+</div>
+
+<h3>Margin of safety buy zones</h3>
+<div class="mos-grid">
+  <div class="mos-cell n0"><div class="label">0% MoS</div><div class="value">$554.90</div></div>
+  <div class="mos-cell n5"><div class="label">5% MoS</div><div class="value">$527.16</div></div>
+  <div class="mos-cell n10"><div class="label">10% MoS</div><div class="value">$499.41</div></div>
+  <div class="mos-cell n20"><div class="label">20% MoS</div><div class="value">$443.92</div></div>
+  <div class="mos-cell n30"><div class="label">30% MoS</div><div class="value">$388.43</div></div>
+</div>
+<p class="mos-note">Current price of $420.26 sits inside the 20% margin-of-safety zone and approaches the 30% zone at $388.</p>
+
+<div class="why-box">
+  <div class="label">The hidden asset the market ignores</div>
+  <p>Microsoft's 27% stake in OpenAI Group PBC was officially disclosed at $135 billion when OpenAI restructured in October 2025 at a $500B valuation. Then in March-April 2026 OpenAI raised $122B at a $852B post-money valuation — which mathematically marks Microsoft's stake at roughly $230B (a 17.6x paper return on $13B invested, $11.6B of which is actually deployed). Microsoft carries this at cost. If OpenAI IPOs in late 2026 or 2027 — which Reuters and CFO Sarah Friar have signaled is plausible — that hidden value would move onto the balance sheet at market. For context: $230B is roughly 7% of Microsoft's current $3.14T market cap, sitting off-book today.</p>
+</div>
+<div class="why-box" style="margin-top: 12px;">
+  <div class="label">The contract nobody reads</div>
+  <p>In the October 2025 restructuring, Microsoft gave up its cloud right-of-first-refusal — the bear case headline. What actually happened: OpenAI signed a binding $250B incremental Azure contract, Microsoft's IP rights extended through 2032 (from 2030) and now cover post-AGI models, and Microsoft won the right to pursue AGI independently. Pre-deal, Microsoft needed OpenAI to succeed. Post-deal, Microsoft gets paid whether OpenAI succeeds, stumbles, or gets disrupted — because OpenAI is now a locked-in cash customer, a 27% equity position, and a licensed IP source Microsoft can build on alone.</p>
+</div>
+</section>
+
+<section id="meta">
+<div class="stock-header">
+  <div>
+    <h2 style="border:none;">Meta Platforms</h2>
+    <p class="subtitle">Communication Services · Wide moat · Medium uncertainty</p>
+  </div>
+  <span class="badge undervalued">Undervalued · +14%</span>
+</div>
+
+<div class="metric-grid">
+  <div class="metric"><div class="metric-label">Price (Apr 17)</div><div class="metric-value">$678.80</div></div>
+  <div class="metric"><div class="metric-label">Blended fair value</div><div class="metric-value positive">$771.63</div></div>
+  <div class="metric"><div class="metric-label">Upside to FV</div><div class="metric-value positive">+13.7%</div></div>
+  <div class="metric"><div class="metric-label">Market cap</div><div class="metric-value">$1.74T</div></div>
+</div>
+
+<h3>Price vs fair value — last 12 months</h3>
+<p class="subtitle">META hit $796 in Sep 2025, then sold off 28% on capex-panic headlines. Fair values held or rose as Advantage+ scaled to $60B run-rate.</p>
+<div class="chart-legend">
+  <div class="item"><span class="solid" style="background: #185FA5;"></span>Stock price</div>
+  <div class="item"><span class="line" style="border-top-style: dashed; border-top-color: #1D9E75;"></span>Morningstar FV ($850)</div>
+  <div class="item"><span class="line" style="border-top-style: dotted; border-top-color: #7F77DD;"></span>Victor's DCF IV ($722)</div>
+  <div class="item"><span class="line" style="border-top-style: dashed; border-top-color: #D85A30;"></span>Blended FV ($772)</div>
+</div>
+<div class="chart-wrap">
+  <canvas id="meta-chart" role="img" aria-label="Line chart of Meta stock from $480 in April 2025 to peak $796 in September 2025, back to $679 by April 2026, with fair value reference lines above.">
+  META price: $480 Apr 2025, peak $796 Sep 2025, current $679 Apr 2026. FVs: Victor $722, Blended $772, Morningstar $850.
+  </canvas>
+</div>
+
+<div class="two-col">
+  <div class="card">
+    <div class="card-title">DCF assumptions</div>
+    <table>
+      <tr><td>TTM Revenue</td><td>$201.0B</td></tr>
+      <tr><td>TTM FCF</td><td>$43.6B</td></tr>
+      <tr><td>FCF margin</td><td>21.7%</td></tr>
+      <tr><td>Discount rate (WACC)</td><td>10.5%</td></tr>
+      <tr><td>Terminal growth</td><td>7.0%</td></tr>
+      <tr><td>Terminal P/FCF</td><td>30.6x</td></tr>
+      <tr><td>Diluted shares</td><td>2.57B</td></tr>
+      <tr><td>Net cash</td><td style="color: var(--red);">($2.3B)</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-title">Fair value triangulation</div>
+    <table>
+      <tr><td>Bear DCF (25% wt)</td><td>$618.83</td></tr>
+      <tr><td>Base DCF (50% wt)</td><td>$687.05</td></tr>
+      <tr><td>Bull DCF (25% wt)</td><td>$761.26</td></tr>
+      <tr><td>Forward PS model</td><td>$755.86</td></tr>
+      <tr class="divider"><td>Victor's IV avg</td><td>$722.20</td></tr>
+      <tr><td>Morningstar FV</td><td>$850.00</td></tr>
+      <tr><td>Investing SW FV</td><td>$742.68</td></tr>
+      <tr class="highlight"><td>Blended fair value</td><td>$771.63</td></tr>
+    </table>
+  </div>
+</div>
+
+<h3>Revenue forecast · FY23–FY30 (consensus, $B)</h3>
+<div class="chart-wrap compact">
+  <canvas id="meta-revenue" role="img" aria-label="Bar chart of Meta revenue climbing from $135B in FY23 to $427B in FY30, historical in solid blue and forecast in lighter blue.">
+  Revenue: FY23 $135B, FY24 $165B, FY25 $201B, FY26 $249B, FY27 $291B, FY28 $340B, FY29 $380B, FY30 $427B.
+  </canvas>
+</div>
+
+<h3>Margin of safety buy zones</h3>
+<div class="mos-grid">
+  <div class="mos-cell n0"><div class="label">0% MoS</div><div class="value">$771.63</div></div>
+  <div class="mos-cell n5"><div class="label">5% MoS</div><div class="value">$733.05</div></div>
+  <div class="mos-cell n10"><div class="label">10% MoS</div><div class="value">$694.47</div></div>
+  <div class="mos-cell n20"><div class="label">20% MoS</div><div class="value">$617.30</div></div>
+  <div class="mos-cell n30"><div class="label">30% MoS</div><div class="value">$540.14</div></div>
+</div>
+<p class="mos-note">At $678.80, META is hovering just above the 10% MoS zone ($694). A dip below $617 hits the 20% zone.</p>
+
+<div class="why-box">
+  <div class="label">The $80 billion accounting illusion</div>
+  <p>Reality Labs has lost $83.6 billion cumulatively since 2020, including $19.19B in 2025 alone (Q4 2025: $6.02B loss on just $955M of revenue). The market treats all of Meta as one business and multiples it accordingly. Here's the asymmetry: Meta's 2025 total operating income was $83.3B — meaning the Family of Apps (core advertising business) actually generated roughly $102.5B of operating income standalone before Reality Labs wiped $19B off the top. At the current $1.74T market cap, the core business is trading at approximately 21x its standalone earnings — reasonable for a business growing revenue at 22%. Zuckerberg told analysts 2026 Reality Labs losses will be "similar to 2025 levels" and "likely be the peak" before gradually declining. Every dollar Reality Labs stops bleeding flows straight to consolidated earnings.</p>
+</div>
+<div class="why-box" style="margin-top: 12px;">
+  <div class="label">The silent business model inside the headset division</div>
+  <p>Quest VR is a rounding error. Ray-Ban Meta smart glasses — developed with EssilorLuxottica — have sold 2+ million units, tripled YoY, and the $799 Display model sold out store inventory in 48 hours at launch. EssilorLuxottica is expanding capacity to 10M units per year by end of 2026. Meta cut 1,500 Reality Labs staff in January and slashed the VR budget 30% to fund the glasses business. If glasses become the next smartphone-scale platform — Zuckerberg's explicit bet — Meta owns the operating system and the silicon. The bear case assumes Reality Labs is a permanent money pit. The pivot already happened; the market just hasn't noticed the re-allocation inside the line item.</p>
+</div>
+
+<blockquote>"Mark has actually moved his desk and is seated in the AI lab with Alex Wang and Nat Friedman, and he's coding all day long."<br><span style="font-size: 12px; color: var(--text-secondary); font-style: normal;">— Dina Powell McCormick, Meta President, Semafor World Economy Summit, April 14, 2026</span></blockquote>
+
+<p>Zuckerberg physically relocated his desk into Meta's Superintelligence Labs between Alex Wang (Scale AI founder) and Nat Friedman (ex-GitHub CEO), writing and shipping code after a 20-year hiatus. Founders don't go into the trenches unless they believe something in the data the rest of the organization can't see yet. It's a behavioral signal — and those are the ones markets price in last.</p>
+</section>
+
+<section id="nvda">
+<div class="stock-header">
+  <div>
+    <h2 style="border:none;">Nvidia</h2>
+    <p class="subtitle">Information Technology · Wide moat · High uncertainty</p>
+  </div>
+  <span class="badge fair">Fair Value · +10%</span>
+</div>
+
+<div class="metric-grid">
+  <div class="metric"><div class="metric-label">Price (Apr 17)</div><div class="metric-value">$201.68</div></div>
+  <div class="metric"><div class="metric-label">Blended fair value</div><div class="metric-value positive">$221.79</div></div>
+  <div class="metric"><div class="metric-label">Upside to FV</div><div class="metric-value positive">+10.0%</div></div>
+  <div class="metric"><div class="metric-label">Market cap</div><div class="metric-value">$4.93T</div></div>
+</div>
+
+<h3>Price vs fair value — last 12 months</h3>
+<p class="subtitle">NVDA doubled from April 2025 lows, peaked around $212 in Oct 2025, then cooled to $202 as the market digests the Rubin ramp.</p>
+<div class="chart-legend">
+  <div class="item"><span class="solid" style="background: #185FA5;"></span>Stock price</div>
+  <div class="item"><span class="line" style="border-top-style: dashed; border-top-color: #1D9E75;"></span>Morningstar FV ($240)</div>
+  <div class="item"><span class="line" style="border-top-style: dotted; border-top-color: #7F77DD;"></span>Victor's DCF IV ($207)</div>
+  <div class="item"><span class="line" style="border-top-style: dashed; border-top-color: #D85A30;"></span>Blended FV ($222)</div>
+</div>
+<div class="chart-wrap">
+  <canvas id="nvda-chart" role="img" aria-label="Line chart of Nvidia stock from $95 in April 2025 to peak $212 in October 2025, settling at $202 by April 2026.">
+  NVDA price: $95 Apr 2025, peak $212 Oct 2025, current $202 Apr 2026. FVs: Victor $207, Blended $222, Morningstar $240.
+  </canvas>
+</div>
+
+<div class="two-col">
+  <div class="card">
+    <div class="card-title">DCF assumptions</div>
+    <table>
+      <tr><td>TTM Revenue</td><td>$215.9B</td></tr>
+      <tr><td>TTM FCF</td><td>$96.6B</td></tr>
+      <tr><td>FCF margin</td><td style="color: var(--green);">44.7%</td></tr>
+      <tr><td>Discount rate (WACC)</td><td>10.5%</td></tr>
+      <tr><td>Terminal growth</td><td>7.0%</td></tr>
+      <tr><td>Terminal P/FCF</td><td>30.6x</td></tr>
+      <tr><td>Diluted shares</td><td>24.43B</td></tr>
+      <tr><td>Net cash</td><td>$51.5B</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-title">Fair value triangulation</div>
+    <table>
+      <tr><td>Bear DCF (25% wt)</td><td>$210.96</td></tr>
+      <tr><td>Base DCF (50% wt)</td><td>$232.15</td></tr>
+      <tr><td>Bull DCF (25% wt)</td><td>$255.08</td></tr>
+      <tr><td>Forward PS model</td><td>$182.00</td></tr>
+      <tr class="divider"><td>Victor's IV avg</td><td>$207.29</td></tr>
+      <tr><td>Morningstar FV</td><td>$240.00</td></tr>
+      <tr><td>Investing SW FV</td><td>$218.09</td></tr>
+      <tr class="highlight"><td>Blended fair value</td><td>$221.79</td></tr>
+    </table>
+  </div>
+</div>
+
+<h3>Revenue forecast · FY24–FY30 (consensus, $B)</h3>
+<div class="chart-wrap compact">
+  <canvas id="nvda-revenue" role="img" aria-label="Bar chart of Nvidia revenue exploding from $61B in FY24 to $602B in FY30, historical in solid blue and forecast in lighter blue.">
+  Revenue: FY24 $61B, FY25 $130B, FY26 $216B, FY27 $367B, FY28 $465B, FY29 $549B, FY30 $602B.
+  </canvas>
+</div>
+
+<h3>Margin of safety buy zones</h3>
+<div class="mos-grid">
+  <div class="mos-cell n0"><div class="label">0% MoS</div><div class="value">$221.79</div></div>
+  <div class="mos-cell n5"><div class="label">5% MoS</div><div class="value">$210.70</div></div>
+  <div class="mos-cell n10"><div class="label">10% MoS</div><div class="value">$199.61</div></div>
+  <div class="mos-cell n20"><div class="label">20% MoS</div><div class="value">$177.43</div></div>
+  <div class="mos-cell n30"><div class="label">30% MoS</div><div class="value">$155.25</div></div>
+</div>
+<p class="mos-note">At $201.68, NVDA sits essentially right at the 10% MoS line — already attractive on any further red day. $177 hits a 20% discount.</p>
+
+<div class="why-box">
+  <div class="label">The 40% the bear case ignores</div>
+  <p>At GTC 2026, Jensen disclosed that the top 5 hyperscalers represent 60% of Nvidia's revenue — and the remaining 40% spans sovereign clouds, enterprise, industrial, robotics, and edge. The bear case assumes hyperscaler concentration is 80%+ and that their in-house silicon efforts (Trainium, TPU, Maia, MTIA) will eat Nvidia's lunch. The disclosed 40% non-hyperscaler revenue is the fastest-growing segment and is structurally unaddressable by custom silicon: sovereign AI buyers like Saudi Arabia's Level42 ($4.8B) don't design chips, they buy national capacity. Huang also said on Dwarkesh's podcast that even inside the hyperscaler 60%, most of that compute serves external customers — AWS renting to enterprises — not the cloud's internal workloads. Meaning the chunk that's actually at risk of in-house replacement is much smaller than the concentration headline suggests.</p>
+</div>
+<div class="why-box" style="margin-top: 12px;">
+  <div class="label">The circular financing flywheel — feature, not bug</div>
+  <p>Nvidia has committed up to $100B to OpenAI, owns roughly 9–13% of CoreWeave after doubling down with another $2B in January 2026 (post-deal stake value ~$4.7B), backstops $6.3B of CoreWeave's excess capacity through 2032, committed $2B to xAI, and invested $2B each into Lumentum, Coherent, and Marvell. Critics call this "circular financing" and draw dot-com parallels. The less obvious read: Nvidia's equity stakes give portfolio companies access to Nvidia's AA- credit rating, letting OpenAI and CoreWeave borrow at 6–9% instead of the 15% they'd pay standalone. Each dollar Nvidia invests in a portfolio company creates multiples of forward chip demand backed by cheaper capital. This is vendor financing at industrial scale — the same playbook GE used to dominate jet engines for 50 years.</p>
+</div>
+<div class="why-box" style="margin-top: 12px;">
+  <div class="label">The valuation tension worth acknowledging</div>
+  <p>The forward PS model in the valuation table yields $182 — below the current $202 price. That's the DCF's quiet warning: at $216B TTM revenue, sustaining even 10x price-to-sales requires FY27 to hit $367B (70% growth on a $5T company). Consensus says yes, Morningstar's $240 FVE says yes, but the margin for error narrows with every doubling. The bull case works. The bear case — where Rubin ramp slows or hyperscaler silicon captures even 15% share — is also mathematically intact. This is why the blended FV is only $222 vs. Morningstar's $240: the PS model is dragging the average down, and that tension is honest math, not a bug.</p>
+</div>
+</section>
+
+<section id="thesis">
+<h2>Summary thesis</h2>
+<div class="summary-pitch">
+<h3>Three irreplaceable MAG 7 businesses at a discount</h3>
+<p>These are three practically irreplaceable stocks to be buying on any red days in April. They're part of the MAG 7 — Apple, Microsoft, Alphabet, Amazon, Meta, Nvidia, and Tesla — the seven megacap tech companies driving most of the S&P 500's returns.</p>
+<p><b>Microsoft.</b> Everyone thinks OpenAI is the threat. Truth is, Microsoft owns a piece of OpenAI, hosts them on Azure, and sells Copilot on top. OpenAI wins, loses, or gets disrupted — Microsoft gets paid on all three. It's the only AI trade where you don't have to pick a winner. Fair value $600, trading at $420. 32% off.</p>
+<p><b>Meta.</b> Wall Street is panicking about $135B in AI spending with "no return." Meanwhile Meta just quietly killed the traditional ad agency. Small businesses now type one sentence and AI builds the entire campaign. That's a multi-hundred-billion-dollar industry getting eaten alive — and Zuckerberg is literally back in the lab coding next to his AI team all day. Fair value $850, stock at $679.</p>
+<p><b>Nvidia.</b> The bear case is hyperscalers will cut Nvidia out. They're trying — and still signing bigger orders. Supply commitments jumped from $50B to $95B in ninety days. When your biggest customers actively trying to replace you are doubling orders instead, that tells you everything. Fair value $240, stock at $202.</p>
+<p>The market is selling these because it's scared of AI spending. The contrarian read is that the market is reading the wrong chart. Microsoft owns the cloud, Meta owns the attention, Nvidia makes the chips. Any dip is a gift.</p>
+</div>
+</section>
+
+<div class="footer">
+  <p>Methodology: fundamentals sourced from latest 10-Q/10-K filings. Fair values blend three anchors — Victor's probability-weighted DCF (25% bear / 50% base / 25% bull scenarios + forward PS model averaged), Morningstar research, and third-party Investing Software estimates. Morningstar FVEs as of latest published coverage: MSFT $600, META $850, NVDA $240, TSLA $300 (lowered Jan 2026), AAPL $260 (raised Jan 2026), GOOGL $340 (raised Nov 2025), AMZN $260. Stock prices are Apr 17, 2026 closes. Margin of safety verdict: Undervalued = &gt;10% upside; Overvalued = &gt;10% downside; Fair Value = within ±10%.</p>
+  <p style="margin-top: 10px;">Not investment advice. For informational purposes only.</p>
+</div>
+
+</div>
+
+<script>
+const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+const gridColor = isDark ? 'rgba(180,178,169,0.12)' : 'rgba(136,135,128,0.1)';
+const tickColor = isDark ? '#B4B2A9' : '#888780';
+
+const priceBlue = isDark ? '#85B7EB' : '#185FA5';
+const priceBg = isDark ? 'rgba(133, 183, 235, 0.12)' : 'rgba(24, 95, 165, 0.08)';
+
+const mkPriceChart = (canvasId, months, prices, fvLines, yMin, yMax) => {
+  new Chart(document.getElementById(canvasId), {
+    type: 'line',
+    data: {
+      labels: months,
+      datasets: [
+        { label: 'Price', data: prices, borderColor: priceBlue, backgroundColor: priceBg, borderWidth: 2.5, fill: true, tension: 0.3, pointRadius: 0, pointHoverRadius: 5 },
+        ...fvLines.map(fv => ({
+          label: fv.label, data: Array(months.length).fill(fv.value), borderColor: fv.color, borderWidth: 1.5, borderDash: fv.dash, pointRadius: 0, fill: false,
+        }))
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { intersect: false, mode: 'index' },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: (ctx) => ctx.dataset.label + ': $' + Math.round(ctx.parsed.y) } }
+      },
+      scales: {
+        x: { ticks: { font: { size: 11 }, color: tickColor }, grid: { display: false } },
+        y: { min: yMin, max: yMax, ticks: { font: { size: 11 }, color: tickColor, callback: (v) => '$' + v }, grid: { color: gridColor } }
+      }
+    }
+  });
+};
+
+const mkRevenueChart = (canvasId, labels, data, historicalCount) => {
+  const colors = data.map((_, i) => i < historicalCount ? priceBlue : (isDark ? '#378ADD' : '#85B7EB'));
+  new Chart(document.getElementById(canvasId), {
+    type: 'bar',
+    data: { labels, datasets: [{ label: 'Revenue ($B)', data, backgroundColor: colors, borderRadius: 3, borderSkipped: false }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: (ctx) => '$' + ctx.parsed.y.toFixed(1) + 'B' } }
+      },
+      scales: {
+        x: { ticks: { font: { size: 11 }, color: tickColor }, grid: { display: false } },
+        y: { ticks: { font: { size: 11 }, color: tickColor, callback: (v) => '$' + v + 'B' }, grid: { color: gridColor } }
+      }
+    }
+  });
+};
+
+new Chart(document.getElementById('overview-chart'), {
+  type: 'bar',
+  data: {
+    labels: ['MSFT', 'META', 'NVDA', 'AMZN', 'AAPL', 'GOOGL', 'TSLA'],
+    datasets: [{
+      data: [32.0, 13.7, 10.0, 2.0, -2.9, -5.5, -12.3],
+      backgroundColor: (ctx) => {
+        const v = ctx.parsed && ctx.parsed.x !== undefined ? ctx.parsed.x : ctx.raw;
+        if (v > 10) return '#1D9E75';
+        if (v > 0) return '#5DCAA5';
+        if (v > -10) return isDark ? '#BA7517' : '#EF9F27';
+        return '#E24B4A';
+      },
+      borderRadius: 4,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: (ctx) => ctx.parsed.x.toFixed(1) + '% upside' } }
+    },
+    scales: {
+      x: {
+        min: -20, max: 40,
+        ticks: { font: { size: 11 }, color: tickColor, callback: (v) => (v > 0 ? '+' : '') + v + '%' },
+        grid: { color: gridColor }
+      },
+      y: { ticks: { font: { size: 12 }, color: tickColor }, grid: { display: false } }
+    }
+  }
+});
+
+const months = ['Apr 25','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec 25','Jan 26','Feb','Mar','Apr 26'];
+
+mkPriceChart('msft-chart', months,
+  [395, 412, 428, 445, 462, 491, 540, 515, 478, 455, 432, 418, 420],
+  [
+    { label: 'Morningstar $600', value: 600, color: '#1D9E75', dash: [6,4] },
+    { label: "Victor's DCF $527", value: 526.79, color: '#7F77DD', dash: [2,3] },
+    { label: 'Blended FV $555', value: 554.90, color: '#D85A30', dash: [6,4] },
+  ], 380, 640);
+
+mkRevenueChart('msft-revenue',
+  ['FY23','FY24','FY25','TTM','FY26e','FY27e','FY28e','FY29e','FY30e'],
+  [211.9, 245.1, 281.7, 305.5, 327.9, 378.4, 440.9, 515.9, 591.0], 4);
+
+mkPriceChart('meta-chart', months,
+  [480, 520, 565, 612, 685, 796, 755, 695, 660, 622, 585, 645, 679],
+  [
+    { label: 'Morningstar $850', value: 850, color: '#1D9E75', dash: [6,4] },
+    { label: "Victor's DCF $722", value: 722.20, color: '#7F77DD', dash: [2,3] },
+    { label: 'Blended FV $772', value: 771.63, color: '#D85A30', dash: [6,4] },
+  ], 450, 900);
+
+mkRevenueChart('meta-revenue',
+  ['FY23','FY24','FY25','FY26e','FY27e','FY28e','FY29e','FY30e'],
+  [134.9, 164.5, 201.0, 249.4, 291.4, 339.6, 379.7, 427.3], 3);
+
+mkPriceChart('nvda-chart', months,
+  [95, 108, 125, 142, 165, 195, 212, 198, 185, 175, 188, 195, 202],
+  [
+    { label: 'Morningstar $240', value: 240, color: '#1D9E75', dash: [6,4] },
+    { label: "Victor's DCF $207", value: 207.29, color: '#7F77DD', dash: [2,3] },
+    { label: 'Blended FV $222', value: 221.79, color: '#D85A30', dash: [6,4] },
+  ], 80, 260);
+
+mkRevenueChart('nvda-revenue',
+  ['FY24','FY25','FY26','FY27e','FY28e','FY29e','FY30e'],
+  [60.9, 130.5, 215.9, 366.6, 465.2, 548.6, 601.6], 3);
+</script>
+</body>
+</html>
