@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Three Malaysian Stocks the US Wishes They Had</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,900&family=JetBrains+Mono:wght@400;500;700&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0e0c;
+    --bg-2: #161411;
+    --ink: #f5f1e8;
+    --ink-dim: #a8a197;
+    --ink-faint: #5a554e;
+    --rule: #2a2722;
+    --inari: #d4a574;      /* warm amber — semiconductors */
+    --ytl: #7fb3a3;        /* teal — power/water/data */
+    --maybank: #b85d5d;    /* maroon — banking heritage */
+    --bonus: #8a8578;      /* muted — the "sidekick" */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter Tight', sans-serif;
+    line-height: 1.6;
+    font-weight: 400;
+    overflow-x: hidden;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    padding: 80px 0 60px;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(800px 400px at 15% 0%, rgba(212,165,116,0.06), transparent 60%),
+      radial-gradient(600px 300px at 85% 20%, rgba(127,179,163,0.05), transparent 60%);
+    pointer-events: none;
+  }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    margin-bottom: 28px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+  .eyebrow::before {
+    content: ''; width: 32px; height: 1px; background: var(--ink-dim);
+  }
+  h1.title {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(42px, 6.5vw, 82px);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    margin-bottom: 32px;
+    font-variation-settings: "opsz" 144;
+  }
+  h1.title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--inari);
+  }
+  .lede {
+    font-size: 19px;
+    color: var(--ink-dim);
+    max-width: 640px;
+    line-height: 1.55;
+  }
+  .lede strong { color: var(--ink); font-weight: 500; }
+  .hero-meta {
+    display: flex;
+    gap: 40px;
+    margin-top: 48px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+  .hero-meta span strong {
+    color: var(--ink);
+    display: block;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+  }
+
+  /* ---------- STOCK CARDS ---------- */
+  .stock {
+    padding: 80px 0;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+  }
+  .stock-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 40px;
+    align-items: end;
+    margin-bottom: 48px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .stock-num {
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    letter-spacing: 0.3em;
+    color: var(--ink-faint);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .stock h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(36px, 5vw, 60px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  .stock h2 .accent { font-style: italic; font-weight: 300; }
+  .ticker-block {
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+    white-space: nowrap;
+  }
+  .ticker {
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--ink-dim);
+    margin-bottom: 4px;
+  }
+  .price {
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .price-note {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    margin-top: 6px;
+    text-transform: uppercase;
+  }
+
+  /* Accent lines per stock */
+  #inari .stock-num, #inari h2 .accent { color: var(--inari); }
+  #ytl .stock-num, #ytl h2 .accent { color: var(--ytl); }
+  #maybank .stock-num, #maybank h2 .accent { color: var(--maybank); }
+
+  /* ---------- CONTENT GRID ---------- */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 64px;
+  }
+  @media (max-width: 820px) {
+    .content-grid { grid-template-columns: 1fr; gap: 40px; }
+    .stock-header { grid-template-columns: 1fr; align-items: start; }
+    .ticker-block { text-align: left; }
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 14px;
+  }
+  .thesis {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    line-height: 1.35;
+    font-weight: 300;
+    color: var(--ink);
+    margin-bottom: 28px;
+    letter-spacing: -0.01em;
+  }
+  .thesis em {
+    font-style: italic;
+    font-weight: 400;
+  }
+  #inari .thesis em { color: var(--inari); }
+  #ytl .thesis em { color: var(--ytl); }
+  #maybank .thesis em { color: var(--maybank); }
+
+  .body-text {
+    color: var(--ink-dim);
+    font-size: 15.5px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+  .body-text strong { color: var(--ink); font-weight: 500; }
+
+  /* The "why US can't replicate" callout */
+  .gap-callout {
+    border-left: 2px solid var(--inari);
+    padding: 4px 0 4px 24px;
+    margin: 28px 0;
+    background: linear-gradient(90deg, rgba(212,165,116,0.04), transparent);
+  }
+  #ytl .gap-callout { border-left-color: var(--ytl); background: linear-gradient(90deg, rgba(127,179,163,0.04), transparent); }
+  #maybank .gap-callout { border-left-color: var(--maybank); background: linear-gradient(90deg, rgba(184,93,93,0.04), transparent); }
+  .gap-callout .section-label { margin-bottom: 8px; }
+  .gap-callout p {
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  /* ---------- SIDEBAR STATS ---------- */
+  .sidebar {
+    border-left: 1px solid var(--rule);
+    padding-left: 40px;
+  }
+  @media (max-width: 820px) {
+    .sidebar { border-left: none; border-top: 1px solid var(--rule); padding-left: 0; padding-top: 32px; }
+  }
+  .stat {
+    padding: 18px 0;
+    border-bottom: 1px dashed var(--rule);
+  }
+  .stat:last-child { border-bottom: none; }
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 6px;
+  }
+  .stat-value {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  .stat-value.mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .stat-sub {
+    font-size: 12px;
+    color: var(--ink-dim);
+    margin-top: 4px;
+  }
+
+  /* The "key data point" hero number */
+  .killer-stat {
+    margin: 36px 0;
+    padding: 28px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .killer-stat .number {
+    font-family: 'Fraunces', serif;
+    font-size: 72px;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--inari);
+    font-variation-settings: "opsz" 144;
+  }
+  #ytl .killer-stat .number { color: var(--ytl); }
+  #maybank .killer-stat .number { color: var(--maybank); }
+  .killer-stat .caption {
+    font-size: 14px;
+    color: var(--ink-dim);
+    margin-top: 10px;
+    max-width: 380px;
+    line-height: 1.45;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    padding: 80px 0 60px;
+    text-align: center;
+  }
+  footer .mark {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  footer p {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* ---------- ANIMATIONS ---------- */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .stock, .hero > * { animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+  .hero .eyebrow { animation-delay: 0s; }
+  .hero h1 { animation-delay: 0.08s; }
+  .hero .lede { animation-delay: 0.16s; }
+  .hero .hero-meta { animation-delay: 0.24s; }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Malaysia Equity Research · April 2026</div>
+    <h1 class="title">Three Malaysian stocks<br>the US <em>wishes</em> they had.</h1>
+    <p class="lede">
+      Structural advantages Wall Street cannot buy. Not "cheaper" — <strong>impossible to replicate</strong>.
+      One rides 50 years of chip packaging know-how. One owns the land that serves Singapore's data demand.
+      One operates inside a legal framework the US banking system structurally locks out.
+    </p>
+    <div class="hero-meta">
+      <span><strong>Exchange</strong>Bursa Malaysia</span>
+      <span><strong>Currency</strong>MYR (RM)</span>
+      <span><strong>Framing</strong>Asymmetry, not arbitrage</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STOCK 1: INARI ============ -->
+<section class="stock" id="inari">
+  <div class="wrap">
+    <div class="stock-header">
+      <div>
+        <div class="stock-num">Stock № 01</div>
+        <h2>Inari Amertron <span class="accent">— the chip that passes through Penang.</span></h2>
+      </div>
+      <div class="ticker-block">
+        <div class="ticker">KLSE : INARI · 0166</div>
+        <div class="price">RM 1.80</div>
+        <div class="price-note">MKT CAP ≈ RM 6.7 B</div>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <div>
+        <div class="section-label">The business</div>
+        <p class="thesis">Inari packages the <em>RF chips</em> inside your iPhone — via Broadcom — from Penang, the world's oldest semiconductor back-end cluster.</p>
+        <p class="body-text">
+          It's the largest pure-play OSAT (outsourced semiconductor assembly & test) listed on Bursa. Radio-frequency filters, optoelectronics, and sensor packaging are its core. Broadcom is the dominant customer; Apple is the end-buyer through that relationship.
+        </p>
+
+        <div class="gap-callout">
+          <div class="section-label">Why the US can't replicate this</div>
+          <p>
+            The CHIPS Act funds <strong>front-end fabrication</strong> — wafers in Arizona, Ohio, Texas. It barely touches <strong>back-end packaging</strong>, which is still ~73% Asia-Pacific. Penang has 50 years of substrate suppliers, wire-bond operators, and test houses inside a 30km radius. Rebuilding that cluster density takes a generation, not a subsidy cycle.
+          </p>
+        </div>
+
+        <div class="killer-stat">
+          <div class="number">73%</div>
+          <div class="caption">of global semiconductor assembly &amp; test revenue stays in Asia-Pacific. When it diversifies, it moves <em>laterally</em> — to Malaysia, Vietnam, the Philippines — not to the US.</div>
+        </div>
+
+        <p class="body-text">
+          Legitimate risk: Apple has been moving modems in-house. Inari's exposure to that is real but not existential — the chips still need to be packaged, and Penang is where that happens. A recent attempted Lumileds acquisition fell through on US national security grounds, leaving Inari with a clean balance sheet and RM300M+ in preserved cash.
+        </p>
+      </div>
+
+      <aside class="sidebar">
+        <div class="stat">
+          <div class="stat-label">Net Cash Position</div>
+          <div class="stat-value mono">RM 2.15 B</div>
+          <div class="stat-sub">~44% of market cap in cash</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Key Customer</div>
+          <div class="stat-value">Broadcom</div>
+          <div class="stat-sub">RF front-end for Apple iPhone</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Latest Dividend</div>
+          <div class="stat-value mono">4.83 sen</div>
+          <div class="stat-sub">Declared Feb 2026</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Institutional Holder</div>
+          <div class="stat-value">EPF</div>
+          <div class="stat-sub">Accumulating in 2026</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Analyst View</div>
+          <div class="stat-value mono">TP RM 2.01 – 2.20</div>
+          <div class="stat-sub">RHB · Hong Leong · BUY</div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STOCK 2: YTL POWER ============ -->
+<section class="stock" id="ytl">
+  <div class="wrap">
+    <div class="stock-header">
+      <div>
+        <div class="stock-num">Stock № 02</div>
+        <h2>YTL Power International <span class="accent">— Singapore's overflow, on Malaysian soil.</span></h2>
+      </div>
+      <div class="ticker-block">
+        <div class="ticker">KLSE : YTLPOWR · 6742</div>
+        <div class="price">RM 3.71</div>
+        <div class="price-note">MKT CAP ≈ RM 32 B</div>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <div>
+        <div class="section-label">The business</div>
+        <p class="thesis">A 664-hectare data centre campus in Kulai, Johor — <em>30 km from Singapore</em> — running Nvidia's latest Grace Blackwell GPUs and scaling to 1 gigawatt.</p>
+        <p class="body-text">
+          YTL Power is a multi-utility: it owns Wessex Water in the UK, PowerSeraya in Singapore, telco infrastructure in Malaysia, and now the region's largest emerging AI data centre cluster. The data centre thesis is what the market is paying for; the rest is stable utility cashflow underneath.
+        </p>
+
+        <div class="gap-callout">
+          <div class="section-label">Why the US can't replicate this</div>
+          <p>
+            This is <strong>geographic asymmetry</strong>. Singapore hosts the Asia HQs of most US multinationals, but capped its own data centre capacity at 1.4 GW in 2019. Serving Singapore-latency workloads is a physics constraint — you cannot solve it from Virginia or Texas. Johor is the only land on earth that satisfies it.
+          </p>
+        </div>
+
+        <div class="killer-stat">
+          <div class="number">US$23B</div>
+          <div class="caption">that North American hyperscalers committed to Malaysia in the first 10 months of 2024 alone. Microsoft, Google, AWS, Oracle — all crossing the causeway out of Singapore.</div>
+        </div>
+
+        <p class="body-text">
+          YTL partnered with Nvidia on a US$4.3B project in December 2023 and completed its first Grace Blackwell facility in late 2025. The company has secured 300MW of contracted capacity and plans to add 200MW annually toward a 1,000MW target by 2031. Dato' Seri Yeoh Seok Hong's strategic moat: YTL owns its own power generation, bypassing Tenaga's grid bottleneck every competitor faces.
+        </p>
+      </div>
+
+      <aside class="sidebar">
+        <div class="stat">
+          <div class="stat-label">Data Centre Capacity</div>
+          <div class="stat-value mono">300 MW</div>
+          <div class="stat-sub">Committed · scaling to 1,000 MW</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Anchor Partner</div>
+          <div class="stat-value">NVIDIA</div>
+          <div class="stat-sub">US$4.3B AI campus (2023)</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Dividend Yield (TTM)</div>
+          <div class="stat-value mono">~2.2%</div>
+          <div class="stat-sub">Semi-annual · growing</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Utility Backbone</div>
+          <div class="stat-value">Wessex · Seraya</div>
+          <div class="stat-sub">UK water · SG power</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Analyst View</div>
+          <div class="stat-value mono">TP RM 5.08 – 5.63</div>
+          <div class="stat-sub">HLIB · MBSB · BUY</div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STOCK 3: MAYBANK ============ -->
+<section class="stock" id="maybank">
+  <div class="wrap">
+    <div class="stock-header">
+      <div>
+        <div class="stock-num">Stock № 03</div>
+        <h2>Malayan Banking <span class="accent">— the bank a US bank can't become.</span></h2>
+      </div>
+      <div class="ticker-block">
+        <div class="ticker">KLSE : MAYBANK · 1155</div>
+        <div class="price">RM 11.26</div>
+        <div class="price-note">MKT CAP ≈ RM 137 B</div>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <div>
+        <div class="section-label">The business</div>
+        <p class="thesis">Malaysia's largest bank and, through Maybank Islamic, one of the top global <em>sukuk</em> arrangers in a US$4.3 trillion market the US cannot legally enter.</p>
+        <p class="body-text">
+          Malayan Banking is a top-tier ASEAN universal bank — retail, wholesale, investment banking, Etiqa insurance — with operations in 18 countries. What makes it asymmetric is underneath: Maybank Islamic is a full-service Shariah-compliant primary issuance platform. Sovereign sukuk for Malaysia and Indonesia, corporate sukuk for GCC issuers wanting Ringgit exposure, bookrunner mandates Goldman and Citi effectively subcontract.
+        </p>
+
+        <div class="gap-callout">
+          <div class="section-label">Why the US can't replicate this</div>
+          <p>
+            This is a <strong>legal moat</strong>, not a cost one. US banking law — the Bank Holding Company Act, FDIC deposit insurance mechanics — is built around interest-bearing structures. Islamic finance prohibits interest (<em>riba</em>). There is no US Shariah Advisory Council with statutory recognition. Iran is sanctioned; the GCC serves itself. Malaysia is the only English-common-law jurisdiction positioned to intermediate global Shariah capital at scale.
+          </p>
+        </div>
+
+        <div class="killer-stat">
+          <div class="number">36%</div>
+          <div class="caption">of the global sukuk market is Malaysia, per the Securities Commission Malaysia (end-2024). Malaysia has topped the Islamic Finance Development Indicator for 13 consecutive years — ahead of Saudi Arabia, the UAE, and Indonesia.</div>
+        </div>
+
+        <p class="body-text">
+          The secondary story is simpler: Maybank is a cash-flow machine. FY2025 net profit of RM 10.5B, a 63 sen total dividend (~5.6% yield at current price), consistent mid-teen ROE, and foreign shareholding near multi-year highs above 21%. The Islamic finance leadership is the structural moat; the dividend is the reason you hold it while the moat compounds.
+        </p>
+      </div>
+
+      <aside class="sidebar">
+        <div class="stat">
+          <div class="stat-label">FY2025 Net Profit</div>
+          <div class="stat-value mono">RM 10.51 B</div>
+          <div class="stat-sub">+4.2% YoY · ATH territory</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">FY2025 Dividend</div>
+          <div class="stat-value mono">63 sen</div>
+          <div class="stat-sub">~5.6% yield · 72% payout ratio</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Islamic Finance Hub</div>
+          <div class="stat-value">Ranked № 1</div>
+          <div class="stat-sub">2025 Global Islamic Finance Development Index</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Foreign Shareholding</div>
+          <div class="stat-value mono">21.5%</div>
+          <div class="stat-sub">Mar 2026 · Multi-year high</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Analyst View</div>
+          <div class="stat-value mono">TP RM 10.50+</div>
+          <div class="stat-sub">CIMB upgrade to BUY</div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="mark">The common thread — you can't write a check for geography, know-how, or legal architecture.</div>
+    <p>
+      Data as of April 2026. All figures from Bursa Malaysia, company filings, and analyst research.<br>
+      Educational content only — not investment advice. Do your own research before trading.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
