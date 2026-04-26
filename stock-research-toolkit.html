@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Stock Research Toolkit</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --black: #0a0a0a;
+  --white: #f5f2ec;
+  --cream: #ede9e0;
+  --red: #c8392b;
+  --red-light: #f0d5d2;
+  --green: #1a6b4a;
+  --green-light: #d2e8dd;
+  --purple: #3d2c8c;
+  --purple-light: #e0dbf5;
+  --gold: #b8952a;
+  --mid: #6b6560;
+  --border: rgba(10,10,10,0.12);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--white);
+  color: var(--black);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* HEADER */
+.site-header {
+  border-bottom: 1.5px solid var(--black);
+  padding: 2rem 3rem 1.5rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.header-left {}
+.eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 6px;
+}
+.site-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 7vw, 88px);
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+  color: var(--black);
+}
+.site-title span { color: var(--red); }
+
+.header-right {
+  max-width: 320px;
+}
+.header-desc {
+  font-size: 13px;
+  color: var(--mid);
+  line-height: 1.7;
+  border-left: 2px solid var(--black);
+  padding-left: 14px;
+}
+
+/* NAV TABS */
+.tab-nav {
+  display: flex;
+  border-bottom: 1.5px solid var(--black);
+  overflow-x: auto;
+}
+.tab-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 1rem 2rem;
+  background: none;
+  border: none;
+  border-right: 1px solid var(--border);
+  cursor: pointer;
+  color: var(--mid);
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+  position: relative;
+}
+.tab-btn:hover { background: var(--cream); color: var(--black); }
+.tab-btn.active { color: var(--black); font-weight: 500; }
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1.5px;
+  left: 0; right: 0;
+  height: 2.5px;
+  background: var(--black);
+}
+.tab-btn.t1.active::after { background: var(--purple); }
+.tab-btn.t2.active::after { background: var(--green); }
+.tab-btn.t3.active::after { background: var(--red); }
+
+/* PANELS */
+.panel { display: none; }
+.panel.active { display: block; }
+
+.panel-inner {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  min-height: calc(100vh - 180px);
+}
+
+/* SIDEBAR */
+.sidebar {
+  border-right: 1.5px solid var(--black);
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.panel-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 6px;
+}
+.panel-heading {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 38px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+.panel-desc {
+  font-size: 13px;
+  color: var(--mid);
+  line-height: 1.7;
+  margin-top: 8px;
+}
+
+.accent-bar {
+  height: 3px;
+  border-radius: 2px;
+  width: 40px;
+  margin-bottom: 1.5rem;
+}
+.p1 .accent-bar { background: var(--purple); }
+.p2 .accent-bar { background: var(--green); }
+.p3 .accent-bar { background: var(--red); }
+
+/* INPUTS */
+.input-group { display: flex; flex-direction: column; gap: 12px; }
+.input-wrap { display: flex; flex-direction: column; gap: 5px; }
+.input-wrap label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mid);
+}
+.input-wrap input {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--black);
+  background: var(--white);
+  color: var(--black);
+  outline: none;
+  border-radius: 0;
+  transition: border-color 0.15s, background 0.15s;
+}
+.p1 .input-wrap input:focus { border-color: var(--purple); background: var(--purple-light); }
+.p2 .input-wrap input:focus { border-color: var(--green); background: var(--green-light); }
+.p3 .input-wrap input:focus { border-color: var(--red); background: var(--red-light); }
+
+.copy-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 12px 20px;
+  border: 1.5px solid var(--black);
+  background: var(--black);
+  color: var(--white);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  margin-top: 4px;
+}
+.copy-btn:hover { background: var(--white); color: var(--black); }
+
+/* WHAT'S INSIDE */
+.sections-list { display: flex; flex-direction: column; gap: 6px; }
+.section-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--mid);
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+.section-item:last-child { border-bottom: none; }
+.section-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.p1 .section-dot { background: var(--purple); }
+.p2 .section-dot { background: var(--green); }
+.p3 .section-dot { background: var(--red); }
+
+/* MAIN CONTENT */
+.main-content { padding: 2.5rem 2.5rem; }
+
+.steps-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 2rem;
+}
+
+.step-card {
+  border: 1.5px solid var(--black);
+  border-bottom: none;
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 1.25rem;
+  align-items: flex-start;
+  background: var(--white);
+  transition: background 0.15s;
+}
+.step-card:last-child { border-bottom: 1.5px solid var(--black); }
+.step-card:hover { background: var(--cream); }
+
+.step-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  line-height: 1;
+  color: var(--border);
+  user-select: none;
+}
+.p1 .step-card:hover .step-num { color: var(--purple); }
+.p2 .step-card:hover .step-num { color: var(--green); }
+.p3 .step-card:hover .step-num { color: var(--red); }
+
+.step-body {}
+.step-title {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: var(--black);
+}
+.step-text {
+  font-size: 13px;
+  color: var(--mid);
+  line-height: 1.65;
+}
+.step-text strong { color: var(--black); font-weight: 500; }
+
+/* OUTPUT AREA */
+.output-area {
+  border: 1.5px solid var(--black);
+  background: var(--black);
+  color: var(--white);
+}
+.output-header {
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.output-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+}
+.output-copy {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: none;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.6);
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.output-copy:hover { border-color: rgba(255,255,255,0.6); color: var(--white); }
+.output-text {
+  font-family: 'DM Mono', monospace;
+  font-size: 11.5px;
+  line-height: 1.8;
+  padding: 1.25rem 1.5rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: rgba(255,255,255,0.8);
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+/* RESPONSIVE */
+@media (max-width: 800px) {
+  .site-header { padding: 1.5rem; }
+  .panel-inner { grid-template-columns: 1fr; }
+  .sidebar { border-right: none; border-bottom: 1.5px solid var(--black); padding: 1.5rem; }
+  .main-content { padding: 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-left">
+    <div class="eyebrow">Claude · Stock Research</div>
+    <div class="site-title">Research<br>any <span>stock</span><br>in minutes.</div>
+  </div>
+  <div class="header-right">
+    <p class="header-desc">Three prompts. One system. Used to find RDDT before it returned 50% in under a month. Fill in the company — copy the prompt — paste into Claude.</p>
+  </div>
+</header>
+
+<nav class="tab-nav">
+  <button class="tab-btn t1 active" onclick="switchTab(0)">01 — Research report</button>
+  <button class="tab-btn t2" onclick="switchTab(1)">02 — Financial model</button>
+  <button class="tab-btn t3" onclick="switchTab(2)">03 — Bear case</button>
+</nav>
+
+<!-- PANEL 1: RESEARCH REPORT -->
+<div class="panel p1 active" id="panel0">
+  <div class="panel-inner">
+    <aside class="sidebar">
+      <div>
+        <div class="accent-bar"></div>
+        <div class="panel-label">Prompt 01</div>
+        <div class="panel-heading">Equity Research Report</div>
+        <p class="panel-desc">Turn Claude into a sell-side analyst. It breaks down the entire business and finds catalysts the market hasn't priced in — including ones that aren't obvious.</p>
+      </div>
+      <div class="input-group">
+        <div class="input-wrap">
+          <label>Company name</label>
+          <input id="p1co" type="text" placeholder="e.g. Reddit Inc." oninput="gen1()"/>
+        </div>
+        <div class="input-wrap">
+          <label>Ticker</label>
+          <input id="p1tk" type="text" placeholder="e.g. RDDT" oninput="gen1()"/>
+        </div>
+        <div class="input-wrap">
+          <label>Sector</label>
+          <input id="p1sec" type="text" placeholder="e.g. social media" oninput="gen1()"/>
+        </div>
+        <button class="copy-btn" onclick="copy('p1out','p1copybtn')" id="p1copybtn">Copy prompt →</button>
+      </div>
+      <div>
+        <div class="panel-label" style="margin-bottom:10px">What's inside</div>
+        <div class="sections-list">
+          <div class="section-item"><div class="section-dot"></div>Revenue model & segment breakdown</div>
+          <div class="section-item"><div class="section-dot"></div>Cash flow & financial health</div>
+          <div class="section-item"><div class="section-dot"></div>Valuation vs. peers</div>
+          <div class="section-item"><div class="section-dot"></div>Macro & regulatory environment</div>
+          <div class="section-item"><div class="section-dot"></div>Asymmetric & hidden catalysts</div>
+          <div class="section-item"><div class="section-dot"></div>Risk assessment</div>
+          <div class="section-item"><div class="section-dot"></div>Bull vs. bear investment thesis</div>
+        </div>
+      </div>
+    </aside>
+    <main class="main-content">
+      <div class="steps-grid">
+        <div class="step-card"><div class="step-num">1</div><div class="step-body"><div class="step-title">Business model breakdown</div><div class="step-text">How does the company make money? Break revenue into segments — advertising, subscriptions, licensing, other. Assess whether the model is sustainable.</div></div></div>
+        <div class="step-card"><div class="step-num">2</div><div class="step-body"><div class="step-title">Financial health check</div><div class="step-text">Cash flow dynamics, debt structure, working capital, and balance sheet quality. Is the company burning cash or generating it?</div></div></div>
+        <div class="step-card"><div class="step-num">3</div><div class="step-body"><div class="step-title">Valuation vs. competitors</div><div class="step-text">P/E, EV/Revenue, Price/Book. How does this stock compare to peers? Is it expensive, cheap, or fairly priced relative to growth?</div></div></div>
+        <div class="step-card"><div class="step-num">4</div><div class="step-body"><div class="step-title">Macro & regulatory environment</div><div class="step-text">What external forces — interest rates, ad market cycles, regulation — affect this stock? What's the competitive threat landscape?</div></div></div>
+        <div class="step-card"><div class="step-num">5</div><div class="step-body"><div class="step-title">Catalysts — obvious & hidden</div><div class="step-text"><strong>Asymmetric:</strong> low-probability, high-impact events like partnerships or unexpected profitability. <strong>Hidden:</strong> drivers the market is undervaluing right now.</div></div></div>
+        <div class="step-card"><div class="step-num">6</div><div class="step-body"><div class="step-title">Bull vs. bear — both fairly argued</div><div class="step-text">Claude presents the strongest version of each case before concluding. No cheerleading — evidence-based with clear risk flags.</div></div></div>
+      </div>
+      <div class="output-area">
+        <div class="output-header">
+          <span class="output-label">Generated prompt</span>
+          <button class="output-copy" onclick="copy('p1out','p1copybtn')" id="p1copybtn2">Copy</button>
+        </div>
+        <div class="output-text" id="p1out">← Fill in the fields on the left to generate your prompt.</div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- PANEL 2: FINANCIAL MODEL -->
+<div class="panel p2" id="panel1">
+  <div class="panel-inner">
+    <aside class="sidebar">
+      <div>
+        <div class="accent-bar"></div>
+        <div class="panel-label">Prompt 02</div>
+        <div class="panel-heading">3-Statement Financial Model</div>
+        <p class="panel-desc">Real numbers from SEC filings. A 5-year projection with every assumption labelled. The same model investment bankers build — in 60 seconds.</p>
+      </div>
+      <div class="input-group">
+        <div class="input-wrap">
+          <label>Company name</label>
+          <input id="p2co" type="text" placeholder="e.g. Apple Inc." oninput="gen2()"/>
+        </div>
+        <div class="input-wrap">
+          <label>Ticker</label>
+          <input id="p2tk" type="text" placeholder="e.g. AAPL" oninput="gen2()"/>
+        </div>
+        <div class="input-wrap">
+          <label>Fiscal year end</label>
+          <input id="p2fy" type="text" placeholder="e.g. December" oninput="gen2()"/>
+        </div>
+        <button class="copy-btn" onclick="copy('p2out','p2copybtn')" id="p2copybtn">Copy prompt →</button>
+      </div>
+      <div>
+        <div class="panel-label" style="margin-bottom:10px">What's inside</div>
+        <div class="sections-list">
+          <div class="section-item"><div class="section-dot"></div>3 years of real historical data</div>
+          <div class="section-item"><div class="section-dot"></div>5-year revenue projections</div>
+          <div class="section-item"><div class="section-dot"></div>Income statement build</div>
+          <div class="section-item"><div class="section-dot"></div>Balance sheet with balance check</div>
+          <div class="section-item"><div class="section-dot"></div>Cash flow tied to balance sheet</div>
+          <div class="section-item"><div class="section-dot"></div>All assumptions clearly labelled</div>
+          <div class="section-item"><div class="section-dot"></div>Bear / base / bull sensitivity table</div>
+        </div>
+      </div>
+    </aside>
+    <main class="main-content">
+      <div class="steps-grid">
+        <div class="step-card"><div class="step-num">1</div><div class="step-body"><div class="step-title">Pull 3 years of real data</div><div class="step-text">From SEC filings: revenue, expenses, assets, debt, equity, cash flow. Every number cites the exact filing and year — no made-up figures.</div></div></div>
+        <div class="step-card"><div class="step-num">2</div><div class="step-body"><div class="step-title">Project revenue (5 years)</div><div class="step-text">Growth rate justified by historical CAGR or analyst consensus. Three scenarios: bear (−5%), base, bull (+5%). Math shown step by step.</div></div></div>
+        <div class="step-card"><div class="step-num">3</div><div class="step-body"><div class="step-title">Build the income statement</div><div class="step-text">Gross margin, R&D, SG&A, depreciation, taxes — all as % of revenue using 3-year averages. Net income calculated per year.</div></div></div>
+        <div class="step-card"><div class="step-num">4</div><div class="step-body"><div class="step-title">Build the balance sheet</div><div class="step-text">Working capital driven by how fast the company collects cash and pays suppliers. Every year must balance: <strong>Assets = Liabilities + Equity.</strong></div></div></div>
+        <div class="step-card"><div class="step-num">5</div><div class="step-body"><div class="step-title">Build the cash flow statement</div><div class="step-text">Net income → add depreciation → subtract capex = free cash flow. Ending cash must tie exactly to the balance sheet.</div></div></div>
+        <div class="step-card"><div class="step-num">6</div><div class="step-body"><div class="step-title">Check everything links + output</div><div class="step-text">All 3 statements verified to connect. Output: 8-column tables (3 historical + 5 projected), assumptions table, Year 5 FCF sensitivity at ±3%.</div></div></div>
+      </div>
+      <div class="output-area">
+        <div class="output-header">
+          <span class="output-label">Generated prompt</span>
+          <button class="output-copy" onclick="copy('p2out','p2copybtn')" id="p2copybtn2">Copy</button>
+        </div>
+        <div class="output-text" id="p2out">← Fill in the fields on the left to generate your prompt.</div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- PANEL 3: BEAR CASE -->
+<div class="panel p3" id="panel2">
+  <div class="panel-inner">
+    <aside class="sidebar">
+      <div>
+        <div class="accent-bar"></div>
+        <div class="panel-label">Prompt 03</div>
+        <div class="panel-heading">Bear Case Stress Test</div>
+        <p class="panel-desc">The prompt most people skip. Forces Claude to argue the most credible downside — so you know your exit before you're even in the trade.</p>
+      </div>
+      <div class="input-group">
+        <div class="input-wrap">
+          <label>Company name</label>
+          <input id="p3co" type="text" placeholder="e.g. Reddit Inc." oninput="gen3()"/>
+        </div>
+        <div class="input-wrap">
+          <label>Ticker</label>
+          <input id="p3tk" type="text" placeholder="e.g. RDDT" oninput="gen3()"/>
+        </div>
+        <div class="input-wrap">
+          <label>Current share price</label>
+          <input id="p3px" type="text" placeholder="e.g. $75" oninput="gen3()"/>
+        </div>
+        <button class="copy-btn" onclick="copy('p3out','p3copybtn')" id="p3copybtn">Copy prompt →</button>
+      </div>
+      <div>
+        <div class="panel-label" style="margin-bottom:10px">What's inside</div>
+        <div class="sections-list">
+          <div class="section-item"><div class="section-dot"></div>What the market currently believes</div>
+          <div class="section-item"><div class="section-dot"></div>Where the business model breaks</div>
+          <div class="section-item"><div class="section-dot"></div>Realistic downside revenue scenario</div>
+          <div class="section-item"><div class="section-dot"></div>Cost & margin collapse risk</div>
+          <div class="section-item"><div class="section-dot"></div>Risks the market is ignoring</div>
+          <div class="section-item"><div class="section-dot"></div>Downside price target with math</div>
+          <div class="section-item"><div class="section-dot"></div>What would make the bear case wrong</div>
+        </div>
+      </div>
+    </aside>
+    <main class="main-content">
+      <div class="steps-grid">
+        <div class="step-card"><div class="step-num">1</div><div class="step-body"><div class="step-title">What is the market pricing in?</div><div class="step-text">Before arguing the downside, understand what growth, margins, and outcomes the current share price already requires. That's what needs to be dismantled.</div></div></div>
+        <div class="step-card"><div class="step-num">2</div><div class="step-body"><div class="step-title">Where does the business model break?</div><div class="step-text">Find the 2–3 most fragile assumptions. What has to go perfectly right for the bull case to work — and how realistic is that?</div></div></div>
+        <div class="step-card"><div class="step-num">3</div><div class="step-body"><div class="step-title">Revenue downside scenario</div><div class="step-text">Realistic numbers — not worst-case fantasy. Consider: customer concentration, saturation, pricing pressure, and competition. Show the figures.</div></div></div>
+        <div class="step-card"><div class="step-num">4</div><div class="step-body"><div class="step-title">Margin & cash burn risk</div><div class="step-text">If revenue disappoints, what happens to costs? Are they fixed or variable? How long does the balance sheet hold up? Estimate the runway.</div></div></div>
+        <div class="step-card"><div class="step-num">5</div><div class="step-body"><div class="step-title">The risk everyone is ignoring</div><div class="step-text">1–2 underappreciated threats not in the consensus view. Regulatory shift, a competitor move, a technology disruption. Why is the market sleeping on it?</div></div></div>
+        <div class="step-card"><div class="step-num">6</div><div class="step-body"><div class="step-title">Downside price target + exit signal</div><div class="step-text">Bear-case valuation with the multiple and revenue assumption shown. Percentage downside from current price. <strong>And the one thing that would make the bear case wrong.</strong></div></div></div>
+      </div>
+      <div class="output-area">
+        <div class="output-header">
+          <span class="output-label">Generated prompt</span>
+          <button class="output-copy" onclick="copy('p3out','p3copybtn')" id="p3copybtn2">Copy</button>
+        </div>
+        <div class="output-text" id="p3out">← Fill in the fields on the left to generate your prompt.</div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+function switchTab(i){
+  document.querySelectorAll('.tab-btn').forEach((b,j)=>b.classList.toggle('active',i===j));
+  document.querySelectorAll('.panel').forEach((p,j)=>p.classList.toggle('active',i===j));
+}
+
+function gen1(){
+  const co=document.getElementById('p1co').value.trim()||'[COMPANY NAME]';
+  const tk=document.getElementById('p1tk').value.trim().toUpperCase()||'[TICKER]';
+  const sec=document.getElementById('p1sec').value.trim()||'[sector]';
+  document.getElementById('p1out').textContent=`You are a financial analyst specializing in equity research. Conduct a comprehensive investment research report on ${co} (${tk}).
+
+ROLE: Analyze both macroeconomic drivers and company fundamentals. Every claim must be evidence-based. Distinguish clearly between facts, inferences, and speculation.
+
+1. BUSINESS MODEL
+How does ${co} make money? Break revenue into segments. Is the model sustainable long-term?
+
+2. FINANCIAL HEALTH
+Operating cash flow, free cash flow, debt structure, working capital. Is the company generating or burning cash?
+
+3. VALUATION VS PEERS
+P/E, EV/Revenue, Price/Book. How does ${tk} compare to others in ${sec}? Is it cheap or expensive relative to growth?
+
+4. MACRO & COMPETITIVE ENVIRONMENT
+How do interest rates, ad cycles, regulation, and competitors affect ${co}? Who is the biggest competitive threat?
+
+5. CATALYSTS — OBVIOUS AND HIDDEN
+Asymmetric: low-probability, high-impact events (partnerships, profitability surprise, acquisition).
+Hidden: drivers the market is underappreciating right now.
+
+6. RISKS
+Regulatory, revenue concentration, competitive, execution, and valuation compression risks.
+
+7. INVESTMENT THESIS
+Present the strongest bull case AND the strongest bear case. Then conclude: does ${tk} offer asymmetric risk/reward at current levels? What are the key metrics to watch?`;
+}
+
+function gen2(){
+  const co=document.getElementById('p2co').value.trim()||'[COMPANY NAME]';
+  const tk=document.getElementById('p2tk').value.trim().toUpperCase()||'[TICKER]';
+  const fy=document.getElementById('p2fy').value.trim()||'[fiscal year end]';
+  document.getElementById('p2out').textContent=`You are a financial analyst building an integrated 3-statement model for ${co} (${tk}). Fiscal year ends: ${fy}.
+
+RULES: Never fabricate numbers. Cite every historical figure with its SEC filing source. Label every assumption as [ASSUMPTION] with a one-line reason.
+
+STEP 1 — REAL HISTORICAL DATA (last 3 years)
+Pull from SEC filings:
+• Income statement: revenue, gross profit, R&D, SG&A, net income
+• Balance sheet: cash, assets, debt, equity
+• Cash flow: operating cash flow, capex, free cash flow
+Cite the filing name and year for every number.
+
+STEP 2 — REVENUE PROJECTIONS (years 1–5)
+[ASSUMPTION] Set a growth rate for each year. Base it on historical CAGR, analyst consensus, or management guidance. Show the math: prior revenue × (1 + growth rate).
+Scenarios: Bear (−5%) / Base / Bull (+5%)
+
+STEP 3 — INCOME STATEMENT
+[ASSUMPTION] Use 3-year averages for: gross margin %, R&D %, SG&A %, tax rate.
+Calculate net income for each projected year.
+
+STEP 4 — BALANCE SHEET
+[ASSUMPTION] Use historical averages for how fast ${co} collects cash (DSO) and pays suppliers (DPO).
+Check every year: Assets = Liabilities + Equity.
+
+STEP 5 — CASH FLOW
+Net income + depreciation − capex [ASSUMPTION: % of revenue] = free cash flow.
+Ending cash must match the balance sheet exactly.
+
+STEP 6 — OUTPUT
+Present all 3 statements as markdown tables: 3 historical + 5 projected years.
+Include: assumptions table, Year 5 FCF sensitivity at ±3% growth.`;
+}
+
+function gen3(){
+  const co=document.getElementById('p3co').value.trim()||'[COMPANY NAME]';
+  const tk=document.getElementById('p3tk').value.trim().toUpperCase()||'[TICKER]';
+  const px=document.getElementById('p3px').value.trim()||'[current price]';
+  document.getElementById('p3out').textContent=`You are writing a bear case on ${co} (${tk}) at ${px}. Do NOT be balanced — argue the most credible, evidence-based downside. Be direct. Back every claim with data.
+
+STEP 1 — WHAT IS THE MARKET PRICING IN?
+What growth, margins, and outcomes does ${px} require? This is the bull case you need to dismantle.
+
+STEP 2 — WHERE DOES THE BUSINESS MODEL BREAK?
+Identify the 2–3 most fragile assumptions. What has to go perfectly right — and how realistic is that? Be specific.
+
+STEP 3 — REVENUE DOWNSIDE
+Realistic bear-case revenue for the next 2–3 years. Consider: customer concentration, saturation, pricing pressure, competition. Show the numbers.
+
+STEP 4 — MARGIN AND CASH RISK
+If revenue disappoints, what happens to costs and margins? Are costs fixed or variable? How long does the balance sheet hold up?
+
+STEP 5 — THE RISK NOBODY IS TALKING ABOUT
+1–2 underappreciated threats not in the consensus view. Why is the market ignoring this?
+
+STEP 6 — DOWNSIDE PRICE TARGET
+Bear-case valuation using lower revenue and compressed multiples. Show the multiple used and the revenue assumption. What is the % downside from ${px}?
+
+STEP 7 — WHAT MAKES THE BEAR CASE WRONG?
+State the single event or metric that would invalidate this thesis. This is your exit signal — know it before you trade.`;
+}
+
+function copy(outId, btnId){
+  const t=document.getElementById(outId).textContent;
+  if(t.startsWith('←')) return;
+  navigator.clipboard.writeText(t).then(()=>{
+    ['p1copybtn','p1copybtn2','p2copybtn','p2copybtn2','p3copybtn','p3copybtn2'].forEach(id=>{
+      const b=document.getElementById(id);
+      if(b && (id===btnId || id===btnId+'2' || id===btnId.replace('2',''))){
+        const orig=b.textContent;
+        b.textContent='Copied!';
+        setTimeout(()=>{b.textContent=orig;},2000);
+      }
+    });
+  });
+}
+</script>
+</body>
+</html>
