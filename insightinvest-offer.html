@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InsightInvest — Build the Perfect Portfolio for Your Child</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --black:   #0A0A08;
+  --dark:    #111110;
+  --dark2:   #1A1A18;
+  --dark3:   #242420;
+  --gold:    #C9922A;
+  --gold-lt: #E8B84B;
+  --gold-dim: rgba(201,146,42,0.15);
+  --cream:   #F0EAD8;
+  --cream2:  rgba(240,234,216,0.6);
+  --cream3:  rgba(240,234,216,0.25);
+  --cream4:  rgba(240,234,216,0.08);
+  --muted:   rgba(240,234,216,0.35);
+  --border:  rgba(240,234,216,0.08);
+  --border2: rgba(201,146,42,0.2);
+  --green:   #1D9E75;
+}
+
+body {
+  background: var(--black);
+  color: var(--cream);
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* grain */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none; opacity: 0.6;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 0 3rem;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  background: rgba(10,10,8,0.85);
+  backdrop-filter: blur(16px);
+}
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem; font-weight: 600;
+  color: var(--cream); letter-spacing: 0.04em;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.nav-logo-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gold); display: inline-block;
+}
+.nav-back {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; font-weight: 500;
+  color: var(--muted); text-decoration: none;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  display: flex; align-items: center; gap: 0.5rem;
+  transition: color 0.2s;
+}
+.nav-back:hover { color: var(--cream); }
+.nav-back::before { content: '←'; font-family: inherit; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 8rem 3rem 6rem;
+  position: relative;
+  max-width: 1000px; margin: 0 auto;
+}
+
+/* animated gold orb */
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 20%; right: -10%;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(201,146,42,0.06) 0%, transparent 65%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: orbFloat 8s ease-in-out infinite;
+}
+@keyframes orbFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-30px) scale(1.05); }
+}
+
+.hero-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold);
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 2rem;
+  opacity: 0; animation: fadeUp 0.7s 0.1s ease forwards;
+}
+.hero-tag::before {
+  content: '';
+  width: 30px; height: 1px;
+  background: var(--gold); display: inline-block;
+}
+
+.hero-headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 300; line-height: 1.05;
+  color: var(--cream);
+  letter-spacing: -0.01em;
+  margin-bottom: 1.5rem;
+  opacity: 0; animation: fadeUp 0.7s 0.2s ease forwards;
+}
+.hero-headline strong {
+  font-weight: 600; font-style: italic;
+  color: var(--gold-lt);
+}
+
+.hero-sub {
+  font-size: 1rem; color: var(--muted);
+  max-width: 520px; line-height: 1.75;
+  margin-bottom: 3.5rem;
+  opacity: 0; animation: fadeUp 0.7s 0.35s ease forwards;
+}
+
+.hero-cta-group {
+  display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;
+  opacity: 0; animation: fadeUp 0.7s 0.45s ease forwards;
+}
+
+.btn-apply {
+  display: inline-flex; align-items: center; gap: 0.75rem;
+  background: var(--gold);
+  color: var(--black);
+  font-family: 'Syne', sans-serif;
+  font-size: 0.82rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 1rem 2.25rem;
+  border: none; cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+  position: relative; overflow: hidden;
+}
+.btn-apply::after {
+  content: '→';
+  transition: transform 0.2s;
+}
+.btn-apply:hover { background: var(--gold-lt); transform: translateY(-1px); }
+.btn-apply:hover::after { transform: translateX(4px); }
+.btn-apply:active { transform: translateY(0); }
+
+.hero-note {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; color: var(--muted);
+  letter-spacing: 0.06em;
+}
+
+/* ── DIVIDER ── */
+.gold-line {
+  width: 100%; height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+  margin: 0;
+}
+
+/* ── WHAT'S INCLUDED ── */
+.section { padding: 6rem 3rem; position: relative; }
+.section-inner { max-width: 1000px; margin: 0 auto; }
+
+.section-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 1rem;
+}
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 400; line-height: 1.15;
+  color: var(--cream); margin-bottom: 1rem;
+}
+.section-title em { font-style: italic; color: var(--gold-lt); }
+
+.section-body {
+  font-size: 0.95rem; color: var(--muted);
+  line-height: 1.75; max-width: 580px;
+  margin-bottom: 3.5rem;
+}
+
+/* Pillars grid */
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-bottom: 4rem;
+}
+.pillar {
+  background: var(--dark);
+  padding: 2.5rem 2rem;
+  transition: background 0.2s;
+}
+.pillar:hover { background: var(--dark2); }
+.pillar-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3rem; font-weight: 300;
+  color: var(--gold-dim);
+  line-height: 1; margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border2);
+  padding-bottom: 1rem;
+}
+.pillar-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem; font-weight: 600;
+  color: var(--cream); margin-bottom: 0.75rem;
+  line-height: 1.2;
+}
+.pillar-body {
+  font-size: 0.82rem; color: var(--muted);
+  line-height: 1.7;
+}
+
+/* ── PROCESS ── */
+.process-section { background: var(--dark); }
+
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border: 1px solid var(--border);
+  margin-top: 3rem;
+}
+.step {
+  padding: 2rem 1.75rem;
+  border-right: 1px solid var(--border);
+  position: relative;
+}
+.step:last-child { border-right: none; }
+.step-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; font-weight: 500;
+  letter-spacing: 0.14em; color: var(--gold);
+  margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.step-num::after {
+  content: ''; flex: 1;
+  height: 1px; background: var(--border2);
+}
+.step-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem; font-weight: 600;
+  color: var(--cream); margin-bottom: 0.6rem; line-height: 1.2;
+}
+.step-body { font-size: 0.78rem; color: var(--muted); line-height: 1.65; }
+
+/* ── WHAT YOU GET ── */
+.deliverables {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1rem; margin-top: 3rem;
+}
+.deliverable {
+  display: flex; gap: 1.25rem; align-items: flex-start;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  background: var(--dark2);
+  transition: border-color 0.2s;
+}
+.deliverable:hover { border-color: var(--border2); }
+.deliverable-icon {
+  width: 36px; height: 36px; flex-shrink: 0;
+  border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; color: var(--gold);
+  font-family: 'JetBrains Mono', monospace;
+}
+.deliverable-title {
+  font-size: 0.85rem; font-weight: 700;
+  color: var(--cream); margin-bottom: 0.3rem;
+  letter-spacing: 0.02em;
+}
+.deliverable-body { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
+
+/* ── THE SESSION ── */
+.session-section { background: var(--dark2); }
+
+.session-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 4rem; align-items: start;
+}
+.session-details { margin-top: 2.5rem; }
+.detail-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.detail-row:first-child { border-top: 1px solid var(--border); }
+.detail-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted);
+}
+.detail-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem; font-weight: 600; color: var(--cream);
+}
+.detail-val.gold { color: var(--gold-lt); }
+
+.session-right {
+  padding: 2.5rem;
+  border: 1px solid var(--border2);
+  background: var(--gold-dim);
+  margin-top: 2.5rem;
+}
+.session-right-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 0.75rem;
+}
+.session-right-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem; font-weight: 600; color: var(--cream);
+  line-height: 1.3; margin-bottom: 1rem;
+}
+.session-right-body {
+  font-size: 0.82rem; color: var(--muted);
+  line-height: 1.7; margin-bottom: 1.5rem;
+}
+.session-checklist { list-style: none; }
+.session-checklist li {
+  font-size: 0.82rem; color: var(--cream2);
+  padding: 0.45rem 0;
+  display: flex; gap: 0.75rem; align-items: flex-start;
+}
+.session-checklist li::before {
+  content: '✓';
+  color: var(--gold); font-size: 0.75rem;
+  flex-shrink: 0; margin-top: 0.05rem;
+}
+
+/* ── WHO IS THIS FOR ── */
+.for-section { background: var(--black); }
+.for-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border);
+  margin-top: 3rem;
+}
+.for-card {
+  background: var(--dark); padding: 2rem 1.75rem;
+}
+.for-card-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 0.75rem;
+}
+.for-card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem; font-weight: 600;
+  color: var(--cream); margin-bottom: 0.6rem;
+  line-height: 1.25;
+}
+.for-card-body { font-size: 0.8rem; color: var(--muted); line-height: 1.65; }
+
+/* ── APPLICATION FORM ── */
+.apply-section { background: var(--dark); }
+
+.form-wrap {
+  max-width: 680px;
+  border: 1px solid var(--border2);
+  padding: 3rem;
+  background: var(--dark2);
+  margin-top: 3rem;
+}
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem; }
+.form-row.full { grid-template-columns: 1fr; }
+
+.field label {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 0.5rem;
+}
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  background: var(--dark3);
+  border: 1px solid var(--border);
+  color: var(--cream);
+  padding: 0.85rem 1rem;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.88rem;
+  outline: none;
+  border-radius: 0;
+  transition: border-color 0.2s;
+  appearance: none;
+}
+.field select option { background: var(--dark3); }
+.field input:focus,
+.field select:focus,
+.field textarea:focus { border-color: var(--gold); }
+.field input::placeholder,
+.field textarea::placeholder { color: rgba(240,234,216,0.2); }
+.field textarea { resize: vertical; min-height: 110px; }
+
+.checkbox-group {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0.6rem; margin-top: 0.5rem;
+}
+.checkbox-label {
+  display: flex; align-items: center; gap: 0.75rem;
+  font-size: 0.8rem; color: var(--muted);
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.checkbox-label:hover { border-color: var(--border2); color: var(--cream2); }
+.checkbox-label input { accent-color: var(--gold); flex-shrink: 0; }
+
+.form-footer {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  margin-top: 2rem; flex-wrap: wrap; gap: 1rem;
+}
+.form-disclaimer {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; color: var(--muted);
+  letter-spacing: 0.04em; line-height: 1.6;
+  max-width: 280px;
+}
+
+/* Submit button */
+.btn-submit {
+  display: inline-flex; align-items: center; gap: 0.75rem;
+  background: var(--gold); color: var(--black);
+  font-family: 'Syne', sans-serif;
+  font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 0.95rem 2rem;
+  border: none; cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+.btn-submit:hover { background: var(--gold-lt); transform: translateY(-1px); }
+.btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.btn-submit-arrow { transition: transform 0.2s; }
+.btn-submit:hover .btn-submit-arrow { transform: translateX(4px); }
+
+/* Success state */
+.form-success {
+  display: none;
+  padding: 2rem;
+  border-left: 2px solid var(--gold);
+  background: var(--gold-dim);
+  margin-top: 1.5rem;
+}
+.form-success-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 0.5rem;
+}
+.form-success-body { font-size: 0.88rem; color: var(--cream2); line-height: 1.7; }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--black);
+  border-top: 1px solid var(--border);
+  padding: 2.5rem 3rem;
+  display: flex; justify-content: space-between; align-items: center;
+}
+footer p {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; color: var(--muted);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  margin: 0;
+}
+.footer-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem; font-weight: 600; color: var(--cream2);
+  letter-spacing: 0.04em;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.65s ease, transform 0.65s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 800px) {
+  nav { padding: 0 1.5rem; }
+  .hero { padding: 7rem 1.5rem 4rem; }
+  .section { padding: 4rem 1.5rem; }
+  .pillars, .for-grid { grid-template-columns: 1fr; }
+  .process-steps { grid-template-columns: 1fr 1fr; }
+  .step { border-right: none; border-bottom: 1px solid var(--border); }
+  .step:nth-child(2n) { border-right: none; }
+  .deliverables { grid-template-columns: 1fr; }
+  .session-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .form-row { grid-template-columns: 1fr; }
+  .checkbox-group { grid-template-columns: 1fr; }
+  .form-wrap { padding: 2rem 1.5rem; }
+  footer { flex-direction: column; gap: 1rem; padding: 2rem 1.5rem; }
+  .hero-cta-group { flex-direction: column; align-items: flex-start; gap: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <span class="nav-logo-dot"></span>
+    InsightInvest
+  </div>
+  <a href="childrens_etf_portfolio_guide.html" class="nav-back">Back to guide</a>
+</nav>
+
+<!-- HERO -->
+<section style="position:relative;z-index:1;">
+  <div class="hero">
+    <div class="hero-tag">Private Portfolio Consultation</div>
+    <h1 class="hero-headline">
+      Built for parents who want to<br>
+      start investing for their children<br>
+      but don't know <strong>where to begin.</strong>
+    </h1>
+    <p class="hero-sub">
+      A 1-on-1, fully personalised session where we review your situation, build a portfolio tailored to your child's timeline and your financial goals, and give you a clear, actionable plan you can start the same day.
+    </p>
+    <div class="hero-cta-group">
+      <a href="#apply" class="btn-apply">Apply for a session</a>
+      <span class="hero-note">By application only &nbsp;·&nbsp; Limited spots</span>
+    </div>
+  </div>
+</section>
+
+<div class="gold-line"></div>
+
+<!-- WHAT'S INCLUDED -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-tag reveal">What's included</div>
+    <h2 class="section-title reveal">Three things. <em>One session.</em></h2>
+    <p class="section-body reveal">Everything you need to go from uncertain to invested — in a single 60-minute conversation. No homework before. No confusion after.</p>
+
+    <div class="pillars reveal">
+      <div class="pillar">
+        <div class="pillar-num">01</div>
+        <div class="pillar-title">Your personalised portfolio</div>
+        <div class="pillar-body">We build the exact fund allocation for your child's age, your monthly budget, your risk comfort, and your country — not a template. Yours.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">02</div>
+        <div class="pillar-title">A written plan you keep</div>
+        <div class="pillar-body">After the session, you receive a written summary — the funds, the percentages, the account type, and the exact steps to open and fund it. Nothing left vague.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">03</div>
+        <div class="pillar-title">Ongoing support</div>
+        <div class="pillar-body">Questions don't end when the call does. You get direct access to follow up after the session — so you can actually execute the plan with confidence.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-line"></div>
+
+<!-- THE PROCESS -->
+<section class="section process-section">
+  <div class="section-inner">
+    <div class="section-tag reveal">How it works</div>
+    <h2 class="section-title reveal">Four steps from <em>application to plan.</em></h2>
+
+    <div class="process-steps reveal">
+      <div class="step">
+        <div class="step-num">Step 01</div>
+        <div class="step-title">You apply below</div>
+        <div class="step-body">Fill in the short form — your situation, your child's age, what you're hoping to achieve. Takes under 3 minutes.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">Step 02</div>
+        <div class="step-title">We review your application</div>
+        <div class="step-body">We read every application personally. If it's a good fit, you'll receive a calendar booking link within 48 hours.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">Step 03</div>
+        <div class="step-title">The 60-minute session</div>
+        <div class="step-body">We go through your situation in depth and build the portfolio together — live, on the call. You ask everything. Nothing is rushed.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">Step 04</div>
+        <div class="step-title">Your plan arrives</div>
+        <div class="step-body">Your written portfolio plan lands in your inbox within 24 hours. Open the account. Start the standing order. Done.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-line"></div>
+
+<!-- WHAT YOU GET -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-tag reveal">The deliverables</div>
+    <h2 class="section-title reveal">What you walk away with.</h2>
+    <div class="deliverables reveal">
+      <div class="deliverable">
+        <div class="deliverable-icon">01</div>
+        <div>
+          <div class="deliverable-title">Custom fund selection</div>
+          <div class="deliverable-body">The exact ETFs for your situation — not a generic list. Tailored by age, budget, geography, and goals.</div>
+        </div>
+      </div>
+      <div class="deliverable">
+        <div class="deliverable-icon">02</div>
+        <div>
+          <div class="deliverable-title">Allocation breakdown</div>
+          <div class="deliverable-body">Precise percentages for each fund. How much goes where, and why — in plain language you can explain to anyone.</div>
+        </div>
+      </div>
+      <div class="deliverable">
+        <div class="deliverable-icon">03</div>
+        <div>
+          <div class="deliverable-title">Account setup guidance</div>
+          <div class="deliverable-body">Which broker to use, which account type is right for your country, and the exact steps to open and fund it.</div>
+        </div>
+      </div>
+      <div class="deliverable">
+        <div class="deliverable-icon">04</div>
+        <div>
+          <div class="deliverable-title">20-year projection</div>
+          <div class="deliverable-body">A realistic simulation of what your specific portfolio grows to — based on your monthly contribution and actual historical index returns.</div>
+        </div>
+      </div>
+      <div class="deliverable">
+        <div class="deliverable-icon">05</div>
+        <div>
+          <div class="deliverable-title">Written plan document</div>
+          <div class="deliverable-body">Everything from the session in a clean, shareable PDF you can reference, revisit, and act on any time.</div>
+        </div>
+      </div>
+      <div class="deliverable">
+        <div class="deliverable-icon">06</div>
+        <div>
+          <div class="deliverable-title">Post-session access</div>
+          <div class="deliverable-body">Direct line to follow up after the call. Questions when you're actually setting it up — answered.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-line"></div>
+
+<!-- THE SESSION -->
+<section class="section session-section">
+  <div class="section-inner">
+    <div class="session-grid">
+      <div>
+        <div class="section-tag reveal">The session</div>
+        <h2 class="section-title reveal">60 minutes. <em>Everything changes.</em></h2>
+        <p class="section-body reveal" style="margin-bottom:0;">Most parents spend months reading, comparing, second-guessing — and still never start. One focused session removes all of it. You end the call knowing exactly what to buy, how much, and where.</p>
+        <div class="session-details reveal">
+          <div class="detail-row">
+            <span class="detail-label">Format</span>
+            <span class="detail-val">1-on-1 video call</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Duration</span>
+            <span class="detail-val">60 minutes</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Booking</span>
+            <span class="detail-val">By application only</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Spots</span>
+            <span class="detail-val gold">Limited availability</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Price</span>
+            <span class="detail-val gold">Revealed on acceptance</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="session-right reveal">
+          <div class="session-right-label">What we cover on the call</div>
+          <div class="session-right-title">A full portfolio built around your child's future.</div>
+          <div class="session-right-body">We don't talk theory. We open a blank document and build your child's portfolio from scratch — live, together, in real time.</div>
+          <ul class="session-checklist">
+            <li>Your child's age and the exact time horizon we're building for</li>
+            <li>Your monthly budget and how to allocate it across the funds</li>
+            <li>Which ETFs make sense for your country and broker</li>
+            <li>How to handle dividends — reinvest or withdraw</li>
+            <li>What to do when markets crash (and they will)</li>
+            <li>When and how to rebalance, and how long it takes</li>
+            <li>Every question you've been holding since you started reading</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-line"></div>
+
+<!-- WHO IS THIS FOR -->
+<section class="section for-section">
+  <div class="section-inner">
+    <div class="section-tag reveal">Who this is for</div>
+    <h2 class="section-title reveal">Right for you if <em>any of this sounds familiar.</em></h2>
+    <div class="for-grid reveal">
+      <div class="for-card">
+        <div class="for-card-tag">Parent</div>
+        <div class="for-card-title">You want to start but don't know which broker, which funds, or how much</div>
+        <div class="for-card-body">You've read the articles, watched the videos — but every source says something different. You need one clear answer, not more content.</div>
+      </div>
+      <div class="for-card">
+        <div class="for-card-tag">Already started</div>
+        <div class="for-card-title">You're investing something but not sure if it's the right thing or right amount</div>
+        <div class="for-card-body">You opened an account, picked a fund, and now you're not confident it's optimal. We'll review it, fix what needs fixing, and give you certainty.</div>
+      </div>
+      <div class="for-card">
+        <div class="for-card-tag">Planning ahead</div>
+        <div class="for-card-title">Your child isn't born yet — and you want the account ready on day one</div>
+        <div class="for-card-body">The best time to open an account is the day they're born. The best time to plan it is now. Come in before they arrive and leave with a plan you can execute immediately.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-line"></div>
+
+<!-- APPLICATION FORM -->
+<section class="section apply-section" id="apply">
+  <div class="section-inner">
+    <div class="section-tag reveal">Apply for a session</div>
+    <h2 class="section-title reveal">Tell us about <em>your situation.</em></h2>
+    <p class="section-body reveal">We review every application personally. If it's a good fit, you'll hear from us within 48 hours with a calendar booking link. If it isn't the right time, we'll tell you honestly and point you in the right direction.</p>
+
+    <div class="form-wrap reveal">
+      <form id="applyForm" action="https://formspree.io/f/xnjwdbgn" method="POST">
+
+        <div class="form-row">
+          <div class="field">
+            <label>Your full name</label>
+            <input type="text" name="name" placeholder="Jane Smith" required>
+          </div>
+          <div class="field">
+            <label>Email address</label>
+            <input type="email" name="email" placeholder="jane@email.com" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Country / location</label>
+            <input type="text" name="country" placeholder="e.g. Malaysia, Singapore, UK" required>
+          </div>
+          <div class="field">
+            <label>Child's current age</label>
+            <select name="child_age" required>
+              <option value="" disabled selected>Select age</option>
+              <option>Not born yet — planning ahead</option>
+              <option>Newborn</option>
+              <option>1–3 years</option>
+              <option>4–6 years</option>
+              <option>7–10 years</option>
+              <option>11–14 years</option>
+              <option>15–18 years</option>
+              <option>Multiple children</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Monthly investment budget (USD)</label>
+            <select name="monthly_budget" required>
+              <option value="" disabled selected>Select range</option>
+              <option>Under $100</option>
+              <option>$100 – $250</option>
+              <option>$250 – $500</option>
+              <option>$500 – $1,000</option>
+              <option>Over $1,000</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Have you started investing for your child?</label>
+            <select name="started" required>
+              <option value="" disabled selected>Select one</option>
+              <option>No — starting from scratch</option>
+              <option>Yes — but not confident in my choices</option>
+              <option>Yes — just want to optimise</option>
+              <option>Not sure where I stand</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row full">
+          <div class="field">
+            <label>What matters most to you in this portfolio?</label>
+            <div class="checkbox-group">
+              <label class="checkbox-label"><input type="checkbox" name="priority" value="Maximum long-term growth"> Maximum long-term growth</label>
+              <label class="checkbox-label"><input type="checkbox" name="priority" value="Lowest possible fees"> Lowest possible fees</label>
+              <label class="checkbox-label"><input type="checkbox" name="priority" value="Dividend compounding"> Dividend compounding</label>
+              <label class="checkbox-label"><input type="checkbox" name="priority" value="Global diversification"> Global diversification</label>
+              <label class="checkbox-label"><input type="checkbox" name="priority" value="Simplicity"> Simplicity — as few funds as possible</label>
+              <label class="checkbox-label"><input type="checkbox" name="priority" value="Education savings"> Education savings focus</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row full">
+          <div class="field">
+            <label>Tell us a bit more about your situation</label>
+            <textarea name="message" placeholder="e.g. I'm in Malaysia, not sure which broker to use. My child is 2 years old. I can invest around $300/month. I've read about ETFs but never actually bought any. Main goal is to give them a head start when they turn 18..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-footer">
+          <div class="form-disclaimer">
+            We review personally within 48 hours. If accepted, you'll receive a calendar link to book your session.
+          </div>
+          <button type="submit" class="btn-submit" id="submitBtn">
+            Submit application
+            <span class="btn-submit-arrow">→</span>
+          </button>
+        </div>
+
+        <div class="form-success" id="formSuccess">
+          <div class="form-success-label">Application received</div>
+          <div class="form-success-body">Thank you for applying. We'll review your situation and come back to you within 48 hours. If it's a good fit, you'll receive a calendar link to book your session. Keep an eye on your inbox.</div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">InsightInvest</div>
+  <p>For educational purposes only &nbsp;·&nbsp; Not financial advice</p>
+</footer>
+
+<script>
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.07, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Form submission
+document.getElementById('applyForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = 'Submitting&nbsp;&nbsp;···';
+
+  try {
+    const res = await fetch(this.action, {
+      method: 'POST',
+      body: new FormData(this),
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (res.ok) {
+      this.reset();
+      document.getElementById('formSuccess').style.display = 'block';
+      btn.style.display = 'none';
+      document.getElementById('formSuccess').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+      btn.disabled = false;
+      btn.innerHTML = 'Try again &nbsp;→';
+      btn.style.background = '#8B1A1A';
+      btn.style.color = '#F0EAD8';
+    }
+  } catch {
+    btn.disabled = false;
+    btn.innerHTML = 'Try again &nbsp;→';
+    btn.style.background = '#8B1A1A';
+    btn.style.color = '#F0EAD8';
+  }
+});
+</script>
+</body>
+</html>
