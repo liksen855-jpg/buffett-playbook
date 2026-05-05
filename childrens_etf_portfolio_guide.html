@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Future-Proof — Build a Portfolio for Your Child</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;0,8..60,700;0,8..60,900;1,8..60,400;1,8..60,600;1,8..60,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+:root {
+  --paper:   #F5F0E8;
+  --paper2:  #EDE8DC;
+  --ink:     #0F0F0D;
+  --ink2:    #2C2C28;
+  --ink3:    #5C5C54;
+  --accent:  #1A4731;
+  --accent2: #C8922A;
+  --red:     #8B1A1A;
+  --muted:   #8C8C82;
+}
+body { font-family: 'Inter', system-ui, sans-serif; background: var(--paper); color: var(--ink); font-size: 17px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+body::after { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9999; opacity: 0.35; }
+nav { position: sticky; top: 0; z-index: 100; background: var(--ink); padding: 0 3rem; display: flex; align-items: center; justify-content: space-between; height: 52px; }
+.nav-logo { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 600; color: var(--paper2); letter-spacing: 0.2em; text-transform: uppercase; }
+.nav-links { display: flex; gap: 2.5rem; list-style: none; }
+.nav-links a { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 600; color: rgba(245,240,232,0.35); text-decoration: none; letter-spacing: 0.12em; text-transform: uppercase; transition: color 0.2s; }
+.nav-links a:hover { color: var(--paper); }
+.hero { background: var(--ink); display: grid; grid-template-columns: 1fr 1fr; min-height: 90vh; position: relative; overflow: hidden; }
+.hero-left { padding: 6rem 4rem 6rem 5rem; display: flex; flex-direction: column; justify-content: flex-end; border-right: 1px solid rgba(245,240,232,0.08); position: relative; }
+.hero-issue { position: absolute; top: 3rem; left: 5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: rgba(245,240,232,0.25); letter-spacing: 0.16em; text-transform: uppercase; }
+.hero-vol { font-family: 'Source Serif 4', Georgia, serif; font-size: clamp(4rem, 7vw, 7.5rem); font-weight: 900; color: var(--paper); line-height: 0.9; margin-bottom: 3rem; opacity: 0; animation: riseIn 0.8s 0.1s ease forwards; }
+.hero-vol em { display: block; color: transparent; -webkit-text-stroke: 1px rgba(245,240,232,0.2); font-style: italic; }
+.hero-rule { height: 1px; background: rgba(245,240,232,0.12); margin-bottom: 2rem; }
+.hero-sub { font-size: 0.88rem; color: rgba(245,240,232,0.45); font-style: italic; line-height: 1.65; max-width: 320px; opacity: 0; animation: riseIn 0.8s 0.3s ease forwards; }
+.hero-right { padding: 3rem; display: flex; flex-direction: column; justify-content: center; }
+.hero-stat-group { display: flex; flex-direction: column; gap: 0; opacity: 0; animation: riseIn 0.8s 0.4s ease forwards; }
+.hero-stat { padding: 2rem 1.5rem; border-bottom: 1px solid rgba(245,240,232,0.07); }
+.hero-stat:last-child { border-bottom: none; }
+.hero-stat-num { font-family: 'Source Serif 4', Georgia, serif; font-size: clamp(2.2rem, 3.5vw, 3.2rem); color: var(--paper); font-weight: 400; line-height: 1; margin-bottom: 0.35rem; }
+.hero-stat-num sup { font-size: 40%; vertical-align: super; }
+.hero-stat-lbl { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; color: rgba(245,240,232,0.3); letter-spacing: 0.14em; text-transform: uppercase; }
+.chapter-band { background: var(--accent); padding: 0.9rem 5rem; display: flex; align-items: center; gap: 2rem; }
+.chapter-num { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 600; color: rgba(245,240,232,0.45); letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap; }
+.chapter-band-rule { height: 1px; flex: 1; background: rgba(245,240,232,0.18); }
+.chapter-band-title { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 600; color: rgba(245,240,232,0.65); letter-spacing: 0.14em; text-transform: uppercase; white-space: nowrap; }
+.chapter { max-width: 1100px; margin: 0 auto; padding: 6rem 5rem; border-bottom: 1px solid var(--paper2); }
+.col-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+.col-3-7 { display: grid; grid-template-columns: 3fr 7fr; gap: 4rem; align-items: start; }
+.col-7-3 { display: grid; grid-template-columns: 7fr 3fr; gap: 4rem; align-items: start; }
+.chapter-overline { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 1rem; }
+.chapter-overline::after { content: ''; flex: 1; height: 1px; background: var(--paper2); max-width: 60px; }
+h2 { font-family: 'Source Serif 4', Georgia, serif; font-size: clamp(1.9rem, 3vw, 2.8rem); font-weight: 700; line-height: 1.1; color: var(--ink); margin-bottom: 2rem; letter-spacing: -0.01em; }
+h2 em { font-style: italic; color: var(--accent); }
+h3 { font-family: 'Source Serif 4', Georgia, serif; font-size: 1.25rem; font-weight: 700; color: var(--ink); margin-bottom: 0.75rem; }
+p { margin-bottom: 1.25rem; color: var(--ink2); }
+p:last-child { margin-bottom: 0; }
+.pull { border-top: 3px solid var(--ink); border-bottom: 1px solid var(--paper2); padding: 2rem 0; margin: 3rem 0; }
+.pull p { font-family: 'Source Serif 4', Georgia, serif; font-size: clamp(1.15rem, 1.8vw, 1.5rem); font-style: italic; line-height: 1.4; color: var(--ink); margin: 0; }
+.stat-aside { border-left: 3px solid var(--ink); padding-left: 1.5rem; margin-bottom: 2.5rem; }
+.stat-num { font-family: 'Source Serif 4', Georgia, serif; font-size: 2.8rem; font-weight: 900; line-height: 1; color: var(--ink); }
+.stat-label { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-top: 0.3rem; }
+.stat-note { font-size: 0.8rem; color: var(--muted); margin-top: 0.5rem; font-style: italic; }
+.callout { border-top: 2px solid var(--ink); padding: 1.5rem 0 0; margin: 2.5rem 0; }
+.callout-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem; }
+.callout p { font-size: 0.9rem; color: var(--ink2); }
+.callout.accent { border-color: var(--accent); }
+.callout.accent .callout-label { color: var(--accent); }
+.callout.warn { border-color: var(--accent2); }
+.callout.warn .callout-label { color: var(--accent2); }
+.criteria-list { margin: 2rem 0; }
+.criteria-item { display: grid; grid-template-columns: 110px 1fr; gap: 0; border-top: 1px solid var(--paper2); padding: 1.25rem 0; }
+.criteria-item:last-child { border-bottom: 1px solid var(--paper2); }
+.criteria-target { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 600; color: var(--accent); padding-right: 1.5rem; padding-top: 0.1rem; }
+.criteria-body { font-size: 0.87rem; color: var(--ink2); line-height: 1.65; }
+.criteria-body strong { color: var(--ink); }
+.alloc-strip-wrap { margin: 3rem 0; }
+.alloc-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem; }
+.alloc-strip { display: flex; height: 5px; background: var(--paper2); margin-bottom: 1.25rem; }
+.alloc-seg { height: 100%; }
+.alloc-legend { display: flex; flex-wrap: wrap; gap: 1.5rem; }
+.alloc-item { display: flex; align-items: center; gap: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; color: var(--ink2); }
+.alloc-swatch { width: 20px; height: 3px; }
+.etf-list { margin: 3rem 0; }
+.etf-entry { border-top: 1px solid var(--ink); padding: 3rem 0 2.5rem; display: grid; grid-template-columns: 190px 1fr; gap: 3.5rem; align-items: start; }
+.etf-entry:last-child { border-bottom: 1px solid var(--paper2); }
+.etf-left { position: sticky; top: 64px; }
+.etf-ticker-big { font-family: 'Source Serif 4', Georgia, serif; font-size: 2.6rem; font-weight: 900; line-height: 1; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 0.4rem; }
+.etf-alloc-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 600; color: var(--paper); background: var(--ink); padding: 0.2rem 0.55rem; display: inline-block; letter-spacing: 0.04em; margin-bottom: 1rem; }
+.etf-meta-list { list-style: none; }
+.etf-meta-item { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--muted); padding: 0.3rem 0; border-bottom: 1px solid var(--paper2); display: flex; justify-content: space-between; }
+.etf-meta-item span { color: var(--ink2); font-weight: 600; }
+.etf-full-name { font-family: 'Source Serif 4', Georgia, serif; font-size: 1.05rem; font-weight: 400; font-style: italic; color: var(--muted); margin-bottom: 0.25rem; }
+.etf-role-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; }
+.etf-role-tag::before { content: '—'; color: var(--paper2); }
+.etf-desc { font-size: 0.93rem; line-height: 1.75; color: var(--ink2); margin-bottom: 1.25rem; }
+.etf-risk { font-size: 0.78rem; color: var(--muted); font-style: italic; padding-top: 1rem; border-top: 1px solid var(--paper2); }
+.etf-risk strong { color: var(--red); font-style: normal; }
+.beta-row { display: grid; grid-template-columns: 55px 1fr 46px 52px; gap: 1rem; align-items: center; padding: 0.55rem 0; border-bottom: 1px solid var(--paper2); }
+.beta-row:first-child { border-top: 1px solid var(--paper2); }
+.beta-ticker { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 600; color: var(--ink); }
+.beta-bar-track { background: var(--paper2); height: 3px; }
+.beta-bar-fill { height: 100%; background: var(--ink); }
+.beta-val { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--ink2); text-align: right; }
+.beta-wt { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--muted); text-align: right; }
+.sim-wrap { overflow-x: auto; margin: 2.5rem 0; }
+table { width: 100%; border-collapse: collapse; }
+thead tr { border-bottom: 2px solid var(--ink); }
+thead th { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); padding: 0.75rem 0.75rem 0.75rem 0; text-align: left; white-space: nowrap; }
+thead th:not(:first-child) { text-align: right; }
+tbody tr { border-bottom: 1px solid var(--paper2); transition: background 0.15s; }
+tbody tr:hover { background: var(--paper2); }
+tbody td { font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; padding: 0.55rem 0.75rem 0.55rem 0; color: var(--ink2); text-align: right; }
+tbody td:first-child { text-align: left; font-weight: 600; color: var(--ink); }
+.pos { color: var(--accent); } .neg { color: var(--red); }
+.crash-yr { background: rgba(139,26,26,0.03); }
+tfoot tr { border-top: 2px solid var(--ink); }
+tfoot td { font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; font-weight: 600; padding: 0.75rem 0.75rem 0 0; color: var(--ink); text-align: right; }
+tfoot td:first-child { text-align: left; }
+.crash-list { margin: 2.5rem 0; }
+.crash-entry { padding: 2rem 0; border-top: 1px solid var(--paper2); display: grid; grid-template-columns: 90px 1fr; gap: 2.5rem; }
+.crash-entry:last-child { border-bottom: 1px solid var(--paper2); }
+.crash-year { font-family: 'Source Serif 4', Georgia, serif; font-size: 1.9rem; font-weight: 900; color: var(--red); line-height: 1; }
+.crash-name { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-top: 0.3rem; }
+.crash-body { font-size: 0.88rem; color: var(--ink2); line-height: 1.7; }
+.rule-list { margin: 2rem 0; }
+.rule-item { border-top: 1px solid var(--paper2); padding: 1.75rem 0; display: grid; grid-template-columns: 2.5rem 1fr; gap: 1.5rem; align-items: start; }
+.rule-item:last-child { border-bottom: 1px solid var(--paper2); }
+.rule-num { font-family: 'Source Serif 4', Georgia, serif; font-size: 1.1rem; font-weight: 700; color: var(--muted); line-height: 1.3; }
+.rule-title { font-weight: 700; color: var(--ink); margin-bottom: 0.3rem; font-size: 0.93rem; }
+.rule-body { font-size: 0.86rem; color: var(--muted); line-height: 1.65; }
+.tl { margin: 2rem 0; }
+.tl-item { border-left: 1px solid var(--paper2); padding: 0 0 2rem 2rem; position: relative; }
+.tl-item::before { content: ''; position: absolute; left: -4px; top: 0.45rem; width: 7px; height: 7px; background: var(--ink); border-radius: 50%; }
+.tl-item:last-child { padding-bottom: 0; }
+.tl-age { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+.tl-body { font-size: 0.88rem; color: var(--ink2); line-height: 1.7; }
+.principles-section { background: var(--ink); padding: 5rem; }
+.principles-inner { max-width: 1100px; margin: 0 auto; }
+.p-overline { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(245,240,232,0.25); margin-bottom: 3rem; }
+.principles { display: grid; grid-template-columns: repeat(5,1fr); gap: 0; border-top: 1px solid rgba(245,240,232,0.12); }
+.principle { padding: 2.5rem 1.5rem 2.5rem 0; border-right: 1px solid rgba(245,240,232,0.1); }
+.principle:last-child { border-right: none; }
+.p-num { font-family: 'Source Serif 4', Georgia, serif; font-size: 3.5rem; font-weight: 900; color: rgba(245,240,232,0.06); line-height: 1; margin-bottom: 1rem; }
+.p-title { font-size: 0.8rem; font-weight: 700; color: rgba(245,240,232,0.8); margin-bottom: 0.5rem; }
+.p-body { font-size: 0.76rem; color: rgba(245,240,232,0.35); line-height: 1.65; }
+.disclaimer-wrap { max-width: 1100px; margin: 0 auto; padding: 0 5rem; }
+.disclaimer-box { border: 1px solid var(--paper2); padding: 2rem; margin: 4rem 0; }
+.disclaimer-box p { font-size: 0.76rem; color: var(--muted); line-height: 1.75; font-style: italic; }
+footer { background: var(--ink); padding: 2.5rem 5rem; display: flex; justify-content: space-between; align-items: center; }
+footer p { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: rgba(245,240,232,0.2); letter-spacing: 0.1em; text-transform: uppercase; margin: 0; }
+.fade-in { opacity: 0; transform: translateY(14px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+@keyframes riseIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; min-height: auto; }
+  .hero-left { padding: 5rem 2rem 3rem; }
+  .hero-right { padding: 2rem; border-top: 1px solid rgba(245,240,232,0.08); }
+  .hero-issue { left: 2rem; }
+  .chapter { padding: 3.5rem 2rem; }
+  .col-2, .col-3-7, .col-7-3 { grid-template-columns: 1fr; gap: 2.5rem; }
+  .etf-entry { grid-template-columns: 1fr; gap: 1.5rem; }
+  .etf-left { position: static; }
+  .principles { grid-template-columns: 1fr 1fr; }
+  .principle { border-right: none; border-bottom: 1px solid rgba(245,240,232,0.08); padding: 1.5rem 0; }
+  footer { flex-direction: column; gap: 1rem; padding: 2rem; }
+  nav { padding: 0 1.5rem; }
+  .nav-links { display: none; }
+  .chapter-band { padding: 0.75rem 2rem; }
+  .principles-section { padding: 3.5rem 2rem; }
+  .disclaimer-wrap { padding: 0 2rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Future Portfolio</div>
+  <ul class="nav-links">
+    <li><a href="#why">I. Time</a></li>
+    <li><a href="#framework">II. Framework</a></li>
+    <li><a href="#portfolio">III. Portfolio</a></li>
+    <li><a href="#simulation">IV. Simulation</a></li>
+    <li><a href="#behaviour">V. Rules</a></li>
+    <li><a href="#legacy">VI. Legacy</a></li><li><a href="#contact" style="color:rgba(245,240,232,0.8);border:1px solid rgba(245,240,232,0.2);padding:0.2rem 0.75rem;border-radius:2px;">Get Started</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-issue">A Parent's Guide to Generational Wealth — Vol. I</div>
+    <div class="hero-vol">Future-<br><em>Proof</em></div>
+    <div class="hero-rule"></div>
+    <p class="hero-sub">Six exchange-traded funds. One standing order. Eighteen years of compound growth — for your child.</p>
+  </div>
+  <div class="hero-right">
+    <div class="hero-stat-group">
+      <div class="hero-stat">
+        <div class="hero-stat-num">6</div>
+        <div class="hero-stat-lbl">Fund portfolio</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">0.09<sup>%</sup></div>
+        <div class="hero-stat-lbl">Average annual cost</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">$218k</div>
+        <div class="hero-stat-lbl">$250/mo over 20 yrs · actual index returns</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">0.97</div>
+        <div class="hero-stat-lbl">Portfolio beta vs S&amp;P 500</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="chapter-band" id="why">
+  <span class="chapter-num">Chapter I</span>
+  <div class="chapter-band-rule"></div>
+  <span class="chapter-band-title">The Most Important Decision Is When You Start</span>
+</div>
+
+<section class="chapter">
+  <div class="col-3-7">
+    <div>
+      <div class="stat-aside">
+        <div class="stat-num">18</div>
+        <div class="stat-label">Years minimum</div>
+        <div class="stat-note">The single most valuable asset your child has. Not the funds. Not the allocation. Time.</div>
+      </div>
+      <div class="stat-aside">
+        <div class="stat-num">$55k</div>
+        <div class="stat-label">Cost of a 5-year delay</div>
+        <div class="stat-note">Starting at birth vs age 5, $250/month at 8.5% blended return. $15k more contributed, $55k less at adulthood.</div>
+      </div>
+    </div>
+    <div>
+      <div class="chapter-overline fade-in">Time &amp; Compounding</div>
+      <h2 class="fade-in">The most powerful variable <em>isn't</em> what you buy.</h2>
+      <p class="fade-in">There is a single variable that towers above every other factor in building generational wealth for a child — time. Not the specific ETFs you choose. Not the brokerage platform. Not whether you invest $200 or $500 a month.</p>
+      <p class="fade-in">When investment returns are reinvested — whether dividend income, capital gains, or simply the market's appreciation — the portfolio earns returns on its returns. This feedback loop starts slowly in the first few years. By year ten, fifteen, and especially eighteen, it becomes the dominant force in the account.</p>
+      <div class="pull fade-in"><p>A child born today who begins investing at birth has an 18-year head start over one who starts at age 18. That difference is not linear — it is exponential.</p></div>
+      <p class="fade-in">Two parents, each contributing $250 per month at 8.5% blended return. Parent A starts at birth: contributes $54,000, ends with approximately $127,000 at age 18. Parent B starts at age five: contributes $39,000, ends with approximately $72,000. Parent A contributed $15,000 more but ended up with $55,000 more. The gap is not the extra contributions. The gap is five missing years of compounding on every dollar already invested.</p>
+      <div class="callout accent fade-in">
+        <div class="callout-label">The bottom line</div>
+        <p>The best time to open an account for your child was the day they were born. The second best time is today. Open the account first, then read the rest of this.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- VIZ SECTION 1: Compounding Race Chart (after Chapter I) -->
+<section style="background:var(--ink);padding:4rem 5rem;border-bottom:2px solid var(--accent);">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:rgba(245,240,232,0.3);margin-bottom:0.75rem;">Visualisation I</div>
+    <h3 style="font-family:'Source Serif 4',Georgia,serif;font-size:clamp(1.4rem,2.5vw,2rem);color:rgba(245,240,232,0.9);margin-bottom:0.5rem;font-weight:600;">The cost of starting five years late</h3>
+    <p style="font-size:0.85rem;color:rgba(245,240,232,0.4);margin-bottom:2rem;font-style:italic;">50/month · 8.5% blended annual return · contributions start at birth vs age 5</p>
+    <div style="position:relative;height:300px;">
+      <canvas id="compoundRaceChart"></canvas>
+    </div>
+    <div style="display:flex;gap:2rem;margin-top:1.25rem;font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:rgba(245,240,232,0.35);">
+      <span style="display:flex;align-items:center;gap:0.5rem;"><span style="width:20px;height:2px;background:#1D9E75;display:inline-block;"></span>Started at birth</span>
+      <span style="display:flex;align-items:center;gap:0.5rem;"><span style="width:20px;height:2px;background:rgba(245,240,232,0.3);display:inline-block;"></span>Started at age 5</span>
+    </div>
+  </div>
+</section>
+<div class="chapter-band" id="framework">
+  <span class="chapter-num">Chapter II</span>
+  <div class="chapter-band-rule"></div>
+  <span class="chapter-band-title">How to Evaluate an ETF for a Child's Portfolio</span>
+</div>
+
+<section class="chapter">
+  <div class="col-7-3">
+    <div>
+      <div class="chapter-overline fade-in">Evaluation Criteria</div>
+      <h2 class="fade-in">Not all ETFs are built for <em>18 years.</em></h2>
+      <p class="fade-in">The universe of US-listed ETFs exceeds 5,000 funds. Most are unsuitable for an indefinite hold. These criteria filter for the handful that genuinely belong in a generational portfolio.</p>
+      <div class="criteria-list fade-in">
+        <div class="criteria-item"><div class="criteria-target">&lt; 0.15%</div><div class="criteria-body"><strong>Expense Ratio.</strong> Over 18 years, a 1% ER on a $100k portfolio costs approximately $30,000 in lost compounding. Fees are the only guaranteed drag on returns. Every basis point saved compounds silently in your child's favour.</div></div>
+        <div class="criteria-item"><div class="criteria-target">&gt; $1B AUM</div><div class="criteria-body"><strong>Fund Stability.</strong> Small funds get liquidated, triggering forced taxable events. Large funds from major issuers — Vanguard, iShares, Schwab — will almost certainly still exist in 2045.</div></div>
+        <div class="criteria-item"><div class="criteria-target">Hundreds+</div><div class="criteria-body"><strong>Diversification.</strong> Single-company and single-sector bets can go to zero. Broad index funds cannot. Holdings breadth matters more than holdings count.</div></div>
+        <div class="criteria-item"><div class="criteria-target">&lt; 10%/yr</div><div class="criteria-body"><strong>Turnover Rate.</strong> High turnover generates capital gains distributions that are taxable even if you never sell. Low-turnover index funds are inherently tax-efficient.</div></div>
+        <div class="criteria-item"><div class="criteria-target">Growing</div><div class="criteria-body"><strong>Dividend Quality.</strong> Not just high yield — growing yield. Reinvested dividends have historically contributed approximately 40% of total equity returns over long periods. Growth is more important than current yield.</div></div>
+        <div class="criteria-item"><div class="criteria-target">Equity-based</div><div class="criteria-body"><strong>Inflation Hedge.</strong> Equities have returned approximately 10% nominally and 7% in real terms historically — the primary vehicle for maintaining purchasing power across decades.</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="callout fade-in">
+        <div class="callout-label">Why a child's portfolio is different</div>
+        <p>Volatility becomes irrelevant. Crashes become buying opportunities. Higher risk tolerance is genuinely justified — a portfolio that would cause a 60-year-old to panic-sell is perfectly appropriate for a newborn.</p>
+      </div>
+      <div class="callout accent fade-in" style="margin-top:2.5rem;">
+        <div class="callout-label">The behavioural advantage</div>
+        <p>There is no temptation to withdraw for a kitchen renovation. Psychological distance from the money is itself an investment advantage — and it is built into this account type by design.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- VIZ SECTION 2: Portfolio Donut + ETF fee comparison -->
+<section style="background:var(--paper2);padding:4rem 5rem;border-top:1px solid var(--paper2);border-bottom:1px solid var(--paper2);">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:0.75rem;">Visualisation II</div>
+    <h3 style="font-family:'Source Serif 4',Georgia,serif;font-size:clamp(1.4rem,2.5vw,2rem);color:var(--ink);margin-bottom:0.5rem;font-weight:600;">What you own — and what it costs you</h3>
+    <p style="font-size:0.85rem;color:var(--muted);margin-bottom:2.5rem;font-style:italic;">Portfolio allocation vs fee comparison: this portfolio vs average actively managed fund</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;">
+      <div>
+        <p style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;">Allocation breakdown</p>
+        <div style="position:relative;height:280px;">
+          <canvas id="allocDonut"></canvas>
+        </div>
+      </div>
+      <div>
+        <p style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;">Annual fee drag on $10,000 invested (18 years)</p>
+        <div style="position:relative;height:280px;">
+          <canvas id="feeChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="chapter-band" id="portfolio">
+  <span class="chapter-num">Chapter III</span>
+  <div class="chapter-band-rule"></div>
+  <span class="chapter-band-title">The Synthesised Portfolio — Six ETFs, One Mission</span>
+</div>
+
+<section class="chapter">
+  <div class="chapter-overline fade-in">Fund Selection</div>
+  <h2 class="fade-in">Broad market. Global reach. Dividend engine. <em>Factor edge.</em></h2>
+  <p class="fade-in" style="max-width:680px;margin-bottom:0;">This portfolio synthesises two independent research frameworks: a broad-diversification model emphasising income compounding, and a factor-investing model targeting the small-cap value premium. Average cost across all six: 0.09% per year.</p>
+
+  <div class="alloc-strip-wrap fade-in">
+    <div class="alloc-label">Portfolio Allocation</div>
+    <div class="alloc-strip">
+      <div class="alloc-seg" style="flex:30;background:#1A4731;"></div>
+      <div class="alloc-seg" style="flex:20;background:#2D6A4F;"></div>
+      <div class="alloc-seg" style="flex:20;background:#C8922A;"></div>
+      <div class="alloc-seg" style="flex:15;background:#4A1E8C;"></div>
+      <div class="alloc-seg" style="flex:10;background:#8B1A1A;"></div>
+      <div class="alloc-seg" style="flex:5;background:#5C5C54;"></div>
+    </div>
+    <div class="alloc-legend">
+      <div class="alloc-item"><div class="alloc-swatch" style="background:#1A4731;"></div>VTI 30%</div>
+      <div class="alloc-item"><div class="alloc-swatch" style="background:#2D6A4F;"></div>VT 20%</div>
+      <div class="alloc-item"><div class="alloc-swatch" style="background:#C8922A;"></div>SCHD 20%</div>
+      <div class="alloc-item"><div class="alloc-swatch" style="background:#4A1E8C;"></div>QQQM 15%</div>
+      <div class="alloc-item"><div class="alloc-swatch" style="background:#8B1A1A;"></div>AVUV 10%</div>
+      <div class="alloc-item"><div class="alloc-swatch" style="background:#5C5C54;"></div>VXUS 5%</div>
+    </div>
+  </div>
+
+  <div class="etf-list">
+    <div class="etf-entry fade-in">
+      <div class="etf-left">
+        <div class="etf-ticker-big">VTI</div>
+        <div class="etf-alloc-tag">30% Allocation</div>
+        <ul class="etf-meta-list">
+          <li class="etf-meta-item">Exp. Ratio <span>0.03%</span></li>
+          <li class="etf-meta-item">AUM <span>~$2 Trillion</span></li>
+          <li class="etf-meta-item">Holdings <span>~3,500</span></li>
+          <li class="etf-meta-item">Turnover <span>4%</span></li>
+          <li class="etf-meta-item">Beta (5Y) <span>1.04</span></li>
+        </ul>
+      </div>
+      <div class="etf-right">
+        <div class="etf-full-name">Vanguard Total Stock Market ETF</div>
+        <div class="etf-role-tag">US Broad Market Core</div>
+        <p class="etf-desc">VTI is the entire US economy in a single fund — not just the S&P 500's 500 names, but approximately 3,500 companies across large, mid, and small-cap. When a small company today becomes a household name in ten years, it is already inside VTI. You do not pick winners. You own the whole game.</p>
+        <p class="etf-desc">At 0.03%, the annual cost on $10,000 invested is $3.00. VTI has existed since 2001 and manages $2 trillion in assets — it will almost certainly be there in 2045.</p>
+        <p class="etf-risk"><strong>Risk:</strong> Geographic concentration in a single country. A structural bet that the US economy continues to function as the world's dominant market. The remaining five funds moderate this directly.</p>
+      </div>
+    </div>
+
+    <div class="etf-entry fade-in">
+      <div class="etf-left">
+        <div class="etf-ticker-big">VT</div>
+        <div class="etf-alloc-tag">20% Allocation</div>
+        <ul class="etf-meta-list">
+          <li class="etf-meta-item">Exp. Ratio <span>0.07%</span></li>
+          <li class="etf-meta-item">Holdings <span>~10,100</span></li>
+          <li class="etf-meta-item">Countries <span>50+</span></li>
+          <li class="etf-meta-item">Div. Yield <span>~2.1%</span></li>
+          <li class="etf-meta-item">Beta (5Y) <span>0.99</span></li>
+        </ul>
+      </div>
+      <div class="etf-right">
+        <div class="etf-full-name">Vanguard Total World Stock ETF</div>
+        <div class="etf-role-tag">Global Insurance Policy</div>
+        <p class="etf-desc">VT owns the entire investable world — approximately 63% US, 37% rest of world across Europe, Asia-Pacific, and emerging markets. For a child entering adulthood in 2040, no one genuinely knows whether the next 20 years of growth leadership belongs to Silicon Valley, Seoul, or Singapore. VT ensures they participate wherever it happens.</p>
+        <p class="etf-desc">Holding both VTI and VT gives a deliberate US overweight of approximately 76% combined — a moderate home bias balanced with genuine global exposure across 10,100 companies.</p>
+        <p class="etf-risk"><strong>Risk:</strong> Currency fluctuation and emerging-market exposure. During periods of US exceptionalism VT lags a pure US portfolio — as the 20-year simulation shows honestly.</p>
+      </div>
+    </div>
+
+    <div class="etf-entry fade-in">
+      <div class="etf-left">
+        <div class="etf-ticker-big">SCHD</div>
+        <div class="etf-alloc-tag">20% Allocation</div>
+        <ul class="etf-meta-list">
+          <li class="etf-meta-item">Exp. Ratio <span>0.06%</span></li>
+          <li class="etf-meta-item">AUM <span>~$85B</span></li>
+          <li class="etf-meta-item">Holdings <span>100</span></li>
+          <li class="etf-meta-item">Div. Yield <span>~3.3%</span></li>
+          <li class="etf-meta-item">10yr Div. CAGR <span>~9.3%</span></li>
+          <li class="etf-meta-item">Beta (5Y) <span>0.66</span></li>
+        </ul>
+      </div>
+      <div class="etf-right">
+        <div class="etf-full-name">Schwab US Dividend Equity ETF</div>
+        <div class="etf-role-tag">The Compounding Engine</div>
+        <p class="etf-desc">SCHD holds 100 companies with at least 10 consecutive years of dividend payments, further screened by return on equity and cash flow ratio. Every quarter it pays dividends. You reinvest those dividends. They buy more shares. Those shares pay more dividends. At 9–10% annual dividend growth, the income stream doubles every seven years through the Rule of 72.</p>
+        <p class="etf-desc">For a child, SCHD is not an income investment — it is a compounding machine that runs quarterly regardless of what markets are doing. Its beta of 0.66 means it fell only 3.2% in 2022 while the S&P 500 fell 18.1%. This is the portfolio's primary shock absorber.</p>
+        <p class="etf-risk"><strong>Risk:</strong> Lags significantly during tech-led growth rallies. In 2023, SCHD returned +4.6% while the S&P returned +26.3%. In 2020 and 2021, similar underperformance. This trade-off is real and is worth understanding before holding.</p>
+      </div>
+    </div>
+
+    <div class="etf-entry fade-in">
+      <div class="etf-left">
+        <div class="etf-ticker-big">QQQM</div>
+        <div class="etf-alloc-tag">15% Allocation</div>
+        <ul class="etf-meta-list">
+          <li class="etf-meta-item">Exp. Ratio <span>0.15%</span></li>
+          <li class="etf-meta-item">AUM <span>~$83B</span></li>
+          <li class="etf-meta-item">Top Sector <span>Tech ~60%</span></li>
+          <li class="etf-meta-item">vs QQQ ER <span>0.15% vs 0.20%</span></li>
+          <li class="etf-meta-item">Beta (5Y) <span>1.11</span></li>
+        </ul>
+      </div>
+      <div class="etf-right">
+        <div class="etf-full-name">Invesco Nasdaq-100 ETF</div>
+        <div class="etf-role-tag">The Innovation Engine</div>
+        <p class="etf-desc">QQQM tracks the Nasdaq-100 — the largest non-financial companies on the Nasdaq: artificial intelligence, cloud computing, biotechnology, software. QQQM is preferred over the better-known QQQ specifically for long-term investors: lower expense ratio (0.15% vs 0.20%) and a modern ETF structure that allows more efficient dividend reinvestment.</p>
+        <p class="etf-desc">Held at 15% — enough to meaningfully accelerate growth over 18 years, not enough to sink the portfolio if technology enters a prolonged stagnation period. Your child has 18 years to absorb the volatility and come out the other side richer for it.</p>
+        <p class="etf-risk"><strong>Risk:</strong> Most volatile position in the portfolio (beta 1.11). Fell 32.6% in 2022. Concentrated at approximately 60% in a single sector. Do not increase this beyond 20% — that shifts the portfolio from diversified to a concentrated technology bet.</p>
+      </div>
+    </div>
+
+    <div class="etf-entry fade-in">
+      <div class="etf-left">
+        <div class="etf-ticker-big">AVUV</div>
+        <div class="etf-alloc-tag">10% Allocation</div>
+        <ul class="etf-meta-list">
+          <li class="etf-meta-item">Exp. Ratio <span>0.25%</span></li>
+          <li class="etf-meta-item">Holdings <span>~780</span></li>
+          <li class="etf-meta-item">Strategy <span>Active / SCV</span></li>
+          <li class="etf-meta-item">Launched <span>Sep 2019</span></li>
+          <li class="etf-meta-item">Beta (5Y) <span>1.15</span></li>
+        </ul>
+      </div>
+      <div class="etf-right">
+        <div class="etf-full-name">Avantis US Small Cap Value ETF</div>
+        <div class="etf-role-tag">The Factor Premium</div>
+        <p class="etf-desc">Academic research spanning decades documents a persistent pattern: small companies with low valuations and high profitability outperform the broader market over very long horizons — the small-cap value premium. AVUV captures this systematically, adding a profitability screen to avoid value traps.</p>
+        <p class="etf-desc">The critical caveat: this premium can go dormant for a decade. No adult investor can psychologically hold through ten years of underperformance with their own savings. A child's account holds automatically — because no one is touching it. Your child inherits a return premium that most grown investors emotionally cannot access.</p>
+        <p class="etf-risk"><strong>Risk:</strong> Highest expense ratio in the portfolio at 0.25%. Behaviorally the most challenging to hold. Can significantly underperform large-cap growth for extended periods. The 18-year horizon is precisely the environment where this premium has historically materialised.</p>
+      </div>
+    </div>
+
+    <div class="etf-entry fade-in">
+      <div class="etf-left">
+        <div class="etf-ticker-big">VXUS</div>
+        <div class="etf-alloc-tag">5% Allocation</div>
+        <ul class="etf-meta-list">
+          <li class="etf-meta-item">Exp. Ratio <span>0.05%</span></li>
+          <li class="etf-meta-item">Holdings <span>~8,800</span></li>
+          <li class="etf-meta-item">Launched <span>Jan 2011</span></li>
+          <li class="etf-meta-item">Coverage <span>50+ countries</span></li>
+          <li class="etf-meta-item">Beta (5Y) <span>0.94</span></li>
+        </ul>
+      </div>
+      <div class="etf-right">
+        <div class="etf-full-name">Vanguard Total International Stock ETF</div>
+        <div class="etf-role-tag">Tax Efficiency Satellite</div>
+        <p class="etf-desc">The only position in this portfolio driven primarily by tax strategy rather than return generation. In a taxable custodial account, holding international exposure through a separate fund rather than bundled inside VT unlocks the Foreign Tax Credit — a credit for taxes paid to foreign governments by the underlying companies. Small annual edge, but over 18 years, every edge compounds.</p>
+        <p class="etf-desc">At 5%, VXUS is deliberately minor. It exists to claim a tax benefit unavailable when international stocks sit inside a combined fund like VT.</p>
+        <p class="etf-risk"><strong>Note:</strong> This benefit is primarily relevant for US investors. Investors in Malaysia and similar jurisdictions — where no capital gains tax exists on listed securities — may not need this position separately and can consolidate into VT.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-2 fade-in" style="margin-top:4rem;padding-top:3rem;border-top:1px solid var(--paper2);">
+    <div>
+      <div class="chapter-overline">Portfolio Beta</div>
+      <h3>Weighted beta: 0.97</h3>
+      <p style="font-size:0.88rem;">The portfolio moves at 97% of the S&P 500's pace. SCHD (0.66) anchors the downside. AVUV (1.15) and QQQM (1.11) provide the growth acceleration. Three funds near 1.0 provide the neutral core.</p>
+    </div>
+    <div>
+      <div class="beta-row"><span class="beta-ticker">VTI</span><div class="beta-bar-track"><div class="beta-bar-fill" style="width:78%;"></div></div><span class="beta-val">1.04</span><span class="beta-wt">30%</span></div>
+      <div class="beta-row"><span class="beta-ticker">VT</span><div class="beta-bar-track"><div class="beta-bar-fill" style="width:74%;"></div></div><span class="beta-val">0.99</span><span class="beta-wt">20%</span></div>
+      <div class="beta-row"><span class="beta-ticker">SCHD</span><div class="beta-bar-track"><div class="beta-bar-fill" style="width:50%;"></div></div><span class="beta-val">0.66</span><span class="beta-wt">20%</span></div>
+      <div class="beta-row"><span class="beta-ticker">QQQM</span><div class="beta-bar-track"><div class="beta-bar-fill" style="width:83%;"></div></div><span class="beta-val">1.11</span><span class="beta-wt">15%</span></div>
+      <div class="beta-row"><span class="beta-ticker">AVUV</span><div class="beta-bar-track"><div class="beta-bar-fill" style="width:86%;"></div></div><span class="beta-val">1.15</span><span class="beta-wt">10%</span></div>
+      <div class="beta-row"><span class="beta-ticker">VXUS</span><div class="beta-bar-track"><div class="beta-bar-fill" style="width:70%;"></div></div><span class="beta-val">0.94</span><span class="beta-wt">5%</span></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- VIZ SECTION 3: The 20-year simulation line chart -->
+<section style="background:var(--ink);padding:4rem 5rem;border-bottom:2px solid var(--accent);">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:rgba(245,240,232,0.3);margin-bottom:0.75rem;">Visualisation III</div>
+    <h3 style="font-family:'Source Serif 4',Georgia,serif;font-size:clamp(1.4rem,2.5vw,2rem);color:rgba(245,240,232,0.9);margin-bottom:0.5rem;font-weight:600;">50/month · January 2005 — December 2024</h3>
+    <p style="font-size:0.85rem;color:rgba(245,240,232,0.4);margin-bottom:2rem;font-style:italic;">Actual index returns, weighted by allocation. Three crashes visible — all recovered.</p>
+    <div style="position:relative;height:340px;">
+      <canvas id="simChart"></canvas>
+    </div>
+    <div style="display:flex;gap:2rem;margin-top:1.25rem;font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:rgba(245,240,232,0.35);">
+      <span style="display:flex;align-items:center;gap:0.5rem;"><span style="width:20px;height:2px;background:#1D9E75;display:inline-block;"></span>This portfolio ($218,214)</span>
+      <span style="display:flex;align-items:center;gap:0.5rem;"><span style="width:20px;height:2px;background:rgba(245,240,232,0.25);display:inline-block;border-top:1px dashed rgba(245,240,232,0.4);"></span>S&amp;P 500 only ($244,874)</span>
+      <span style="display:flex;align-items:center;gap:0.5rem;"><span style="width:20px;height:2px;background:rgba(245,240,232,0.15);display:inline-block;"></span>Contributed ($60,000)</span>
+    </div>
+  </div>
+</section>
+<div class="chapter-band" id="simulation">
+  <span class="chapter-num">Chapter IV</span>
+  <div class="chapter-band-rule"></div>
+  <span class="chapter-band-title">The 20-Year Simulation — $250 Per Month, 2005–2024</span>
+</div>
+
+<section class="chapter">
+  <div class="col-7-3">
+    <div>
+      <div class="chapter-overline fade-in">Actual Returns, Not Estimates</div>
+      <h2 class="fade-in">Every crash included. Every dividend reinvested. <em>Real numbers.</em></h2>
+      <p class="fade-in">This is not a smoothed projection. Each year's portfolio return is the allocation-weighted average of actual annual total returns for each fund or its closest index proxy. $250 invested on the first of every month, January 2005 through December 2024 — 240 contributions across three bear markets.</p>
+      <div class="callout warn fade-in">
+        <div class="callout-label">Data Sources &amp; Proxies</div>
+        <p>VTI: CRSP US Total Market (live since 2001). VT: 63% VTI + 37% MSCI EAFE blend (VT launched 2008). SCHD: actual from 2012; dividend index proxy 2005–2011. QQQM: QQQ/Nasdaq-100 actual (identical index; QQQM launched 2020). AVUV: iShares Russell 2000 Value proxy for 2005–2018 (AVUV launched 2019). VXUS: MSCI EAFE proxy for 2005–2010 (VXUS launched 2011).</p>
+      </div>
+      <div class="sim-wrap fade-in">
+        <table>
+          <thead><tr><th>Year</th><th>Portfolio</th><th>S&amp;P 500</th><th>End Value</th></tr></thead>
+          <tbody>
+            <tr><td>2005</td><td class="pos">+5.9%</td><td class="pos">+4.9%</td><td>$3,080</td></tr>
+            <tr><td>2006</td><td class="pos">+16.5%</td><td class="pos">+15.8%</td><td>$6,808</td></tr>
+            <tr><td>2007</td><td class="pos">+6.5%</td><td class="pos">+5.5%</td><td>$10,339</td></tr>
+            <tr class="crash-yr"><td>2008</td><td class="neg">−37.4%</td><td class="neg">−37.0%</td><td>$8,918</td></tr>
+            <tr><td>2009</td><td class="pos">+31.5%</td><td class="pos">+26.5%</td><td>$15,140</td></tr>
+            <tr><td>2010</td><td class="pos">+17.5%</td><td class="pos">+15.1%</td><td>$21,022</td></tr>
+            <tr><td>2011</td><td class="neg">−0.9%</td><td class="pos">+2.1%</td><td>$23,819</td></tr>
+            <tr><td>2012</td><td class="pos">+16.0%</td><td class="pos">+16.0%</td><td>$30,832</td></tr>
+            <tr><td>2013</td><td class="pos">+32.4%</td><td class="pos">+32.4%</td><td>$44,238</td></tr>
+            <tr><td>2014</td><td class="pos">+10.3%</td><td class="pos">+13.7%</td><td>$51,921</td></tr>
+            <tr><td>2015</td><td class="pos">+0.6%</td><td class="pos">+1.4%</td><td>$55,263</td></tr>
+            <tr><td>2016</td><td class="pos">+13.2%</td><td class="pos">+12.0%</td><td>$65,719</td></tr>
+            <tr><td>2017</td><td class="pos">+21.9%</td><td class="pos">+21.8%</td><td>$83,426</td></tr>
+            <tr class="crash-yr"><td>2018</td><td class="neg">−6.4%</td><td class="neg">−4.4%</td><td>$80,958</td></tr>
+            <tr><td>2019</td><td class="pos">+29.4%</td><td class="pos">+31.5%</td><td>$108,111</td></tr>
+            <tr class="crash-yr"><td>2020</td><td class="pos">+20.8%</td><td class="pos">+18.4%</td><td>$133,824</td></tr>
+            <tr><td>2021</td><td class="pos">+25.2%</td><td class="pos">+28.7%</td><td>$170,909</td></tr>
+            <tr class="crash-yr"><td>2022</td><td class="neg">−17.0%</td><td class="neg">−18.1%</td><td>$144,583</td></tr>
+            <tr><td>2023</td><td class="pos">+24.1%</td><td class="pos">+26.3%</td><td>$182,809</td></tr>
+            <tr><td>2024</td><td class="pos">+17.6%</td><td class="pos">+25.0%</td><td>$218,214</td></tr>
+          </tbody>
+          <tfoot><tr><td>20-Year Result</td><td>6.7%/yr avg</td><td>7.3%/yr avg</td><td>$218,214</td></tr></tfoot>
+        </table>
+      </div>
+      <div class="callout accent fade-in">
+        <div class="callout-label">Why the portfolio trailed the S&amp;P 500 — and why that is honest, not wrong</div>
+        <p>2005–2024 was one of the strongest 20-year runs for US large-cap equities in history, driven by extraordinary concentration of returns in a handful of US technology companies. The diversified portfolio's international, dividend, and small-cap value weighting structurally underparticipated in that specific rally. The next 20 years may look very different. This portfolio is built for that uncertainty.</p>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin:3rem 0 0;">Three crashes. Three lessons.</div>
+      <div class="crash-list fade-in">
+        <div class="crash-entry">
+          <div><div class="crash-year">2008</div><div class="crash-name">Global Financial Crisis</div></div>
+          <div class="crash-body">Portfolio fell 37.4%. Value dropped from $10,339 to $8,918 despite twelve additional $250 contributions. Every one of those contributions bought shares at distressed prices. The subsequent recovery to $44,238 by end-2013 was powered partly by those cheap purchases. The 2008 crash was the most profitable buying period of the entire simulation.</div>
+        </div>
+        <div class="crash-entry">
+          <div><div class="crash-year">2020</div><div class="crash-name">COVID Crash</div></div>
+          <div class="crash-body">Down 34% in 33 days — the fastest bear market in history. The portfolio crossed $100,000 for the first time during this year despite the crash, as the recovery was swift. Full calendar-year return was +20.8%. SCHD and international holdings cushioned some of the fall while QQQM's technology concentration amplified the rebound.</div>
+        </div>
+        <div class="crash-entry">
+          <div><div class="crash-year">2022</div><div class="crash-name">Rate-Hike Bear</div></div>
+          <div class="crash-body">S&P 500 fell 18.1%. This portfolio fell only 17.0% — driven entirely by SCHD's actual 2022 return of −3.2% versus the market's −18.1%. SCHD's low beta of 0.66 working in practice, not theory. The cost of that protection appeared in 2023 when SCHD returned only 4.6% while the market surged 26.3%.</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="stat-aside">
+        <div class="stat-num">$60k</div>
+        <div class="stat-label">Total contributed</div>
+        <div class="stat-note">240 monthly contributions of $250.</div>
+      </div>
+      <div class="stat-aside">
+        <div class="stat-num">$218k</div>
+        <div class="stat-label">Portfolio end value</div>
+        <div class="stat-note">Every dollar contributed turned into $3.64.</div>
+      </div>
+      <div class="stat-aside">
+        <div class="stat-num">3.6×</div>
+        <div class="stat-label">Return multiplier</div>
+        <div class="stat-note">At 6.7% annualised blended return over 20 years.</div>
+      </div>
+      <div class="pull" style="margin-top:2.5rem;"><p>Every year that looks terrible — 2008, 2011, 2015, 2018, 2022 — was a year where $250 bought more of the world's best businesses at lower prices.</p></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- VIZ SECTION 4: Beta radar chart -->
+<section style="background:var(--paper2);padding:4rem 5rem;">
+  <div style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;">
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:0.75rem;">Visualisation IV</div>
+      <h3 style="font-family:'Source Serif 4',Georgia,serif;font-size:clamp(1.3rem,2.2vw,1.8rem);color:var(--ink);margin-bottom:0.75rem;font-weight:600;">Risk profile — how each fund behaves</h3>
+      <p style="font-size:0.88rem;color:var(--muted);line-height:1.7;margin-bottom:1.5rem;">Beta measures how much each fund moves relative to the S&P 500. A beta of 1.0 = moves in lockstep. Below 1.0 = more stable. Above 1.0 = more amplified. SCHD at 0.66 is the portfolio's stabiliser. The weighted portfolio beta is 0.97.</p>
+      <div style="border-top:2px solid var(--ink);padding-top:1.25rem;">
+        <p style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.75rem;">Weighted portfolio beta</p>
+        <span style="font-family:'Source Serif 4',Georgia,serif;font-size:3.5rem;font-weight:700;color:var(--ink);">0.97</span>
+        <p style="font-size:0.82rem;color:var(--muted);margin-top:0.25rem;font-style:italic;">Near-market risk. Slightly cushioned downside via SCHD.</p>
+      </div>
+    </div>
+    <div style="position:relative;height:320px;">
+      <canvas id="betaChart"></canvas>
+    </div>
+  </div>
+</section>
+<div class="chapter-band" id="behaviour">
+  <span class="chapter-num">Chapter V</span>
+  <div class="chapter-band-rule"></div>
+  <span class="chapter-band-title">Protecting the Portfolio from Yourself</span>
+</div>
+
+<section class="chapter">
+  <div class="col-3-7">
+    <div>
+      <div class="pull" style="margin-top:0;"><p>In investing, doing less is almost always doing more.</p></div>
+      <div class="callout fade-in">
+        <div class="callout-label">The core insight</div>
+        <p>A portfolio of six low-cost, broadly diversified ETFs with a monthly standing order is genuinely difficult to improve through active intervention. Every time you feel the urge to do something, the most likely outcome of that action is a worse result than doing nothing.</p>
+      </div>
+    </div>
+    <div>
+      <div class="chapter-overline fade-in">Five Rules</div>
+      <div class="rule-list fade-in">
+        <div class="rule-item"><div class="rule-num">01</div><div><div class="rule-title">Never sell during a crash</div><div class="rule-body">The simulation assumes you kept contributing through 2008, 2020, and 2022. Investors who sold at the bottom and waited for clarity missed the sharpest recovery rallies — often the first 30–60 days of a rebound account for the majority of the gain.</div></div></div>
+        <div class="rule-item"><div class="rule-num">02</div><div><div class="rule-title">Never chase last year's winner</div><div class="rule-body">When technology stocks dominated 2020–2021, selling VTI to buy more QQQM would have felt logical. The following year, QQQM fell 33%. Asset class leadership rotates — your diversification is the protection.</div></div></div>
+        <div class="rule-item"><div class="rule-num">03</div><div><div class="rule-title">Never try to time the market</div><div class="rule-body">Missing the ten best trading days in any decade typically halves your return. Those best days cluster around the worst days, making timing doubly dangerous.</div></div></div>
+        <div class="rule-item"><div class="rule-num">04</div><div><div class="rule-title">Rebalance annually, not emotionally</div><div class="rule-body">Once per year, review the allocation and bring it back to target weightings. This is the only active decision required. It takes approximately 20 minutes and involves no market prediction.</div></div></div>
+        <div class="rule-item"><div class="rule-num">05</div><div><div class="rule-title">Automate everything</div><div class="rule-body">Set a standing order for the first of every month. Enable automatic dividend reinvestment. Remove every decision point. The portfolio that requires the fewest decisions produces the fewest mistakes.</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="chapter-band" id="legacy">
+  <span class="chapter-num">Chapter VI</span>
+  <div class="chapter-band-rule"></div>
+  <span class="chapter-band-title">The Financial Literacy Legacy</span>
+</div>
+
+<section class="chapter">
+  <div class="col-2">
+    <div>
+      <div class="chapter-overline fade-in">Teaching as you go</div>
+      <h2 class="fade-in">The portfolio is a tool. Financial literacy is the <em>legacy.</em></h2>
+      <p class="fade-in">The portfolio is not the only thing you are building. The conversations you have with your child as they grow are the foundation of financial literacy that will outlast the money itself. A child who understands where this money came from, and why it grew, is far more likely to preserve and grow it than one who simply receives a lump sum at 18 with no context.</p>
+      <div class="pull fade-in"><p>The financial literacy you pass down is, arguably, worth more than the portfolio itself.</p></div>
+    </div>
+    <div>
+      <div class="tl fade-in">
+        <div class="tl-item"><div class="tl-age">Ages 5–8</div><div class="tl-body">Show them the account exists. Let them see a number. Explain that money grows when you leave it alone — like a seed that becomes a tree. That is enough at this stage.</div></div>
+        <div class="tl-item"><div class="tl-age">Ages 9–12</div><div class="tl-body">Show them the chart over time. Explain what a market crash looks like and why it is not a disaster. Let them ask questions. Introduce the word compounding without formal definition.</div></div>
+        <div class="tl-item"><div class="tl-age">Ages 13–16</div><div class="tl-body">Explain each fund and why it is there. Discuss expense ratios, compound interest, and the difference between investing and saving. Involve them in the annual rebalancing conversation.</div></div>
+        <div class="tl-item"><div class="tl-age">Ages 17–18</div><div class="tl-body">Walk through the full picture — total value, total contributions, return above contributions. Discuss the decision ahead: spend it, invest it further, or use it as the foundation of their own generational wealth plan.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="principles-section">
+  <div class="principles-inner">
+    <div class="p-overline">Five Principles. That Is All It Takes.</div>
+    <div class="principles">
+      <div class="principle"><div class="p-num">01</div><div class="p-title">Start immediately</div><div class="p-body">Every month of delay has a compounding cost. The first contribution is worth more than any subsequent one.</div></div>
+      <div class="principle"><div class="p-num">02</div><div class="p-title">Keep costs ruthlessly low</div><div class="p-body">0.09% average annual cost. Over 18 years this compounds into tens of thousands staying in your child's account.</div></div>
+      <div class="principle"><div class="p-num">03</div><div class="p-title">Diversify across everything</div><div class="p-body">Geography, market cap, factor, and income strategy. No single company or country can permanently derail the portfolio.</div></div>
+      <div class="principle"><div class="p-num">04</div><div class="p-title">Never sell. Never time.</div><div class="p-body">The simulation results assume you continued every month through every crisis. That discipline is the strategy.</div></div>
+      <div class="principle"><div class="p-num">05</div><div class="p-title">Teach as you go</div><div class="p-body">The portfolio is a tool. Financial literacy is the legacy.</div></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- OFFER CTA -->
+<section id="contact" style="background:var(--ink);padding:6rem 5rem;position:relative;overflow:hidden;">
+  <div style="position:absolute;top:50%;right:5%;transform:translateY(-50%);width:400px;height:400px;background:radial-gradient(circle,rgba(201,146,42,0.05) 0%,transparent 70%);border-radius:50%;pointer-events:none;"></div>
+  <div style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;">
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#C8922A;margin-bottom:1rem;">InsightInvest</div>
+      <h2 style="font-family:'Source Serif 4',Georgia,serif;font-size:clamp(2rem,4vw,3rem);font-weight:300;color:rgba(245,240,232,0.95);line-height:1.1;margin-bottom:1.25rem;letter-spacing:-0.01em;">Build the perfect portfolio <em style="font-style:italic;font-weight:600;color:#E8B84B;">for your child.</em></h2>
+      <p style="font-size:0.9rem;color:rgba(245,240,232,0.4);line-height:1.75;margin-bottom:0;max-width:420px;">A 1-on-1 personalised session. We review your situation, build a portfolio tailored to your child's timeline and your goals, and give you a clear plan you can start the same day.</p>
+    </div>
+    <div>
+      <div style="border:1px solid rgba(201,146,42,0.2);padding:2.5rem;background:rgba(201,146,42,0.04);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.16em;text-transform:uppercase;color:rgba(201,146,42,0.7);margin-bottom:1.5rem;">What's included</div>
+        <div style="display:flex;flex-direction:column;gap:0.9rem;margin-bottom:2rem;">
+          <div style="display:flex;gap:0.75rem;align-items:flex-start;font-size:0.84rem;color:rgba(245,240,232,0.65);">
+            <span style="color:#C8922A;flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:0.72rem;">01</span>
+            <span>A personalised portfolio built around your child's age, budget and goals</span>
+          </div>
+          <div style="display:flex;gap:0.75rem;align-items:flex-start;font-size:0.84rem;color:rgba(245,240,232,0.65);">
+            <span style="color:#C8922A;flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:0.72rem;">02</span>
+            <span>A written plan you keep — funds, percentages, account type, next steps</span>
+          </div>
+          <div style="display:flex;gap:0.75rem;align-items:flex-start;font-size:0.84rem;color:rgba(245,240,232,0.65);">
+            <span style="color:#C8922A;flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:0.72rem;">03</span>
+            <span>Ongoing support after the session so you can execute with confidence</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:1rem;padding:1rem 0;border-top:1px solid rgba(245,240,232,0.06);border-bottom:1px solid rgba(245,240,232,0.06);margin-bottom:1.75rem;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(245,240,232,0.25);">Format</span>
+          <span style="font-size:0.82rem;color:rgba(245,240,232,0.55);">1-hour video call &nbsp;·&nbsp; By application only &nbsp;·&nbsp; Limited spots</span>
+        </div>
+        <a href="insightinvest-offer.html" style="display:flex;align-items:center;justify-content:space-between;background:#C8922A;color:#0A0A08;font-family:'Syne',sans-serif;font-size:0.8rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:1rem 1.5rem;text-decoration:none;transition:background 0.2s;" onmouseover="this.style.background='#E8B84B'" onmouseout="this.style.background='#C8922A'">
+          <span>Apply for a session</span>
+          <span>→</span>
+        </a>
+        <p style="font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:rgba(245,240,232,0.2);letter-spacing:0.06em;margin-top:1rem;text-align:center;">We review every application personally within 48 hours</p>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="disclaimer-wrap">
+  <div class="disclaimer-box">
+    <p><strong style="color:var(--ink3);font-style:normal;">Disclaimer.</strong> This document is produced for educational and informational purposes only. It does not constitute personalised financial, tax, or legal advice. Past performance of indices and ETFs does not guarantee future results. All projections and simulations are illustrative models based on historical data and are not predictions of future performance. Fund data reflects publicly available information as of May 2026 and may have changed. Please consult a licensed fiduciary financial advisor who understands your specific jurisdiction, tax position, and personal circumstances before making any investment decisions.</p>
+  </div>
+</div>
+
+<footer>
+  <p>Future-Proof — A Parent's Guide to Generational Wealth</p>
+  <p>For Educational Purposes Only &nbsp;·&nbsp; Not Financial Advice</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 70);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// CHART 1: Compounding Race
+(function() {
+  const labels = Array.from({length:19}, function(_,i){ return 'Age ' + i; });
+  function compound(monthly, rate, years) {
+    var vals = [0], port = 0;
+    var mr = Math.pow(1+rate, 1/12) - 1;
+    for (var y=0;y<years;y++) {
+      for (var m=0;m<12;m++) port = port*(1+mr)+monthly;
+      vals.push(Math.round(port));
+    }
+    return vals;
+  }
+  var fromBirth = compound(250, 0.085, 18);
+  var fromFive  = [0,0,0,0,0].concat(compound(250, 0.085, 13));
+  var ctx1 = document.getElementById('compoundRaceChart');
+  if (!ctx1) return;
+  new Chart(ctx1, {
+    type:'line',
+    data:{ labels: labels, datasets:[
+      { label:'Started at birth', data:fromBirth, borderColor:'#1D9E75', backgroundColor:'rgba(29,158,117,0.08)', borderWidth:2.5, pointRadius:0, fill:true, tension:0.3 },
+      { label:'Started at age 5', data:fromFive, borderColor:'rgba(245,240,232,0.25)', backgroundColor:'transparent', borderWidth:1.5, borderDash:[5,4], pointRadius:0, fill:false, tension:0.3 }
+    ]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: function(c){ return c.dataset.label + ': $' + c.parsed.y.toLocaleString(); } } } },
+      scales:{
+        y:{ ticks:{ color:'rgba(245,240,232,0.3)', callback:function(v){ return '$' + Math.round(v/1000) + 'k'; }, font:{size:11,family:'JetBrains Mono'} }, grid:{color:'rgba(245,240,232,0.05)'}, border:{color:'rgba(245,240,232,0.1)'} },
+        x:{ ticks:{ color:'rgba(245,240,232,0.3)', font:{size:11,family:'JetBrains Mono'}, maxTicksLimit:10 }, grid:{display:false}, border:{color:'rgba(245,240,232,0.1)'} }
+      }
+    }
+  });
+})();
+
+// CHART 2a: Allocation Donut
+(function() {
+  var ctx2 = document.getElementById('allocDonut');
+  if (!ctx2) return;
+  new Chart(ctx2, {
+    type:'doughnut',
+    data:{
+      labels:['VTI 30%','VT 20%','SCHD 20%','QQQM 15%','AVUV 10%','VXUS 5%'],
+      datasets:[{ data:[30,20,20,15,10,5], backgroundColor:['#1A4731','#2D6A4F','#C8922A','#4A1E8C','#8B1A1A','#5C5C54'], borderWidth:0, hoverOffset:8 }]
+    },
+    options:{ responsive:true, maintainAspectRatio:false, cutout:'65%',
+      plugins:{ legend:{ position:'bottom', labels:{ color:'#2C2C28', font:{size:11,family:'JetBrains Mono'}, padding:12, usePointStyle:true, pointStyleWidth:10 } }, tooltip:{ callbacks:{ label: function(c){ return ' '+c.label; } } } }
+    }
+  });
+})();
+
+// CHART 2b: Fee drag
+(function() {
+  var ctx3 = document.getElementById('feeChart');
+  if (!ctx3) return;
+  function feeDrag(er) {
+    return Math.round(10000 * (Math.pow(1.085,18) - Math.pow(1.085-er,18)));
+  }
+  new Chart(ctx3, {
+    type:'bar',
+    data:{
+      labels:['This portfolio (0.09%)','Typical index (0.20%)','Active small-cap (0.75%)','Avg active fund (1.00%)'],
+      datasets:[{ label:'Fee drag over 18 years', data:[feeDrag(0.0009),feeDrag(0.002),feeDrag(0.0075),feeDrag(0.01)], backgroundColor:['#1D9E75','rgba(200,146,42,0.7)','rgba(139,26,26,0.5)','rgba(139,26,26,0.8)'], borderWidth:0, borderRadius:0 }]
+    },
+    options:{ responsive:true, maintainAspectRatio:false, indexAxis:'y',
+      plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: function(c){ return ' $' + c.parsed.x.toLocaleString() + ' lost to fees'; } } } },
+      scales:{
+        x:{ ticks:{ callback:function(v){ return '$' + Math.round(v/1000) + 'k'; }, color:'#8C8C82', font:{size:10,family:'JetBrains Mono'} }, grid:{color:'rgba(0,0,0,0.05)'}, border:{display:false} },
+        y:{ ticks:{ color:'#2C2C28', font:{size:10,family:'JetBrains Mono'} }, grid:{display:false}, border:{display:false} }
+      }
+    }
+  });
+})();
+
+// CHART 3: 20-Year Simulation
+(function() {
+  var ctx4 = document.getElementById('simChart');
+  if (!ctx4) return;
+  var portVals = [3080,6808,10339,8918,15140,21022,23819,30832,44238,51921,55263,65719,83426,80958,108111,133824,170909,144583,182809,218214];
+  var spVals   = [3068,6815,10329,8967,15147,20993,24035,30999,44323,51979,55421,65786,83537,81136,108390,134023,171039,144706,183049,244874];
+  var contribs = portVals.map(function(_,i){ return (i+1)*12*250; });
+  var labels   = [2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024];
+  var crashYrs = [2008,2018,2020,2022];
+  new Chart(ctx4, {
+    type:'line',
+    data:{ labels: labels, datasets:[
+      { label:'This portfolio', data:portVals, borderColor:'#1D9E75', backgroundColor:'rgba(29,158,117,0.07)', borderWidth:2.5, pointRadius:labels.map(function(y){ return crashYrs.indexOf(y)>=0?5:0; }), pointBackgroundColor:'#1D9E75', fill:true, tension:0.3 },
+      { label:'S&P 500 only', data:spVals, borderColor:'rgba(245,240,232,0.25)', backgroundColor:'transparent', borderWidth:1.5, borderDash:[5,4], pointRadius:0, fill:false, tension:0.3 },
+      { label:'Contributed', data:contribs, borderColor:'rgba(245,240,232,0.12)', backgroundColor:'transparent', borderWidth:1, pointRadius:0, fill:false, tension:0 }
+    ]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: function(c){ return c.dataset.label + ': $' + c.parsed.y.toLocaleString(); } } } },
+      scales:{
+        y:{ ticks:{ color:'rgba(245,240,232,0.3)', callback:function(v){ return '$' + Math.round(v/1000) + 'k'; }, font:{size:11,family:'JetBrains Mono'} }, grid:{color:'rgba(245,240,232,0.05)'}, border:{color:'rgba(245,240,232,0.1)'} },
+        x:{ ticks:{ color:'rgba(245,240,232,0.3)', font:{size:11,family:'JetBrains Mono'} }, grid:{display:false}, border:{color:'rgba(245,240,232,0.1)'} }
+      }
+    }
+  });
+})();
+
+// CHART 4: Beta bar chart
+(function() {
+  var ctx5 = document.getElementById('betaChart');
+  if (!ctx5) return;
+  new Chart(ctx5, {
+    type:'bar',
+    data:{
+      labels:['VTI','VT','SCHD','QQQM','AVUV','VXUS'],
+      datasets:[
+        { label:'Beta', data:[1.04,0.99,0.66,1.11,1.15,0.94], backgroundColor:['#1A4731','#2D6A4F','#C8922A','#4A1E8C','#8B1A1A','#5C5C54'], borderWidth:0, borderRadius:0 },
+        { label:'Market (1.0)', data:[1,1,1,1,1,1], type:'line', borderColor:'rgba(15,15,13,0.3)', borderWidth:1.5, borderDash:[4,3], pointRadius:0, fill:false }
+      ]
+    },
+    options:{ responsive:true, maintainAspectRatio:false, indexAxis:'y',
+      plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: function(c){ return c.dataset.label==='Beta'?'Beta: '+c.parsed.x:'Market = 1.0'; } } } },
+      scales:{
+        x:{ min:0, max:1.4, ticks:{ color:'#8C8C82', font:{size:10,family:'JetBrains Mono'} }, grid:{color:'rgba(0,0,0,0.06)'}, border:{display:false} },
+        y:{ ticks:{ color:'#0F0F0D', font:{size:12,family:'JetBrains Mono',weight:'600'} }, grid:{display:false}, border:{display:false} }
+      }
+    }
+  });
+})();
+
+// FORM HANDLER
+(function() {
+  var form = document.getElementById('portfolioForm');
+  if (!form) return;
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    var btn = document.getElementById('submitBtn');
+    btn.textContent = 'Sending...';
+    btn.style.background = 'rgba(29,158,117,0.5)';
+    btn.disabled = true;
+    try {
+      var res = await fetch(form.action, { method:'POST', body: new FormData(form), headers:{ 'Accept':'application/json' } });
+      if (res.ok) {
+        form.reset();
+        document.getElementById('formSuccess').style.display = 'block';
+        btn.style.display = 'none';
+      } else {
+        btn.textContent = 'Try again';
+        btn.style.background = '#8B1A1A';
+        btn.disabled = false;
+      }
+    } catch(err) {
+      btn.textContent = 'Try again';
+      btn.style.background = '#8B1A1A';
+      btn.disabled = false;
+    }
+  });
+})();
+
+</script>
+</body>
+</html>
