@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finding Asymmetric Themes — InsightInvest</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0d0d0d;--paper:#f7f4ef;--accent:#c8892a;--accent-light:#f0d9b0;--accent-dark:#8a5e16;--muted:#7a7468;--rule:#e0dbd2;--purple:#4a3f7a;--purple-light:#ece9f5;--teal:#1a6b5a;--teal-light:#d8f0ea;--coral:#c04830;--coral-light:#faeae7;--green:#2d6a2d;--green-light:#e6f4e6;--card:#ffffff;--serif:'Playfair Display',Georgia,serif;--sans:'DM Sans',sans-serif;--mono:'DM Mono',monospace}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-weight:300;line-height:1.7;font-size:16px;overflow-x:hidden}
+
+.disclaimer-banner{background:#1a1612;border-bottom:1px solid #3a3028;padding:14px max(2rem,5vw);display:flex;align-items:flex-start;gap:14px}
+.disclaimer-icon{font-family:var(--mono);font-size:0.65rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);background:rgba(200,137,42,0.15);border:1px solid rgba(200,137,42,0.3);padding:4px 10px;border-radius:2px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+.disclaimer-text{font-family:var(--mono);font-size:0.72rem;color:#a89e92;line-height:1.65}
+.disclaimer-text strong{color:#d4c8bc;font-weight:500}
+
+header{border-bottom:1px solid var(--rule);padding:0 max(2rem,5vw);display:flex;align-items:center;justify-content:space-between;height:64px;background:var(--paper);position:sticky;top:0;z-index:100}
+.logo{font-family:var(--serif);font-size:1.25rem;font-weight:700;color:var(--ink);text-decoration:none}
+.logo span{color:var(--accent)}
+.header-tag{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);border:1px solid var(--rule);padding:4px 12px;border-radius:2px}
+
+.hero{padding:80px max(2rem,5vw) 40px;max-width:900px;margin:0 auto;opacity:0;animation:fadeUp 0.8s 0.1s ease forwards}
+.hero-eyebrow{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:1.25rem;display:flex;align-items:center;gap:10px}
+.hero-eyebrow::before{content:'';display:block;width:28px;height:1px;background:var(--accent)}
+.hero h1{font-family:var(--serif);font-size:clamp(2.2rem,5vw,3.6rem);font-weight:700;line-height:1.1;letter-spacing:-0.02em;margin-bottom:1.25rem}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero-sub{font-size:1.05rem;color:var(--muted);max-width:520px;margin-bottom:2.5rem}
+.hero-badge{display:inline-flex;align-items:center;gap:10px;background:var(--accent-light);border:1px solid var(--accent);border-radius:3px;padding:10px 18px;font-family:var(--mono);font-size:0.78rem;color:var(--accent-dark);font-weight:500}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:blink 2s ease infinite}
+
+.nav-pills{padding:0 max(2rem,5vw) 56px;max-width:900px;margin:0 auto;display:flex;gap:8px;flex-wrap:wrap;opacity:0;animation:fadeUp 0.8s 0.25s ease forwards}
+.pill{font-family:var(--mono);font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;padding:6px 14px;border:1px solid var(--rule);border-radius:2px;background:var(--card);color:var(--muted);text-decoration:none;transition:all 0.2s}
+.pill:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+
+main{max-width:900px;margin:0 auto;padding:0 max(2rem,5vw) 100px}
+
+.section{margin-bottom:80px;opacity:0;transform:translateY(28px);transition:opacity 0.65s ease,transform 0.65s ease}
+.section.visible{opacity:1;transform:translateY(0)}
+.section-header{display:flex;align-items:baseline;gap:16px;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--rule)}
+.section-num{font-family:var(--serif);font-size:1.8rem;font-weight:400;color:var(--accent-light);line-height:1;flex-shrink:0}
+.section-title{font-family:var(--serif);font-size:1.5rem;font-weight:600;letter-spacing:-0.01em}
+.section-intro{color:var(--muted);font-size:0.95rem;margin-bottom:28px;line-height:1.65;max-width:680px}
+
+.callout{border-left:3px solid var(--accent);padding:14px 18px;background:var(--accent-light);border-radius:0 3px 3px 0;margin:20px 0;font-size:0.875rem;color:var(--accent-dark);line-height:1.6}
+.callout strong{font-weight:500}
+.callout.red{border-color:var(--coral);background:var(--coral-light);color:var(--coral)}
+.callout.teal{border-color:var(--teal);background:var(--teal-light);color:var(--teal)}
+
+.cards{display:grid;gap:12px}
+.cards-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.cards-3{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:22px;position:relative;overflow:hidden;transition:border-color 0.25s,transform 0.25s}
+.card:hover{border-color:var(--accent);transform:translateY(-3px)}
+.card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%}
+.card.purple::before{background:var(--purple)}
+.card.teal::before{background:var(--teal)}
+.card.coral::before{background:var(--coral)}
+.card.amber::before{background:var(--accent)}
+.card.gray::before{background:#b0a898}
+.card-title{font-family:var(--serif);font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:8px}
+.card-body{font-size:0.85rem;color:var(--muted);line-height:1.65}
+.card-example{margin-top:10px;padding:9px 11px;background:var(--paper);border-radius:2px;font-family:var(--mono);font-size:0.7rem;color:var(--accent-dark);line-height:1.5}
+.card-example::before{content:'→ CRCL: ';color:var(--accent);font-weight:500}
+.src-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.src{font-family:var(--mono);font-size:0.63rem;padding:3px 8px;border:1px solid var(--rule);border-radius:2px;color:var(--muted)}
+
+/* CHART */
+.chart-wrap{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:24px;margin-bottom:32px}
+.chart-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.chart-ticker{font-family:var(--serif);font-size:1.3rem;font-weight:600;color:var(--ink)}
+.chart-sub{font-size:0.8rem;color:var(--muted);margin-top:4px}
+.chart-price{font-family:var(--serif);font-size:1.7rem;font-weight:700;color:var(--green);line-height:1}
+.chart-chg{font-family:var(--mono);font-size:0.7rem;color:var(--green);background:var(--green-light);padding:3px 8px;border-radius:2px;margin-top:4px;display:inline-block}
+.chart-canvas-wrap{position:relative;height:180px;margin-bottom:16px}
+#priceChart{display:block}
+.chart-events{display:flex;flex-wrap:wrap;gap:8px}
+.evt-tag{font-family:var(--mono);font-size:0.62rem;letter-spacing:0.06em;text-transform:uppercase;padding:4px 10px;border-radius:2px;white-space:nowrap}
+.evt-tag.purple{background:var(--purple-light);color:var(--purple)}
+.evt-tag.teal{background:var(--teal-light);color:var(--teal)}
+.evt-tag.amber{background:var(--accent-light);color:var(--accent-dark)}
+
+/* STATS */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:4px;overflow:hidden;margin:32px 0}
+.stat{background:var(--card);padding:22px;text-align:center}
+.stat-val{font-family:var(--serif);font-size:2rem;font-weight:700;color:var(--ink);line-height:1;margin-bottom:4px}
+.stat-val span{color:var(--accent)}
+.stat-label{font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)}
+
+/* SCORECARD */
+.scorecard{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:12px;margin-bottom:24px}
+.score-item{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:20px;transition:border-color 0.2s,transform 0.2s}
+.score-item:hover{border-color:var(--accent);transform:translateY(-2px)}
+.score-q{font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.score-title{font-family:var(--serif);font-size:0.95rem;font-weight:600;color:var(--ink);margin-bottom:8px}
+.score-body{font-size:0.82rem;color:var(--muted);line-height:1.55;margin-bottom:12px}
+.meter-track{height:6px;background:var(--rule);border-radius:3px;overflow:hidden;margin-bottom:8px}
+.meter-fill{height:100%;border-radius:3px;width:0;transition:width 1.3s cubic-bezier(0.4,0,0.2,1)}
+.meter-fill.pass{background:var(--teal)}
+.score-verdict{font-family:var(--mono);font-size:0.68rem;display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:2px;background:var(--teal-light);color:var(--teal)}
+.score-verdict::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+
+/* EXPOSURE */
+.exp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:28px}
+.exp-card{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:18px;transition:border-color 0.2s,transform 0.2s}
+.exp-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.exp-tag{font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;padding:3px 8px;border-radius:2px;display:inline-block;margin-bottom:10px;font-weight:500}
+.exp-tag.high{background:var(--teal-light);color:var(--teal)}
+.exp-tag.med{background:var(--accent-light);color:var(--accent-dark)}
+.exp-tag.low{background:var(--purple-light);color:var(--purple)}
+.exp-title{font-family:var(--serif);font-size:0.95rem;font-weight:600;color:var(--ink);margin-bottom:6px}
+.exp-body{font-size:0.8rem;color:var(--muted);line-height:1.55}
+
+/* MOAT */
+.moat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:28px}
+.moat-card{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:18px;transition:border-color 0.2s,transform 0.2s}
+.moat-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.moat-type{font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;padding:3px 8px;border-radius:2px;display:inline-block;font-weight:500}
+.moat-type.regulatory{background:var(--purple-light);color:var(--purple)}
+.moat-type.network{background:var(--teal-light);color:var(--teal)}
+.moat-type.data{background:var(--accent-light);color:var(--accent-dark)}
+.moat-title{font-family:var(--serif);font-size:0.95rem;font-weight:600;color:var(--ink);margin:8px 0 6px}
+.moat-body{font-size:0.8rem;color:var(--muted);line-height:1.6;margin-bottom:8px}
+.moat-eg{font-family:var(--mono);font-size:0.68rem;color:var(--muted)}
+
+/* RERATE */
+.rerate-wrap{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:28px;margin-bottom:24px}
+.rerate-eyebrow{font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.rerate-heading{font-family:var(--serif);font-size:0.95rem;font-weight:600;color:var(--ink);margin-bottom:28px}
+.rerate-track{position:relative;height:4px;background:var(--rule);border-radius:2px;margin-bottom:0}
+.rerate-fill{position:absolute;top:0;left:0;height:100%;background:var(--accent);border-radius:2px;width:0;transition:width 1.4s cubic-bezier(0.4,0,0.2,1)}
+.rerate-nodes{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.rn{display:flex;flex-direction:column;align-items:center;text-align:center}
+.rn-dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--rule);background:var(--paper);margin-bottom:8px;flex-shrink:0;transition:border-color 0.5s,background 0.5s}
+.rn-dot.done{border-color:var(--teal);background:var(--teal)}
+.rn-dot.active{border-color:var(--accent);background:var(--accent)}
+.rn-label{font-family:var(--mono);font-size:0.62rem;color:var(--muted);line-height:1.4;margin-bottom:3px}
+.rn-status{font-family:var(--mono);font-size:0.65rem;font-weight:500}
+.rn-status.done{color:var(--teal)}
+.rn-status.active{color:var(--accent)}
+.rn-status.pending{color:var(--muted)}
+.rerate-caps{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.recap{background:var(--paper);border-radius:4px;padding:14px 16px;text-align:center;border:1px solid var(--rule)}
+.recap-val{font-family:var(--serif);font-size:1.5rem;font-weight:700;line-height:1;margin-bottom:4px}
+.recap-lbl{font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)}
+
+/* TRANCHES */
+.tranche-stack{display:flex;height:36px;border-radius:4px;overflow:hidden;margin-bottom:20px;border:1px solid var(--rule)}
+.t-seg{display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.64rem;font-weight:500;color:rgba(255,255,255,0.9);flex:0;transition:flex 1.2s cubic-bezier(0.4,0,0.2,1)}
+.t-seg.s1{background:var(--purple)}
+.t-seg.s2{background:var(--teal)}
+.t-seg.s3{background:var(--accent)}
+
+.tranches{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.tranche-row{display:grid;grid-template-columns:84px 1fr;background:var(--card);border:1px solid var(--rule);border-radius:4px;overflow:hidden;transition:border-color 0.2s,transform 0.2s}
+.tranche-row:hover{border-color:var(--accent);transform:translateY(-2px)}
+.tranche-label{padding:16px 12px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;border-right:1px solid var(--rule)}
+.tranche-pct{font-family:var(--serif);font-size:1.6rem;font-weight:700;line-height:1}
+.tranche-lbl{font-family:var(--mono);font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+.tranche-content{padding:16px 20px}
+.tranche-title{font-family:var(--serif);font-size:0.95rem;font-weight:600;color:var(--ink);margin-bottom:5px}
+.tranche-body{font-size:0.82rem;color:var(--muted);line-height:1.6}
+.tranche-body strong{color:var(--ink);font-weight:500}
+
+/* INVAL */
+.inval-list{display:flex;flex-direction:column;gap:8px}
+.inval-item{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:13px 17px;font-size:0.875rem;color:var(--muted);line-height:1.55;transition:border-color 0.2s,background 0.2s}
+.inval-item:hover{border-color:var(--coral);background:var(--coral-light)}
+.inval-mark{width:18px;height:18px;border-radius:50%;background:var(--coral-light);color:var(--coral);font-size:0.65rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;font-weight:500}
+
+/* DONUT */
+.donut-section{display:grid;grid-template-columns:180px 1fr;gap:28px;align-items:center;margin-bottom:28px}
+.donut-wrap{position:relative;width:180px;height:180px}
+#donutChart{display:block}
+.donut-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none}
+.donut-val{font-family:var(--serif);font-size:1.4rem;font-weight:700;color:var(--ink);line-height:1}
+.donut-sub{font-family:var(--mono);font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+.donut-legend{display:flex;flex-direction:column;gap:14px}
+.dleg{display:flex;align-items:flex-start;gap:10px}
+.dleg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0;margin-top:4px}
+.dleg-label{font-size:0.875rem;color:var(--ink);font-weight:500;margin-bottom:2px}
+.dleg-sub{font-family:var(--mono);font-size:0.68rem;color:var(--muted)}
+
+/* FLOW */
+.flow{display:flex;flex-direction:column}
+.flow-step{display:grid;grid-template-columns:44px 1fr}
+.flow-left{display:flex;flex-direction:column;align-items:center}
+.flow-dot{width:13px;height:13px;border-radius:50%;border:2px solid var(--accent);background:var(--paper);flex-shrink:0;margin-top:5px;z-index:1}
+.flow-line{width:1px;flex:1;background:var(--rule);margin:4px 0}
+.flow-right{padding-bottom:24px}
+.flow-step:last-child .flow-right{padding-bottom:0}
+.flow-step:last-child .flow-line{display:none}
+.flow-lbl{font-family:var(--mono);font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.flow-title{font-family:var(--serif);font-size:1.05rem;font-weight:600;color:var(--ink);margin-bottom:6px}
+.flow-body{font-size:0.85rem;color:var(--muted);line-height:1.65}
+.flow-body strong{color:var(--ink);font-weight:500}
+
+footer{border-top:1px solid var(--rule);padding:28px max(2rem,5vw);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-logo{font-family:var(--serif);font-size:1rem;font-weight:700;color:var(--ink);text-decoration:none}
+.footer-logo span{color:var(--accent)}
+.footer-disc{font-size:0.75rem;color:var(--muted);max-width:480px;line-height:1.5}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.7)}}
+
+@media(max-width:600px){
+  .donut-section{grid-template-columns:1fr}
+  .donut-wrap{margin:0 auto}
+  .tranche-row{grid-template-columns:70px 1fr}
+  .tranche-pct{font-size:1.3rem}
+  .rerate-nodes{grid-template-columns:repeat(2,1fr)}
+  footer{flex-direction:column}
+  #bookingSnippet>div{grid-template-columns:1fr!important}
+}
+</style>
+</head>
+<body>
+
+<div class="disclaimer-banner">
+  <span class="disclaimer-icon">Hindsight note</span>
+  <p class="disclaimer-text"><strong>This analysis is constructed in hindsight.</strong> The CRCL thesis reads cleanly now — but this play didn't happen because of a perfect framework. It happened because of luck, timing, and positioning that no model could have guaranteed. The regulatory tailwinds, the earnings beat, the Ark buying, the CLARITY Act timing — these aligned. They didn't have to. <strong>Past thesis construction does not predict future results. You can be right about a theme and still lose money on the trade.</strong></p>
+</div>
+
+<header>
+  <a href="#" class="logo">Insight<span>Invest</span></a>
+  <span class="header-tag">Thematic Edge Series</span>
+</header>
+
+<section class="hero">
+  <p class="hero-eyebrow">Framework</p>
+  <h1>Finding <em>asymmetric</em> themes<br>before the market does</h1>
+  <p class="hero-sub">A complete system for sourcing, validating, entering, and managing thematic positions — from signal to re-rating event.</p>
+  <div class="hero-badge"><span class="live-dot"></span>Live example: $CRCL — stablecoin infrastructure, $20B → $100B re-rating thesis</div>
+</section>
+
+<nav class="nav-pills">
+  <a class="pill" href="#detection">01 Detection</a>
+  <a class="pill" href="#scoring">02 Scoring</a>
+  <a class="pill" href="#selection">03 Company</a>
+  <a class="pill" href="#position">04 Position</a>
+  <a class="pill" href="#portfolio">05 Portfolio</a>
+</nav>
+
+<main>
+
+<!-- CHART -->
+<section class="section visible" style="margin-bottom:52px" id="chartSection">
+  <div class="chart-wrap">
+    <div class="chart-header">
+      <div>
+        <div class="chart-ticker">$CRCL — Circle Internet Group</div>
+        <div class="chart-sub">Stablecoin infrastructure · NYSE</div>
+      </div>
+      <div style="text-align:right">
+        <div class="chart-price">$131.76</div>
+        <div class="chart-chg">+16.0% on earnings day</div>
+        <div style="font-family:var(--mono);font-size:0.65rem;color:var(--muted);margin-top:4px">From ~$83 thesis entry</div>
+      </div>
+    </div>
+    <div class="chart-canvas-wrap"><canvas id="priceChart"></canvas></div>
+    <div class="chart-events">
+      <span class="evt-tag purple">GENIUS Act summer '25</span>
+      <span class="evt-tag teal">Visa USDC settlement</span>
+      <span class="evt-tag amber">Q1 2026 earnings beat</span>
+      <span class="evt-tag purple">CLARITY Act progress</span>
+      <span class="evt-tag teal">Ark $5.5M buy</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="section" id="statsSection">
+  <div class="stat-row">
+    <div class="stat"><div class="stat-val"><span id="c1">$0</span></div><div class="stat-label">USDC 2025 volume</div></div>
+    <div class="stat"><div class="stat-val"><span id="c2">0</span><span style="color:var(--accent)">%</span></div><div class="stat-label">YTD gain 2026</div></div>
+    <div class="stat"><div class="stat-val"><span id="c3">0</span><span style="color:var(--accent)">x</span></div><div class="stat-label">Target re-rating</div></div>
+    <div class="stat"><div class="stat-val"><span style="color:var(--accent)">$</span><span id="c4">0</span><span style="color:var(--accent)">B</span></div><div class="stat-label">Target market cap</div></div>
+  </div>
+</section>
+
+<!-- 01 DETECTION -->
+<section class="section" id="detection">
+  <div class="section-header"><span class="section-num">01</span><h2 class="section-title">How to find underappreciated themes</h2></div>
+  <p class="section-intro">By the time a theme appears in a Bloomberg headline the edge is gone. The signal lives in primary sources — data that exists before it gets processed into an analyst recommendation.</p>
+  <div class="callout"><strong>The discipline:</strong> Read primary sources, not interpretations. The Treasury RFI, the TSMC earnings Q&A, the ASCO abstract — before anyone translates it into a buy rating.</div>
+  <div class="cards cards-2" style="margin-top:20px">
+    <div class="card purple">
+      <div class="card-title">Regulatory filings & government dockets</div>
+      <div class="card-body">Treasury RFIs, SEC rule proposals, congressional testimony, CFTC dockets. Regulators act before markets notice — a rule proposal is a 12-month early warning system.</div>
+      <div class="card-example">Circle submitted USDC payment rail guidance to Treasury. Public doc. Almost no one read it.</div>
+      <div class="src-pills"><span class="src">regulations.gov</span><span class="src">SEC EDGAR</span><span class="src">congress.gov</span></div>
+    </div>
+    <div class="card teal">
+      <div class="card-title">Industry throughput data</div>
+      <div class="card-body">Port volumes, freight rates, visa issuances, patent filings, FDA submissions. Actual throughput precedes revenue by 1–3 quarters.</div>
+      <div class="card-example">Stablecoin volume hit $33T in 2025 — larger than Visa + Mastercard combined — before sell-side modelled it.</div>
+      <div class="src-pills"><span class="src">BIS data</span><span class="src">USPTO</span><span class="src">FDA PDUFA</span></div>
+    </div>
+    <div class="card teal">
+      <div class="card-title">Job posting & hiring patterns</div>
+      <div class="card-body">Companies hire 6–18 months before growth shows in earnings. A cluster of GPU engineers in 2022 was a datacenter acceleration signal hiding in plain sight.</div>
+      <div class="card-example">Circle hiring DC government affairs specialists throughout 2024 — lobbying treasury modernization.</div>
+      <div class="src-pills"><span class="src">LinkedIn Insights</span><span class="src">Indeed</span></div>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Private market capital flows</div>
+      <div class="card-body">When serious VC money clusters into a sector, public market repricing follows by 12–36 months. Follow Series B and C rounds — conviction capital.</div>
+      <div class="card-example">Stablecoin infra attracted $2B+ VC in 2023–24. Public repricing lagged 18 months.</div>
+      <div class="src-pills"><span class="src">Crunchbase</span><span class="src">PitchBook</span></div>
+    </div>
+    <div class="card coral">
+      <div class="card-title">Academic preprints & conferences</div>
+      <div class="card-body">arXiv, bioRxiv, NeurIPS, ASCO abstracts. Breakthroughs commercialize 3–7 years later. What published in 2022–23 is investable now.</div>
+      <div class="card-example">Tokenization & CBDC research from 2021–22 directly preceded the stablecoin regulatory wave.</div>
+      <div class="src-pills"><span class="src">arXiv</span><span class="src">bioRxiv</span><span class="src">SSRN</span></div>
+    </div>
+    <div class="card gray">
+      <div class="card-title">Supply chain & component orders</div>
+      <div class="card-body">TSMC capacity bookings, ASML shipments, PCB orders. End demand is visible in the supply chain 2–4 quarters before it hits revenue. Suppliers always know first.</div>
+      <div class="card-example">Cloud datacenter buildout visible in power equipment orders 6 months before AWS capex numbers.</div>
+      <div class="src-pills"><span class="src">SEMI.org</span><span class="src">ISM data</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 SCORING -->
+<section class="section" id="scoring">
+  <div class="section-header"><span class="section-num">02</span><h2 class="section-title">The theme validity scorecard</h2></div>
+  <p class="section-intro">Not every signal is a theme. A theme must pass four tests simultaneously — fail any one and you're speculating on a narrative, not investing in a structural shift.</p>
+  <div class="scorecard">
+    <div class="score-item">
+      <div class="score-q">Test 01</div>
+      <div class="score-title">Volume reality check</div>
+      <div class="score-body">Is actual throughput large and growing — or a forecast? Real numbers only. Not TAM estimates from pitch decks.</div>
+      <div class="meter-track"><div class="meter-fill pass" data-w="95"></div></div>
+      <span class="score-verdict">CRCL: $33T real volume. Pass.</span>
+    </div>
+    <div class="score-item">
+      <div class="score-q">Test 02</div>
+      <div class="score-title">Moat durability</div>
+      <div class="score-body">Can the winner's advantage be replicated in 18 months or less? If yes, it's a trade. If no, it's a theme.</div>
+      <div class="meter-track"><div class="meter-fill pass" data-w="90"></div></div>
+      <span class="score-verdict">CRCL: Regulatory trust = years. Pass.</span>
+    </div>
+    <div class="score-item">
+      <div class="score-q">Test 03</div>
+      <div class="score-title">Timing window</div>
+      <div class="score-body">Is the primary catalyst 6–24 months out? Earlier = drift risk. Later = already priced. Sweet spot: visible but not imminent.</div>
+      <div class="meter-track"><div class="meter-fill pass" data-w="82"></div></div>
+      <span class="score-verdict">CRCL: Senate markup mid-2025. Pass.</span>
+    </div>
+    <div class="score-item">
+      <div class="score-q">Test 04</div>
+      <div class="score-title">Consensus gap</div>
+      <div class="score-body">Fewer than 8 analysts on a $5B+ company, not in major ETF top-10 holdings — market hasn't formed a view. That silence is the edge.</div>
+      <div class="meter-track"><div class="meter-fill pass" data-w="88"></div></div>
+      <span class="score-verdict">CRCL: 6 analysts at $20B cap. Pass.</span>
+    </div>
+  </div>
+  <div class="callout"><strong>If a theme fails:</strong> diagnose which test. Volume fake → pass. No moat → find who has it. Timing too early → watchlist with a trigger date.</div>
+</section>
+
+<!-- 03 COMPANY SELECTION -->
+<section class="section" id="selection">
+  <div class="section-header"><span class="section-num">03</span><h2 class="section-title">Company selection — finding the pure play</h2></div>
+  <p class="section-intro">The theme is the wind. The company is the sail. You want the company that captures the most of that wind per dollar of market cap — with the least risk of someone else capturing it instead.</p>
+
+  <h3 style="font-family:var(--serif);font-size:1rem;font-weight:600;margin-bottom:12px">Step 1 — What % of revenue is theme-native?</h3>
+  <div class="exp-grid">
+    <div class="exp-card"><span class="exp-tag high">Pure play</span><div class="exp-title">80–100% revenue</div><div class="exp-body">Highest beta to the theme. Maximum upside — and maximum downside if wrong. This is where asymmetry lives.</div></div>
+    <div class="exp-card"><span class="exp-tag med">Partial exposure</span><div class="exp-title">30–79% revenue</div><div class="exp-body">Theme matters but won't dominate the multiple. Lower volatility, compressed re-rating ceiling.</div></div>
+    <div class="exp-card"><span class="exp-tag low">Infrastructure play</span><div class="exp-title">Picks &amp; shovels</div><div class="exp-body">Whoever wins, the infra supplier benefits. Lower single-name risk, lower upside ceiling.</div></div>
+  </div>
+
+  <h3 style="font-family:var(--serif);font-size:1rem;font-weight:600;margin-bottom:12px">Step 2 — What moat does the winner hold?</h3>
+  <div class="moat-grid">
+    <div class="moat-card"><span class="moat-type regulatory">Regulatory</span><div class="moat-title">Compliance as moat</div><div class="moat-body">Years of DC presence, audit trails, and regulatory trust. No one can just "ship" compliance — which makes it durable.</div><div class="moat-eg">eg. CRCL, CME, ICE</div></div>
+    <div class="moat-card"><span class="moat-type network">Network</span><div class="moat-title">Value grows with users</div><div class="moat-body">Every new participant makes the network more valuable. Winner-take-most dynamics. Second place is often not viable.</div><div class="moat-eg">eg. Visa rails, SWIFT, NYSE</div></div>
+    <div class="moat-card"><span class="moat-type data">Data</span><div class="moat-title">Proprietary dataset</div><div class="moat-body">A dataset nobody else can buy or build. Compounds in value as it grows. The model trained on proprietary data wins.</div><div class="moat-eg">eg. Bloomberg, Palantir, MSCI</div></div>
+  </div>
+
+  <h3 style="font-family:var(--serif);font-size:1rem;font-weight:600;margin-bottom:16px">Step 3 — The re-rating event</h3>
+  <div class="rerate-wrap" id="rerateWrap">
+    <div class="rerate-eyebrow">CRCL re-rating journey</div>
+    <div class="rerate-heading">Crypto company → Payment infrastructure → National security asset</div>
+    <div class="rerate-track"><div class="rerate-fill" id="rerateFill"></div></div>
+    <div class="rerate-nodes">
+      <div class="rn"><div class="rn-dot done"></div><div class="rn-label">GENIUS Act passes</div><div class="rn-status done">Done ✓</div></div>
+      <div class="rn"><div class="rn-dot done"></div><div class="rn-label">Visa / FIS integration</div><div class="rn-status done">Done ✓</div></div>
+      <div class="rn"><div class="rn-dot active"></div><div class="rn-label">CLARITY Act finalized</div><div class="rn-status active">In progress</div></div>
+      <div class="rn"><div class="rn-dot"></div><div class="rn-label">Treasury payment rail</div><div class="rn-status pending">Pending</div></div>
+    </div>
+    <div class="rerate-caps">
+      <div class="recap"><div class="recap-val" style="color:var(--muted)">$20B</div><div class="recap-lbl">Now — crypto peer</div></div>
+      <div class="recap"><div class="recap-val" style="color:var(--accent)">$100B</div><div class="recap-lbl">Re-rated — payments peer</div></div>
+    </div>
+  </div>
+  <div class="callout"><strong>The re-rating insight:</strong> CRCL today trades like Coinbase (~20x). If USDC becomes a US government payment rail, it trades like Visa (~30x). That peer group shift alone is worth $40B+ in market cap before any growth assumption.</div>
+</section>
+
+<!-- BOOKING SNIPPET -->
+<section class="section" id="bookingSnippet" style="margin-bottom:80px">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;background:var(--card);border:1px solid var(--rule);border-radius:8px;overflow:hidden;min-height:320px">
+
+    <!-- LEFT -->
+    <div style="padding:48px 40px;display:flex;flex-direction:column;justify-content:space-between;background:var(--paper)">
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:8px;background:var(--accent-light);border:1px solid var(--accent);border-radius:20px;padding:6px 14px;font-family:var(--mono);font-size:0.68rem;color:var(--accent-dark);font-weight:500;margin-bottom:28px">
+          <span style="width:7px;height:7px;border-radius:50%;background:var(--accent);display:inline-block;animation:blink 2s ease infinite"></span>
+          Now booking · Limited spots available
+        </div>
+        <h2 style="font-family:var(--serif);font-size:clamp(1.7rem,3.5vw,2.4rem);font-weight:700;line-height:1.15;letter-spacing:-0.02em;color:var(--ink);margin-bottom:20px">Investing advice<br>built around <em style="font-style:italic;color:var(--accent)">you</em></h2>
+        <p style="font-size:0.95rem;color:var(--muted);line-height:1.65;max-width:340px">A private 60-minute session personalised to your portfolio, your investing strategy, and where the market is creating opportunity for you — right now.</p>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:32px">
+        <a href="https://www.leiholding.com/insightinvest-1on1" target="_blank" rel="noopener" style="display:inline-block;background:var(--ink);color:#fff;font-family:var(--sans);font-size:0.9rem;font-weight:500;padding:13px 24px;border-radius:6px;text-decoration:none;transition:opacity 0.2s" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">Book your session</a>
+        <a href="https://www.leiholding.com/insightinvest-1on1" target="_blank" rel="noopener" style="display:inline-block;background:transparent;color:var(--ink);font-family:var(--sans);font-size:0.9rem;font-weight:400;padding:13px 24px;border-radius:6px;text-decoration:none;border:1px solid var(--rule);transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--ink)'" onmouseout="this.style.borderColor='var(--rule)'">See how it works</a>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div style="background:#1c1a14;padding:36px 32px;display:flex;flex-direction:column;justify-content:space-between">
+      <div>
+        <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;color:#6b6455;margin-bottom:10px">Your session</div>
+        <div style="font-family:var(--serif);font-size:1.6rem;font-weight:600;color:#f0ece4;line-height:1.2;margin-bottom:28px">60 minutes of<br><em style="font-style:italic;color:var(--accent)">pure clarity</em></div>
+
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:28px">
+          <div id="lvl1" onclick="selectLevel(1)" style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-radius:6px;border:1px solid #2e2b20;background:#252218;cursor:pointer;transition:border-color 0.2s">
+            <div style="display:flex;align-items:center;gap:12px">
+              <span style="width:10px;height:10px;border-radius:50%;background:#4ecb94;display:inline-block;flex-shrink:0"></span>
+              <span style="font-family:var(--sans);font-size:0.9rem;font-weight:500;color:#f0ece4">Beginner</span>
+            </div>
+            <span style="font-family:var(--mono);font-size:0.7rem;color:#6b6455;letter-spacing:0.06em">Foundations</span>
+          </div>
+          <div id="lvl2" onclick="selectLevel(2)" style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-radius:6px;border:1px solid var(--accent);background:#2a2210;cursor:pointer;transition:border-color 0.2s">
+            <div style="display:flex;align-items:center;gap:12px">
+              <span style="width:10px;height:10px;border-radius:50%;background:var(--accent);display:inline-block;flex-shrink:0"></span>
+              <span style="font-family:var(--sans);font-size:0.9rem;font-weight:500;color:#f0ece4">Mid-level</span>
+            </div>
+            <span style="font-family:var(--mono);font-size:0.7rem;color:#c8892a;letter-spacing:0.06em">Growth</span>
+          </div>
+          <div id="lvl3" onclick="selectLevel(3)" style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-radius:6px;border:1px solid #2e2b20;background:#252218;cursor:pointer;transition:border-color 0.2s">
+            <div style="display:flex;align-items:center;gap:12px">
+              <span style="width:10px;height:10px;border-radius:50%;background:#9b8fe0;display:inline-block;flex-shrink:0"></span>
+              <span style="font-family:var(--sans);font-size:0.9rem;font-weight:500;color:#f0ece4">Advanced</span>
+            </div>
+            <span style="font-family:var(--mono);font-size:0.7rem;color:#6b6455;letter-spacing:0.06em">Precision</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid #2e2b20;padding-top:20px">
+        <div style="text-align:center">
+          <div style="font-family:var(--mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:#6b6455;margin-bottom:4px">Duration</div>
+          <div style="font-family:var(--serif);font-size:1rem;font-weight:600;color:#f0ece4">60 min</div>
+        </div>
+        <div style="text-align:center;border-left:1px solid #2e2b20">
+          <div style="font-family:var(--mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:#6b6455;margin-bottom:4px">Format</div>
+          <div style="font-family:var(--serif);font-size:1rem;font-weight:600;color:#f0ece4">Private</div>
+        </div>
+        <div style="text-align:center;border-left:1px solid #2e2b20">
+          <div style="font-family:var(--mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:#6b6455;margin-bottom:4px">Prep</div>
+          <div style="font-family:var(--serif);font-size:1rem;font-weight:600;color:#f0ece4">24 hrs</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 04 POSITION -->
+<section class="section" id="position">
+  <div class="section-header"><span class="section-num">04</span><h2 class="section-title">Building the position</h2></div>
+  <p class="section-intro">A correct thesis with bad position management still loses. Entry discipline, tranche sizing, and knowing exactly what changes your view are as important as the idea itself.</p>
+
+  <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Position allocation across 3 tranches</div>
+  <div class="tranche-stack" id="tStack">
+    <div class="t-seg s1" id="ts1">40%</div>
+    <div class="t-seg s2" id="ts2">35%</div>
+    <div class="t-seg s3" id="ts3">25%</div>
+  </div>
+
+  <div class="tranches">
+    <div class="tranche-row">
+      <div class="tranche-label" style="background:var(--purple-light)"><div class="tranche-pct" style="color:var(--purple)">40%</div><div class="tranche-lbl">Tranche 1</div></div>
+      <div class="tranche-content"><div class="tranche-title">Conviction starter</div><div class="tranche-body">Enter when the thesis is validated but <strong>before the first catalyst fires</strong>. Define your stop at a technical level — not just "stock is down." Small defined risk, open-ended upside.</div></div>
+    </div>
+    <div class="tranche-row">
+      <div class="tranche-label" style="background:var(--teal-light)"><div class="tranche-pct" style="color:var(--teal)">35%</div><div class="tranche-lbl">Tranche 2</div></div>
+      <div class="tranche-content"><div class="tranche-title">Confirmation add</div><div class="tranche-body">Add when the first catalyst fires and the stock <strong>holds or accelerates</strong>. Paying more, but risk-per-dollar is lower — reality is bending toward your thesis. Move tranche 1 stop to breakeven.</div></div>
+    </div>
+    <div class="tranche-row">
+      <div class="tranche-label" style="background:var(--accent-light)"><div class="tranche-pct" style="color:var(--accent-dark)">25%</div><div class="tranche-lbl">Tranche 3</div></div>
+      <div class="tranche-content"><div class="tranche-title">Re-rating add</div><div class="tranche-body">The re-rating event itself — government contract, index inclusion, major institutional adoption. <strong>Expensive but justified</strong> because the TAM just expanded publicly and most models haven't caught up.</div></div>
+    </div>
+  </div>
+
+  <h3 style="font-family:var(--serif);font-size:1rem;font-weight:600;margin:24px 0 12px">What actually invalidates the thesis</h3>
+  <div class="callout red"><strong>Critical:</strong> A 20% drawdown is NOT a thesis exit unless it comes with one of the below. Price volatility is noise. Thesis invalidation is signal. Never confuse the two.</div>
+  <div class="inval-list" style="margin-top:14px">
+    <div class="inval-item"><div class="inval-mark">✕</div><div>A better-capitalized competitor achieves regulatory equivalence — the moat is breached. The core reason you own it just disappeared.</div></div>
+    <div class="inval-item"><div class="inval-mark">✕</div><div>The re-rating event fails — government selects a different rail, legislation passes with a fatal carve-out for your company specifically.</div></div>
+    <div class="inval-item"><div class="inval-mark">✕</div><div>Volume growth decelerates for two consecutive quarters — reality diverging from thesis. The data that built your case is weakening.</div></div>
+    <div class="inval-item"><div class="inval-mark">✕</div><div>Management signals dilution or pivot that changes the exposure profile — you're no longer owning what you thought you owned.</div></div>
+  </div>
+</section>
+
+<!-- 05 PORTFOLIO -->
+<section class="section" id="portfolio">
+  <div class="section-header"><span class="section-num">05</span><h2 class="section-title">Portfolio construction across themes</h2></div>
+  <p class="section-intro">Running multiple themes feels like diversification. It often isn't. Most "different" themes share a hidden common driver — risk appetite — and collapse together in a liquidity crunch.</p>
+  <div class="callout teal"><strong>The correlation trap:</strong> AI infrastructure + digital payments + crypto equities look unrelated until a rate spike hits. You think you hold 4 themes; you hold one macro bet dressed in 4 costumes.</div>
+
+  <h3 style="font-family:var(--serif);font-size:1rem;font-weight:600;margin:24px 0 16px">Target allocation — two macro buckets</h3>
+  <div class="donut-section">
+    <div class="donut-wrap"><canvas id="donutChart" width="360" height="360" style="width:180px;height:180px"></canvas><div class="donut-center"><div class="donut-val">65%</div><div class="donut-sub">growth</div></div></div>
+    <div class="donut-legend">
+      <div class="dleg"><div class="dleg-dot" style="background:var(--purple)"></div><div><div class="dleg-label">Growth / risk-on — 65%</div><div class="dleg-sub">AI infra, stablecoins, space, longevity biotech</div></div></div>
+      <div class="dleg"><div class="dleg-dot" style="background:var(--teal)"></div><div><div class="dleg-label">Macro-resilient — 35%</div><div class="dleg-sub">Energy security, defense, nearshoring, food chain</div></div></div>
+    </div>
+  </div>
+
+  <div class="cards cards-2" style="margin-bottom:28px">
+    <div class="card purple"><div class="card-title">Growth / risk-on themes</div><div class="card-body">AI infrastructure, stablecoins, space economy, longevity biotech. These need liquidity and risk appetite. Suffer in rate spikes. Own them when macro allows.</div><div class="card-example">CRCL sits here — needs regulatory tailwinds and crypto risk appetite.</div></div>
+    <div class="card teal"><div class="card-title">Macro-resilient themes</div><div class="card-body">Domestic energy security, defense modernization, food supply chain, nearshoring. Work in geopolitical stress and inflation environments.</div><div class="card-example">Defense modernization, LNG infra work regardless of crypto sentiment.</div></div>
+  </div>
+
+  <h3 style="font-family:var(--serif);font-size:1rem;font-weight:600;margin-bottom:16px">Sizing rules</h3>
+  <div class="flow">
+    <div class="flow-step"><div class="flow-left"><div class="flow-dot"></div><div class="flow-line"></div></div><div class="flow-right"><div class="flow-lbl">Highest conviction</div><div class="flow-title">Up to 20% of capital per theme</div><div class="flow-body">Thesis is ironclad, all four tests pass hard, defined stop in place. Concentration is the point — this is where asymmetry lives and being right changes your portfolio.</div></div></div>
+    <div class="flow-step"><div class="flow-left"><div class="flow-dot"></div><div class="flow-line"></div></div><div class="flow-right"><div class="flow-lbl">Second tier</div><div class="flow-title">10–15% per theme</div><div class="flow-body">Strong thesis, one or two uncertainties remain. Tracking catalysts, ready to move to top tier on confirmation via the tranche 2 mechanism.</div></div></div>
+    <div class="flow-step"><div class="flow-left"><div class="flow-dot"></div><div class="flow-line"></div></div><div class="flow-right"><div class="flow-lbl">The hard rule</div><div class="flow-title">Nothing below 5%</div><div class="flow-body"><strong>Below 5% you're collecting positions, not running a book.</strong> A 500% return on a 4% position moves your portfolio 20%. That's noise. The math only works when you're concentrated enough for winners to matter.</div></div></div>
+    <div class="flow-step"><div class="flow-left"><div class="flow-dot"></div></div><div class="flow-right"><div class="flow-lbl">Position count</div><div class="flow-title">Maximum 4–6 active themes</div><div class="flow-body">More than 6 and you're indexing with extra steps. Each theme requires active monitoring of validation data, catalysts, and invalidation triggers. Run fewer, know them deeper.</div></div></div>
+  </div>
+</section>
+
+<!-- FINAL STATS -->
+<section class="section" id="finalStats">
+  <div class="stat-row">
+    <div class="stat"><div class="stat-val"><span id="f1" style="color:var(--accent)">0</span></div><div class="stat-label">Signal sources</div></div>
+    <div class="stat"><div class="stat-val"><span id="f2" style="color:var(--accent)">0</span></div><div class="stat-label">Validity tests</div></div>
+    <div class="stat"><div class="stat-val"><span id="f3" style="color:var(--accent)">0</span></div><div class="stat-label">Entry tranches</div></div>
+    <div class="stat"><div class="stat-val">4–<span id="f4" style="color:var(--accent)">0</span></div><div class="stat-label">Max themes</div></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <a href="#" class="footer-logo">Insight<span>Invest</span></a>
+  <p class="footer-disc">This material is for informational and educational purposes only and does not constitute financial advice or a solicitation to buy or sell any security. Always conduct your own research and consult a qualified financial professional before making investment decisions.</p>
+</footer>
+
+<script>
+/* INTERSECTION OBSERVER */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target;
+    el.classList.add('visible');
+    if (el.id === 'scoring') animateMeters();
+    if (el.id === 'statsSection') animateHeroStats();
+    if (el.id === 'portfolio') { animateDonut(); }
+    if (el.id === 'selection') animateRerate();
+    if (el.id === 'position') animateTranches();
+    if (el.id === 'finalStats') animateFinalStats();
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.section').forEach(s => io.observe(s));
+
+/* PRICE CHART */
+(function(){
+  const canvas = document.getElementById('priceChart');
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const W = canvas.parentElement.offsetWidth;
+  const H = 180;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const prices = [78,80,76,74,77,82,83,85,87,84,86,88,91,93,90,89,92,96,99,97,100,98,95,98,102,105,108,104,107,112,110,115,118,116,120,119,122,125,128,131];
+  const catalysts = [{i:4,col:'#4a3f7a'},{i:14,col:'#1a6b5a'},{i:36,col:'#c8892a'}];
+  const pad={t:16,r:16,b:16,l:40};
+  const cW=W-pad.l-pad.r, cH=H-pad.t-pad.b;
+  const mn=Math.min(...prices)-5, mx=Math.max(...prices)+8;
+  const px=i=>pad.l+(i/(prices.length-1))*cW;
+  const py=v=>pad.t+(1-(v-mn)/(mx-mn))*cH;
+
+  function draw(prog){
+    ctx.clearRect(0,0,W,H);
+    const pts=Math.max(2,Math.floor(prog*prices.length));
+    // gridlines
+    [0,.33,.66,1].forEach(t=>{
+      const y=pad.t+t*cH;
+      ctx.strokeStyle='#e0dbd2'; ctx.lineWidth=0.5;
+      ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
+      ctx.fillStyle='#7a7468'; ctx.font=`${10*dpr/dpr}px DM Mono,monospace`;
+      ctx.textAlign='right';
+      ctx.fillText('$'+Math.round(mx-t*(mx-mn)),pad.l-6,y+4);
+    });
+    // area fill
+    const grad=ctx.createLinearGradient(0,pad.t,0,H-pad.b);
+    grad.addColorStop(0,'rgba(200,137,42,0.2)');
+    grad.addColorStop(1,'rgba(200,137,42,0)');
+    ctx.beginPath(); ctx.moveTo(px(0),py(prices[0]));
+    for(let i=1;i<pts;i++) ctx.lineTo(px(i),py(prices[i]));
+    ctx.lineTo(px(pts-1),H-pad.b); ctx.lineTo(px(0),H-pad.b); ctx.closePath();
+    ctx.fillStyle=grad; ctx.fill();
+    // line
+    ctx.beginPath(); ctx.moveTo(px(0),py(prices[0]));
+    for(let i=1;i<pts;i++) ctx.lineTo(px(i),py(prices[i]));
+    ctx.strokeStyle='#c8892a'; ctx.lineWidth=2.5; ctx.lineJoin='round'; ctx.stroke();
+    // stop line
+    const sy=py(75);
+    ctx.beginPath(); ctx.moveTo(pad.l,sy); ctx.lineTo(W-pad.r,sy);
+    ctx.strokeStyle='rgba(192,72,48,0.45)'; ctx.lineWidth=1; ctx.setLineDash([5,4]); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#c04830'; ctx.font='9px DM Mono,monospace'; ctx.textAlign='left';
+    ctx.fillText('Stop $75',pad.l+4,sy-4);
+    // catalyst dots
+    catalysts.forEach(c=>{
+      if(c.i<pts){
+        ctx.beginPath(); ctx.arc(px(c.i),py(prices[c.i]),5,0,Math.PI*2);
+        ctx.fillStyle=c.col; ctx.fill();
+      }
+    });
+    // live dot
+    const lx=px(pts-1), ly=py(prices[pts-1]);
+    ctx.beginPath(); ctx.arc(lx,ly,4,0,Math.PI*2); ctx.fillStyle='#2d6a2d'; ctx.fill();
+    ctx.beginPath(); ctx.arc(lx,ly,8,0,Math.PI*2);
+    ctx.strokeStyle='rgba(45,106,45,0.25)'; ctx.lineWidth=2; ctx.stroke();
+  }
+
+  let prog=0, started=false;
+  function animate(){
+    prog=Math.min(1,prog+0.022); draw(prog);
+    if(prog<1) requestAnimationFrame(animate);
+  }
+  const cObs=new IntersectionObserver(es=>{
+    if(es[0].isIntersecting&&!started){started=true;animate();cObs.disconnect();}
+  },{threshold:0.3});
+  cObs.observe(canvas);
+})();
+
+/* COUNTER HELPER */
+function countUp(el,target,suffix,dur){
+  const start=performance.now();
+  function tick(now){
+    const t=Math.min(1,(now-start)/dur);
+    const e=1-Math.pow(1-t,3);
+    el.textContent=Math.round(e*target)+suffix;
+    if(t<1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+/* HERO STATS */
+let heroStatsDone=false;
+function animateHeroStats(){
+  if(heroStatsDone) return; heroStatsDone=true;
+  countUp(document.getElementById('c1'),33,'T',1100);
+  setTimeout(()=>countUp(document.getElementById('c2'),68,'',1100),100);
+  setTimeout(()=>countUp(document.getElementById('c3'),5,'',1100),200);
+  setTimeout(()=>countUp(document.getElementById('c4'),100,'',1100),300);
+}
+
+/* FINAL STATS */
+let finalDone=false;
+function animateFinalStats(){
+  if(finalDone) return; finalDone=true;
+  countUp(document.getElementById('f1'),6,'',900);
+  setTimeout(()=>countUp(document.getElementById('f2'),4,'',900),100);
+  setTimeout(()=>countUp(document.getElementById('f3'),3,'',900),200);
+  setTimeout(()=>countUp(document.getElementById('f4'),6,'',900),300);
+}
+
+/* SCORE METERS */
+let metersDone=false;
+function animateMeters(){
+  if(metersDone) return; metersDone=true;
+  document.querySelectorAll('.meter-fill').forEach((el,i)=>{
+    setTimeout(()=>{el.style.width=el.dataset.w+'%';},i*120+200);
+  });
+}
+
+/* RERATE TIMELINE */
+let rerateDone=false;
+function animateRerate(){
+  if(rerateDone) return; rerateDone=true;
+  setTimeout(()=>{ document.getElementById('rerateFill').style.width='62%'; },300);
+}
+
+/* TRANCHE STACK */
+let trancheDone=false;
+function animateTranches(){
+  if(trancheDone) return; trancheDone=true;
+  const s1=document.getElementById('ts1');
+  const s2=document.getElementById('ts2');
+  const s3=document.getElementById('ts3');
+  if(s1){ s1.style.flex='40'; s2.style.flex='35'; s3.style.flex='25'; }
+}
+// trigger immediately since section starts visible
+setTimeout(animateTranches,600);
+
+/* LEVEL SELECTOR */
+function selectLevel(n){
+  [1,2,3].forEach(i=>{
+    const el=document.getElementById('lvl'+i);
+    if(!el) return;
+    if(i===n){
+      el.style.border='1px solid #c8892a';
+      el.style.background='#2a2210';
+    } else {
+      el.style.border='1px solid #2e2b20';
+      el.style.background='#252218';
+    }
+  });
+}
+
+/* DONUT */
+let donutDone=false;
+function animateDonut(){
+  if(donutDone) return; donutDone=true;
+  const canvas=document.getElementById('donutChart');
+  if(!canvas) return;
+  const dpr=window.devicePixelRatio||1;
+  canvas.width=180*dpr; canvas.height=180*dpr;
+  canvas.style.width='180px'; canvas.style.height='180px';
+  const ctx=canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+  const cx=90,cy=90,R=78,ir=54;
+  const segs=[{p:0.65,c:'#4a3f7a'},{p:0.35,c:'#1a6b5a'}];
+  const start=performance.now();
+  function draw(now){
+    const prog=Math.min(1,(now-start)/900);
+    const ease=1-Math.pow(1-prog,3);
+    ctx.clearRect(0,0,180,180);
+    let ang=-Math.PI/2;
+    segs.forEach(s=>{
+      const sw=s.p*Math.PI*2*ease;
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,R,ang,ang+sw); ctx.closePath();
+      ctx.fillStyle=s.c; ctx.fill(); ang+=sw;
+    });
+    ctx.beginPath(); ctx.arc(cx,cy,ir,0,Math.PI*2);
+    ctx.fillStyle='#ffffff'; ctx.fill();
+    if(prog<1) requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+}
+</script>
+</body>
+</html>
