@@ -426,9 +426,70 @@
     white-space: nowrap;
   }
 
+  /* Contact section */
+  .contact-section {
+    margin-top: 80px;
+    padding-top: 64px;
+    border-top: 1px solid var(--border);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .contact-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .contact-section-tag {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .contact-section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--paper);
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+
+  .contact-section-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--silver);
+    line-height: 1.7;
+    margin-bottom: 36px;
+    font-style: italic;
+  }
+
+  .contact-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 48px;
+  }
+
+  .contact-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .contact-field-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
   /* Submit */
   .submit-section {
-    margin-top: 80px;
+    margin-top: 64px;
     padding-top: 48px;
     border-top: 1px solid var(--border);
     text-align: center;
@@ -512,13 +573,14 @@
     .options-grid { grid-template-columns: 1fr; }
     .form-container { padding: 60px 24px 100px; }
     .landing-meta { gap: 32px; }
+    .contact-fields { grid-template-columns: 1fr; gap: 0; }
   }
 </style>
 </head>
 <body>
 
 <div class="progress-bar" id="progressBar"></div>
-<div class="progress-counter" id="progressCounter">0 / 12</div>
+<div class="progress-counter" id="progressCounter">0 / 13</div>
 
 <!-- LANDING -->
 <section class="landing" id="landing">
@@ -857,6 +919,39 @@
     </div>
   </div>
 
+  <!-- CONTACT DETAILS -->
+  <div class="contact-section" id="contactSection">
+    <div class="contact-section-tag">Almost done</div>
+    <div class="contact-section-title">How should we reach you?</div>
+    <div class="contact-section-sub">We'll be in touch within 24–48 hours to discuss next steps. No spam — this goes directly to the team.</div>
+    <div class="contact-fields">
+      <div class="contact-field">
+        <label class="contact-field-label" for="contactEmail">Email address</label>
+        <input
+          class="q-input"
+          type="email"
+          id="contactEmail"
+          name="contact_email"
+          placeholder="you@example.com"
+          autocomplete="email"
+          oninput="updateProgress()"
+        >
+      </div>
+      <div class="contact-field">
+        <label class="contact-field-label" for="contactPhone">Phone number</label>
+        <input
+          class="q-input"
+          type="tel"
+          id="contactPhone"
+          name="contact_phone"
+          placeholder="+60 12-345 6789"
+          autocomplete="tel"
+          oninput="updateProgress()"
+        >
+      </div>
+    </div>
+  </div>
+
   <!-- SUBMIT -->
   <div class="submit-section">
     <p class="submit-note">Your responses are confidential and reviewed personally before our next conversation.</p>
@@ -874,6 +969,7 @@
 
 <script>
   const scaleValues = {};
+  const TOTAL = 15;
 
   function startForm() {
     document.getElementById('landing').style.display = 'none';
@@ -882,7 +978,6 @@
     document.getElementById('progressCounter').style.opacity = '1';
     updateProgress();
 
-    // Intersection observer for fade-in
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) e.target.classList.add('visible');
@@ -890,35 +985,35 @@
     }, { threshold: 0.15 });
 
     document.querySelectorAll('.question-block').forEach(el => observer.observe(el));
+    observer.observe(document.getElementById('contactSection'));
     window.addEventListener('scroll', updateProgress);
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
 
   function updateProgress() {
     const answered = countAnswered();
-    const pct = (answered / 13) * 100;
+    const pct = (answered / TOTAL) * 100;
     document.getElementById('progressBar').style.width = pct + '%';
-    document.getElementById('progressCounter').textContent = answered + ' / 13';
+    document.getElementById('progressCounter').textContent = answered + ' / ' + TOTAL;
   }
 
   function countAnswered() {
     let count = 0;
-    // radio
-    ['q1','q2','q3','q7','q9','q10'].forEach(n => {
+    ['q1','q2','q3','q7','q9','q13'].forEach(n => {
       if (document.querySelector(`input[name="${n}"]:checked`)) count++;
     });
-    // checkboxes — count if at least one checked
     if (document.querySelector(`input[name="q5"]:checked`)) count++;
-    // textareas
-    ['q4','q6','q8'].forEach(n => {
+    ['q4','q6','q8','q10'].forEach(n => {
       const el = document.querySelector(`textarea[name="${n}"]`);
       if (el && el.value.trim().length > 3) count++;
     });
-    // scale
     if (scaleValues['q11']) count++;
-    // q12 optional — always count
-    count++;
-    return Math.min(count, 12);
+    count++; // q12 optional — always count
+    const email = document.getElementById('contactEmail');
+    if (email && email.value.trim().length > 3) count++;
+    const phone = document.getElementById('contactPhone');
+    if (phone && phone.value.trim().length > 3) count++;
+    return Math.min(count, TOTAL);
   }
 
   function selectScale(btn) {
@@ -929,16 +1024,59 @@
     updateProgress();
   }
 
-  // Update progress on input
   document.addEventListener('change', updateProgress);
   document.addEventListener('input', updateProgress);
 
-  function submitForm() {
-    document.getElementById('formContainer').style.display = 'none';
-    const ty = document.getElementById('thankyou');
-    ty.style.display = 'flex';
-    document.getElementById('progressBar').style.width = '100%';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  async function submitForm() {
+    const btn = document.querySelector('.submit-btn');
+    btn.disabled = true;
+    btn.querySelector('span').textContent = 'Sending…';
+
+    const data = {};
+
+    // Radios
+    ['q1','q2','q3','q7','q9','q13'].forEach(n => {
+      const el = document.querySelector(`input[name="${n}"]:checked`);
+      data[n] = el ? el.value : '';
+    });
+
+    // Checkboxes
+    data['q5'] = Array.from(document.querySelectorAll('input[name="q5"]:checked')).map(e => e.value).join(', ');
+
+    // Textareas
+    ['q4','q6','q8','q10','q12'].forEach(n => {
+      const el = document.querySelector(`textarea[name="${n}"]`);
+      data[n] = el ? el.value : '';
+    });
+
+    // Scale
+    data['q11_urgency'] = scaleValues['q11'] || '';
+
+    // Contact
+    data['email'] = document.getElementById('contactEmail').value;
+    data['phone'] = document.getElementById('contactPhone').value;
+
+    try {
+      const res = await fetch('https://formspree.io/f/xykoojwo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (res.ok) {
+        document.getElementById('formContainer').style.display = 'none';
+        const ty = document.getElementById('thankyou');
+        ty.style.display = 'flex';
+        document.getElementById('progressBar').style.width = '100%';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        btn.disabled = false;
+        btn.querySelector('span').textContent = 'Something went wrong — try again';
+      }
+    } catch (err) {
+      btn.disabled = false;
+      btn.querySelector('span').textContent = 'Connection error — try again';
+    }
   }
 </script>
 </body>
