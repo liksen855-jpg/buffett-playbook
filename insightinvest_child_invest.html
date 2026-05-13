@@ -1,0 +1,711 @@
+
+<!DOCTYPE html>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=DM+Mono:wght@400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#1A1714;--ink2:#2C2926;--body:#3D3935;--muted:#8C8480;--faint:#B5AFA4;
+  --rule:#E4DDD6;--bg:#F9F6F1;--bg2:#F2EBE1;--bg3:#EAE3D6;
+  --gold:#A8832A;--gold-lt:#F5E9C8;
+  --teal:#1A7A59;--teal-lt:#D4EDE5;
+  --coral:#B84020;--coral-lt:#F7DDD5;
+  --purple:#5C4FC0;--purple-lt:#E0DCFA;
+}
+html{background:var(--bg);color:var(--body);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.7;}
+.page{max-width:680px;margin:0 auto;padding:0 0 80px;}
+
+/* ── OVERLAY + POPUP ─────────────────────────── */
+.overlay{
+  display:none;
+  position:fixed;inset:0;
+  background:rgba(26,23,20,0.55);
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+  z-index:1000;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+.overlay.open{display:flex;}
+
+.popup{
+  background:var(--bg);
+  border-radius:14px;
+  width:100%;
+  max-width:440px;
+  overflow:hidden;
+  box-shadow:0 24px 64px rgba(0,0,0,0.18);
+  animation:popIn 0.22s cubic-bezier(0.34,1.56,0.64,1) both;
+  position:relative;
+}
+
+@keyframes popIn{
+  from{opacity:0;transform:scale(0.93) translateY(8px);}
+  to{opacity:1;transform:scale(1) translateY(0);}
+}
+
+.popup-close{
+  position:absolute;top:14px;right:16px;
+  width:28px;height:28px;border-radius:50%;
+  background:var(--bg3);border:none;cursor:pointer;
+  font-size:14px;color:var(--muted);
+  display:flex;align-items:center;justify-content:center;
+  transition:background 0.15s;
+  line-height:1;
+}
+.popup-close:hover{background:var(--rule);}
+
+.popup-top{
+  padding:28px 28px 20px;
+  border-bottom:1px solid var(--rule);
+}
+.popup-eyebrow{
+  font-family:'DM Mono',monospace;font-size:9px;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:10px;
+}
+.popup-title{
+  font-family:'Playfair Display',serif;
+  font-size:22px;font-weight:700;color:var(--ink);
+  line-height:1.2;margin-bottom:7px;
+}
+.popup-title em{font-style:italic;color:var(--gold);}
+.popup-sub{font-size:13px;color:var(--muted);line-height:1.65;}
+
+.popup-form{padding:20px 28px 24px;}
+
+.form-field{display:flex;flex-direction:column;gap:5px;margin-bottom:10px;}
+.form-field:last-of-type{margin-bottom:0;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+
+.field-label{
+  font-family:'DM Mono',monospace;font-size:9px;
+  letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);
+}
+.field-input,.field-select{
+  width:100%;padding:9px 12px;
+  border:1px solid var(--rule);border-radius:6px;
+  font-family:'DM Sans',sans-serif;font-size:13px;
+  color:var(--ink);background:white;outline:none;
+  transition:border-color 0.15s;-webkit-appearance:none;
+}
+.field-input:focus,.field-select:focus{border-color:var(--teal);}
+.field-input::placeholder{color:var(--faint);}
+.field-select{cursor:pointer;color:var(--ink);}
+.field-select option[value=""]{color:var(--faint);}
+
+.form-bottom{
+  display:flex;align-items:center;
+  justify-content:space-between;
+  gap:12px;margin-top:16px;flex-wrap:wrap;
+}
+.form-note{font-size:11px;color:var(--faint);line-height:1.5;flex:1;min-width:140px;}
+.form-submit{
+  flex-shrink:0;background:var(--ink);color:var(--gold-lt);
+  border:none;border-radius:5px;
+  font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;
+  padding:10px 18px;cursor:pointer;letter-spacing:0.03em;
+  transition:opacity 0.15s;white-space:nowrap;
+}
+.form-submit:hover{opacity:0.85;}
+.form-submit:disabled{opacity:0.45;cursor:not-allowed;}
+
+.popup-success{
+  display:none;padding:36px 28px;text-align:center;
+}
+.ps-icon{font-size:32px;margin-bottom:12px;}
+.ps-title{
+  font-family:'Playfair Display',serif;
+  font-size:20px;font-weight:700;color:var(--teal);
+  margin-bottom:8px;
+}
+.ps-sub{font-size:13px;color:var(--muted);line-height:1.65;}
+
+/* ── FLOATING TRIGGER ────────────────────────── */
+.float-trigger{
+  position:fixed;
+  bottom:24px;right:24px;
+  z-index:900;
+  display:flex;align-items:center;gap:10px;
+  background:var(--ink);
+  color:var(--gold-lt);
+  border:none;border-radius:40px;
+  padding:11px 18px 11px 14px;
+  font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;
+  cursor:pointer;letter-spacing:0.02em;
+  box-shadow:0 4px 20px rgba(0,0,0,0.18);
+  transition:transform 0.2s,box-shadow 0.2s;
+}
+.float-trigger:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,0.22);}
+.ft-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--gold);flex-shrink:0;
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{opacity:1;transform:scale(1);}
+  50%{opacity:0.5;transform:scale(0.8);}
+}
+
+/* ── COVER ───────────────────────────────────── */
+.cover{padding:48px 32px 40px;border-bottom:3px solid var(--ink);}
+.cover-flag{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
+.cover-title{font-family:'Playfair Display',serif;font-size:clamp(28px,5.5vw,46px);font-weight:900;color:var(--ink);line-height:1.05;margin-bottom:10px;}
+.cover-title em{font-style:italic;color:var(--gold);}
+.cover-sub{font-size:14px;color:var(--muted);line-height:1.65;max-width:500px;margin-bottom:20px;}
+.cover-pill{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:var(--gold-lt);font-size:11px;font-weight:500;padding:7px 14px;border-radius:2px;letter-spacing:0.03em;}
+
+/* ── FRAMEWORK WRAPPER ───────────────────────── */
+.fw{margin:0 32px;padding:36px 0;border-top:1px solid var(--rule);}
+.fw:first-of-type{border-top:none;padding-top:40px;}
+.fw-eye{display:flex;align-items:flex-start;gap:12px;margin-bottom:6px;}
+.fw-num{font-family:'Playfair Display',serif;font-size:56px;font-weight:900;line-height:1;opacity:.08;flex-shrink:0;margin-top:-6px;}
+.fw-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:3px;}
+.fw-name{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--ink);line-height:1.1;}
+.fw-desc{font-size:13px;color:var(--muted);font-style:italic;margin-bottom:22px;line-height:1.65;max-width:560px;}
+
+/* ── ANATOMY ─────────────────────────────────── */
+.anatomy{border-radius:10px;overflow:hidden;border:1px solid var(--rule);margin-bottom:18px;}
+.anatomy-head{padding:10px 16px;display:flex;justify-content:space-between;align-items:center;}
+.ah-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;}
+.ah-badge{font-family:'DM Mono',monospace;font-size:9px;padding:3px 8px;border-radius:2px;letter-spacing:0.08em;text-transform:uppercase;}
+.anatomy-cols{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--rule);}
+.ac{padding:12px 14px;border-right:1px solid var(--rule);}
+.ac:last-child{border-right:none;}
+.ac-label{font-size:9px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;font-family:'DM Mono',monospace;}
+.ac-val{font-size:12px;color:var(--ink);line-height:1.5;font-weight:500;}
+
+/* ── AGE LADDER ──────────────────────────────── */
+.age-ladder{border:1px solid var(--rule);border-radius:8px;overflow:hidden;margin-bottom:16px;}
+.al-row{display:grid;grid-template-columns:70px 1fr;border-bottom:1px solid var(--rule);}
+.al-row:last-child{border-bottom:none;}
+.al-age{padding:12px 10px 12px 14px;font-family:'DM Mono',monospace;font-size:9px;font-weight:500;letter-spacing:0.08em;color:var(--faint);border-right:2px solid var(--rule);text-transform:uppercase;display:flex;align-items:flex-start;padding-top:14px;}
+.al-body{padding:12px 14px;}
+.al-skill{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:2px;}
+.al-how{font-size:12px;color:var(--muted);line-height:1.5;}
+
+/* ── RITUAL ──────────────────────────────────── */
+.ritual{border-radius:8px;padding:16px 18px;border:1px solid;margin-bottom:14px;}
+.ritual-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+.ritual-icon{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.ritual-title-wrap{flex:1;min-width:0;}
+.ritual-title{font-size:13px;font-weight:500;color:var(--ink);line-height:1.4;}
+.ritual-freq{font-size:9px;font-family:'DM Mono',monospace;letter-spacing:0.12em;text-transform:uppercase;padding:2px 7px;border-radius:2px;margin-top:4px;display:inline-block;}
+.rlist{display:flex;flex-direction:column;gap:6px;}
+.ritem{display:flex;gap:9px;align-items:flex-start;font-size:12px;color:var(--body);line-height:1.55;}
+.rdot{flex-shrink:0;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;margin-top:2px;}
+.say-block{margin-top:12px;padding:11px 14px;border-radius:5px;border-left:3px solid;background:white;}
+.say-label{font-size:9px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px;font-family:'DM Mono',monospace;display:block;}
+.say-text{font-size:12px;font-style:italic;color:var(--ink2);line-height:1.65;}
+
+/* ── PORTFOLIO ───────────────────────────────── */
+.portfolio{background:white;border:1px solid var(--rule);border-radius:10px;overflow:hidden;margin-bottom:14px;}
+.pf-top{background:var(--ink);padding:10px 18px;display:flex;justify-content:space-between;align-items:center;}
+.pf-top-label{font-size:9px;color:rgba(255,255,255,0.4);letter-spacing:0.14em;text-transform:uppercase;font-family:'DM Mono',monospace;}
+.pf-top-name{font-size:11px;color:rgba(255,255,255,0.75);font-weight:500;}
+.pf-body{padding:14px 18px 10px;}
+.pf-bars{display:flex;gap:5px;align-items:flex-end;height:60px;margin-bottom:4px;}
+.pf-bar{flex:1;border-radius:3px 3px 0 0;background:var(--bg3);}
+.pf-bar.hl{background:var(--teal);}
+.pf-tip{display:block;text-align:right;font-size:10px;color:var(--teal);font-weight:600;font-family:'DM Mono',monospace;margin-bottom:4px;}
+.pf-months{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;}
+.pf-bottom{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:var(--teal-lt);border-top:1px solid var(--rule);flex-wrap:wrap;gap:8px;}
+.pf-val-label{font-size:9px;color:var(--teal);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:2px;font-family:'DM Mono',monospace;}
+.pf-val{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--teal);}
+.pf-badge{font-size:10px;font-weight:600;color:var(--teal);background:white;padding:3px 9px;border-radius:20px;white-space:nowrap;}
+.pf-fact{padding:9px 18px;font-size:11px;color:var(--muted);border-top:1px solid var(--rule);line-height:1.55;}
+
+/* ── QBANK ───────────────────────────────────── */
+.qbank{border-radius:8px;overflow:hidden;border:1px solid var(--rule);margin-bottom:16px;}
+.qbank-head{padding:10px 16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px;}
+.qbank-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500;}
+.qitem{padding:9px 16px;border-top:1px solid var(--rule);display:flex;gap:10px;align-items:flex-start;}
+.qi-arr{color:var(--muted);flex-shrink:0;margin-top:3px;font-size:11px;font-weight:600;}
+.qi-q{font-size:13px;color:var(--ink);line-height:1.5;font-weight:500;}
+.qi-ctx{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5;}
+
+/* ── PUSH ────────────────────────────────────── */
+.push{border-radius:8px;padding:14px 16px;border:1px solid;margin-bottom:16px;}
+.push-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;margin-bottom:10px;}
+.push-row{display:flex;gap:10px;align-items:flex-start;font-size:12px;line-height:1.6;color:var(--body);margin-bottom:6px;}
+.push-row:last-child{margin-bottom:0;}
+.push-arr{flex-shrink:0;font-weight:600;}
+
+/* ── SIG GRID ────────────────────────────────── */
+.sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.sig-card{padding:13px 14px;border-radius:7px;border:1px solid;}
+.sig-type{font-size:9px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:5px;font-family:'DM Mono',monospace;}
+.sig-title{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:3px;line-height:1.35;}
+.sig-body{font-size:11px;color:var(--muted);line-height:1.55;}
+
+/* ── CRASH ───────────────────────────────────── */
+.crash-visual{border-radius:10px;overflow:hidden;border:1px solid rgba(184,64,32,0.2);margin-bottom:16px;}
+.crash-chart{padding:22px 22px 0;background:var(--ink);position:relative;height:130px;}
+.crash-svg{width:100%;height:100%;}
+.crash-badge{position:absolute;font-size:9px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--coral);background:rgba(184,64,32,0.2);padding:3px 8px;border-radius:2px;top:10px;right:14px;font-family:'DM Mono',monospace;}
+
+/* ── INSTINCT + PATHS ────────────────────────── */
+.instinct-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.instinct-card{padding:14px 15px;border-radius:8px;border:1px solid;}
+.ic-label{font-size:9px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:6px;font-family:'DM Mono',monospace;}
+.ic-text{font-size:13px;line-height:1.55;}
+.protocol{border-radius:10px;overflow:hidden;border:1px solid rgba(184,64,32,0.15);margin-bottom:16px;}
+.proto-row{display:grid;grid-template-columns:80px 1fr;border-bottom:1px solid rgba(184,64,32,0.1);}
+.proto-row:last-child{border-bottom:none;}
+.proto-phase{padding:14px 12px;display:flex;flex-direction:column;gap:2px;}
+.proto-phase-tag{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;}
+.proto-phase-name{font-size:14px;font-weight:600;}
+.proto-phase-when{font-size:10px;color:var(--muted);}
+.proto-body{padding:14px 17px;border-left:1px solid rgba(184,64,32,0.1);}
+.proto-action{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:5px;}
+.proto-say{font-size:12px;font-style:italic;line-height:1.6;margin-bottom:4px;}
+.proto-note{font-size:11px;color:var(--muted);line-height:1.5;}
+.two-path{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.path{padding:14px 15px;border-radius:8px;border:1px solid;}
+.path-label{font-size:9px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;font-family:'DM Mono',monospace;}
+.path-text{font-size:12px;line-height:1.6;}
+
+/* ── CALLBACK ────────────────────────────────── */
+.callback{padding:10px 14px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--muted);line-height:1.55;font-style:italic;margin:14px 0 0;}
+
+/* ── TRACKER ─────────────────────────────────── */
+.tracker{border:1px solid var(--rule);border-radius:10px;overflow:hidden;margin-bottom:16px;}
+.tracker-head{padding:11px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--rule);flex-wrap:wrap;gap:4px;}
+.th-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;}
+.th-sub{font-size:11px;color:var(--muted);}
+.tracker-cols{display:grid;grid-template-columns:1fr 1fr 1fr;}
+.tcol{padding:13px 14px;border-right:1px solid var(--rule);border-top:1px solid var(--rule);}
+.tcol:last-child{border-right:none;}
+.tc-tag{font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:9px;font-family:'DM Mono',monospace;display:block;}
+.tc-row{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--body);line-height:1.45;margin-bottom:5px;cursor:pointer;user-select:none;}
+.tc-row:last-child{margin-bottom:0;}
+.tc-box{width:14px;height:14px;border-radius:3px;border:1.5px solid;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;transition:background 0.15s;}
+
+/* ── CLOSING ─────────────────────────────────── */
+.closing{margin:0 32px;padding-top:36px;border-top:2px solid var(--ink);}
+.closing-q{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;font-style:italic;color:var(--ink);line-height:1.35;padding:20px 22px;background:var(--gold-lt);border-left:4px solid var(--gold);border-radius:0 8px 8px 0;}
+
+/* ── FOOTER ──────────────────────────────────── */
+.footer-disc{margin:24px 32px 0;font-size:10px;color:var(--faint);line-height:1.6;}
+
+/* ── MOBILE ──────────────────────────────────── */
+@media(max-width:600px){
+  .fw,.closing{margin-left:16px;margin-right:16px;}
+  .footer-disc{margin-left:16px;margin-right:16px;}
+  .cover{padding-left:16px;padding-right:16px;}
+  .anatomy-cols{grid-template-columns:1fr;}
+  .ac{border-right:none;border-bottom:1px solid var(--rule);}
+  .ac:last-child{border-bottom:none;}
+  .tracker-cols{grid-template-columns:1fr;}
+  .tcol{border-right:none;}
+  .instinct-row,.two-path,.sig-grid{grid-template-columns:1fr;}
+  .proto-row{grid-template-columns:1fr;}
+  .proto-phase{flex-direction:row;align-items:center;gap:10px;padding:10px 14px;}
+  .proto-body{border-left:none;border-top:1px solid rgba(184,64,32,0.1);}
+  .al-row{grid-template-columns:60px 1fr;}
+  .al-age{padding-left:10px;font-size:8px;}
+  .crash-chart{height:100px;padding:14px 14px 0;}
+  .float-trigger{bottom:16px;right:16px;padding:9px 14px 9px 12px;font-size:11px;}
+  .popup{max-width:100%;}
+  .popup-top,.popup-form{padding-left:20px;padding-right:20px;}
+  .form-row{grid-template-columns:1fr;}
+  .form-bottom{flex-direction:column;align-items:stretch;}
+  .form-submit{text-align:center;}
+}
+@media(max-width:380px){
+  .fw,.closing{margin-left:12px;margin-right:12px;}
+  .footer-disc{margin-left:12px;margin-right:12px;}
+  .cover{padding-left:12px;padding-right:12px;}
+  .cover-title{font-size:26px;}
+}
+</style>
+
+<div class="page">
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-flag">InsightInvest · A guide for Malaysian parents</div>
+  <div class="cover-title">Raise your child to think<br>like an <em>investor.</em><br>Three frameworks. For life.</div>
+  <p class="cover-sub">Not tips. Not a reading list. Three structured systems you run with your child — from age 5 to 18 — that build the financial mind behind every portfolio.</p>
+  <div class="cover-pill">🔑 &nbsp;The third framework is the game changer</div>
+</div>
+
+<!-- FRAMEWORK 1 -->
+<div class="fw" style="border-top:none;">
+  <div class="fw-eye">
+    <div class="fw-num" style="color:var(--teal)">1</div>
+    <div>
+      <div class="fw-tag" style="color:var(--teal)">Framework One · Perception</div>
+      <div class="fw-name">The Statement Ritual</div>
+    </div>
+  </div>
+  <p class="fw-desc">A monthly, 5-minute practice that teaches the most fundamental truth in investing: money works while you sleep. Run it from age 5. Keep running it until they leave home.</p>
+  <div class="anatomy">
+    <div class="anatomy-head" style="background:var(--teal-lt);">
+      <div class="ah-title" style="color:var(--teal);">Framework anatomy</div>
+      <div class="ah-badge" style="background:var(--teal);color:white;">Monthly · 5 min</div>
+    </div>
+    <div class="anatomy-cols">
+      <div class="ac"><div class="ac-label">Trigger</div><div class="ac-val">Same day every month. Statement arrives. Child is present.</div></div>
+      <div class="ac"><div class="ac-label">The action</div><div class="ac-val">Open together. Point. Say the line. One question. Close.</div></div>
+      <div class="ac"><div class="ac-label">What it builds</div><div class="ac-val">Perception — money as an active force, not a passive number.</div></div>
+    </div>
+  </div>
+  <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--teal);margin-bottom:8px;">How it evolves as they grow</div>
+  <div class="age-ladder">
+    <div class="al-row"><div class="al-age">Age 5–7</div><div class="al-body"><div class="al-skill">See the number. Feel the growth.</div><div class="al-how">Show the chart going up. "Look — it grew. The money worked." No explanation needed yet.</div></div></div>
+    <div class="al-row"><div class="al-age">Age 8–11</div><div class="al-body"><div class="al-skill">Understand the mechanism.</div><div class="al-how">"This company made money — they shared a small piece with us. That's called a dividend."</div></div></div>
+    <div class="al-row"><div class="al-age">Age 12–15</div><div class="al-body"><div class="al-skill">Read the statement themselves.</div><div class="al-how">Hand it to them first. "What do you notice? What went up, what went down? Why?" You facilitate — you don't teach.</div></div></div>
+    <div class="al-row"><div class="al-age">Age 16–18</div><div class="al-body"><div class="al-skill">Co-manage. Decide together.</div><div class="al-how">"Should we add this month or wait? What would you do if it dropped 20%?" They're the investor now.</div></div></div>
+  </div>
+  <div class="ritual" style="background:var(--teal-lt);border-color:rgba(26,122,89,0.2);">
+    <div class="ritual-top">
+      <div class="ritual-icon" style="background:var(--teal);color:white;">📊</div>
+      <div class="ritual-title-wrap">
+        <div class="ritual-title">Run it exactly like this — every month, without exception</div>
+        <div class="ritual-freq" style="color:var(--teal);background:white;">Monthly · 5 min</div>
+      </div>
+    </div>
+    <div class="rlist">
+      <div class="ritem"><div class="rdot" style="background:var(--teal);color:white;">1</div><div>Same day each month. After dinner. 5 minutes. Make it a date.</div></div>
+      <div class="ritem"><div class="rdot" style="background:var(--teal);color:white;">2</div><div>Open the app or statement together — both of you looking at the same screen.</div></div>
+      <div class="ritem"><div class="rdot" style="background:var(--teal);color:white;">3</div><div>Point to this month versus last month. Be honest whether it's up or down.</div></div>
+      <div class="ritem"><div class="rdot" style="background:var(--teal);color:white;">4</div><div>Say the line. Ask one question. Close. Don't over-explain.</div></div>
+    </div>
+    <div class="say-block" style="border-color:var(--teal);">
+      <span class="say-label" style="color:var(--teal);">Say this every single month</span>
+      <span class="say-text">"Last month it was here. This month it's here. You didn't do anything. Neither did I. The money was working while we were asleep. That's what investing does."</span>
+    </div>
+  </div>
+  <div class="portfolio">
+    <div class="pf-top"><div class="pf-top-label">Portfolio</div><div class="pf-top-name">Amirah's Account · ASNB</div></div>
+    <div class="pf-body">
+      <div class="pf-bars" id="bars"></div>
+      <div class="pf-tip">↑ RM 340 this month</div>
+      <div class="pf-months"><span>JAN</span><span>FEB</span><span>MAR</span><span>APR</span><span>MAY</span><span>JUN</span><span>NOW</span></div>
+    </div>
+    <div class="pf-bottom">
+      <div><div class="pf-val-label">Total value</div><div class="pf-val">RM 18,420</div></div>
+      <div class="pf-badge">↑ RM 340 while you slept</div>
+    </div>
+    <div class="pf-fact">ASNB 2024 dividend rate — <strong style="color:var(--teal);">RM300/month from birth grows to ~RM108,000 by age 18.</strong></div>
+  </div>
+  <div class="callback">Your friend's child has never seen that screen. One habit, every month, creates a different adult.</div>
+</div>
+
+<!-- FRAMEWORK 2 -->
+<div class="fw">
+  <div class="fw-eye">
+    <div class="fw-num" style="color:var(--purple)">2</div>
+    <div>
+      <div class="fw-tag" style="color:var(--purple)">Framework Two · Pattern Recognition</div>
+      <div class="fw-name">The Observer Method</div>
+    </div>
+  </div>
+  <p class="fw-desc">A question-based system you run everywhere, always. It trains your child to look at the world as an investor — observing why businesses survive, scale, or fail — before they ever touch a share.</p>
+  <div class="anatomy">
+    <div class="anatomy-head" style="background:var(--purple-lt);">
+      <div class="ah-title" style="color:var(--purple);">Framework anatomy</div>
+      <div class="ah-badge" style="background:var(--purple);color:white;">Weekly · 10 min</div>
+    </div>
+    <div class="anatomy-cols">
+      <div class="ac"><div class="ac-label">Trigger</div><div class="ac-val">Any outing. Any business. Any moment your child notices something.</div></div>
+      <div class="ac"><div class="ac-label">The action</div><div class="ac-val">Point. Ask. Listen. Push one level deeper. Never answer first.</div></div>
+      <div class="ac"><div class="ac-label">What it builds</div><div class="ac-val">Pattern recognition — the investor's instinct for what survives and why.</div></div>
+    </div>
+  </div>
+  <div class="qbank">
+    <div class="qbank-head" style="background:var(--purple-lt);">
+      <div class="qbank-label" style="color:var(--purple);">The Question Bank — rotate these everywhere</div>
+      <div style="font-size:10px;color:var(--purple);font-family:'DM Mono',monospace;">8 questions</div>
+    </div>
+    <div class="qitem"><div class="qi-arr" style="color:var(--purple);">›</div><div><div class="qi-q">"Why do you think this place is still open?"</div><div class="qi-ctx">Use at: any mamak, kedai, petrol station, any business that's lasted years</div></div></div>
+    <div class="qitem"><div class="qi-arr" style="color:var(--purple);">›</div><div><div class="qi-q">"Why do you think that place closed?"</div><div class="qi-ctx">Use at: any shuttered shop, empty lot, closed restaurant</div></div></div>
+    <div class="qitem"><div class="qi-arr" style="color:var(--purple);">›</div><div><div class="qi-q">"Why do people keep coming back here instead of going somewhere else?"</div><div class="qi-ctx">Use at: any place with regulars — barber, bakery, hawker stall</div></div></div>
+    <div class="qitem"><div class="qi-arr" style="color:var(--purple);">›</div><div><div class="qi-q">"If you had RM10,000, would you invest in this business? Why or why not?"</div><div class="qi-ctx">Use from age 10 — works on any business they know well</div></div></div>
+    <div class="qitem"><div class="qi-arr" style="color:var(--purple);">›</div><div><div class="qi-q">"Why is this brand more expensive than the one next to it?"</div><div class="qi-ctx">Use at: supermarket, pharmacy, any shelf with competing products</div></div></div>
+    <div class="qitem"><div class="qi-arr" style="color:var(--purple);">›</div><div><div class="qi-q">"What would happen if a bigger competitor opened next door?"</div><div class="qi-ctx">Use at: any standalone local business — tests moat thinking</div></div></div>
+    <div class="qitem"><div class="qi-arr" style="color:var(--purple);">›</div><div><div class="qi-q">"What would this business need to do to get 10x bigger?"</div><div class="qi-ctx">Use at: any local business — trains scalability thinking</div></div></div>
+    <div class="qitem"><div class="qi-arr" style="color:var(--purple);">›</div><div><div class="qi-q">"Who actually makes money when you buy this?"</div><div class="qi-ctx">Use at: any purchase — supermarket, online, mall</div></div></div>
+  </div>
+  <div class="push" style="background:var(--purple-lt);border-color:rgba(92,79,192,0.18);">
+    <div class="push-label" style="color:var(--purple);">The one-deeper rule — this is what makes it stick</div>
+    <div class="push-row"><div class="push-arr" style="color:var(--purple);">→</div><div>They say "good food." You say: <em>"But the place next door had good food and they closed. What's the difference?"</em></div></div>
+    <div class="push-row"><div class="push-arr" style="color:var(--purple);">→</div><div>They say "it's cheap." You say: <em>"Could they charge more? Would people still come? Who would stop?"</em></div></div>
+    <div class="push-row"><div class="push-arr" style="color:var(--purple);">→</div><div>They say "I don't know." You say: <em>"If you had to guess — what's one reason it's lasted 20 years?"</em></div></div>
+    <div class="say-block" style="border-color:var(--purple);margin-top:12px;">
+      <span class="say-label" style="color:var(--purple);">The rule</span>
+      <span class="say-text">Never give the answer first. Never correct immediately. Their wrong answer is the beginning of thinking. Push one level deeper — then one more. 500 times and you've built an investor's instinct over teh tarik.</span>
+    </div>
+  </div>
+  <div class="sig-grid">
+    <div class="sig-card" style="background:var(--purple-lt);border-color:rgba(92,79,192,0.15);">
+      <div class="sig-type" style="color:var(--purple);">Best weekly ritual</div>
+      <div class="sig-title">Sunday breakfast at the mamak</div>
+      <div class="sig-body">Same mamak, every week. Survived 1997, 2008, 2020. The world's best free case study. Make it a ritual and the conversation becomes automatic.</div>
+    </div>
+    <div class="sig-card" style="background:var(--bg2);border-color:var(--rule);">
+      <div class="sig-type" style="color:var(--muted);">Best age 12+ entry</div>
+      <div class="sig-title">Any brand they're obsessed with</div>
+      <div class="sig-body">Their favourite brand is the easiest entry into business analysis. They already care. "Why does everyone your age buy this?" is the most natural question you can ask.</div>
+    </div>
+  </div>
+  <div class="callback">Their child got a Happy Meal and went home. Yours learned why some businesses survive every crisis.</div>
+</div>
+
+<!-- FRAMEWORK 3 -->
+<div class="fw">
+  <div class="fw-eye">
+    <div class="fw-num" style="color:var(--coral)">3</div>
+    <div>
+      <div class="fw-tag" style="color:var(--coral)">Framework Three · Emotional Architecture · 🔑 The Game Changer</div>
+      <div class="fw-name">The Crash Protocol</div>
+    </div>
+  </div>
+  <p class="fw-desc">A three-phase system for turning every market crash into the most valuable financial education your child will ever receive. Most parents do none of these. The ones who complete all three raise investors who never panic-sell.</p>
+  <div class="anatomy">
+    <div class="anatomy-head" style="background:var(--coral-lt);">
+      <div class="ah-title" style="color:var(--coral);">Framework anatomy</div>
+      <div class="ah-badge" style="background:var(--coral);color:white;">As needed · 3 phases</div>
+    </div>
+    <div class="anatomy-cols">
+      <div class="ac"><div class="ac-label">Trigger</div><div class="ac-val">Any market drop. Run all 3 phases every single time.</div></div>
+      <div class="ac"><div class="ac-label">The action</div><div class="ac-val">Open together. Say the line. Show the longer chart. Return after recovery.</div></div>
+      <div class="ac"><div class="ac-label">What it builds</div><div class="ac-val">Emotional architecture — the reference that stops panic-selling at 25.</div></div>
+    </div>
+  </div>
+  <div class="crash-visual">
+    <div class="crash-chart">
+      <div class="crash-badge">Market −32%</div>
+      <svg class="crash-svg" viewBox="0 0 600 110" preserveAspectRatio="none">
+        <line x1="0" y1="30" x2="600" y2="30" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+        <line x1="0" y1="65" x2="600" y2="65" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+        <defs><linearGradient id="cfade" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#B84020" stop-opacity="0.3"/><stop offset="100%" stop-color="#B84020" stop-opacity="0"/></linearGradient></defs>
+        <polygon points="0,110 0,78 60,70 120,63 180,56 230,50 270,46 310,90 345,102 370,95 410,68 450,48 490,32 540,20 600,12 600,110" fill="url(#cfade)" opacity="0.4"/>
+        <polyline points="0,78 60,70 120,63 180,56 230,50 270,46 310,90 345,102 370,95 410,68 450,48 490,32 540,20 600,12" fill="none" stroke="#B84020" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="345" cy="102" r="4" fill="#B84020"/>
+        <line x1="345" y1="102" x2="345" y2="14" stroke="rgba(184,64,32,0.25)" stroke-width="1" stroke-dasharray="3 3"/>
+        <circle cx="600" cy="12" r="4" fill="rgba(26,122,89,0.9)"/>
+      </svg>
+      <div style="position:absolute;bottom:6px;right:8px;font-size:9px;font-weight:600;color:rgba(26,122,89,0.9);font-family:'DM Mono',monospace;letter-spacing:0.08em;background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:2px;">↑ Recovery</div>
+    </div>
+  </div>
+  <div class="instinct-row">
+    <div class="instinct-card" style="background:var(--bg3);border-color:var(--rule);">
+      <div class="ic-label" style="color:var(--muted);">The natural instinct</div>
+      <div class="ic-text" style="color:var(--muted);font-style:italic;">"Don't let them see it. They're too young. Protect them from the worry."</div>
+    </div>
+    <div class="instinct-card" style="background:var(--coral-lt);border-color:rgba(184,64,32,0.18);">
+      <div class="ic-label" style="color:var(--coral);">The right move</div>
+      <div class="ic-text" style="color:var(--ink);font-weight:500;">Open it together. Name it. Stay calm. That composure is the entire lesson.</div>
+    </div>
+  </div>
+  <div class="protocol">
+    <div class="proto-row" style="background:var(--bg2);">
+      <div class="proto-phase" style="background:var(--bg3);"><div class="proto-phase-tag" style="color:var(--muted);">Phase 1</div><div class="proto-phase-name" style="color:var(--ink);">Before</div><div class="proto-phase-when">Calm months</div></div>
+      <div class="proto-body"><div class="proto-action">Set the frame before the crash arrives</div><div class="proto-say" style="color:var(--muted);">"Sometimes the number goes down. That's totally normal — every investor in history has seen it. It always comes back. When it happens to us, we'll look at it together."</div><div class="proto-note">Say this during a good month — not during a crash. Plant the reference before it's needed.</div></div>
+    </div>
+    <div class="proto-row">
+      <div class="proto-phase" style="background:var(--coral-lt);"><div class="proto-phase-tag" style="color:var(--coral);">Phase 2</div><div class="proto-phase-name" style="color:var(--coral);">During</div><div class="proto-phase-when">The crash</div></div>
+      <div class="proto-body"><div class="proto-action">Open it. Name it. Stay calm. Do not sell.</div><div class="proto-say" style="color:var(--coral);">"Look — it went down. This is what a crash feels like. Now watch what we do: nothing. Because we know it comes back. We talked about this."</div><div class="proto-note">Show the longer chart — 10 or 20 years. Let them see every crash and every recovery that followed.</div></div>
+    </div>
+    <div class="proto-row" style="border-bottom:none;">
+      <div class="proto-phase" style="background:var(--teal-lt);"><div class="proto-phase-tag" style="color:var(--teal);">Phase 3</div><div class="proto-phase-name" style="color:var(--teal);">After</div><div class="proto-phase-when">Recovery</div></div>
+      <div class="proto-body"><div class="proto-action">Come back. Close the loop. Most parents miss this step.</div><div class="proto-say" style="color:var(--teal);">"Remember when it was here? Look where it is now. That's why we didn't sell. This is what patience looks like."</div><div class="proto-note">The recovery closes the loop. Before → Crash → Recovery seen once creates the reference point they use at 25.</div></div>
+    </div>
+  </div>
+  <div class="two-path">
+    <div class="path" style="background:var(--bg3);border-color:var(--rule);">
+      <div class="path-label" style="color:var(--muted);">Their child at 25</div>
+      <div class="path-text" style="color:var(--muted);">Market drops 30%. No reference. Brain finds only fear. Sells at the bottom. Locks in the loss. May never invest again.</div>
+    </div>
+    <div class="path" style="background:var(--teal-lt);border-color:rgba(26,122,89,0.18);">
+      <div class="path-label" style="color:var(--teal);">Your child at 25</div>
+      <div class="path-text" style="color:var(--ink);font-weight:500;">Market drops 30%. Brain finds a reference. Finds you. Holds. Watches the recovery. Compounds for 40 more years.</div>
+    </div>
+  </div>
+  <div class="callback">When the crash comes at 25, their child panics alone. Yours has been here before — with you. And they remember what happened next.</div>
+</div>
+
+<!-- TRACKER -->
+<div class="fw">
+  <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Running the system · Monthly check-in</div>
+  <div class="fw-name" style="margin-bottom:8px;">The Parent Tracker</div>
+  <p class="fw-desc" style="margin-bottom:16px;">Three frameworks. Running consistently. That's the whole system. Tap each box as you run it.</p>
+  <div class="tracker">
+    <div class="tracker-head"><div class="th-label" style="color:var(--gold);">This month</div><div class="th-sub">~20 minutes across all three</div></div>
+    <div class="tracker-cols">
+      <div class="tcol">
+        <span class="tc-tag" style="color:var(--teal);">Framework 1 · Monthly</span>
+        <div class="tc-row" onclick="toggleCheck(this,'var(--teal)')"><div class="tc-box" style="border-color:var(--teal);"></div><div>Showed the statement</div></div>
+        <div class="tc-row" onclick="toggleCheck(this,'var(--teal)')"><div class="tc-box" style="border-color:var(--teal);"></div><div>Said the line</div></div>
+        <div class="tc-row" onclick="toggleCheck(this,'var(--teal)')"><div class="tc-box" style="border-color:var(--teal);"></div><div>Asked one question</div></div>
+      </div>
+      <div class="tcol">
+        <span class="tc-tag" style="color:var(--purple);">Framework 2 · Weekly</span>
+        <div class="tc-row" onclick="toggleCheck(this,'var(--purple)')"><div class="tc-box" style="border-color:var(--purple);"></div><div>Asked the question</div></div>
+        <div class="tc-row" onclick="toggleCheck(this,'var(--purple)')"><div class="tc-box" style="border-color:var(--purple);"></div><div>Pushed one level deeper</div></div>
+        <div class="tc-row" onclick="toggleCheck(this,'var(--purple)')"><div class="tc-box" style="border-color:var(--purple);"></div><div>Let them answer first</div></div>
+      </div>
+      <div class="tcol">
+        <span class="tc-tag" style="color:var(--coral);">Framework 3 · As needed</span>
+        <div class="tc-row" onclick="toggleCheck(this,'var(--coral)')"><div class="tc-box" style="border-color:var(--coral);"></div><div>Set the frame</div></div>
+        <div class="tc-row" onclick="toggleCheck(this,'var(--coral)')"><div class="tc-box" style="border-color:var(--coral);"></div><div>Opened during a drop</div></div>
+        <div class="tc-row" onclick="toggleCheck(this,'var(--teal)')"><div class="tc-box" style="border-color:var(--teal);"></div><div>Came back after recovery</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CLOSING -->
+<div class="closing">
+  <div class="closing-q">
+    A portfolio is something you build <em>for</em> your child.<br>
+    A mindset is something you build <em>with</em> them.<br>
+    These are the three ways you do it.
+  </div>
+</div>
+
+<div class="footer-disc">For educational purposes only. Not financial advice. Always consult a licensed financial adviser before making investment decisions.</div>
+
+</div><!-- end .page -->
+
+
+<!-- ══ FLOATING TRIGGER ══ -->
+<button class="float-trigger" onclick="openPopup()" id="float-btn">
+  <span class="ft-dot"></span>
+  Build the portfolio together
+</button>
+
+
+<!-- ══ OVERLAY + POPUP ══ -->
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+  <div class="popup" id="popup">
+    <button class="popup-close" onclick="closePopup()">✕</button>
+
+    <div class="popup-top">
+      <div class="popup-eyebrow">InsightInvest · Next step</div>
+      <div class="popup-title">Want help building the<br><em>actual portfolio</em> behind it?</div>
+      <p class="popup-sub">The frameworks are yours to run. If you'd like a hand figuring out where to start — which accounts to open, how much to put in, what to buy first — leave your details and we'll reach out.</p>
+    </div>
+
+    <div class="popup-form">
+      <form id="cta-form" onsubmit="submitForm(event)">
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="field-label" for="fname">Your name</label>
+            <input class="field-input" type="text" id="fname" name="name" placeholder="Your name" required>
+          </div>
+          <div class="form-field">
+            <label class="field-label" for="fphone">Phone</label>
+            <input class="field-input" type="tel" id="fphone" name="phone" placeholder="+60 12 345 6789" required>
+          </div>
+        </div>
+
+        <div class="form-field" style="margin-bottom:10px;">
+          <label class="field-label" for="femail">Email</label>
+          <input class="field-input" type="email" id="femail" name="email" placeholder="you@email.com" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label class="field-label" for="fchild">Child's age</label>
+            <select class="field-select" id="fchild" name="child_age" required>
+              <option value="" disabled selected>Select age</option>
+              <option>Under 2</option>
+              <option>2–5</option>
+              <option>6–9</option>
+              <option>10–13</option>
+              <option>14–18</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label class="field-label" for="fstarted">Already started?</label>
+            <select class="field-select" id="fstarted" name="already_started" required>
+              <option value="" disabled selected>Select one</option>
+              <option>Yes — account is open</option>
+              <option>No — starting from scratch</option>
+              <option>Not sure where to begin</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-bottom">
+          <div class="form-note">No pitch. No pressure. Just a conversation about where to start.</div>
+          <button class="form-submit" type="submit" id="submit-btn">Let's build it together</button>
+        </div>
+
+      </form>
+
+      <div class="popup-success" id="success-state">
+        <div class="ps-icon">🌱</div>
+        <div class="ps-title">You're on the list.</div>
+        <div class="ps-sub">We'll be in touch soon. In the meantime — start with Framework 1 this weekend. Show them the statement.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+// Portfolio bars
+const vals=[40,46,43,51,56,53,66];
+const c=document.getElementById('bars');
+vals.forEach((v,i)=>{
+  const b=document.createElement('div');
+  b.className='pf-bar'+(i===6?' hl':'');
+  b.style.height=Math.round(v/66*100)+'%';
+  c.appendChild(b);
+});
+
+// Tracker
+function toggleCheck(row,color){
+  const box=row.querySelector('.tc-box');
+  const on=box.dataset.checked==='1';
+  box.dataset.checked=on?'0':'1';
+  box.style.background=on?'':color;
+  box.style.color=on?'':'white';
+  box.textContent=on?'':'✓';
+}
+
+// Popup
+function openPopup(){
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closePopup(){
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function handleOverlayClick(e){
+  if(e.target===document.getElementById('overlay')) closePopup();
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closePopup(); });
+
+// Formspree
+async function submitForm(e){
+  e.preventDefault();
+  const btn=document.getElementById('submit-btn');
+  btn.disabled=true;
+  btn.textContent='Sending...';
+  const data=new FormData(document.getElementById('cta-form'));
+  try{
+    const res=await fetch('https://formspree.io/f/mzdowald',{
+      method:'POST',body:data,
+      headers:{'Accept':'application/json'}
+    });
+    if(res.ok){
+      document.getElementById('cta-form').style.display='none';
+      document.getElementById('success-state').style.display='block';
+    } else {
+      btn.disabled=false;
+      btn.textContent='Try again';
+    }
+  } catch(err){
+    btn.disabled=false;
+    btn.textContent='Try again';
+  }
+}
+</script>
