@@ -1,0 +1,547 @@
+
+<!DOCTYPE html>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0;}
+
+:root{
+  --ink:#1A1714;
+  --ink-2:#2E2B26;
+  --body:#3D3935;
+  --muted:#8C8480;
+  --faint:#B5AFA4;
+  --rule:#E4DDD6;
+  --bg:#F9F6F1;
+  --bg2:#F2EBE1;
+  --bg3:#EAE3D6;
+  --gold:#A8832A;
+  --gold-lt:#F5E9C8;
+  --teal:#1A7A59;
+  --teal-lt:#D4EDE5;
+  --coral:#B84020;
+  --coral-lt:#F7DDD5;
+  --purple:#5C4FC0;
+  --purple-lt:#E0DCFA;
+}
+
+html{background:var(--bg);color:var(--body);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.7;}
+
+.page{max-width:680px;margin:0 auto;padding:0 0 80px;}
+
+/* ── COVER ── */
+.cover{padding:56px 32px 0;position:relative;}
+
+.cover-tag{font-size:10px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;}
+
+.cover-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(32px,6vw,50px);
+  font-weight:900;color:var(--ink);
+  line-height:1.05;margin-bottom:4px;
+}
+.cover-title .accent{color:var(--gold);font-style:italic;}
+
+.cover-gc{
+  margin-top:18px;display:inline-flex;align-items:center;gap:8px;
+  background:var(--ink);color:var(--gold-lt);
+  font-size:12px;font-weight:500;padding:8px 14px;border-radius:3px;letter-spacing:0.04em;
+}
+
+/* ── FORK TABLE ── */
+.fork{margin:36px 32px 0;}
+
+.fork-label{
+  font-size:10px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:10px;
+}
+
+.fork-head{
+  display:grid;grid-template-columns:56px 1fr 1fr;gap:0;
+  padding:0 0 6px;border-bottom:1px solid var(--rule);
+  font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;
+}
+.fh-age{color:var(--muted);}
+.fh-them{color:var(--muted);}
+.fh-you{color:var(--teal);}
+
+.fork-row{
+  display:grid;grid-template-columns:56px 1fr 1fr;gap:0;
+  padding:12px 0;border-bottom:1px solid var(--rule);
+  align-items:start;
+}
+.fork-row:last-child{border-bottom:none;}
+
+.fr-age{font-size:11px;font-weight:500;color:var(--faint);padding-top:1px;}
+.fr-them{font-size:12px;color:var(--muted);line-height:1.55;padding-right:12px;}
+.fr-you{font-size:12px;color:var(--ink);font-weight:500;line-height:1.55;padding-left:12px;border-left:2px solid var(--teal);}
+
+.fork-row.highlight .fr-you{color:var(--teal);}
+
+.fork-cta-line{
+  margin-top:14px;font-size:12px;color:var(--muted);font-style:italic;
+  padding-top:12px;border-top:1px solid var(--rule);
+}
+
+/* ── DIVIDER ── */
+.div-rule{
+  margin:40px 32px;
+  height:1px;background:var(--rule);
+}
+
+/* ── SECTION HEADER ── */
+.sec{padding:0 32px;}
+.sec-sub{font-size:13px;color:var(--muted);font-style:italic;margin-bottom:28px;margin-top:4px;}
+
+/* ── WAY HEADERS ── */
+.way-head{
+  display:flex;align-items:flex-start;gap:16px;
+  margin-bottom:24px;padding-bottom:18px;
+  border-bottom:1px solid var(--rule);
+}
+.way-n{
+  font-family:'Playfair Display',serif;
+  font-size:72px;font-weight:900;line-height:1;
+  opacity:0.1;flex-shrink:0;margin-top:-8px;
+}
+.way-titles{}
+.way-age{
+  font-size:10px;font-weight:500;letter-spacing:0.14em;
+  text-transform:uppercase;margin-bottom:4px;
+}
+.way-name{
+  font-family:'Playfair Display',serif;
+  font-size:26px;font-weight:700;color:var(--ink);line-height:1.1;
+}
+.way-sub{font-size:13px;color:var(--muted);margin-top:5px;font-style:italic;}
+
+/* ── VISUAL BLOCKS ── */
+.v-block{
+  border-radius:12px;overflow:hidden;
+  border:1px solid var(--rule);margin-bottom:14px;
+  background:white;
+}
+
+/* Statement */
+.sv-top{background:var(--ink);padding:12px 18px;display:flex;justify-content:space-between;align-items:center;}
+.sv-top-label{font-size:9px;color:rgba(255,255,255,0.4);letter-spacing:0.14em;text-transform:uppercase;}
+.sv-top-name{font-size:11px;color:rgba(255,255,255,0.75);font-weight:500;}
+.sv-body{padding:18px 18px 12px;}
+.sv-months{display:flex;gap:5px;align-items:flex-end;height:72px;margin-bottom:10px;}
+.sv-bar{flex:1;border-radius:3px 3px 0 0;background:var(--bg3);position:relative;}
+.sv-bar.hl{background:var(--teal);}
+.sv-tip{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--teal);font-weight:600;white-space:nowrap;}
+.sv-months-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);letter-spacing:0.06em;}
+.sv-bottom{display:flex;justify-content:space-between;align-items:flex-end;padding:14px 18px;background:var(--teal-lt);border-top:1px solid var(--rule);}
+.sv-val-label{font-size:9px;color:var(--teal);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:2px;}
+.sv-val{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--teal);}
+.sv-badge{font-size:10px;font-weight:600;color:var(--teal);background:white;padding:3px 9px;border-radius:20px;}
+.sv-say{padding:12px 18px;font-size:12px;color:var(--ink-2);line-height:1.6;border-top:1px solid var(--rule);background:var(--bg2);}
+.sv-say-label{font-size:9px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.sv-say-text{font-style:italic;}
+.sv-fact{padding:10px 18px;font-size:11px;color:var(--muted);border-top:1px solid var(--rule);line-height:1.55;}
+.sv-fact strong{color:var(--teal);font-weight:500;}
+
+/* Mamak */
+.mamak-scene{background:var(--ink);padding:24px 22px;position:relative;}
+.mamak-sign{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:var(--gold);letter-spacing:0.03em;}
+.mamak-details{font-size:10px;color:rgba(255,255,255,0.35);margin-top:3px;}
+.mamak-years{margin-top:12px;display:flex;gap:6px;flex-wrap:wrap;}
+.mamak-yr{font-size:9px;font-weight:600;letter-spacing:0.08em;padding:3px 8px;border-radius:2px;}
+
+.mamak-q{padding:16px 22px;background:var(--purple-lt);border-bottom:1px solid rgba(92,79,192,0.12);}
+.mq-label{font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--purple);margin-bottom:5px;font-weight:600;}
+.mq-text{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--purple);line-height:1.2;}
+
+.mamak-answers{padding:14px 22px;display:flex;flex-direction:column;gap:7px;}
+.ma-row{display:flex;gap:10px;align-items:flex-start;}
+.ma-dot{width:6px;height:6px;border-radius:50%;background:var(--rule);flex-shrink:0;margin-top:7px;}
+.ma-dot.right{background:var(--purple);}
+.ma-text{font-size:12px;color:var(--body);line-height:1.5;}
+.ma-text.right{color:var(--ink);font-weight:500;}
+.ma-tag{font-size:9px;font-weight:600;padding:2px 7px;border-radius:2px;background:var(--purple-lt);color:var(--purple);margin-left:5px;letter-spacing:0.06em;}
+
+/* Crash */
+.crash-chart{padding:22px 22px 0;background:var(--ink);position:relative;height:130px;}
+.crash-svg{width:100%;height:100%;}
+.crash-badge{position:absolute;font-size:9px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--coral);background:rgba(184,64,32,0.2);padding:3px 8px;border-radius:2px;top:10px;right:14px;}
+
+.crash-split{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid rgba(184,64,32,0.12);}
+.crash-col{padding:14px 18px;}
+.crash-col+.crash-col{border-left:1px solid rgba(184,64,32,0.12);}
+.cc-label{font-size:9px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;}
+.cc-line{display:flex;align-items:flex-start;gap:7px;font-size:11px;line-height:1.5;color:var(--body);margin-bottom:5px;}
+.cc-icon{font-size:13px;flex-shrink:0;margin-top:1px;}
+
+.crash-say{padding:14px 22px;background:var(--coral-lt);border-top:1px solid rgba(184,64,32,0.12);}
+.cw-label{font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--coral);margin-bottom:5px;font-weight:600;}
+.cw-text{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--coral);line-height:1.3;}
+
+.crash-after{padding:12px 22px;border-top:1px solid rgba(184,64,32,0.12);background:white;}
+.ca-label{font-size:9px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.ca-text{font-size:12px;color:var(--ink-2);line-height:1.6;font-style:italic;}
+
+/* ── CALLBACK LINE ── */
+.callback{
+  margin-top:14px;padding:10px 14px;
+  background:var(--bg3);border-radius:6px;
+  font-size:12px;color:var(--muted);
+  line-height:1.55;font-style:italic;
+}
+
+/* ── ACTION BOX ── */
+.action{border-radius:8px;padding:18px 20px;margin-top:20px;border:1px solid;}
+.action-label{font-size:9px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:12px;}
+.action-step{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;font-size:13px;line-height:1.6;color:var(--ink-2);}
+.action-step:last-child{margin-bottom:0;}
+.a-dot{flex-shrink:0;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;margin-top:3px;}
+
+/* ── CLOSING ── */
+.closing{margin:0 32px;padding-top:40px;border-top:2px solid var(--ink);}
+
+.closing-q{
+  font-family:'Playfair Display',serif;
+  font-size:20px;font-weight:700;font-style:italic;
+  color:var(--ink);line-height:1.35;
+  padding:22px 24px;
+  background:var(--gold-lt);
+  border-left:4px solid var(--gold);
+  border-radius:0 8px 8px 0;
+  margin-bottom:32px;
+}
+
+/* ── CTA ── */
+.cta{
+  margin:0 32px;
+  padding:28px 0 0;
+  border-top:1px solid var(--rule);
+}
+.cta-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;flex-wrap:wrap;
+}
+.cta-left{}
+.cta-brand{
+  font-size:10px;font-weight:500;letter-spacing:0.16em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:5px;
+}
+.cta-text{
+  font-size:13px;color:var(--body);line-height:1.55;
+  max-width:360px;
+}
+.cta-text a{color:var(--teal);text-decoration:none;font-weight:500;}
+.cta-text a:hover{text-decoration:underline;}
+
+.cta-btn{
+  flex-shrink:0;
+  font-size:12px;font-weight:500;
+  padding:10px 18px;
+  border-radius:4px;
+  background:var(--ink);color:var(--gold-lt);
+  border:none;cursor:pointer;
+  letter-spacing:0.03em;
+  white-space:nowrap;
+  text-decoration:none;
+  display:inline-block;
+}
+
+.footer-disc{margin-top:20px;font-size:10px;color:var(--faint);line-height:1.6;}
+
+@media(max-width:480px){
+  .crash-split{grid-template-columns:1fr;}
+  .crash-col+.crash-col{border-left:none;border-top:1px solid rgba(184,64,32,0.12);}
+  .fork-row{grid-template-columns:44px 1fr;}
+  .fr-them{display:none;}
+  .fh-them{display:none;}
+  .cta-inner{flex-direction:column;align-items:flex-start;}
+}
+</style>
+
+<div class="page">
+
+<!-- ── COVER ── -->
+<div class="cover">
+  <div class="cover-tag">InsightInvest · A guide for Malaysian parents</div>
+  <div class="cover-title">
+    3 ways to make sure your child ends up<br>
+    <span class="accent">financially smarter</span><br>
+    than your friend's child.
+  </div>
+  <div class="cover-gc">🔑 &nbsp;The third one is the game changer</div>
+</div>
+
+<!-- ── FORK TABLE — moved up ── -->
+<div class="fork" style="margin-top:32px;">
+  <div class="fork-label">Here's what 18 years of three small habits actually produces</div>
+
+  <div class="fork-head">
+    <div class="fh-age"></div>
+    <div class="fh-them">Their child</div>
+    <div class="fh-you">Your child</div>
+  </div>
+
+  <div class="fork-row">
+    <div class="fr-age">Age 8</div>
+    <div class="fr-them">Never seen an investment account. Money is something adults deal with.</div>
+    <div class="fr-you">Watches a number grow every month. Understands money works while you sleep.</div>
+  </div>
+  <div class="fork-row">
+    <div class="fr-age">Age 13</div>
+    <div class="fr-them">No framework for why some businesses thrive and others fail.</div>
+    <div class="fr-you">Has asked "why is this place still here?" hundreds of times. Pattern recognition is instinct.</div>
+  </div>
+  <div class="fork-row">
+    <div class="fr-age">Age 17</div>
+    <div class="fr-them">Has never seen a market crash. No emotional reference for one.</div>
+    <div class="fr-you">Sat through one crash with you. Watched you not sell. Has the reference.</div>
+  </div>
+  <div class="fork-row highlight">
+    <div class="fr-age" style="color:var(--teal);">Age 25</div>
+    <div class="fr-them">Receives RM200,000. No framework to protect it.</div>
+    <div class="fr-you">Receives RM200,000 — and a mind that knows exactly what to do with it.</div>
+  </div>
+
+  <div class="fork-cta-line">Three habits. No finance degree needed. Here's exactly what they look like.</div>
+</div>
+
+<div class="div-rule"></div>
+
+<!-- ── WAY 1 ── -->
+<div class="sec">
+  <div class="way-head">
+    <div class="way-n" style="color:var(--teal)">1</div>
+    <div class="way-titles">
+      <div class="way-age" style="color:var(--teal)">Way one &nbsp;·&nbsp; Works from age 5</div>
+      <div class="way-name">Show them the statement.</div>
+      <div class="way-sub">Not someday. Not when they're ready. This weekend.</div>
+    </div>
+  </div>
+
+  <div class="v-block">
+    <div class="sv-top">
+      <div class="sv-top-label">Portfolio</div>
+      <div class="sv-top-name">Amirah's Account — ASNB</div>
+    </div>
+    <div class="sv-body">
+      <div class="sv-months" id="bars"></div>
+      <div class="sv-months-labels">
+        <span>JAN</span><span>FEB</span><span>MAR</span><span>APR</span><span>MAY</span><span>JUN</span><span>NOW</span>
+      </div>
+    </div>
+    <div class="sv-bottom">
+      <div>
+        <div class="sv-val-label">Total value</div>
+        <div class="sv-val">RM 18,420</div>
+      </div>
+      <div class="sv-badge">↑ RM 340 while you slept</div>
+    </div>
+    <div class="sv-say">
+      <div class="sv-say-label">Say this exactly</div>
+      <div class="sv-say-text">"Last month the number was here. This month it's here. You didn't do anything. Neither did I. The money was working while we were asleep. That's what investing does."</div>
+    </div>
+    <div class="sv-fact">Based on ASNB's 2024 dividend rate — <strong>RM300/month from birth grows to approximately RM108,000 by age 18.</strong> Your friend is not showing their child this screen.</div>
+  </div>
+
+  <div class="callback">Your friend's child has never seen that statement. One habit, every month, creates a different adult.</div>
+
+  <div class="action" style="background:var(--teal-lt);border-color:rgba(26,122,89,0.18);">
+    <div class="action-label" style="color:var(--teal);">What to actually do</div>
+    <div class="action-step">
+      <div class="a-dot" style="background:var(--teal);color:white;">1</div>
+      <div>Open your portfolio app with your child next to you. No big announcement needed.</div>
+    </div>
+    <div class="action-step">
+      <div class="a-dot" style="background:var(--teal);color:white;">2</div>
+      <div>Point to the number. Say the line above. Don't over-explain. Let it land.</div>
+    </div>
+    <div class="action-step">
+      <div class="a-dot" style="background:var(--teal);color:white;">3</div>
+      <div>Make it monthly. Same day, same ritual. The repetition is the lesson.</div>
+    </div>
+  </div>
+</div>
+
+<div class="div-rule"></div>
+
+<!-- ── WAY 2 ── -->
+<div class="sec">
+  <div class="way-head">
+    <div class="way-n" style="color:var(--purple)">2</div>
+    <div class="way-titles">
+      <div class="way-age" style="color:var(--purple)">Way two &nbsp;·&nbsp; Works from age 7</div>
+      <div class="way-name">Ask them the question.</div>
+      <div class="way-sub">At every mamak. On every school run. For the rest of their childhood.</div>
+    </div>
+  </div>
+
+  <div class="v-block">
+    <div class="mamak-scene">
+      <div class="mamak-sign">Restoran Nasi Kandar Ali</div>
+      <div class="mamak-details">Corner of Jalan Gombak &nbsp;·&nbsp; Open since 1987 &nbsp;·&nbsp; 24 hours</div>
+      <div class="mamak-years">
+        <span class="mamak-yr" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.3);">1997 crisis ✓</span>
+        <span class="mamak-yr" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.3);">2008 crash ✓</span>
+        <span class="mamak-yr" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.3);">2020 lockdown ✓</span>
+        <span class="mamak-yr" style="background:rgba(201,168,76,0.18);color:var(--gold);">Still here. Why?</span>
+      </div>
+    </div>
+    <div class="mamak-q">
+      <div class="mq-label">The question — say this anywhere, anytime</div>
+      <div class="mq-text">"Why do you think this place is still open?"</div>
+    </div>
+    <div class="mamak-answers">
+      <div class="ma-row">
+        <div class="ma-dot"></div>
+        <div class="ma-text">"Because the food is cheap?"</div>
+      </div>
+      <div class="ma-row">
+        <div class="ma-dot"></div>
+        <div class="ma-text">"Because it's open 24 hours?"</div>
+      </div>
+      <div class="ma-row">
+        <div class="ma-dot right"></div>
+        <div class="ma-text right">"Because the regulars have come every day for 30 years and would go nowhere else."<span class="ma-tag">Why it survives</span></div>
+      </div>
+      <div class="ma-row" style="margin-top:4px;">
+        <div class="ma-dot" style="background:transparent;"></div>
+        <div class="ma-text" style="font-size:11px;color:var(--muted);">All answers are right. The habit of asking is the lesson. Do this 500 times and you've built an investor's instinct — over teh tarik.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callback">Their child got a Happy Meal and went home. Yours learned why some businesses survive every crisis.</div>
+
+  <div class="action" style="background:var(--purple-lt);border-color:rgba(92,79,192,0.18);">
+    <div class="action-label" style="color:var(--purple);">What to actually do</div>
+    <div class="action-step">
+      <div class="a-dot" style="background:var(--purple);color:white;">1</div>
+      <div>Pick one regular outing — Sunday breakfast, weekly grocery run, school pickup. That's where the question lives.</div>
+    </div>
+    <div class="action-step">
+      <div class="a-dot" style="background:var(--purple);color:white;">2</div>
+      <div>Point to any business and ask: <strong>"Why do you think this place is still here?"</strong> Wait for their answer first.</div>
+    </div>
+    <div class="action-step">
+      <div class="a-dot" style="background:var(--purple);color:white;">3</div>
+      <div>Push one level deeper. If they say "good food" — ask "but the place next door had good food and they closed. What's the difference?"</div>
+    </div>
+  </div>
+</div>
+
+<div class="div-rule"></div>
+
+<!-- ── WAY 3 ── -->
+<div class="sec">
+  <div class="way-head">
+    <div class="way-n" style="color:var(--coral)">3</div>
+    <div class="way-titles">
+      <div class="way-age" style="color:var(--coral)">🔑 The game changer &nbsp;·&nbsp; Works from age 9</div>
+      <div class="way-name">Don't hide the crash.</div>
+      <div class="way-sub">This is the one your friend will never do. And it changes everything.</div>
+    </div>
+  </div>
+
+  <div class="v-block">
+    <div class="crash-chart">
+      <div class="crash-badge">Market −32%</div>
+      <svg class="crash-svg" viewBox="0 0 600 110" preserveAspectRatio="none">
+        <line x1="0" y1="30" x2="600" y2="30" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+        <line x1="0" y1="65" x2="600" y2="65" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+        <line x1="0" y1="95" x2="600" y2="95" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+        <defs>
+          <linearGradient id="cfade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#B84020" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="#B84020" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <polygon points="0,110 0,78 60,70 120,63 180,56 230,50 270,46 310,90 345,102 370,95 410,68 450,48 490,32 540,20 600,12 600,110" fill="url(#cfade)" opacity="0.4"/>
+        <polyline points="0,78 60,70 120,63 180,56 230,50 270,46 310,90 345,102 370,95 410,68 450,48 490,32 540,20 600,12" fill="none" stroke="#B84020" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="345" cy="102" r="4" fill="#B84020"/>
+        <line x1="345" y1="102" x2="345" y2="12" stroke="rgba(184,64,32,0.25)" stroke-width="1" stroke-dasharray="3 3"/>
+        <circle cx="600" cy="12" r="4" fill="rgba(26,122,89,0.9)"/>
+        <text x="570" y="8" font-size="9" fill="rgba(26,122,89,0.8)" font-family="sans-serif">Recovery</text>
+      </svg>
+    </div>
+
+    <div class="crash-split">
+      <div class="crash-col">
+        <div class="cc-label" style="color:var(--muted);">Friend's child — alone at 25</div>
+        <div class="cc-line"><div class="cc-icon">😰</div><div>No reference. Brain finds only fear.</div></div>
+        <div class="cc-line"><div class="cc-icon">📉</div><div>Panic-sells. Locks in the loss.</div></div>
+        <div class="cc-line"><div class="cc-icon">❌</div><div>May never invest again.</div></div>
+      </div>
+      <div class="crash-col">
+        <div class="cc-label" style="color:var(--teal);">Your child — they've been here</div>
+        <div class="cc-line"><div class="cc-icon">🧠</div><div>Brain finds a reference. Finds you.</div></div>
+        <div class="cc-line"><div class="cc-icon">✋</div><div>"I've seen this. We didn't sell."</div></div>
+        <div class="cc-line"><div class="cc-icon">✅</div><div>Holds. Watches the recovery. Compounds.</div></div>
+      </div>
+    </div>
+
+    <div class="crash-say">
+      <div class="cw-label">During — say this exactly</div>
+      <div class="cw-text">"Look — it went down.<br>Here's why we're not selling."</div>
+    </div>
+
+    <div class="crash-after">
+      <div class="ca-label">After the recovery — don't skip this part</div>
+      <div class="ca-text">"Remember when it was here? Look where it is now. That's why we didn't sell." Close the loop. This moment — not the crash — is what they'll remember at 25.</div>
+    </div>
+  </div>
+
+  <div class="callback">When the crash comes at 25, their child panics alone. Yours has been here before — with you. And they remember what happened next.</div>
+
+  <div class="action" style="background:var(--coral-lt);border-color:rgba(184,64,32,0.18);">
+    <div class="action-label" style="color:var(--coral);">What to actually do — before, during, after</div>
+    <div class="action-step">
+      <div class="a-dot" style="background:var(--coral);color:white;">B</div>
+      <div><strong>Before:</strong> Talk about crashes as normal — not disasters. "Sometimes the number goes down. That's part of how it works. It always comes back."</div>
+    </div>
+    <div class="action-step">
+      <div class="a-dot" style="background:var(--coral);color:white;">D</div>
+      <div><strong>During:</strong> Open the portfolio together. Say the line above. Show them the longer chart — the crashes and recoveries before this one.</div>
+    </div>
+    <div class="action-step">
+      <div class="a-dot" style="background:var(--coral);color:white;">A</div>
+      <div><strong>After:</strong> Come back when it recovers. Show them. Say the line above. Close the loop. This is the most important step most parents miss.</div>
+    </div>
+  </div>
+</div>
+
+<div class="div-rule"></div>
+
+<!-- ── CLOSING ── -->
+<div class="closing">
+  <div class="closing-q">
+    A portfolio is something you build <em>for</em> your child.<br>
+    A mindset is something you build <em>with</em> them.
+  </div>
+</div>
+
+<!-- ── CTA ── -->
+<div class="cta">
+  <div class="cta-inner">
+    <div class="cta-left">
+      <div class="cta-brand">InsightInvest</div>
+      <div class="cta-text">
+        Building your children's financial literacy — more frameworks, tools, and guides at <a href="#">insightinvest.co</a>
+      </div>
+    </div>
+    <a href="#" class="cta-btn">Explore the series</a>
+  </div>
+  <div class="footer-disc">For educational purposes only. Not financial advice. Always consult a licensed financial adviser before making investment decisions.</div>
+</div>
+
+</div>
+
+<script>
+const vals=[40,46,43,51,56,53,66];
+const c=document.getElementById('bars');
+vals.forEach((v,i)=>{
+  const b=document.createElement('div');
+  b.className='sv-bar'+(i===6?' hl':'');
+  b.style.height=(v/66*100)+'%';
+  if(i===6){const t=document.createElement('div');t.className='sv-tip';t.textContent='+RM340';b.appendChild(t);}
+  c.appendChild(b);
+});
+</script>
