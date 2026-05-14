@@ -1187,10 +1187,21 @@ document.addEventListener('click',e=>{if(!e.target.closest('.search-wrap'))searc
 async function doSearch(q){
   const key=getFmpKey();if(!key)return;
   try{
-    const r=await fetch(`${FMP_BASE}/search-name?query=${encodeURIComponent(q)}&apikey=${key}`);
-    const raw=await r.json();
-    const US=new Set(['NASDAQ','NYSE','AMEX','NYSEARCA','BATS']);
-    const data=(Array.isArray(raw)?raw:[]).filter(d=>US.has(d.exchange));
+    const url = qParam => `${FMP_BASE}/${qParam}?query=${encodeURIComponent(q)}&apikey=${key}`;
+    const [symR, nameR] = await Promise.allSettled([
+      fetch(url('search-symbol')).then(r => r.json()),
+      fetch(url('search-name')).then(r => r.json()),
+    ]);
+    // Merge — ticker matches first (more relevant), then name matches; dedupe by symbol
+    const merged = new Map();
+    const ingest = (arr) => {
+      if(!Array.isArray(arr)) return;
+      arr.forEach(d => { if(d.symbol && !merged.has(d.symbol)) merged.set(d.symbol, d); });
+    };
+    if(symR.status === 'fulfilled')  ingest(symR.value);
+    if(nameR.status === 'fulfilled') ingest(nameR.value);
+    const US = new Set(['NASDAQ','NYSE','AMEX','NYSEARCA','BATS','NMS','NGS']);
+    const data = [...merged.values()].filter(d => US.has(d.exchange));
     if(!data.length){searchResults.classList.remove('open');return;}
     searchResults.innerHTML=data.slice(0,8).map(d=>`
       <div class="search-result-item" onclick="selectResult('${d.symbol}')">
