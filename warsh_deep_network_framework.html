@@ -1,0 +1,346 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{font-family:var(--font-sans);padding:0 0 2rem}
+.node-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;cursor:pointer;transition:border-color .2s}
+.node-card:hover{border-color:var(--color-border-secondary)}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500;margin-bottom:6px}
+.tag-fin{background:#E1F5EE;color:#085041}
+.tag-ideo{background:#EEEDFE;color:#3C3489}
+.tag-inst{background:#FAECE7;color:#712B13}
+.tag-fam{background:#F1EFE8;color:#444441}
+.tag-apex{background:#1D9E75;color:#E1F5EE}
+.intensity-bar{height:4px;border-radius:2px;margin-top:6px;background:var(--color-background-secondary)}
+.intensity-fill{height:100%;border-radius:2px;transition:width .4s}
+.section-label{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin:1.5rem 0 .5rem;font-weight:500}
+.detail-panel{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:1rem;margin-top:1rem;font-size:13px;color:var(--color-text-secondary);line-height:1.6;display:none}
+.detail-panel.open{display:block}
+.edge-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.edge-row:last-child{border-bottom:none}
+.edge-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;font-weight:500}
+.edge-meta{flex:1}
+.edge-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.edge-desc{font-size:12px;color:var(--color-text-secondary);margin-top:2px;line-height:1.5}
+.intensity-label{font-size:11px;color:var(--color-text-tertiary);margin-top:3px}
+.int-bar{height:3px;border-radius:2px;margin-top:2px;width:120px;background:var(--color-background-primary)}
+.int-fill{height:100%;border-radius:2px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:500px){.grid2,.grid3{grid-template-columns:1fr}}
+</style>
+<div class="wrap">
+
+<div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:1.25rem;line-height:1.6">Click any node to expand its full relationship analysis — origin, mechanism, intensity, and policy consequence.</div>
+
+<!-- ═══════════════════ APEX ═══════════════════ -->
+<div class="section-label">Apex node — the common source</div>
+<div class="node-card" onclick="toggle('druck')">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start">
+    <div>
+      <span class="tag tag-apex">Apex · Financial</span>
+      <div style="font-size:16px;font-weight:500;color:var(--color-text-primary);margin:2px 0">Stanley Druckenmiller</div>
+      <div style="font-size:12px;color:var(--color-text-secondary)">Duquesne Family Office · $4.49B · 30% avg annual return</div>
+    </div>
+    <div style="font-size:18px;color:var(--color-text-tertiary)" id="druck-arr">▾</div>
+  </div>
+  <div style="margin-top:8px;font-size:12px;color:var(--color-text-secondary)">Influence intensity across the whole network</div>
+  <div class="intensity-bar" style="margin-top:4px"><div class="intensity-fill" style="width:100%;background:#1D9E75"></div></div>
+</div>
+<div class="detail-panel" id="druck">
+  <div class="edge-row">
+    <div class="edge-icon" style="background:#E1F5EE;color:#085041">W</div>
+    <div class="edge-meta">
+      <div class="edge-title">→ Kevin Warsh · father-son · 10/10</div>
+      <div class="edge-desc">Warsh joined Duquesne in 2011 after leaving the Fed, initially as advisor then full partner. The FT described the bond as "close to father-son" — they communicated 10+ times per day by phone and text. Druckenmiller described Warsh as running private equity, economic forecasting, and all external networking for Duquesne. Warsh accumulated $100M+ in Duquesne funds including the opaque Juggernaut vehicle. CIO Peter Boockvar said: "Being next to Stanley for years means you learned an enormous amount — for Warsh it would have been like a curriculum." The WSJ noted that "the Wall Street community took Warsh's Fed nomination in stride largely because of the Druckenmiller relationship." Druckenmiller publicly endorsed Warsh the day of the nomination: "I could not think of a single other individual on the planet better equipped."</div>
+      <div class="intensity-label">Intensity</div>
+      <div class="int-bar"><div class="int-fill" style="width:100%;background:#1D9E75"></div></div>
+    </div>
+  </div>
+  <div class="edge-row">
+    <div class="edge-icon" style="background:#E1F5EE;color:#085041">B</div>
+    <div class="edge-meta">
+      <div class="edge-title">→ Scott Bessent · founding mentor · 9/10</div>
+      <div class="edge-desc">Druckenmiller hired Bessent at Soros's Quantum Fund in the early 1990s — Bessent's London research into UK variable-rate mortgages directly informed the 1992 Black Wednesday pound trade. Bessent described Druckenmiller's "gamesmanship" as the engine of that trade. After Bessent launched Key Square Capital in 2015, Druckenmiller seeded it with anchor capital. They remain in close regular contact. The FT wrote that "the pair [Bessent and Warsh] embody the way Druckenmiller interprets markets and economic policy." Druckenmiller publicly named the relationship the day of Warsh's nomination: "I'm really excited about the partnership between him and Bessent. Having an accord between the Treasury secretary and Fed chair is ideal."</div>
+      <div class="intensity-label">Intensity</div>
+      <div class="int-bar"><div class="int-fill" style="width:90%;background:#1D9E75"></div></div>
+    </div>
+  </div>
+  <div class="edge-row">
+    <div class="edge-icon" style="background:#E1F5EE;color:#085041">K</div>
+    <div class="edge-meta">
+      <div class="edge-title">→ Alex Karp / Palantir · investor · 6/10</div>
+      <div class="edge-desc">Druckenmiller is an early Palantir investor — Warsh brokered this and other private tech deals after joining Duquesne, leveraging his Stanford relationships with Thiel and Andreessen. Druckenmiller's Q4 2025 13F does not show Palantir in equity holdings but the private position predates public disclosure requirements. The Karp-Druckenmiller channel is ideological as much as financial — both hold the view that Western institutional decay requires technological disruption as the escape hatch.</div>
+      <div class="intensity-label">Intensity</div>
+      <div class="int-bar"><div class="int-fill" style="width:60%;background:#1D9E75"></div></div>
+    </div>
+  </div>
+  <div style="margin-top:10px;padding:8px;background:var(--color-background-primary);border-radius:6px;font-size:12px;color:var(--color-text-secondary)">
+    <strong style="color:var(--color-text-primary)">Policy consequence:</strong> Bloomberg called Druckenmiller "the behind-the-scenes force in the US economy" after both his protégés landed the two most powerful economic roles simultaneously. Markets price in "Druckenmiller Economics" — anti-deficit, anti-inflation, structurally productivity-focused — as the operating philosophy of the entire US fiscal-monetary complex.
+  </div>
+</div>
+
+<!-- ═══════════════════ WARSH ═══════════════════ -->
+<div class="section-label">Central node — the convergence point</div>
+<div class="node-card" onclick="toggle('warsh')">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start">
+    <div>
+      <span class="tag tag-ideo">Convergence node</span>
+      <div style="font-size:16px;font-weight:500;color:var(--color-text-primary);margin:2px 0">Kevin Warsh</div>
+      <div style="font-size:12px;color:var(--color-text-secondary)">Fed Chair nominee · $192M disclosed · Stanford '92 · Harvard Law '95</div>
+    </div>
+    <div style="font-size:18px;color:var(--color-text-tertiary)" id="warsh-arr">▾</div>
+  </div>
+  <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+    <span style="font-size:11px;background:var(--color-background-secondary);padding:2px 7px;border-radius:4px;color:var(--color-text-secondary)">Wall Street (Morgan Stanley '95–'02)</span>
+    <span style="font-size:11px;background:var(--color-background-secondary);padding:2px 7px;border-radius:4px;color:var(--color-text-secondary)">White House NEC '02–'06</span>
+    <span style="font-size:11px;background:var(--color-background-secondary);padding:2px 7px;border-radius:4px;color:var(--color-text-secondary)">Fed Governor '06–'11</span>
+    <span style="font-size:11px;background:var(--color-background-secondary);padding:2px 7px;border-radius:4px;color:var(--color-text-secondary)">Duquesne '11–'26</span>
+    <span style="font-size:11px;background:var(--color-background-secondary);padding:2px 7px;border-radius:4px;color:var(--color-text-secondary)">Hoover Institution fellow</span>
+  </div>
+</div>
+<div class="detail-panel" id="warsh">
+  <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:10px;line-height:1.6">Warsh is unique in that he is simultaneously the output of three completely separate influence networks — Wall Street capital, Silicon Valley tech, and academic institutionalism — and the only figure who bridges all three into a single policy worldview. His unique power as Fed Chair is precisely this triangulation: no previous chair has operated at the intersection of all three.</div>
+  <div class="edge-row">
+    <div class="edge-icon" style="background:#EEEDFE;color:#3C3489">→</div>
+    <div class="edge-meta">
+      <div class="edge-title">From Druckenmiller: the empirical method</div>
+      <div class="edge-desc">15 years of daily contact instilled Druckenmiller's core practice: gather real-time intelligence from corporate executives and private market signals before official data arrives. Warsh is expected to operate the Fed this way — relying on his Silicon Valley network's capex and hiring data as early indicators rather than waiting for lagged government statistics. This is what the dossier calls "front-running the data."</div>
+    </div>
+  </div>
+  <div class="edge-row">
+    <div class="edge-icon" style="background:#EEEDFE;color:#3C3489">→</div>
+    <div class="edge-meta">
+      <div class="edge-title">From Friedman/Shultz: the rules-based scaffold</div>
+      <div class="edge-desc">Research assistantship at Hoover gave Warsh Friedman's monetarist axiom ("inflation is always a choice") and Shultz's institutional philosophy (credibility is the central bank's most fragile and most valuable asset). These two ideas form the backbone of his "Regime Change" doctrine — end discretionary forward guidance, return to rules, and never wander into fiscal or social policy.</div>
+    </div>
+  </div>
+  <div class="edge-row">
+    <div class="edge-icon" style="background:#EEEDFE;color:#3C3489">→</div>
+    <div class="edge-meta">
+      <div class="edge-title">From Thiel/Karp: the AI deflationary thesis</div>
+      <div class="edge-desc">Decades of exposure to the Stanford disruption worldview gave Warsh his core supply-side bet: AI will compress unit labor costs, allowing the economy to grow at 4%+ without triggering the wage-price spirals the Phillips Curve predicts. This is the intellectual cover that lets him justify potential rate cuts while claiming to be structurally orthodox.</div>
+    </div>
+  </div>
+  <div class="edge-row">
+    <div class="edge-icon" style="background:#EEEDFE;color:#3C3489">→</div>
+    <div class="edge-meta">
+      <div class="edge-title">From Jane Lauder: the social and financial infrastructure</div>
+      <div class="edge-desc">The Lauder marriage in 2002 — the same year he entered the Bush White House — gave Warsh immediate access to elite New York and Washington social networks that an M&A banker from Albany would not otherwise have possessed. Jane's father Ronald Lauder is a Trump intimate who planted the Greenland acquisition idea. The marriage is also the financial base: Jane's estimated $2.7B net worth is the foundation beneath Warsh's own $192M, making him effectively insulated from financial pressure that might otherwise compromise his policy independence.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ BESSENT ═══════════════════ -->
+<div class="section-label">Tier 2 — operational axis</div>
+<div class="grid2">
+<div class="node-card" onclick="toggle('bess')">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start">
+    <div>
+      <span class="tag tag-fin">Financial · Ideological</span>
+      <div style="font-size:15px;font-weight:500;color:var(--color-text-primary);margin:2px 0">Scott Bessent</div>
+      <div style="font-size:12px;color:var(--color-text-secondary)">Treasury Secretary · Key Square · Soros Fund alumnus</div>
+    </div>
+    <div style="font-size:16px;color:var(--color-text-tertiary)" id="bess-arr">▾</div>
+  </div>
+  <div class="intensity-bar" style="margin-top:8px"><div class="intensity-fill" style="width:85%;background:#7F77DD"></div></div>
+</div>
+
+<!-- KARP -->
+<div class="node-card" onclick="toggle('karp')">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start">
+    <div>
+      <span class="tag tag-ideo">Ideological · Financial</span>
+      <div style="font-size:15px;font-weight:500;color:var(--color-text-primary);margin:2px 0">Alex Karp</div>
+      <div style="font-size:12px;color:var(--color-text-secondary)">CEO Palantir · Stanford JD · Goethe PhD</div>
+    </div>
+    <div style="font-size:16px;color:var(--color-text-tertiary)" id="karp-arr">▾</div>
+  </div>
+  <div class="intensity-bar" style="margin-top:8px"><div class="intensity-fill" style="width:72%;background:#D85A30"></div></div>
+</div>
+</div>
+
+<div class="detail-panel" id="bess">
+  <div class="edge-row">
+    <div class="edge-icon" style="background:#EEEDFE;color:#3C3489">⚡</div>
+    <div class="edge-meta">
+      <div class="edge-title">Black Wednesday origin (1992) — intensity: formative</div>
+      <div class="edge-desc">Bessent was head of Soros's London office in 1992. His bottom-up research into UK variable-rate mortgage exposure convinced Druckenmiller to put on the pound short. When Druckenmiller hesitated to go beyond $1.5B, Bessent was among those pushing for more. The trade — which netted over $1B — was the moment Bessent proved to Druckenmiller he could think at the scale of central bank confrontation. This formative experience is why both men view monetary policy not as academic theory but as a battlefield where precision, timing, and size of conviction determine outcomes.</div>
+    </div>
+  </div>
+  <div class="edge-row">
+    <div class="edge-icon" style="background:#EEEDFE;color:#3C3489">📄</div>
+    <div class="edge-meta">
+      <div class="edge-title">"Gain-of-Function Monetary Policy" — Spring 2025</div>
+      <div class="edge-desc">Bessent published this essay 9 months before Warsh's nomination using language nearly identical to Warsh's Hoover papers: QE should only be used "in true emergencies and in coordination with the rest of government"; the Fed's monetary independence is a "jewel box" — narrow and walled. Both cite Thomas Hoenig's 2010 QE dissent as moral authority. Both use Karen Petrou's phrase "socialism for investors, capitalism for everyone else." The parallel publication is not coincidence — it is coordinated doctrine-setting for their eventual institutional roles.</div>
+    </div>
+  </div>
+  <div class="edge-row">
+    <div class="edge-icon" style="background:#EEEDFE;color:#3C3489">🏛</div>
+    <div class="edge-meta">
+      <div class="edge-title">Live operational coordination — April 22, 2026</div>
+      <div class="edge-desc">One day after Warsh's Senate confirmation hearing, Bessent appeared before a separate Senate subcommittee and treated Fed and Treasury swap lines as legally interchangeable when discussing the UAE's request. These are distinct instruments with separate statutory foundations. The casual conflation was the coordination register operating in real time — not a theoretical accord but an active blurring of institutional boundaries that both men had been preparing in public for over a year.</div>
+    </div>
+  </div>
+  <div style="margin-top:10px;padding:8px;background:var(--color-background-primary);border-radius:6px;font-size:12px;color:var(--color-text-secondary)">
+    <strong style="color:var(--color-text-primary)">Why it matters:</strong> Warsh handles rates and balance sheet. Bessent handles debt issuance and maturity structure. For the "New Accord" to work, they must coordinate on both simultaneously — creating a unified fiscal-monetary policy framework that no previous US administration has openly attempted since 1951.
+  </div>
+</div>
+
+<div class="detail-panel" id="karp">
+  <div class="edge-row">
+    <div class="edge-icon" style="background:#FAECE7;color:#712B13">S</div>
+    <div class="edge-meta">
+      <div class="edge-title">Stanford Review network — origin: early 1990s</div>
+      <div class="edge-desc">The Stanford Review, founded by Thiel in 1987, published both Warsh and future Palantir co-founders including Joe Lonsdale and Stephen Cohen in the early 1990s. Warsh was president of the student association while Thiel (who met Karp at Stanford Law) served as comptroller. The Review was a pipeline for a generation of techno-libertarian institutional critics — including David Sacks (now White House AI Czar), Keith Rabois, and others now embedded in Trump's policy apparatus. Warsh did not co-found Palantir, but he shared its formative social matrix.</div>
+    </div>
+  </div>
+  <div class="edge-row">
+    <div class="edge-icon" style="background:#FAECE7;color:#712B13">🎙</div>
+    <div class="edge-meta">
+      <div class="edge-title">Stanford Hoover podcast (January 2022) — the ideological merge on record</div>
+      <div class="edge-desc">Karp told Warsh on air: "You wouldn't be hanging out with us if you were as normal as you claim to be." This was public affiliation — Karp vouching for Warsh as ideologically within the disruption camp. Their conversation centered on the idea that "tomorrow will be a step function in terms of complexity" — the West must technologically leapfrog its institutional decay or collapse. This is the worldview that drives Warsh's AI deflationary thesis: not just an economic observation but a civilizational bet.</div>
+    </div>
+  </div>
+  <div class="edge-row">
+    <div class="edge-icon" style="background:#FAECE7;color:#712B13">💰</div>
+    <div class="edge-meta">
+      <div class="edge-title">Palantir investment (via Duquesne) — financial entanglement</div>
+      <div class="edge-desc">Warsh's financial disclosure confirms Palantir investments made during his Duquesne years. Druckenmiller is also an early Palantir investor. Warsh has pledged to divest if confirmed, but as Senator Warren noted, the divestiture likely flows back to Druckenmiller — the same person whose business depends on what the Fed does. The conflict is structural, not merely disclosed. Palantir derives 42% of revenue from the US government and is actively deployed for federal fraud detection — the exact mechanism Warsh's inflation theory points to as the supply-side fix for fiscal excess.</div>
+    </div>
+  </div>
+  <div style="margin-top:10px;padding:8px;background:var(--color-background-primary);border-radius:6px;font-size:12px;color:var(--color-text-secondary)">
+    <strong style="color:var(--color-text-primary)">Convergence point:</strong> Warsh believes inflation is fiscal. Palantir cuts government waste. Therefore Palantir is operationally executing Warsh's monetary theory — the AI infrastructure of "regime change" is already deployed, and Warsh would be the central banker who validates it with rate policy.
+  </div>
+</div>
+
+<!-- ═══════════════════ TIER 3 ═══════════════════ -->
+<div class="section-label">Tier 3 — intellectual and familial foundations</div>
+<div class="grid3">
+
+<div class="node-card" onclick="toggle('fried')">
+  <span class="tag tag-inst">Mentorship · Academic</span>
+  <div style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin:4px 0">Milton Friedman</div>
+  <div style="font-size:11px;color:var(--color-text-secondary)">Hoover · monetarist · "inflation is a choice"</div>
+  <div class="intensity-bar" style="margin-top:8px"><div class="intensity-fill" style="width:90%;background:#D85A30"></div></div>
+</div>
+
+<div class="node-card" onclick="toggle('shultz')">
+  <span class="tag tag-inst">Mentorship · Institutional</span>
+  <div style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin:4px 0">George Shultz</div>
+  <div style="font-size:11px;color:var(--color-text-secondary)">Hoover · "Commanding Heights" · statesman</div>
+  <div class="intensity-bar" style="margin-top:8px"><div class="intensity-fill" style="width:85%;background:#D85A30"></div></div>
+</div>
+
+<div class="node-card" onclick="toggle('thiel')">
+  <span class="tag tag-inst">Network · Financial</span>
+  <div style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin:4px 0">Peter Thiel</div>
+  <div style="font-size:11px;color:var(--color-text-secondary)">Stanford '89 · Palantir · Founders Fund</div>
+  <div class="intensity-bar" style="margin-top:8px"><div class="intensity-fill" style="width:65%;background:#D85A30"></div></div>
+</div>
+
+</div>
+
+<div class="detail-panel" id="fried">
+  <div class="edge-row">
+    <div class="edge-icon" style="background:#FAECE7;color:#712B13">F</div>
+    <div class="edge-meta">
+      <div class="edge-title">The monetarist axiom — "inflation is always a choice"</div>
+      <div class="edge-desc">Warsh served as Friedman's research assistant at Hoover — a direct, personal intellectual apprenticeship. Friedman's core proposition is that central banks cause inflation by expanding money supply and can always stop it by refusing to do so. No supply shocks, no external factors, no excuses. This is why Warsh called the post-2020 "Team Transitory" narrative the "biggest policy mistake in 40 years" — Friedman's framework allows zero tolerance for self-deception. It also explains Warsh's determination to eliminate forward guidance (dot plots): Friedman believed central banks should follow clear rules and never make discretionary promises about the future they may be unable to keep.</div>
+      <div class="intensity-label">Mechanism: ideological bedrock — intensity 9/10</div>
+      <div class="int-bar"><div class="int-fill" style="width:90%;background:#D85A30"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="detail-panel" id="shultz">
+  <div class="edge-row">
+    <div class="edge-icon" style="background:#FAECE7;color:#712B13">S</div>
+    <div class="edge-meta">
+      <div class="edge-title">Institutional credibility as the only real asset</div>
+      <div class="edge-desc">Shultz served as Nixon's Treasury Secretary during the era when the dollar was decoupled from gold and the Fed's independence was informally compromised — he watched the 1970s inflation disaster unfold from inside government. His lesson, which he passed to Warsh, is that a central bank's credibility is its most fragile and most valuable possession: once lost it takes a decade of pain to recover. This is the source of Warsh's insistence that the Fed "stay in its lane" — not wander into climate, social justice, or fiscal support — because every venture outside the mandate chips away at the credibility that makes anti-inflation promises believable. Shultz also gave Warsh the "Commanding Heights" framework: the idea that major institutions must maintain stability and rule-of-law above short-term political demands.</div>
+      <div class="intensity-label">Mechanism: governance philosophy — intensity 8.5/10</div>
+      <div class="int-bar"><div class="int-fill" style="width:85%;background:#D85A30"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="detail-panel" id="thiel">
+  <div class="edge-row">
+    <div class="edge-icon" style="background:#FAECE7;color:#712B13">T</div>
+    <div class="edge-meta">
+      <div class="edge-title">The Stanford Review matrix — where the network was born</div>
+      <div class="edge-desc">Thiel founded the Stanford Review in 1987. Warsh wrote for it and was president of the student association while Thiel was comptroller — they shared actual institutional governance as undergraduates, not merely social proximity. The Review produced an extraordinary concentration of future power: Palantir's co-founders (Thiel, Lonsdale, Cohen), Trump's AI Czar David Sacks, and now Warsh as Fed Chair nominee. Thiel later co-founded Palantir with Karp (whom he met at Stanford Law), creating the direct bridge between Warsh's college relationships and his later Palantir investment. Thiel's influence on Warsh is not primarily direct today — it is structural: the network Thiel built at Stanford became the substrate on which Warsh's Silicon Valley worldview was formed.</div>
+      <div class="intensity-label">Mechanism: network substrate — intensity 6.5/10</div>
+      <div class="int-bar"><div class="int-fill" style="width:65%;background:#D85A30"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Jane Lauder full width -->
+<div class="node-card" style="margin-top:10px" onclick="toggle('jane')">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start">
+    <div>
+      <span class="tag tag-fam">Familial · Social capital</span>
+      <div style="font-size:15px;font-weight:500;color:var(--color-text-primary);margin:2px 0">Jane Lauder — the underappreciated force multiplier</div>
+      <div style="font-size:12px;color:var(--color-text-secondary)">Estée Lauder heiress · ~$2.7B · Stanford '95 · Chief Data Officer ELC · married Warsh 2002</div>
+    </div>
+    <div style="font-size:16px;color:var(--color-text-tertiary)" id="jane-arr">▾</div>
+  </div>
+  <div class="intensity-bar" style="margin-top:8px"><div class="intensity-fill" style="width:55%;background:#888780"></div></div>
+</div>
+<div class="detail-panel" id="jane">
+  <div class="edge-row">
+    <div class="edge-icon" style="background:#F1EFE8;color:#444441">1</div>
+    <div class="edge-meta">
+      <div class="edge-title">The social network unlock (2002)</div>
+      <div class="edge-desc">Warsh was an M&A banker from Albany when he married Lauder. The Lauder family sits at the intersection of New York finance, Republican politics, and Washington power: Ronald Lauder is a Trump intimate who was the first to suggest the Greenland acquisition, a former ambassador to Austria, and president of the World Jewish Congress. The marriage gave Warsh instant credibility and access in circles that would have taken decades to penetrate independently — and it occurred the same year Bush brought him into the White House NEC.</div>
+    </div>
+  </div>
+  <div class="edge-row">
+    <div class="edge-icon" style="background:#F1EFE8;color:#444441">2</div>
+    <div class="edge-meta">
+      <div class="edge-title">Financial insulation and independence</div>
+      <div class="edge-desc">Jane's ~$2.7B fortune means Warsh is not financially dependent on any investor, institution, or political patron. This is structurally important: Fed Chairs who are financially exposed to markets face implicit pressure to avoid policies that hurt their own portfolios. Warsh's personal $192M is substantial, but the Lauder fortune beneath it means he operates from a position of genuine financial independence — which paradoxically makes his actual conflicts of interest (Duquesne, Palantir) more concerning, not less, since they appear voluntary rather than necessary.</div>
+    </div>
+  </div>
+  <div class="edge-row">
+    <div class="edge-icon" style="background:#F1EFE8;color:#444441">3</div>
+    <div class="edge-meta">
+      <div class="edge-title">The Stanford connection — how they met</div>
+      <div class="edge-desc">Warsh and Jane met at Stanford in the early 1990s — the same institution where Warsh built his relationships with Thiel, Andreessen, Karp, and Friedman/Shultz at Hoover. Stanford is not incidental; it is the single physical location where every major non-Druckenmiller relationship in Warsh's network originated. Jane's election to the Stanford Board of Trustees in early 2025 deepens the family's institutional stake in that ecosystem.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ SYNTHESIS ═══════════════════ -->
+<div class="section-label">Synthesis — what this network actually produces</div>
+<div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.25rem;font-size:13px;color:var(--color-text-secondary);line-height:1.7">
+  <div style="font-weight:500;color:var(--color-text-primary);margin-bottom:8px;font-size:14px">The three-layer architecture of influence</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px">
+    <div style="background:var(--color-background-primary);border-radius:8px;padding:10px">
+      <div style="font-size:11px;font-weight:500;color:#085041;margin-bottom:4px">LAYER 1 · CAPITAL</div>
+      <div style="font-size:12px">Druckenmiller provides real-time market intelligence, financial resources, and the daily empirical feedback loop that shapes how Warsh reads the economy.</div>
+    </div>
+    <div style="background:var(--color-background-primary);border-radius:8px;padding:10px">
+      <div style="font-size:11px;font-weight:500;color:#3C3489;margin-bottom:4px">LAYER 2 · IDEOLOGY</div>
+      <div style="font-size:12px">Friedman and Shultz provide the rules-based framework. Karp and Thiel provide the AI-disruption thesis. Together they justify both the hawkish baseline and the dove escape valve.</div>
+    </div>
+    <div style="background:var(--color-background-primary);border-radius:8px;padding:10px">
+      <div style="font-size:11px;font-weight:500;color:#444441;margin-bottom:4px">LAYER 3 · SOCIAL</div>
+      <div style="font-size:12px">Jane Lauder provides access, insulation, and political adjacency (Ronald Lauder → Trump). Bessent provides operational synchronization at Treasury.</div>
+    </div>
+  </div>
+  <div style="font-size:12px;border-top:0.5px solid var(--color-border-tertiary);padding-top:10px">The critical insight: none of these relationships are compartmentalized. Druckenmiller hired Bessent, funded Warsh, and invested in Palantir. Thiel co-founded Palantir with Karp. Warsh met Jane at Stanford where he also befriended Thiel. Friedman and Shultz sat at Hoover where Warsh was a fellow. Every node connects to every other node through at most two hops — which means the network is not a web of separate relationships. It is a single, deeply integrated power cluster that happens to now control the Fed, the Treasury, and a significant share of US government AI infrastructure simultaneously.</div>
+</div>
+
+</div>
+<script>
+function toggle(id){
+  const p=document.getElementById(id);
+  const a=document.getElementById(id+'-arr');
+  const isOpen=p.classList.contains('open');
+  document.querySelectorAll('.detail-panel').forEach(el=>el.classList.remove('open'));
+  document.querySelectorAll('[id$="-arr"]').forEach(el=>el.textContent='▾');
+  if(!isOpen){p.classList.add('open');if(a)a.textContent='▴';}
+}
+</script>

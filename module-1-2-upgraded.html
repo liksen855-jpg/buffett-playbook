@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>How Markets Work — Insight Invest</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+   :root {
+    --bg: #08090c; --bg2: #0e1016; --bg3: #14161e; --surface: #1a1d28;
+    --border: #252838; --text: #9ca3b8; --text-bright: #e8ecf4; --text-dim: #555c72;
+    --gold: #c9a84c; --gold-light: #e4cc7a; --gold-dim: #8a7234;
+    --blue: #4a7cff; --green: #3dd68c; --red: #ff5c5c; --cyan: #38d9d9;
+   }
+   * { box-sizing: border-box; margin: 0; padding: 0; }
+   html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: var(--border) var(--bg); }
+   ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: var(--bg); } ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+   body { font-family: 'Syne', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+   body::before { content: ''; position: fixed; inset: 0; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9999; }
+   nav { position: fixed; top: 0; left: 0; right: 0; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; z-index: 100; background: linear-gradient(180deg, var(--bg) 0%, transparent 100%); transition: all 0.4s; }
+   nav.scrolled { background: #08090cee; backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 14px 48px; }
+   .nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+   .nav-logo-mark { width: 38px; height: 38px; border: 1.5px solid var(--gold); display: flex; align-items: center; justify-content: center; }
+   .nav-logo-mark::before { content: 'I'; font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--gold); }
+   .nav-logo-text { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 600; color: var(--text-bright); letter-spacing: 0.12em; text-transform: uppercase; }
+   .nav-links { display: flex; gap: 36px; align-items: center; }
+   .nav-links a { font-size: 12px; font-weight: 500; color: var(--text-dim); text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.3s; position: relative; }
+   .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: var(--gold); transition: width 0.3s; }
+   .nav-links a:hover { color: var(--gold); } .nav-links a:hover::after { width: 100%; }
+   .nav-cta { padding: 10px 24px !important; border: 1px solid var(--gold-dim) !important; color: var(--gold) !important; font-size: 11px !important; letter-spacing: 0.14em !important; transition: all 0.3s !important; }
+   .nav-cta:hover { background: var(--gold) !important; color: var(--bg) !important; }
+   .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+   .reveal.visible { opacity: 1; transform: translateY(0); }
+   .mod-breadcrumb { display: flex; align-items: center; gap: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); padding: 100px 48px 0; }
+   .mod-breadcrumb a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; } .mod-breadcrumb a:hover { color: var(--gold); } .mod-breadcrumb span { opacity: 0.4; }
+   .mod-hero { padding: 36px 48px 64px; position: relative; overflow: hidden; border-bottom: 1px solid var(--border); }
+   .mod-hero::before { content: attr(data-watermark); position: absolute; right: 48px; top: 10px; font-family: 'Cormorant Garamond', serif; font-size: 160px; font-weight: 300; color: var(--border); opacity: 0.35; line-height: 1; user-select: none; pointer-events: none; white-space: nowrap; }
+   .mod-code { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.15em; color: var(--blue); text-transform: uppercase; margin-bottom: 16px; }
+   .mod-hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 4.5vw, 64px); font-weight: 400; color: var(--text-bright); line-height: 1.1; margin-bottom: 20px; }
+   .mod-hero-meta { display: flex; align-items: center; gap: 24px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); letter-spacing: 0.08em; }
+   .mod-hero-meta span { display: flex; align-items: center; gap: 6px; }
+   .mod-hero-meta svg { width: 13px; height: 13px; opacity: 0.6; }
+   .mod-desc { max-width: 680px; font-family: 'Syne', sans-serif; font-size: 16px; color: var(--text); line-height: 1.7; margin-bottom: 28px; }
+   .mod-progress-bar { position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--blue); z-index: 999; transition: width 0.1s linear; }
+   .mod-layout { display: grid; grid-template-columns: 1fr 300px; gap: 0; max-width: 1400px; margin: 0 auto; padding: 0 48px; align-items: start; }
+   .mod-content { padding: 64px 48px 64px 0; border-right: 1px solid var(--border); }
+   .mod-sidebar { padding: 64px 0 64px 40px; position: sticky; top: 80px; }
+   .mod-section { margin-bottom: 64px; }
+   .mod-section-tag { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 16px; }
+   .mod-section h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(24px, 2.5vw, 36px); font-weight: 400; color: var(--text-bright); line-height: 1.2; margin-bottom: 20px; }
+   .mod-section p { font-size: 15px; line-height: 1.75; color: var(--text); margin-bottom: 16px; max-width: 700px; }
+   .mod-section h3 { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 500; color: var(--text-bright); margin: 32px 0 12px; }
+   .key-concept { background: var(--bg2); border: 1px solid var(--border); border-left: 3px solid var(--blue); padding: 24px 28px; margin: 32px 0; max-width: 700px; }
+   .key-concept-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: var(--blue); text-transform: uppercase; margin-bottom: 10px; }
+   .key-concept p { margin-bottom: 0; font-size: 14px; }
+   .insight-box { background: linear-gradient(135deg, rgba(201,168,76,0.06), rgba(201,168,76,0.02)); border: 1px solid var(--gold-dim); padding: 24px 28px; margin: 32px 0; max-width: 700px; }
+   .insight-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; }
+   .insight-box p { margin-bottom: 0; font-size: 14px; }
+   .asymmetric-box { background: linear-gradient(135deg, rgba(56,217,217,0.05), rgba(56,217,217,0.01)); border: 1px solid rgba(56,217,217,0.25); padding: 24px 28px; margin: 32px 0; max-width: 700px; position: relative; overflow: hidden; }
+   .asymmetric-box::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: linear-gradient(180deg, var(--cyan), transparent); }
+   .asymmetric-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; color: var(--cyan); text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+   .asymmetric-label::after { content: '◆'; font-size: 7px; }
+   .asymmetric-box p { margin-bottom: 8px; font-size: 14px; color: var(--text); }
+   .asymmetric-box p:last-child { margin-bottom: 0; }
+   .legend-quote { background: var(--bg3); border-left: 3px solid var(--gold); padding: 24px 28px; margin: 32px 0; max-width: 700px; position: relative; }
+   .legend-quote-mark { font-family: 'Cormorant Garamond', serif; font-size: 64px; font-weight: 300; color: var(--gold-dim); opacity: 0.4; position: absolute; top: -8px; left: 24px; line-height: 1; }
+   .legend-quote-text { font-family: 'Cormorant Garamond', serif; font-size: 19px; font-style: italic; color: var(--text-bright); line-height: 1.55; margin-bottom: 14px; padding-top: 16px; }
+   .legend-quote-attr { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--gold); letter-spacing: 0.15em; text-transform: uppercase; }
+   .formula-box { background: var(--bg3); border: 1px solid var(--border); padding: 20px 24px; margin: 24px 0; font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: var(--text-bright); max-width: 700px; }
+   .formula-label { font-size: 10px; letter-spacing: 0.15em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px; }
+   .example-list { list-style: none; padding: 0; margin: 20px 0; max-width: 700px; }
+   .example-list li { padding: 10px 0 10px 20px; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text); line-height: 1.6; position: relative; }
+   .example-list li::before { content: '→'; position: absolute; left: 0; color: var(--blue); font-family: 'IBM Plex Mono', monospace; }
+   .example-list li:last-child { border-bottom: none; }
+   .tool-container { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 32px; margin: 40px 0; max-width: 700px; }
+   .tool-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 500; color: var(--text-bright); margin-bottom: 6px; }
+   .tool-subtitle { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); letter-spacing: 0.08em; margin-bottom: 28px; }
+   .tool-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+   .tool-field { display: flex; flex-direction: column; gap: 8px; }
+   .tool-field label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.12em; color: var(--text-dim); text-transform: uppercase; }
+   .tool-field input, .tool-field select { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 10px 14px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--text-bright); outline: none; transition: border-color 0.2s; -webkit-appearance: none; }
+   .tool-field input:focus, .tool-field select:focus { border-color: var(--blue); }
+   .tool-btn { background: var(--blue); color: #fff; border: none; border-radius: 6px; padding: 12px 28px; cursor: pointer; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.05em; transition: opacity 0.2s; margin-top: 8px; }
+   .tool-btn:hover { opacity: 0.85; }
+   .tool-result { margin-top: 24px; padding: 20px 24px; background: var(--bg3); border-radius: 8px; border: 1px solid var(--border); display: none; }
+   .tool-result.visible { display: block; }
+   .diagram-container { max-width: 700px; margin: 40px 0; background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 32px; }
+   .diagram-title { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 24px; }
+   svg.diagram { width: 100%; overflow: visible; }
+   .compare-table { width: 100%; border-collapse: collapse; margin: 24px 0; max-width: 700px; }
+   .compare-table th { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.12em; color: var(--text-dim); text-transform: uppercase; padding: 12px 16px; border-bottom: 1px solid var(--border); text-align: left; }
+   .compare-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text); line-height: 1.5; vertical-align: top; }
+   .compare-table tr:last-child td { border-bottom: none; }
+   .compare-table tr:hover td { background: var(--bg3); }
+   .compare-table .td-highlight { color: var(--text-bright); font-weight: 500; }
+
+   /* ── NEW: Sentiment gauge ── */
+   .sentiment-gauge { max-width: 700px; margin: 32px 0; background: var(--bg2); border: 1px solid var(--border); padding: 28px; }
+   .sg-title { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 20px; }
+   .sg-track { height: 12px; background: linear-gradient(90deg, var(--blue) 0%, var(--green) 50%, var(--red) 100%); border-radius: 6px; position: relative; margin-bottom: 8px; }
+   .sg-needle { position: absolute; top: -8px; width: 2px; height: 28px; background: var(--text-bright); border-radius: 2px; transform: translateX(-50%); transition: left 0.6s cubic-bezier(0.34,1.56,0.64,1); }
+   .sg-needle::after { content: '▲'; position: absolute; bottom: -14px; left: 50%; transform: translateX(-50%); font-size: 8px; color: var(--text-bright); }
+   .sg-labels { display: flex; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-dim); letter-spacing: 0.1em; margin-top: 16px; }
+   .sg-reading { margin-top: 20px; display: flex; align-items: baseline; gap: 12px; }
+   .sg-reading-val { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 400; }
+   .sg-reading-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); }
+   .sg-signal { margin-top: 12px; font-size: 13px; color: var(--text); line-height: 1.6; }
+   .sg-controls { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+   .sg-btn { background: var(--bg3); border: 1px solid var(--border); padding: 8px 16px; cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; transition: all 0.2s; border-radius: 4px; }
+   .sg-btn:hover, .sg-btn.active { border-color: var(--gold); color: var(--gold); }
+
+   /* ── NEW: Liquidity cascade viz ── */
+   .cascade-viz { max-width: 700px; margin: 32px 0; background: var(--bg2); border: 1px solid var(--border); padding: 28px; }
+   .cascade-title { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 20px; }
+   .cascade-steps { display: flex; flex-direction: column; gap: 0; }
+   .cascade-step { display: flex; align-items: flex-start; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--border); }
+   .cascade-step:last-child { border-bottom: none; }
+   .cascade-step-num { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-dim); min-width: 24px; margin-top: 2px; }
+   .cascade-step-title { font-size: 13px; font-weight: 700; color: var(--text-bright); margin-bottom: 4px; }
+   .cascade-step-desc { font-size: 12px; color: var(--text); line-height: 1.6; }
+   .cascade-step-impact { font-family: 'IBM Plex Mono', monospace; font-size: 9px; padding: 2px 8px; margin-top: 6px; display: inline-block; }
+   .impact-severe { background: rgba(255,92,92,0.1); color: var(--red); border: 1px solid rgba(255,92,92,0.3); }
+   .impact-high { background: rgba(201,168,76,0.1); color: var(--gold); border: 1px solid rgba(201,168,76,0.3); }
+   .impact-medium { background: rgba(74,124,255,0.1); color: var(--blue); border: 1px solid rgba(74,124,255,0.3); }
+
+   /* ── NEW: Positioning table ── */
+   .positioning-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 700px; margin: 24px 0; }
+   .pos-card { background: var(--bg3); border: 1px solid var(--border); padding: 20px; }
+   .pos-card-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 10px; }
+   .pos-card-title { font-size: 13px; font-weight: 700; color: var(--text-bright); margin-bottom: 8px; }
+   .pos-card-desc { font-size: 12px; color: var(--text); line-height: 1.65; }
+   .pos-card-signal { font-family: 'IBM Plex Mono', monospace; font-size: 10px; margin-top: 10px; padding: 4px 10px; display: inline-block; }
+   .signal-contrarian-buy { background: rgba(61,214,140,0.1); color: var(--green); border: 1px solid rgba(61,214,140,0.3); }
+   .signal-contrarian-sell { background: rgba(255,92,92,0.1); color: var(--red); border: 1px solid rgba(255,92,92,0.3); }
+   .signal-neutral { background: rgba(74,124,255,0.1); color: var(--blue); border: 1px solid rgba(74,124,255,0.3); }
+
+   /* ── QUIZ ── */
+   .quiz-container { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 32px; margin: 40px 0; max-width: 700px; }
+   .quiz-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+   .quiz-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 500; color: var(--text-bright); }
+   .quiz-progress { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); letter-spacing: 0.1em; }
+   .quiz-progress-track { height: 2px; background: var(--border); border-radius: 2px; margin-bottom: 28px; }
+   .quiz-progress-fill { height: 100%; background: var(--blue); border-radius: 2px; transition: width 0.4s ease; }
+   .quiz-q { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; color: var(--text-bright); line-height: 1.4; margin-bottom: 24px; }
+   .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+   .quiz-opt { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; cursor: pointer; transition: all 0.2s; font-size: 14px; color: var(--text); line-height: 1.5; text-align: left; }
+   .quiz-opt:hover:not(.answered) { border-color: var(--blue); color: var(--text-bright); }
+   .quiz-opt.correct { border-color: var(--green); background: rgba(61,214,140,0.08); color: var(--green); }
+   .quiz-opt.wrong { border-color: var(--red); background: rgba(255,92,92,0.08); color: var(--red); }
+   .quiz-feedback { margin-top: 20px; padding: 16px 20px; border-radius: 8px; font-size: 14px; line-height: 1.6; display: none; }
+   .quiz-feedback.show { display: block; }
+   .quiz-feedback.correct-fb { background: rgba(61,214,140,0.08); border: 1px solid rgba(61,214,140,0.3); color: var(--green); }
+   .quiz-feedback.wrong-fb { background: rgba(255,92,92,0.08); border: 1px solid rgba(255,92,92,0.3); color: #ff8a8a; }
+   .quiz-next { margin-top: 20px; background: none; border: 1px solid var(--border); border-radius: 6px; padding: 10px 24px; cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text); letter-spacing: 0.1em; text-transform: uppercase; transition: all 0.2s; display: none; }
+   .quiz-next.show { display: inline-block; }
+   .quiz-next:hover { border-color: var(--blue); color: var(--blue); }
+   .quiz-score { text-align: center; padding: 40px 0 20px; display: none; }
+   .quiz-score.show { display: block; }
+   .quiz-score-num { font-family: 'Cormorant Garamond', serif; font-size: 72px; font-weight: 300; color: var(--text-bright); line-height: 1; }
+   .quiz-score-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 8px; margin-bottom: 24px; }
+   .quiz-score-msg { font-size: 15px; color: var(--text); line-height: 1.6; margin-bottom: 28px; }
+   .quiz-restart { background: var(--blue); color: #fff; border: none; border-radius: 6px; padding: 12px 28px; cursor: pointer; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.05em; transition: opacity 0.2s; }
+   .quiz-restart:hover { opacity: 0.85; }
+   .sidebar-toc { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 24px; }
+   .sidebar-toc-title { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 16px; }
+   .toc-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); cursor: pointer; font-size: 13px; color: var(--text); transition: color 0.2s; }
+   .toc-item:last-child { border-bottom: none; }
+   .toc-item:hover { color: var(--text-bright); }
+   .toc-item.active { color: var(--blue); }
+   .toc-num { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-dim); min-width: 20px; }
+   .sidebar-next { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 24px; }
+   .sidebar-next-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 12px; }
+   .sidebar-next-title { font-family: 'Cormorant Garamond', serif; font-size: 17px; color: var(--text-bright); margin-bottom: 10px; }
+   .sidebar-next a { display: inline-flex; align-items: center; gap: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--blue); text-decoration: none; letter-spacing: 0.08em; transition: gap 0.2s; }
+   .sidebar-next a:hover { gap: 10px; }
+   .sidebar-key-stats { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+   .sidebar-stat { padding: 12px 0; border-bottom: 1px solid var(--border); }
+   .sidebar-stat:last-child { border-bottom: none; }
+   .sidebar-stat-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+   .sidebar-stat-value { font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--text-bright); font-weight: 400; }
+   .mod-nav-bar { border-top: 1px solid var(--border); padding: 40px 48px; display: flex; justify-content: space-between; align-items: center; }
+   .mod-nav-btn { display: flex; flex-direction: column; gap: 4px; text-decoration: none; max-width: 240px; }
+   .mod-nav-dir { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: var(--text-dim); text-transform: uppercase; }
+   .mod-nav-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--text-bright); transition: color 0.2s; }
+   .mod-nav-btn:hover .mod-nav-title { color: var(--blue); }
+   footer { padding: 60px 48px 40px; background: var(--bg); border-top: 1px solid var(--border); }
+   .footer-grid { display: flex; justify-content: space-between; max-width: 1400px; margin: 0 auto; padding-bottom: 40px; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 40px; }
+   .footer-brand { max-width: 280px; }
+   .footer-brand-name { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; color: var(--text-bright); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+   .footer-brand-desc { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+   .footer-col-title { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500; color: var(--text-dim); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 16px; }
+   .footer-col a { display: block; font-size: 13px; color: var(--text); text-decoration: none; padding: 4px 0; transition: color 0.3s; }
+   .footer-col a:hover { color: var(--gold); }
+   .footer-bottom { max-width: 1400px; margin: 24px auto 0; display: flex; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); flex-wrap: wrap; gap: 12px; }
+   @media (max-width: 1100px) { nav { padding: 16px 24px; } .nav-links { display: none; } }
+   @media (max-width: 900px) {
+    .mod-layout { grid-template-columns: 1fr; padding: 0 24px; }
+    .mod-content { padding: 48px 0; border-right: none; border-bottom: 1px solid var(--border); }
+    .mod-sidebar { padding: 40px 0; position: static; }
+    .mod-hero { padding: 28px 24px 48px; } .mod-hero::before { display: none; }
+    .mod-breadcrumb { padding: 90px 24px 0; }
+    .tool-row { grid-template-columns: 1fr; }
+    .mod-nav-bar { padding: 32px 24px; flex-direction: column; gap: 24px; align-items: flex-start; }
+    .positioning-grid { grid-template-columns: 1fr; }
+    footer { padding: 48px 24px 32px; }
+   }
+  </style>
+</head>
+<body>
+  <div class="mod-progress-bar" id="readingProgress"></div>
+  <nav id="navbar">
+    <a class="nav-logo" href="/"><div class="nav-logo-mark"></div><span class="nav-logo-text">Insight Invest</span></a>
+    <div class="nav-links">
+      <a href="/#pillars">What We Cover</a><a href="/#macro">Macro</a><a href="/curriculum">Learn</a>
+      <a class="nav-cta" href="/#reports">Access Reports</a>
+    </div>
+  </nav>
+
+  <div class="mod-breadcrumb">
+    <a href="/">Insight Invest</a><span>/</span><a href="/curriculum">Curriculum</a><span>/</span>
+    <a href="/tier-1">Tier 1 · Foundation</a><span>/</span>
+    <span style="color:var(--text);">1.2 · How Markets Work</span>
+  </div>
+
+  <div class="mod-hero" data-watermark="1.2">
+    <div class="mod-code">Module 1.2 · Tier 1: Foundation · 70 min</div>
+    <h1>How Markets Work</h1>
+    <p class="mod-desc">The mechanical reality of exchanges, order books, and price discovery — plus the asymmetric frameworks the masses never learn: Soros's reflexivity, liquidity as the true risk, and how to read crowd positioning as a contrarian signal.</p>
+    <div class="mod-hero-meta">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 70 min</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> Article · 2 Tools · 10-Q Quiz</span>
+    </div>
+  </div>
+
+  <div class="mod-layout">
+   <div class="mod-content">
+
+    <!-- S1: What is a stock market -->
+    <div class="mod-section reveal" id="s1">
+      <div class="mod-section-tag">Section 01</div>
+      <h2>What Is a Stock Market?</h2>
+      <p>A stock market is a marketplace where buyers and sellers exchange ownership stakes in publicly listed companies. When you buy a share, you are purchasing a fractional claim on the company's assets, earnings, and future cash flows. You become, legally and economically, a part-owner.</p>
+      <p>The market serves two distinct functions that are often confused:</p>
+      <ul class="example-list">
+        <li><strong>Primary market:</strong> Companies raise capital by selling new shares to the public through an IPO. The company receives the proceeds. This is the capital formation function.</li>
+        <li><strong>Secondary market:</strong> After the IPO, investors trade shares among themselves on exchanges. The company receives no proceeds. This is where virtually all daily trading occurs.</li>
+      </ul>
+      <div class="key-concept">
+        <div class="key-concept-label">Key Concept</div>
+        <p>When you buy Apple stock on the NYSE, you are not giving Apple any money. You are buying shares from another investor who chose to sell. Apple's role ended at the IPO. The secondary market is simply investors continuously reassessing the value of already-issued shares — and disagreeing with each other enough to trade.</p>
+      </div>
+      <h3>The Major Exchanges</h3>
+      <table class="compare-table">
+        <thead><tr><th>Exchange</th><th>Location</th><th>Notable Listings</th><th>Structure</th></tr></thead>
+        <tbody>
+          <tr><td class="td-highlight">NYSE</td><td>New York</td><td>Berkshire, JPMorgan, Exxon</td><td>Auction + specialists</td></tr>
+          <tr><td class="td-highlight">NASDAQ</td><td>New York</td><td>Apple, Microsoft, Meta</td><td>Electronic dealer market</td></tr>
+          <tr><td class="td-highlight">LSE</td><td>London</td><td>HSBC, Shell, AstraZeneca</td><td>Electronic order book</td></tr>
+          <tr><td class="td-highlight">SGX</td><td>Singapore</td><td>DBS, Sea Ltd, Wilmar</td><td>Electronic order book</td></tr>
+          <tr><td class="td-highlight">Bursa Malaysia</td><td>Kuala Lumpur</td><td>Maybank, Petronas, CIMB</td><td>Electronic order book</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- S2: Market Participants -->
+    <div class="mod-section reveal" id="s2">
+      <div class="mod-section-tag">Section 02</div>
+      <h2>Market Participants</h2>
+      <p>Markets are not populated by a homogeneous mass of "investors." There are distinct participant types with different goals, time horizons, information advantages, and impact on price. Understanding who is on the other side of your trade matters more than most retail investors realise.</p>
+
+      <div class="diagram-container">
+        <div class="diagram-title">Market Participant Ecosystem</div>
+        <svg class="diagram" viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="g_blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4a7cff" stop-opacity="0.2"/><stop offset="100%" stop-color="#4a7cff" stop-opacity="0.04"/></linearGradient>
+            <linearGradient id="g_gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c9a84c" stop-opacity="0.2"/><stop offset="100%" stop-color="#c9a84c" stop-opacity="0.04"/></linearGradient>
+            <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff5c5c" stop-opacity="0.2"/><stop offset="100%" stop-color="#ff5c5c" stop-opacity="0.04"/></linearGradient>
+            <linearGradient id="g_green" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3dd68c" stop-opacity="0.2"/><stop offset="100%" stop-color="#3dd68c" stop-opacity="0.04"/></linearGradient>
+          </defs>
+          <rect x="10" y="20" width="140" height="120" rx="8" fill="url(#g_blue)" stroke="#252838"/>
+          <text x="80" y="46" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#4a7cff" letter-spacing="1.5">RETAIL</text>
+          <text x="80" y="62" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">Individual investors</text>
+          <text x="80" y="80" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">~15–25% of volume</text>
+          <text x="80" y="100" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">Least information</text>
+          <text x="80" y="116" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">Emotional decisions</text>
+          <rect x="165" y="20" width="150" height="120" rx="8" fill="url(#g_gold)" stroke="#252838"/>
+          <text x="240" y="46" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#c9a84c" letter-spacing="1.5">INSTITUTIONS</text>
+          <text x="240" y="62" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">Funds, pensions,</text>
+          <text x="240" y="80" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">insurance, endowments</text>
+          <text x="240" y="100" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">~60–70% of volume</text>
+          <text x="240" y="116" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">Move markets</text>
+          <rect x="330" y="20" width="145" height="120" rx="8" fill="url(#g_red)" stroke="#252838"/>
+          <text x="402" y="46" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#ff5c5c" letter-spacing="1.5">HFT FIRMS</text>
+          <text x="402" y="62" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">Algorithmic traders</text>
+          <text x="402" y="80" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">microsecond execution</text>
+          <text x="402" y="100" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">~50% of all trades</text>
+          <text x="402" y="116" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">Provide liquidity</text>
+          <rect x="490" y="20" width="145" height="120" rx="8" fill="url(#g_green)" stroke="#252838"/>
+          <text x="562" y="46" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#3dd68c" letter-spacing="1.5">MARKET MAKERS</text>
+          <text x="562" y="62" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">Quote both bid</text>
+          <text x="562" y="80" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">and ask prices</text>
+          <text x="562" y="100" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">Earn the spread</text>
+          <text x="562" y="116" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">Ensure liquidity</text>
+          <rect x="200" y="190" width="240" height="80" rx="8" fill="#14161e" stroke="#4a7cff" stroke-width="1.5"/>
+          <text x="320" y="222" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#4a7cff" letter-spacing="2">EXCHANGE / ORDER BOOK</text>
+          <text x="320" y="244" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">Matches buyers &amp; sellers</text>
+          <text x="320" y="260" text-anchor="middle" font-family="Cormorant Garamond" font-size="13" fill="#9ca3b8">Price discovery mechanism</text>
+          <line x1="80" y1="140" x2="240" y2="190" stroke="#252838" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="240" y1="140" x2="290" y2="190" stroke="#252838" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="402" y1="140" x2="350" y2="190" stroke="#252838" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="562" y1="140" x2="400" y2="190" stroke="#252838" stroke-width="1" stroke-dasharray="4,3"/>
+        </svg>
+      </div>
+
+      <div class="asymmetric-box">
+        <div class="asymmetric-label">Asymmetric Edge</div>
+        <p>When you place a market order on a major US exchange, you are almost certainly trading against an HFT algorithm that knows the order book better than you do, faster than you can blink. This is not a conspiracy — it is the infrastructure of modern markets. The implication: for retail investors, speed is not your edge. Your edges are time horizon (you can hold for years; they cannot), position size (you can enter small positions that institutions cannot without moving the market), and patience. Never compete on their terms. Win on yours.</p>
+      </div>
+    </div>
+
+    <!-- S3: Price Discovery + Order Book Tool -->
+    <div class="mod-section reveal" id="s3">
+      <div class="mod-section-tag">Section 03</div>
+      <h2>Price Discovery &amp; the Order Book</h2>
+      <p>Prices are not assigned — they emerge. Price discovery is the process by which markets aggregate the opinions of all participants about what a security is worth, and express that consensus as a single number: the current price.</p>
+      <p>The mechanism is the order book — a real-time ledger of all outstanding buy (bid) and sell (ask) orders at every price level. The current market price is simply the intersection of the highest willing buyer and lowest willing seller.</p>
+
+      <div class="tool-container">
+        <div class="tool-title">Live Order Book Simulator</div>
+        <div class="tool-subtitle">Interactive simulation of how bid/ask orders form the market price</div>
+        <div id="orderbook_display" style="font-family:'IBM Plex Mono',monospace;font-size:12px;"></div>
+        <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;">
+          <button class="tool-btn" onclick="addBuyOrder()" style="background:var(--green);">+ Buy Order</button>
+          <button class="tool-btn" onclick="addSellOrder()" style="background:var(--red);">+ Sell Order</button>
+          <button class="tool-btn" onclick="executeOrder()" style="background:var(--gold);color:var(--bg);">Execute Trade</button>
+          <button class="tool-btn" onclick="resetOrderBook()" style="background:var(--surface);color:var(--text);border:1px solid var(--border);">Reset</button>
+        </div>
+        <div id="ob_log" style="margin-top:16px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-dim);min-height:40px;"></div>
+      </div>
+
+      <div class="key-concept">
+        <div class="key-concept-label">What the Spread Tells You</div>
+        <p>A tight spread (e.g., $0.01 on Apple) signals high liquidity — many participants, efficient pricing, low cost of execution. A wide spread (e.g., $0.50 on a small-cap) signals low liquidity — your order will move the price against you. Always check the spread before entering any position. Wide spreads silently eat your returns.</p>
+      </div>
+    </div>
+
+    <!-- S4: Order Types -->
+    <div class="mod-section reveal" id="s4">
+      <div class="mod-section-tag">Section 04</div>
+      <h2>Order Types Every Investor Must Know</h2>
+      <p>Your choice of order type is not a technicality — it directly affects execution price, risk, and strategy. These are the four order types that matter:</p>
+      <table class="compare-table">
+        <thead><tr><th>Order Type</th><th>Execution</th><th>Price Certainty</th><th>Best For</th></tr></thead>
+        <tbody>
+          <tr><td class="td-highlight">Market Order</td><td>Immediate at best available price</td><td>None — price can slip</td><td>High-liquidity stocks, urgency</td></tr>
+          <tr><td class="td-highlight">Limit Order</td><td>Only at your specified price or better</td><td>Full — your price or no deal</td><td>Most long-term investing</td></tr>
+          <tr><td class="td-highlight">Stop Order</td><td>Becomes market order when price hits stop</td><td>None after trigger</td><td>Cutting losses, protecting gains</td></tr>
+          <tr><td class="td-highlight">Stop-Limit</td><td>Becomes limit order when price hits stop</td><td>Price certainty after trigger</td><td>Precision risk management</td></tr>
+        </tbody>
+      </table>
+      <div class="insight-box">
+        <div class="insight-label">Practical Insight</div>
+        <p>For most long-term investors, limit orders are superior to market orders in virtually all situations. A market order for an illiquid stock during volatile conditions can execute significantly worse than the displayed price — this is called slippage. Always use limit orders unless speed of execution is genuinely critical. The extra 5 minutes it takes to get a fill is worth far less than the 1–3% you might otherwise surrender to slippage.</p>
+      </div>
+    </div>
+
+    <!-- S5: Market Efficiency -->
+    <div class="mod-section reveal" id="s5">
+      <div class="mod-section-tag">Section 05</div>
+      <h2>Market Efficiency &amp; What It Means for You</h2>
+      <p>The Efficient Market Hypothesis (EMH) proposes that stock prices at all times reflect all available information. In its strong form, this would mean no investor can consistently beat the market — any advantage would be instantly arbitraged away.</p>
+      <p>The evidence is mixed and nuanced. Markets are <em>mostly</em> efficient for widely-followed, liquid, large-cap securities. But inefficiencies persist at the edges.</p>
+
+      <div class="diagram-container">
+        <div class="diagram-title">Three Forms of Market Efficiency</div>
+        <svg class="diagram" viewBox="0 0 580 180" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="290" cy="90" rx="270" ry="80" fill="none" stroke="#252838" stroke-width="1"/>
+          <ellipse cx="290" cy="90" rx="185" ry="55" fill="none" stroke="#4a7cff" stroke-width="1" opacity="0.5"/>
+          <ellipse cx="290" cy="90" rx="90" ry="32" fill="rgba(74,124,255,0.1)" stroke="#4a7cff" stroke-width="1.5"/>
+          <text x="290" y="85" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#4a7cff" letter-spacing="1">WEAK FORM</text>
+          <text x="290" y="100" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#9ca3b8">Past prices priced in</text>
+          <text x="290" y="134" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#555c72" letter-spacing="1">SEMI-STRONG</text>
+          <text x="290" y="150" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#555c72">+ All public info priced in</text>
+          <text x="480" y="78" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#333a50" letter-spacing="1">STRONG FORM</text>
+          <text x="480" y="94" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#333a50">+ All info including</text>
+          <text x="480" y="110" text-anchor="middle" font-family="Cormorant Garamond" font-size="12" fill="#333a50">insider knowledge</text>
+        </svg>
+      </div>
+
+      <p>The practical implication: beating the market in large-cap, well-covered US stocks is extraordinarily difficult because thousands of analysts are pricing every data point in real time. Beating the market in less-efficient areas — emerging markets, microcaps, event-driven situations, complex corporate structures — is possible, but requires genuine informational or analytical edge, not just effort.</p>
+
+      <div class="asymmetric-box">
+        <div class="asymmetric-label">Asymmetric Edge — Where Inefficiency Lives</div>
+        <p>The market is most efficient where the most eyeballs are watching. It is least efficient where: (1) securities are too small for institutions to participate (sub-$300M market cap), (2) there is a structural reason why sophisticated investors can't or won't look (regulatory restrictions, stigma, complexity), (3) the time horizon required is longer than institutional mandates allow (multi-year thesis), (4) it's a market where language or geography creates barriers (local EM markets, foreign small-caps). These four inefficiency pockets are where Druckenmiller, Soros, and every other outperformer built their careers. The question isn't "can you beat Apple?" — it's "where are the blind spots in the system?"</p>
+      </div>
+    </div>
+
+    <!-- S6: Market Cycles -->
+    <div class="mod-section reveal" id="s6">
+      <div class="mod-section-tag">Section 06</div>
+      <h2>Bull Markets, Bear Markets &amp; Market Cycles</h2>
+      <p>Markets move in cycles. Understanding cycle vocabulary and mechanics prevents the most common and costly mistake in investing: panic selling at lows and exuberant buying at highs.</p>
+      <ul class="example-list">
+        <li><strong>Bull market:</strong> Sustained price rise of 20%+ from recent lows. Rising confidence, expanding earnings expectations, often leverage. Historically lasts 3–5 years on average.</li>
+        <li><strong>Bear market:</strong> Sustained decline of 20%+ from recent highs. Falling earnings expectations, risk aversion, forced selling. Average decline: −35%, average duration: 9–14 months.</li>
+        <li><strong>Correction:</strong> A 10–20% pullback within a larger trend. Often sudden, often reversible within weeks. The most common buying opportunity most investors talk themselves out of.</li>
+        <li><strong>Crash:</strong> Rapid decline of 20%+ in days or weeks. Almost always driven by liquidity events and margin calls — not fundamental deterioration. The 1987 crash reversed 100% within 2 years.</li>
+      </ul>
+      <div class="key-concept">
+        <div class="key-concept-label">Historical Context</div>
+        <p>The S&P 500 has experienced a bear market (–20%+) approximately every 3.5 years on average. It has recovered and made new all-time highs every single time. The investor who understood this and did not sell in 2009, 2020, or 2022 made extraordinary returns. The one who panicked made losses permanent. Bear markets are not threats to the long-term investor — they are the mechanism that generates long-term equity returns.</p>
+      </div>
+    </div>
+
+    <!-- S7: SOROS REFLEXIVITY (NEW) -->
+    <div class="mod-section reveal" id="s7">
+      <div class="mod-section-tag">Section 07 · Asymmetric Framework</div>
+      <h2>Soros's Reflexivity: The Operating System of Markets</h2>
+      <p>The most important concept about markets that almost no standard investing course teaches. George Soros built the most successful macro hedge fund in history on one core insight: markets do not simply <em>reflect</em> reality — they <em>create</em> it.</p>
+      <p>The standard model of markets assumes that prices reflect underlying fundamental value, and that when prices deviate from fundamentals, they eventually correct back. Reflexivity challenges this entirely. It says the relationship runs in both directions: fundamentals influence prices, but prices also influence fundamentals.</p>
+
+      <div class="legend-quote">
+        <div class="legend-quote-mark">"</div>
+        <div class="legend-quote-text">Markets are constantly in a state of uncertainty and flux, and money is made by discounting the obvious and betting on the unexpected. The prevailing wisdom is usually wrong at turning points.</div>
+        <div class="legend-quote-attr">— George Soros, The Alchemy of Finance</div>
+      </div>
+
+      <h3>The Reflexive Feedback Loop</h3>
+      <p>Here is a concrete example of reflexivity in action. A stock begins to rise on optimistic expectations. As it rises:</p>
+      <ul class="example-list">
+        <li><strong>The company's cost of capital falls</strong> — it can now issue equity cheaply and raise cash for acquisitions or growth investment.</li>
+        <li><strong>Management credibility increases</strong> — a rising stock price attracts better talent, better deal terms, more press coverage.</li>
+        <li><strong>The business improves</strong> — the higher stock price literally made the company's fundamentals better than they were before the rise.</li>
+        <li><strong>The narrative self-reinforces</strong> — analysts upgrade, momentum investors pile in, index funds increase their weighting. More buying begets more buying.</li>
+      </ul>
+      <p>The critical insight: <strong>the price rise created the fundamental improvement that now justifies the higher price.</strong> This is not a mispricing that will correct — it is a new reality that the market created. And it can continue far longer, and reach far higher, than any "fair value" model would predict.</p>
+
+      <div class="asymmetric-box">
+        <div class="asymmetric-label">Asymmetric Edge — How to Trade Reflexivity</div>
+        <p><strong>On the way up:</strong> Reflexive trends have more momentum than fundamentals suggest. Don't fight the trend simply because valuation looks stretched. The feedback loop is real, and it can persist for years. Soros rode UK real estate reflexivity through the late 1980s, Druckenmiller rode US tech reflexivity through the 1990s. The question isn't "is it overvalued?" — it's "is the feedback loop intact or breaking?"</p>
+        <p><strong>On the way down:</strong> Reflexive collapses are equally violent and self-reinforcing. A falling stock price raises the cost of capital, hurts management credibility, triggers analyst downgrades, forces index rebalancing, hits management stock options, and can trigger covenant breaches on debt — all of which make the underlying business worse, justifying the lower price. This is why value traps exist. The stock looks cheap at −40%, gets worse at −60%, and is still getting worse at −80%. Reflexivity is working in reverse.</p>
+        <p><strong>The edge:</strong> Identify where the feedback loop is about to reverse. The inflection from reinforcing to reversing is the highest-conviction entry point in all of markets. It requires watching fundamentals <em>and</em> the narrative simultaneously — the moment the fundamental improvement can no longer justify the price, or the moment a collapsing business stabilises, is where the asymmetric trade lives.</p>
+      </div>
+    </div>
+
+    <!-- S8: LIQUIDITY AS THE TRUE RISK (NEW) -->
+    <div class="mod-section reveal" id="s8">
+      <div class="mod-section-tag">Section 08 · Asymmetric Framework</div>
+      <h2>Liquidity: The Real Risk That Causes Every Crash</h2>
+      <p>Most investing courses teach risk as volatility — the standard deviation of returns. This is technically rigorous and completely wrong for how markets actually blow up. The real risk is liquidity risk: the risk that when you want to sell, there is no buyer.</p>
+      <p>Every major market crash in history — 1929, 1987, 1998, 2008, March 2020 — was not primarily a story of fundamentals deteriorating. It was a story of liquidity evaporating. The bid disappeared. And when the bid disappears, price discovery stops working and assets fall to whatever level can attract a buyer — which can be far, far below intrinsic value.</p>
+
+      <div class="cascade-viz">
+        <div class="cascade-title">The Liquidity Cascade — How Crashes Actually Happen</div>
+        <div class="cascade-steps">
+          <div class="cascade-step">
+            <div class="cascade-step-num">01</div>
+            <div>
+              <div class="cascade-step-title">Initial Trigger</div>
+              <div class="cascade-step-desc">A forced seller appears — a fund redemption, a margin call, a regulatory action, a surprise earnings miss. They need to sell regardless of price.</div>
+              <span class="cascade-step-impact impact-medium">LOCALISED</span>
+            </div>
+          </div>
+          <div class="cascade-step">
+            <div class="cascade-step-num">02</div>
+            <div>
+              <div class="cascade-step-title">Price Decline Triggers More Margin Calls</div>
+              <div class="cascade-step-desc">The forced sale moves prices down. Other leveraged investors now have margin calls of their own. They sell whatever is liquid — often assets unrelated to the original trigger.</div>
+              <span class="cascade-step-impact impact-high">SPREADING</span>
+            </div>
+          </div>
+          <div class="cascade-step">
+            <div class="cascade-step-num">03</div>
+            <div>
+              <div class="cascade-step-title">Market Makers Widen Spreads or Step Back</div>
+              <div class="cascade-step-desc">HFT algorithms detect volatility and widen bid-ask spreads dramatically. Some pull their quotes entirely. The "cost" of selling spikes. Buyers demand a much larger discount to take risk.</div>
+              <span class="cascade-step-impact impact-high">ACCELERATING</span>
+            </div>
+          </div>
+          <div class="cascade-step">
+            <div class="cascade-step-num">04</div>
+            <div>
+              <div class="cascade-step-title">Correlation Goes to 1</div>
+              <div class="cascade-step-desc">In a liquidity crisis, diversification stops working. Everything sells together — stocks, bonds, commodities, crypto, EM currencies. Investors don't sell what they want to sell; they sell what they can sell.</div>
+              <span class="cascade-step-impact impact-severe">CRISIS</span>
+            </div>
+          </div>
+          <div class="cascade-step">
+            <div class="cascade-step-num">05</div>
+            <div>
+              <div class="cascade-step-title">Resolution: The Patient Buyer Wins</div>
+              <div class="cascade-step-desc">The cascade stops when buyers with no leverage and no forced selling obligations step in. Those who preserved dry powder — cash, low debt — buy assets at generational discounts from panicked forced sellers.</div>
+              <span class="cascade-step-impact impact-medium" style="background:rgba(61,214,140,0.1);color:var(--green);border-color:rgba(61,214,140,0.3);">OPPORTUNITY</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="asymmetric-box">
+        <div class="asymmetric-label">Asymmetric Edge — The Liquidity Framework</div>
+        <p><strong>Before a position:</strong> Ask — if I need to exit this, how large is the market? How wide is the spread? What happens to my exit price in a risk-off environment? A position that looks attractively priced but has thin liquidity can destroy more capital in an exit than the investment ever would have made.</p>
+        <p><strong>Portfolio construction:</strong> Always hold a liquidity reserve. The exact amount is a personal choice, but the purpose is fixed: it is not a return-seeking asset. It is ammunition for the moments when everyone else is forced to sell. Druckenmiller has described his 1992 sterling trade and his 2008 positioning as both being built on holding cash until the opportunity became obvious — then concentrating aggressively. You cannot concentrate when you have no dry powder.</p>
+        <p><strong>Crisis recognition:</strong> Watch credit spreads (the yield difference between corporate bonds and government bonds). When spreads widen sharply, it is the bond market pricing in liquidity stress before the equity market has caught up. This is the single most reliable early warning system available, and most retail investors never look at it.</p>
+      </div>
+    </div>
+
+    <!-- S9: CROWD POSITIONING AS SIGNAL (NEW) -->
+    <div class="mod-section reveal" id="s9">
+      <div class="mod-section-tag">Section 09 · Asymmetric Framework</div>
+      <h2>Crowd Positioning: Reading Consensus as a Contrarian Signal</h2>
+      <p>When everyone who is going to buy has bought, there are no buyers left — only sellers. This sounds tautological, but it is the most powerful and most ignored principle in markets.</p>
+      <p>Price is not just a reflection of what people believe about fundamentals. It is also a reflection of what position they have already taken. A stock with universally bullish sentiment, record institutional ownership, and maximum analyst coverage may well have excellent fundamentals — but if there is no incremental buyer, it cannot go up.</p>
+
+      <div class="legend-quote">
+        <div class="legend-quote-mark">"</div>
+        <div class="legend-quote-text">When you find yourself agreeing with the consensus, you should be very worried. The market has already discounted what everyone agrees on.</div>
+        <div class="legend-quote-attr">— Stanley Druckenmiller</div>
+      </div>
+
+      <h3>The Positioning Data That Matters</h3>
+      <p>These are the institutional-grade sentiment and positioning indicators that professional macro investors monitor. Most retail investors are unaware they exist:</p>
+
+      <div class="positioning-grid">
+        <div class="pos-card">
+          <div class="pos-card-label" style="color:var(--blue);">Indicator · 01</div>
+          <div class="pos-card-title">CFTC Commitment of Traders (COT)</div>
+          <div class="pos-card-desc">Published weekly. Shows net positioning of commercial hedgers, large speculators, and small speculators across futures markets — currencies, commodities, equity indices. When speculators are at historical extremes of long or short, the contrarian trade is statistically strong.</div>
+          <span class="pos-card-signal signal-contrarian-buy">CONTRARIAN SIGNAL</span>
+        </div>
+        <div class="pos-card">
+          <div class="pos-card-label" style="color:var(--gold);">Indicator · 02</div>
+          <div class="pos-card-title">BofA Fund Manager Survey</div>
+          <div class="pos-card-desc">Monthly survey of global fund managers. Tracks: cash levels, equity overweight/underweight, sector positioning, and "most crowded trades." When cash is at record highs (fear) or record lows (greed), historically it has been time to do the opposite.</div>
+          <span class="pos-card-signal signal-neutral">MONTHLY DATA</span>
+        </div>
+        <div class="pos-card">
+          <div class="pos-card-label" style="color:var(--red);">Indicator · 03</div>
+          <div class="pos-card-title">Put/Call Ratio</div>
+          <div class="pos-card-desc">Ratio of put options (bets on decline) to call options (bets on rise). Very high reading = extreme fear = often a near-term bottom. Very low reading = extreme complacency = often a near-term top. Most powerful as a contrarian indicator at extremes, not as a trend signal.</div>
+          <span class="pos-card-signal signal-contrarian-sell">VOLATILITY SIGNAL</span>
+        </div>
+        <div class="pos-card">
+          <div class="pos-card-label" style="color:var(--green);">Indicator · 04</div>
+          <div class="pos-card-title">Short Interest</div>
+          <div class="pos-card-desc">Percentage of a stock's float that is sold short. Very high short interest can signal either: a legitimate warning (smart money sees a problem) or a short squeeze opportunity if the thesis is wrong. The distinction between the two requires fundamental analysis, not just the data.</div>
+          <span class="pos-card-signal signal-neutral">CONTEXT-DEPENDENT</span>
+        </div>
+        <div class="pos-card">
+          <div class="pos-card-label" style="color:var(--cyan);">Indicator · 05</div>
+          <div class="pos-card-title">AAII Sentiment Survey</div>
+          <div class="pos-card-desc">Weekly survey of individual investors. Bull/Bear ratio is a reliable contrarian indicator at extremes. When 60%+ bears: historically a near-term bottom in 80% of cases. When 60%+ bulls: historically preceded underperformance in subsequent 6 months.</div>
+          <span class="pos-card-signal signal-contrarian-buy">CONTRARIAN SIGNAL</span>
+        </div>
+        <div class="pos-card">
+          <div class="pos-card-label" style="color:var(--red);">Indicator · 06</div>
+          <div class="pos-card-title">Credit Spreads (IG &amp; HY)</div>
+          <div class="pos-card-desc">The spread between investment-grade or high-yield corporate bond yields and equivalent Treasury yields. Widening spreads = credit stress = leading indicator for equity volatility. Narrowing spreads = risk appetite returning. The bond market is smarter than the stock market and always moves first.</div>
+          <span class="pos-card-signal signal-contrarian-sell">EARLY WARNING</span>
+        </div>
+      </div>
+
+      <div class="asymmetric-box">
+        <div class="asymmetric-label">Asymmetric Edge — The Contrarian Framework</div>
+        <p>Positioning data is not a trading signal. It is a risk-management input. When all of the indicators above simultaneously flash extreme bullish positioning — record low cash, record high equity exposure, record high call/put ratio, max analyst optimism — it does not mean sell everything immediately. It means: (1) you have no margin of safety, (2) the upside is limited because all potential buyers are already long, and (3) any negative surprise will produce an outsized reaction because there are no incremental buyers to absorb selling pressure.</p>
+        <p>Conversely, when all indicators flash extreme bearish positioning, the fundamental backdrop matters less. Even mediocre news can trigger sharp rallies simply because shorts need to cover and underinvested institutions need to get back to benchmark weight. The fuel for the next rally is already sitting in cash and short positions. Ackman's maxim applies here exactly: "The consensus is wrong at turning points."</p>
+      </div>
+    </div>
+
+    <!-- S10: Sentiment Gauge Tool (NEW) -->
+    <div class="mod-section reveal" id="s10">
+      <div class="mod-section-tag">Interactive Tool · 02</div>
+      <h2>Market Sentiment Positioning Simulator</h2>
+      <p>Model how different positioning extremes affect the risk/reward of being long or short. This is the qualitative framework that professional macro investors run before sizing any position.</p>
+
+      <div class="tool-container">
+        <div class="tool-title">Sentiment &amp; Positioning Analyzer</div>
+        <div class="tool-subtitle">Select market conditions — get the contrarian positioning framework</div>
+
+        <div class="tool-field" style="margin-bottom:16px;">
+          <label>Fund Manager Cash Level (vs. historical avg)</label>
+          <select id="sp_cash">
+            <option value="very_low">Very Low — record-low cash, maximum equity exposure</option>
+            <option value="low">Below Average — modestly overweight equities</option>
+            <option value="normal" selected>Normal — near historical average</option>
+            <option value="high">Above Average — cautious, building cash</option>
+            <option value="very_high">Very High — record-high cash, maximum defensiveness</option>
+          </select>
+        </div>
+        <div class="tool-field" style="margin-bottom:16px;">
+          <label>Put/Call Ratio</label>
+          <select id="sp_pc">
+            <option value="very_low">Very Low (&lt;0.6) — extreme call buying, greed dominant</option>
+            <option value="low">Low (0.6–0.8) — moderately bullish sentiment</option>
+            <option value="normal" selected>Normal (0.8–1.0) — balanced</option>
+            <option value="high">High (1.0–1.3) — elevated fear, put protection buying</option>
+            <option value="very_high">Very High (&gt;1.3) — panic, maximum fear</option>
+          </select>
+        </div>
+        <div class="tool-field" style="margin-bottom:16px;">
+          <label>Analyst Consensus on the Market</label>
+          <select id="sp_analysts">
+            <option value="unanimous_bull">Unanimous Bull — 90%+ of analysts bullish, high targets</option>
+            <option value="mostly_bull">Mostly Bullish — consensus positive</option>
+            <option value="mixed" selected>Mixed — divided opinion</option>
+            <option value="mostly_bear">Mostly Bearish — consensus cautious</option>
+            <option value="unanimous_bear">Unanimous Bear — nearly everyone negative</option>
+          </select>
+        </div>
+        <div class="tool-field" style="margin-bottom:20px;">
+          <label>Retail Investor AAII Sentiment</label>
+          <select id="sp_retail">
+            <option value="max_bull">Maximum Bullish — 60%+ bulls, lowest bears in years</option>
+            <option value="mostly_bull">Mostly Bullish — above-average optimism</option>
+            <option value="neutral" selected>Neutral — near historical averages</option>
+            <option value="mostly_bear">Mostly Bearish — elevated fear</option>
+            <option value="max_bear">Maximum Bearish — 60%+ bears, extreme fear reading</option>
+          </select>
+        </div>
+        <button class="tool-btn" onclick="analyzeSentiment()">Analyze Positioning</button>
+        <div class="tool-result" id="sp_result">
+          <div id="sp_score_display" style="margin-bottom:16px;"></div>
+          <div id="sp_gauge_container">
+            <div class="sg-title">CONTRARIAN POSITIONING SIGNAL</div>
+            <div class="sg-track"><div class="sg-needle" id="sp_needle" style="left:50%"></div></div>
+            <div class="sg-labels"><span>EXTREME FEAR<br>(Buy Signal)</span><span style="text-align:center">NEUTRAL</span><span style="text-align:right">EXTREME GREED<br>(Sell Signal)</span></div>
+          </div>
+          <div id="sp_verdict" style="margin-top:24px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S11: Quiz -->
+    <div class="mod-section reveal" id="s11">
+      <div class="mod-section-tag">Knowledge Check</div>
+      <h2>Module 1.2 Assessment</h2>
+      <p>10 questions covering market mechanics, reflexivity, liquidity risk, and crowd positioning. The last four questions are framework-level — they test how you think, not what you memorised.</p>
+
+      <div class="quiz-container" id="quiz_1_2">
+        <div class="quiz-header"><div class="quiz-title">Module 1.2 · Assessment</div><div class="quiz-progress">1 / 10</div></div>
+        <div class="quiz-progress-track"><div class="quiz-progress-fill" style="width:0%"></div></div>
+        <div class="quiz-q-area">
+          <div class="quiz-q"></div>
+          <div class="quiz-options"></div>
+          <div class="quiz-feedback"></div>
+          <button class="quiz-next">Next Question →</button>
+        </div>
+        <div class="quiz-score">
+          <div class="quiz-score-num"></div>
+          <div class="quiz-score-label">Score</div>
+          <div class="quiz-score-msg"></div>
+          <button class="quiz-restart">Retake Quiz</button>
+        </div>
+      </div>
+    </div>
+
+   </div><!-- /mod-content -->
+
+   <!-- SIDEBAR -->
+   <div class="mod-sidebar">
+     <div class="sidebar-toc">
+       <div class="sidebar-toc-title">Contents</div>
+       <div class="toc-item" data-target="s1"><span class="toc-num">01</span>What Is a Market?</div>
+       <div class="toc-item" data-target="s2"><span class="toc-num">02</span>Market Participants</div>
+       <div class="toc-item" data-target="s3"><span class="toc-num">03</span>Price Discovery &amp; Order Book</div>
+       <div class="toc-item" data-target="s4"><span class="toc-num">04</span>Order Types</div>
+       <div class="toc-item" data-target="s5"><span class="toc-num">05</span>Market Efficiency</div>
+       <div class="toc-item" data-target="s6"><span class="toc-num">06</span>Market Cycles</div>
+       <div class="toc-item" data-target="s7"><span class="toc-num">07</span>Soros Reflexivity ★</div>
+       <div class="toc-item" data-target="s8"><span class="toc-num">08</span>Liquidity Risk ★</div>
+       <div class="toc-item" data-target="s9"><span class="toc-num">09</span>Crowd Positioning ★</div>
+       <div class="toc-item" data-target="s10"><span class="toc-num">10</span>Sentiment Analyzer ★</div>
+       <div class="toc-item" data-target="s11"><span class="toc-num">11</span>Assessment</div>
+     </div>
+     <div class="sidebar-key-stats">
+       <div class="sidebar-stat"><div class="sidebar-stat-label">Institutional share of volume</div><div class="sidebar-stat-value">~65%</div></div>
+       <div class="sidebar-stat"><div class="sidebar-stat-label">Avg bear market frequency</div><div class="sidebar-stat-value">3.5 yrs</div></div>
+       <div class="sidebar-stat"><div class="sidebar-stat-label">S&amp;P500 bear mkt recoveries</div><div class="sidebar-stat-value" style="color:var(--green);">100%</div></div>
+       <div class="sidebar-stat"><div class="sidebar-stat-label">Reflexivity feedback loop</div><div class="sidebar-stat-value" style="font-size:16px;color:var(--cyan);">Soros 1992</div></div>
+     </div>
+     <div class="sidebar-next">
+       <div class="sidebar-next-label">Next Module</div>
+       <div class="sidebar-next-title">1.3 · Interest Rates: The Master Variable</div>
+       <a href="/tier-1/module-1-3">Continue <span>→</span></a>
+     </div>
+   </div>
+  </div><!-- /mod-layout -->
+
+  <div class="mod-nav-bar">
+    <a class="mod-nav-btn" href="/tier-1/module-1-1"><span class="mod-nav-dir">← Previous</span><span class="mod-nav-title">1.1 · Money, Value &amp; Time</span></a>
+    <a class="mod-nav-btn" style="text-align:right" href="/tier-1/module-1-3"><span class="mod-nav-dir">Next →</span><span class="mod-nav-title">1.3 · Interest Rates</span></a>
+  </div>
+
+  <footer>
+   <div class="footer-grid">
+    <div class="footer-brand"><div class="footer-brand-name">Insight Invest</div><p class="footer-brand-desc">Macro intelligence, equity analysis, and financial education for serious investors. Not financial advice.</p></div>
+    <div class="footer-col"><div class="footer-col-title">Research</div><a href="#macro">Macro Updates</a><a href="#reports">US Equities</a><a href="#reports">Global Equities</a><a href="/iran-conflict">Iran Playbook</a><a href="/iran-bursa-playbook">Bursa Playbook</a><a href="/investor-profile">Investor Profile</a></div>
+    <div class="footer-col"><div class="footer-col-title">Learn</div><a href="#learning">All Tracks</a><a href="/buffett-playbook">Buffett Playbook</a><a href="#learning">Options</a><a href="#learning">Portfolio</a></div>
+    <div class="footer-col"><div class="footer-col-title">Company</div><a href="#">About</a><a href="#">Contact</a><a href="#">Disclaimer</a></div>
+   </div>
+   <div class="footer-bottom"><span>© 2026 Insight Invest. All rights reserved.</span><span>Educational content only · Not financial advice</span></div>
+  </footer>
+
+  <script>
+  // SCROLL REVEAL
+  const revealEls = document.querySelectorAll('.reveal');
+  const revObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(el => revObserver.observe(el));
+
+  // NAV SCROLL
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // READING PROGRESS
+  window.addEventListener('scroll', () => {
+    const doc = document.documentElement;
+    const scrolled = doc.scrollTop / (doc.scrollHeight - doc.clientHeight);
+    document.getElementById('readingProgress').style.width = (scrolled * 100) + '%';
+  });
+
+  // TOC ACTIVE STATE
+  const sections = document.querySelectorAll('.mod-section[id]');
+  const tocItems = document.querySelectorAll('.toc-item[data-target]');
+  const tocObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocItems.forEach(t => t.classList.remove('active'));
+        const active = document.querySelector('.toc-item[data-target="' + e.target.id + '"]');
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+  sections.forEach(s => tocObserver.observe(s));
+  tocItems.forEach(t => {
+    t.addEventListener('click', () => {
+      const target = document.getElementById(t.dataset.target);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // QUIZ ENGINE
+  function initQuiz(containerId, questions) {
+    const c = document.getElementById(containerId);
+    if (!c) return;
+    let current = 0, score = 0, answered = false;
+    function render() {
+      if (current >= questions.length) { showScore(); return; }
+      const q = questions[current];
+      const pct = Math.round((current / questions.length) * 100);
+      c.querySelector('.quiz-progress').textContent = (current+1) + ' / ' + questions.length;
+      c.querySelector('.quiz-progress-fill').style.width = pct + '%';
+      c.querySelector('.quiz-q').textContent = q.q;
+      const opts = c.querySelector('.quiz-options');
+      opts.innerHTML = '';
+      q.opts.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt'; btn.textContent = opt;
+        btn.onclick = () => answer(i, q.correct, q.explanation);
+        opts.appendChild(btn);
+      });
+      c.querySelector('.quiz-feedback').className = 'quiz-feedback';
+      c.querySelector('.quiz-feedback').textContent = '';
+      c.querySelector('.quiz-next').className = 'quiz-next';
+      answered = false;
+    }
+    function answer(chosen, correct, explanation) {
+      if (answered) return; answered = true;
+      const opts = c.querySelectorAll('.quiz-opt');
+      opts[chosen].classList.add(chosen === correct ? 'correct' : 'wrong');
+      opts[correct].classList.add('correct');
+      opts.forEach(o => o.classList.add('answered'));
+      if (chosen === correct) score++;
+      const fb = c.querySelector('.quiz-feedback');
+      fb.textContent = (chosen === correct ? '✓ Correct. ' : '✗ Incorrect. ') + explanation;
+      fb.className = 'quiz-feedback show ' + (chosen === correct ? 'correct-fb' : 'wrong-fb');
+      c.querySelector('.quiz-next').className = 'quiz-next show';
+    }
+    function showScore() {
+      const qArea = c.querySelector('.quiz-q-area');
+      if (qArea) qArea.style.display = 'none';
+      const sc = c.querySelector('.quiz-score');
+      sc.querySelector('.quiz-score-num').textContent = score + '/' + questions.length;
+      const pct = Math.round((score/questions.length)*100);
+      let msg = pct >= 80 ? 'Strong result. You understand not just market mechanics but the asymmetric frameworks that create edge. Proceed to Module 1.3.'
+        : pct >= 60 ? 'Solid foundation. Review the reflexivity, liquidity, and positioning sections — that is the asymmetric layer of this module.'
+        : 'Review before proceeding, especially Sections 07–09. The mechanical sections are table stakes. The frameworks are the edge.';
+      sc.querySelector('.quiz-score-msg').textContent = msg;
+      sc.className = 'quiz-score show';
+    }
+    c.querySelector('.quiz-next').addEventListener('click', () => { current++; render(); });
+    c.querySelector('.quiz-restart').addEventListener('click', () => {
+      current = 0; score = 0;
+      const qArea = c.querySelector('.quiz-q-area');
+      if (qArea) qArea.style.display = '';
+      c.querySelector('.quiz-score').className = 'quiz-score';
+      render();
+    });
+    render();
+  }
+
+  // ORDER BOOK SIMULATOR
+  let bids = [{price:99.50,size:200},{price:99.25,size:350},{price:99.00,size:500},{price:98.75,size:150}];
+  let asks = [{price:100.00,size:300},{price:100.25,size:250},{price:100.50,size:180},{price:100.75,size:420}];
+  function renderOB() {
+    const el = document.getElementById('orderbook_display');
+    if (!el) return;
+    const spread = (asks[0].price - bids[0].price).toFixed(2);
+    let html = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">';
+    html += '<div><div style="color:var(--text-dim);margin-bottom:8px;font-size:10px;letter-spacing:2px;">BIDS (BUY)</div>';
+    bids.slice(0,4).forEach((b,i) => {
+      const w = Math.min(100, b.size/6);
+      html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">';
+      html += '<span style="color:var(--green);min-width:54px;">$' + b.price.toFixed(2) + '</span>';
+      html += '<div style="flex:1;height:18px;background:var(--bg3);border-radius:2px;"><div style="width:' + w + '%;height:100%;background:rgba(61,214,140,' + (0.4-i*0.08) + ');border-radius:2px;"></div></div>';
+      html += '<span style="color:var(--text-dim);min-width:36px;text-align:right;">' + b.size + '</span></div>';
+    });
+    html += '</div><div><div style="color:var(--text-dim);margin-bottom:8px;font-size:10px;letter-spacing:2px;">ASKS (SELL)</div>';
+    asks.slice(0,4).forEach((a,i) => {
+      const w = Math.min(100, a.size/6);
+      html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">';
+      html += '<span style="color:var(--red);min-width:54px;">$' + a.price.toFixed(2) + '</span>';
+      html += '<div style="flex:1;height:18px;background:var(--bg3);border-radius:2px;"><div style="width:' + w + '%;height:100%;background:rgba(255,92,92,' + (0.4-i*0.08) + ');border-radius:2px;"></div></div>';
+      html += '<span style="color:var(--text-dim);min-width:36px;text-align:right;">' + a.size + '</span></div>';
+    });
+    html += '</div></div>';
+    html += '<div style="margin-top:16px;padding:12px;background:var(--bg3);border-radius:6px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">';
+    html += '<span>Mid price: <strong style="color:var(--text-bright)">$' + (((bids[0].price+asks[0].price)/2).toFixed(2)) + '</strong></span>';
+    html += '<span>Spread: <strong style="color:var(--gold)">$' + spread + '</strong></span>';
+    html += '<span>Best bid: <strong style="color:var(--green)">$' + bids[0].price.toFixed(2) + '</strong></span>';
+    html += '<span>Best ask: <strong style="color:var(--red)">$' + asks[0].price.toFixed(2) + '</strong></span>';
+    html += '</div>';
+    el.innerHTML = html;
+  }
+  function addBuyOrder() {
+    const price = parseFloat((bids[0].price - (Math.random()*0.5) + 0.25).toFixed(2));
+    bids.unshift({price, size: Math.floor(Math.random()*300+100)});
+    bids.sort((a,b)=>b.price-a.price); bids = bids.slice(0,6);
+    document.getElementById('ob_log').textContent = '→ Buy order placed at $' + price.toFixed(2);
+    renderOB();
+  }
+  function addSellOrder() {
+    const price = parseFloat((asks[0].price + (Math.random()*0.5) - 0.1).toFixed(2));
+    asks.unshift({price, size: Math.floor(Math.random()*300+100)});
+    asks.sort((a,b)=>a.price-b.price); asks = asks.slice(0,6);
+    document.getElementById('ob_log').textContent = '→ Sell order placed at $' + price.toFixed(2);
+    renderOB();
+  }
+  function executeOrder() {
+    const execPrice = asks[0].price;
+    const execSize = Math.min(asks[0].size, bids[0].size);
+    asks[0].size -= execSize; if (asks[0].size <= 0) asks.shift();
+    bids[0].size -= execSize; if (bids[0].size <= 0) bids.shift();
+    document.getElementById('ob_log').innerHTML = '✓ Trade executed: <strong style="color:var(--text-bright)">' + execSize + ' shares @ $' + execPrice.toFixed(2) + '</strong> — this price is now the last traded price';
+    renderOB();
+  }
+  function resetOrderBook() {
+    bids = [{price:99.50,size:200},{price:99.25,size:350},{price:99.00,size:500},{price:98.75,size:150}];
+    asks = [{price:100.00,size:300},{price:100.25,size:250},{price:100.50,size:180},{price:100.75,size:420}];
+    document.getElementById('ob_log').textContent = '';
+    renderOB();
+  }
+  renderOB();
+
+  // SENTIMENT ANALYZER
+  function analyzeSentiment() {
+    const cash = document.getElementById('sp_cash').value;
+    const pc = document.getElementById('sp_pc').value;
+    const analysts = document.getElementById('sp_analysts').value;
+    const retail = document.getElementById('sp_retail').value;
+
+    // Score: -2 to +2 per indicator. Negative = bearish/fearful (contrarian buy). Positive = bullish/greedy (contrarian sell)
+    const scores = {
+      cash: { very_low: 2, low: 1, normal: 0, high: -1, very_high: -2 },
+      pc: { very_low: 2, low: 1, normal: 0, high: -1, very_high: -2 },
+      analysts: { unanimous_bull: 2, mostly_bull: 1, mixed: 0, mostly_bear: -1, unanimous_bear: -2 },
+      retail: { max_bull: 2, mostly_bull: 1, neutral: 0, mostly_bear: -1, max_bear: -2 }
+    };
+
+    const total = scores.cash[cash] + scores.pc[pc] + scores.analysts[analysts] + scores.retail[retail];
+    const maxScore = 8;
+    const pct = ((total + maxScore) / (2 * maxScore)) * 100; // 0–100%, 50% = neutral
+
+    // Set needle
+    document.getElementById('sp_needle').style.left = pct + '%';
+
+    // Score display
+    let scoreColor = total > 3 ? 'var(--red)' : total < -3 ? 'var(--green)' : total > 1 ? '#f59e0b' : total < -1 ? 'var(--cyan)' : 'var(--text-dim)';
+    document.getElementById('sp_score_display').innerHTML =
+      '<div style="display:flex;align-items:baseline;gap:12px;margin-bottom:4px;">' +
+      '<div style="font-family:\'Cormorant Garamond\',serif;font-size:40px;font-weight:400;color:' + scoreColor + ';">' + (total > 0 ? '+' : '') + total + '</div>' +
+      '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.12em;">Composite Sentiment Score<br>Range: −8 (Max Fear) to +8 (Max Greed)</div></div>';
+
+    // Verdict
+    let label, color, interpretation, action;
+    if (total >= 5) {
+      label = 'EXTREME GREED — Maximum Caution';
+      color = 'var(--red)';
+      interpretation = 'All indicators point to maximum bullish positioning. Essentially all potential buyers are already long. There is no incremental buying power left. Any negative surprise will trigger outsized selling because there are no new buyers to absorb the flow. This is not a sell signal — it is a signal that risk/reward has deteriorated severely.';
+      action = 'Reduce new position sizing. Trim overleveraged positions. Raise cash reserve to 15–25%. Do not chase. Set price alerts for the first 5–10% decline as a re-entry trigger.';
+    } else if (total >= 3) {
+      label = 'ELEVATED GREED — Proceed with Caution';
+      color = '#f59e0b';
+      interpretation = 'Sentiment is leaning significantly bullish. Positioning is stretched but not at historical extremes. The market can still grind higher, but margin of safety has compressed. Complacency is present.';
+      action = 'No new large positions. Let existing positions run but tighten stop-losses. Monitor credit spreads for early warning of sentiment reversal.';
+    } else if (total >= -2) {
+      label = 'NEUTRAL POSITIONING — Balanced Risk/Reward';
+      color = 'var(--blue)';
+      interpretation = 'Positioning is near historical averages. Neither extreme fear nor extreme greed present. Market direction is likely driven by fundamentals and macro data rather than sentiment flows. Standard investment criteria apply.';
+      action = 'Normal position sizing applies. Let thesis quality drive decisions. No positioning-driven adjustment needed.';
+    } else if (total >= -4) {
+      label = 'ELEVATED FEAR — Improving Risk/Reward';
+      color = 'var(--cyan)';
+      interpretation = 'Positioning is leaning significantly bearish. Many potential buyers are sitting in cash or short. This creates fuel for a rally — when fear recedes, even marginal good news can trigger large moves as short-covering and reinvestment flows combine.';
+      action = 'Begin scaling into high-conviction long positions. Opportunities to buy quality at discounted prices are present. Size modestly — fear can become panic before the bottom.';
+    } else {
+      label = 'EXTREME FEAR — Maximum Opportunity Signal';
+      color = 'var(--green)';
+      interpretation = 'All indicators simultaneously flash maximum bearish positioning. Record cash levels. Maximum short interest. Retail capitulation. Unanimous analyst pessimism. This is the environment in which the best long-term returns are built. It is also the environment where it feels most wrong to buy — that is precisely the point.';
+      action = 'This is the Druckenmiller / Ackman / Dalio entry environment. Deploy capital aggressively into highest-conviction positions. This is the asymmetric entry point the frameworks in this course are designed to identify. Position size at the top end of your conviction range.';
+    }
+
+    document.getElementById('sp_verdict').innerHTML =
+      '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:11px;font-weight:700;color:' + color + ';letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;">' + label + '</div>' +
+      '<div style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:16px;">' + interpretation + '</div>' +
+      '<div style="background:var(--bg3);border:1px solid var(--border);padding:16px;">' +
+      '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:9px;color:' + color + ';letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px;">POSITIONING ACTION</div>' +
+      '<div style="font-size:12px;color:var(--text-bright);line-height:1.7;">' + action + '</div></div>';
+
+    document.getElementById('sp_result').className = 'tool-result visible';
+  }
+
+  // QUIZ
+  initQuiz('quiz_1_2', [
+    { q: "When you buy Apple shares on the NYSE, who receives your money?",
+      opts: ["Apple Inc., which uses it for operations","The US government as a transaction tax","The seller — another investor who chose to sell","The NYSE as a market fee"],
+      correct: 2, explanation: "In the secondary market, you buy shares from another investor. Apple received money only at the IPO (primary market). All subsequent trading is peer-to-peer — the company is no longer involved and receives nothing from secondary market transactions." },
+    { q: "What is the bid-ask spread, and why does it matter for investors?",
+      opts: ["The daily price range of a stock — irrelevant for long-term investors","The difference between what buyers will pay and sellers will accept — it is the cost of immediate execution","A government tax on trading activity","The minimum order size required by the exchange"],
+      correct: 1, explanation: "The spread is the gap between the best bid (highest buyer price) and best ask (lowest seller price). It represents the cost of immediate execution. On illiquid stocks, wide spreads can silently erode 1–3% of every round trip. Always check the spread before entering any position." },
+    { q: "Which order type guarantees you will not pay more than a specified price?",
+      opts: ["Market order — fastest execution","Stop order — activates at your trigger price","Limit order — only fills at your price or better","Fill-or-kill — all or nothing immediately"],
+      correct: 2, explanation: "A limit order executes only at your specified price or better. It sacrifices certainty of execution for certainty of price. For most long-term investors, this is the correct default — protecting against slippage is worth the occasional missed fill." },
+    { q: "What is Soros's concept of reflexivity, and why does it matter for market analysis?",
+      opts: ["Markets always return to fair value — prices are self-correcting","Market prices reflect reality, but reality also shapes market prices in a self-reinforcing feedback loop","Technical analysis always works because patterns repeat reflexively","Interest rates and stock prices are inversely reflexive"],
+      correct: 1, explanation: "Reflexivity: a rising stock price actually improves a company's fundamentals (cheaper capital, better talent acquisition, acquisition currency) which justifies the higher price — creating self-reinforcing trends that run far beyond what 'fair value' models predict. The reverse is also true on the way down. This is why trends persist longer than logic says they should, and why reversals are so violent." },
+    { q: "Every major market crash — 1929, 1987, 2008, March 2020 — was primarily caused by:",
+      opts: ["Fundamental deterioration in corporate earnings","Liquidity evaporating as forced sellers overwhelmed the bid","Central banks raising rates too aggressively","Retail investors panic-selling their portfolios"],
+      correct: 1, explanation: "Every major crash is a liquidity event, not a fundamentals event. Forced sellers (margin calls, fund redemptions, risk limits) overwhelm the bid. Market makers widen spreads or pull back. Correlation goes to 1 as people sell whatever is liquid. Fundamentals matter for where prices eventually settle — not for what causes the cascade." },
+    { q: "The Efficient Market Hypothesis states that large-cap US stocks are nearly impossible to beat consistently. Where does genuine informational edge most likely persist?",
+      opts: ["In S&P 500 stocks — they move on news just like small caps","In small-caps, emerging markets, complex corporate events, and situations with structural access barriers","In technical chart patterns — these work regardless of company size","In ETFs, because they aggregate mispriced individual stocks"],
+      correct: 1, explanation: "Inefficiency survives where: securities are too small for institutions to participate, there are structural barriers to participation (language, regulation, stigma), the required time horizon exceeds institutional mandates, or complexity deters analysis. These are the corners of the market where outperformance is still achievable — and where your edge as an individual investor can be real." },
+    { q: "In a liquidity cascade, why does 'correlation go to 1' — causing different asset classes to fall together?",
+      opts: ["Because fundamentals of all companies deteriorate simultaneously during recessions","Because investors sell what they CAN sell, not what they WANT to sell — liquidity becomes the only criterion","Because central banks raise rates on all assets at once","Because ETFs create artificial correlations between unrelated stocks"],
+      correct: 1, explanation: "In a liquidity crisis, investors with forced selling pressure cannot be selective. They sell whatever has a bid — stocks, bonds, gold, commodities, foreign currencies — regardless of fundamentals. This is why diversification fails precisely when it matters most: during a liquidity event, the question is not 'what is worth less?' but 'what can I sell right now?'" },
+    { q: "The CFTC Commitment of Traders report is most useful as:",
+      opts: ["A real-time trading signal to follow institutional money","A contrarian indicator — extreme positioning by speculators historically precedes reversals","A measure of insider trading activity","A tool for measuring fundamental value of commodities"],
+      correct: 1, explanation: "COT data shows net positioning of different market participants across futures. When speculative positioning reaches historical extremes — maximum long or maximum short — it signals that the consensus trade is fully crowded. The contrarian reading is that with everyone already positioned in one direction, the setup for a reversal is building." },
+    { q: "According to Druckenmiller's framework, when all of the following are true simultaneously — record-low fund manager cash, maximum analyst bullishness, extreme low put/call ratio — the correct interpretation is:",
+      opts: ["A strong buy signal — smart money is fully invested so you should be too","A neutral signal — institutional positioning has no predictive value","A deteriorating risk/reward signal — there are no incremental buyers left to push prices higher","A sell-everything signal — crash is imminent"],
+      correct: 2, explanation: "Maximum bullish positioning means all potential buyers are already long. There is no incremental buying power. This does not mean a crash is imminent — but it means the upside is capped while downside risk is elevated because any negative surprise finds no buyers. Risk/reward has deteriorated. Not a sell signal — a signal that position sizing should reflect the diminished margin of safety." },
+    { q: "Reflexivity's most dangerous application for investors is:",
+      opts: ["Buying stocks when PE ratios are high","Shorting a falling stock and assuming it will recover to fair value, not recognising the self-reinforcing decline","Holding cash when inflation is high","Buying bonds when interest rates are rising"],
+      correct: 1, explanation: "The value trap: a stock falls 40%, looks cheap, falls another 30%. The investor buys 'cheap fundamentals' while reflexivity is still working against the company — falling stock = higher cost of capital = credit covenant concerns = management distraction = worsening business = lower earnings = further stock fall. Soros: 'price can create the fundamental it's priced for.' Understanding when a reflexive collapse has run its course vs. still feeding itself is one of the hardest and most valuable skills in investing." }
+  ]);
+  </script>
+</body>
+</html>

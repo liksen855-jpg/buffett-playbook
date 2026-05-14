@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>InsightInvest — AI Layer</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%233b82f6'/><path d='M6 22L12 14L18 18L26 8' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/><circle cx='26' cy='8' r='2.5' fill='white'/></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ── Design tokens (mirror main app) ─────────────────────────────────── */
+:root {
+  --background:     hsl(222,47%,6%);
+  --foreground:     hsl(210,20%,92%);
+  --card:           hsl(222,40%,8%);
+  --card-border:    hsl(220,30%,13%);
+  --border:         hsl(220,25%,14%);
+  --primary:        hsl(213,94%,58%);
+  --primary-dim:    hsl(213,94%,58%,0.12);
+  --muted:          hsl(220,28%,12%);
+  --muted-fg:       hsl(210,12%,55%);
+  --accent:         hsl(220,30%,14%);
+  --green:          hsl(160,65%,45%);
+  --red:            hsl(0,72%,51%);
+  --yellow:         hsl(45,93%,58%);
+  --purple:         hsl(280,65%,62%);
+  --radius:         6px;
+  --font: "Inter", sans-serif;
+  --mono: "JetBrains Mono", monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ── Layout ──────────────────────────────────────────────────────────── */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 56px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--background);
+  z-index: 100;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+}
+
+.logo svg { flex-shrink: 0; }
+
+.logo-badge {
+  background: hsl(213,94%,58%,0.12);
+  color: var(--primary);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 2px 7px;
+  border-radius: 999px;
+  border: 1px solid hsl(213,94%,58%,0.25);
+  text-transform: uppercase;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--muted-fg);
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: color 0.15s, border-color 0.15s;
+}
+.back-btn:hover { color: var(--foreground); border-color: var(--muted-fg); }
+
+/* ── Key bar ─────────────────────────────────────────────────────────── */
+#key-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 24px;
+  background: hsl(45,93%,58%,0.06);
+  border-bottom: 1px solid hsl(45,93%,58%,0.15);
+  font-size: 13px;
+}
+#key-bar.hidden { display: none; }
+#key-bar label { color: var(--yellow); font-weight: 500; white-space: nowrap; }
+#key-bar input {
+  flex: 1;
+  max-width: 340px;
+  background: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--foreground);
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 6px 10px;
+  outline: none;
+}
+#key-bar input:focus { border-color: var(--primary); }
+#key-bar button { padding: 6px 14px; border-radius: var(--radius); cursor: pointer; font-size: 13px; font-weight: 500; border: none; }
+.btn-save { background: var(--primary); color: hsl(222,47%,6%); }
+.btn-skip { background: transparent; color: var(--muted-fg); border: 1px solid var(--border) !important; }
+
+/* ── Nav tabs ────────────────────────────────────────────────────────── */
+.tab-nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tab-nav::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 14px;
+  height: 44px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted-fg);
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: color 0.15s;
+}
+.tab-btn:hover { color: var(--foreground); }
+.tab-btn.active { color: var(--foreground); border-bottom-color: var(--primary); }
+.tab-btn .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.5;
+}
+.tab-btn.active .dot { opacity: 1; }
+
+/* ── Main content ────────────────────────────────────────────────────── */
+.page { display: none; padding: 24px; max-width: 1200px; margin: 0 auto; }
+.page.active { display: block; }
+
+.page-title {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+.page-sub {
+  font-size: 13px;
+  color: var(--muted-fg);
+  margin-bottom: 24px;
+}
+
+/* ── Card ────────────────────────────────────────────────────────────── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 16px 20px;
+}
+
+/* ── Gauge grid ──────────────────────────────────────────────────────── */
+.gauge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.gauge {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+.gauge-label { display: block; font-size: 11px; color: var(--muted-fg); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+.gauge-value { display: block; font-size: 22px; font-weight: 600; font-family: var(--mono); letter-spacing: -0.02em; line-height: 1.1; }
+.gauge-sub { display: block; font-size: 11px; color: var(--muted-fg); margin-top: 4px; }
+.gauge[data-trend="up"] .gauge-value { color: var(--red); }
+.gauge[data-trend="down"] .gauge-value { color: var(--green); }
+.gauge[data-trend="neutral"] .gauge-value { color: var(--foreground); }
+
+/* ── Signal pills ────────────────────────────────────────────────────── */
+.signal-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.pill {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid;
+}
+.pill-bear { background: hsl(0,72%,51%,0.10); color: hsl(0,72%,65%); border-color: hsl(0,72%,51%,0.25); }
+.pill-bull { background: hsl(160,65%,45%,0.10); color: hsl(160,65%,60%); border-color: hsl(160,65%,45%,0.25); }
+.pill-neutral { background: hsl(45,93%,58%,0.08); color: hsl(45,93%,65%); border-color: hsl(45,93%,58%,0.20); }
+
+/* ── AI output box ───────────────────────────────────────────────────── */
+.ai-box {
+  background: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--foreground);
+  white-space: pre-wrap;
+  min-height: 60px;
+  margin-top: 12px;
+  transition: border-color 0.2s;
+}
+.ai-box.streaming { border-color: hsl(213,94%,58%,0.4); }
+.ai-box .placeholder { color: var(--muted-fg); font-style: italic; }
+
+.ai-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: opacity 0.15s;
+}
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary { background: var(--primary); color: hsl(222,47%,6%); border-color: var(--primary); }
+.btn-primary:hover:not(:disabled) { opacity: 0.9; }
+.btn-ghost { background: transparent; color: var(--muted-fg); border-color: var(--border); }
+.btn-ghost:hover:not(:disabled) { color: var(--foreground); border-color: var(--muted-fg); }
+
+/* ── Divergence ──────────────────────────────────────────────────────── */
+.div-event {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 10px;
+}
+.div-event[data-type="opportunity"] { border-left: 3px solid var(--green); }
+.div-event[data-type="warning"]     { border-left: 3px solid var(--yellow); }
+
+.div-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.div-date { font-size: 12px; color: var(--muted-fg); }
+.div-badge {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.div-badge.opportunity { background: hsl(160,65%,45%,0.12); color: hsl(160,65%,60%); border: 1px solid hsl(160,65%,45%,0.25); }
+.div-badge.warning     { background: hsl(45,93%,58%,0.08); color: hsl(45,93%,65%);  border: 1px solid hsl(45,93%,58%,0.20); }
+
+.div-signal { font-size: 13px; color: var(--foreground); margin-bottom: 12px; }
+
+.bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; font-size: 12px; }
+.bar-label { width: 90px; color: var(--muted-fg); flex-shrink: 0; }
+.bar-track {
+  flex: 1;
+  height: 6px;
+  background: var(--muted);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.bar-fill { height: 100%; border-radius: 999px; }
+.bar-fill.retail { background: var(--yellow); }
+.bar-fill.inst   { background: var(--primary); }
+.bar-val { width: 90px; font-family: var(--mono); font-size: 11px; color: var(--muted-fg); }
+
+/* ── Sector grid ─────────────────────────────────────────────────────── */
+.sector-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.sector-cell {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.sector-cell:hover { border-color: var(--primary); }
+
+.sector-name { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+.sector-score-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.sector-score-track { flex: 1; height: 4px; background: var(--muted); border-radius: 999px; overflow: hidden; }
+.sector-score-fill { height: 100%; border-radius: 999px; }
+.sector-score-num { font-family: var(--mono); font-size: 13px; font-weight: 600; width: 28px; text-align: right; }
+.sector-meta { display: flex; gap: 8px; flex-wrap: wrap; }
+.sector-tag {
+  font-size: 10px;
+  color: var(--muted-fg);
+  background: var(--muted);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* ── Options flow table ──────────────────────────────────────────────── */
+.flow-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.flow-stat { font-size: 13px; }
+.flow-stat-label { color: var(--muted-fg); }
+.flow-stat-val { font-family: var(--mono); font-weight: 600; margin-left: 6px; }
+.flow-stat-val.bull { color: var(--green); }
+.flow-stat-val.bear { color: var(--red); }
+
+.flow-table-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 16px; }
+table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+thead { background: var(--muted); }
+th { padding: 10px 14px; text-align: left; font-weight: 500; color: var(--muted-fg); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; border-bottom: 1px solid var(--border); }
+td { padding: 10px 14px; border-bottom: 1px solid hsl(220,25%,14%,0.5); white-space: nowrap; }
+tr:last-child td { border-bottom: none; }
+tr[data-sentiment="bullish"] td:first-child { color: var(--green); font-weight: 600; }
+tr[data-sentiment="bearish"] td:first-child { color: var(--red); font-weight: 600; }
+td[data-heat="extreme"] { color: var(--yellow); font-weight: 600; }
+
+/* ── COT grid ────────────────────────────────────────────────────────── */
+.cot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.cot-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 16px;
+}
+.cot-card[data-direction="long"]  { border-top: 3px solid var(--green); }
+.cot-card[data-direction="short"] { border-top: 3px solid var(--red); }
+
+.cot-name  { display: block; font-size: 12px; color: var(--muted-fg); margin-bottom: 4px; }
+.cot-value { display: block; font-family: var(--mono); font-size: 26px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 4px; }
+.cot-card[data-direction="long"]  .cot-value { color: var(--green); }
+.cot-card[data-direction="short"] .cot-value { color: var(--red); }
+.cot-trend { display: block; font-size: 11px; color: var(--muted-fg); margin-bottom: 10px; }
+
+.cot-track { width: 100%; height: 6px; background: var(--muted); border-radius: 999px; overflow: hidden; margin-bottom: 10px; }
+.cot-fill { height: 100%; border-radius: 999px; }
+.cot-fill.long  { background: var(--green); }
+.cot-fill.short { background: var(--red); }
+
+.cot-context { font-size: 11px; color: var(--muted-fg); line-height: 1.5; }
+
+/* ── Squeeze grid ────────────────────────────────────────────────────── */
+.squeeze-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.squeeze-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 16px;
+}
+.sq-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
+.sq-ticker { font-size: 15px; font-weight: 700; font-family: var(--mono); }
+.sq-score-badge {
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--mono);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.sq-score-track { width: 100%; height: 4px; background: var(--muted); border-radius: 999px; overflow: hidden; margin-bottom: 10px; }
+.sq-score-fill { height: 100%; border-radius: 999px; background: var(--primary); }
+.sq-score-fill.high   { background: var(--yellow); }
+.sq-score-fill.extreme{ background: var(--red); }
+.sq-name   { display: block; font-size: 11px; color: var(--muted-fg); margin-bottom: 8px; }
+.sq-meta   { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font-size: 11px; }
+.sq-meta span { color: var(--muted-fg); }
+.sq-meta .val { color: var(--foreground); font-family: var(--mono); }
+.sq-chg.rising { color: var(--red); }
+.sq-price { display: block; font-family: var(--mono); font-size: 13px; font-weight: 600; margin-top: 8px; }
+
+/* ── Live badge ──────────────────────────────────────────────────────── */
+.live-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--green);
+  background: hsl(160,65%,45%,0.10);
+  border: 1px solid hsl(160,65%,45%,0.25);
+  padding: 2px 8px 2px 6px;
+  border-radius: 999px;
+}
+.live-chip::before {
+  content: "";
+  display: block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* ── Section header ──────────────────────────────────────────────────── */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted-fg);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+/* ── Regime state card ───────────────────────────────────────────────── */
+.regime-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 20px;
+}
+.regime-name  { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 4px; }
+.regime-conf  { font-size: 12px; color: var(--muted-fg); font-family: var(--mono); margin-bottom: 8px; }
+.regime-desc  { font-size: 13px; color: var(--muted-fg); max-width: 480px; line-height: 1.6; }
+
+/* ── Key-change button (small, top-right of header) ─────────────────── */
+.key-change-btn {
+  font-size: 11px;
+  color: var(--muted-fg);
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 4px 10px;
+  transition: color 0.15s;
+}
+.key-change-btn:hover { color: var(--foreground); }
+
+/* ── Loading spinner ─────────────────────────────────────────────────── */
+.spinner {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Divider ─────────────────────────────────────────────────────────── */
+.divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+
+/* ── Scrollbar ───────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* ── Responsive ──────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .page { padding: 16px; }
+  .app-header { padding: 0 16px; }
+  .tab-nav { padding: 0 10px; }
+  .gauge-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- ── Header ──────────────────────────────────────────────────────────── -->
+<header class="app-header">
+  <div class="logo">
+    <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
+      <rect width="32" height="32" rx="6" fill="#3b82f6"/>
+      <path d="M6 22L12 14L18 18L26 8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="26" cy="8" r="2.5" fill="white"/>
+    </svg>
+    InsightInvest
+    <span class="logo-badge">AI Layer</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <button class="key-change-btn" onclick="showKeyBar()">⚙ API Key</button>
+    <a class="back-btn" href="/macro_intelligence/">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Dashboard
+    </a>
+  </div>
+</header>
+
+<!-- ── API Key bar ──────────────────────────────────────────────────────── -->
+<div id="key-bar">
+  <label>⚡ Claude API Key required</label>
+  <input type="password" id="key-input" placeholder="sk-ant-api03-..." autocomplete="off"/>
+  <button class="btn-save btn" onclick="saveKey()">Save Key</button>
+  <button class="btn-skip btn" onclick="dismissKeyBar()">Skip</button>
+  <span style="color:var(--muted-fg);font-size:12px">Stored locally in your browser. Never sent anywhere except api.anthropic.com.</span>
+</div>
+
+<!-- ── Tab nav ──────────────────────────────────────────────────────────── -->
+<nav class="tab-nav" id="tab-nav">
+  <button class="tab-btn active" data-tab="regime"     onclick="switchTab('regime')">    <span class="dot"></span>Macro Regime</button>
+  <button class="tab-btn"        data-tab="divergence" onclick="switchTab('divergence')"><span class="dot"></span>Divergence Feed</button>
+  <button class="tab-btn"        data-tab="sectors"    onclick="switchTab('sectors')">   <span class="dot"></span>Sector Rotation</button>
+  <button class="tab-btn"        data-tab="flow"       onclick="switchTab('flow')">      <span class="dot"></span>Options Flow</button>
+  <button class="tab-btn"        data-tab="cot"        onclick="switchTab('cot')">       <span class="dot"></span>COT Positioning</button>
+  <button class="tab-btn"        data-tab="squeeze"    onclick="switchTab('squeeze')">   <span class="dot"></span>Squeeze Scanner</button>
+</nav>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     MACRO REGIME
+     ════════════════════════════════════════════════════════════════════════ -->
+<section id="page-regime" class="page active">
+  <div class="page-title">Macro Regime Engine</div>
+  <div class="page-sub">Real-time regime classification across growth, inflation, liquidity, and risk dimensions</div>
+
+  <div class="regime-header" id="regime-header">
+    <div>
+      <div class="regime-name" id="regime-name">Loading…</div>
+      <div class="regime-conf" id="regime-conf">—</div>
+      <div class="regime-desc" id="regime-desc">Fetching live data…</div>
+    </div>
+    <div id="regime-signals" class="signal-pills"></div>
+  </div>
+
+  <div class="gauge-grid" id="regime-gauges"></div>
+
+  <div class="ai-actions">
+    <button class="btn btn-primary" onclick="regimeAnalysis()">Full Regime Analysis</button>
+    <button class="btn btn-ghost"   onclick="portfolioImplications()">Portfolio Implications</button>
+    <button class="btn btn-ghost"   onclick="riskScenarios()">Risk Scenarios</button>
+  </div>
+  <div class="ai-box" id="ai-regime"><span class="placeholder">Select an analysis above to get an AI read on current macro conditions.</span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     DIVERGENCE FEED
+     ════════════════════════════════════════════════════════════════════════ -->
+<section id="page-divergence" class="page">
+  <div class="page-title">Smart Money Divergence Feed</div>
+  <div class="page-sub">Institutional vs. retail positioning gaps — historically the most actionable signals</div>
+
+  <!-- Live signal -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="section-header">
+      <span class="section-title">Live Signal</span>
+      <span class="live-chip">Live</span>
+    </div>
+    <div id="div-live-signal" style="font-size:14px;margin-bottom:12px">—</div>
+    <div id="div-live-bars"></div>
+    <div class="ai-actions" style="margin-top:12px">
+      <button class="btn btn-primary" onclick="analyzeLive()">Analyze Live Signal</button>
+    </div>
+    <div class="ai-box" id="ai-div-live"><span class="placeholder">Click to get AI read on the current divergence.</span></div>
+  </div>
+
+  <!-- Historical events -->
+  <div class="section-header">
+    <span class="section-title">Historical Divergence Events</span>
+    <button class="btn btn-ghost" onclick="analyzeAllDivergences()">AI: Interpret All</button>
+  </div>
+  <div id="divergence-history"></div>
+  <div class="ai-box" id="ai-div-all" style="margin-top:12px"><span class="placeholder">Click "AI: Interpret All" for a cross-event thesis.</span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     SECTOR ROTATION
+     ════════════════════════════════════════════════════════════════════════ -->
+<section id="page-sectors" class="page">
+  <div class="page-title">Sector Rotation</div>
+  <div class="page-sub">Composite attractiveness: P/E 30% + EPS growth 35% + YTD momentum 20% + dividend yield 15%</div>
+
+  <div class="sector-grid" id="sector-grid"></div>
+
+  <div class="ai-actions">
+    <button class="btn btn-primary" onclick="sectorPlaybook()">AI: Full Rotation Playbook</button>
+  </div>
+  <div class="ai-box" id="ai-sectors"><span class="placeholder">Click a sector card to deep-dive, or run the full rotation playbook.</span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     OPTIONS FLOW
+     ════════════════════════════════════════════════════════════════════════ -->
+<section id="page-flow" class="page">
+  <div class="page-title">Unusual Options Flow</div>
+  <div class="page-sub">Sorted by premium size — blocks &gt;300% above average volume indicate institutional activity</div>
+
+  <div class="flow-summary" id="flow-summary"></div>
+
+  <div class="flow-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Ticker</th><th>Type</th><th>Strike</th><th>Expiry</th>
+          <th>Size</th><th>Premium</th><th>IV%</th><th>vs Avg</th>
+          <th>Sentiment</th><th>Date</th>
+        </tr>
+      </thead>
+      <tbody id="flow-tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="ai-actions">
+    <button class="btn btn-primary" onclick="analyzeFlow()">AI: Interpret Flow</button>
+  </div>
+  <div class="ai-box" id="ai-flow"><span class="placeholder">Click to get an AI read on the current flow pattern.</span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     COT POSITIONING
+     ════════════════════════════════════════════════════════════════════════ -->
+<section id="page-cot" class="page">
+  <div class="page-title">COT Positioning</div>
+  <div class="page-sub">Net speculative positioning from CFTC Commitments of Traders. Positive = net long, negative = net short.</div>
+
+  <div class="cot-grid" id="cot-grid"></div>
+
+  <div class="ai-actions">
+    <button class="btn btn-primary" onclick="analyzeCOT()">AI: Trade Thesis</button>
+  </div>
+  <div class="ai-box" id="ai-cot"><span class="placeholder">Click to generate a cross-asset COT trade thesis.</span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     SQUEEZE SCANNER
+     ════════════════════════════════════════════════════════════════════════ -->
+<section id="page-squeeze" class="page">
+  <div class="page-title">Short Squeeze Scanner</div>
+  <div class="page-sub">Score factors: short float %, days-to-cover, 1M change in short interest, options flow activity</div>
+
+  <div class="squeeze-grid" id="squeeze-grid"></div>
+
+  <div class="ai-actions">
+    <button class="btn btn-primary" onclick="analyzeSqueeze()">AI: Squeeze Analysis</button>
+  </div>
+  <div class="ai-box" id="ai-squeeze"><span class="placeholder">Click to identify real setups vs. meme traps.</span></div>
+</section>
+
+
+<script>
+// ════════════════════════════════════════════════════════════════════════════
+// CONFIG
+// ════════════════════════════════════════════════════════════════════════════
+const CLAUDE_MODEL  = 'claude-sonnet-4-6';
+const SYSTEM_PROMPT = `You are a senior macro analyst at a top hedge fund providing intelligence to paid institutional-quality subscribers. Be direct, specific, and actionable. Use the exact numbers provided. No disclaimers, no generic hedging. Max 280 words.`;
+
+// ════════════════════════════════════════════════════════════════════════════
+// KEY MANAGEMENT
+// ════════════════════════════════════════════════════════════════════════════
+function getKey()    { return localStorage.getItem('insightinvest_claude_key') || ''; }
+function saveKey()   {
+  const v = document.getElementById('key-input').value.trim();
+  if (!v) return;
+  localStorage.setItem('insightinvest_claude_key', v);
+  document.getElementById('key-bar').classList.add('hidden');
+}
+function dismissKeyBar() { document.getElementById('key-bar').classList.add('hidden'); }
+function showKeyBar()    {
+  const bar = document.getElementById('key-bar');
+  bar.classList.remove('hidden');
+  document.getElementById('key-input').value = getKey();
+  document.getElementById('key-input').focus();
+}
+
+// Show key bar on first visit if no key set
+if (!getKey()) {
+  document.getElementById('key-bar').classList.remove('hidden');
+} else {
+  document.getElementById('key-bar').classList.add('hidden');
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// TAB NAVIGATION
+// ════════════════════════════════════════════════════════════════════════════
+function switchTab(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === id);
+  });
+  document.getElementById('page-' + id).classList.add('active');
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// DATA LOADING
+// ════════════════════════════════════════════════════════════════════════════
+let D = {};
+
+async function loadJSON(path) {
+  try {
+    const r = await fetch(path + '?t=' + Date.now());
+    if (!r.ok) throw new Error(r.status);
+    return r.json();
+  } catch { return null; }
+}
+
+function last(arr)  { return arr && arr.length ? arr[arr.length - 1] : {}; }
+function prev2(arr) { return arr && arr.length > 1 ? arr[arr.length - 2] : last(arr); }
+const f2 = v => (+v).toFixed(2);
+
+function computeYoY(levelData) {
+  if (!levelData || levelData.length < 13) return [];
+  const byDate = {};
+  levelData.forEach(d => { byDate[d.date] = d.value; });
+  return levelData.map(d => {
+    const y = parseInt(d.date.slice(0, 4));
+    const prev = `${y - 1}${d.date.slice(4)}`;
+    if (!(prev in byDate) || byDate[prev] === 0) return null;
+    return { date: d.date, value: Math.round((byDate[d.date] - byDate[prev]) / byDate[prev] * 100000) / 1000 };
+  }).filter(Boolean);
+}
+
+async function loadAllData() {
+  const base = '/macro_intelligence/data/';
+  const [
+    cpiYoy, cpiCore, fedfunds, unrate, gdp,
+    gs2, gs10, t10y2y, t10y3m,
+    bamlHy, baaSpread,
+    vix, layer6, layer3
+  ] = await Promise.all([
+    loadJSON(base + 'fred_CPI_YOY.json'),
+    loadJSON(base + 'fred_CPILFESL.json'),
+    loadJSON(base + 'fred_FEDFUNDS.json'),
+    loadJSON(base + 'fred_UNRATE.json'),
+    loadJSON(base + 'fred_A191RL1Q225SBEA.json'),
+    loadJSON(base + 'fred_GS2.json'),
+    loadJSON(base + 'fred_GS10.json'),
+    loadJSON(base + 'fred_T10Y2Y.json'),
+    loadJSON(base + 'fred_T10Y3M.json'),
+    loadJSON(base + 'fred_BAMLH0A0HYM2.json'),
+    loadJSON(base + 'fred_BAA10Y.json'),
+    loadJSON(base + 'fred_VIXCLS.json'),
+    loadJSON(base + 'layer6.json'),
+    loadJSON(base + 'layer3.json'),
+  ]);
+
+  D.cpi_yoy  = (cpiYoy || []).slice(-12);
+  D.core_cpi = computeYoY(cpiCore).slice(-12);
+  D.fedfunds = (fedfunds || []).slice(-12);
+  D.unrate   = (unrate   || []).slice(-12);
+  D.gdp      = (gdp      || []).slice(-8);
+  D.gs2      = (gs2      || []).slice(-12);
+  D.gs10     = (gs10     || []).slice(-12);
+  D.t10y2y   = (t10y2y   || []).slice(-12);
+  D.t10y3m   = (t10y3m   || []).slice(-12);
+  D.hy_oas   = (bamlHy   || []).slice(-8);
+  D.baa_spread = (baaSpread || []).slice(-8);
+  D.vix      = (vix      || []).slice(-8);
+
+  if (layer6) {
+    D.fg_current    = layer6.fg_current    || 42;
+    D.fg_label      = layer6.fg_label      || 'Fear';
+    D.fg_history    = layer6.fg_history    || [];
+    D.fg_components = layer6.fg_components || {};
+    D.smart_money   = layer6.smart_money   || { retail_sentiment: [], institutional_flow: [], divergence_events: [] };
+    D.options_flow  = layer6.options_flow  || [];
+    D.short_interest = layer6.short_interest || [];
+  }
+  if (layer3) {
+    D.sector_pe = layer3.sector_pe || [];
+    D.cot_data  = layer3.cot_data  || {};
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// CLAUDE STREAMING
+// ════════════════════════════════════════════════════════════════════════════
+async function stream(prompt, elId) {
+  const el = document.getElementById(elId);
+  const key = getKey();
+
+  if (!key) {
+    el.innerHTML = '<span class="placeholder">⚠ Set your Claude API key (⚙ API Key button, top right) to enable AI analysis.</span>';
+    showKeyBar();
+    return;
+  }
+
+  el.classList.add('streaming');
+  el.textContent = '';
+
+  // Show spinner while waiting for first token
+  const spin = document.createElement('span');
+  spin.className = 'spinner';
+  el.appendChild(spin);
+
+  const allBtns = document.querySelectorAll('.btn');
+  allBtns.forEach(b => b.disabled = true);
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: CLAUDE_MODEL,
+        max_tokens: 1024,
+        stream: true,
+        system: SYSTEM_PROMPT,
+        messages: [{ role: 'user', content: prompt }],
+      }),
+    });
+
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      el.textContent = `API error ${resp.status}: ${err?.error?.message || 'Unknown error'}`;
+      el.classList.remove('streaming');
+      allBtns.forEach(b => b.disabled = false);
+      return;
+    }
+
+    const reader = resp.body.getReader();
+    const dec = new TextDecoder();
+    let buf = '', text = '';
+    let firstToken = true;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      const lines = buf.split('\n');
+      buf = lines.pop();
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const raw = line.slice(6).trim();
+        if (raw === '[DONE]') continue;
+        try {
+          const j = JSON.parse(raw);
+          if (j.type === 'content_block_delta' && j.delta?.text) {
+            if (firstToken) { el.textContent = ''; firstToken = false; }
+            text += j.delta.text;
+            el.textContent = text;
+          }
+        } catch {}
+      }
+    }
+    if (!text) el.textContent = '(No response)';
+  } catch (e) {
+    el.textContent = `Error: ${e.message}`;
+  }
+
+  el.classList.remove('streaming');
+  allBtns.forEach(b => b.disabled = false);
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// RENDER: REGIME GAUGES
+// ════════════════════════════════════════════════════════════════════════════
+function renderRegime() {
+  const cpi   = last(D.cpi_yoy);
+  const core  = last(D.core_cpi);
+  const fed   = last(D.fedfunds);
+  const ur    = last(D.unrate);
+  const gs10v = last(D.gs10);
+  const gs2v  = last(D.gs2);
+  const sp    = last(D.t10y2y);
+  const hy    = last(D.hy_oas);
+  const baa   = last(D.baa_spread);
+  const vixv  = last(D.vix);
+  const fg    = D.fg_current || 42;
+  const fgL   = D.fg_label   || 'Fear';
+  const breadth = D.fg_components?.breadth?.value || 41;
+
+  // Regime classification
+  const cpiUp     = cpi.value > (prev2(D.cpi_yoy).value || 0);
+  const hyWide    = hy.value  > 350;
+  const yieldPos  = sp.value  > 0;
+  const growthOK  = D.gdp.length && last(D.gdp).value > 0;
+
+  let regimeName = 'Stagflationary Slowdown';
+  let regimeConf = 73;
+  let regimeDesc = 'Transition phase — softening growth with sticky inflation and re-widening credit spreads';
+
+  if (!cpiUp && !hyWide && growthOK) {
+    regimeName = 'Goldilocks'; regimeConf = 68;
+    regimeDesc = 'Growth without inflation — historically the most favorable equity regime';
+  } else if (cpiUp && hyWide && !growthOK) {
+    regimeName = 'Stagflationary Contraction'; regimeConf = 81;
+    regimeDesc = 'Worst-case combination: rising inflation and contracting credit/growth';
+  } else if (!cpiUp && hyWide) {
+    regimeName = 'Deflationary Slowdown'; regimeConf = 64;
+    regimeDesc = 'Credit stress with benign inflation — late-cycle risk-off environment';
+  } else if (cpiUp && !hyWide && growthOK) {
+    regimeName = 'Inflationary Growth'; regimeConf = 70;
+    regimeDesc = 'Growth with rising inflation — supports real assets and short duration';
+  }
+
+  document.getElementById('regime-name').textContent = regimeName;
+  document.getElementById('regime-conf').textContent = `Confidence: ${regimeConf}%`;
+  document.getElementById('regime-desc').textContent = regimeDesc;
+
+  // Signal pills
+  const signals = [
+    { label: `CPI ${cpiUp ? 're-accelerating' : 'cooling'} ${f2(cpi.value)}%`, type: cpiUp ? 'bear' : 'bull' },
+    { label: `Yield curve ${sp.value > 0 ? '+' : ''}${Math.round((sp.value||0)*100)}bps`, type: sp.value > 0.2 ? 'bull' : sp.value < 0 ? 'bear' : 'neutral' },
+    { label: `HY spreads ${hy.value}bps`, type: hy.value > 400 ? 'bear' : hy.value < 300 ? 'bull' : 'neutral' },
+    { label: `Fed ${f2(fed.value)}% (on hold)`, type: 'neutral' },
+    { label: `Unemployment ${f2(ur.value)}%`, type: ur.value < 4.5 ? 'bull' : 'bear' },
+    { label: `Fear & Greed ${fg} (${fgL})`, type: fg < 40 ? 'bear' : fg > 60 ? 'bull' : 'neutral' },
+  ];
+  document.getElementById('regime-signals').innerHTML = signals.map(s =>
+    `<span class="pill pill-${s.type}">${s.label}</span>`
+  ).join('');
+
+  // Gauges
+  const gauges = [
+    { label: 'CPI YoY',     value: f2(cpi.value)+'%',  sub: 'Core: '+f2(core.value)+'%',       trend: cpiUp ? 'up' : 'down' },
+    { label: 'Fed Funds',   value: f2(fed.value)+'%',  sub: 'Last change: Jan 2026',            trend: 'neutral' },
+    { label: '10Y Yield',   value: f2(gs10v.value)+'%',sub: '2Y: '+f2(gs2v.value)+'%',          trend: gs10v.value > (prev2(D.gs10).value||0) ? 'up' : 'down' },
+    { label: '10Y–2Y',      value: (sp.value>0?'+':'')+Math.round((sp.value||0)*100)+'bps', sub: 'Yield curve slope',  trend: 'neutral' },
+    { label: 'HY OAS',      value: Math.round(hy.value)+'bps', sub: 'IG: ' + f2(baa.value)+'%', trend: 'up' },
+    { label: 'Unemployment', value: f2(ur.value)+'%',  sub: 'Sahm Rule inactive',               trend: 'neutral' },
+    { label: 'VIX',         value: f2(vixv.value),     sub: 'Volatility index',                 trend: vixv.value > 20 ? 'up' : 'down' },
+    { label: 'Fear & Greed', value: fg,                sub: fgL,                                trend: fg < 40 ? 'up' : fg > 60 ? 'down' : 'neutral' },
+    { label: 'Breadth >200MA', value: breadth+'%',     sub: D.fg_components?.breadth?.note || '', trend: breadth < 50 ? 'up' : 'down' },
+  ];
+
+  document.getElementById('regime-gauges').innerHTML = gauges.map(g =>
+    `<div class="gauge" data-trend="${g.trend}">
+      <span class="gauge-label">${g.label}</span>
+      <span class="gauge-value">${g.value}</span>
+      <span class="gauge-sub">${g.sub}</span>
+    </div>`
+  ).join('');
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// AI: REGIME
+// ════════════════════════════════════════════════════════════════════════════
+function regimeAnalysis() {
+  const cpi = last(D.cpi_yoy), pCpi = prev2(D.cpi_yoy);
+  const core = last(D.core_cpi);
+  const fed = last(D.fedfunds);
+  const gs10v = last(D.gs10), gs2v = last(D.gs2);
+  const sp = last(D.t10y2y), sm = last(D.t10y3m);
+  const hy = last(D.hy_oas), baa = last(D.baa_spread);
+  const ur = last(D.unrate);
+  const vixv = last(D.vix);
+  const fg = D.fg_current || 42;
+  const gdpLast = last(D.gdp);
+
+  stream(`Analyze this macro data snapshot and name the exact regime with a confidence level and 3 specific portfolio positioning recommendations:
+
+CPI YoY: ${f2(cpi.value)}% (prev ${f2(pCpi.value)}%). Core CPI: ${f2(core.value)}%.
+Fed Funds: ${f2(fed.value)}% — paused since January 2026.
+10Y: ${f2(gs10v.value)}%, 2Y: ${f2(gs2v.value)}%. 10Y-2Y: ${sp.value > 0 ? '+' : ''}${Math.round((sp.value||0)*100)}bps. 10Y-3M: ${sm.value > 0 ? '+' : ''}${Math.round((sm.value||0)*100)}bps.
+HY OAS: ${Math.round(hy.value)}bps. BAA spread: ${f2(baa.value)}%.
+GDP QoQ annualized (latest): ${f2(gdpLast.value)}% (${gdpLast.date}).
+Unemployment: ${f2(ur.value)}% — Sahm Rule not triggered.
+F&G: ${fg}. VIX: ${f2(vixv.value)}.
+Institutional flow: ${last(D.smart_money?.institutional_flow || []).value || 61}. Retail: ${last(D.smart_money?.retail_sentiment || []).value || 38}.
+
+Give: regime name, confidence %, 3 portfolio positioning calls with rationale. Specific. Numbers. No disclaimers.`,
+    'ai-regime');
+}
+
+function portfolioImplications() {
+  const cpi = last(D.cpi_yoy), fed = last(D.fedfunds);
+  const sp = last(D.t10y2y), hy = last(D.hy_oas);
+  const fg = D.fg_current || 42;
+  const inst = last(D.smart_money?.institutional_flow || []).value || 61;
+  const retail = last(D.smart_money?.retail_sentiment || []).value || 38;
+  const breadth = D.fg_components?.breadth?.value || 41;
+  const vixv = last(D.vix);
+
+  stream(`Given: CPI ${f2(cpi.value)}% (re-accelerating), Fed on hold at ${f2(fed.value)}%, HY spreads ${Math.round(hy.value)}bps (widening), yield curve ${sp.value > 0 ? '+' : ''}${Math.round((sp.value||0)*100)}bps (re-steepening), breadth weak (${breadth}% above 200MA), VIX ${f2(vixv.value)}, institutions accumulating (${inst}) while retail bearish (${retail}).
+
+Give 5 specific portfolio positioning calls: which sectors to overweight/underweight, factor tilts (quality/value/momentum), duration stance, and one cross-asset trade. Include the macro logic for each. Use ETF tickers.`,
+    'ai-regime');
+}
+
+function riskScenarios() {
+  const cpi = last(D.cpi_yoy), hy = last(D.hy_oas), fed = last(D.fedfunds);
+  stream(`For members positioned in a stagflationary slowdown (CPI ${f2(cpi.value)}%, HY spreads ${Math.round(hy.value)}bps, Fed paused at ${f2(fed.value)}%), give 3 tail risk scenarios to hedge against. For each: the scenario, the specific data trigger to watch, and the exact hedge instrument/position. Be precise about trigger levels — not vague.`,
+    'ai-regime');
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// RENDER: DIVERGENCE
+// ════════════════════════════════════════════════════════════════════════════
+function renderDivergence() {
+  const sm = D.smart_money;
+  if (!sm) return;
+
+  const retLast  = last(sm.retail_sentiment);
+  const instLast = last(sm.institutional_flow);
+  const gap = Math.abs((instLast.value||61) - (retLast.value||38));
+
+  document.getElementById('div-live-signal').innerHTML =
+    `<strong>${retLast.date || 'Current'}</strong> — ${instLast.label || 'Accumulating'} (${instLast.value||61}) vs Retail ${retLast.label||'Bearish'} (${retLast.value||38}) — <strong>${gap}pt gap</strong>`;
+
+  document.getElementById('div-live-bars').innerHTML = `
+    <div class="bar-row">
+      <span class="bar-label">Retail ${retLast.value||38}</span>
+      <div class="bar-track"><div class="bar-fill retail" style="width:${retLast.value||38}%"></div></div>
+      <span class="bar-val">${retLast.label||'Bearish'}</span>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">Institutional ${instLast.value||61}</span>
+      <div class="bar-track"><div class="bar-fill inst" style="width:${instLast.value||61}%"></div></div>
+      <span class="bar-val">${instLast.label||'Accumulating'}</span>
+    </div>`;
+
+  const events = (sm.divergence_events || []).slice().reverse();
+  document.getElementById('divergence-history').innerHTML = events.map((e, i) => `
+    <div class="div-event" data-type="${e.type}">
+      <div class="div-header">
+        <span class="div-date">${e.date}</span>
+        <span class="div-badge ${e.type}">${e.type.toUpperCase()}</span>
+      </div>
+      <div class="div-signal">${e.signal}</div>
+      <div class="bar-row">
+        <span class="bar-label">Retail ${e.retail}</span>
+        <div class="bar-track"><div class="bar-fill retail" style="width:${e.retail}%"></div></div>
+        <span class="bar-val">Gap: ${Math.abs(e.institutional - e.retail)}pt</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Inst. ${e.institutional}</span>
+        <div class="bar-track"><div class="bar-fill inst" style="width:${e.institutional}%"></div></div>
+      </div>
+      <div class="ai-box" id="ai-div-${i}" style="margin-top:10px"><span class="placeholder">Click Analyze for AI read.</span></div>
+      <div class="ai-actions" style="margin-top:8px">
+        <button class="btn btn-ghost" style="font-size:12px" onclick="analyzeDivEvent(${i},'${e.date}',${e.retail},${e.institutional},'${e.signal.replace(/'/g,"\\'")}','${e.type}')">Analyze</button>
+      </div>
+    </div>`
+  ).join('');
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// AI: DIVERGENCE
+// ════════════════════════════════════════════════════════════════════════════
+function analyzeLive() {
+  const sm     = D.smart_money || {};
+  const retail = (sm.retail_sentiment || []).slice(-5).map(d => `${d.value}(${d.date?.slice(0,7)||''})`).join(' → ');
+  const inst   = (sm.institutional_flow || []).slice(-5).map(d => `${d.value}(${d.date?.slice(0,7)||''})`).join(' → ');
+  const retLast = last(sm.retail_sentiment || [{}]);
+  const instLast = last(sm.institutional_flow || [{}]);
+
+  stream(`Live divergence: institutional at ${instLast.value||61} (${instLast.label||'Accumulating'}), retail at ${retLast.value||38} (${retLast.label||'Bearish'}) — ${Math.abs((instLast.value||61)-(retLast.value||38))}pt gap.
+
+Retail sequence (recent): ${retail}
+Institutional sequence (recent): ${inst}
+
+Institutions front-ran the selloff (reduced in Feb-Mar), bought the panic, now actively accumulating while retail is still bearish. What does this specific pattern signal? Give 3 concrete trade ideas to follow smart money. Be specific about entry, what you're buying, and the catalyst.`,
+    'ai-div-live');
+}
+
+function analyzeDivEvent(i, date, retail, inst, signal, type) {
+  const sm = D.smart_money || {};
+  const retailSeq = (sm.retail_sentiment || []).map(d => `${d.value}`).join(' → ');
+  const instSeq   = (sm.institutional_flow || []).map(d => `${d.value}`).join(' → ');
+
+  stream(`Divergence event on ${date}: "${signal}". Type: ${type}. Retail: ${retail}, Institutional: ${inst}, Gap: ${Math.abs(inst-retail)}pts.
+
+Full context — retail sequence: ${retailSeq}
+Institutional: ${instSeq}
+
+Was this divergence actionable at the time? What was the right trade? What does it tell us about current positioning?`,
+    `ai-div-${i}`);
+}
+
+function analyzeAllDivergences() {
+  const events = (D.smart_money?.divergence_events || []);
+  const evStr = events.map((e, i) => `${i+1}. ${e.date}: "${e.signal}" (${e.type.toUpperCase()}) — Retail ${e.retail}, Inst ${e.institutional}`).join('\n');
+  const retLast  = last(D.smart_money?.retail_sentiment || [{}]);
+  const instLast = last(D.smart_money?.institutional_flow || [{}]);
+
+  stream(`${events.length} divergence events to interpret together:\n${evStr}
+
+Current state: institutional ${instLast.value||61} (${instLast.label||'Accumulating'}) vs retail ${retLast.value||38} (${retLast.label||'Bearish'}).
+
+What is the institutional macro thesis here? What are they accumulating into and why? What should members be doing to follow smart money RIGHT NOW? Give 3 specific actions.`,
+    'ai-div-all');
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// RENDER: SECTORS
+// ════════════════════════════════════════════════════════════════════════════
+function sectorScore(s) {
+  const pe  = Math.max(0, (30 - Math.min(s.pe, 40)) / 30 * 100);
+  const eps = Math.max(0, Math.min(100, (s.eps_growth + 5) / 25 * 100));
+  const ytd = Math.max(0, Math.min(100, (s.ytd + 15) / 30 * 100));
+  const div = Math.min(100, s.div_yield * 15);
+  return Math.round(pe * 0.30 + eps * 0.35 + ytd * 0.20 + div * 0.15);
+}
+
+function scoreColor(s) {
+  if (s >= 65) return 'var(--green)';
+  if (s >= 45) return 'var(--yellow)';
+  return 'var(--red)';
+}
+
+function renderSectors() {
+  const scored = (D.sector_pe || [])
+    .map(s => ({ ...s, score: sectorScore(s) }))
+    .sort((a, b) => b.score - a.score);
+
+  document.getElementById('sector-grid').innerHTML = scored.map(s => `
+    <div class="sector-cell" onclick="askSector('${s.sector}',${s.score},${s.pe},${s.eps_growth},${s.ytd},${s.div_yield})">
+      <span class="sector-name">${s.sector}</span>
+      <div class="sector-score-bar">
+        <div class="sector-score-track">
+          <div class="sector-score-fill" style="width:${s.score}%;background:${scoreColor(s.score)}"></div>
+        </div>
+        <span class="sector-score-num" style="color:${scoreColor(s.score)}">${s.score}</span>
+      </div>
+      <div class="sector-meta">
+        <span class="sector-tag">P/E ${s.pe}×</span>
+        <span class="sector-tag">EPS ${s.eps_growth > 0 ? '+' : ''}${s.eps_growth}%</span>
+        <span class="sector-tag" style="${s.ytd < 0 ? 'color:var(--red)' : 'color:var(--green)'}">YTD ${s.ytd > 0 ? '+' : ''}${s.ytd}%</span>
+        <span class="sector-tag">Yld ${s.div_yield}%</span>
+      </div>
+    </div>`
+  ).join('');
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// AI: SECTORS
+// ════════════════════════════════════════════════════════════════════════════
+function askSector(name, score, pe, eps, ytd, div) {
+  const cpi = last(D.cpi_yoy), hy = last(D.hy_oas), fed = last(D.fedfunds);
+  stream(`Sector deep-dive: ${name}. Attractiveness score: ${score}/100. P/E: ${pe}×, EPS growth: ${eps}%, YTD: ${ytd > 0 ? '+' : ''}${ytd}%, Div yield: ${div}%.
+
+Current macro: CPI ${f2(cpi.value)}%, HY spreads ${Math.round(hy.value)}bps, institutional accumulating, Fed on hold ${f2(fed.value)}%.
+
+Is this sector a buy, hold, or avoid right now? Give the 2 best ETF or stock plays within this sector for the current regime and why. Be specific with tickers.`,
+    'ai-sectors');
+}
+
+function sectorPlaybook() {
+  const scored = (D.sector_pe || []).map(s => ({ ...s, score: sectorScore(s) })).sort((a, b) => b.score - a.score);
+  const rows = scored.map(s => `${s.sector}: score ${s.score}, P/E ${s.pe}×, EPS ${s.eps_growth}%, YTD ${s.ytd}%`).join('\n');
+  const cpi = last(D.cpi_yoy), hy = last(D.hy_oas), fed = last(D.fedfunds);
+  stream(`Sector rotation playbook for a stagflationary slowdown (CPI ${f2(cpi.value)}%, HY ${Math.round(hy.value)}bps, Fed on hold ${f2(fed.value)}%):
+
+${rows}
+
+Give the rotation playbook: top 3 to overweight, bottom 3 to underweight, and the macro catalyst that would change each call. Include ETF tickers.`,
+    'ai-sectors');
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// RENDER: OPTIONS FLOW
+// ════════════════════════════════════════════════════════════════════════════
+function renderFlow() {
+  const flow   = D.options_flow || [];
+  const sorted = [...flow].sort((a, b) => b.premium_m - a.premium_m);
+  const bullP  = flow.filter(f => f.sentiment === 'bullish').reduce((a, f) => a + f.premium_m, 0);
+  const bearP  = flow.filter(f => f.sentiment === 'bearish').reduce((a, f) => a + f.premium_m, 0);
+  const ratio  = bearP > 0 ? (bullP / bearP).toFixed(2) : '∞';
+
+  document.getElementById('flow-summary').innerHTML = `
+    <div class="flow-stat"><span class="flow-stat-label">Total premium</span><span class="flow-stat-val">$${(bullP+bearP).toFixed(1)}M</span></div>
+    <div class="flow-stat"><span class="flow-stat-label">Bullish</span><span class="flow-stat-val bull">$${bullP.toFixed(1)}M</span></div>
+    <div class="flow-stat"><span class="flow-stat-label">Bearish</span><span class="flow-stat-val bear">$${bearP.toFixed(1)}M</span></div>
+    <div class="flow-stat"><span class="flow-stat-label">Bull/Bear ratio</span><span class="flow-stat-val">${ratio}×</span></div>`;
+
+  document.getElementById('flow-tbody').innerHTML = sorted.map(f => `
+    <tr data-sentiment="${f.sentiment}">
+      <td><strong>${f.ticker}</strong></td>
+      <td style="color:${f.type==='CALL'?'var(--green)':'var(--red)'};font-weight:600">${f.type}</td>
+      <td>${f.strike}</td>
+      <td>${f.expiry}</td>
+      <td>${(f.size||0).toLocaleString()}</td>
+      <td style="font-family:var(--mono)">$${f.premium_m}M</td>
+      <td style="font-family:var(--mono)">${f.implied_vol}%</td>
+      <td style="font-family:var(--mono);${f.vs_avg_pct>=500?'color:var(--yellow);font-weight:600':''}">${f.vs_avg_pct}%</td>
+      <td style="color:${f.sentiment==='bullish'?'var(--green)':'var(--red)'}">${f.sentiment}</td>
+      <td style="color:var(--muted-fg)">${f.date}</td>
+    </tr>`
+  ).join('');
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// AI: FLOW
+// ════════════════════════════════════════════════════════════════════════════
+function analyzeFlow() {
+  const flow  = D.options_flow || [];
+  const bullP = flow.filter(f => f.sentiment==='bullish').reduce((a,f)=>a+f.premium_m, 0);
+  const bearP = flow.filter(f => f.sentiment==='bearish').reduce((a,f)=>a+f.premium_m, 0);
+
+  const bullStr = flow.filter(f=>f.sentiment==='bullish')
+    .sort((a,b)=>b.premium_m-a.premium_m).slice(0,5)
+    .map(f=>`${f.ticker} ${f.type} ${f.strike} ($${f.premium_m}M, ${f.vs_avg_pct}% above avg, IV ${f.implied_vol}%)`).join(', ');
+
+  const bearStr = flow.filter(f=>f.sentiment==='bearish')
+    .sort((a,b)=>b.premium_m-a.premium_m).slice(0,5)
+    .map(f=>`${f.ticker} ${f.type} ${f.strike} ($${f.premium_m}M, ${f.vs_avg_pct}% above avg, IV ${f.implied_vol}%)`).join(', ');
+
+  const spyPut = flow.find(f=>f.ticker==='SPY'&&f.type==='PUT');
+  const ratio = bearP > 0 ? (bullP/bearP).toFixed(2) : '∞';
+
+  stream(`Unusual options flow analysis:
+
+BULLISH ($${bullP.toFixed(1)}M): ${bullStr}
+BEARISH ($${bearP.toFixed(1)}M): ${bearStr}
+
+${spyPut ? `KEY: SPY PUT at LOW IV (${spyPut.implied_vol}%) = institutional tail hedge, not panic.` : ''}
+Net bull/bear ratio: ${ratio}×.
+
+What is the net directional bias? Is this a "long risk with tail hedge" institutional pattern? What do the cross-asset puts (XLE, TLT, GLD) tell us about macro positioning? Give 3 actionable takeaways.`,
+    'ai-flow');
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// RENDER: COT
+// ════════════════════════════════════════════════════════════════════════════
+const COT_CONTEXT = {
+  'Gold':              'Commercial shorts at multi-month extreme and still building. Historically mean-reverts.',
+  'Crude Oil':         'Speculative shorts building steadily. Macro demand concerns dominant.',
+  'S&P 500 Futures':   'Rapid reversal from net long to net short. Smart money now cautious on equities.',
+  '10Y T-Note':        'Net short and accelerating. Bond bears in control.',
+  'USD Index':         'Rapid reversal underway. Dollar weakness emerging.',
+  'Copper':            'Multi-month extreme long and still building. Real economy or China re-open thesis.',
+};
+
+function renderCOT() {
+  const cot = D.cot_data || {};
+  document.getElementById('cot-grid').innerHTML = Object.entries(cot).map(([name, vals]) => {
+    const cur = last(vals).value;
+    const prv = prev2(vals).value;
+    const dir     = cur > 0 ? 'long' : 'short';
+    const adding  = cur > prv;
+    const pct = Math.round(Math.abs(cur) / 100 * 100);
+    const fillPct = Math.min(100, Math.abs(cur));
+    return `<div class="cot-card" data-direction="${dir}">
+      <span class="cot-name">${name}</span>
+      <span class="cot-value">${cur > 0 ? '+' : ''}${cur}</span>
+      <span class="cot-trend">${adding ? (cur>0?'↑ Adding longs':'↓ Adding shorts') : (cur>0?'↓ Reducing longs':'↑ Covering shorts')}</span>
+      <div class="cot-track">
+        <div class="cot-fill ${dir}" style="width:${fillPct}%"></div>
+      </div>
+      <p class="cot-context">${COT_CONTEXT[name] || ''}</p>
+    </div>`;
+  }).join('');
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// AI: COT
+// ════════════════════════════════════════════════════════════════════════════
+function analyzeCOT() {
+  const cot = D.cot_data || {};
+  const lines = Object.entries(cot).map(([name, vals]) => {
+    const cur = last(vals).value;
+    const prv = prev2(vals).value;
+    return `${name}: ${cur > 0 ? '+' : ''}${cur} (prev ${prv > 0 ? '+' : ''}${prv}, ${cur > prv ? 'building' : 'reducing'})`;
+  }).join('\n');
+
+  stream(`COT positioning trade thesis:\n\n${lines}\n\nWhat single macro trade thesis ties all these positions together? Are they consistent with stagflation, a dollar crisis, or something else? Give 3 COT-based trade ideas with entry rationale and the risk to each. Specific instruments.`,
+    'ai-cot');
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// RENDER: SQUEEZE
+// ════════════════════════════════════════════════════════════════════════════
+function squeezeColor(s) {
+  if (s >= 85) return 'extreme';
+  if (s >= 65) return 'high';
+  return '';
+}
+
+function renderSqueeze() {
+  const sorted = [...(D.short_interest || [])].sort((a, b) => b.squeeze_score - a.squeeze_score);
+  document.getElementById('squeeze-grid').innerHTML = sorted.map(s => {
+    const cls = squeezeColor(s.squeeze_score);
+    const scoreStyle = cls === 'extreme' ? 'color:var(--red)' : cls === 'high' ? 'color:var(--yellow)' : '';
+    return `<div class="squeeze-card">
+      <div class="sq-header">
+        <span class="sq-ticker">${s.ticker}</span>
+        <span class="sq-score-badge" style="${scoreStyle}">${s.squeeze_score}</span>
+      </div>
+      <span class="sq-name">${s.name} · ${s.sector}</span>
+      <div class="sq-score-track">
+        <div class="sq-score-fill ${cls}" style="width:${s.squeeze_score}%"></div>
+      </div>
+      <div class="sq-meta">
+        <span>Short float</span><span class="val">${s.short_pct}%</span>
+        <span>Days to cover</span><span class="val">${s.dtc}</span>
+        <span>1M change</span><span class="val sq-chg ${s.chg_1m > 0 ? 'rising' : ''}">${s.chg_1m > 0 ? '+' : ''}${s.chg_1m}%</span>
+        <span>Price</span><span class="val">$${s.price}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// AI: SQUEEZE
+// ════════════════════════════════════════════════════════════════════════════
+function analyzeSqueeze() {
+  const top = [...(D.short_interest || [])].sort((a, b) => b.squeeze_score - a.squeeze_score).slice(0, 6);
+  const fg = D.fg_current || 42;
+  const inst = last(D.smart_money?.institutional_flow || [{}]).value || 61;
+  const vixv = last(D.vix);
+
+  stream(`Short squeeze analysis:
+
+${top.map(s=>`${s.ticker} (${s.name}): score ${s.squeeze_score}/100, short% ${s.short_pct}%, DTC ${s.dtc}, 1M chg ${s.chg_1m>0?'+':''}${s.chg_1m}%, price $${s.price}`).join('\n')}
+
+Context: Institutional flow at ${inst} (Accumulating), F&G recovering to ${fg}, VIX at ${f2(vixv.value)}.
+
+Which 2-3 have the most credible squeeze setup — not just high short %, but a real catalyst or momentum? What triggers each squeeze? What's the risk/reward? Be honest about which are meme traps vs real setups.`,
+    'ai-squeeze');
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════════════════════════
+(async () => {
+  await loadAllData();
+  renderRegime();
+  renderDivergence();
+  renderSectors();
+  renderFlow();
+  renderCOT();
+  renderSqueeze();
+})();
+</script>
+</body>
+</html>

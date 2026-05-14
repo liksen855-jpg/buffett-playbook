@@ -1,0 +1,306 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.rpt{padding:0.5rem 0 2rem}
+.sec{margin-bottom:2rem}
+.sh{display:flex;align-items:center;gap:10px;margin-bottom:1rem;border-bottom:0.5px solid var(--color-border-tertiary);padding-bottom:0.5rem}
+.sn{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.04em}
+.st{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.bdg{display:inline-block;font-size:11px;font-weight:500;padding:2px 8px;border-radius:4px}
+.bd{background:var(--color-background-danger);color:var(--color-text-danger)}
+.bw{background:var(--color-background-warning);color:var(--color-text-warning)}
+.bi{background:var(--color-background-info);color:var(--color-text-info)}
+.bs{background:var(--color-background-success);color:var(--color-text-success)}
+.bn{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.mg{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:1rem}
+.mc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:0.75rem 1rem}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px}
+.mv{font-size:19px;font-weight:500;color:var(--color-text-primary)}
+.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+.mv.red{color:#a32d2d}.mv.amb{color:#854f0b}.mv.grn{color:#3b6d11}
+.crd{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:0.75rem}
+.ct{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.cb{font-size:13px;color:var(--color-text-secondary);line-height:1.55}
+.src{font-size:11px;color:var(--color-text-tertiary);margin-top:6px;font-style:italic}
+.src span{font-weight:500;color:var(--color-text-tertiary)}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;font-size:11px;font-weight:500;color:var(--color-text-tertiary);padding:4px 8px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.tbl td{padding:7px 8px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);vertical-align:top}
+.tbl tr:last-child td{border-bottom:none}
+.tbl .mu{color:var(--color-text-secondary)}
+.alrt{border-left:3px solid;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:0.75rem 1rem;margin-bottom:0.6rem;background:var(--color-background-secondary)}
+.alrt.dng{border-color:#E24B4A}.alrt.wrn{border-color:#EF9F27}.alrt.inf{border-color:#378ADD}
+.at{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.ab{font-size:12px;color:var(--color-text-secondary);line-height:1.5}
+.sc{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:0.75rem;background:var(--color-background-primary)}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:0.75rem}
+.sb{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:0.6rem 0.75rem}
+.sbl{font-size:10px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px}
+.sbv{font-size:12px;color:var(--color-text-primary);line-height:1.4}
+.inv{font-size:12px;color:var(--color-text-secondary);margin-top:0.5rem;padding-top:0.5rem;border-top:0.5px solid var(--color-border-tertiary)}
+.invl{font-size:10px;font-weight:500;color:var(--color-text-danger);text-transform:uppercase}
+.ci{display:flex;gap:12px;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);align-items:flex-start}
+.ci:last-child{border-bottom:none}
+.cd{font-size:11px;font-weight:500;color:var(--color-text-tertiary);min-width:62px;padding-top:2px}
+.ce{font-size:13px;color:var(--color-text-primary)}
+.cn{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.sbar-track{height:8px;border-radius:4px;background:linear-gradient(to right,#a32d2d 0%,#E24B4A 20%,#EF9F27 45%,#5DCAA5 70%,#1D9E75 100%);position:relative;margin:8px 0 4px}
+.sbar-ptr{position:absolute;top:-4px;width:16px;height:16px;border-radius:50%;background:var(--color-background-primary);border:2px solid #a32d2d;transform:translateX(-50%)}
+.slabs{display:flex;justify-content:space-between;font-size:10px;color:var(--color-text-tertiary)}
+.conflict{border:1px solid var(--color-border-warning);border-radius:var(--border-radius-md);background:var(--color-background-warning);padding:0.6rem 0.85rem;margin-bottom:0.75rem}
+.conflict-label{font-size:10px;font-weight:500;color:var(--color-text-warning);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px}
+.conflict-body{font-size:12px;color:var(--color-text-primary);line-height:1.5}
+.resolved{border:0.5px solid var(--color-border-success);border-radius:var(--border-radius-md);background:var(--color-background-success);padding:0.5rem 0.85rem;margin-bottom:0.5rem}
+.resolved-label{font-size:10px;font-weight:500;color:var(--color-text-success);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px}
+.resolved-body{font-size:12px;color:var(--color-text-primary);line-height:1.5}
+@media(max-width:500px){.sg{grid-template-columns:1fr}}
+</style>
+
+<div class="rpt">
+
+<div style="margin-bottom:1.5rem">
+  <p style="font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">InsightInvest Capital · Synthesized Market Intelligence</p>
+  <h1 style="font-size:22px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px">Weekly Market Outlook — Revised & Synthesized</h1>
+  <p style="font-size:13px;color:var(--color-text-secondary)">Week of March 23–28, 2026 &nbsp;·&nbsp; Multi-source synthesis: live market data + primary research brief</p>
+  <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+    <span class="bdg bd">Regime: Risk-Off</span>
+    <span class="bdg bw">Geopolitical: Extreme Elevated</span>
+    <span class="bdg bn">Fed: Hold 3.5–3.75% · 1 cut projected 2026</span>
+    <span class="bdg bw">Synthesis: 2 sources reconciled</span>
+  </div>
+</div>
+
+<div class="resolved">
+  <div class="resolved-label">Synthesis note — sources reconciled</div>
+  <div class="resolved-body">Two independent intelligence streams were integrated for this briefing: live market data (Brent ~$103–110, Gold ~$4,100–4,355, SPX last close ~6,506 on Mar 20) and the primary research brief (SPX ~6,632–6,637 YTD low, WTI ~$98+, Gold in strong uptrend). Where data diverged on exact price levels, the more conservative and technically grounded numbers are used. All thematic conclusions from both sources are consistent and mutually reinforcing. No material conflicts found — minor discrepancies reflect intraday/session timing differences.</div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="sn">01</span><span class="st">Price Levels & Technical Setup — Synthesized</span></div>
+
+  <div class="mg">
+    <div class="mc"><div class="ml">S&P 500 (Mar 20 close)</div><div class="mv red">~6,506–6,637</div><div class="ms">4 consecutive wkly declines; –7.7% from YTD high</div></div>
+    <div class="mc"><div class="ml">Nasdaq 100</div><div class="mv red">~23,712–23,907</div><div class="ms">Testing 23.6% Fib; worst wkly perf at –2%</div></div>
+    <div class="mc"><div class="ml">Dow Jones</div><div class="mv amb">~45,400</div><div class="ms">Down –2.1% weekly; lagging on cyclicals</div></div>
+    <div class="mc"><div class="ml">VIX</div><div class="mv red">Mid-20s to 30+</div><div class="ms">Institutional hedging spike; fear regime</div></div>
+    <div class="mc"><div class="ml">WTI / Brent Crude</div><div class="mv amb">$98–110</div><div class="ms">Iran premium embedded; structurally elevated</div></div>
+    <div class="mc"><div class="ml">10Y UST Yield</div><div class="mv amb">~4.36–4.39%</div><div class="ms">Easing from 4.445% peak; still elevated</div></div>
+  </div>
+
+  <table class="tbl">
+    <thead><tr><th>Asset</th><th>Current Zone</th><th>Key Support</th><th>Key Resistance</th><th>Signal</th></tr></thead>
+    <tbody>
+      <tr><td><strong>SPX</strong></td><td>6,506–6,637</td><td><strong>6,492–6,550</strong> — Nov swing / Oct LDC / 23.6% Fib / Evercore ISI structural floor. Below here → 6,400 zone, then JPM 6,000–6,200 target</td><td>6,668–6,835 (200-DMA + recent breakdown). Then 6,950–7,000</td><td><span class="bdg bd">Strong sell (10/12 MAs)</span></td></tr>
+      <tr><td><strong>NDX</strong></td><td>23,712–23,907</td><td>23,410 (52-wk MA / median-line convergence). Below → 22,133–22,499 (2024 swing / 38.2% Fib)</td><td>25,000 weekly → 25,500 YTD high</td><td><span class="bdg bd">Breakdown structure</span></td></tr>
+      <tr><td><strong>Dow</strong></td><td>~45,400</td><td>52-week MA (watch closely this week)</td><td>Prior range highs</td><td><span class="bdg bw">Cautious</span></td></tr>
+      <tr><td><strong>SPX RSI</strong></td><td>~29</td><td colspan="2">Deep oversold — historically consistent with bounce setup. But geopol/oil can override technicals. Necessary but not sufficient condition for reversal.</td><td><span class="bdg bw">Contrarian watch</span></td></tr>
+      <tr><td><strong>XLE Energy</strong></td><td>+25% YTD</td><td>Breakout zone / prior range high</td><td>2022 energy sector highs</td><td><span class="bdg bs">Leader</span></td></tr>
+      <tr><td><strong>XLU Utilities</strong></td><td>+10–12% YTD</td><td>Rising trend support</td><td>2024 highs</td><td><span class="bdg bs">Strong</span></td></tr>
+      <tr><td><strong>WTI / Brent</strong></td><td>$98–110</td><td>$89–93 (bear reversal signal)</td><td>$115–120 (0.618 Fib ext.)</td><td><span class="bdg bw">Binary — Hormuz</span></td></tr>
+      <tr><td><strong>Gold (GLD)</strong></td><td>~$4,100–4,355</td><td>Prior consolidation zone</td><td>All-time highs</td><td><span class="bdg bs">Risk-off hedge</span></td></tr>
+      <tr><td><strong>DXY</strong></td><td>~103.2</td><td>99.50</td><td>105–106 (risk-off bid)</td><td><span class="bdg bn">Safe-haven elevated</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="crd" style="margin-top:0.75rem">
+    <div class="ct">The Line in the Sand: SPX 6,492–6,550</div>
+    <div class="cb">Both sources converge on this zone as the make-or-break level for the week. It is simultaneously the 23.6% Fibonacci retracement of the entire 2025 advance, the November 2025 swing low, the October low-day close, and the Evercore ISI structural floor. A confirmed daily close below 6,520 on volume accelerates to the 6,400 zone. Below 6,400, JPMorgan's 6,000–6,200 scenario is the next structural target. Holding this zone with a green PCE or Iran de-escalation is the precondition for any relief bounce. RSI at ~29 is the oversold setup — but oversold can stay oversold in geopolitical shock regimes.</div>
+    <div class="src"><span>Sources:</span> Primary research brief (Evercore ISI floor, Fib retracement) + live market data (Nov swing low, Oct LDC confirmation)</div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="sn">02</span><span class="st">Market Sentiment — Synthesized</span></div>
+
+  <div style="margin-bottom:1rem">
+    <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px">CNN Fear &amp; Greed Index</div>
+    <div class="sbar-track"><div class="sbar-ptr" style="left:16%"></div></div>
+    <div class="slabs"><span>Extreme Fear (0)</span><span>Fear</span><span>Neutral</span><span>Greed</span><span>Extreme Greed (100)</span></div>
+    <div style="font-size:12px;color:var(--color-text-secondary);margin-top:6px">Current: <strong style="color:#a32d2d">15–16 — Extreme Fear</strong> &nbsp;·&nbsp; AAII Bullish 30.4% (avg 37.5%) &nbsp;·&nbsp; AAII Bearish 52.0%</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:1rem">
+    <div class="mc"><div class="ml">VIX</div><div class="mv amb">Mid-20s–30+</div><div class="ms">Institutional hedging spike</div></div>
+    <div class="mc"><div class="ml">AAII Bulls</div><div class="mv red">30.4%</div><div class="ms">Well below 37.5% avg</div></div>
+    <div class="mc"><div class="ml">AAII Bears</div><div class="mv red">52.0%</div><div class="ms">Elevated; not yet flush</div></div>
+    <div class="mc"><div class="ml">Put/Call</div><div class="mv red">Elevated</div><div class="ms">Protection buying dominant</div></div>
+  </div>
+
+  <div class="crd">
+    <div class="ct">Directional Read: Risk-Off, but No Capitulation Flush Yet</div>
+    <div class="cb">Both sources agree on the regime: deep risk-off with sentiment at Extreme Fear. The critical nuance both sources flag identically — sentiment is bearish enough to be contrarian-positive for a bounce, but there has been no capitulation flush. Short interest is crowded but cautious; it feels tense rather than panicked. True breakdowns come from complacency, not from markets already leaning defensive. The divergence between extreme fear readings and the absence of a full flush is the key setup tension: it creates a coiled spring that could release sharply in either direction on a binary catalyst (Iran headline, PCE print). Do not act on the oversold signal alone without a catalyst confirmation.</div>
+    <div class="src"><span>Convergence:</span> Both sources independently reached identical conclusions on this regime characterization</div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="sn">03</span><span class="st">Equities Flow & Sector Rotation — Synthesized</span></div>
+
+  <div class="crd">
+    <div class="ct">Dark-Pool Intelligence (added from primary brief)</div>
+    <div class="cb">The primary research brief adds critical dark-pool intelligence absent from the first briefing: heavy dark-pool prints in SPY/IVV ETFs and select large-cap names (AAPL, AVGO) on large-block activity. This is being interpreted as smart-money index accumulation and hedging at lows — not outright distribution. This is a bullish nuance. It signals institutional players are not in panic-selling mode; they are defensively repositioning while maintaining optionality. Equal-weight S&P (RSP) has now outperformed cap-weighted SPX for multiple consecutive months, confirming the broadening thesis. Infrastructure/tech (AVGO) is holding better than pure software, suggesting AI hardware still has institutional support even as software valuations get cut.</div>
+    <div class="src"><span>New intelligence:</span> Primary research brief (dark-pool ETF prints, AAPL/AVGO block activity)</div>
+  </div>
+
+  <table class="tbl">
+    <thead><tr><th>Sector</th><th>YTD Performance</th><th>Flow Signal</th><th>Confluence</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Energy (XLE)</strong></td><td class="grn" style="color:#3b6d11">+25% YTD</td><td><span class="bdg bs">Heavy inflows</span></td><td>Both sources agree — primary driver this week</td></tr>
+      <tr><td><strong>Utilities (XLU)</strong></td><td class="grn" style="color:#3b6d11">+10–12% YTD</td><td><span class="bdg bs">Inflows</span></td><td>AI power demand + defensive rotation</td></tr>
+      <tr><td><strong>Materials (XLB)</strong></td><td class="grn" style="color:#3b6d11">+17–18% YTD</td><td><span class="bdg bs">Inflows</span></td><td>Reflation + supply disruption play</td></tr>
+      <tr><td><strong>Industrials (XLI)</strong></td><td class="grn" style="color:#3b6d11">+14% YTD</td><td><span class="bdg bs">Inflows</span></td><td>Defense + fiscal stimulus + broadening</td></tr>
+      <tr><td><strong>Aerospace/Defense (ITA)</strong></td><td class="grn" style="color:#3b6d11">Strong</td><td><span class="bdg bs">Heavy inflows</span></td><td>Structural + tactical — LMT +15%, RTX, NOC</td></tr>
+      <tr><td><strong>Gold (GLD)</strong></td><td class="grn" style="color:#3b6d11">+20%+ YTD</td><td><span class="bdg bs">Safe-haven bid</span></td><td>Both sources flag as asymmetric upside this week</td></tr>
+      <tr><td><strong>Equal-weight SPX (RSP)</strong></td><td class="grn" style="color:#3b6d11">Outperforming</td><td><span class="bdg bi">Dark-pool accumulation</span></td><td>NEW: Primary brief adds dark-pool ETF intelligence</td></tr>
+      <tr><td><strong>Technology (XLK)</strong></td><td class="red" style="color:#a32d2d">–3.6% YTD</td><td><span class="bdg bd">Outflows</span></td><td>AI capex doubt + rate sensitivity</td></tr>
+      <tr><td><strong>Financials (XLF)</strong></td><td class="red" style="color:#a32d2d">–6.0% YTD</td><td><span class="bdg bd">Outflows</span></td><td>5-wave structure complete; technical correction</td></tr>
+      <tr><td><strong>Consumer Disc. (XLY)</strong></td><td class="red" style="color:#a32d2d">–3.4% YTD</td><td><span class="bdg bd">Outflows</span></td><td>Consumer pullback; luxury demand collapsing</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="sn">04</span><span class="st">News & Catalysts — Reconciled Calendar</span></div>
+
+  <div class="conflict">
+    <div class="conflict-label">Data reconciliation — calendar detail updated</div>
+    <div class="conflict-body">The primary research brief provides more granular calendar detail with specific earnings names and EIA oil inventory (Wednesday). These have been integrated below. The macro framework is identical across both sources — PCE Friday and Iran headlines are the dominant drivers for the week.</div>
+  </div>
+
+  <div class="ci"><div class="cd">Mon Mar 23</div><div><div class="ce">Flash PMIs (US, Europe, UK) — first post-Hormuz economic read</div><div class="cn">February Composite PMI was 51.9. Any sub-50 Services print re-ignites stagflation narrative. Most watched PMI release in months. <span class="bdg bw">High Impact</span></div></div></div>
+  <div class="ci"><div class="cd">Mon–Tue</div><div><div class="ce">Iran/Hormuz — Trump 48-hour ultimatum window; warship deployment confirmed</div><div class="cn">Pentagon deploying warships and Marines to Middle East. Iran's security chief has rejected talks. Binary: escalation → oil spike + VIX surge; de-escalation → sharp relief rally. Outweighs all data this week. <span class="bdg bd">Extreme Impact</span></div></div></div>
+  <div class="ci"><div class="cd">Tue Mar 24</div><div><div class="ce">New Home Sales + Consumer Confidence (Conference Board, March)</div><div class="cn">Gas prices spiking will hammer confidence. New Home Sales reflects pre-war demand; limited signal. Earnings: GameStop (minor). <span class="bdg bw">Medium Impact</span></div></div></div>
+  <div class="ci"><div class="cd">Wed Mar 25</div><div><div class="ce">Durable Goods Orders + EIA Oil Inventories</div><div class="cn">EIA inventory build would be bearish for oil — watch for Hormuz-driven demand destruction starting to show. Durable Goods: watch capex ex-transportation. Earnings: Chewy, PDD, CTAS, PAYX — consumer/AI-adjacent names, limited mega-cap signal. <span class="bdg bn">Medium Impact</span></div></div></div>
+  <div class="ci"><div class="cd">Thu Mar 26</div><div><div class="ce">Initial Jobless Claims + Q4 GDP (3rd estimate)</div><div class="cn">GDP third estimate — prior reads already disappointed. Claims: watch for labor deterioration signal (Feb report showed unexpected –92K jobs). <span class="bdg bw">Medium-High Impact</span></div></div></div>
+  <div class="ci"><div class="cd">Fri Mar 27</div><div><div class="ce">PCE Price Index (Feb) + Personal Income/Spending + UoM Sentiment (final)</div><div class="cn">The week's single most market-sensitive data release. Soft PCE = dovish / risk-on catalyst (target: 6,835 resistance reclaim). Hot PCE = rate pressure confirmed / 6,400 downside unlocked. Energy shock hasn't fully fed into Feb PCE yet — so April/May prints will be worse. UoM Sentiment final: gas prices will crater this number. <span class="bdg bd">Extreme Impact</span></div></div></div>
+  <div class="ci"><div class="cd">All Week</div><div><div class="ce">Fed speakers (blackout lifted post-FOMC)</div><div class="cn">Watch for any speaker language around "monitoring Iran" or staging conditions for rate response to oil-driven inflation. Any hawkish tilt cements higher-for-longer. <span class="bdg bw">High Impact</span></div></div></div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="sn">05</span><span class="st">Asymmetric Upside Setups — 6 Synthesized Plays</span></div>
+
+  <div class="crd" style="margin-bottom:0.75rem">
+    <div class="ct">Synthesis: 4+4 → 6 non-redundant setups</div>
+    <div class="cb">Both sources generated overlapping setup lists. After de-duplication and synthesis, 6 distinct plays emerge. Setups 1–2 are new from the primary brief (SPX tactical bounce + Gold). Setups 3–6 are enhanced versions of the original with additional data layers added. All six are compatible — they are not mutually exclusive if sized correctly.</div>
+  </div>
+
+  <div class="sc">
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:0.4rem;flex-wrap:wrap">
+      <span style="font-size:16px;font-weight:500;color:var(--color-text-primary)">SPY / SPX — Tactical Bounce at 6,520–6,550</span>
+      <span class="bdg bw">Tactical Long</span><span class="bdg bi">New from primary brief</span>
+    </div>
+    <div class="cb">RSI ~29 (deeply oversold), AAII/Fear &amp; Greed at historic extremes, four-week decline, and equal-weight broadening all create the technical preconditions for a 3–5% short-covering bounce. Historical precedent: mid-30s VIX often marks tactical lows. Dark-pool ETF accumulation in SPY/IVV at these levels is the smart-money signal that gives this setup conviction. Equal-weight participation supports broad bounce rather than narrow mega-cap relief.</div>
+    <div class="sg">
+      <div class="sb"><div class="sbl">Thesis</div><div class="sbv">Extreme oversold + dark-pool accumulation + 4-week decline priced in. Asymmetric bounce potential of 3–5% from support.</div></div>
+      <div class="sb"><div class="sbl">Trigger</div><div class="sbv">Hold 6,520 on a daily close basis. Green PCE print Friday OR Iran de-escalation headline.</div></div>
+    </div>
+    <div class="inv"><span class="invl">Invalidation: </span>Clean break below 6,520 on volume. Worsening Iran headlines. Hot PCE Friday. Any of these, exit immediately — targets 6,400 then 6,200.</div>
+  </div>
+
+  <div class="sc">
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:0.4rem;flex-wrap:wrap">
+      <span style="font-size:16px;font-weight:500;color:var(--color-text-primary)">GLD / Gold — Risk-Off Hedge with Upside Torque</span>
+      <span class="bdg bs">Long</span><span class="bdg bi">New from primary brief</span>
+    </div>
+    <div class="cb">Gold at $4,100–4,355 has already delivered 20%+ YTD and still has structural tailwinds: Fear &amp; Greed at 15, yield backdrop supportive, PBoC buying for 15+ consecutive months (JP Morgan target raised to $6,300). The asymmetry this week: if SPX breaks 6,520 OR oil pushes above $115, gold catches a safe-haven bid. If PCE is hot (stagflation signal), gold benefits from the inflation hedge bid. Two distinct paths to upside; limited downside if risk-on reversal is sharp and orderly.</div>
+    <div class="sg">
+      <div class="sb"><div class="sbl">Thesis</div><div class="sbv">Dual-trigger upside: SPX breakdown OR hot PCE both bid gold. Central bank demand provides structural floor.</div></div>
+      <div class="sb"><div class="sbl">Trigger</div><div class="sbv">SPX close below 6,520 OR oil above $110. Also: hot PCE Friday (stagflation = gold bid).</div></div>
+    </div>
+    <div class="inv"><span class="invl">Invalidation: </span>Sharp risk-on reversal on dovish PCE + Iran de-escalation. Gold sold into relief rallies historically — tight stops warranted.</div>
+  </div>
+
+  <div class="sc">
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:0.4rem;flex-wrap:wrap">
+      <span style="font-size:16px;font-weight:500;color:var(--color-text-primary)">XLE / Energy — Geopolitical Premium + Structural Rotation</span>
+      <span class="bdg bs">Long</span><span class="bdg bw">Core Position</span>
+    </div>
+    <div class="cb">WTI ~$98+ and Brent $103–110 with Hormuz effectively closed for commercial shipping. Oil majors (XOM, CVX +25% YTD) are printing record free cash flow with aggressive buybacks. The primary brief confirms dark-pool and options flow favor commodity-exposed names. Any Trump escalation or Iranian retaliation → oil spike → XLE follows immediately. The structural rotation from tech to energy is now in week 4 and showing no signs of reversal while the Strait remains disrupted.</div>
+    <div class="sg">
+      <div class="sb"><div class="sbl">Thesis</div><div class="sbv">Brent $100–115 with Hormuz closed. Oil majors FCF + buybacks. Smart-money flows confirmed by dark-pool data.</div></div>
+      <div class="sb"><div class="sbl">Trigger</div><div class="sbv">Iran escalation language / warship action OR OPEC+ commentary. EIA inventory draw Wednesday confirms demand.</div></div>
+    </div>
+    <div class="inv"><span class="invl">Invalidation: </span>Credible ceasefire OR Brent closes below $89–93. Surprise EIA inventory build. Quick de-escalation would unwind 15–20% of XLE gains rapidly.</div>
+  </div>
+
+  <div class="sc">
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:0.4rem;flex-wrap:wrap">
+      <span style="font-size:16px;font-weight:500;color:var(--color-text-primary)">ITA / Aerospace & Defense — Structural + Tactical</span>
+      <span class="bdg bs">Long</span><span class="bdg bn">Multi-year thesis</span>
+    </div>
+    <div class="cb">LMT +15% from conflict open, RTX and NOC surging on interceptor/missile replenishment demand. Record $1.5T US defense budget proposal. Even if Hormuz resolves, the defense capex cycle is locked in for years — this is not purely a geopolitical trade. It is a secular repositioning confirmed by every NATO member's budget expansion. Asymmetry is strong: downside is muted by long-cycle procurement contracts; upside is open-ended with further escalation or additional congressional defense supplementals.</div>
+    <div class="sg">
+      <div class="sb"><div class="sbl">Thesis</div><div class="sbv">Multi-year defense capex cycle. Tactical urgency from Iran conflict layered on top of secular NATO spending expansion.</div></div>
+      <div class="sb"><div class="sbl">Trigger</div><div class="sbv">Emergency defense spending authorization. Trump escalation beyond 48hr ultimatum. European defense budget announcements.</div></div>
+    </div>
+    <div class="inv"><span class="invl">Invalidation: </span>Rapid Iran ceasefire + reversal of defense budget authorization. Extremely unlikely to fully unwind given secular NATO trend.</div>
+  </div>
+
+  <div class="sc">
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:0.4rem;flex-wrap:wrap">
+      <span style="font-size:16px;font-weight:500;color:var(--color-text-primary)">RSP / Equal-Weight S&P — Broadening Rotation</span>
+      <span class="bdg bs">Long</span><span class="bdg bi">Confirmed by dark-pool data</span>
+    </div>
+    <div class="cb">Both sources converge on this. Equal-weight RSP has outperformed cap-weighted SPX for multiple consecutive months. Dark-pool ETF accumulation in broad index vehicles (SPY/IVV) is being interpreted as institutional preference for broad exposure over concentrated mega-cap bets. Lower beta captures any relief bounce with reduced drawdown risk. Infrastructure/tech (AVGO-type names) holding better than software within tech, suggesting selective participation. This is the defensive-yet-opportunistic positioning the primary brief describes in dark-pool smart-money analysis.</div>
+    <div class="sg">
+      <div class="sb"><div class="sbl">Thesis</div><div class="sbv">Institutional broadening confirmed. Dark-pool accumulation at index level. Lower beta with bounce participation.</div></div>
+      <div class="sb"><div class="sbl">Trigger</div><div class="sbv">Soft PCE + any Iran de-escalation signal. VIX compression back toward 22–24. Hold of 6,520.</div></div>
+    </div>
+    <div class="inv"><span class="invl">Invalidation: </span>Sustained oil spike + equity break below 6,520 on volume. If macro deteriorates, equal-weight falls alongside cap-weight.</div>
+  </div>
+
+  <div class="sc">
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:0.4rem;flex-wrap:wrap">
+      <span style="font-size:16px;font-weight:500;color:var(--color-text-primary)">FCX / Copper — Physical AI + Supply Shock Overlay</span>
+      <span class="bdg bs">Long</span><span class="bdg bn">Slow-burn asymmetry</span>
+    </div>
+    <div class="cb">Copper demand for AI infrastructure is structural and inelastic. Hormuz closure is disrupting ~45% of global sulfur (copper mining input) and tightening helium supply. Heavy institutional inflows into FCX confirmed. The Hormuz crisis paradoxically supports copper prices even as global growth concerns mount — a rare supply-side squeeze meeting a structural demand driver. This is the "physical AI" trade that both sources implicitly reference through the "atoms over bits" rotation thesis.</div>
+    <div class="sg">
+      <div class="sb"><div class="sbl">Thesis</div><div class="sbv">AI infrastructure copper demand (structural) + Hormuz supply squeeze (tactical) = dual tailwind not yet fully priced.</div></div>
+      <div class="sb"><div class="sbl">Trigger</div><div class="sbv">Any hyperscaler AI capex reaffirmation. Copper futures breakout. Hormuz prolongation confirmed by shipping data.</div></div>
+    </div>
+    <div class="inv"><span class="invl">Invalidation: </span>Global recession fears accelerate sharply. China demand deterioration — monitor Chinese PMI prints as leading indicator.</div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="sn">06</span><span class="st">High-Impact News & Binary Events — Synthesized</span></div>
+
+  <div class="alrt dng">
+    <div class="at">Binary #1 — Iran power infrastructure strike (48-hr window)</div>
+    <div class="ab">Trump threatened strikes on power plants; Iran said Strait "completely closed" if attacked. Pentagon warship deployment confirmed. A strike → full closure cycle sends Brent toward $130–150, triggers SPX 6,000–6,200, and pushes 10Y toward 5%. Futures as of Monday open are NOT adequately pricing this tail. This is the week's highest-variance event bar none.</div>
+  </div>
+
+  <div class="alrt dng">
+    <div class="at">Binary #2 — Friday PCE + potential stagflation confirmation</div>
+    <div class="ab">The primary brief flags this as the single most market-sensitive scheduled data point. Soft PCE = risk-on relief, reclaim 6,835 resistance target. Hot PCE = higher-for-longer cemented, 6,400 downside unlocked. The full oil-driven inflation pulse (petrochemicals, plastics, fertilizers) is 4–8 weeks from feeding into CPI/PCE — so April/May prints will be structurally worse regardless of this week's number. Markets may be underpricing this lagged inflation channel entirely.</div>
+  </div>
+
+  <div class="alrt wrn">
+    <div class="at">Under-the-radar — Wednesday EIA Oil Inventory</div>
+    <div class="ab">The primary brief specifically flags this as a potential under-the-radar catalyst. A surprise inventory build would signal early demand destruction from high prices — bearish for oil but potentially bullish for equities (stagflation risk reduced). A draw confirms demand resilience and keeps oil elevated. Either way, the EIA print creates a mid-week trading catalyst that consensus is not positioning around.</div>
+  </div>
+
+  <div class="alrt wrn">
+    <div class="at">Under-the-radar — Fertilizer & food chain inflation (slow-burn)</div>
+    <div class="ab">Hormuz closure disrupts ~50% global urea/sulfur and 20% LNG (fertilizer feedstock). Agricultural commodity prices will spike in Q2–Q3 planting season. QatarEnergy LNG force majeure is a 3–5 year structural damage story, not a one-week event. DBA and agriculture-adjacent plays are deeply underpriced relative to this risk. Watch Dutch TTF gas (already near €60/MWh, Goldman Sachs scenario to €100/MWh).</div>
+  </div>
+
+  <div class="alrt wrn">
+    <div class="at">Under-the-radar — Dark-pool ETF accumulation as sentiment divergence signal</div>
+    <div class="ab">Flagged exclusively in the primary research brief: heavy large-block prints in SPY/IVV and select names (AAPL, AVGO) suggest smart money is accumulating at lows, not distributing. If this continues through the week, it would be a strong leading indicator that the 6,492–6,550 support zone holds and a more durable low is forming. Track equal-weight outperformance vs. cap-weight daily as a proxy for this signal.</div>
+  </div>
+
+  <div class="alrt inf">
+    <div class="at">Watch — Russia competitive repositioning (geopolitical second-order)</div>
+    <div class="ab">India and China are pivoting back to Russian crude as Middle East barrels become inaccessible. Russia's competitive position has materially improved. This adds complexity to US-Europe Iran coordination and reduces sanctions pressure effectiveness. For markets: Russian-commodity-exposed plays benefit; complicates the geopolitical resolution timeline.</div>
+  </div>
+</div>
+
+<div style="border-top:0.5px solid var(--color-border-tertiary);padding-top:1rem">
+  <p style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:4px">Strategist's Bottom Line — Week of March 23</p>
+  <p style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">Risk-off regime with geopolitical/oil as the dominant driver. Expect a 2%+ breakout move — higher or lower — by week-end given oversold technicals and dual binary catalysts (Iran + PCE). Hold SPX 6,520–6,550 is the critical condition for any upside setup. Dark-pool accumulation at index level is the one bullish signal below the surface. Position size defensively; watch Iran and PCE above all else. The "bits to atoms" rotation is structural — maintain energy, defense, materials, equal-weight bias regardless of the weekly outcome.</p>
+  <p style="font-size:11px;color:var(--color-text-tertiary);margin-top:8px">InsightInvest Capital · leiholding.com · For educational and research purposes only. Not financial advice.</p>
+</div>
+
+</div>

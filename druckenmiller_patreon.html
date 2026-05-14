@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Druckenmiller Strategy — Deep Dive</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream:   #F8F4ED;
+  --paper:   #FEFCF8;
+  --ink:     #18130E;
+  --ink2:    #4A4038;
+  --ink3:    #9A8E82;
+  --rule:    #E4DDD4;
+  --gold:    #B8860B;
+  --gold-bg: #FBF5E0;
+  --yellow:  #F5E642;
+  --green:   #166534;
+  --green-bg:#DCFCE7;
+  --red:     #991B1B;
+  --red-bg:  #FEE2E2;
+  --blue:    #1E3A8A;
+  --blue-bg: #EFF6FF;
+  --max:     760px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Manrope', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── PROGRESS ── */
+#reading-bar {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 3px; z-index: 200;
+  background: transparent;
+}
+#reading-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #B8860B, #D4A520);
+  width: 0%; transition: width 0.1s linear;
+}
+
+/* ── NAV ── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(248,244,237,0.94);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--rule);
+  padding: 0 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 52px;
+}
+.nav-brand {
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.5px; color: var(--ink);
+  display: flex; align-items: center; gap: 8px;
+}
+.nav-badge {
+  background: var(--yellow); color: var(--ink);
+  font-size: 9px; font-weight: 800;
+  padding: 2px 7px; border-radius: 3px;
+  letter-spacing: 1px; text-transform: uppercase;
+}
+.nav-links {
+  display: flex; gap: 4px;
+}
+.nav-link {
+  font-size: 11px; font-weight: 500; color: var(--ink3);
+  padding: 5px 12px; border-radius: 5px;
+  cursor: pointer; transition: all 0.15s;
+  text-decoration: none; border: none; background: transparent;
+}
+.nav-link:hover { background: var(--rule); color: var(--ink); }
+.nav-link.active { color: var(--gold); font-weight: 600; }
+
+/* ── CONTAINER ── */
+.container {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ── HERO ── */
+.hero {
+  background: var(--ink);
+  padding: 80px 0 72px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: 
+    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.02) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.02) 40px);
+}
+.hero-inner { position: relative; z-index: 1; }
+.hero-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 12px;
+}
+.hero-eyebrow::before {
+  content: '';
+  width: 28px; height: 1px;
+  background: rgba(255,255,255,0.2);
+}
+.hero-tag {
+  display: inline-block;
+  background: var(--yellow); color: var(--ink);
+  font-family: 'Manrope', sans-serif;
+  font-size: 10px; font-weight: 800;
+  padding: 4px 10px; border-radius: 4px;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.hero-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(42px, 6vw, 64px);
+  font-weight: 400;
+  color: #fff;
+  line-height: 1.08;
+  letter-spacing: -1px;
+  margin-bottom: 20px;
+}
+.hero-title em {
+  font-style: italic;
+  color: rgba(255,255,255,0.5);
+}
+.hero-sub {
+  font-size: 16px; font-weight: 400;
+  color: rgba(255,255,255,0.5);
+  max-width: 500px;
+  line-height: 1.65;
+  margin-bottom: 40px;
+}
+.hero-stats {
+  display: flex; gap: 0;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px; overflow: hidden;
+  max-width: 440px;
+}
+.hero-stat {
+  flex: 1; padding: 16px 20px;
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+.hero-stat:last-child { border-right: none; }
+.hero-stat-val {
+  font-family: 'Instrument Serif', serif;
+  font-size: 26px; color: var(--yellow);
+  line-height: 1;
+}
+.hero-stat-lbl {
+  font-size: 10px; font-weight: 500;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
+
+/* ── SECTION STRUCTURE ── */
+.section {
+  padding: 72px 0;
+  border-bottom: 1px solid var(--rule);
+  scroll-margin-top: 64px;
+}
+.section:last-of-type { border-bottom: none; }
+
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-label::after {
+  content: '';
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, rgba(184,134,11,0.3), transparent);
+}
+
+.section-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(28px, 4vw, 38px);
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1.15;
+  margin-bottom: 14px;
+  letter-spacing: -0.5px;
+}
+.section-intro {
+  font-size: 17px; font-weight: 400;
+  color: var(--ink2); line-height: 1.75;
+  margin-bottom: 40px;
+  max-width: 620px;
+}
+
+/* ── PROSE ── */
+.prose {
+  font-size: 16px; color: var(--ink2);
+  line-height: 1.82; margin-bottom: 24px;
+}
+.prose strong { color: var(--ink); font-weight: 600; }
+.prose em { color: var(--gold); font-style: italic; }
+
+/* ── PILLAR CARDS ── */
+.pillars { display: flex; flex-direction: column; gap: 2px; }
+
+.pillar {
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--paper);
+  transition: box-shadow 0.2s;
+}
+.pillar:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.06); }
+
+.pillar-top {
+  display: flex; align-items: stretch; cursor: pointer;
+  user-select: none;
+}
+.pillar-num {
+  width: 52px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Instrument Serif', serif;
+  font-size: 22px; font-weight: 400;
+  color: var(--ink3);
+  border-right: 1px solid var(--rule);
+  background: var(--cream);
+}
+.pillar-header {
+  flex: 1; padding: 18px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px;
+}
+.pillar-header-left {}
+.pillar-cat {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--ink3); margin-bottom: 4px;
+}
+.pillar-name {
+  font-size: 15px; font-weight: 700; color: var(--ink);
+  line-height: 1.25;
+}
+.pillar-chevron {
+  color: var(--ink3); font-size: 14px;
+  transition: transform 0.2s; flex-shrink: 0;
+}
+.pillar.open .pillar-chevron { transform: rotate(180deg); }
+
+.pillar-body {
+  display: none;
+  padding: 20px 20px 22px 72px;
+  border-top: 1px solid var(--rule);
+  background: var(--paper);
+}
+.pillar.open .pillar-body { display: block; }
+
+.pillar-desc {
+  font-size: 15px; color: var(--ink2);
+  line-height: 1.78; margin-bottom: 18px;
+}
+.pillar-desc strong { color: var(--ink); font-weight: 600; }
+
+.pillar-points { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+.pillar-point {
+  display: flex; gap: 12px; align-items: flex-start;
+  font-size: 14px; color: var(--ink2); line-height: 1.6;
+}
+.pillar-point-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gold); flex-shrink: 0; margin-top: 7px;
+}
+
+.pillar-bars {
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 14px 16px; background: var(--cream);
+  border-radius: 8px; border: 1px solid var(--rule);
+}
+.bar-row { display: flex; align-items: center; gap: 12px; }
+.bar-lbl {
+  font-size: 10px; font-weight: 600;
+  color: var(--ink3); width: 110px;
+  text-align: right; flex-shrink: 0;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.bar-track {
+  flex: 1; height: 8px; background: var(--rule);
+  border-radius: 4px; overflow: hidden;
+}
+.bar-fill { height: 100%; border-radius: 4px; }
+.bar-pct {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: var(--ink3);
+  width: 32px; text-align: right; flex-shrink: 0;
+}
+
+/* ── PULL QUOTE ── */
+.pull-quote {
+  border-left: 3px solid var(--yellow);
+  background: var(--gold-bg);
+  border-radius: 0 10px 10px 0;
+  padding: 22px 26px;
+  margin: 36px 0;
+}
+.pull-quote-text {
+  font-family: 'Instrument Serif', serif;
+  font-size: 21px;
+  font-style: italic;
+  color: var(--ink);
+  line-height: 1.55;
+  margin-bottom: 12px;
+}
+.pull-quote-attr {
+  font-size: 11px; font-weight: 600;
+  color: var(--gold); letter-spacing: 0.5px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ── CALLOUT BOXES ── */
+.callout {
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin: 24px 0;
+  border: 1px solid transparent;
+}
+.callout-label {
+  font-size: 9px; font-weight: 800;
+  letter-spacing: 2px; text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.callout-text {
+  font-size: 14px; line-height: 1.72;
+}
+.callout.insight { background: var(--blue-bg); border-color: #BFDBFE; }
+.callout.insight .callout-label { color: var(--blue); }
+.callout.insight .callout-text { color: #1E3A5F; }
+.callout.warning { background: var(--red-bg); border-color: #FCA5A5; }
+.callout.warning .callout-label { color: var(--red); }
+.callout.warning .callout-text { color: #7F1D1D; }
+.callout.tip { background: var(--green-bg); border-color: #86EFAC; }
+.callout.tip .callout-label { color: var(--green); }
+.callout.tip .callout-text { color: #14532D; }
+.callout.gold { background: var(--gold-bg); border-color: #FDE68A; }
+.callout.gold .callout-label { color: var(--gold); }
+.callout.gold .callout-text { color: #78350F; }
+
+/* ── TRADE CARDS ── */
+.trades { display: flex; flex-direction: column; gap: 1px; }
+
+.trade-card {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  border: 1px solid var(--rule);
+  border-radius: 10px; overflow: hidden;
+  background: var(--paper);
+  transition: box-shadow 0.15s;
+}
+.trade-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+
+.trade-aside {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 8px; padding: 16px 8px;
+  border-right: 1px solid var(--rule);
+}
+.trade-aside-win { background: var(--green-bg); border-color: #BBF7D0; }
+.trade-aside-loss { background: var(--red-bg); border-color: #FECACA; }
+
+.trade-emoji { font-size: 28px; }
+.trade-outcome {
+  font-size: 9px; font-weight: 800;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 3px 7px; border-radius: 3px;
+}
+.outcome-win { background: var(--green); color: #fff; }
+.outcome-loss { background: var(--red); color: #fff; }
+
+.trade-content { padding: 16px 20px 18px; }
+.trade-meta {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 7px;
+}
+.trade-year {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; font-weight: 500;
+  color: var(--ink3); letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.trade-type {
+  font-size: 9px; font-weight: 700;
+  color: var(--ink3); background: var(--rule);
+  padding: 2px 7px; border-radius: 3px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.trade-title {
+  font-size: 15px; font-weight: 700;
+  color: var(--ink); margin-bottom: 9px;
+  line-height: 1.3;
+}
+.trade-body {
+  font-size: 13.5px; color: var(--ink2);
+  line-height: 1.7; margin-bottom: 12px;
+}
+.trade-lesson {
+  font-size: 12.5px; font-weight: 600;
+  color: var(--green); background: var(--green-bg);
+  border: 1px solid #BBF7D0;
+  padding: 6px 12px; border-radius: 5px;
+  display: inline-block;
+}
+.trade-lesson-loss {
+  color: var(--red); background: var(--red-bg);
+  border-color: #FECACA;
+}
+
+/* ── RULES GRID ── */
+.rules-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 600px) { .rules-grid { grid-template-columns: 1fr; } }
+
+.rule-card {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  padding: 22px 22px 20px;
+  transition: box-shadow 0.15s;
+}
+.rule-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+.rule-n {
+  font-family: 'Instrument Serif', serif;
+  font-size: 48px; font-weight: 400;
+  color: var(--rule); line-height: 1;
+  margin-bottom: -4px; letter-spacing: -2px;
+}
+.rule-title {
+  font-size: 15px; font-weight: 700;
+  color: var(--ink); margin-bottom: 9px;
+  line-height: 1.3;
+}
+.rule-desc { font-size: 13px; color: var(--ink2); line-height: 1.7; }
+
+/* ── PROCESS STEPS ── */
+.steps { display: flex; flex-direction: column; }
+.step {
+  display: flex; gap: 20px; align-items: flex-start;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.step:last-child { border-bottom: none; }
+.step-left { flex-shrink: 0; width: 36px; }
+.step-num-circle {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--ink);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: #fff;
+}
+.step-right { flex: 1; }
+.step-title {
+  font-size: 15px; font-weight: 700;
+  color: var(--ink); margin-bottom: 6px;
+}
+.step-desc { font-size: 14px; color: var(--ink2); line-height: 1.7; }
+
+/* ── STATS TABLE ── */
+.stats-table {
+  border: 1px solid var(--rule);
+  border-radius: 10px; overflow: hidden;
+  background: var(--paper);
+}
+.stats-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 13px 20px;
+  border-bottom: 1px solid var(--rule);
+  font-size: 14px;
+}
+.stats-row:last-child { border-bottom: none; }
+.stats-row:nth-child(even) { background: var(--cream); }
+.stats-label { color: var(--ink2); font-weight: 400; }
+.stats-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600; font-size: 13px;
+}
+.stats-val.good { color: var(--green); }
+.stats-val.neutral { color: var(--ink); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--ink);
+  padding: 48px 0;
+  color: rgba(255,255,255,0.35);
+}
+footer .container { display: flex; justify-content: space-between; align-items: flex-start; gap: 40px; flex-wrap: wrap; }
+.footer-brand {
+  font-family: 'Instrument Serif', serif;
+  font-size: 20px; color: rgba(255,255,255,0.7);
+  margin-bottom: 8px;
+}
+.footer-text { font-size: 12px; line-height: 1.7; max-width: 300px; }
+.footer-note { font-size: 11px; color: rgba(255,255,255,0.2); margin-top: 4px; font-style: italic; }
+
+/* ── ANIMATIONS ── */
+.fade-in {
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.fade-in.visible { opacity: 1; transform: none; }
+
+/* ── MOBILE ── */
+@media (max-width: 640px) {
+  .hero { padding: 52px 0 48px; }
+  .hero-stats { flex-wrap: wrap; }
+  nav .nav-links { display: none; }
+  .pillar-body { padding-left: 20px; }
+}
+</style>
+</head>
+<body>
+
+<div id="reading-bar"><div id="reading-fill"></div></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <span class="nav-badge">Patreon</span>
+    Druckenmiller Deep Dive
+  </div>
+  <div class="nav-links">
+    <a class="nav-link" onclick="scrollSec('philosophy')">Philosophy</a>
+    <a class="nav-link" onclick="scrollSec('pillars')">6 Pillars</a>
+    <a class="nav-link" onclick="scrollSec('trades')">Trades</a>
+    <a class="nav-link" onclick="scrollSec('process')">Process</a>
+    <a class="nav-link" onclick="scrollSec('rules')">Rules</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-eyebrow">Exclusive · Deep Dive Series</div>
+    <div class="hero-tag">Investor Profile</div>
+    <h1 class="hero-title">
+      How Stanley<br>Druckenmiller<br><em>Never Lost a Year</em>
+    </h1>
+    <p class="hero-sub">A complete breakdown of the strategy, mindset, and real trades behind one of the greatest investing records in history.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-val">~30%</div>
+        <div class="hero-stat-lbl">Avg annual return</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">0</div>
+        <div class="hero-stat-lbl">Losing years</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">30yr</div>
+        <div class="hero-stat-lbl">Track record</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="section fade-in" id="philosophy">
+  <div class="container">
+    <div class="section-label">01 · Who Is He</div>
+    <h2 class="section-title">The Man Behind the Record</h2>
+    <p class="section-intro">Druckenmiller grew up in Pittsburgh and spent forty years building a philosophy that completely inverts most of what we're taught about investing.</p>
+
+    <p class="prose">He started at a bank doing ordinary equity research. But he noticed something that would define his career: <strong>no matter how thoroughly he analyzed a company, something bigger was moving stock prices.</strong> That something was the Federal Reserve — the cost and availability of money in the system.</p>
+
+    <p class="prose">From that insight, he built Duquesne Capital in 1981. Then George Soros hired him to run the Quantum Fund — one of the most legendary macro funds ever. Together they pulled off some of the most famous trades in market history. In 2010, he closed the fund to outside investors and now manages his own money — estimated at $6–12 billion.</p>
+
+    <div class="pull-quote">
+      <div class="pull-quote-text">"Earnings don't move the overall market; it's the Federal Reserve Board. Focus on the central banks and focus on the movement of liquidity."</div>
+      <div class="pull-quote-attr">— Stanley Druckenmiller</div>
+    </div>
+
+    <p class="prose">What makes Druckenmiller different isn't just returns. It's the <strong>paradox at the core of his approach</strong>: he takes concentrated, enormous bets — sometimes 20–30% of his entire portfolio in a single position — yet never had a losing year across three decades. That combination of aggression and discipline is what this breakdown is about.</p>
+
+    <div class="callout insight">
+      <div class="callout-label">Key Insight</div>
+      <div class="callout-text">Most investors pick between being aggressive or being safe. Druckenmiller's framework is specifically designed to let you do both at the same time — by only being aggressive when the conditions are genuinely asymmetric in your favor.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PILLARS -->
+<section class="section fade-in" id="pillars">
+  <div class="container">
+    <div class="section-label">02 · The Framework</div>
+    <h2 class="section-title">The 6 Pillars of His Strategy</h2>
+    <p class="section-intro">Every trade Druckenmiller makes runs through these six filters. Tap each one to expand it.</p>
+
+    <div class="pillars">
+
+      <!-- PILLAR 1 -->
+      <div class="pillar open" onclick="togglePillar(this)">
+        <div class="pillar-top">
+          <div class="pillar-num">1</div>
+          <div class="pillar-header">
+            <div class="pillar-header-left">
+              <div class="pillar-cat">Federal Reserve</div>
+              <div class="pillar-name">Liquidity First — Watch the Fed, Not the Company</div>
+            </div>
+            <div class="pillar-chevron">▲</div>
+          </div>
+        </div>
+        <div class="pillar-body">
+          <p class="pillar-desc">Most investors obsess over earnings reports. Druckenmiller thinks that's looking at the <strong>wrong variable</strong>. The real driver of market prices is liquidity — how much money is in the system and how cheap it is to borrow. The Fed controls that. So the Fed comes first.</p>
+          <div class="pillar-points">
+            <div class="pillar-point"><div class="pillar-point-dot"></div><span>Fed easing (cutting rates) → buy risk assets broadly and aggressively</span></div>
+            <div class="pillar-point"><div class="pillar-point-dot"></div><span>Fed tightening (raising rates) → reduce exposure immediately</span></div>
+            <div class="pillar-point"><div class="pillar-point-dot"></div><span>Watch the <em>direction</em> of change — not just the current stance</span></div>
+            <div class="pillar-point"><div class="pillar-point-dot"></div><span>Money supply growth is a leading indicator for risk assets</span></div>
+          </div>
+          <div class="pillar-bars">
+            <div class="bar-row">
+              <div class="bar-lbl">Importance</div>
+              <div class="bar-track"><div class="bar-fill" style="width:95%;background:#22C55E"></div></div>
+              <div class="bar-pct">95%</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-lbl">Ease to apply</div>
+              <div class="bar-track"><div class="bar-fill" style="width:70%;background:#F97316"></div></div>
+              <div class="bar-pct">70%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PILLAR 2 -->
+      <div class="pillar" onclick="togglePillar(this)">
+        <div class="pillar-top">
+          <div class="pillar-num">2</div>
+          <div class="pillar-header">
+            <div class="pillar-header-left">
+              <div class="pillar-cat">Risk Management</div>
+              <div class="pillar-name">Asymmetric Risk/Reward — The Only Bets Worth Taking</div>
+            </div>
+            <div class="pillar-chevron">▼</div>
+          </div>
+        </div>
+        <div class="pillar-body">
+          <p class="pillar-desc">Before any trade, Druckenmiller asks one question: <strong>how much can I make versus how much can I lose?</strong> He requires the upside to be at least 3× the downside — and passes on ideas that don't clear this bar, no matter how confident he is in the thesis.</p>
+          <div class="pillar-points">
+            <div class="pillar-point"><div class="pillar-point-dot"></div><span>Minimum: 3× upside vs 1× downside on every trade</span></div>
+            <div class="pillar-point"><div class="pillar-point-dot"></div><span>Being right doesn't matter if the reward is only symmetric</span></div>
+            <div class="pillar-point"><div class="pillar-point-dot"></div><span>Pass when the market has already priced in your thesis</span></div>
+            <div class="pillar-point"><div class="pillar-point-dot"></div><span>Patience is the skill — wait for the fat pitch</span></div>
+          </div>
+          <div class="pillar-bars">
+            <div class="bar-row">
+              <div class="bar-lbl">Importance</div>
+              <div class="bar-track"><div class="bar-fill" style="width:92%;background:#22C55E"></div></div>
+              <div class="bar-pct">92%</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-lbl">Ease to apply</div>
+              <div class="bar-track"><div class="bar-fill" style="width:55%;background:#F97316"></div></div>
+              <div class="bar-pct">55%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PILLAR 3 -->
+      <div class="pillar" onclick="togglePillar(this)">
+        <div class="pillar-top">
+          <div class="pillar-num">3</div>
+          <div class="pillar-header">
+            <div class="pillar-header-left">
+              <div class="pillar-cat">Portfolio Construction</div>
+              <div class="pillar-name">Concentration — Bet Big on Your Best Ideas</div>
+            </div>
+            <div class="pillar-chevron">▼</div>
+          </div>
+        </div>
+        <div class="pillar-body">
+          <p class="pillar-desc">Conventional wisdom says diversify. Druckenmiller says diversification is for people who aren't confident in their ideas. When you've done the work and found genuine edge, <strong>spreading it thin is intellectual cowardice</strong>. His portfolio typically holds 5–15 positions, with his best idea sometimes at 20–30% of capital.</p>
+          <div class="pillar-points">
+            <div class="pillar-point"><div class="pillar-point-dot"></div><span>Run 5–15 focused positions — never a zoo of holdings</span></div>
+            <div class="pillar-point"><div class="pillar-point-dot"></div><span>High conviction = large position size, proportionally</span></div>
+            <div class="pillar-point"><div class="pillar-point-dot"></div><span>Diluting great ideas with mediocre ones lowers returns</span></div>
+            <div class="pillar-point"><div class="pillar-point-dot"></div><span>Soros taught him: when you're right, go for the jugular</span></div>
+          </div>
+          <div class="pillar-bars">
+            <div class="bar-row">
+              <div class="bar-lbl">Importance</div>
+              <div class="bar-track"><div class="bar-fill" style="width:88%;background:#22C55E"></div></div>
+              <div class="bar-pct">88%</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-lbl">Ease to apply</div>
+              <div class="bar-track"><div class="bar-fill" style="width:28%;background:#EF4444"></div></div>
+              <div class="bar-pct">28%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PILLAR 4 -->
+      <div class="pillar" onclick="togglePillar(this)">
+        <div class="pillar-top">
+          <div class="pillar-num">4</div>
+          <div class="pillar-header">
+            <div class="pillar-header-left">
+              <div class="pillar-cat">Global Macro</div>
+              <div class="pillar-name">Macro as Context — Top-Down Before Bottom-Up</div>
+            </div>
+            <div class="pillar-chevron">▼</div>
+          </div>
+        </div>
+        <div class="pillar-body">
+          <p class="pillar-desc">Despite his macro reputation, Druckenmiller is also a skilled stock picker. His process is: <strong>macro first, stocks second</strong>. Macro tells him where to invest. Individual analysis tells him what to buy. "I never invest in the macro — I invest in individual stocks. But I use macro to understand the environment."</p>
+          <div class="pillar-points">
+            <div class="pillar-point"><div class="pillar-point-dot"></div><span>Macro context = the tide. Stocks = how well you swim in it.</span></div>
+            <div class="pillar-point"><div class="pillar-point-dot"></div><span>Credit markets often lead equity markets by 6–18 months</span></div>
+            <div class="pillar-point"><div class="pillar-point-dot"></div><span>Currency divergence signals policy gaps between countries</span></div>
+            <div class="pillar-point"><div class="pillar-point-dot"></div><span>Even the best company struggles against a bad macro tide</span></div>
+          </div>
+          <div class="pillar-bars">
+            <div class="bar-row">
+              <div class="bar-lbl">Importance</div>
+              <div class="bar-track"><div class="bar-fill" style="width:85%;background:#22C55E"></div></div>
+              <div class="bar-pct">85%</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-lbl">Ease to apply</div>
+              <div class="bar-track"><div class="bar-fill" style="width:40%;background:#EF4444"></div></div>
+              <div class="bar-pct">40%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PILLAR 5 -->
+      <div class="pillar" onclick="togglePillar(this)">
+        <div class="pillar-top">
+          <div class="pillar-num">5</div>
+          <div class="pillar-header">
+            <div class="pillar-header-left">
+              <div class="pillar-cat">Adaptability</div>
+              <div class="pillar-name">Total Flexibility — No Labels, No Ideology</div>
+            </div>
+            <div class="pillar-chevron">▼</div>
+          </div>
+        </div>
+        <div class="pillar-body">
+          <p class="pillar-desc">"I am neither a bull nor a bear. I'm an opportunist." Druckenmiller carries <strong>zero ideological commitment</strong> to any direction, style, or asset class. He will go long or short, equities or currencies, bonds or commodities — whatever the evidence supports. Flexibility is his structural advantage.</p>
+          <div class="pillar-points">
+            <div class="pillar-point"><div class="pillar-point-dot"></div><span>No permanent style box — equity, macro, currency, rates</span></div>
+            <div class="pillar-point"><div class="pillar-point-dot"></div><span>Net long or net short based purely on conditions</span></div>
+            <div class="pillar-point"><div class="pillar-point-dot"></div><span>Ideology creates blind spots; evidence doesn't</span></div>
+            <div class="pillar-point"><div class="pillar-point-dot"></div><span>Updates views when facts change — no ego protection</span></div>
+          </div>
+          <div class="pillar-bars">
+            <div class="bar-row">
+              <div class="bar-lbl">Importance</div>
+              <div class="bar-track"><div class="bar-fill" style="width:82%;background:#22C55E"></div></div>
+              <div class="bar-pct">82%</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-lbl">Ease to apply</div>
+              <div class="bar-track"><div class="bar-fill" style="width:38%;background:#EF4444"></div></div>
+              <div class="bar-pct">38%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PILLAR 6 -->
+      <div class="pillar" onclick="togglePillar(this)">
+        <div class="pillar-top">
+          <div class="pillar-num">6</div>
+          <div class="pillar-header">
+            <div class="pillar-header-left">
+              <div class="pillar-cat">Survival Rule</div>
+              <div class="pillar-name">Capital Preservation — Without Capital, Nothing Else Works</div>
+            </div>
+            <div class="pillar-chevron">▼</div>
+          </div>
+        </div>
+        <div class="pillar-body">
+          <p class="pillar-desc">This is the rule that makes everything else possible. <strong>Protecting capital is what keeps you in the game.</strong> A 50% loss requires a 100% gain just to break even. Druckenmiller exits losing positions before they compound — not because he likes being wrong, but because he knows tomorrow's opportunity is more valuable than today's ego.</p>
+          <div class="pillar-points">
+            <div class="pillar-point"><div class="pillar-point-dot"></div><span>Exit losing positions before they become serious</span></div>
+            <div class="pillar-point"><div class="pillar-point-dot"></div><span>Adverse price action is information — listen to it</span></div>
+            <div class="pillar-point"><div class="pillar-point-dot"></div><span>Never average down on a broken thesis to "prove a point"</span></div>
+            <div class="pillar-point"><div class="pillar-point-dot"></div><span>Surviving bad days is the foundation of great years</span></div>
+          </div>
+          <div class="pillar-bars">
+            <div class="bar-row">
+              <div class="bar-lbl">Importance</div>
+              <div class="bar-track"><div class="bar-fill" style="width:98%;background:#22C55E"></div></div>
+              <div class="bar-pct">98%</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-lbl">Ease to apply</div>
+              <div class="bar-track"><div class="bar-fill" style="width:50%;background:#F97316"></div></div>
+              <div class="bar-pct">50%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TRADES -->
+<section class="section fade-in" id="trades">
+  <div class="container">
+    <div class="section-label">03 · Real Evidence</div>
+    <h2 class="section-title">The Trades That Prove the Strategy</h2>
+    <p class="section-intro">Four wins and one devastating loss — all of which teach you something essential about how this framework works in practice.</p>
+
+    <div class="trades">
+
+      <div class="trade-card">
+        <div class="trade-aside trade-aside-win">
+          <div class="trade-emoji">🇬🇧</div>
+          <div class="trade-outcome outcome-win">WIN</div>
+        </div>
+        <div class="trade-content">
+          <div class="trade-meta">
+            <span class="trade-year">1992</span>
+            <span class="trade-type">Currency</span>
+          </div>
+          <div class="trade-title">Breaking the Bank of England</div>
+          <div class="trade-body">Britain had joined the European Exchange Rate Mechanism, locking the pound to the German mark. The problem: Germany needed <em>high</em> rates to cool reunification inflation. Britain needed <em>low</em> rates to escape a recession. The two needs were incompatible. The peg would have to break. Druckenmiller shorted £10 billion worth of sterling. On Sept 16, 1992 — "Black Wednesday" — Britain withdrew from the ERM. The pound collapsed.</div>
+          <div class="trade-lesson">✓ ~$1.5B profit in a single day · All 6 pillars aligned perfectly</div>
+        </div>
+      </div>
+
+      <div class="trade-card">
+        <div class="trade-aside trade-aside-win">
+          <div class="trade-emoji">🇩🇪</div>
+          <div class="trade-outcome outcome-win">WIN</div>
+        </div>
+        <div class="trade-content">
+          <div class="trade-meta">
+            <span class="trade-year">1989–91</span>
+            <span class="trade-type">Equities</span>
+          </div>
+          <div class="trade-title">German Reunification Play</div>
+          <div class="trade-body">When the Berlin Wall fell, most investors saw chaos. Druckenmiller saw deeply undervalued assets. German companies were priced for continued division — but reunification was going to unleash a decade of growth. He bought heavily before the consensus caught on.</div>
+          <div class="trade-lesson">✓ Strong multiyear gains · Macro context identified before market</div>
+        </div>
+      </div>
+
+      <div class="trade-card">
+        <div class="trade-aside trade-aside-win">
+          <div class="trade-emoji">🏠</div>
+          <div class="trade-outcome outcome-win">WIN</div>
+        </div>
+        <div class="trade-content">
+          <div class="trade-meta">
+            <span class="trade-year">2007–08</span>
+            <span class="trade-type">Crisis Trade</span>
+          </div>
+          <div class="trade-title">Subprime Housing Short</div>
+          <div class="trade-body">By 2007, Druckenmiller had studied the deteriorating quality of mortgage-backed securities, the insane leverage in financial institutions, and the dependence of the entire system on perpetually rising home prices. He shorted financial stocks and housing-related credits well before the crisis became obvious to anyone else.</div>
+          <div class="trade-lesson">✓ Profitable through the crisis · Credit cycle identified early</div>
+        </div>
+      </div>
+
+      <div class="trade-card">
+        <div class="trade-aside trade-aside-win">
+          <div class="trade-emoji">₿</div>
+          <div class="trade-outcome outcome-win">WIN</div>
+        </div>
+        <div class="trade-content">
+          <div class="trade-meta">
+            <span class="trade-year">2020</span>
+            <span class="trade-type">Digital Assets</span>
+          </div>
+          <div class="trade-title">Bitcoin as Digital Gold</div>
+          <div class="trade-body">For years Druckenmiller had been skeptical of Bitcoin. But COVID-era stimulus changed his view. He saw two things converging: extreme monetary debasement risk from unprecedented money printing, and a generational demographic shift toward digital assets. He called Bitcoin "better brand than gold" for younger investors and took a position as a debasement hedge.</div>
+          <div class="trade-lesson">✓ Profitable hedge · Demographic + macro thesis both played out</div>
+        </div>
+      </div>
+
+      <!-- THE LOSS -->
+      <div class="trade-card" style="border-color:#FECACA">
+        <div class="trade-aside trade-aside-loss">
+          <div class="trade-emoji">💻</div>
+          <div class="trade-outcome outcome-loss">LOSS</div>
+        </div>
+        <div class="trade-content">
+          <div class="trade-meta">
+            <span class="trade-year">2000</span>
+            <span class="trade-type">Tech Bubble</span>
+          </div>
+          <div class="trade-title">The Dot-Com Mistake — His Biggest Lesson</div>
+          <div class="trade-body">By late 1999, Druckenmiller knew technology stocks were wildly overvalued. He shorted them. Then the market kept going up, and his shorts lost money. He covered the shorts — sensible given the momentum. But then he made the catastrophic error: he bought into the rally. Near the peak. He saw everyone making money and felt pressure to keep up. The Nasdaq peaked in March 2000 and he lost approximately $3 billion in months.</div>
+          <div class="callout warning" style="margin:12px 0 4px">
+            <div class="callout-label">The Lesson He Shares Publicly</div>
+            <div class="callout-text">"I knew better. I knew the market was insane. But I let career pressure and FOMO override my own analysis. That was an emotional failure, not an analytical one." — This is Druckenmiller's most repeated cautionary tale about what happens when you let social pressure replace independent thinking.</div>
+          </div>
+          <div class="trade-lesson trade-lesson-loss" style="margin-top:12px">✗ ~$3B loss · Pillar 5 (flexibility) and Pillar 6 (capital preservation) both failed</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="section fade-in" id="process">
+  <div class="container">
+    <div class="section-label">04 · How He Decides</div>
+    <h2 class="section-title">The 5-Step Decision Process</h2>
+    <p class="section-intro">Every investment runs through these five checkpoints — in order. Skip one and you're guessing.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-left"><div class="step-num-circle">1</div></div>
+        <div class="step-right">
+          <div class="step-title">Macro Scan — What regime are we in?</div>
+          <div class="step-desc">Start with the Fed. Is the central bank easing or tightening? Which direction is policy moving, and at what speed? Then look at credit markets — are spreads widening or tightening? What's the yield curve doing? This context determines the overall risk tolerance for the portfolio.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num-circle">2</div></div>
+        <div class="step-right">
+          <div class="step-title">Thesis Formation — What's the idea, and what does the market believe?</div>
+          <div class="step-desc">Articulate the thesis clearly: what must be true for this trade to work? Then flip it: what does the consensus believe? The gap between your view and the market's is your potential edge. If your view is already the consensus, there's no edge — only price movement left to extract.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num-circle">3</div></div>
+        <div class="step-right">
+          <div class="step-title">Asymmetry Check — Is the risk/reward genuinely skewed?</div>
+          <div class="step-desc">Map the upside and downside explicitly. If you're right, how much do you make? If you're wrong, how much do you lose? Druckenmiller's threshold: 3× upside minimum. If it's only 1.5×, pass — no matter how confident you are. The math doesn't work over the long run.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num-circle">4</div></div>
+        <div class="step-right">
+          <div class="step-title">Technical Timing — Is the market set up for the move?</div>
+          <div class="step-desc">Even a correct fundamental thesis can be early by years. He uses technical analysis — chart patterns, support/resistance, momentum, relative strength — to time the entry. He won't fight an established trend. He waits for the price action to confirm that the move is beginning before committing full size.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num-circle">5</div></div>
+        <div class="step-right">
+          <div class="step-title">Size Up or Pass — Conviction determines allocation</div>
+          <div class="step-desc">If all four previous steps are aligned: bet big. 10%, 20%, maybe more. If any step is uncertain: small position or pass entirely. He never takes a medium position on a great idea — that's the worst of both worlds. You don't make enough when you're right, and the loss still hurts when you're wrong.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout tip" style="margin-top:32px">
+      <div class="callout-label">The Key Psychological Point</div>
+      <div class="callout-text">The whole process is designed to remove emotion from sizing. You don't decide how much to bet based on how excited you are about the idea — you decide based on how cleanly it passes each filter. Excitement is not an edge. Asymmetry is.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PERFORMANCE -->
+<section class="section fade-in" id="performance">
+  <div class="container">
+    <div class="section-label">05 · The Numbers</div>
+    <h2 class="section-title">Track Record at a Glance</h2>
+    <p class="section-intro">The numbers that make Duquesne Capital arguably the greatest institutional track record ever compiled.</p>
+
+    <div class="stats-table">
+      <div class="stats-row"><span class="stats-label">Average Annual Return (Duquesne Capital)</span><span class="stats-val good">~30% net</span></div>
+      <div class="stats-row"><span class="stats-label">Calendar Losing Years (30yr run)</span><span class="stats-val good">Zero</span></div>
+      <div class="stats-row"><span class="stats-label">Years of Institutional Management</span><span class="stats-val neutral">30 years</span></div>
+      <div class="stats-row"><span class="stats-label">Peak Assets Under Management</span><span class="stats-val neutral">~$12 billion</span></div>
+      <div class="stats-row"><span class="stats-label">1992 Quantum Fund Return</span><span class="stats-val good">&gt;40%</span></div>
+      <div class="stats-row"><span class="stats-label">GBP Trade Single-Day Profit</span><span class="stats-val good">~$1 billion</span></div>
+      <div class="stats-row"><span class="stats-label">Worst Single Period (dot-com)</span><span class="stats-val" style="color:var(--red)">~$3B loss</span></div>
+      <div class="stats-row"><span class="stats-label">Fund closed to outside investors</span><span class="stats-val neutral">2010 (Family Office)</span></div>
+    </div>
+
+    <div class="callout gold" style="margin-top:28px">
+      <div class="callout-label">Why the Zero Losing Years Matters Most</div>
+      <div class="callout-text">The ~30% average is remarkable. But the zero losing years is actually more impressive — because it was achieved while running concentrated, high-risk positions. It means his downside protection worked just as well as his upside capture. Both halves of the strategy are operating simultaneously.</div>
+    </div>
+  </div>
+</section>
+
+<!-- RULES -->
+<section class="section fade-in" id="rules">
+  <div class="container">
+    <div class="section-label">06 · The Distillation</div>
+    <h2 class="section-title">The 4 Golden Rules</h2>
+    <p class="section-intro">Everything he's said publicly across 40 years, reduced to four rules you can use as a checklist on every investment decision.</p>
+
+    <div class="rules-grid">
+      <div class="rule-card">
+        <div class="rule-n">01</div>
+        <div class="rule-title">Don't Fight the Fed</div>
+        <div class="rule-desc">Liquidity is the master variable. Before any trade, know what the central bank is doing and in what direction. Going against that tide is the single most common and costly mistake investors make.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-n">02</div>
+        <div class="rule-title">Go for the Jugular</div>
+        <div class="rule-desc">When you've done the work, the asymmetry is real, and the conviction is high — size up meaningfully. Taking a tiny position on a great idea is a waste of the edge you've earned. Courage is part of the strategy.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-n">03</div>
+        <div class="rule-title">The Market Tells You</div>
+        <div class="rule-desc">When price moves persistently against your thesis, it is new information. Listen. If you can't articulate why the market is wrong, you should probably be out of the trade — not averaging in.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-n">04</div>
+        <div class="rule-title">Never Lose Money</div>
+        <div class="rule-desc">Not just as a goal — as a discipline. A 50% loss needs a 100% gain to recover. Protecting capital is what keeps you in the game for the next opportunity. Exit early. Preserve. Reload.</div>
+      </div>
+    </div>
+
+    <div class="pull-quote" style="margin-top:48px">
+      <div class="pull-quote-text">"The way to build superior long-term returns is through preservation of capital and home runs. When you have tremendous conviction on a trade, you have to go for the jugular. It takes courage to be a pig."</div>
+      <div class="pull-quote-attr">— Stanley Druckenmiller</div>
+    </div>
+
+    <p class="prose" style="margin-top:32px">The strategy is not complicated. What's complicated is executing it under pressure — when the market is rallying and you're sitting in cash because the asymmetry isn't there yet. When your position is losing money and your ego wants to hold. When you've found a genuinely great idea and fear makes you size it at 2% instead of 20%.</p>
+
+    <p class="prose">That gap between understanding and execution is the actual work. And it's why most people who study Druckenmiller carefully still don't replicate his results. <strong>The framework is knowable. The discipline is the hard part.</strong></p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div>
+      <div class="footer-brand">Druckenmiller Deep Dive</div>
+      <div class="footer-text">An exclusive breakdown for Patreon members. Synthesized from 40+ years of public interviews, speeches, and documented trade case studies.</div>
+      <div class="footer-note">Educational purposes only. Not financial advice.</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:11px;color:rgba(255,255,255,0.2);margin-bottom:6px;font-family:'JetBrains Mono',monospace;letter-spacing:1px">SERIES</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.5);font-weight:500">Investor Profiles</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.3);margin-top:4px">Deep Dive Collection</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Reading progress
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const pct = (window.scrollY / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('reading-fill').style.width = pct + '%';
+
+  // Active nav
+  const sections = ['philosophy','pillars','trades','process','performance','rules'];
+  let active = null;
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top < 100) active = id;
+  });
+  document.querySelectorAll('.nav-link').forEach(l => {
+    const target = l.getAttribute('onclick')?.match(/'(\w+)'/)?.[1];
+    l.classList.toggle('active', target === active);
+  });
+
+  // Fade in
+  document.querySelectorAll('.fade-in').forEach(el => {
+    if (el.getBoundingClientRect().top < window.innerHeight - 60) {
+      el.classList.add('visible');
+    }
+  });
+});
+
+// Scroll to section
+function scrollSec(id) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Pillar accordion
+function togglePillar(el) {
+  const isOpen = el.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.pillar').forEach(p => {
+    p.classList.remove('open');
+    p.querySelector('.pillar-chevron').textContent = '▼';
+  });
+  // Open clicked if it was closed
+  if (!isOpen) {
+    el.classList.add('open');
+    el.querySelector('.pillar-chevron').textContent = '▲';
+  }
+}
+
+// Init fade
+window.dispatchEvent(new Event('scroll'));
+</script>
+</body>
+</html>

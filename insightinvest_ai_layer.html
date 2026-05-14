@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>InsightInvest — AI Layer</title>
+</head>
+<body>
+
+<!-- NAV TABS -->
+<nav id="nav">
+  <button onclick="show('regime')">Macro Regime</button>
+  <button onclick="show('divergence')">Divergence Feed</button>
+  <button onclick="show('sectors')">Sector Rotation</button>
+  <button onclick="show('flow')">Options Flow</button>
+  <button onclick="show('cot')">COT Positioning</button>
+  <button onclick="show('squeeze')">Squeeze Scanner</button>
+</nav>
+
+<!-- ── MACRO REGIME ENGINE ───────────────────────────────────────────────── -->
+<section id="regime" class="page">
+  <h2>Macro Regime Engine</h2>
+
+  <!-- Static computed regime state — update these values when data refreshes -->
+  <div id="regime-state">
+    <p id="regime-name">Stagflationary Slowdown</p>
+    <p id="regime-confidence">Confidence: 73%</p>
+    <p id="regime-description">Transition phase — softening growth with sticky inflation and re-widening credit spreads</p>
+
+    <!-- Signal pills — one per key indicator -->
+    <div id="regime-signals">
+      <span data-signal="bearish">CPI re-accelerating 3.49%</span>
+      <span data-signal="bullish">Yield curve positive +54bps</span>
+      <span data-signal="bearish">Credit spreads widening 425bps</span>
+      <span data-signal="neutral">Fed on hold 3.64%</span>
+      <span data-signal="bullish">Labor stable 4.3%</span>
+      <span data-signal="neutral">Sentiment Fear 42</span>
+    </div>
+  </div>
+
+  <!-- Key macro gauges — populated from data -->
+  <div id="regime-gauges">
+    <!-- js fills this -->
+  </div>
+
+  <!-- AI analysis output -->
+  <div id="regime-ai">
+    <div id="regime-ai-output">Click a button to run AI analysis.</div>
+    <button onclick="regimeAnalysis()">Full Regime Analysis</button>
+    <button onclick="portfolioImplications()">Portfolio Implications</button>
+    <button onclick="riskScenarios()">Risk Scenarios</button>
+  </div>
+</section>
+
+<!-- ── DIVERGENCE FEED ───────────────────────────────────────────────────── -->
+<section id="divergence" class="page" hidden>
+  <h2>Smart Money Divergence Feed</h2>
+
+  <!-- Live current divergence -->
+  <div id="divergence-live" data-type="live">
+    <p data-label="date">Apr 22, 2026 — LIVE</p>
+    <p data-label="signal">Institutional Accumulating (61) vs Retail Bearish (38) — 23pt gap</p>
+    <div data-label="bars">
+      <div>
+        <span>Retail</span>
+        <progress value="38" max="100"></progress>
+        <span>38 — Bearish</span>
+      </div>
+      <div>
+        <span>Institutional</span>
+        <progress value="61" max="100"></progress>
+        <span>61 — Accumulating</span>
+      </div>
+    </div>
+    <div id="divergence-live-ai">Click to analyze.</div>
+    <button onclick="analyzeLive()">Analyze Live Signal</button>
+  </div>
+
+  <!-- Historical divergence events — js populated -->
+  <div id="divergence-history"></div>
+
+  <button onclick="analyzeAllDivergences()">AI: Interpret All Divergences</button>
+  <div id="divergence-all-ai"></div>
+</section>
+
+<!-- ── SECTOR ROTATION ───────────────────────────────────────────────────── -->
+<section id="sectors" class="page" hidden>
+  <h2>Sector Attractiveness Scores</h2>
+  <p>Composite: P/E attractiveness (30%) + EPS growth (35%) + YTD (20%) + dividend yield (15%)</p>
+
+  <!-- Sector grid — js populated, sorted by score desc -->
+  <div id="sector-grid"></div>
+
+  <button onclick="sectorPlaybook()">AI: Full Rotation Playbook</button>
+  <div id="sector-ai"></div>
+</section>
+
+<!-- ── OPTIONS FLOW ──────────────────────────────────────────────────────── -->
+<section id="flow" class="page" hidden>
+  <h2>Unusual Options Flow</h2>
+
+  <!-- Summary stats — js populated -->
+  <div id="flow-summary"></div>
+
+  <!-- Flow table — js populated, sorted by premium desc -->
+  <table id="flow-table">
+    <thead>
+      <tr>
+        <th>Ticker</th>
+        <th>Type</th>
+        <th>Strike</th>
+        <th>Expiry</th>
+        <th>Size</th>
+        <th>Premium ($M)</th>
+        <th>IV%</th>
+        <th>vs Avg%</th>
+        <th>Sentiment</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody id="flow-tbody"></tbody>
+  </table>
+
+  <button onclick="analyzeFlow()">AI: Interpret Flow</button>
+  <div id="flow-ai"></div>
+</section>
+
+<!-- ── COT POSITIONING ───────────────────────────────────────────────────── -->
+<section id="cot" class="page" hidden>
+  <h2>COT Positioning</h2>
+  <p>Net speculative positioning. Positive = net long, negative = net short.</p>
+
+  <!-- COT cards — js populated -->
+  <div id="cot-grid"></div>
+
+  <button onclick="analyzeCOT()">AI: Trade Thesis</button>
+  <div id="cot-ai"></div>
+</section>
+
+<!-- ── SQUEEZE SCANNER ───────────────────────────────────────────────────── -->
+<section id="squeeze" class="page" hidden>
+  <h2>Short Squeeze Scanner</h2>
+  <p>Score: short%, DTC, 1M change in short interest, options flow activity.</p>
+
+  <!-- Squeeze cards — js populated, sorted by score desc -->
+  <div id="squeeze-grid"></div>
+
+  <button onclick="analyzeSqueeze()">AI: Squeeze Analysis</button>
+  <div id="squeeze-ai"></div>
+</section>
+
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// DATA
+// All pre-fetched from your existing JSON files. Replace with live fetches
+// when you wire up a backend refresh.
+// ─────────────────────────────────────────────────────────────────────────────
+const D = {"cpi_yoy":[{"date":"2025-07-01","value":2.705},{"date":"2025-08-01","value":2.916},{"date":"2025-09-01","value":3.013},{"date":"2025-11-01","value":2.679},{"date":"2025-12-01","value":2.714},{"date":"2026-01-01","value":3.057},{"date":"2026-02-01","value":2.869},{"date":"2026-03-01","value":3.488}],"core_cpi":[{"date":"2025-07-01","value":2.305},{"date":"2025-08-01","value":2.516},{"date":"2025-09-01","value":2.613},{"date":"2025-11-01","value":2.279},{"date":"2025-12-01","value":2.314},{"date":"2026-01-01","value":2.657},{"date":"2026-02-01","value":2.469},{"date":"2026-03-01","value":3.088}],"fedfunds":[{"date":"2025-08-01","value":4.33},{"date":"2025-09-01","value":4.22},{"date":"2025-10-01","value":4.09},{"date":"2025-11-01","value":3.88},{"date":"2025-12-01","value":3.72},{"date":"2026-01-01","value":3.64},{"date":"2026-02-01","value":3.64},{"date":"2026-03-01","value":3.64}],"unrate":[{"date":"2025-07-01","value":4.3},{"date":"2025-08-01","value":4.3},{"date":"2025-09-01","value":4.4},{"date":"2025-11-01","value":4.5},{"date":"2025-12-01","value":4.4},{"date":"2026-01-01","value":4.3},{"date":"2026-02-01","value":4.4},{"date":"2026-03-01","value":4.3}],"gdp":[{"date":"2024-01-01","value":-12.98},{"date":"2024-04-01","value":13.53},{"date":"2024-07-01","value":3.84},{"date":"2024-10-01","value":7.88},{"date":"2025-01-01","value":-13.91},{"date":"2025-04-01","value":12.05},{"date":"2025-07-01","value":5.52},{"date":"2025-10-01","value":6.5}],"gs2":[{"date":"2025-08-01","value":3.7},{"date":"2025-09-01","value":3.57},{"date":"2025-10-01","value":3.52},{"date":"2025-11-01","value":3.55},{"date":"2025-12-01","value":3.5},{"date":"2026-01-01","value":3.54},{"date":"2026-02-01","value":3.47},{"date":"2026-03-01","value":3.71}],"gs10":[{"date":"2025-08-01","value":4.26},{"date":"2025-09-01","value":4.12},{"date":"2025-10-01","value":4.06},{"date":"2025-11-01","value":4.09},{"date":"2025-12-01","value":4.14},{"date":"2026-01-01","value":4.21},{"date":"2026-02-01","value":4.13},{"date":"2026-03-01","value":4.25}],"t10y2y":[{"date":"2025-08-01","value":0.56},{"date":"2025-09-01","value":0.55},{"date":"2025-10-01","value":0.54},{"date":"2025-11-01","value":0.54},{"date":"2025-12-01","value":0.64},{"date":"2026-01-01","value":0.67},{"date":"2026-02-01","value":0.66},{"date":"2026-03-01","value":0.54}],"t10y3m":[{"date":"2025-08-01","value":-0.04},{"date":"2025-09-01","value":0.05},{"date":"2025-10-01","value":0.08},{"date":"2025-11-01","value":0.15},{"date":"2025-12-01","value":0.46},{"date":"2026-01-01","value":0.54},{"date":"2026-02-01","value":0.44},{"date":"2026-03-01","value":0.53}],"hy_oas":[{"date":"2023-01-01","value":470},{"date":"2023-07-01","value":385},{"date":"2024-01-01","value":328},{"date":"2024-07-01","value":315},{"date":"2025-01-01","value":308},{"date":"2025-07-01","value":295},{"date":"2026-01-01","value":325},{"date":"2026-03-01","value":425}],"baa_spread":[{"date":"2023-01-01","value":1.67},{"date":"2023-07-01","value":1.54},{"date":"2024-01-01","value":1.31},{"date":"2024-07-01","value":1.29},{"date":"2025-01-01","value":1.55},{"date":"2025-07-01","value":1.42},{"date":"2026-01-01","value":1.83},{"date":"2026-03-01","value":2.12}],"vix":[{"date":"2025-09-01","value":17.8},{"date":"2025-10-01","value":19.1},{"date":"2025-11-01","value":15.9},{"date":"2025-12-01","value":18.3},{"date":"2026-01-01","value":19.54},{"date":"2026-02-01","value":22.85},{"date":"2026-03-01","value":22.28},{"date":"2026-04-07","value":38.57}],"fg_current":42,"fg_label":"Fear","fg_components":{"vix":{"value":44,"label":"Fear","note":"VIX at 19.12 — elevated but recovering from 38.57"},"momentum":{"value":58,"label":"Neutral","note":"SPY +1.39% today, recovering from tariff lows"},"breadth":{"value":41,"label":"Fear","note":"41% of S&P 500 above 200MA — below healthy 60%"},"put_call":{"value":38,"label":"Fear","note":"P/C ratio 1.08 — above neutral 0.7, still cautious"},"safe_haven":{"value":35,"label":"Fear","note":"Gold and bond demand still elevated post-spike"},"junk_spread":{"value":46,"label":"Neutral","note":"HY spread 425bps — widened but not crisis levels"},"market_vol":{"value":48,"label":"Neutral","note":"30-day realized vol normalizing toward implied"}},"smart_money":{"retail_sentiment":[{"date":"2025-10-01","value":72,"label":"Bullish"},{"date":"2025-11-01","value":78,"label":"Bullish"},{"date":"2025-12-01","value":85,"label":"Very Bullish"},{"date":"2026-01-01","value":81,"label":"Very Bullish"},{"date":"2026-02-01","value":74,"label":"Bullish"},{"date":"2026-03-01","value":58,"label":"Neutral"},{"date":"2026-04-07","value":12,"label":"Very Bearish"},{"date":"2026-04-14","value":24,"label":"Bearish"},{"date":"2026-04-22","value":38,"label":"Bearish"}],"institutional_flow":[{"date":"2025-10-01","value":64,"label":"Moderate Buy"},{"date":"2025-11-01","value":71,"label":"Buy"},{"date":"2025-12-01","value":68,"label":"Buy"},{"date":"2026-01-01","value":65,"label":"Moderate Buy"},{"date":"2026-02-01","value":58,"label":"Neutral"},{"date":"2026-03-01","value":44,"label":"Reducing"},{"date":"2026-04-07","value":38,"label":"Defensive"},{"date":"2026-04-14","value":52,"label":"Opportunistic Buy"},{"date":"2026-04-22","value":61,"label":"Accumulating"}],"divergence_events":[{"date":"2026-03-01","retail":58,"institutional":44,"signal":"Smart money de-risked while retail held","type":"warning"},{"date":"2026-04-07","retail":12,"institutional":38,"signal":"Institutions bought the panic while retail sold","type":"opportunity"},{"date":"2026-04-14","retail":24,"institutional":52,"signal":"Classic divergence — smart money accumulating","type":"opportunity"}]},"options_flow":[{"ticker":"NVDA","type":"CALL","strike":220,"expiry":"2026-05-16","size":15420,"premium_m":8.2,"implied_vol":72,"vs_avg_pct":842,"sentiment":"bullish","date":"2026-04-22"},{"ticker":"SPY","type":"PUT","strike":660,"expiry":"2026-05-02","size":45200,"premium_m":12.1,"implied_vol":24,"vs_avg_pct":320,"sentiment":"bearish","date":"2026-04-22"},{"ticker":"TSLA","type":"CALL","strike":420,"expiry":"2026-05-16","size":22100,"premium_m":6.4,"implied_vol":88,"vs_avg_pct":560,"sentiment":"bullish","date":"2026-04-21"},{"ticker":"AAPL","type":"PUT","strike":240,"expiry":"2026-05-09","size":18700,"premium_m":4.2,"implied_vol":38,"vs_avg_pct":280,"sentiment":"bearish","date":"2026-04-21"},{"ticker":"QQQ","type":"CALL","strike":680,"expiry":"2026-04-30","size":31400,"premium_m":9.8,"implied_vol":28,"vs_avg_pct":445,"sentiment":"bullish","date":"2026-04-21"},{"ticker":"META","type":"CALL","strike":580,"expiry":"2026-05-02","size":12800,"premium_m":5.7,"implied_vol":62,"vs_avg_pct":380,"sentiment":"bullish","date":"2026-04-20"},{"ticker":"MSFT","type":"CALL","strike":420,"expiry":"2026-04-29","size":9800,"premium_m":3.2,"implied_vol":44,"vs_avg_pct":290,"sentiment":"bullish","date":"2026-04-20"},{"ticker":"XLE","type":"PUT","strike":54,"expiry":"2026-05-16","size":28900,"premium_m":2.8,"implied_vol":42,"vs_avg_pct":510,"sentiment":"bearish","date":"2026-04-20"},{"ticker":"GLD","type":"PUT","strike":400,"expiry":"2026-05-16","size":14200,"premium_m":7.1,"implied_vol":22,"vs_avg_pct":240,"sentiment":"bearish","date":"2026-04-19"},{"ticker":"TLT","type":"PUT","strike":82,"expiry":"2026-05-16","size":35200,"premium_m":3.6,"implied_vol":18,"vs_avg_pct":420,"sentiment":"bearish","date":"2026-04-18"},{"ticker":"AMZN","type":"CALL","strike":210,"expiry":"2026-05-01","size":16800,"premium_m":6.8,"implied_vol":48,"vs_avg_pct":340,"sentiment":"bullish","date":"2026-04-17"},{"ticker":"JPM","type":"CALL","strike":330,"expiry":"2026-05-16","size":8900,"premium_m":2.4,"implied_vol":32,"vs_avg_pct":260,"sentiment":"bullish","date":"2026-04-17"}],"short_interest":[{"ticker":"NVDA","name":"NVIDIA","short_pct":2.8,"dtc":1.2,"chg_1m":-0.4,"price":199.88,"squeeze_score":72,"sector":"Technology"},{"ticker":"TSLA","name":"Tesla","short_pct":3.1,"dtc":0.9,"chg_1m":0.3,"price":386.42,"squeeze_score":68,"sector":"Cons. Disc."},{"ticker":"MSTR","name":"MicroStrategy","short_pct":18.2,"dtc":4.8,"chg_1m":2.1,"price":163.97,"squeeze_score":88,"sector":"Technology"},{"ticker":"COIN","name":"Coinbase","short_pct":12.4,"dtc":2.8,"chg_1m":1.4,"price":195.95,"squeeze_score":82,"sector":"Financials"},{"ticker":"GME","name":"GameStop","short_pct":22.4,"dtc":3.2,"chg_1m":4.1,"price":24.46,"squeeze_score":91,"sector":"Cons. Disc."},{"ticker":"AMC","name":"AMC Entertainment","short_pct":31.8,"dtc":6.1,"chg_1m":5.8,"price":1.67,"squeeze_score":94,"sector":"Cons. Disc."},{"ticker":"ARKK","name":"ARK Innovation","short_pct":6.2,"dtc":1.8,"chg_1m":0.6,"price":77.38,"squeeze_score":61,"sector":"Technology"},{"ticker":"TLT","name":"iShares 20Y Treasury","short_pct":7.4,"dtc":2.4,"chg_1m":2.8,"price":86.57,"squeeze_score":64,"sector":"Bonds"}],"fg_history":[{"date":"2025-07-01","value":69,"label":"Greed"},{"date":"2025-08-01","value":61,"label":"Greed"},{"date":"2025-09-01","value":58,"label":"Neutral"},{"date":"2025-10-01","value":67,"label":"Greed"},{"date":"2025-11-01","value":73,"label":"Greed"},{"date":"2025-12-01","value":76,"label":"Extreme Greed"},{"date":"2026-01-01","value":68,"label":"Greed"},{"date":"2026-02-01","value":61,"label":"Greed"},{"date":"2026-03-01","value":48,"label":"Neutral"},{"date":"2026-04-07","value":8,"label":"Extreme Fear"},{"date":"2026-04-14","value":28,"label":"Fear"},{"date":"2026-04-22","value":42,"label":"Fear"}],"sector_pe":[{"sector":"Technology","pe":28.4,"eps_growth":14.2,"div_yield":0.7,"ytd":8.2},{"sector":"Financials","pe":13.8,"eps_growth":8.1,"div_yield":2.1,"ytd":2.1},{"sector":"Healthcare","pe":17.2,"eps_growth":7.3,"div_yield":1.8,"ytd":-4.2},{"sector":"Consumer Disc.","pe":24.1,"eps_growth":12.4,"div_yield":0.9,"ytd":3.8},{"sector":"Industrials","pe":20.3,"eps_growth":9.2,"div_yield":1.4,"ytd":-1.2},{"sector":"Energy","pe":11.2,"eps_growth":-3.1,"div_yield":4.2,"ytd":-12.4},{"sector":"Materials","pe":16.8,"eps_growth":5.6,"div_yield":2.0,"ytd":-3.1},{"sector":"Utilities","pe":17.4,"eps_growth":4.1,"div_yield":3.4,"ytd":-5.8},{"sector":"Comm. Services","pe":22.5,"eps_growth":11.3,"div_yield":0.9,"ytd":5.4},{"sector":"Cons. Staples","pe":19.1,"eps_growth":3.8,"div_yield":2.6,"ytd":-6.1},{"sector":"Real Estate","pe":38.2,"eps_growth":4.2,"div_yield":3.8,"ytd":0.4}],"cot_data":{"Gold":[{"date":"2025-09-02","value":-52},{"date":"2025-10-07","value":-61},{"date":"2025-11-04","value":-65},{"date":"2025-12-02","value":-70},{"date":"2026-01-06","value":-74},{"date":"2026-02-03","value":-78},{"date":"2026-03-03","value":-82},{"date":"2026-04-01","value":-85}],"Crude Oil":[{"date":"2025-09-02","value":-39},{"date":"2025-10-07","value":-33},{"date":"2025-11-04","value":-29},{"date":"2025-12-02","value":-36},{"date":"2026-01-06","value":-41},{"date":"2026-02-03","value":-53},{"date":"2026-03-03","value":-61},{"date":"2026-04-01","value":-68}],"S&P 500 Futures":[{"date":"2025-09-02","value":12},{"date":"2025-10-07","value":24},{"date":"2025-11-04","value":31},{"date":"2025-12-02","value":28},{"date":"2026-01-06","value":19},{"date":"2026-02-03","value":8},{"date":"2026-03-03","value":-12},{"date":"2026-04-01","value":-28}],"10Y T-Note":[{"date":"2025-09-02","value":14},{"date":"2025-10-07","value":8},{"date":"2025-11-04","value":-4},{"date":"2025-12-02","value":-11},{"date":"2026-01-06","value":-18},{"date":"2026-02-03","value":-22},{"date":"2026-03-03","value":-28},{"date":"2026-04-01","value":-34}],"USD Index":[{"date":"2025-09-02","value":-18},{"date":"2025-10-07","value":-8},{"date":"2025-11-04","value":6},{"date":"2025-12-02","value":14},{"date":"2026-01-06","value":22},{"date":"2026-02-03","value":28},{"date":"2026-03-03","value":18},{"date":"2026-04-01","value":-8}],"Copper":[{"date":"2025-09-02","value":-4},{"date":"2025-10-07","value":6},{"date":"2025-11-04","value":14},{"date":"2025-12-02","value":22},{"date":"2026-01-06","value":31},{"date":"2026-02-03","value":38},{"date":"2026-03-03","value":42},{"date":"2026-04-01","value":44}]}};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────────────────────────────────────
+const last = arr => arr[arr.length - 1];
+const prev = arr => arr[arr.length - 2];
+const f2 = v => Number(v).toFixed(2);
+
+// Sector attractiveness score — composite of P/E, EPS growth, YTD, div yield
+function sectorScore(s) {
+  const pe  = (30 - Math.min(s.pe, 40)) / 30 * 100;           // lower P/E = higher score
+  const eps = Math.max(0, Math.min(100, (s.eps_growth + 5) / 25 * 100));
+  const ytd = Math.max(0, Math.min(100, (s.ytd + 15) / 30 * 100));
+  const div = Math.min(100, s.div_yield * 15);
+  return Math.round(pe * 0.30 + eps * 0.35 + ytd * 0.20 + div * 0.15);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CLAUDE API — streaming
+// ─────────────────────────────────────────────────────────────────────────────
+const SYSTEM = `You are a senior macro analyst at a top hedge fund providing intelligence to paid institutional-quality subscribers. Be direct, specific, and actionable. Use the exact numbers provided. No disclaimers, no generic hedging. Max 280 words.`;
+
+async function stream(prompt, outputEl) {
+  outputEl.textContent = 'Analyzing…';
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      stream: true,
+      system: SYSTEM,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  const reader = resp.body.getReader();
+  const dec = new TextDecoder();
+  let buf = '', text = '';
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buf += dec.decode(value, { stream: true });
+    const lines = buf.split('\n');
+    buf = lines.pop();
+    for (const line of lines) {
+      if (!line.startsWith('data: ')) continue;
+      const raw = line.slice(6).trim();
+      if (raw === '[DONE]') continue;
+      try {
+        const j = JSON.parse(raw);
+        if (j.type === 'content_block_delta' && j.delta?.text) {
+          text += j.delta.text;
+          outputEl.textContent = text;
+        }
+      } catch {}
+    }
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TAB NAVIGATION
+// ─────────────────────────────────────────────────────────────────────────────
+function show(id) {
+  document.querySelectorAll('.page').forEach(p => p.hidden = true);
+  document.getElementById(id).hidden = false;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// REGIME ENGINE — render gauges
+// ─────────────────────────────────────────────────────────────────────────────
+function renderGauges() {
+  const gauges = [
+    { label: 'CPI YoY',        value: f2(last(D.cpi_yoy).value) + '%',    sub: 'Core: ' + f2(last(D.core_cpi).value) + '%',  trend: last(D.cpi_yoy).value > prev(D.cpi_yoy).value ? 'up' : 'down' },
+    { label: 'Fed Funds',      value: f2(last(D.fedfunds).value) + '%',   sub: 'Paused since Jan 2026',                       trend: 'neutral' },
+    { label: '10Y Yield',      value: f2(last(D.gs10).value) + '%',       sub: '2Y: ' + f2(last(D.gs2).value) + '%',         trend: last(D.gs10).value > prev(D.gs10).value ? 'up' : 'down' },
+    { label: '10Y–2Y Spread',  value: '+' + Math.round(last(D.t10y2y).value * 100) + 'bps', sub: 'Re-steepened post-inversion', trend: 'up' },
+    { label: 'HY OAS',         value: last(D.hy_oas).value + 'bps',      sub: '↑ from 295bps Jul 2025',                     trend: 'up' },
+    { label: 'BAA Spread',     value: f2(last(D.baa_spread).value) + '%', sub: '↑ from 1.29% Jul 2024',                      trend: 'up' },
+    { label: 'Unemployment',   value: f2(last(D.unrate).value) + '%',     sub: 'Stable, no Sahm trigger',                    trend: 'neutral' },
+    { label: 'VIX',            value: f2(last(D.vix).value),              sub: 'Down from 38.57 spike',                      trend: 'down' },
+    { label: 'Fear & Greed',   value: D.fg_current,                       sub: D.fg_label,                                   trend: 'neutral' },
+    { label: 'Breadth >200MA', value: D.fg_components.breadth.value + '%', sub: 'Below 60% healthy threshold',               trend: 'down' },
+  ];
+  document.getElementById('regime-gauges').innerHTML = gauges.map(g =>
+    `<div class="gauge" data-trend="${g.trend}">
+      <span class="gauge-label">${g.label}</span>
+      <span class="gauge-value">${g.value}</span>
+      <span class="gauge-sub">${g.sub}</span>
+    </div>`
+  ).join('');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// REGIME — AI calls
+// ─────────────────────────────────────────────────────────────────────────────
+function regimeAnalysis() {
+  stream(`Analyze this macro data snapshot and name the exact regime with a confidence level and 3 specific portfolio positioning recommendations:
+
+CPI YoY: ${f2(last(D.cpi_yoy).value)}% (prev ${f2(prev(D.cpi_yoy).value)}%) — re-accelerating after 2.68% low in Nov 2025. Core CPI: ${f2(last(D.core_cpi).value)}%.
+Fed Funds: ${f2(last(D.fedfunds).value)}% — paused since January 2026.
+10Y: ${f2(last(D.gs10).value)}%, 2Y: ${f2(last(D.gs2).value)}%. 10Y-2Y: +${Math.round(last(D.t10y2y).value*100)}bps. 10Y-3M: +${Math.round(last(D.t10y3m).value*100)}bps.
+HY OAS: 425bps, up from 295bps Jul 2025. BAA spread: 2.12%, up from 1.29% low.
+GDP quarterly (annualized): Q1-2025: -13.91 (tariff shock), Q2: +12.05 (snap-back), Q3: +5.52, Q4: +6.50.
+Unemployment: 4.3% — stable, Sahm Rule not triggered.
+F&G: 42 (Fear). VIX: ~19, recovering from 38.57. Breadth: 41% above 200MA. Institutional flow: 61 Accumulating. Retail: 38 Bearish.
+Shiller CAPE: 34.2x. Forward P/E: 20.3x.
+
+Give: regime name, confidence %, 3 portfolio positioning calls with rationale. Specific. Numbers. No disclaimers.`,
+    document.getElementById('regime-ai-output'));
+}
+
+function portfolioImplications() {
+  stream(`Given: CPI re-accelerating to 3.49%, Fed on hold at 3.64%, HY spreads 425bps (widening), yield curve +54bps (re-steepening), breadth weak (41% above 200MA), VIX recovering from 38.57, institutions accumulating (61) while retail bearish (38).
+
+Give 5 specific portfolio positioning calls: which sectors to overweight/underweight, factor tilts (quality/value/momentum), duration stance, and one cross-asset trade. Include the macro logic for each. Use ETF tickers.`,
+    document.getElementById('regime-ai-output'));
+}
+
+function riskScenarios() {
+  stream(`For members positioned in a stagflationary slowdown (CPI 3.49%, HY spreads 425bps, Fed paused), give 3 tail risk scenarios to hedge against. For each: the scenario, the specific data trigger to watch, and the exact hedge instrument/position. Be precise about trigger levels — not vague.`,
+    document.getElementById('regime-ai-output'));
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DIVERGENCE FEED — render + AI calls
+// ─────────────────────────────────────────────────────────────────────────────
+function renderDivergenceFeed() {
+  const events = D.smart_money.divergence_events;
+  document.getElementById('divergence-history').innerHTML = events.slice().reverse().map((e, i) =>
+    `<div class="divergence-event" data-type="${e.type}" id="div-event-${i}">
+      <p data-label="date">${e.date}</p>
+      <p data-label="type">${e.type.toUpperCase()}</p>
+      <p data-label="signal">${e.signal}</p>
+      <div data-label="bars">
+        <div>
+          <span>Retail: ${e.retail}</span>
+          <progress value="${e.retail}" max="100"></progress>
+        </div>
+        <div>
+          <span>Institutional: ${e.institutional}</span>
+          <progress value="${e.institutional}" max="100"></progress>
+        </div>
+        <span>Gap: ${Math.abs(e.institutional - e.retail)} points</span>
+      </div>
+      <div id="div-ai-${i}">Click Analyze to get AI read.</div>
+      <button onclick="analyzeDivEvent(${i}, '${e.date}', ${e.retail}, ${e.institutional}, '${e.signal}', '${e.type}')">Analyze</button>
+    </div>`
+  ).join('');
+}
+
+function analyzeLive() {
+  stream(`Live divergence as of Apr 22, 2026: institutional at 61 (Accumulating), retail at 38 (Bearish) — 23pt gap.
+
+Full retail sequence: 85 Dec 2025 → 81 Jan → 74 Feb → 58 Mar → 12 Apr-7 (extreme panic) → 24 Apr-14 → 38 Apr-22.
+Full institutional sequence: 68 Dec 2025 → 65 Jan → 58 Feb → 44 Mar → 38 Apr-7 (defensive) → 52 Apr-14 → 61 Apr-22 (accumulating).
+
+Institutions front-ran the selloff (reduced in Feb-Mar), bought the Apr-7 panic, now actively accumulating while retail is still bearish. What does this specific pattern signal? Give 3 concrete trade ideas to follow smart money. Be specific about entry, what you're buying, and the catalyst.`,
+    document.getElementById('divergence-live-ai'));
+}
+
+function analyzeDivEvent(i, date, retail, inst, signal, type) {
+  stream(`Divergence event on ${date}: "${signal}". Type: ${type}. Retail: ${retail}, Institutional: ${inst}, Gap: ${Math.abs(inst-retail)}pts.
+
+Full context — retail sequence: 85(Dec25) → 74 → 58 → 12(Apr7) → 24 → 38(Apr22 now). Institutional: 68 → 65 → 58 → 44 → 38 → 52 → 61.
+
+Was this divergence actionable at the time? What was the right trade? What does it tell us about current positioning as of Apr 22?`,
+    document.getElementById(`div-ai-${i}`));
+}
+
+function analyzeAllDivergences() {
+  stream(`Three divergence events to interpret together:
+1. Mar 1: Smart money de-risked (institutional 44) while retail held bullish (retail 58) — WARNING.
+2. Apr 7: Institutions opportunistic (38) while retail panic-sold (12) — OPPORTUNITY.
+3. Apr 14: Classic accumulation (institutional 52 vs retail 24) — OPPORTUNITY.
+
+Current: institutional 61 (Accumulating) vs retail 38 (Bearish). Retail peaked at 85 in Dec, still only at 38 now.
+
+What is the institutional macro thesis here? What are they accumulating into and why? What should members be doing to follow smart money RIGHT NOW? Give 3 specific actions.`,
+    document.getElementById('divergence-all-ai'));
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTOR ROTATION — render + AI
+// ─────────────────────────────────────────────────────────────────────────────
+function renderSectors() {
+  const scored = D.sector_pe
+    .map(s => ({ ...s, score: sectorScore(s) }))
+    .sort((a, b) => b.score - a.score);
+
+  document.getElementById('sector-grid').innerHTML = scored.map(s =>
+    `<div class="sector-cell" data-score="${s.score}" onclick="askSector('${s.sector}', ${s.score}, ${s.pe}, ${s.eps_growth}, ${s.ytd}, ${s.div_yield})">
+      <span class="sector-name">${s.sector}</span>
+      <span class="sector-score">${s.score}</span>
+      <span class="sector-pe">P/E ${s.pe}×</span>
+      <span class="sector-eps">EPS ${s.eps_growth > 0 ? '+' : ''}${s.eps_growth}%</span>
+      <span class="sector-ytd">YTD ${s.ytd > 0 ? '+' : ''}${s.ytd}%</span>
+      <span class="sector-div">Yield ${s.div_yield}%</span>
+    </div>`
+  ).join('');
+}
+
+function askSector(name, score, pe, eps, ytd, div) {
+  stream(`Sector deep-dive: ${name}. Attractiveness score: ${score}/100. P/E: ${pe}×, EPS growth: ${eps}%, YTD: ${ytd > 0 ? '+' : ''}${ytd}%, Div yield: ${div}%.
+
+Current macro: CPI re-accelerating 3.49%, HY spreads widening to 425bps, institutional money accumulating, breadth weak (41% above 200MA), Fed on hold.
+
+Is this sector a buy, hold, or avoid right now? Give the 2 best ETF or stock plays within this sector for the current regime and why. Be specific with tickers.`,
+    document.getElementById('sector-ai'));
+}
+
+function sectorPlaybook() {
+  const scored = D.sector_pe.map(s => ({ ...s, score: sectorScore(s) })).sort((a, b) => b.score - a.score);
+  const rows = scored.map(s => `${s.sector}: score ${s.score}, P/E ${s.pe}×, EPS ${s.eps_growth}%, YTD ${s.ytd}%`).join('\n');
+  stream(`Sector rotation playbook for a stagflationary slowdown (CPI 3.49%, HY 425bps, Fed on hold):
+
+${rows}
+
+Notable: Energy P/E 11.2× but EPS -3.1% and YTD -12.4% — contrarian value or value trap? Real Estate P/E 38.2× in a rate-hold environment. Technology P/E 28.4× with 14.2% EPS growth holding.
+
+Give the rotation playbook: top 3 to overweight, bottom 3 to underweight, and the macro catalyst that would change each call. Include ETF tickers.`,
+    document.getElementById('sector-ai'));
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// OPTIONS FLOW — render + AI
+// ─────────────────────────────────────────────────────────────────────────────
+function renderFlow() {
+  const sorted = [...D.options_flow].sort((a, b) => b.premium_m - a.premium_m);
+  const bullPrem = D.options_flow.filter(f => f.sentiment === 'bullish').reduce((a, f) => a + f.premium_m, 0);
+  const bearPrem = D.options_flow.filter(f => f.sentiment === 'bearish').reduce((a, f) => a + f.premium_m, 0);
+
+  document.getElementById('flow-summary').innerHTML =
+    `<span data-label="total-premium">Total: $${(bullPrem + bearPrem).toFixed(1)}M</span>
+     <span data-label="bull-premium">Bullish: $${bullPrem.toFixed(1)}M</span>
+     <span data-label="bear-premium">Bearish: $${bearPrem.toFixed(1)}M</span>
+     <span data-label="ratio">Bull/Bear: ${(bullPrem / bearPrem).toFixed(2)}×</span>`;
+
+  document.getElementById('flow-tbody').innerHTML = sorted.map(f =>
+    `<tr data-sentiment="${f.sentiment}" data-heat="${f.vs_avg_pct >= 500 ? 'extreme' : f.vs_avg_pct >= 300 ? 'high' : 'normal'}">
+      <td>${f.ticker}</td>
+      <td>${f.type}</td>
+      <td>${f.strike}</td>
+      <td>${f.expiry}</td>
+      <td>${f.size.toLocaleString()}</td>
+      <td>$${f.premium_m}M</td>
+      <td>${f.implied_vol}%</td>
+      <td>${f.vs_avg_pct}%</td>
+      <td>${f.sentiment}</td>
+      <td>${f.date}</td>
+    </tr>`
+  ).join('');
+}
+
+function analyzeFlow() {
+  const bullPrem = D.options_flow.filter(f => f.sentiment === 'bullish').reduce((a, f) => a + f.premium_m, 0);
+  const bearPrem = D.options_flow.filter(f => f.sentiment === 'bearish').reduce((a, f) => a + f.premium_m, 0);
+  stream(`Unusual options flow analysis:
+
+BULLISH ($${bullPrem.toFixed(1)}M total): NVDA CALL $220 May-16 ($8.2M, 842% above avg, IV 72%) — highest anomaly. QQQ CALL $680 ($9.8M, 445%). TSLA CALL $420 ($6.4M, 560%, IV 88% — expensive). META CALL $580 ($5.7M, 380%). AMZN CALL $210 ($6.8M, 340%).
+
+BEARISH ($${bearPrem.toFixed(1)}M total): SPY PUT $660 May-2 ($12.1M, 320%, IV only 24% — cheap hedge). TLT PUT $82 ($3.6M, 420%). XLE PUT $54 ($2.8M, 510%). GLD PUT $400 ($7.1M, 240%).
+
+KEY OBSERVATIONS: SPY put at LOW IV (24%) = institutional tail hedge not panic. NVDA at 842% above avg = most anomalous block. Net bull/bear ratio: ${(bullPrem/bearPrem).toFixed(2)}×.
+
+What is the net directional bias? Is the SPY put + tech calls a "long risk with tail hedge" institutional pattern? What does XLE+TLT double put tell us about macro positioning? Give 3 actionable takeaways.`,
+    document.getElementById('flow-ai'));
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// COT — render + AI
+// ─────────────────────────────────────────────────────────────────────────────
+const COT_CONTEXT = {
+  'Gold':          'Commercial shorts at 16-month extreme (-85) and still building. Historically mean-reverts.',
+  'Crude Oil':     'Speculative shorts building steadily since Apr 2025 (-68). Macro demand concerns dominant.',
+  'S&P 500 Futures': 'Flipped from +31 (Nov 2025) to -28 (Apr 2026) — 59-point reversal. Smart money now net short equities.',
+  '10Y T-Note':    'Net short -34, accelerating negative for 7 consecutive weeks. Bond bears in control.',
+  'USD Index':     'Rapid reversal from +28 (Feb) to -8 (Apr). Dollar weakness emerging.',
+  'Copper':        '16-month extreme long (+44) and still building. Real economy or China-re-open thesis.'
+};
+
+function renderCOT() {
+  document.getElementById('cot-grid').innerHTML = Object.entries(D.cot_data).map(([name, vals]) => {
+    const cur = last(vals).value;
+    const p   = prev(vals).value;
+    const trend = cur > p ? 'increasing' : 'decreasing';
+    return `<div class="cot-card" data-direction="${cur > 0 ? 'long' : 'short'}" data-trend="${trend}">
+      <span class="cot-name">${name}</span>
+      <span class="cot-value">${cur > 0 ? '+' : ''}${cur}</span>
+      <span class="cot-trend">${trend === 'increasing' ? (cur > 0 ? '↑ Adding longs' : '↑ Adding shorts') : (cur > 0 ? '↓ Reducing longs' : '↓ Covering shorts')}</span>
+      <progress value="${cur + 100}" max="200"></progress>
+      <p class="cot-context">${COT_CONTEXT[name]}</p>
+    </div>`;
+  }).join('');
+}
+
+function analyzeCOT() {
+  stream(`COT positioning trade thesis:
+
+Gold: -85 (16-month extreme short, from -52 in Sep). Copper: +44 (16-month extreme long, from -4 in Sep). S&P 500 futures: -28 (from +31 in Nov, 59pt flip). 10Y T-Note: -34 (accelerating short, 7 weeks straight). USD Index: -8 (rapid reversal from +28 in Feb). Crude Oil: -68 (building short since Apr 2025).
+
+The combined picture: smart money is short US equities, short bonds, short crude, short USD, long copper, short gold (despite spot near highs — commercial hedging).
+
+What single macro trade thesis ties all these positions together? Are they consistent with stagflation, a dollar crisis, or something else? Give 3 COT-based trade ideas with entry rationale and the risk to each. Specific instruments.`,
+    document.getElementById('cot-ai'));
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SQUEEZE SCANNER — render + AI
+// ─────────────────────────────────────────────────────────────────────────────
+function renderSqueeze() {
+  const sorted = [...D.short_interest].sort((a, b) => b.squeeze_score - a.squeeze_score);
+  document.getElementById('squeeze-grid').innerHTML = sorted.map(s =>
+    `<div class="squeeze-card" data-score="${s.squeeze_score}">
+      <span class="sq-ticker">${s.ticker}</span>
+      <span class="sq-name">${s.name}</span>
+      <span class="sq-sector">${s.sector}</span>
+      <span class="sq-score">${s.squeeze_score}/100</span>
+      <progress value="${s.squeeze_score}" max="100"></progress>
+      <span class="sq-short">Short: ${s.short_pct}%</span>
+      <span class="sq-dtc">DTC: ${s.dtc}</span>
+      <span class="sq-chg" data-rising="${s.chg_1m > 0}">1M chg: ${s.chg_1m > 0 ? '+' : ''}${s.chg_1m}%</span>
+      <span class="sq-price">$${s.price}</span>
+    </div>`
+  ).join('');
+}
+
+function analyzeSqueeze() {
+  const top = [...D.short_interest].sort((a, b) => b.squeeze_score - a.squeeze_score).slice(0, 6);
+  stream(`Short squeeze analysis:
+
+${top.map(s => `${s.ticker} (${s.name}): score ${s.squeeze_score}/100, short% ${s.short_pct}%, DTC ${s.dtc}, 1M chg ${s.chg_1m > 0 ? '+' : ''}${s.chg_1m}%, price $${s.price}`).join('\n')}
+
+Context: Institutional flow at 61 (Accumulating), F&G recovering from 8 to 42, options show bullish NVDA and TSLA calls, VIX normalizing from 38.57.
+
+Which 2-3 have the most credible squeeze setup right now — not just high short %, but a real catalyst or momentum? What triggers each squeeze? What's the risk/reward? Be honest about which are meme traps vs real setups.`,
+    document.getElementById('squeeze-ai'));
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────────────────────
+renderGauges();
+renderDivergenceFeed();
+renderSectors();
+renderFlow();
+renderCOT();
+renderSqueeze();
+</script>
+</body>
+</html>

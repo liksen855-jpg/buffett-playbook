@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Malaysia's Hidden Trade Paradox</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080C10;
+    --surface: #0E1318;
+    --card: #131B22;
+    --amber: #F5A623;
+    --amber-dim: rgba(245,166,35,0.15);
+    --amber-glow: rgba(245,166,35,0.06);
+    --red: #E84545;
+    --red-dim: rgba(232,69,69,0.15);
+    --green: #27C97A;
+    --green-dim: rgba(39,201,122,0.12);
+    --text: #EEF2F7;
+    --muted: #6B7A8D;
+    --border: rgba(255,255,255,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  /* GLOBAL PROGRESS BAR */
+  .progress-track {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: rgba(255,255,255,0.05);
+    z-index: 100;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--amber), #FFD580);
+    width: 0%;
+    transition: width 0.3s linear;
+    box-shadow: 0 0 12px rgba(245,166,35,0.6);
+  }
+
+  /* SCENE DOTS */
+  .scene-dots {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 100;
+  }
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    transition: all 0.3s ease;
+  }
+  .dot.active {
+    background: var(--amber);
+    box-shadow: 0 0 8px var(--amber);
+    width: 20px;
+    border-radius: 3px;
+  }
+
+  /* SCENE TIMER */
+  .scene-timer {
+    position: fixed;
+    top: 20px; right: 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    z-index: 100;
+  }
+
+  /* SLIDE LABEL */
+  .slide-label {
+    position: fixed;
+    top: 20px; left: 24px;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--amber);
+    font-weight: 500;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .slide-label.show { opacity: 1; }
+
+  /* SCENES */
+  .scene {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 40px 60px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
+  }
+  .scene.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* ─────────── SCENE 1: HOOK ─────────── */
+  .s1-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--amber);
+    font-weight: 500;
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: all 0.5s ease 0.1s;
+  }
+  .s1-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 8vw, 88px);
+    line-height: 0.95;
+    text-align: center;
+    letter-spacing: 0.02em;
+    max-width: 800px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease 0.2s;
+  }
+  .s1-headline span { color: var(--amber); }
+  .s1-sub {
+    margin-top: 24px;
+    font-size: 16px;
+    color: var(--muted);
+    text-align: center;
+    max-width: 480px;
+    line-height: 1.6;
+    font-weight: 300;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: all 0.5s ease 0.4s;
+  }
+  .s1-number-row {
+    margin-top: 48px;
+    display: flex;
+    gap: 40px;
+    opacity: 0;
+    transition: all 0.5s ease 0.6s;
+  }
+  .s1-stat {
+    text-align: center;
+  }
+  .s1-stat-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    color: var(--amber);
+    letter-spacing: 0.03em;
+  }
+  .s1-stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .s1-divider {
+    width: 1px;
+    background: var(--border);
+    height: 50px;
+    align-self: center;
+  }
+
+  .scene.active .s1-eyebrow,
+  .scene.active .s1-headline,
+  .scene.active .s1-sub,
+  .scene.active .s1-number-row {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─────────── SCENE 2: GDP vs GNI Chart ─────────── */
+  .s2-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(32px, 5vw, 52px);
+    letter-spacing: 0.03em;
+    text-align: center;
+    margin-bottom: 6px;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: all 0.5s ease 0.1s;
+  }
+  .s2-title .highlight { color: var(--amber); }
+  .s2-subtitle {
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    opacity: 0;
+    transition: all 0.5s ease 0.2s;
+  }
+  .scene.active .s2-title,
+  .scene.active .s2-subtitle { opacity: 1; transform: translateY(0); }
+
+  .chart-wrap {
+    width: 100%;
+    max-width: 640px;
+    opacity: 0;
+    transition: opacity 0.5s ease 0.3s;
+  }
+  .scene.active .chart-wrap { opacity: 1; }
+
+  .bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .bar-row {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 12px;
+    align-items: center;
+  }
+  .bar-year {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    text-align: right;
+  }
+  .bar-pair {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .bar-track {
+    height: 22px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    width: 0%;
+    transition: width 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 8px;
+  }
+  .bar-fill.gdp {
+    background: linear-gradient(90deg, rgba(238,242,247,0.15), rgba(238,242,247,0.3));
+  }
+  .bar-fill.gni {
+    background: linear-gradient(90deg, rgba(39,201,122,0.3), rgba(39,201,122,0.5));
+  }
+  .bar-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.7);
+    white-space: nowrap;
+  }
+  .gap-badge {
+    position: absolute;
+    right: -110px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--red-dim);
+    border: 1px solid rgba(232,69,69,0.3);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--red);
+    white-space: nowrap;
+  }
+  .chart-legend {
+    display: flex;
+    gap: 24px;
+    margin-top: 16px;
+    justify-content: center;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 2px;
+  }
+  .legend-dot.gdp { background: rgba(238,242,247,0.4); }
+  .legend-dot.gni { background: rgba(39,201,122,0.6); }
+
+  /* ─────────── SCENE 3: THE DRAIN ─────────── */
+  .s3-container {
+    width: 100%;
+    max-width: 680px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+  }
+  .s3-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 5.5vw, 58px);
+    text-align: center;
+    letter-spacing: 0.03em;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: all 0.5s ease 0.1s;
+  }
+  .s3-title .red { color: var(--red); }
+  .scene.active .s3-title { opacity: 1; transform: translateY(0); }
+
+  .funnel-visual {
+    width: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease 0.3s;
+  }
+  .scene.active .funnel-visual { opacity: 1; }
+
+  .flow-row {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    width: 100%;
+    margin-bottom: 2px;
+  }
+  .flow-box {
+    flex: 1;
+    padding: 16px 20px;
+    border-radius: 8px;
+    text-align: center;
+    position: relative;
+  }
+  .flow-box.surplus {
+    background: linear-gradient(135deg, rgba(39,201,122,0.08), rgba(39,201,122,0.15));
+    border: 1px solid rgba(39,201,122,0.25);
+  }
+  .flow-box.drain {
+    background: linear-gradient(135deg, rgba(232,69,69,0.08), rgba(232,69,69,0.15));
+    border: 1px solid rgba(232,69,69,0.25);
+  }
+  .flow-box.retained {
+    background: linear-gradient(135deg, rgba(245,166,35,0.08), rgba(245,166,35,0.15));
+    border: 1px solid rgba(245,166,35,0.25);
+  }
+  .flow-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 34px;
+    letter-spacing: 0.03em;
+  }
+  .flow-val.green { color: var(--green); }
+  .flow-val.red { color: var(--red); }
+  .flow-val.amber { color: var(--amber); }
+  .flow-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .flow-connector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 18px;
+    color: var(--muted);
+    position: relative;
+  }
+  .flow-connector::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--border), transparent);
+  }
+  .equation-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+  }
+  .eq-box {
+    text-align: center;
+    padding: 14px 18px;
+    border-radius: 8px;
+  }
+  .eq-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.03em;
+  }
+  .eq-label {
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+  .eq-op {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--muted);
+  }
+  .insight-pill {
+    background: var(--red-dim);
+    border: 1px solid rgba(232,69,69,0.3);
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 13px;
+    color: var(--text);
+    text-align: center;
+    line-height: 1.5;
+    opacity: 0;
+    transition: opacity 0.5s ease 0.8s;
+  }
+  .insight-pill strong { color: var(--red); }
+  .scene.active .insight-pill { opacity: 1; }
+
+  /* ─────────── SCENE 4: GAP GROWTH ─────────── */
+  .s4-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(34px, 5vw, 54px);
+    text-align: center;
+    letter-spacing: 0.03em;
+    margin-bottom: 8px;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: all 0.5s ease 0.1s;
+  }
+  .s4-title .amber { color: var(--amber); }
+  .s4-sub {
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 32px;
+    opacity: 0;
+    transition: all 0.5s ease 0.2s;
+  }
+  .scene.active .s4-title { opacity: 1; transform: translateY(0); }
+  .scene.active .s4-sub { opacity: 1; }
+
+  .area-chart-container {
+    width: 100%;
+    max-width: 620px;
+    opacity: 0;
+    transition: opacity 0.5s ease 0.3s;
+  }
+  .scene.active .area-chart-container { opacity: 1; }
+
+  #areaCanvas {
+    width: 100%;
+    height: 200px;
+    display: block;
+  }
+
+  .gap-callout-row {
+    display: flex;
+    gap: 16px;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 620px;
+    opacity: 0;
+    transition: all 0.5s ease 0.8s;
+  }
+  .scene.active .gap-callout-row { opacity: 1; }
+  .gap-callout {
+    flex: 1;
+    padding: 14px 16px;
+    border-radius: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    text-align: center;
+  }
+  .gap-callout-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.03em;
+  }
+  .gap-callout-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .gap-callout.bad .gap-callout-val { color: var(--red); }
+  .gap-callout.amber .gap-callout-val { color: var(--amber); }
+
+  /* ─────────── SCENE 5: SOVEREIGNTY TEST ─────────── */
+  .s5-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--red);
+    font-weight: 500;
+    margin-bottom: 16px;
+    opacity: 0;
+    transition: all 0.5s ease 0.1s;
+  }
+  .s5-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(38px, 6vw, 66px);
+    line-height: 0.95;
+    text-align: center;
+    letter-spacing: 0.02em;
+    max-width: 700px;
+    margin-bottom: 12px;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: all 0.6s ease 0.2s;
+  }
+  .s5-headline .amber { color: var(--amber); }
+  .s5-headline .red { color: var(--red); }
+  .scene.active .s5-eyebrow { opacity: 1; }
+  .scene.active .s5-headline { opacity: 1; transform: translateY(0); }
+
+  .worker-visual {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 560px;
+    opacity: 0;
+    transition: opacity 0.5s ease 0.4s;
+  }
+  .scene.active .worker-visual { opacity: 1; }
+
+  .worker-grid-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  .worker-icons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+    max-width: 400px;
+  }
+  .worker-icon {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--muted);
+    opacity: 0;
+    transition: opacity 0.05s ease, background 0.3s ease;
+  }
+  .worker-icon.lit {
+    background: var(--amber);
+    box-shadow: 0 0 6px rgba(245,166,35,0.5);
+  }
+
+  .stat-cards {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    max-width: 560px;
+    opacity: 0;
+    transition: opacity 0.5s ease 0.9s;
+  }
+  .scene.active .stat-cards { opacity: 1; }
+  .stat-card {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-card-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30px;
+    letter-spacing: 0.03em;
+  }
+  .stat-card-val.amber { color: var(--amber); }
+  .stat-card-val.red { color: var(--red); }
+  .stat-card-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  /* ─────────── SCENE 6: CLOSING ─────────── */
+  .s6-bg-text {
+    position: absolute;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22vw;
+    color: rgba(245,166,35,0.03);
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    pointer-events: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .s6-content {
+    position: relative;
+    text-align: center;
+    max-width: 680px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  .s6-label {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--amber);
+    opacity: 0;
+    transition: all 0.5s ease 0.1s;
+  }
+  .s6-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(44px, 7vw, 80px);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: all 0.6s ease 0.25s;
+  }
+  .s6-headline .amber { color: var(--amber); }
+  .s6-headline .muted { color: var(--muted); }
+  .s6-body {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+    opacity: 0;
+    transition: all 0.5s ease 0.5s;
+    max-width: 520px;
+  }
+  .s6-body strong { color: var(--text); font-weight: 500; }
+  .s6-divider {
+    width: 80px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--amber), transparent);
+    opacity: 0;
+    transition: all 0.5s ease 0.7s;
+  }
+  .s6-footer {
+    display: flex;
+    gap: 32px;
+    opacity: 0;
+    transition: all 0.5s ease 0.9s;
+  }
+  .s6-footer-item {
+    text-align: center;
+  }
+  .s6-footer-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .s6-footer-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+  .scene.active .s6-label,
+  .scene.active .s6-body,
+  .scene.active .s6-divider,
+  .scene.active .s6-footer { opacity: 1; }
+  .scene.active .s6-headline { opacity: 1; transform: translateY(0); }
+
+  /* CLICK HINT */
+  .click-hint {
+    position: fixed;
+    bottom: 56px;
+    right: 24px;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    z-index: 100;
+  }
+
+  /* Noise overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.4;
+    z-index: 50;
+  }
+
+  /* Animated glow accent */
+  .glow-orb {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    filter: blur(80px);
+  }
+  .glow-orb-1 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(245,166,35,0.04) 0%, transparent 70%);
+    top: -100px; right: -100px;
+    animation: orb-drift 8s ease-in-out infinite alternate;
+  }
+  .glow-orb-2 {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(39,201,122,0.03) 0%, transparent 70%);
+    bottom: -60px; left: -60px;
+    animation: orb-drift 12s ease-in-out infinite alternate-reverse;
+  }
+  @keyframes orb-drift {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(30px, 40px); }
+  }
+
+  /* pulse animation for worker icons */
+  @keyframes pop {
+    0% { transform: scale(0); opacity: 0; }
+    70% { transform: scale(1.3); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .worker-icon.popping {
+    animation: pop 0.2s ease forwards;
+  }
+
+  /* svg area chart */
+  .area-chart-svg {
+    width: 100%;
+    overflow: visible;
+  }
+
+  /* replay button */
+  .replay-btn {
+    position: fixed;
+    bottom: 52px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: transparent;
+    border: 1px solid var(--amber);
+    color: var(--amber);
+    padding: 8px 24px;
+    border-radius: 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.4s ease;
+    z-index: 200;
+  }
+  .replay-btn:hover {
+    background: var(--amber-dim);
+  }
+  .replay-btn.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div class="glow-orb glow-orb-1"></div>
+<div class="glow-orb glow-orb-2"></div>
+
+<div class="progress-track">
+  <div class="progress-fill" id="progressFill"></div>
+</div>
+
+<div class="scene-timer" id="sceneTimer">00:00</div>
+<div class="slide-label" id="slideLabel">Malaysia Trade Report</div>
+
+<div class="scene-dots" id="sceneDots"></div>
+<div class="click-hint" id="clickHint">Tap to advance</div>
+<button class="replay-btn" id="replayBtn" onclick="resetPresentation()">↺ Replay</button>
+
+<!-- ═══════════════════════════════ SCENE 1 ═══════════════════════════════ -->
+<div class="scene" id="scene-0">
+  <div class="s1-eyebrow">Malaysia · January 2026</div>
+  <div class="s1-headline">Record Trade.<br><span>Whose Surplus?</span></div>
+  <div class="s1-sub">Malaysia just posted its highest-ever January trade figures. But behind every record export, a hidden income drain erodes what Malaysians actually keep.</div>
+  <div class="s1-number-row">
+    <div class="s1-stat">
+      <div class="s1-stat-val">RM272B</div>
+      <div class="s1-stat-label">Total Trade</div>
+    </div>
+    <div class="s1-divider"></div>
+    <div class="s1-stat">
+      <div class="s1-stat-val">+12.6%</div>
+      <div class="s1-stat-label">YoY Growth</div>
+    </div>
+    <div class="s1-divider"></div>
+    <div class="s1-stat">
+      <div class="s1-stat-val">+483%</div>
+      <div class="s1-stat-label">Surplus Surge</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ SCENE 2 ═══════════════════════════════ -->
+<div class="scene" id="scene-1">
+  <div class="s2-title">GDP vs <span class="highlight">GNI</span></div>
+  <div class="s2-subtitle">What's produced inside Malaysia vs. what Malaysians actually earn</div>
+
+  <div class="chart-wrap">
+    <div class="bar-chart" id="barChart">
+      <!-- Rows injected by JS -->
+    </div>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot gdp"></div> Nominal GDP</div>
+      <div class="legend-item"><div class="legend-dot gni"></div> Nominal GNI</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ SCENE 3 ═══════════════════════════════ -->
+<div class="scene" id="scene-2">
+  <div class="s3-container">
+    <div class="s3-title">The <span class="red">Income Drain</span></div>
+
+    <div class="funnel-visual">
+      <div class="equation-row">
+        <div class="eq-box" style="background:rgba(39,201,122,0.08);border:1px solid rgba(39,201,122,0.25)">
+          <div class="eq-num" style="color:var(--green)">RM136.9B</div>
+          <div class="eq-label">Goods Surplus 2024</div>
+        </div>
+        <div class="eq-op">−</div>
+        <div class="eq-box" style="background:rgba(232,69,69,0.08);border:1px solid rgba(232,69,69,0.25)">
+          <div class="eq-num" style="color:var(--red)">RM48.8B</div>
+          <div class="eq-label">Primary Income Deficit</div>
+        </div>
+        <div class="eq-op">−</div>
+        <div class="eq-box" style="background:rgba(107,122,141,0.08);border:1px solid var(--border)">
+          <div class="eq-num" style="color:var(--muted)">RM54.5B</div>
+          <div class="eq-label">Other Deficits</div>
+        </div>
+        <div class="eq-op">=</div>
+        <div class="eq-box" style="background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.3)">
+          <div class="eq-num" style="color:var(--amber)">RM33.6B</div>
+          <div class="eq-label">Net Retained</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight-pill">
+      In Q2 2024 — Malaysia posted a <strong>RM32B goods surplus</strong>.<br>
+      After the primary income drain, the current account surplus collapsed to just <strong>RM3B</strong>. A <strong>90.6% erosion</strong> in a single quarter.
+    </div>
+
+    <div class="s2-subtitle" style="margin-bottom:0;opacity:1;transition-delay:0.6s;margin-top:4px">
+      <span style="color:var(--muted)">Primary income deficit</span> — dividends, royalties & fees flowing out to MNC shareholders offshore
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ SCENE 4 ═══════════════════════════════ -->
+<div class="scene" id="scene-3">
+  <div class="s4-title">The Gap Is <span class="amber">Accelerating</span></div>
+  <div class="s4-sub">GDP–GNI divergence (RM billion) · 2020–2024</div>
+
+  <div class="area-chart-container">
+    <svg id="areaSvg" viewBox="0 0 600 200" class="area-chart-svg" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+
+  <div class="gap-callout-row">
+    <div class="gap-callout bad">
+      <div class="gap-callout-val">RM80.1B</div>
+      <div class="gap-callout-label">2023 Peak Gap</div>
+    </div>
+    <div class="gap-callout bad">
+      <div class="gap-callout-val">2.81×</div>
+      <div class="gap-callout-label">Gap Growth 2020→2023</div>
+    </div>
+    <div class="gap-callout amber">
+      <div class="gap-callout-val">~RM60B</div>
+      <div class="gap-callout-label">2024 Estimated Gap</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ SCENE 5 ═══════════════════════════════ -->
+<div class="scene" id="scene-4">
+  <div class="s5-eyebrow">The Sovereignty Test</div>
+  <div class="s5-headline">RM<span class="amber">60</span> Billion<br>Leaves Malaysia<br>Every <span class="red">Year</span></div>
+
+  <div class="worker-visual">
+    <div class="worker-grid-label">Each dot = ~20,000 workers at minimum wage (RM1,700/month)</div>
+    <div class="worker-icons" id="workerGrid"></div>
+  </div>
+
+  <div class="stat-cards">
+    <div class="stat-card">
+      <div class="stat-card-val red">~2.94M</div>
+      <div class="stat-card-label">Equivalent workers' annual wages lost to the gap</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-val amber">~⅙</div>
+      <div class="stat-card-label">Of Malaysia's entire workforce, in wage-equivalents</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-val" style="color:var(--muted)">↑ Growing</div>
+      <div class="stat-card-label">FDI boom = more repatriation in 2025–26</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ SCENE 6 ═══════════════════════════════ -->
+<div class="scene" id="scene-5">
+  <div class="s6-bg-text">GNI</div>
+  <div class="s6-content">
+    <div class="s6-label">The Bottom Line</div>
+    <div class="s6-headline">The Trade<br>Surplus Is <span class="amber">Real</span>.<br>The <span class="muted">Question</span> Is<br><span class="amber">Whose.</span></div>
+    <div class="s6-divider"></div>
+    <div class="s6-body">
+      Malaysia produces <strong>RM1.93 trillion</strong> annually — but Malaysians keep <strong>RM1.87 trillion</strong>. The RM60B difference flows to MNC shareholders in the US, Germany, and Taiwan via dividends, royalties, and management fees that no trade headline reports.
+    </div>
+    <div class="s6-footer">
+      <div class="s6-footer-item">
+        <div class="s6-footer-val">DOSM</div>
+        <div class="s6-footer-label">Source</div>
+      </div>
+      <div class="s6-footer-item">
+        <div class="s6-footer-val">BNM BoP</div>
+        <div class="s6-footer-label">Source</div>
+      </div>
+      <div class="s6-footer-item">
+        <div class="s6-footer-val">World Bank</div>
+        <div class="s6-footer-label">Source</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════
+const SCENES = [
+  { label: 'The Record', duration: 15000 },
+  { label: 'GDP vs GNI', duration: 22000 },
+  { label: 'The Income Drain', duration: 22000 },
+  { label: 'Accelerating Gap', duration: 22000 },
+  { label: 'Sovereignty Test', duration: 22000 },
+  { label: 'The Bottom Line', duration: 17000 },
+];
+const TOTAL_DURATION = SCENES.reduce((a, b) => a + b.duration, 0);
+
+const GDP_GNI = [
+  { year: '2020', gdp: 1418.5, gni: 1390.0 },
+  { year: '2021', gdp: 1548.9, gni: 1506.5 },
+  { year: '2022', gdp: 1791.4, gni: 1737.0 },
+  { year: '2023', gdp: 1850.1, gni: 1770.0 },
+  { year: '2024', gdp: 1930.0, gni: 1869.6 },
+];
+
+// ═══════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════
+let currentScene = 0;
+let globalTimer = null;
+let sceneTimer = null;
+let elapsed = 0;
+let sceneElapsed = 0;
+let barsAnimated = false;
+let areaAnimated = false;
+let workersAnimated = false;
+let running = false;
+
+// ═══════════════════════════════════════════════════
+// INIT DOTS
+// ═══════════════════════════════════════════════════
+function initDots() {
+  const container = document.getElementById('sceneDots');
+  container.innerHTML = '';
+  SCENES.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.onclick = (e) => { e.stopPropagation(); goToScene(i); };
+    container.appendChild(dot);
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// INIT BAR CHART
+// ═══════════════════════════════════════════════════
+function initBarChart() {
+  const container = document.getElementById('barChart');
+  container.innerHTML = '';
+  const maxVal = 2000;
+
+  GDP_GNI.forEach((d, i) => {
+    const gdpPct = (d.gdp / maxVal * 100).toFixed(1);
+    const gniPct = (d.gni / maxVal * 100).toFixed(1);
+    const gapB = (d.gdp - d.gni).toFixed(1);
+
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+    row.innerHTML = `
+      <div class="bar-year">${d.year}</div>
+      <div class="bar-pair" style="position:relative">
+        <div class="bar-track">
+          <div class="bar-fill gdp" data-target="${gdpPct}" id="gdp-${i}">
+            <span class="bar-val">RM${d.gdp}B</span>
+          </div>
+        </div>
+        <div class="bar-track">
+          <div class="bar-fill gni" data-target="${gniPct}" id="gni-${i}">
+            <span class="bar-val">RM${d.gni}B</span>
+          </div>
+        </div>
+        <div class="gap-badge" id="gap-${i}" style="opacity:0">Gap: RM${gapB}B</div>
+      </div>
+    `;
+    container.appendChild(row);
+  });
+}
+
+function animateBars() {
+  if (barsAnimated) return;
+  barsAnimated = true;
+  const maxVal = 2000;
+  GDP_GNI.forEach((d, i) => {
+    setTimeout(() => {
+      const gdpBar = document.getElementById(`gdp-${i}`);
+      const gniBar = document.getElementById(`gni-${i}`);
+      const gapBadge = document.getElementById(`gap-${i}`);
+      if (gdpBar) gdpBar.style.width = gdpBar.dataset.target + '%';
+      if (gniBar) gniBar.style.width = gniBar.dataset.target + '%';
+      if (gapBadge) {
+        setTimeout(() => { gapBadge.style.opacity = 1; }, 600);
+      }
+    }, i * 180);
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// AREA CHART
+// ═══════════════════════════════════════════════════
+function drawAreaChart() {
+  if (areaAnimated) return;
+  areaAnimated = true;
+
+  const svg = document.getElementById('areaSvg');
+  svg.innerHTML = '';
+  const W = 600, H = 200;
+  const PAD = { t: 30, r: 30, b: 40, l: 56 };
+  const chartW = W - PAD.l - PAD.r;
+  const chartH = H - PAD.t - PAD.b;
+
+  const gaps = GDP_GNI.map(d => d.gdp - d.gni);
+  const maxGap = 90;
+  const years = GDP_GNI.map(d => d.year);
+
+  // x/y helpers
+  const xScale = (i) => PAD.l + (i / (gaps.length - 1)) * chartW;
+  const yScale = (v) => PAD.t + chartH - (v / maxGap) * chartH;
+
+  // Grid lines
+  [0, 30, 60, 90].forEach(v => {
+    const y = yScale(v);
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', PAD.l); line.setAttribute('x2', W - PAD.r);
+    line.setAttribute('y1', y); line.setAttribute('y2', y);
+    line.setAttribute('stroke', 'rgba(255,255,255,0.05)');
+    line.setAttribute('stroke-width', '1');
+    svg.appendChild(line);
+
+    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    label.setAttribute('x', PAD.l - 8);
+    label.setAttribute('y', y + 4);
+    label.setAttribute('text-anchor', 'end');
+    label.setAttribute('fill', '#6B7A8D');
+    label.setAttribute('font-size', '10');
+    label.setAttribute('font-family', 'DM Mono, monospace');
+    label.textContent = v === 0 ? '' : `${v}B`;
+    svg.appendChild(label);
+  });
+
+  // X labels
+  years.forEach((yr, i) => {
+    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    label.setAttribute('x', xScale(i));
+    label.setAttribute('y', H - PAD.b + 18);
+    label.setAttribute('text-anchor', 'middle');
+    label.setAttribute('fill', '#6B7A8D');
+    label.setAttribute('font-size', '11');
+    label.setAttribute('font-family', 'DM Mono, monospace');
+    label.textContent = yr;
+    svg.appendChild(label);
+  });
+
+  // Build path strings
+  const linePoints = gaps.map((g, i) => `${xScale(i)},${yScale(g)}`).join(' L ');
+  const areaPoints = `M ${xScale(0)},${yScale(0)} L ${linePoints.split(' L ').map((p, i) => i === 0 ? p : p).join(' L ')} L ${xScale(gaps.length - 1)},${yScale(0)} Z`;
+
+  // Area fill with gradient
+  const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+  const grad = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+  grad.setAttribute('id', 'areaGrad');
+  grad.setAttribute('x1', '0'); grad.setAttribute('y1', '0');
+  grad.setAttribute('x2', '0'); grad.setAttribute('y2', '1');
+  const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+  stop1.setAttribute('offset', '0%');
+  stop1.setAttribute('stop-color', 'rgba(232,69,69,0.3)');
+  const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+  stop2.setAttribute('offset', '100%');
+  stop2.setAttribute('stop-color', 'rgba(232,69,69,0.02)');
+  grad.appendChild(stop1); grad.appendChild(stop2);
+  defs.appendChild(grad);
+  svg.appendChild(defs);
+
+  // Animated area
+  const areaPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  areaPath.setAttribute('d', `M ${xScale(0)},${yScale(0)} L ${xScale(0)},${yScale(gaps[0])} L ${xScale(0)},${yScale(0)} Z`);
+  areaPath.setAttribute('fill', 'url(#areaGrad)');
+  svg.appendChild(areaPath);
+
+  // Animated line
+  const linePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  const lineD = `M ${gaps.map((g, i) => `${xScale(i)},${yScale(g)}`).join(' L ')}`;
+  linePath.setAttribute('d', lineD);
+  linePath.setAttribute('fill', 'none');
+  linePath.setAttribute('stroke', 'var(--red)');
+  linePath.setAttribute('stroke-width', '2.5');
+  linePath.setAttribute('stroke-linecap', 'round');
+  const length = linePath.getTotalLength ? (linePath.getTotalLength() || 500) : 500;
+  linePath.setAttribute('stroke-dasharray', length);
+  linePath.setAttribute('stroke-dashoffset', length);
+  linePath.style.transition = 'stroke-dashoffset 1.6s cubic-bezier(0.4,0,0.2,1) 0.3s';
+  svg.appendChild(linePath);
+
+  // Dots
+  gaps.forEach((g, i) => {
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', xScale(i));
+    circle.setAttribute('cy', yScale(g));
+    circle.setAttribute('r', '5');
+    circle.setAttribute('fill', 'var(--red)');
+    circle.setAttribute('stroke', 'var(--bg)');
+    circle.setAttribute('stroke-width', '2');
+    circle.style.opacity = '0';
+    circle.style.transition = `opacity 0.3s ease ${0.3 + i * 0.25}s`;
+
+    // Value label
+    const valLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    valLabel.setAttribute('x', xScale(i));
+    valLabel.setAttribute('y', yScale(g) - 12);
+    valLabel.setAttribute('text-anchor', 'middle');
+    valLabel.setAttribute('fill', '#E84545');
+    valLabel.setAttribute('font-size', '11');
+    valLabel.setAttribute('font-family', 'DM Mono, monospace');
+    valLabel.setAttribute('font-weight', '500');
+    valLabel.style.opacity = '0';
+    valLabel.style.transition = `opacity 0.3s ease ${0.4 + i * 0.25}s`;
+    valLabel.textContent = `RM${g.toFixed(1)}B`;
+    svg.appendChild(valLabel);
+    svg.appendChild(circle);
+
+    setTimeout(() => {
+      circle.style.opacity = '1';
+      valLabel.style.opacity = '1';
+    }, (0.3 + i * 0.25) * 1000);
+  });
+
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      linePath.setAttribute('stroke-dashoffset', '0');
+      // Build full area
+      const fullArea = `M ${xScale(0)},${yScale(0)} L ${gaps.map((g, i) => `${xScale(i)},${yScale(g)}`).join(' L ')} L ${xScale(gaps.length - 1)},${yScale(0)} Z`;
+      areaPath.style.transition = 'd 1.6s ease';
+      areaPath.setAttribute('d', fullArea);
+    }, 50);
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// WORKER GRID
+// ═══════════════════════════════════════════════════
+function buildWorkerGrid() {
+  const container = document.getElementById('workerGrid');
+  container.innerHTML = '';
+  const count = 147; // ~2.94M / 20k
+  for (let i = 0; i < count; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'worker-icon';
+    container.appendChild(dot);
+  }
+}
+
+function animateWorkers() {
+  if (workersAnimated) return;
+  workersAnimated = true;
+  const dots = document.querySelectorAll('.worker-icon');
+  dots.forEach((dot, i) => {
+    setTimeout(() => {
+      dot.classList.add('popping');
+      dot.style.opacity = '1';
+      setTimeout(() => {
+        dot.classList.add('lit');
+      }, i * 6 + 300);
+    }, i * 12);
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// SCENE MANAGEMENT
+// ═══════════════════════════════════════════════════
+function goToScene(n) {
+  // Hide current
+  document.getElementById(`scene-${currentScene}`).classList.remove('active');
+  // Update dots
+  document.querySelectorAll('.dot')[currentScene]?.classList.remove('active');
+  document.querySelectorAll('.dot')[n]?.classList.add('active');
+
+  currentScene = n;
+
+  // Show new
+  const el = document.getElementById(`scene-${currentScene}`);
+  el.classList.add('active');
+
+  // Label
+  const lbl = document.getElementById('slideLabel');
+  lbl.textContent = SCENES[currentScene].label;
+  lbl.classList.add('show');
+
+  // Trigger scene-specific animations
+  if (currentScene === 1 && !barsAnimated) {
+    setTimeout(animateBars, 400);
+  }
+  if (currentScene === 3 && !areaAnimated) {
+    setTimeout(drawAreaChart, 400);
+  }
+  if (currentScene === 4 && !workersAnimated) {
+    setTimeout(animateWorkers, 500);
+  }
+  if (currentScene === 5) {
+    document.getElementById('replayBtn').classList.add('show');
+    document.getElementById('clickHint').style.opacity = '0';
+  }
+
+  // Reset scene elapsed for timer logic
+  sceneElapsed = 0;
+}
+
+function nextScene() {
+  if (currentScene < SCENES.length - 1) {
+    goToScene(currentScene + 1);
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// TIMER
+// ═══════════════════════════════════════════════════
+function formatTime(ms) {
+  const s = Math.floor(ms / 1000);
+  const m = Math.floor(s / 60);
+  return `${String(m).padStart(2,'0')}:${String(s % 60).padStart(2,'0')}`;
+}
+
+function startTimer() {
+  if (running) return;
+  running = true;
+  const startTime = Date.now() - elapsed;
+  const sceneStartTimes = SCENES.reduce((acc, s, i) => {
+    acc[i] = i === 0 ? 0 : acc[i-1] + SCENES[i-1].duration;
+    return acc;
+  }, {});
+
+  globalTimer = setInterval(() => {
+    elapsed = Date.now() - startTime;
+
+    // Progress
+    const pct = Math.min((elapsed / TOTAL_DURATION) * 100, 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('sceneTimer').textContent = formatTime(elapsed);
+
+    // Auto-advance
+    const expectedScene = SCENES.findIndex((_, i) => {
+      const end = sceneStartTimes[i] + SCENES[i].duration;
+      return elapsed < end;
+    });
+    if (expectedScene !== -1 && expectedScene !== currentScene) {
+      goToScene(expectedScene);
+    }
+
+    if (elapsed >= TOTAL_DURATION) {
+      clearInterval(globalTimer);
+      running = false;
+    }
+  }, 100);
+}
+
+// ═══════════════════════════════════════════════════
+// RESET
+// ═══════════════════════════════════════════════════
+function resetPresentation() {
+  clearInterval(globalTimer);
+  running = false;
+  elapsed = 0;
+  sceneElapsed = 0;
+  barsAnimated = false;
+  areaAnimated = false;
+  workersAnimated = false;
+
+  // Reset all scenes
+  document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.dot').forEach((d, i) => {
+    d.classList.remove('active');
+    if (i === 0) d.classList.add('active');
+  });
+
+  document.getElementById('progressFill').style.width = '0%';
+  document.getElementById('sceneTimer').textContent = '00:00';
+  document.getElementById('replayBtn').classList.remove('show');
+  document.getElementById('clickHint').style.opacity = '0.5';
+
+  currentScene = 0;
+  initBarChart();
+  buildWorkerGrid();
+
+  const first = document.getElementById('scene-0');
+  first.classList.add('active');
+  document.getElementById('slideLabel').textContent = SCENES[0].label;
+
+  setTimeout(startTimer, 400);
+}
+
+// ═══════════════════════════════════════════════════
+// CLICK TO ADVANCE
+// ═══════════════════════════════════════════════════
+document.body.addEventListener('click', (e) => {
+  if (e.target.closest('.replay-btn') || e.target.closest('.scene-dots')) return;
+  nextScene();
+});
+
+// ═══════════════════════════════════════════════════
+// KEYBOARD
+// ═══════════════════════════════════════════════════
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') nextScene();
+  if (e.key === 'ArrowLeft' && currentScene > 0) goToScene(currentScene - 1);
+  if (e.key === 'r') resetPresentation();
+});
+
+// ═══════════════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════════════
+initDots();
+initBarChart();
+buildWorkerGrid();
+document.getElementById('scene-0').classList.add('active');
+document.getElementById('slideLabel').classList.add('show');
+document.getElementById('slideLabel').textContent = SCENES[0].label;
+
+setTimeout(startTimer, 800);
+</script>
+</body>
+</html>

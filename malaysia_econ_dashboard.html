@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InsightInvest · Malaysia Economic Monitor</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0f14;
+  --bg2: #13161d;
+  --bg3: #191d26;
+  --bg4: #1f2430;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --gold: #c9a84c;
+  --gold2: #f0d080;
+  --cyan: #4ecdc4;
+  --cyan2: #7ef7ee;
+  --red: #e05555;
+  --green: #52b788;
+  --amber: #f4a261;
+  --muted: #6b7280;
+  --text: #e8eaf0;
+  --text2: #9ba3af;
+  --text3: #5c6370;
+  --font-serif: 'DM Serif Display', Georgia, serif;
+  --font-sans: 'Sora', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+/* LAYOUT */
+.shell { display: flex; min-height: 100vh; }
+.sidebar {
+  width: 220px;
+  min-width: 220px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 100;
+}
+.main { flex: 1; overflow-x: hidden; }
+
+/* SIDEBAR */
+.sidebar-logo {
+  padding: 24px 20px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-logo .brand {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  color: var(--gold2);
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+.sidebar-logo .sub {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-top: 3px;
+}
+.sidebar-section {
+  padding: 16px 20px 8px;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text3);
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 20px;
+  cursor: pointer;
+  transition: all 0.15s;
+  border-left: 2px solid transparent;
+  font-size: 13px;
+  color: var(--text2);
+  text-decoration: none;
+}
+.nav-item:hover { background: var(--bg3); color: var(--text); }
+.nav-item.active { background: var(--bg3); color: var(--gold); border-left-color: var(--gold); }
+.nav-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--text3);
+  flex-shrink: 0;
+}
+.nav-item.active .nav-dot { background: var(--gold); }
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text3);
+}
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(82,183,136,0.12);
+  color: var(--green);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 20px;
+  border: 1px solid rgba(82,183,136,0.2);
+  margin-bottom: 8px;
+}
+.live-dot {
+  width: 5px; height: 5px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* HEADER */
+.page-header {
+  padding: 32px 40px 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.page-title {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  color: var(--text);
+  letter-spacing: 0.01em;
+}
+.page-title span { color: var(--gold); }
+.page-subtitle {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+  letter-spacing: 0.04em;
+}
+.header-tabs {
+  display: flex;
+  gap: 0;
+  margin-top: 20px;
+}
+.tab {
+  padding: 10px 20px;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: var(--text3);
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.tab:hover { color: var(--text2); }
+.tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+/* CONTENT */
+.content { padding: 32px 40px 80px; }
+.section { display: none; }
+.section.active { display: block; }
+.section-title {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.section-desc {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 24px;
+}
+
+/* KPI GRID */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 32px;
+}
+.kpi-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  transition: border-color 0.2s;
+  cursor: pointer;
+}
+.kpi-card:hover { border-color: var(--border2); }
+.kpi-label {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 8px;
+}
+.kpi-value {
+  font-family: var(--font-mono);
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.kpi-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+.kpi-change {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 7px;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 11px;
+}
+.kpi-change.up { background: rgba(82,183,136,0.12); color: var(--green); }
+.kpi-change.down { background: rgba(224,85,85,0.12); color: var(--red); }
+.kpi-change.neutral { background: rgba(255,255,255,0.06); color: var(--text3); }
+.kpi-period { color: var(--text3); font-size: 11px; }
+.kpi-source {
+  font-size: 9px;
+  color: var(--text3);
+  margin-top: 6px;
+  opacity: 0.7;
+}
+.kpi-card.highlight { border-color: rgba(201,168,76,0.3); background: rgba(201,168,76,0.04); }
+.kpi-card.highlight .kpi-value { color: var(--gold2); }
+
+/* CHART CONTAINERS */
+.chart-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.chart-row.full { grid-template-columns: 1fr; }
+.chart-row.three { grid-template-columns: 1fr 1fr 1fr; }
+.chart-box {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+}
+.chart-box-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text2);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.chart-box-sub {
+  font-size: 11px;
+  color: var(--text3);
+  margin-bottom: 16px;
+}
+.chart-wrap { position: relative; width: 100%; }
+
+/* TABLES */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.data-table th {
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text3);
+  border-bottom: 1px solid var(--border);
+  font-weight: 400;
+}
+.data-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  color: var(--text2);
+  vertical-align: middle;
+}
+.data-table tr:hover td { background: rgba(255,255,255,0.02); }
+.rank { font-family: var(--font-mono); color: var(--text3); }
+.val-pos { color: var(--green); font-family: var(--font-mono); }
+.val-neg { color: var(--red); font-family: var(--font-mono); }
+.val-neu { color: var(--text2); font-family: var(--font-mono); }
+.bar-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.bar-track {
+  flex: 1;
+  height: 4px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.bar-fill { height: 100%; border-radius: 2px; transition: width 1s ease; }
+
+/* BADGES & TAGS */
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+}
+.tag.green { background: rgba(82,183,136,0.12); color: var(--green); }
+.tag.red { background: rgba(224,85,85,0.12); color: var(--red); }
+.tag.amber { background: rgba(244,162,97,0.12); color: var(--amber); }
+.tag.gold { background: rgba(201,168,76,0.12); color: var(--gold2); }
+.tag.cyan { background: rgba(78,205,196,0.12); color: var(--cyan); }
+.tag.gray { background: rgba(255,255,255,0.06); color: var(--text3); }
+
+/* ALERT CARDS */
+.alert-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+.alert-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.alert-card.warn { border-left: 3px solid var(--amber); }
+.alert-card.danger { border-left: 3px solid var(--red); }
+.alert-card.ok { border-left: 3px solid var(--green); }
+.alert-card.info { border-left: 3px solid var(--cyan); }
+.alert-icon { font-size: 16px; margin-top: 1px; flex-shrink: 0; }
+.alert-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.alert-body { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+/* INFO GRID */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.info-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+}
+.info-card-title {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 12px;
+}
+.info-row:last-child { border-bottom: none; }
+.info-key { color: var(--text3); }
+.info-val { color: var(--text); font-family: var(--font-mono); font-size: 12px; }
+
+/* HEATMAP */
+.heatmap-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 3px;
+  margin-top: 8px;
+}
+.hm-cell {
+  aspect-ratio: 1;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+.hm-cell:hover { transform: scale(1.2); }
+
+/* CORRELATION TABLE */
+.corr-grid { overflow-x: auto; }
+.corr-table { border-collapse: collapse; font-size: 11px; }
+.corr-table th, .corr-table td {
+  padding: 8px 10px;
+  text-align: center;
+  white-space: nowrap;
+  border: 1px solid var(--border);
+}
+.corr-table th { color: var(--text3); font-weight: 400; font-size: 10px; background: var(--bg3); }
+.corr-table td { font-family: var(--font-mono); font-size: 11px; }
+
+/* DATA ARCHITECTURE */
+.arch-section { margin-bottom: 32px; }
+.arch-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.indicator-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 10px;
+}
+.indicator-row {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.ind-name { font-size: 13px; color: var(--text); font-weight: 400; }
+.ind-meta {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+.ind-source {
+  font-size: 10px;
+  color: var(--cyan);
+  background: rgba(78,205,196,0.08);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+.ind-freq {
+  font-size: 10px;
+  color: var(--amber);
+  background: rgba(244,162,97,0.08);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+.ind-desc { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+/* TECH STACK */
+.stack-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.stack-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+}
+.stack-layer { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text3); margin-bottom: 6px; }
+.stack-tech { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+.stack-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+.stack-badge { margin-top: 8px; }
+
+/* DIVIDER */
+.divider { height: 1px; background: var(--border); margin: 28px 0; }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .chart-row { grid-template-columns: 1fr; }
+  .chart-row.three { grid-template-columns: 1fr; }
+  .info-grid { grid-template-columns: 1fr; }
+  .content { padding: 24px 20px 60px; }
+  .page-header { padding: 20px 20px 0; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+  .kpi-value { font-size: 20px; }
+}
+
+/* SPARKLINES */
+.sparkline { display: inline-block; vertical-align: middle; }
+
+/* SCROLL FADE IN */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeUp 0.4s ease forwards; }
+
+/* TOOLTIP */
+.tooltip-note {
+  background: var(--bg4);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.6;
+  margin-top: 16px;
+}
+.tooltip-note strong { color: var(--text); }
+
+/* FLAG */
+.flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text3);
+}
+
+/* UPDATE TIME */
+.update-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.last-update { font-size: 11px; color: var(--text3); }
+.refresh-btn {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 11px;
+  color: var(--text2);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: all 0.15s;
+}
+.refresh-btn:hover { background: var(--bg4); color: var(--text); }
+
+/* PROGRESS BARS */
+.progress-item { margin-bottom: 12px; }
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text2);
+  margin-bottom: 5px;
+}
+.progress-track {
+  height: 5px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1.2s ease;
+}
+
+/* SECTOR RADAR PLACEHOLDER */
+.sector-list { display: flex; flex-direction: column; gap: 8px; }
+
+/* SCORE CARD */
+.score-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+}
+.score-num {
+  font-family: var(--font-mono);
+  font-size: 48px;
+  font-weight: 500;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.score-label { font-size: 12px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand">InsightInvest</div>
+    <div class="sub">Malaysia Economic Monitor</div>
+  </div>
+  <div class="sidebar-section">Overview</div>
+  <a class="nav-item active" onclick="switchTab('macro')"><span class="nav-dot"></span>Macro Dashboard</a>
+  <a class="nav-item" onclick="switchTab('micro')"><span class="nav-dot"></span>Micro Indicators</a>
+  <a class="nav-item" onclick="switchTab('sectors')"><span class="nav-dot"></span>Sector Analysis</a>
+  <div class="sidebar-section">Deep Dive</div>
+  <a class="nav-item" onclick="switchTab('fx')"><span class="nav-dot"></span>FX &amp; Trade</a>
+  <a class="nav-item" onclick="switchTab('markets')"><span class="nav-dot"></span>Capital Markets</a>
+  <a class="nav-item" onclick="switchTab('analysis')"><span class="nav-dot"></span>Correlation &amp; Analysis</a>
+  <div class="sidebar-section">System</div>
+  <a class="nav-item" onclick="switchTab('architecture')"><span class="nav-dot"></span>Data Architecture</a>
+  <a class="nav-item" onclick="switchTab('techstack')"><span class="nav-dot"></span>Tech Stack</a>
+  <div class="sidebar-footer">
+    <div class="live-badge"><span class="live-dot"></span> Live</div>
+    <div>BNM · DOSM · Bursa · BIS</div>
+    <div style="margin-top:4px">Updated: Q1 2025</div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- HEADER -->
+  <div class="page-header">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px">
+      <div>
+        <div class="page-title">Malaysia <span>Economic</span> Monitor</div>
+        <div class="page-subtitle">Unified macro &amp; micro intelligence platform · BNM · DOSM · Bursa Malaysia · World Bank</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding-top:4px">
+        <span class="tag green">GDP +5.1%</span>
+        <span class="tag amber">CPI +1.8%</span>
+        <span class="tag cyan">KLCI 1,622</span>
+      </div>
+    </div>
+    <div class="header-tabs">
+      <div class="tab active" onclick="switchTab('macro')">Macro</div>
+      <div class="tab" onclick="switchTab('micro')">Micro</div>
+      <div class="tab" onclick="switchTab('sectors')">Sectors</div>
+      <div class="tab" onclick="switchTab('fx')">FX &amp; Trade</div>
+      <div class="tab" onclick="switchTab('markets')">Markets</div>
+      <div class="tab" onclick="switchTab('analysis')">Analysis</div>
+      <div class="tab" onclick="switchTab('architecture')">Data Sources</div>
+      <div class="tab" onclick="switchTab('techstack')">Tech Stack</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+  <!-- ======================== MACRO DASHBOARD ======================== -->
+  <div id="section-macro" class="section active">
+    <div class="update-row">
+      <div>
+        <div class="section-title">Macroeconomic Dashboard</div>
+        <div class="section-desc">Core national-level indicators · GDP, inflation, monetary policy, fiscal position, external accounts</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <span class="last-update">Last updated: March 2025</span>
+        <button class="refresh-btn" onclick="animateBars()">↻ Refresh</button>
+      </div>
+    </div>
+
+    <!-- ALERTS -->
+    <div class="alert-list">
+      <div class="alert-card ok">
+        <div class="alert-icon">✓</div>
+        <div><div class="alert-title">GDP Growth on Track — 5.1% in 2024</div><div class="alert-body">Malaysia's full-year GDP growth came in at 5.1% for 2024, above consensus of 4.4% and recovering from the 3.6% print in 2023. Domestic demand was the primary driver alongside a rebound in exports.</div></div>
+      </div>
+      <div class="alert-card info">
+        <div class="alert-icon">◈</div>
+        <div><div class="alert-title">BNM Holds OPR at 3.00% — Neutral Stance Maintained</div><div class="alert-body">Bank Negara has held the Overnight Policy Rate steady at 3.00% since May 2023. Policy guidance remains data-dependent amid elevated global uncertainty.</div></div>
+      </div>
+      <div class="alert-card warn">
+        <div class="alert-icon">⚠</div>
+        <div><div class="alert-title">Fuel Subsidy Rationalisation Risk — Fiscal Pressure</div><div class="alert-body">RON95 petrol subsidy reform is active. One-time CPI spike of 0.5–1.2 ppt estimated upon full pass-through. Monitor for second-round wage effects and consumer sentiment impact.</div></div>
+      </div>
+      <div class="alert-card danger">
+        <div class="alert-icon">↓</div>
+        <div><div class="alert-title">MYR Weakness — USD/MYR Above 4.70</div><div class="alert-body">The ringgit has traded near multi-year lows against the USD driven by dollar strength and regional EM outflows. Import costs elevated; export-oriented sectors benefit. BNM intervention risk increases above 4.80.</div></div>
+      </div>
+    </div>
+
+    <!-- KPI CARDS -->
+    <div class="kpi-grid">
+      <div class="kpi-card highlight">
+        <div class="kpi-label">GDP Growth (2024)</div>
+        <div class="kpi-value">5.1%</div>
+        <div class="kpi-meta"><span class="kpi-change up">▲ +1.5 ppt</span><span class="kpi-period">vs 2023</span></div>
+        <div class="kpi-source">DOSM · Quarterly GDP · Annual revision</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Headline CPI (Feb 2025)</div>
+        <div class="kpi-value">1.8%</div>
+        <div class="kpi-meta"><span class="kpi-change down">▼ -0.3 ppt</span><span class="kpi-period">MoM trend</span></div>
+        <div class="kpi-source">DOSM · Consumer Price Index</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">OPR (BNM)</div>
+        <div class="kpi-value">3.00%</div>
+        <div class="kpi-meta"><span class="kpi-change neutral">— Unchanged</span><span class="kpi-period">since May 2023</span></div>
+        <div class="kpi-source">BNM · Monetary Policy Committee</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Unemployment Rate</div>
+        <div class="kpi-value">3.3%</div>
+        <div class="kpi-meta"><span class="kpi-change up">▲ +0.1 ppt</span><span class="kpi-period">MoM</span></div>
+        <div class="kpi-source">DOSM · Labour Force Survey</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">USD/MYR</div>
+        <div class="kpi-value">4.71</div>
+        <div class="kpi-meta"><span class="kpi-change down">▼ -2.4%</span><span class="kpi-period">YTD 2025</span></div>
+        <div class="kpi-source">BNM · Daily FX Reference Rate</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Trade Balance (Jan 2025)</div>
+        <div class="kpi-value">RM +9.8B</div>
+        <div class="kpi-meta"><span class="kpi-change up">▲ Surplus</span><span class="kpi-period">MoM +12%</span></div>
+        <div class="kpi-source">DOSM · External Trade Statistics</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Gov. Debt (% GDP)</div>
+        <div class="kpi-value">64.3%</div>
+        <div class="kpi-meta"><span class="kpi-change down">▼ -0.8 ppt</span><span class="kpi-period">vs 2023</span></div>
+        <div class="kpi-source">MOF · Fiscal Outlook Report</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">FDI Approved (2024)</div>
+        <div class="kpi-value">RM 378B</div>
+        <div class="kpi-meta"><span class="kpi-change up">▲ +23%</span><span class="kpi-period">YoY</span></div>
+        <div class="kpi-source">MIDA · Investment Statistics</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Industrial Production (Jan)</div>
+        <div class="kpi-value">+4.2%</div>
+        <div class="kpi-meta"><span class="kpi-change up">▲ +0.6 ppt</span><span class="kpi-period">MoM</span></div>
+        <div class="kpi-source">DOSM · IPI Monthly</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">KLCI (Bursa)</div>
+        <div class="kpi-value">1,622</div>
+        <div class="kpi-meta"><span class="kpi-change down">▼ -1.3%</span><span class="kpi-period">1-month</span></div>
+        <div class="kpi-source">Bursa Malaysia · Daily Close</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Fiscal Deficit (% GDP)</div>
+        <div class="kpi-value">-3.8%</div>
+        <div class="kpi-meta"><span class="kpi-change up">▲ +0.5 ppt improvement</span></div>
+        <div class="kpi-source">MOF · 2024 Budget Performance</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Current Account (% GDP)</div>
+        <div class="kpi-value">+1.9%</div>
+        <div class="kpi-meta"><span class="kpi-change up">▲ Surplus</span><span class="kpi-period">Q4 2024</span></div>
+        <div class="kpi-source">BNM · Balance of Payments</div>
+      </div>
+    </div>
+
+    <!-- GDP & INFLATION CHARTS -->
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-box-title">GDP Growth Rate</div>
+        <div class="chart-box-sub">Annual % change · 2016–2024 · Source: DOSM</div>
+        <div class="chart-wrap"><canvas id="gdpChart" style="height:220px"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-box-title">CPI Inflation</div>
+        <div class="chart-box-sub">Headline &amp; Core YoY % · Jan 2023–Feb 2025 · Source: DOSM</div>
+        <div class="chart-wrap"><canvas id="cpiChart" style="height:220px"></canvas></div>
+      </div>
+    </div>
+
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-box-title">Interest Rate Policy</div>
+        <div class="chart-box-sub">OPR &amp; 10Y MGS Yield · Source: BNM</div>
+        <div class="chart-wrap"><canvas id="rateChart" style="height:200px"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-box-title">Fiscal Position</div>
+        <div class="chart-box-sub">Government deficit &amp; debt-to-GDP · Source: MOF</div>
+        <div class="chart-wrap"><canvas id="fiscalChart" style="height:200px"></canvas></div>
+      </div>
+    </div>
+
+    <div class="tooltip-note"><strong>Methodology:</strong> All GDP data uses 2015 constant prices from DOSM national accounts. CPI uses 2010=100 base. OPR sourced directly from BNM monetary policy statements. Fiscal data from Ministry of Finance Fiscal Outlook Report. Data refresh: monthly for flow data, quarterly for GDP and balance of payments.</div>
+  </div>
+
+  <!-- ======================== MICRO INDICATORS ======================== -->
+  <div id="section-micro" class="section">
+    <div class="section-title">Microeconomic Indicators</div>
+    <div class="section-desc">Consumer spending · Business confidence · Labour market dynamics · SME health · Wage trends</div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Retail Sales (Jan 2025)</div>
+        <div class="kpi-value">+5.6%</div>
+        <div class="kpi-meta"><span class="kpi-change up">▲ YoY</span><span class="kpi-period">nominal</span></div>
+        <div class="kpi-source">DOSM · Retail Trade Statistics</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Business Confidence</div>
+        <div class="kpi-value">105.2</div>
+        <div class="kpi-meta"><span class="kpi-change neutral">— Above 100</span><span class="kpi-period">Q4 2024</span></div>
+        <div class="kpi-source">MIER · Business Conditions Survey</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Consumer Sentiment</div>
+        <div class="kpi-value">91.4</div>
+        <div class="kpi-meta"><span class="kpi-change down">▼ -3.1 pts</span><span class="kpi-period">vs Q3 2024</span></div>
+        <div class="kpi-source">MIER · Consumer Sentiment Index</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Average Monthly Wage</div>
+        <div class="kpi-value">RM 3,441</div>
+        <div class="kpi-meta"><span class="kpi-change up">▲ +4.8%</span><span class="kpi-period">YoY nominal</span></div>
+        <div class="kpi-source">DOSM · Salaries &amp; Wages Survey</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Labour Force Participation</div>
+        <div class="kpi-value">70.8%</div>
+        <div class="kpi-meta"><span class="kpi-change up">▲ +0.4 ppt</span><span class="kpi-period">YoY</span></div>
+        <div class="kpi-source">DOSM · Labour Force Survey</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">SME Credit Growth</div>
+        <div class="kpi-value">+6.1%</div>
+        <div class="kpi-meta"><span class="kpi-change up">▲ YoY</span><span class="kpi-period">Dec 2024</span></div>
+        <div class="kpi-source">BNM · Financial Stability Review</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Construction Activity</div>
+        <div class="kpi-value">+8.9%</div>
+        <div class="kpi-meta"><span class="kpi-change up">▲ QoQ</span><span class="kpi-period">Q4 2024</span></div>
+        <div class="kpi-source">DOSM · Construction Statistics</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Real Wage Growth</div>
+        <div class="kpi-value">+3.0%</div>
+        <div class="kpi-meta"><span class="kpi-change up">▲ Positive</span><span class="kpi-period">above CPI</span></div>
+        <div class="kpi-source">DOSM · Derived (Nominal − CPI)</div>
+      </div>
+    </div>
+
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-box-title">Consumer &amp; Business Sentiment</div>
+        <div class="chart-box-sub">MIER indices · Quarterly 2022–2024 · 100 = neutral threshold</div>
+        <div class="chart-wrap"><canvas id="sentimentChart" style="height:220px"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-box-title">Labour Market Dynamics</div>
+        <div class="chart-box-sub">Unemployment rate &amp; LFPR · Monthly · Source: DOSM</div>
+        <div class="chart-wrap"><canvas id="labourChart" style="height:220px"></canvas></div>
+      </div>
+    </div>
+
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-box-title">Wage Growth vs Inflation</div>
+        <div class="chart-box-sub">Nominal wages YoY vs CPI YoY · Real purchasing power</div>
+        <div class="chart-wrap"><canvas id="wageChart" style="height:200px"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-box-title">Retail Sales &amp; E-Commerce</div>
+        <div class="chart-box-sub">Monthly YoY change · Traditional vs digital channels</div>
+        <div class="chart-wrap"><canvas id="retailChart" style="height:200px"></canvas></div>
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-card-title">Labour Market Snapshot</div>
+        <div class="info-row"><span class="info-key">Labour force (millions)</span><span class="info-val">17.2M</span></div>
+        <div class="info-row"><span class="info-key">Employed persons</span><span class="info-val">16.6M</span></div>
+        <div class="info-row"><span class="info-key">Unemployed (thousands)</span><span class="info-val">568K</span></div>
+        <div class="info-row"><span class="info-key">Youth unemployment (15–24)</span><span class="info-val">11.4%</span></div>
+        <div class="info-row"><span class="info-key">Underemployment rate</span><span class="info-val">3.1%</span></div>
+        <div class="info-row"><span class="info-key">Gig economy share (est.)</span><span class="info-val">~14%</span></div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">SME Ecosystem Health</div>
+        <div class="info-row"><span class="info-key">SME share of GDP</span><span class="info-val">38.4%</span></div>
+        <div class="info-row"><span class="info-key">SME employment share</span><span class="info-val">48.2%</span></div>
+        <div class="info-row"><span class="info-key">SME credit outstanding</span><span class="info-val">RM 561B</span></div>
+        <div class="info-row"><span class="info-key">NPL ratio (SME)</span><span class="info-val">3.8%</span></div>
+        <div class="info-row"><span class="info-key">New business registrations</span><span class="info-val">+8.2% YoY</span></div>
+        <div class="info-row"><span class="info-key">Business closures</span><span class="info-val">-3.1% YoY</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== SECTORS ======================== -->
+  <div id="section-sectors" class="section">
+    <div class="section-title">Sector Performance Analysis</div>
+    <div class="section-desc">GDP contribution, growth ranking, and YoY change across all major economic sectors</div>
+
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-box-title">Sector GDP Growth (2024)</div>
+        <div class="chart-box-sub">YoY % change by sector · Source: DOSM</div>
+        <div class="chart-wrap"><canvas id="sectorChart" style="height:320px"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-box-title">GDP Composition (2024)</div>
+        <div class="chart-box-sub">Share of nominal GDP by sector</div>
+        <div class="chart-wrap"><canvas id="gdpPieChart" style="height:320px"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Sector Table -->
+    <div class="chart-box" style="margin-bottom:20px">
+      <div class="chart-box-title">Sector Scorecard</div>
+      <div class="chart-box-sub">Growth, contribution, and trend signals · Q4 2024</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Sector</th>
+            <th>Growth (YoY)</th>
+            <th>GDP Share</th>
+            <th>Trend</th>
+            <th>Signal</th>
+            <th>Bar</th>
+          </tr>
+        </thead>
+        <tbody id="sectorTable">
+        </tbody>
+      </table>
+    </div>
+
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-box-title">Digital Economy &amp; Tech Sector</div>
+        <div class="chart-box-sub">Semiconductor exports, tech FDI, and digital GDP share · 2020–2024</div>
+        <div class="chart-wrap"><canvas id="techChart" style="height:200px"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-box-title">Commodities: Oil, Palm Oil, Rubber</div>
+        <div class="chart-box-sub">Index (2020=100) · Price trend comparison</div>
+        <div class="chart-wrap"><canvas id="commodChart" style="height:200px"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== FX & TRADE ======================== -->
+  <div id="section-fx" class="section">
+    <div class="section-title">Foreign Exchange &amp; Trade</div>
+    <div class="section-desc">Ringgit dynamics, trade balance, export composition, and reserve adequacy</div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card highlight">
+        <div class="kpi-label">USD/MYR</div>
+        <div class="kpi-value">4.71</div>
+        <div class="kpi-meta"><span class="kpi-change down">▼ Ringgit weak</span></div>
+        <div class="kpi-source">BNM Daily Reference Rate</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">EUR/MYR</div>
+        <div class="kpi-value">5.11</div>
+        <div class="kpi-meta"><span class="kpi-change down">▼ -1.8% YTD</span></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">CNY/MYR</div>
+        <div class="kpi-value">0.648</div>
+        <div class="kpi-meta"><span class="kpi-change neutral">— Stable</span></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">International Reserves</div>
+        <div class="kpi-value">USD 116B</div>
+        <div class="kpi-meta"><span class="kpi-change up">▲ 5.3 months imports</span></div>
+        <div class="kpi-source">BNM Weekly Reserve</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Exports (Jan 2025)</div>
+        <div class="kpi-value">RM 121B</div>
+        <div class="kpi-meta"><span class="kpi-change up">▲ +8.2% YoY</span></div>
+        <div class="kpi-source">DOSM Trade Statistics</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Imports (Jan 2025)</div>
+        <div class="kpi-value">RM 111B</div>
+        <div class="kpi-meta"><span class="kpi-change up">▲ +6.4% YoY</span></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Trade Balance</div>
+        <div class="kpi-value">RM +10B</div>
+        <div class="kpi-meta"><span class="kpi-change up">▲ Surplus</span></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Current Account Balance</div>
+        <div class="kpi-value">+1.9% GDP</div>
+        <div class="kpi-meta"><span class="kpi-change up">▲ Surplus</span></div>
+        <div class="kpi-source">BNM Balance of Payments</div>
+      </div>
+    </div>
+
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-box-title">USD/MYR Exchange Rate</div>
+        <div class="chart-box-sub">Daily close · 2022–2025 · BNM reference</div>
+        <div class="chart-wrap"><canvas id="fxChart" style="height:220px"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-box-title">Trade Balance</div>
+        <div class="chart-box-sub">Exports vs Imports · Monthly RM billions · DOSM</div>
+        <div class="chart-wrap"><canvas id="tradeChart" style="height:220px"></canvas></div>
+      </div>
+    </div>
+
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-box-title">Export Composition (2024)</div>
+        <div class="chart-box-sub">By product category · Share of total exports</div>
+        <div class="chart-wrap"><canvas id="exportPieChart" style="height:240px"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-box-title">Top Trading Partners</div>
+        <div class="chart-box-sub">2-way trade value RM billions · 2024</div>
+        <div class="chart-wrap"><canvas id="tradingPartnerChart" style="height:240px"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== CAPITAL MARKETS ======================== -->
+  <div id="section-markets" class="section">
+    <div class="section-title">Capital Markets</div>
+    <div class="section-desc">KLCI performance, fixed income, equity flows, and market structure</div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card highlight">
+        <div class="kpi-label">KLCI Index</div>
+        <div class="kpi-value">1,622</div>
+        <div class="kpi-meta"><span class="kpi-change down">▼ -1.3% 1M</span></div>
+        <div class="kpi-source">Bursa Malaysia</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">KLCI P/E Ratio</div>
+        <div class="kpi-value">15.2x</div>
+        <div class="kpi-meta"><span class="kpi-change neutral">— 5Y avg: 16.1x</span></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">KLCI Dividend Yield</div>
+        <div class="kpi-value">3.8%</div>
+        <div class="kpi-meta"><span class="kpi-change up">▲ Above bonds</span></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">10Y MGS Yield</div>
+        <div class="kpi-value">3.89%</div>
+        <div class="kpi-meta"><span class="kpi-change up">▲ +12 bps MoM</span></div>
+        <div class="kpi-source">BNM Bond Market</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Foreign Equity Flows (YTD)</div>
+        <div class="kpi-value">-RM 1.2B</div>
+        <div class="kpi-meta"><span class="kpi-change down">▼ Net outflow</span></div>
+        <div class="kpi-source">Bursa Weekly Report</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Market Cap (Bursa)</div>
+        <div class="kpi-value">RM 1.96T</div>
+        <div class="kpi-meta"><span class="kpi-change down">▼ -2.1% YTD</span></div>
+      </div>
+    </div>
+
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-box-title">KLCI Index</div>
+        <div class="chart-box-sub">Monthly close · 2020–2025 · Bursa Malaysia</div>
+        <div class="chart-wrap"><canvas id="klciChart" style="height:220px"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-box-title">Yield Curve</div>
+        <div class="chart-box-sub">Malaysian Government Securities · Current vs 1Y ago</div>
+        <div class="chart-wrap"><canvas id="yieldChart" style="height:220px"></canvas></div>
+      </div>
+    </div>
+
+    <div class="chart-row full">
+      <div class="chart-box">
+        <div class="chart-box-title">Foreign vs Domestic Equity Flows</div>
+        <div class="chart-box-sub">Monthly net flows RM millions · 2024–2025 · Bursa</div>
+        <div class="chart-wrap"><canvas id="flowChart" style="height:200px"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== ANALYSIS ======================== -->
+  <div id="section-analysis" class="section">
+    <div class="section-title">Correlation &amp; Analysis Layer</div>
+    <div class="section-desc">Cross-indicator relationships, trend signals, and automated economic intelligence</div>
+
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-box-title">Indicator Correlation Matrix</div>
+        <div class="chart-box-sub">Pairwise Pearson correlations (5-year data) · Blue = positive, Red = negative</div>
+        <div id="corrMatrix" style="overflow-x:auto;margin-top:8px"></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-box-title">Economic Health Scorecard</div>
+        <div class="chart-box-sub">Composite score by pillar · 0–100 scale · Q4 2024</div>
+        <div class="chart-wrap"><canvas id="radarChart" style="height:300px"></canvas></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-title" style="font-size:16px;margin-bottom:4px">Trend Signal Watchlist</div>
+    <div class="section-desc">AI-flagged inflection points and acceleration/deceleration signals</div>
+
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-box-title">GDP Growth Momentum</div>
+        <div class="chart-box-sub">Quarter-on-quarter rate of change · Acceleration signal</div>
+        <div class="chart-wrap"><canvas id="momentumChart" style="height:200px"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-box-title">Inflation Decomposition</div>
+        <div class="chart-box-sub">CPI component contributions ppt · Food, Transport, Housing, Others</div>
+        <div class="chart-wrap"><canvas id="cpiStackChart" style="height:200px"></canvas></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-title" style="font-size:16px;margin-bottom:12px">Key Macro Relationships</div>
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-card-title">OPR → Ringgit (r = +0.41)</div>
+        <div class="info-row"><span class="info-key">Relationship</span><span class="info-val">Positive, moderate</span></div>
+        <div class="info-row"><span class="info-key">Lag</span><span class="info-val">1–3 months</span></div>
+        <div class="info-row"><span class="info-key">Interpretation</span><span class="info-val">Rate hikes attract carry inflows → MYR appreciation pressure</span></div>
+        <div class="info-row"><span class="info-key">Current implication</span><span class="info-val">BNM hold limits MYR support</span></div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Oil Prices → Government Revenue (r = +0.78)</div>
+        <div class="info-row"><span class="info-key">Relationship</span><span class="info-val">Strong positive</span></div>
+        <div class="info-row"><span class="info-key">Channel</span><span class="info-val">Petronas dividend + petroleum royalties</span></div>
+        <div class="info-row"><span class="info-key">2024 Brent avg</span><span class="info-val">USD 81/bbl</span></div>
+        <div class="info-row"><span class="info-key">Fiscal sensitivity</span><span class="info-val">±RM 300M per ±$1/bbl</span></div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">USD/MYR → Import Inflation (r = +0.69)</div>
+        <div class="info-row"><span class="info-key">Relationship</span><span class="info-val">Strong positive</span></div>
+        <div class="info-row"><span class="info-key">Lag</span><span class="info-val">2–4 months</span></div>
+        <div class="info-row"><span class="info-key">Key categories</span><span class="info-val">Food, fuel, machinery</span></div>
+        <div class="info-row"><span class="info-key">Pass-through rate</span><span class="info-val">~35–45% partial</span></div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">FDI → Industrial Output (r = +0.62)</div>
+        <div class="info-row"><span class="info-key">Relationship</span><span class="info-val">Positive, lagged</span></div>
+        <div class="info-row"><span class="info-key">Lag</span><span class="info-val">6–18 months (capex cycle)</span></div>
+        <div class="info-row"><span class="info-key">Primary sectors</span><span class="info-val">Semiconductor, E&amp;E, Data Centres</span></div>
+        <div class="info-row"><span class="info-key">2025 outlook</span><span class="info-val">Strong pipeline; AI data centre surge</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== DATA ARCHITECTURE ======================== -->
+  <div id="section-architecture" class="section">
+    <div class="section-title">Data Architecture &amp; Source Registry</div>
+    <div class="section-desc">Complete indicator inventory with sources, update frequencies, and validation protocols</div>
+
+    <div class="arch-section">
+      <div class="arch-title">Macroeconomic Indicators</div>
+      <div class="indicator-grid">
+        <div class="indicator-row"><div class="ind-name">Real GDP &amp; components</div><div class="ind-meta"><span class="ind-source">DOSM</span><span class="ind-freq">Quarterly</span></div><div class="ind-desc">National accounts, expenditure &amp; production approach. Advance, preliminary, final releases.</div></div>
+        <div class="indicator-row"><div class="ind-name">Consumer Price Index (CPI)</div><div class="ind-meta"><span class="ind-source">DOSM</span><span class="ind-freq">Monthly</span></div><div class="ind-desc">Headline + core (excl. food &amp; energy). Base 2010=100. 12 COICOP categories.</div></div>
+        <div class="indicator-row"><div class="ind-name">Overnight Policy Rate (OPR)</div><div class="ind-meta"><span class="ind-source">BNM</span><span class="ind-freq">MPC Dates</span></div><div class="ind-desc">BNM monetary policy rate. 6 MPC meetings/year. Floor and ceiling rates tracked.</div></div>
+        <div class="indicator-row"><div class="ind-name">Labour Force Survey</div><div class="ind-meta"><span class="ind-source">DOSM</span><span class="ind-freq">Monthly</span></div><div class="ind-desc">Employment, unemployment, LFPR. Age and sector breakdowns.</div></div>
+        <div class="indicator-row"><div class="ind-name">Trade Statistics</div><div class="ind-meta"><span class="ind-source">DOSM</span><span class="ind-freq">Monthly</span></div><div class="ind-desc">Exports, imports, trade balance. By commodity and trading partner.</div></div>
+        <div class="indicator-row"><div class="ind-name">BNM International Reserves</div><div class="ind-meta"><span class="ind-source">BNM</span><span class="ind-freq">Bi-weekly</span></div><div class="ind-desc">Total international reserves in USD. Import months cover calculated separately.</div></div>
+        <div class="indicator-row"><div class="ind-name">Industrial Production Index</div><div class="ind-meta"><span class="ind-source">DOSM</span><span class="ind-freq">Monthly</span></div><div class="ind-desc">Manufacturing, mining, electricity. Base 2015=100. MSIC classification.</div></div>
+        <div class="indicator-row"><div class="ind-name">Government Budget Position</div><div class="ind-meta"><span class="ind-source">MOF</span><span class="ind-freq">Quarterly / Annual</span></div><div class="ind-desc">Revenue, expenditure, deficit/surplus. Debt-to-GDP from Fiscal Outlook Report.</div></div>
+        <div class="indicator-row"><div class="ind-name">Balance of Payments</div><div class="ind-meta"><span class="ind-source">BNM</span><span class="ind-freq">Quarterly</span></div><div class="ind-desc">Current account, capital account, FDI flows. IMF BPM6 standard.</div></div>
+        <div class="indicator-row"><div class="ind-name">MGS / Bond Yields</div><div class="ind-meta"><span class="ind-source">BNM FAST</span><span class="ind-freq">Daily</span></div><div class="ind-desc">Malaysian Government Securities yield curve. 3M to 30Y tenors. Via BNM FAST system.</div></div>
+        <div class="indicator-row"><div class="ind-name">Foreign Exchange Rates</div><div class="ind-meta"><span class="ind-source">BNM</span><span class="ind-freq">Daily</span></div><div class="ind-desc">BNM daily reference rates for 20+ currencies. NEER/REER index tracked quarterly.</div></div>
+        <div class="indicator-row"><div class="ind-name">FDI &amp; Investment Approvals</div><div class="ind-meta"><span class="ind-source">MIDA</span><span class="ind-freq">Quarterly</span></div><div class="ind-desc">Approved investments by sector and country of origin. Manufacturing, services, primary.</div></div>
+      </div>
+    </div>
+
+    <div class="arch-section">
+      <div class="arch-title">Microeconomic Indicators</div>
+      <div class="indicator-grid">
+        <div class="indicator-row"><div class="ind-name">Retail Trade Index</div><div class="ind-meta"><span class="ind-source">DOSM</span><span class="ind-freq">Monthly</span></div><div class="ind-desc">Retail sales volume and value. Includes food, motor vehicles, general merchandise.</div></div>
+        <div class="indicator-row"><div class="ind-name">Business Conditions Survey</div><div class="ind-meta"><span class="ind-source">MIER</span><span class="ind-freq">Quarterly</span></div><div class="ind-desc">Business Conditions Index (BCI). Current &amp; expected conditions. 100 = neutral.</div></div>
+        <div class="indicator-row"><div class="ind-name">Consumer Sentiment Index</div><div class="ind-meta"><span class="ind-source">MIER</span><span class="ind-freq">Quarterly</span></div><div class="ind-desc">Household perceptions on income, spending, and major purchases. 100 = neutral.</div></div>
+        <div class="indicator-row"><div class="ind-name">Salaries &amp; Wages Survey</div><div class="ind-meta"><span class="ind-source">DOSM</span><span class="ind-freq">Annual</span></div><div class="ind-desc">Mean and median wages by industry, occupation, education, state.</div></div>
+        <div class="indicator-row"><div class="ind-name">Construction Statistics</div><div class="ind-meta"><span class="ind-source">DOSM</span><span class="ind-freq">Quarterly</span></div><div class="ind-desc">Value of work done, permits issued, employment in construction.</div></div>
+        <div class="indicator-row"><div class="ind-name">SME Credit Data</div><div class="ind-meta"><span class="ind-source">BNM</span><span class="ind-freq">Quarterly</span></div><div class="ind-desc">Loans outstanding, new disbursements, NPL ratios for SME segment.</div></div>
+        <div class="indicator-row"><div class="ind-name">E-Commerce &amp; Digital Economy</div><div class="ind-meta"><span class="ind-source">MCMC / DOSM</span><span class="ind-freq">Annual</span></div><div class="ind-desc">E-commerce transaction value, digital GDP share, internet penetration.</div></div>
+        <div class="indicator-row"><div class="ind-name">Housing Price Index</div><div class="ind-meta"><span class="ind-source">NAPIC</span><span class="ind-freq">Quarterly</span></div><div class="ind-desc">Malaysian House Price Index. State and type breakdowns. Volume &amp; value transactions.</div></div>
+      </div>
+    </div>
+
+    <div class="arch-section">
+      <div class="arch-title">Data Integration &amp; Validation Protocol</div>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-card-title">Ingestion Pipeline</div>
+          <div class="info-row"><span class="info-key">Primary method</span><span class="info-val">API pull + web scrape</span></div>
+          <div class="info-row"><span class="info-key">BNM data</span><span class="info-val">BNM OpenAPI v1</span></div>
+          <div class="info-row"><span class="info-key">DOSM data</span><span class="info-val">DOSM OpenDOSM API</span></div>
+          <div class="info-row"><span class="info-key">Bursa data</span><span class="info-val">Structured PDF + RSS</span></div>
+          <div class="info-row"><span class="info-key">Format</span><span class="info-val">Normalise → Parquet/JSON</span></div>
+          <div class="info-row"><span class="info-key">Frequency</span><span class="info-val">Daily/Monthly/Quarterly</span></div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-title">Data Quality Controls</div>
+          <div class="info-row"><span class="info-key">Missing data</span><span class="info-val">Forward-fill → flag &amp; alert</span></div>
+          <div class="info-row"><span class="info-key">Outlier detection</span><span class="info-val">3σ rule + IQR fence</span></div>
+          <div class="info-row"><span class="info-key">Revision tracking</span><span class="info-val">Version-stamped snapshots</span></div>
+          <div class="info-row"><span class="info-key">Cross-validation</span><span class="info-val">BNM vs DOSM reconcile</span></div>
+          <div class="info-row"><span class="info-key">Alert threshold</span><span class="info-val">>2 std dev deviation</span></div>
+          <div class="info-row"><span class="info-key">Audit log</span><span class="info-val">Immutable append-only</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== TECH STACK ======================== -->
+  <div id="section-techstack" class="section">
+    <div class="section-title">Technical Implementation Blueprint</div>
+    <div class="section-desc">Recommended technology stack, deployment architecture, and access management for production deployment</div>
+
+    <div class="stack-grid">
+      <div class="stack-card">
+        <div class="stack-layer">Data Ingestion</div>
+        <div class="stack-tech">Apache Airflow + Python</div>
+        <div class="stack-desc">Orchestrate scheduled data pulls from BNM OpenAPI, OpenDOSM, MIDA, and Bursa. DAGs per source with retry logic and Slack alerting on failure.</div>
+        <div class="stack-badge"><span class="tag cyan">Open Source</span> <span class="tag gray">Python 3.11+</span></div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">Data Storage</div>
+        <div class="stack-tech">PostgreSQL + TimescaleDB</div>
+        <div class="stack-desc">Time-series optimised relational database. Hypertables for indicator data. Partitioned by indicator_id and date. JSONB for raw source snapshots.</div>
+        <div class="stack-badge"><span class="tag cyan">Time-series</span> <span class="tag gray">Auditable</span></div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">Data Processing</div>
+        <div class="stack-tech">dbt + Pandas</div>
+        <div class="stack-desc">dbt for transformation models and data lineage. Pandas/NumPy for statistical computations (correlations, seasonal adjustment, YoY calcs).</div>
+        <div class="stack-badge"><span class="tag amber">Lineage</span> <span class="tag gray">Tested models</span></div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">API Layer</div>
+        <div class="stack-tech">FastAPI + Redis Cache</div>
+        <div class="stack-desc">REST + WebSocket API exposing indicator endpoints. Redis for sub-second caching of frequently-accessed KPIs. JWT authentication for access tiers.</div>
+        <div class="stack-badge"><span class="tag green">Fast</span> <span class="tag gray">Versioned</span></div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">Visualisation</div>
+        <div class="stack-tech">React + Chart.js / Recharts</div>
+        <div class="stack-desc">SPA dashboard with component-level data fetching. TailwindCSS for responsive layout. Dark/light mode. Exportable charts as PNG/SVG.</div>
+        <div class="stack-badge"><span class="tag cyan">Interactive</span> <span class="tag gray">Mobile-first</span></div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">Deployment</div>
+        <div class="stack-tech">Vercel + Railway / Render</div>
+        <div class="stack-badge"><span class="tag green">Low cost</span> <span class="tag gray">Auto-deploy</span></div>
+        <div class="stack-desc">Frontend on Vercel (existing leiholding.com). Backend API + Airflow on Railway or Render. PostgreSQL managed instance. CI/CD via GitHub Actions.</div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">Alerting &amp; Monitoring</div>
+        <div class="stack-tech">Grafana + Prometheus</div>
+        <div class="stack-desc">System health monitoring. Custom economic alerting rules: deviation alerts, data freshness checks. Slack/Discord webhook delivery to InsightInvest channels.</div>
+        <div class="stack-badge"><span class="tag amber">Alerts</span> <span class="tag gray">SLA monitoring</span></div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-layer">Access Control</div>
+        <div class="stack-tech">Clerk / Supabase Auth</div>
+        <div class="stack-desc">Three-tier access: Public (macro KPIs), Patreon subscriber (full dashboard), Private advisory (raw data export + API access). Stripe integration for gating.</div>
+        <div class="stack-badge"><span class="tag gold">Monetisable</span> <span class="tag gray">Patreon sync</span></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-card-title">Access Tiers</div>
+        <div class="info-row"><span class="info-key">Public (Free)</span><span class="info-val">12 macro KPI cards</span></div>
+        <div class="info-row"><span class="info-key">Patreon (Subscriber)</span><span class="info-val">Full dashboard + charts</span></div>
+        <div class="info-row"><span class="info-key">Advisory (RM 3,499)</span><span class="info-val">API access + raw export</span></div>
+        <div class="info-row"><span class="info-key">Data refresh SLA</span><span class="info-val">24h (monthly), 1h (daily)</span></div>
+        <div class="info-row"><span class="info-key">Historical depth</span><span class="info-val">20 years (where available)</span></div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Estimated Build Timeline</div>
+        <div class="info-row"><span class="info-key">Phase 1 — Data pipeline</span><span class="info-val">2–3 weeks</span></div>
+        <div class="info-row"><span class="info-key">Phase 2 — Backend API</span><span class="info-val">1–2 weeks</span></div>
+        <div class="info-row"><span class="info-key">Phase 3 — Dashboard UI</span><span class="info-val">2–3 weeks</span></div>
+        <div class="info-row"><span class="info-key">Phase 4 — Auth + access tiers</span><span class="info-val">1 week</span></div>
+        <div class="info-row"><span class="info-key">Total MVP</span><span class="info-val">6–9 weeks solo</span></div>
+      </div>
+    </div>
+
+    <div class="tooltip-note"><strong>Integration note for InsightInvest:</strong> This dashboard can be embedded as a protected route at leiholding.com/malaysia-monitor. Patreon webhook → Clerk role grant can automate subscriber access. The advisory tier (RM 3,499 Stripe) unlocks the raw data API endpoint — positioning the tool as both a content marketing asset and a conversion gateway for private advisory clients.</div>
+  </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /shell -->
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────────
+const YEARS = ['2016','2017','2018','2019','2020','2021','2022','2023','2024'];
+const MONTHS_2Y = ['Jan 23','Mar 23','May 23','Jul 23','Sep 23','Nov 23','Jan 24','Mar 24','May 24','Jul 24','Sep 24','Nov 24','Jan 25'];
+const QUARTERS = ['Q1 22','Q2 22','Q3 22','Q4 22','Q1 23','Q2 23','Q3 23','Q4 23','Q1 24','Q2 24','Q3 24','Q4 24'];
+
+const GOLD = '#c9a84c';
+const CYAN = '#4ecdc4';
+const RED = '#e05555';
+const GREEN = '#52b788';
+const AMBER = '#f4a261';
+const MUTED = 'rgba(155,163,175,0.4)';
+const TEXT2 = '#9ba3af';
+
+const defaults = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: { legend: { display: false }, tooltip: { backgroundColor:'#1f2430', titleColor:'#e8eaf0', bodyColor:'#9ba3af', borderColor:'rgba(255,255,255,0.1)', borderWidth:1, padding:10 } },
+  scales: {
+    x: { ticks: { color: TEXT2, font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+    y: { ticks: { color: TEXT2, font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.06)' } }
+  }
+};
+
+function mergeDeep(a, b) {
+  const r = {...a};
+  for (const k in b) {
+    if (b[k] && typeof b[k] === 'object' && !Array.isArray(b[k])) r[k] = mergeDeep(a[k]||{}, b[k]);
+    else r[k] = b[k];
+  }
+  return r;
+}
+
+function mkChart(id, type, labels, datasets, extra = {}) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  return new Chart(el, {
+    type,
+    data: { labels, datasets },
+    options: mergeDeep(defaults, extra)
+  });
+}
+
+// ─── MACRO CHARTS ───────────────────────────────────────────────────────────
+mkChart('gdpChart','bar', YEARS,
+  [{ label:'GDP Growth %', data:[4.2,5.7,4.8,4.3,-5.5,3.1,8.7,3.6,5.1], backgroundColor: YEARS.map((y,i)=>i===8?GOLD:MUTED), borderRadius:4, borderWidth:0 }],
+  { plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label:c=>` ${c.raw}%` } } },
+    scales:{ y:{ ticks:{callback:v=>v+'%', color:TEXT2, font:{size:10}}, grid:{color:'rgba(255,255,255,0.06)'} }, x:{ticks:{color:TEXT2,font:{size:10}},grid:{display:false}} } }
+);
+
+mkChart('cpiChart','line', MONTHS_2Y,
+  [{ label:'Headline CPI', data:[3.7,3.4,2.8,2.5,2.4,1.8,1.5,1.8,2.0,1.9,1.7,1.8,1.8], borderColor:GOLD, backgroundColor:'rgba(201,168,76,0.08)', tension:0.4, fill:true, pointRadius:2, borderWidth:2 },
+   { label:'Core CPI', data:[3.1,2.9,2.6,2.3,2.2,1.6,1.4,1.6,1.7,1.7,1.5,1.5,1.6], borderColor:CYAN, backgroundColor:'transparent', tension:0.4, pointRadius:2, borderWidth:1.5, borderDash:[3,3] }],
+  { plugins:{ legend:{display:true, labels:{color:TEXT2,font:{size:11},boxWidth:12}} },
+    scales:{ y:{ticks:{callback:v=>v+'%',color:TEXT2,font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'}}, x:{ticks:{color:TEXT2,font:{size:10},maxRotation:45},grid:{display:false}} } }
+);
+
+mkChart('rateChart','line', ['Q1 22','Q2 22','Q3 22','Q4 22','Q1 23','Q2 23','Q3 23','Q4 23','Q1 24','Q2 24','Q3 24','Q4 24','Q1 25'],
+  [{ label:'OPR', data:[1.75,1.75,2.25,2.75,2.75,3.00,3.00,3.00,3.00,3.00,3.00,3.00,3.00], borderColor:GOLD, borderWidth:2.5, tension:0.1, pointRadius:3, stepped:true },
+   { label:'10Y MGS', data:[4.0,4.1,4.3,4.2,3.9,3.8,3.85,3.8,3.75,3.7,3.75,3.82,3.89], borderColor:CYAN, borderWidth:1.5, tension:0.4, pointRadius:2, borderDash:[4,4] }],
+  { plugins:{ legend:{display:true, labels:{color:TEXT2,font:{size:11},boxWidth:12}} },
+    scales:{ y:{min:1,max:4.5,ticks:{callback:v=>v+'%',color:TEXT2,font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'}}, x:{ticks:{color:TEXT2,font:{size:10}},grid:{display:false}} } }
+);
+
+mkChart('fiscalChart','bar', YEARS.slice(2),
+  [{ label:'Fiscal Deficit % GDP', data:[-3.7,-3.4,-5.4,-6.4,-6.5,-5.6,-5.0,-4.3,-3.8], backgroundColor:'rgba(224,85,85,0.5)', borderRadius:3, borderWidth:0 },
+   { label:'Debt % GDP (right)', data:[50.8,52.5,57.4,58.5,61.6,62.8,63.6,65.0,64.3], type:'line', borderColor:AMBER, borderWidth:2, tension:0.4, pointRadius:2, yAxisID:'y2' }],
+  { plugins:{ legend:{display:true, labels:{color:TEXT2,font:{size:11},boxWidth:12}} },
+    scales:{ y:{ticks:{callback:v=>v+'%',color:TEXT2,font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'},position:'left'},
+             y2:{ticks:{callback:v=>v+'%',color:TEXT2,font:{size:10}},position:'right',grid:{display:false},min:45,max:70},
+             x:{ticks:{color:TEXT2,font:{size:10}},grid:{display:false}} } }
+);
+
+// ─── MICRO CHARTS ───────────────────────────────────────────────────────────
+mkChart('sentimentChart','line', QUARTERS,
+  [{ label:'Business Confidence (BCI)', data:[101,103,107,108,105,103,106,104,107,106,105,105], borderColor:GOLD, borderWidth:2, tension:0.4, pointRadius:2 },
+   { label:'Consumer Sentiment (CSI)', data:[94,96,99,98,93,92,95,92,94,93,92,91], borderColor:CYAN, borderWidth:1.5, tension:0.4, pointRadius:2, borderDash:[4,4] }],
+  { plugins:{ legend:{display:true, labels:{color:TEXT2,font:{size:11},boxWidth:12}},
+              annotation:{annotations:{line100:{type:'line',yMin:100,yMax:100,borderColor:'rgba(255,255,255,0.2)',borderDash:[5,5]}}} },
+    scales:{ y:{min:80,max:115,ticks:{color:TEXT2,font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'}}, x:{ticks:{color:TEXT2,font:{size:10}},grid:{display:false}} } }
+);
+
+mkChart('labourChart','line', MONTHS_2Y,
+  [{ label:'Unemployment %', data:[3.6,3.5,3.5,3.4,3.3,3.4,3.4,3.3,3.3,3.4,3.4,3.3,3.3], borderColor:RED, borderWidth:2, tension:0.4, pointRadius:2 },
+   { label:'LFPR %', data:[70.1,70.2,70.3,70.4,70.4,70.5,70.6,70.6,70.7,70.7,70.8,70.8,70.8], borderColor:GREEN, borderWidth:1.5, tension:0.4, pointRadius:2, yAxisID:'y2' }],
+  { plugins:{ legend:{display:true, labels:{color:TEXT2,font:{size:11},boxWidth:12}} },
+    scales:{ y:{min:2,max:5,ticks:{callback:v=>v+'%',color:TEXT2,font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'},position:'left'},
+             y2:{min:68,max:73,ticks:{callback:v=>v+'%',color:TEXT2,font:{size:10}},position:'right',grid:{display:false}},
+             x:{ticks:{color:TEXT2,font:{size:10},maxRotation:45},grid:{display:false}} } }
+);
+
+mkChart('wageChart','bar', ['2019','2020','2021','2022','2023','2024'],
+  [{ label:'Nominal Wage Growth', data:[4.1,1.2,3.8,5.4,6.1,4.8], backgroundColor:'rgba(78,205,196,0.5)', borderRadius:3 },
+   { label:'CPI Inflation', data:[0.7,-1.1,2.5,3.3,2.5,1.9], backgroundColor:'rgba(201,168,76,0.4)', borderRadius:3 }],
+  { plugins:{ legend:{display:true, labels:{color:TEXT2,font:{size:11},boxWidth:12}} },
+    scales:{ y:{ticks:{callback:v=>v+'%',color:TEXT2,font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'}}, x:{ticks:{color:TEXT2,font:{size:10}},grid:{display:false}} } }
+);
+
+mkChart('retailChart','line', MONTHS_2Y,
+  [{ label:'Total Retail YoY', data:[6.4,5.8,5.2,4.8,4.2,5.1,5.8,6.2,6.0,5.9,5.6,5.5,5.6], borderColor:GOLD, borderWidth:2, tension:0.4, pointRadius:2 },
+   { label:'E-Commerce YoY', data:[18,17,16,15,14,15,16,17,17,16,15,15,16], borderColor:CYAN, borderWidth:1.5, tension:0.4, pointRadius:2 }],
+  { plugins:{ legend:{display:true, labels:{color:TEXT2,font:{size:11},boxWidth:12}} },
+    scales:{ y:{ticks:{callback:v=>v+'%',color:TEXT2,font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'}}, x:{ticks:{color:TEXT2,font:{size:10},maxRotation:45},grid:{display:false}} } }
+);
+
+// ─── SECTOR CHARTS ───────────────────────────────────────────────────────────
+const sectors = [
+  {name:'Digital Services',    growth:9.2,  share:14.5, trend:'up',   signal:'buy'},
+  {name:'Manufacturing',       growth:5.8,  share:22.1, trend:'up',   signal:'hold'},
+  {name:'Finance & Insurance', growth:7.1,  share:8.2,  trend:'up',   signal:'hold'},
+  {name:'Construction',        growth:8.9,  share:4.1,  trend:'up',   signal:'watch'},
+  {name:'Transport & Logistics',growth:6.4, share:5.8,  trend:'up',   signal:'hold'},
+  {name:'Wholesale & Retail',  growth:5.3,  share:12.9, trend:'flat', signal:'hold'},
+  {name:'Agriculture',         growth:2.1,  share:6.8,  trend:'flat', signal:'neutral'},
+  {name:'Mining & Petroleum',  growth:-1.2, share:8.4,  trend:'down', signal:'caution'},
+  {name:'Tourism & Hospitality',growth:11.4,share:5.2,  trend:'up',   signal:'watch'},
+  {name:'Utilities',           growth:3.2,  share:2.8,  trend:'flat', signal:'neutral'},
+];
+const sorted = [...sectors].sort((a,b)=>b.growth-a.growth);
+const sectorColors = sorted.map(s=>s.growth>7?GOLD:s.growth>3?CYAN:s.growth<0?RED:MUTED);
+
+mkChart('sectorChart','bar', sorted.map(s=>s.name),
+  [{ data:sorted.map(s=>s.growth), backgroundColor:sectorColors, borderRadius:4, borderWidth:0 }],
+  { indexAxis:'y',
+    plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>` ${c.raw}% YoY`}} },
+    scales:{ x:{ticks:{callback:v=>v+'%',color:TEXT2,font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'}},
+             y:{ticks:{color:TEXT2,font:{size:10}},grid:{display:false}} } }
+);
+
+mkChart('gdpPieChart','doughnut', sectors.map(s=>s.name),
+  [{ data:sectors.map(s=>s.share), backgroundColor:['#c9a84c','#4ecdc4','#52b788','#f4a261','#e05555','rgba(78,205,196,0.5)','rgba(201,168,76,0.4)','rgba(224,85,85,0.4)','rgba(82,183,136,0.5)','rgba(155,163,175,0.4)'],
+     borderWidth:0, hoverOffset:6 }],
+  { cutout:'65%',
+    plugins:{ legend:{display:true, position:'right', labels:{color:TEXT2,font:{size:10},boxWidth:10,padding:8}} } }
+);
+
+// Sector table
+const tbody = document.getElementById('sectorTable');
+sorted.forEach((s,i)=>{
+  const signalTag = {buy:'green',hold:'cyan',watch:'amber',caution:'red',neutral:'gray'}[s.signal];
+  const trendArrow = {up:'▲',down:'▼',flat:'—'}[s.trend];
+  const trendColor = {up:GREEN,down:RED,flat:TEXT2}[s.trend];
+  const fillW = Math.min(100, Math.abs(s.growth) * 8) + '%';
+  const fillC = s.growth > 0 ? CYAN : RED;
+  tbody.innerHTML += `<tr>
+    <td class="rank">${i+1}</td>
+    <td style="color:var(--text)">${s.name}</td>
+    <td class="${s.growth>=0?'val-pos':'val-neg'}">${s.growth>0?'+':''}${s.growth}%</td>
+    <td class="val-neu">${s.share}%</td>
+    <td style="color:${trendColor}">${trendArrow}</td>
+    <td><span class="tag ${signalTag}">${s.signal}</span></td>
+    <td><div class="bar-inline"><div class="bar-track"><div class="bar-fill" style="width:${fillW};background:${fillC}"></div></div></div></td>
+  </tr>`;
+});
+
+mkChart('techChart','line', ['2020','2021','2022','2023','2024'],
+  [{ label:'Semiconductor Exports (RM B)', data:[115,128,145,162,178], borderColor:GOLD, borderWidth:2, tension:0.4, pointRadius:3 },
+   { label:'Tech FDI Approved (RM B)', data:[28,45,88,142,198], borderColor:CYAN, borderWidth:1.5, tension:0.4, pointRadius:3, yAxisID:'y2' }],
+  { plugins:{ legend:{display:true, labels:{color:TEXT2,font:{size:11},boxWidth:12}} },
+    scales:{ y:{ticks:{color:TEXT2,font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'},position:'left'},
+             y2:{ticks:{color:TEXT2,font:{size:10}},position:'right',grid:{display:false}},
+             x:{ticks:{color:TEXT2,font:{size:10}},grid:{display:false}} } }
+);
+
+mkChart('commodChart','line', ['Jan 20','Jul 20','Jan 21','Jul 21','Jan 22','Jul 22','Jan 23','Jul 23','Jan 24','Jul 24','Jan 25'],
+  [{ label:'Brent Crude', data:[100,62,78,95,115,105,90,85,84,79,81], borderColor:'#e05555', borderWidth:2, tension:0.4, pointRadius:2 },
+   { label:'CPO Price', data:[100,88,112,142,168,148,108,98,104,112,118], borderColor:GOLD, borderWidth:1.5, tension:0.4, pointRadius:2 },
+   { label:'Rubber (RSS3)', data:[100,84,92,88,94,85,80,78,82,84,80], borderColor:GREEN, borderWidth:1.5, tension:0.4, pointRadius:2 }],
+  { plugins:{ legend:{display:true, labels:{color:TEXT2,font:{size:11},boxWidth:12}} },
+    scales:{ y:{ticks:{callback:v=>v,color:TEXT2,font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'}}, x:{ticks:{color:TEXT2,font:{size:10},maxRotation:45},grid:{display:false}} } }
+);
+
+// ─── FX CHARTS ───────────────────────────────────────────────────────────────
+const fxData = [4.32,4.40,4.35,4.48,4.55,4.62,4.50,4.40,4.45,4.60,4.68,4.72,4.75,4.71,4.68,4.65,4.70,4.73,4.76,4.71];
+const fxLabels = ['Jan 22','Apr 22','Jul 22','Oct 22','Jan 23','Apr 23','Jul 23','Oct 23','Jan 24','Apr 24','Jul 24','Oct 24','Jan 25','Feb 25','Mar 25','...','','','',''];
+mkChart('fxChart','line', fxData.map((_,i)=>i%4===0?['Q1 22','Q3 22','Q1 23','Q3 23','Q1 24','Q3 24','Q1 25'][Math.floor(i/4)]:''),
+  [{ label:'USD/MYR', data:fxData, borderColor:AMBER, backgroundColor:'rgba(244,162,97,0.06)', tension:0.4, fill:true, pointRadius:2, borderWidth:2 }],
+  { plugins:{ legend:{display:false} },
+    scales:{ y:{min:4.1,max:4.9,ticks:{color:TEXT2,font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'}}, x:{ticks:{color:TEXT2,font:{size:10}},grid:{display:false}} } }
+);
+
+const tMonths = ['Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb'];
+mkChart('tradeChart','bar', tMonths,
+  [{ label:'Exports', data:[118,122,115,119,125,120,121,119], backgroundColor:'rgba(78,205,196,0.5)', borderRadius:3 },
+   { label:'Imports', data:[108,112,106,110,114,108,111,112], backgroundColor:'rgba(224,85,85,0.3)', borderRadius:3 }],
+  { plugins:{ legend:{display:true, labels:{color:TEXT2,font:{size:11},boxWidth:12}}, tooltip:{callbacks:{label:c=>` RM ${c.raw}B`}} },
+    scales:{ y:{min:80,ticks:{callback:v=>`RM${v}B`,color:TEXT2,font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'}}, x:{ticks:{color:TEXT2,font:{size:10}},grid:{display:false}} } }
+);
+
+mkChart('exportPieChart','doughnut',
+  ['E&E / Semiconductors','Petroleum Products','Chemicals','Palm Oil & Derivatives','Machinery','Others'],
+  [{ data:[37.8,9.4,8.2,7.1,5.5,32.0], backgroundColor:[GOLD,AMBER,CYAN,GREEN,RED,'#444'], borderWidth:0, hoverOffset:6 }],
+  { cutout:'60%', plugins:{ legend:{display:true, position:'right', labels:{color:TEXT2,font:{size:10},boxWidth:10,padding:8}} } }
+);
+
+mkChart('tradingPartnerChart','bar',
+  ['China','Singapore','USA','Japan','Hong Kong','Thailand','South Korea','Taiwan'],
+  [{ data:[286,218,148,112,88,72,68,54], backgroundColor:GOLD, borderRadius:4, borderWidth:0 }],
+  { indexAxis:'y',
+    plugins:{ tooltip:{callbacks:{label:c=>` RM ${c.raw}B`}} },
+    scales:{ x:{ticks:{callback:v=>`RM${v}B`,color:TEXT2,font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'}},
+             y:{ticks:{color:TEXT2,font:{size:10}},grid:{display:false}} } }
+);
+
+// ─── MARKETS ─────────────────────────────────────────────────────────────────
+const klciData = [1428,1502,1478,1550,1582,1620,1550,1480,1498,1580,1612,1650,1622,1608,1622];
+mkChart('klciChart','line', klciData.map((_,i)=>i%3===0?['Q1 20','Q4 20','Q3 21','Q2 22','Q1 23','Q4 23','Q3 24','Q2 25'][Math.floor(i/3)]||'':''),
+  [{ label:'KLCI', data:klciData, borderColor:GOLD, backgroundColor:'rgba(201,168,76,0.06)', tension:0.4, fill:true, pointRadius:2, borderWidth:2 }],
+  { plugins:{ legend:{display:false} },
+    scales:{ y:{min:1350,ticks:{color:TEXT2,font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'}}, x:{ticks:{color:TEXT2,font:{size:10}},grid:{display:false}} } }
+);
+
+mkChart('yieldChart','line', ['3M','6M','1Y','2Y','3Y','5Y','7Y','10Y','15Y','20Y','30Y'],
+  [{ label:'Current (Mar 2025)', data:[3.1,3.2,3.4,3.55,3.65,3.75,3.82,3.89,4.02,4.08,4.15], borderColor:GOLD, borderWidth:2.5, tension:0.4, pointRadius:3 },
+   { label:'1 Year Ago', data:[2.9,3.0,3.15,3.3,3.4,3.5,3.6,3.65,3.78,3.82,3.90], borderColor:TEXT2, borderWidth:1.5, tension:0.4, pointRadius:2, borderDash:[4,4] }],
+  { plugins:{ legend:{display:true, labels:{color:TEXT2,font:{size:11},boxWidth:12}} },
+    scales:{ y:{min:2.5,max:4.5,ticks:{callback:v=>v+'%',color:TEXT2,font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'}}, x:{ticks:{color:TEXT2,font:{size:10}},grid:{display:false}} } }
+);
+
+mkChart('flowChart','bar', ['Mar 24','Apr 24','May 24','Jun 24','Jul 24','Aug 24','Sep 24','Oct 24','Nov 24','Dec 24','Jan 25','Feb 25'],
+  [{ label:'Foreign Flows (RM M)', data:[420,-280,180,-150,-320,210,-180,150,-420,-200,-380,160], backgroundColor:d=>d.raw>0?'rgba(82,183,136,0.5)':'rgba(224,85,85,0.4)', borderRadius:3, borderWidth:0 },
+   { label:'Domestic Flows (RM M)', data:[-200,380,-80,250,420,-110,280,-50,520,300,480,-60], backgroundColor:'rgba(78,205,196,0.3)', borderRadius:3, borderWidth:0 }],
+  { plugins:{ legend:{display:true, labels:{color:TEXT2,font:{size:11},boxWidth:12}}, tooltip:{callbacks:{label:c=>` RM ${c.raw}M`}} },
+    scales:{ y:{ticks:{callback:v=>`RM${v}M`,color:TEXT2,font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'}}, x:{ticks:{color:TEXT2,font:{size:10}},grid:{display:false}} } }
+);
+
+// ─── ANALYSIS ────────────────────────────────────────────────────────────────
+const corrLabels = ['GDP','CPI','OPR','USD/MYR','Exports','KLCI','FDI'];
+const corrData = [
+  [1.0,  0.42, 0.35, -0.28, 0.68, 0.55, 0.62],
+  [0.42, 1.0,  0.58, 0.69, -0.12, -0.31, -0.18],
+  [0.35, 0.58, 1.0,  0.41, 0.08, -0.22, 0.14],
+  [-0.28,0.69, 0.41, 1.0, -0.38, -0.45, -0.22],
+  [0.68,-0.12, 0.08,-0.38, 1.0,  0.48,  0.55],
+  [0.55,-0.31,-0.22,-0.45, 0.48, 1.0,   0.44],
+  [0.62,-0.18, 0.14,-0.22, 0.55, 0.44,  1.0],
+];
+const corrDiv = document.getElementById('corrMatrix');
+let html = '<table class="corr-table"><tr><th></th>';
+corrLabels.forEach(l=>{html+=`<th>${l}</th>`}); html += '</tr>';
+corrData.forEach((row,i)=>{
+  html += `<tr><th style="text-align:left">${corrLabels[i]}</th>`;
+  row.forEach(v=>{
+    const pct = Math.abs(v);
+    const bg = v>0 ? `rgba(78,205,196,${pct*0.55})` : `rgba(224,85,85,${pct*0.55})`;
+    const fg = v===1.0 ? TEXT2 : v>0.5||v<-0.5 ? '#e8eaf0' : TEXT2;
+    html += `<td style="background:${bg};color:${fg};font-size:11px">${v.toFixed(2)}</td>`;
+  });
+  html += '</tr>';
+});
+html += '</table>';
+corrDiv.innerHTML = html;
+
+mkChart('radarChart','radar',
+  ['Growth','Monetary Stability','Fiscal Health','External Position','Labour Market','Financial Stability','Business Climate'],
+  [{ label:'Malaysia Q4 2024', data:[75,70,55,72,76,80,74],
+     backgroundColor:'rgba(201,168,76,0.15)', borderColor:GOLD, borderWidth:2, pointBackgroundColor:GOLD, pointRadius:4 },
+   { label:'ASEAN Average', data:[65,60,58,65,68,70,65],
+     backgroundColor:'rgba(78,205,196,0.08)', borderColor:CYAN, borderWidth:1.5, pointBackgroundColor:CYAN, pointRadius:3, borderDash:[4,4] }],
+  { plugins:{ legend:{display:true, labels:{color:TEXT2,font:{size:11},boxWidth:12}} },
+    scales:{ r:{ticks:{backdropColor:'transparent', color:TEXT2, font:{size:9}}, grid:{color:'rgba(255,255,255,0.06)'}, pointLabels:{color:TEXT2,font:{size:10}}, min:0, max:100 } } }
+);
+
+mkChart('momentumChart','bar', QUARTERS.slice(4),
+  [{ label:'QoQ Growth', data:[4.2,3.8,4.0,4.8,5.2,5.4,5.8,5.6], backgroundColor:QUARTERS.slice(4).map((_,i)=>i>=4?GOLD:'rgba(78,205,196,0.4)'), borderRadius:3, borderWidth:0 }],
+  { plugins:{ tooltip:{callbacks:{label:c=>` ${c.raw}% QoQ ann.`}} },
+    scales:{ y:{ticks:{callback:v=>v+'%',color:TEXT2,font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'}}, x:{ticks:{color:TEXT2,font:{size:10}},grid:{display:false}} } }
+);
+
+mkChart('cpiStackChart','bar', MONTHS_2Y.slice(0,10),
+  [{ label:'Food & Bev', data:[1.4,1.3,1.2,1.1,1.0,0.9,0.9,0.8,0.8,0.8], backgroundColor:'rgba(201,168,76,0.7)', borderRadius:0 },
+   { label:'Transport', data:[0.8,0.7,0.6,0.5,0.4,0.3,0.2,0.3,0.4,0.3], backgroundColor:'rgba(224,85,85,0.6)', borderRadius:0 },
+   { label:'Housing', data:[0.9,0.9,0.8,0.8,0.8,0.4,0.2,0.4,0.5,0.5], backgroundColor:'rgba(78,205,196,0.5)', borderRadius:0 },
+   { label:'Others', data:[0.6,0.5,0.2,0.1,0.2,0.2,0.2,0.3,0.3,0.2], backgroundColor:'rgba(155,163,175,0.4)', borderRadius:0 }],
+  { plugins:{ legend:{display:true, labels:{color:TEXT2,font:{size:11},boxWidth:12}} },
+    scales:{ x:{stacked:true,ticks:{color:TEXT2,font:{size:10},maxRotation:45},grid:{display:false}},
+             y:{stacked:true,ticks:{callback:v=>v+'%',color:TEXT2,font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'}} } }
+);
+
+// ─── NAVIGATION ──────────────────────────────────────────────────────────────
+function switchTab(id) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const sec = document.getElementById('section-'+id);
+  if (sec) sec.classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>{
+    if (t.getAttribute('onclick')===`switchTab('${id}')`) t.classList.add('active');
+  });
+  document.querySelectorAll('.nav-item').forEach(n=>{
+    if (n.getAttribute('onclick')===`switchTab('${id}')`) n.classList.add('active');
+  });
+}
+
+function animateBars() {
+  document.querySelectorAll('.bar-fill').forEach(b=>{
+    const w = b.style.width;
+    b.style.width = '0%';
+    setTimeout(()=>b.style.width=w, 50);
+  });
+}
+</script>
+</body>
+</html>

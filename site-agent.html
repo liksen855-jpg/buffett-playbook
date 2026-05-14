@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Site Agent — leiholding.com</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #06080d;
+    --surface: #0d1017;
+    --surface2: #131820;
+    --border: #1c2333;
+    --border2: #2a3347;
+    --text: #c8d1e0;
+    --text-dim: #6b7a94;
+    --text-bright: #eaf0ff;
+    --accent: #38bdf8;
+    --accent-glow: #38bdf840;
+    --accent2: #a78bfa;
+    --green: #34d399;
+    --red: #f87171;
+    --orange: #fb923c;
+    --yellow: #fbbf24;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Header ── */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: relative;
+    z-index: 50;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-glow), transparent);
+  }
+  .header-left { display: flex; align-items: center; gap: 14px; }
+  .logo {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px; color: #000;
+    letter-spacing: -0.5px;
+  }
+  .header-title { font-size: 16px; font-weight: 600; color: var(--text-bright); }
+  .header-sub {
+    font-size: 11px; color: var(--accent);
+    font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: 0.02em;
+  }
+  .header-right { display: flex; align-items: center; gap: 14px; }
+  .status-pill {
+    display: flex; align-items: center; gap: 7px;
+    padding: 5px 14px; border-radius: 20px;
+    font-size: 12px; font-weight: 500;
+    background: var(--surface2); border: 1px solid var(--border);
+  }
+  .status-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--red); box-shadow: 0 0 6px var(--red);
+    transition: all 0.3s;
+  }
+  .status-dot.connected { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .btn-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text-dim); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .btn-icon:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── Settings Drawer ── */
+  .settings-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: #00000088;
+    z-index: 100;
+    backdrop-filter: blur(4px);
+  }
+  .settings-overlay.open { display: flex; justify-content: flex-end; }
+  .settings-drawer {
+    width: 420px; max-width: 90vw;
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    padding: 32px;
+    display: flex; flex-direction: column; gap: 24px;
+    animation: slideIn 0.25s ease;
+    overflow-y: auto;
+  }
+  @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+  .settings-close {
+    align-self: flex-end;
+    background: none; border: none;
+    color: var(--text-dim); cursor: pointer; font-size: 20px;
+  }
+  .settings-h2 { font-size: 20px; font-weight: 600; color: var(--text-bright); }
+  .settings-hint { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+  .settings-hint a { color: var(--accent); text-decoration: none; }
+  .field-label {
+    display: block; font-size: 11px; font-weight: 600;
+    color: var(--text-dim); text-transform: uppercase;
+    letter-spacing: 0.08em; margin-bottom: 6px;
+  }
+  .field-input {
+    width: 100%; padding: 11px 14px;
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text);
+    font-size: 13px; font-family: 'IBM Plex Mono', monospace;
+    outline: none; transition: border-color 0.2s;
+  }
+  .field-input:focus { border-color: var(--accent); }
+  .field-input::placeholder { color: var(--text-dim); opacity: 0.5; }
+  .field-row { display: flex; gap: 12px; }
+  .field-row > div { flex: 1; }
+  .btn-connect {
+    padding: 12px 28px; border: none; border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent), #2563eb);
+    color: #fff; font-weight: 600; font-size: 14px;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s; position: relative; overflow: hidden;
+  }
+  .btn-connect:hover { transform: translateY(-1px); box-shadow: 0 4px 20px var(--accent-glow); }
+  .btn-connect:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .api-section {
+    padding-top: 20px; border-top: 1px solid var(--border);
+  }
+
+  /* ── Main Layout ── */
+  .main {
+    flex: 1; display: flex; overflow: hidden;
+  }
+
+  /* ── Sidebar / File Tree ── */
+  .sidebar {
+    width: 240px; border-right: 1px solid var(--border);
+    background: var(--surface);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .sidebar-header {
+    padding: 14px 16px; border-bottom: 1px solid var(--border);
+    font-size: 11px; font-weight: 600; color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .file-list { flex: 1; overflow-y: auto; padding: 8px; }
+  .file-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 10px; border-radius: 6px;
+    font-size: 13px; font-family: 'IBM Plex Mono', monospace;
+    color: var(--text-dim); cursor: pointer;
+    transition: all 0.15s;
+  }
+  .file-item:hover { background: var(--surface2); color: var(--text); }
+  .file-item.active { background: var(--accent)15; color: var(--accent); }
+  .file-icon { font-size: 14px; width: 18px; text-align: center; }
+  .empty-sidebar {
+    padding: 24px 16px; text-align: center;
+    color: var(--text-dim); font-size: 13px; line-height: 1.6;
+  }
+
+  /* ── Center Panel (Chat) ── */
+  .center {
+    flex: 1; display: flex; flex-direction: column;
+    min-width: 0;
+  }
+  .messages {
+    flex: 1; overflow-y: auto;
+    padding: 24px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .msg { display: flex; gap: 12px; max-width: 90%; animation: msgIn 0.3s ease; }
+  .msg.user { align-self: flex-end; flex-direction: row-reverse; }
+  .msg.assistant { align-self: flex-start; }
+  @keyframes msgIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .msg-avatar {
+    width: 30px; height: 30px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 13px; margin-top: 2px;
+  }
+  .msg.assistant .msg-avatar {
+    background: linear-gradient(135deg, var(--accent)20, var(--accent2)20);
+    border: 1px solid var(--accent)30;
+    color: var(--accent);
+  }
+  .msg.user .msg-avatar {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+  .msg-body {
+    padding: 12px 16px; border-radius: 14px;
+    font-size: 14px; line-height: 1.65;
+  }
+  .msg.assistant .msg-body {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-bottom-left-radius: 4px;
+  }
+  .msg.user .msg-body {
+    background: linear-gradient(135deg, #1e3a5f, #1a2744);
+    border: 1px solid #2a4a6f;
+    color: var(--text-bright);
+    border-bottom-right-radius: 4px;
+  }
+  .msg-body strong { color: var(--text-bright); font-weight: 600; }
+  .msg-body code {
+    background: var(--bg); padding: 2px 6px; border-radius: 4px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px;
+    color: var(--accent);
+  }
+  .typing-indicator {
+    display: flex; gap: 5px; padding: 16px 18px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 14px; border-bottom-left-radius: 4px;
+  }
+  .typing-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent); opacity: 0.3;
+    animation: typePulse 1.4s infinite;
+  }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typePulse {
+    0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
+    40% { opacity: 1; transform: scale(1); }
+  }
+
+  /* Pending Changes Bar */
+  .pending-bar {
+    display: none; align-items: center; justify-content: space-between;
+    padding: 12px 24px; background: var(--surface);
+    border-top: 1px solid var(--border);
+    gap: 12px; flex-wrap: wrap;
+  }
+  .pending-bar.visible { display: flex; }
+  .pending-label { font-size: 13px; font-weight: 600; color: var(--yellow); }
+  .change-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip {
+    padding: 3px 10px; border-radius: 20px;
+    font-size: 11px; font-weight: 500;
+    font-family: 'IBM Plex Mono', monospace;
+    border: 1px solid;
+  }
+  .chip-content { border-color: var(--green); color: var(--green); }
+  .chip-style { border-color: var(--red); color: var(--red); }
+  .chip-section { border-color: var(--yellow); color: var(--yellow); }
+  .chip-generate { border-color: var(--accent2); color: var(--accent2); }
+  .chip-page { border-color: var(--orange); color: var(--orange); }
+  .pending-actions { display: flex; gap: 8px; }
+  .btn-discard {
+    padding: 8px 16px; background: none;
+    border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text-dim); cursor: pointer; font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-deploy {
+    padding: 8px 20px; border: none; border-radius: 8px;
+    background: linear-gradient(135deg, var(--green), #059669);
+    color: #000; font-weight: 600; font-size: 13px;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+  .btn-deploy:hover { box-shadow: 0 4px 16px #34d39940; transform: translateY(-1px); }
+
+  /* Input Bar */
+  .input-bar {
+    display: flex; gap: 10px;
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .chat-input {
+    flex: 1; padding: 13px 18px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; color: var(--text);
+    font-size: 14px; font-family: 'DM Sans', sans-serif;
+    outline: none; transition: border-color 0.2s;
+  }
+  .chat-input:focus { border-color: var(--accent); }
+  .chat-input::placeholder { color: var(--text-dim); opacity: 0.5; }
+  .btn-send {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent), #2563eb);
+    border: none; color: #fff; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; flex-shrink: 0;
+  }
+  .btn-send:hover { box-shadow: 0 4px 16px var(--accent-glow); }
+  .btn-send:disabled { opacity: 0.3; cursor: not-allowed; }
+  .btn-send svg { width: 18px; height: 18px; }
+
+  /* ── Right Panel (Preview) ── */
+  .preview-panel {
+    width: 420px; border-left: 1px solid var(--border);
+    background: var(--surface);
+    display: flex; flex-direction: column;
+  }
+  .preview-tabs {
+    display: flex; border-bottom: 1px solid var(--border);
+  }
+  .preview-tab {
+    flex: 1; padding: 12px; border: none;
+    background: none; color: var(--text-dim);
+    font-size: 13px; font-weight: 500; cursor: pointer;
+    border-bottom: 2px solid transparent;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+  .preview-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .preview-content { flex: 1; overflow: hidden; position: relative; }
+  .preview-iframe {
+    width: 100%; height: 100%; border: none; background: #fff;
+  }
+  .changes-list {
+    padding: 16px; overflow-y: auto; height: 100%;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .change-card {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px;
+    animation: msgIn 0.3s ease;
+  }
+  .change-card-header {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 8px; flex-wrap: wrap;
+  }
+  .change-card-type {
+    padding: 3px 10px; border-radius: 6px;
+    font-size: 11px; font-weight: 600;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .change-card-file {
+    font-size: 12px; color: var(--text-dim);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .change-card-desc { font-size: 13px; color: var(--text); line-height: 1.5; margin-bottom: 8px; }
+  .change-card-code {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 6px; padding: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; color: var(--accent);
+    max-height: 120px; overflow: auto;
+    white-space: pre-wrap; word-break: break-all;
+  }
+  .empty-preview {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    height: 100%; gap: 12px; color: var(--text-dim); font-size: 13px;
+  }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    padding: 12px 24px; border-radius: 10px;
+    font-size: 14px; font-weight: 500; z-index: 200;
+    animation: msgIn 0.3s ease;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    display: none;
+  }
+  .toast.visible { display: block; }
+  .toast.success { border-color: var(--green); color: var(--green); }
+  .toast.error { border-color: var(--red); color: var(--red); }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* Responsive */
+  @media (max-width: 1100px) {
+    .sidebar { display: none; }
+    .preview-panel { width: 340px; }
+  }
+  @media (max-width: 800px) {
+    .preview-panel { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-left">
+    <div class="logo">SA</div>
+    <div>
+      <div class="header-title">Site Agent</div>
+      <div class="header-sub">leiholding.com</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="status-pill">
+      <div class="status-dot" id="statusDot"></div>
+      <span id="statusText">Not connected</span>
+    </div>
+    <button class="btn-icon" id="settingsBtn" title="Settings">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 00-2 2v.18a2 2 0 01-1 1.73l-.43.25a2 2 0 01-2 0l-.15-.08a2 2 0 00-2.73.73l-.22.38a2 2 0 00.73 2.73l.15.1a2 2 0 011 1.72v.51a2 2 0 01-1 1.74l-.15.09a2 2 0 00-.73 2.73l.22.38a2 2 0 002.73.73l.15-.08a2 2 0 012 0l.43.25a2 2 0 011 1.73V20a2 2 0 002 2h.44a2 2 0 002-2v-.18a2 2 0 011-1.73l.43-.25a2 2 0 012 0l.15.08a2 2 0 002.73-.73l.22-.39a2 2 0 00-.73-2.73l-.15-.08a2 2 0 01-1-1.74v-.5a2 2 0 011-1.74l.15-.09a2 2 0 00.73-2.73l-.22-.38a2 2 0 00-2.73-.73l-.15.08a2 2 0 01-2 0l-.43-.25a2 2 0 01-1-1.73V4a2 2 0 00-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- Settings Overlay -->
+<div class="settings-overlay" id="settingsOverlay">
+  <div class="settings-drawer">
+    <button class="settings-close" id="settingsClose">&times;</button>
+    <h2 class="settings-h2">Connect Your Repository</h2>
+    <p class="settings-hint">
+      You need a <strong>GitHub Personal Access Token</strong> with <code style="background:var(--bg);padding:2px 6px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--accent);">repo</code> scope.<br><br>
+      1. Go to <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a><br>
+      2. Click <strong>Generate new token (classic)</strong><br>
+      3. Check the <strong>repo</strong> checkbox<br>
+      4. Copy the token and paste below
+    </p>
+    <div>
+      <label class="field-label">GitHub Token</label>
+      <input type="password" class="field-input" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+    </div>
+    <div class="field-row">
+      <div>
+        <label class="field-label">Owner / Username</label>
+        <input type="text" class="field-input" id="ownerInput" placeholder="your-username">
+      </div>
+      <div>
+        <label class="field-label">Repository Name</label>
+        <input type="text" class="field-input" id="repoInput" placeholder="leiholding.com">
+      </div>
+    </div>
+
+    <div class="api-section">
+      <h2 class="settings-h2">Claude API Key</h2>
+      <p class="settings-hint">
+        The AI agent needs a Claude API key to understand your requests.<br>
+        Get one at <a href="https://console.anthropic.com/settings/keys" target="_blank">console.anthropic.com</a>
+      </p>
+      <div>
+        <label class="field-label">API Key</label>
+        <input type="password" class="field-input" id="apiKeyInput" placeholder="sk-ant-xxxxxxxxxxxxxxx">
+      </div>
+    </div>
+
+    <button class="btn-connect" id="connectBtn">Connect &amp; Load Site</button>
+    <p class="settings-hint" id="connectStatus" style="min-height:20px;"></p>
+  </div>
+</div>
+
+<!-- Main Layout -->
+<div class="main">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">Repository Files</div>
+    <div class="file-list" id="fileList">
+      <div class="empty-sidebar">
+        Connect your GitHub repo to see files here.
+      </div>
+    </div>
+  </aside>
+
+  <!-- Center Chat -->
+  <div class="center">
+    <div class="messages" id="messages">
+      <!-- Welcome message inserted by JS -->
+    </div>
+    <div class="pending-bar" id="pendingBar">
+      <div>
+        <div class="pending-label" id="pendingLabel">0 changes ready</div>
+        <div class="change-chips" id="changeChips"></div>
+      </div>
+      <div class="pending-actions">
+        <button class="btn-discard" id="discardBtn">Discard</button>
+        <button class="btn-deploy" id="deployBtn">🚀 Deploy to Vercel</button>
+      </div>
+    </div>
+    <div class="input-bar">
+      <input type="text" class="chat-input" id="chatInput" placeholder="Connect GitHub and Claude API to start..." disabled>
+      <button class="btn-send" id="sendBtn" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Right Preview Panel -->
+  <div class="preview-panel">
+    <div class="preview-tabs">
+      <button class="preview-tab active" data-tab="preview">👁 Preview</button>
+      <button class="preview-tab" data-tab="changes">📝 Changes</button>
+    </div>
+    <div class="preview-content">
+      <div id="previewView">
+        <iframe class="preview-iframe" id="previewFrame" src="about:blank"></iframe>
+      </div>
+      <div id="changesView" style="display:none;">
+        <div class="changes-list" id="changesList">
+          <div class="empty-preview">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+            <span>No changes yet</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════
+const state = {
+  githubToken: '',
+  apiKey: '',
+  owner: '',
+  repo: '',
+  connected: false,
+  files: {},        // { path: { content, sha } }
+  messages: [],
+  pendingChanges: [],
+  processing: false,
+};
+
+// ═══════════════════════════════════════════════════
+//  ELEMENTS
+// ═══════════════════════════════════════════════════
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => document.querySelectorAll(s);
+
+const settingsBtn = $('#settingsBtn');
+const settingsOverlay = $('#settingsOverlay');
+const settingsClose = $('#settingsClose');
+const connectBtn = $('#connectBtn');
+const connectStatus = $('#connectStatus');
+const tokenInput = $('#tokenInput');
+const ownerInput = $('#ownerInput');
+const repoInput = $('#repoInput');
+const apiKeyInput = $('#apiKeyInput');
+const statusDot = $('#statusDot');
+const statusText = $('#statusText');
+const fileListEl = $('#fileList');
+const messagesEl = $('#messages');
+const chatInput = $('#chatInput');
+const sendBtn = $('#sendBtn');
+const pendingBar = $('#pendingBar');
+const pendingLabel = $('#pendingLabel');
+const changeChips = $('#changeChips');
+const discardBtn = $('#discardBtn');
+const deployBtn = $('#deployBtn');
+const previewFrame = $('#previewFrame');
+const changesList = $('#changesList');
+const toast = $('#toast');
+
+// ═══════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════
+addMessage('assistant', `<strong>Welcome to Site Agent</strong> — your AI-powered website editor.<br><br>
+To get started:<br>
+1. Click the <strong>⚙ gear icon</strong> (top right) to open settings<br>
+2. Paste your <strong>GitHub token</strong>, username, and repo name<br>
+3. Paste your <strong>Claude API key</strong><br>
+4. Click <strong>Connect & Load Site</strong><br><br>
+Then just tell me what you want to change!<br>
+<code>"Change the heading to LEI Capital Group"</code><br>
+<code>"Make the background dark navy"</code><br>
+<code>"Add a contact section at the bottom"</code>`);
+
+// Try to restore saved settings
+try {
+  const saved = JSON.parse(localStorage.getItem('site-agent-settings') || '{}');
+  if (saved.owner) ownerInput.value = saved.owner;
+  if (saved.repo) repoInput.value = saved.repo;
+} catch(e) {}
+
+// ═══════════════════════════════════════════════════
+//  SETTINGS
+// ═══════════════════════════════════════════════════
+settingsBtn.onclick = () => settingsOverlay.classList.add('open');
+settingsClose.onclick = () => settingsOverlay.classList.remove('open');
+settingsOverlay.onclick = (e) => { if (e.target === settingsOverlay) settingsOverlay.classList.remove('open'); };
+
+connectBtn.onclick = async () => {
+  const token = tokenInput.value.trim();
+  const owner = ownerInput.value.trim();
+  const repo = repoInput.value.trim();
+  const apiKey = apiKeyInput.value.trim();
+
+  if (!token || !owner || !repo || !apiKey) {
+    connectStatus.textContent = '⚠ Please fill in all fields';
+    connectStatus.style.color = 'var(--red)';
+    return;
+  }
+
+  connectBtn.disabled = true;
+  connectBtn.textContent = 'Connecting...';
+  connectStatus.textContent = '';
+
+  try {
+    // Test GitHub connection
+    const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || 'GitHub connection failed');
+    }
+
+    state.githubToken = token;
+    state.owner = owner;
+    state.repo = repo;
+    state.apiKey = apiKey;
+    state.connected = true;
+
+    // Save non-sensitive settings
+    localStorage.setItem('site-agent-settings', JSON.stringify({ owner, repo }));
+
+    // Update UI
+    statusDot.classList.add('connected');
+    statusText.textContent = `${owner}/${repo}`;
+    chatInput.disabled = false;
+    chatInput.placeholder = 'Tell me what to change on your website...';
+    sendBtn.disabled = false;
+
+    connectStatus.textContent = '✅ Connected! Loading files...';
+    connectStatus.style.color = 'var(--green)';
+
+    await fetchFiles();
+
+    settingsOverlay.classList.remove('open');
+    addMessage('assistant', `Connected to <strong>${owner}/${repo}</strong>. I loaded <strong>${Object.keys(state.files).length} files</strong>. Your site preview is on the right.<br><br>What would you like to change?`);
+
+  } catch (e) {
+    connectStatus.textContent = `❌ ${e.message}`;
+    connectStatus.style.color = 'var(--red)';
+  }
+
+  connectBtn.disabled = false;
+  connectBtn.textContent = 'Connect & Load Site';
+};
+
+// ═══════════════════════════════════════════════════
+//  GITHUB: FETCH FILES
+// ═══════════════════════════════════════════════════
+async function fetchFiles() {
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${state.owner}/${state.repo}/git/trees/main?recursive=1`,
+      { headers: { Authorization: `Bearer ${state.githubToken}` } }
+    );
+    const data = await res.json();
+
+    const relevant = (data.tree || []).filter(f =>
+      f.type === 'blob' &&
+      /\.(html|css|js|json|md|txt)$/i.test(f.path) &&
+      !f.path.includes('node_modules')
+    );
+
+    state.files = {};
+    for (const file of relevant) {
+      try {
+        const cRes = await fetch(
+          `https://api.github.com/repos/${state.owner}/${state.repo}/contents/${file.path}`,
+          { headers: { Authorization: `Bearer ${state.githubToken}` } }
+        );
+        const cData = await cRes.json();
+        if (cData.content) {
+          state.files[file.path] = {
+            content: atob(cData.content),
+            sha: cData.sha
+          };
+        }
+      } catch(e) { console.warn(`Skip ${file.path}:`, e); }
+    }
+
+    renderFileList();
+
+    // Load preview
+    if (state.files['index.html']) {
+      previewFrame.srcdoc = state.files['index.html'].content;
+    }
+  } catch(e) {
+    console.error('Fetch files error:', e);
+  }
+}
+
+function renderFileList() {
+  const paths = Object.keys(state.files).sort();
+  if (paths.length === 0) {
+    fileListEl.innerHTML = '<div class="empty-sidebar">No files found.</div>';
+    return;
+  }
+
+  const icons = { html: '🌐', css: '🎨', js: '⚡', json: '📋', md: '📄', txt: '📄' };
+  fileListEl.innerHTML = paths.map(p => {
+    const ext = p.split('.').pop();
+    return `<div class="file-item" data-path="${p}">${icons[ext] || '📄'}<span>${p}</span></div>`;
+  }).join('');
+
+  fileListEl.querySelectorAll('.file-item').forEach(el => {
+    el.onclick = () => {
+      $$('.file-item').forEach(x => x.classList.remove('active'));
+      el.classList.add('active');
+    };
+  });
+}
+
+// ═══════════════════════════════════════════════════
+//  MESSAGES
+// ═══════════════════════════════════════════════════
+function addMessage(role, html) {
+  state.messages.push({ role, html });
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  div.innerHTML = `
+    <div class="msg-avatar">${role === 'assistant' ? '⚡' : '👤'}</div>
+    <div class="msg-body">${html}</div>
+  `;
+  messagesEl.appendChild(div);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function showTyping() {
+  const div = document.createElement('div');
+  div.className = 'msg assistant';
+  div.id = 'typingMsg';
+  div.innerHTML = `
+    <div class="msg-avatar">⚡</div>
+    <div class="typing-indicator">
+      <span class="typing-dot"></span>
+      <span class="typing-dot"></span>
+      <span class="typing-dot"></span>
+    </div>
+  `;
+  messagesEl.appendChild(div);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function hideTyping() {
+  const el = $('#typingMsg');
+  if (el) el.remove();
+}
+
+// ═══════════════════════════════════════════════════
+//  AI PROCESSING
+// ═══════════════════════════════════════════════════
+async function processMessage(text) {
+  if (state.processing) return;
+  state.processing = true;
+  showTyping();
+
+  const fileContext = Object.entries(state.files)
+    .map(([path, d]) => `--- ${path} ---\n${d.content.substring(0, 4000)}`)
+    .join('\n\n');
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': state.apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4000,
+        system: `You are Site Agent, an AI that edits websites. The user's site is plain HTML/CSS/JS hosted on GitHub + Vercel.
+
+CURRENT SITE FILES:
+${fileContext}
+
+RESPOND WITH ONLY VALID JSON (no markdown, no backticks). Schema:
+{
+  "explanation": "Brief, friendly explanation of changes",
+  "changes": [
+    {
+      "type": "content|style|section|generate|page",
+      "file": "path like index.html or styles.css",
+      "action": "replace|insert|delete|create",
+      "target": "exact text/HTML to find in the file (for replace/insert/delete)",
+      "position": "before|after|inside-start|inside-end (for insert only)",
+      "content": "new HTML/CSS/JS to insert or replace with",
+      "description": "short human-readable label"
+    }
+  ],
+  "preview_summary": "What the site looks like after changes"
+}
+
+Rules:
+- Be surgical — only change what's requested
+- For replace: target is the EXACT existing text to find, content is the replacement
+- For insert: target is an element to anchor to, position says where relative to it
+- For create: file is the new filename, content is the full file
+- Keep the existing site structure intact
+- If files are empty, say the user needs to connect GitHub first`,
+        messages: [{ role: 'user', content: text }]
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.error) {
+      throw new Error(data.error.message || 'API error');
+    }
+
+    const raw = (data.content || [])
+      .filter(b => b.type === 'text')
+      .map(b => b.text)
+      .join('');
+
+    const cleaned = raw.replace(/```json\s?|```/g, '').trim();
+    const parsed = JSON.parse(cleaned);
+
+    hideTyping();
+    addMessage('assistant', parsed.explanation.replace(/\n/g, '<br>'));
+
+    if (parsed.changes && parsed.changes.length > 0) {
+      state.pendingChanges = parsed.changes;
+      renderPendingBar();
+      renderChangesPanel();
+      updatePreview();
+    }
+
+  } catch(e) {
+    hideTyping();
+    addMessage('assistant', `Something went wrong: <strong>${e.message}</strong><br><br>Check that your Claude API key is valid and has credits available.`);
+  }
+
+  state.processing = false;
+}
+
+// ═══════════════════════════════════════════════════
+//  PENDING CHANGES UI
+// ═══════════════════════════════════════════════════
+function renderPendingBar() {
+  const n = state.pendingChanges.length;
+  if (n === 0) {
+    pendingBar.classList.remove('visible');
+    return;
+  }
+  pendingBar.classList.add('visible');
+  pendingLabel.textContent = `${n} change${n > 1 ? 's' : ''} ready`;
+
+  const chipMap = { content: 'chip-content', style: 'chip-style', section: 'chip-section', generate: 'chip-generate', page: 'chip-page' };
+  const labels = { content: 'Content', style: 'Style', section: 'Section', generate: 'Generated', page: 'New Page' };
+  changeChips.innerHTML = state.pendingChanges.map(c =>
+    `<span class="chip ${chipMap[c.type] || ''}">${labels[c.type] || c.type}</span>`
+  ).join('');
+}
+
+function renderChangesPanel() {
+  if (state.pendingChanges.length === 0) {
+    changesList.innerHTML = '<div class="empty-preview"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg><span>No changes yet</span></div>';
+    return;
+  }
+
+  const colorMap = { content: 'var(--green)', style: 'var(--red)', section: 'var(--yellow)', generate: 'var(--accent2)', page: 'var(--orange)' };
+  const labels = { content: 'Content', style: 'Style', section: 'Section', generate: 'Generated', page: 'New Page' };
+
+  changesList.innerHTML = state.pendingChanges.map(c => `
+    <div class="change-card">
+      <div class="change-card-header">
+        <span class="change-card-type" style="background:${colorMap[c.type]}20;color:${colorMap[c.type]};border:1px solid ${colorMap[c.type]}44">${labels[c.type] || c.type}</span>
+        <span class="change-card-file">${c.file}</span>
+      </div>
+      <div class="change-card-desc">${c.description || ''}</div>
+      ${c.content ? `<div class="change-card-code">${escapeHtml(c.content.substring(0, 500))}${c.content.length > 500 ? '...' : ''}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function updatePreview() {
+  let html = state.files['index.html']?.content || '';
+  for (const c of state.pendingChanges) {
+    if (c.file === 'index.html' && c.action === 'replace' && c.target) {
+      html = html.replace(c.target, c.content);
+    } else if (c.file === 'index.html' && c.action === 'insert' && c.target) {
+      const idx = html.indexOf(c.target);
+      if (idx !== -1) {
+        const pt = c.position === 'before' ? idx : idx + c.target.length;
+        html = html.slice(0, pt) + '\n' + c.content + '\n' + html.slice(pt);
+      }
+    } else if (c.file === 'index.html' && c.action === 'delete' && c.target) {
+      html = html.replace(c.target, '');
+    }
+  }
+  previewFrame.srcdoc = html;
+}
+
+// ═══════════════════════════════════════════════════
+//  DEPLOY TO GITHUB
+// ═══════════════════════════════════════════════════
+async function deployChanges() {
+  if (!state.connected || state.pendingChanges.length === 0) return;
+  deployBtn.textContent = '⏳ Pushing...';
+  deployBtn.disabled = true;
+
+  try {
+    for (const change of state.pendingChanges) {
+      const filePath = change.file;
+      const existing = state.files[filePath];
+      let newContent;
+
+      if (change.action === 'create') {
+        newContent = change.content;
+      } else if (change.action === 'replace' && existing) {
+        newContent = existing.content.replace(change.target, change.content);
+      } else if (change.action === 'insert' && existing) {
+        const idx = existing.content.indexOf(change.target);
+        if (idx !== -1) {
+          const pt = change.position === 'before' ? idx : idx + change.target.length;
+          newContent = existing.content.slice(0, pt) + '\n' + change.content + '\n' + existing.content.slice(pt);
+        }
+      } else if (change.action === 'delete' && existing) {
+        newContent = existing.content.replace(change.target, '');
+      }
+
+      if (newContent !== undefined) {
+        const body = {
+          message: `[Site Agent] ${change.description || change.type + ' update'}`,
+          content: btoa(unescape(encodeURIComponent(newContent))),
+        };
+        if (existing?.sha) body.sha = existing.sha;
+
+        const res = await fetch(
+          `https://api.github.com/repos/${state.owner}/${state.repo}/contents/${filePath}`,
+          {
+            method: 'PUT',
+            headers: {
+              Authorization: `Bearer ${state.githubToken}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+          }
+        );
+
+        if (res.ok) {
+          const resData = await res.json();
+          state.files[filePath] = { content: newContent, sha: resData.content.sha };
+        } else {
+          const err = await res.json();
+          throw new Error(`Failed to update ${filePath}: ${err.message}`);
+        }
+      }
+    }
+
+    state.pendingChanges = [];
+    renderPendingBar();
+    renderChangesPanel();
+    renderFileList();
+    showToast('✅ Deployed! Vercel will rebuild in ~30 seconds.', 'success');
+    addMessage('assistant', 'Changes pushed to GitHub! Vercel auto-deploys from your repo, so your site should be live within about 30 seconds. 🚀');
+
+  } catch(e) {
+    showToast(`❌ ${e.message}`, 'error');
+    addMessage('assistant', `Deploy error: <strong>${e.message}</strong>`);
+  }
+
+  deployBtn.textContent = '🚀 Deploy to Vercel';
+  deployBtn.disabled = false;
+}
+
+function showToast(text, type) {
+  toast.textContent = text;
+  toast.className = `toast visible ${type}`;
+  setTimeout(() => toast.classList.remove('visible'), 4000);
+}
+
+// ═══════════════════════════════════════════════════
+//  EVENT LISTENERS
+// ═══════════════════════════════════════════════════
+sendBtn.onclick = () => {
+  const text = chatInput.value.trim();
+  if (!text || state.processing) return;
+  addMessage('user', escapeHtml(text));
+  processMessage(text);
+  chatInput.value = '';
+};
+
+chatInput.onkeydown = (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendBtn.click();
+  }
+};
+
+discardBtn.onclick = () => {
+  state.pendingChanges = [];
+  renderPendingBar();
+  renderChangesPanel();
+  if (state.files['index.html']) {
+    previewFrame.srcdoc = state.files['index.html'].content;
+  }
+  addMessage('assistant', 'Changes discarded. What else would you like to do?');
+};
+
+deployBtn.onclick = deployChanges;
+
+// Preview tabs
+$$('.preview-tab').forEach(tab => {
+  tab.onclick = () => {
+    $$('.preview-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const which = tab.dataset.tab;
+    $('#previewView').style.display = which === 'preview' ? 'block' : 'none';
+    $('#changesView').style.display = which === 'changes' ? 'block' : 'none';
+  };
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+
+<div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:14px;">Gold performance during major equity drawdown events — hedge effectiveness scorecard</div>
+<div style="position:relative;width:100%;height:360px;">
+<canvas id="stressChart"></canvas>
+</div>
+<div style="margin-top:16px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;">
+<div style="background:var(--color-background-secondary);border-radius:8px;padding:10px;">
+<div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:3px;">Effective hedges (gold up, equities down)</div>
+<div style="font-size:14px;font-weight:500;color:#0F6E56;">5 of 9 events</div>
+</div>
+<div style="background:var(--color-background-secondary);border-radius:8px;padding:10px;">
+<div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:3px;">Failed hedges (both fell)</div>
+<div style="font-size:14px;font-weight:500;color:#791F1F;">3 of 9 events</div>
+</div>
+<div style="background:var(--color-background-secondary);border-radius:8px;padding:10px;">
+<div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:3px;">Mixed (gold flat or minor fall)</div>
+<div style="font-size:14px;font-weight:500;color:#633806;">1 of 9 events</div>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const events = ['Black Mon.\n1987','Gulf War\n1990','LTCM\n1998','Dot-com\n2000–02','9/11\n2001','GFC\n2008–09','COVID crash\nMar 2020','Rate hike\n2022','China stress\n2015–16'];
+const goldRet = [4.1, 6.5, -8.3, 13.2, 4.9, 5.6, -12.4, -0.3, -9.2];
+const spRet   = [-30.1, -19.9, -19.3, -49.1, -11.6, -56.8, -34.0, -19.4, -14.2];
+new Chart(document.getElementById('stressChart'), {
+  type: 'bar',
+  data: {
+    labels: events,
+    datasets: [
+      {
+        label: 'Gold return',
+        data: goldRet,
+        backgroundColor: goldRet.map(v => v >= 0 ? '#BA7517' : '#E24B4A'),
+        borderRadius: 3
+      },
+      {
+        label: 'S&P 500 return',
+        data: spRet,
+        backgroundColor: 'rgba(24,95,165,0.35)',
+        borderRadius: 3
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ' ' + ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1) + '%' } }
+    },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { size: 10 }, color: '#888780' } },
+      y: {
+        grid: { color: 'rgba(128,128,128,0.08)' },
+        ticks: { font: { size: 11 }, color: '#888780', callback: v => v + '%' }
+      }
+    }
+  }
+});
+</script>

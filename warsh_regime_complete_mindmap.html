@@ -1,0 +1,430 @@
+
+<h2 class="sr-only">Complete Warsh regime mindmap — interactive network of people, policies, investments, and macro theses</h2>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+#mm-wrap{width:100%;position:relative;overflow:hidden}
+#mm-canvas{position:relative;cursor:grab;user-select:none}
+#mm-canvas.dragging{cursor:grabbing}
+#mm-svg{display:block;width:100%;overflow:visible}
+.mm-node{cursor:pointer}
+.mm-node rect,.mm-node circle,.mm-node ellipse{transition:filter .15s}
+.mm-node:hover rect,.mm-node:hover circle,.mm-node:hover ellipse{filter:brightness(0.93)}
+.mm-node.active rect,.mm-node.active circle,.mm-node.active ellipse{filter:brightness(0.85)}
+#detail-panel{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-top:12px;display:none;max-width:100%}
+#detail-panel.open{display:block}
+.dp-tag{display:inline-block;font-size:11px;font-weight:500;padding:2px 9px;border-radius:4px;margin-bottom:6px}
+.dp-title{font-size:16px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.dp-sub{font-size:12px;color:var(--color-text-secondary);margin-bottom:10px}
+.dp-body{font-size:13px;color:var(--color-text-secondary);line-height:1.65;margin-bottom:10px}
+.dp-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px}
+.dp-stat{background:var(--color-background-secondary);border-radius:6px;padding:7px 10px}
+.dp-sl{font-size:10px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.04em}
+.dp-sv{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-top:1px}
+.dp-links{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.dp-link{font-size:12px;padding:4px 10px;border-radius:4px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-secondary);cursor:pointer}
+.dp-link:hover{background:var(--color-background-primary);color:var(--color-text-primary)}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;font-size:12px;color:var(--color-text-secondary)}
+.leg-item{display:flex;align-items:center;gap:5px}
+.leg-dot{width:10px;height:10px;border-radius:50%}
+.zoom-bar{display:flex;gap:6px;margin-bottom:8px;align-items:center}
+.zb{font-size:13px;padding:4px 10px;border-radius:6px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-secondary);cursor:pointer}
+.zb:hover{background:var(--color-background-primary)}
+</style>
+
+<div class="legend">
+  <span class="leg-item"><span class="leg-dot" style="background:#1D9E75"></span>People / relationships</span>
+  <span class="leg-item"><span class="leg-dot" style="background:#7F77DD"></span>Macro / policy doctrine</span>
+  <span class="leg-item"><span class="leg-dot" style="background:#D85A30"></span>Investment themes</span>
+  <span class="leg-item"><span class="leg-dot" style="background:#BA7517"></span>Market trades / instruments</span>
+  <span class="leg-item"><span class="leg-dot" style="background:#888780"></span>Risk / kill switches</span>
+</div>
+
+<div class="zoom-bar">
+  <button class="zb" onclick="zoom(1.2)">＋</button>
+  <button class="zb" onclick="zoom(0.83)">－</button>
+  <button class="zb" onclick="resetZoom()">Reset</button>
+  <span style="font-size:12px;color:var(--color-text-tertiary);margin-left:4px">Drag to pan · click nodes to expand</span>
+</div>
+
+<div id="mm-wrap">
+<div id="mm-canvas">
+<svg id="mm-svg" viewBox="0 0 1400 1100" xmlns="http://www.w3.org/2000/svg">
+<title>Complete Warsh regime mindmap</title>
+<desc>Interactive mindmap showing the full network of people, policy doctrine, investment themes, market trades, and risk factors in the Warsh macro regime</desc>
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+
+<!-- ── BACKGROUND ZONES ── -->
+<rect x="30" y="30" width="380" height="1040" rx="16" fill="#1D9E75" fill-opacity=".04" stroke="#1D9E75" stroke-width="0.5" stroke-opacity=".2"/>
+<text font-size="11" font-family="var(--font-sans)" fill="#1D9E75" fill-opacity=".5" x="220" y="52" text-anchor="middle">PEOPLE · NETWORK</text>
+
+<rect x="430" y="30" width="530" height="500" rx="16" fill="#7F77DD" fill-opacity=".04" stroke="#7F77DD" stroke-width="0.5" stroke-opacity=".2"/>
+<text font-size="11" font-family="var(--font-sans)" fill="#7F77DD" fill-opacity=".5" x="695" y="52" text-anchor="middle">POLICY DOCTRINE</text>
+
+<rect x="430" y="545" width="530" height="525" rx="16" fill="#D85A30" fill-opacity=".04" stroke="#D85A30" stroke-width="0.5" stroke-opacity=".2"/>
+<text font-size="11" font-family="var(--font-sans)" fill="#D85A30" fill-opacity=".5" x="695" y="567" text-anchor="middle">INVESTMENT THEMES</text>
+
+<rect x="980" y="30" width="390" height="500" rx="16" fill="#BA7517" fill-opacity=".04" stroke="#BA7517" stroke-width="0.5" stroke-opacity=".2"/>
+<text font-size="11" font-family="var(--font-sans)" fill="#BA7517" fill-opacity=".5" x="1175" y="52" text-anchor="middle">MARKET TRADES</text>
+
+<rect x="980" y="545" width="390" height="525" rx="16" fill="#888780" fill-opacity=".04" stroke="#888780" stroke-width="0.5" stroke-opacity=".2"/>
+<text font-size="11" font-family="var(--font-sans)" fill="#888780" fill-opacity=".5" x="1175" y="567" text-anchor="middle">RISK · KILL SWITCHES</text>
+
+<!-- ══════════════════════════════════════════
+     ZONE 1: PEOPLE & RELATIONSHIPS
+══════════════════════════════════════════ -->
+
+<!-- DRUCKENMILLER — apex -->
+<g class="mm-node" id="n-druck" onclick="showDetail('druck')">
+  <rect x="60" y="70" width="310" height="64" rx="10" fill="#1D9E75" fill-opacity=".15" stroke="#1D9E75" stroke-width="1.5"/>
+  <text font-size="14" font-weight="500" font-family="var(--font-sans)" fill="#085041" x="215" y="97" text-anchor="middle" dominant-baseline="central">Stanley Druckenmiller</text>
+  <text font-size="11" font-family="var(--font-sans)" fill="#0F6E56" x="215" y="117" text-anchor="middle" dominant-baseline="central">Apex · $4.49B · 30% avg return · mentor</text>
+</g>
+
+<!-- WARSH — center -->
+<g class="mm-node" id="n-warsh" onclick="showDetail('warsh')">
+  <rect x="60" y="200" width="310" height="64" rx="10" fill="#7F77DD" fill-opacity=".15" stroke="#7F77DD" stroke-width="2"/>
+  <text font-size="14" font-weight="500" font-family="var(--font-sans)" fill="#26215C" x="215" y="227" text-anchor="middle" dominant-baseline="central">Kevin Warsh</text>
+  <text font-size="11" font-family="var(--font-sans)" fill="#3C3489" x="215" y="247" text-anchor="middle" dominant-baseline="central">Fed Chair · $10.2M Duquesne fees · convergence node</text>
+</g>
+
+<!-- $10.2M connector label -->
+<line x1="215" y1="134" x2="215" y2="200" stroke="#1D9E75" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="148" y="155" width="134" height="18" rx="4" fill="#E1F5EE"/>
+<text font-size="10" font-family="var(--font-sans)" fill="#085041" x="215" y="164" text-anchor="middle" dominant-baseline="central">$10.2M · father-son · 15yr</text>
+
+<!-- BESSENT -->
+<g class="mm-node" id="n-bess" onclick="showDetail('bess')">
+  <rect x="60" y="340" width="200" height="56" rx="8" fill="#1D9E75" fill-opacity=".12" stroke="#1D9E75" stroke-width="1"/>
+  <text font-size="13" font-weight="500" font-family="var(--font-sans)" fill="#085041" x="160" y="363" text-anchor="middle" dominant-baseline="central">Scott Bessent</text>
+  <text font-size="10" font-family="var(--font-sans)" fill="#0F6E56" x="160" y="381" text-anchor="middle" dominant-baseline="central">Treasury · Black Wednesday · Druckenmiller protégé</text>
+</g>
+<path d="M215 264 Q160 300 160 340" fill="none" stroke="#1D9E75" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+
+<!-- KARP -->
+<g class="mm-node" id="n-karp" onclick="showDetail('karp')">
+  <rect x="180" y="340" width="190" height="56" rx="8" fill="#D85A30" fill-opacity=".12" stroke="#D85A30" stroke-width="1"/>
+  <text font-size="13" font-weight="500" font-family="var(--font-sans)" fill="#4A1B0C" x="275" y="363" text-anchor="middle" dominant-baseline="central">Alex Karp</text>
+  <text font-size="10" font-family="var(--font-sans)" fill="#712B13" x="275" y="381" text-anchor="middle" dominant-baseline="central">Palantir CEO · Stanford · DOGE axis</text>
+</g>
+<path d="M215 264 Q275 300 275 340" fill="none" stroke="#D85A30" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+
+<!-- FRIEDMAN -->
+<g class="mm-node" id="n-fried" onclick="showDetail('fried')">
+  <rect x="60" y="470" width="190" height="56" rx="8" fill="#888780" fill-opacity=".12" stroke="#888780" stroke-width="1"/>
+  <text font-size="13" font-weight="500" font-family="var(--font-sans)" fill="#2C2C2A" x="155" y="493" text-anchor="middle" dominant-baseline="central">Milton Friedman</text>
+  <text font-size="10" font-family="var(--font-sans)" fill="#444441" x="155" y="511" text-anchor="middle" dominant-baseline="central">Hoover · "inflation is a choice"</text>
+</g>
+<path d="M160 396 Q155 430 155 470" fill="none" stroke="#888780" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#arr)"/>
+
+<!-- SHULTZ -->
+<g class="mm-node" id="n-shultz" onclick="showDetail('shultz')">
+  <rect x="170" y="470" width="190" height="56" rx="8" fill="#888780" fill-opacity=".12" stroke="#888780" stroke-width="1"/>
+  <text font-size="13" font-weight="500" font-family="var(--font-sans)" fill="#2C2C2A" x="265" y="493" text-anchor="middle" dominant-baseline="central">George Shultz</text>
+  <text font-size="10" font-family="var(--font-sans)" fill="#444441" x="265" y="511" text-anchor="middle" dominant-baseline="central">Hoover · institutional credibility</text>
+</g>
+<path d="M275 396 Q265 430 265 470" fill="none" stroke="#888780" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#arr)"/>
+
+<!-- THIEL -->
+<g class="mm-node" id="n-thiel" onclick="showDetail('thiel')">
+  <rect x="60" y="600" width="180" height="56" rx="8" fill="#888780" fill-opacity=".12" stroke="#888780" stroke-width="1"/>
+  <text font-size="13" font-weight="500" font-family="var(--font-sans)" fill="#2C2C2A" x="150" y="623" text-anchor="middle" dominant-baseline="central">Peter Thiel</text>
+  <text font-size="10" font-family="var(--font-sans)" fill="#444441" x="150" y="641" text-anchor="middle" dominant-baseline="central">Stanford Review · Palantir co-founder</text>
+</g>
+<path d="M215 264 Q130 420 150 600" fill="none" stroke="#888780" stroke-width="0.8" stroke-dasharray="3 3" marker-end="url(#arr)"/>
+
+<!-- JANE LAUDER -->
+<g class="mm-node" id="n-jane" onclick="showDetail('jane')">
+  <rect x="60" y="730" width="200" height="56" rx="8" fill="#D4537E" fill-opacity=".12" stroke="#D4537E" stroke-width="1"/>
+  <text font-size="13" font-weight="500" font-family="var(--font-sans)" fill="#4B1528" x="160" y="753" text-anchor="middle" dominant-baseline="central">Jane Lauder</text>
+  <text font-size="10" font-family="var(--font-sans)" fill="#72243E" x="160" y="771" text-anchor="middle" dominant-baseline="central">Spouse · $1.9B · Ronald Lauder → Trump</text>
+</g>
+<path d="M215 264 Q100 500 160 730" fill="none" stroke="#D4537E" stroke-width="0.8" stroke-dasharray="3 3" marker-end="url(#arr)"/>
+
+<!-- MSK / BIOTECH INSTITUTIONAL -->
+<g class="mm-node" id="n-msk" onclick="showDetail('msk')">
+  <rect x="60" y="860" width="310" height="56" rx="8" fill="#1D9E75" fill-opacity=".1" stroke="#1D9E75" stroke-width="1"/>
+  <text font-size="13" font-weight="500" font-family="var(--font-sans)" fill="#085041" x="215" y="883" text-anchor="middle" dominant-baseline="central">Memorial Sloan Kettering</text>
+  <text font-size="10" font-family="var(--font-sans)" fill="#0F6E56" x="215" y="901" text-anchor="middle" dominant-baseline="central">30yr board · AI biotech edge · Druckenmiller Center</text>
+</g>
+<line x1="215" y1="134" x2="215" y2="860" stroke="#1D9E75" stroke-width="0.6" stroke-dasharray="4 4" stroke-opacity=".4"/>
+
+<!-- ══════════════════════════════════════════
+     ZONE 2: POLICY DOCTRINE
+══════════════════════════════════════════ -->
+
+<!-- QT + CUTS DOCTRINE -->
+<g class="mm-node" id="n-qtcuts" onclick="showDetail('qtcuts')">
+  <rect x="450" y="70" width="240" height="64" rx="10" fill="#7F77DD" fill-opacity=".15" stroke="#7F77DD" stroke-width="1.5"/>
+  <text font-size="14" font-weight="500" font-family="var(--font-sans)" fill="#26215C" x="570" y="97" text-anchor="middle" dominant-baseline="central">QT + rate cuts</text>
+  <text font-size="11" font-family="var(--font-sans)" fill="#3C3489" x="570" y="117" text-anchor="middle" dominant-baseline="central">Balance sheet $6.7T → $4T · cuts to 2.75%</text>
+</g>
+<line x1="370" y1="232" x2="450" y2="102" stroke="#7F77DD" stroke-width="1.2" marker-end="url(#arr)"/>
+
+<!-- AI DEFLATIONARY THESIS -->
+<g class="mm-node" id="n-aidef" onclick="showDetail('aidef')">
+  <rect x="450" y="205" width="240" height="64" rx="10" fill="#7F77DD" fill-opacity=".15" stroke="#7F77DD" stroke-width="1.5"/>
+  <text font-size="14" font-weight="500" font-family="var(--font-sans)" fill="#26215C" x="570" y="232" text-anchor="middle" dominant-baseline="central">AI deflationary thesis</text>
+  <text font-size="11" font-family="var(--font-sans)" fill="#3C3489" x="570" y="252" text-anchor="middle" dominant-baseline="central">TFP surge · 4% growth · no inflation</text>
+</g>
+<line x1="370" y1="232" x2="450" y2="237" stroke="#7F77DD" stroke-width="1.2" marker-end="url(#arr)"/>
+
+<!-- NEW 1951 ACCORD -->
+<g class="mm-node" id="n-accord" onclick="showDetail('accord')">
+  <rect x="450" y="340" width="240" height="64" rx="10" fill="#7F77DD" fill-opacity=".12" stroke="#7F77DD" stroke-width="1"/>
+  <text font-size="13" font-weight="500" font-family="var(--font-sans)" fill="#26215C" x="570" y="367" text-anchor="middle" dominant-baseline="central">New 1951 Accord</text>
+  <text font-size="11" font-family="var(--font-sans)" fill="#3C3489" x="570" y="387" text-anchor="middle" dominant-baseline="central">Warsh + Bessent · Fed-Treasury sync</text>
+</g>
+<line x1="370" y1="232" x2="450" y2="372" stroke="#7F77DD" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+
+<!-- RULES BASED POLICY -->
+<g class="mm-node" id="n-rules" onclick="showDetail('rules')">
+  <rect x="715" y="70" width="225" height="64" rx="10" fill="#7F77DD" fill-opacity=".12" stroke="#7F77DD" stroke-width="1"/>
+  <text font-size="13" font-weight="500" font-family="var(--font-sans)" fill="#26215C" x="828" y="97" text-anchor="middle" dominant-baseline="central">Rules-based policy</text>
+  <text font-size="11" font-family="var(--font-sans)" fill="#3C3489" x="828" y="117" text-anchor="middle" dominant-baseline="central">No dot plots · Taylor Rule · end discretion</text>
+</g>
+<line x1="690" y1="102" x2="715" y2="102" stroke="#7F77DD" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- END FED PUT -->
+<g class="mm-node" id="n-fedput" onclick="showDetail('fedput')">
+  <rect x="715" y="205" width="225" height="64" rx="10" fill="#7F77DD" fill-opacity=".12" stroke="#7F77DD" stroke-width="1"/>
+  <text font-size="13" font-weight="500" font-family="var(--font-sans)" fill="#26215C" x="828" y="232" text-anchor="middle" dominant-baseline="central">End of the Fed put</text>
+  <text font-size="11" font-family="var(--font-sans)" fill="#3C3489" x="828" y="252" text-anchor="middle" dominant-baseline="central">No equity market backstop · discipline</text>
+</g>
+<line x1="690" y1="237" x2="715" y2="237" stroke="#7F77DD" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- DEREGULATION -->
+<g class="mm-node" id="n-dereg" onclick="showDetail('dereg')">
+  <rect x="715" y="340" width="225" height="64" rx="10" fill="#7F77DD" fill-opacity=".12" stroke="#7F77DD" stroke-width="1"/>
+  <text font-size="13" font-weight="500" font-family="var(--font-sans)" fill="#26215C" x="828" y="367" text-anchor="middle" dominant-baseline="central">Bank deregulation</text>
+  <text font-size="11" font-family="var(--font-sans)" fill="#3C3489" x="828" y="387" text-anchor="middle" dominant-baseline="central">Basel III rollback · CFPB curtailed</text>
+</g>
+<line x1="690" y1="372" x2="715" y2="372" stroke="#7F77DD" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- FISCAL INFLATION THEORY -->
+<g class="mm-node" id="n-fiscalinf" onclick="showDetail('fiscalinf')">
+  <rect x="450" y="460" width="490" height="56" rx="10" fill="#7F77DD" fill-opacity=".1" stroke="#7F77DD" stroke-width="0.8"/>
+  <text font-size="13" font-weight="500" font-family="var(--font-sans)" fill="#26215C" x="695" y="483" text-anchor="middle" dominant-baseline="central">Fiscal dominance theory</text>
+  <text font-size="11" font-family="var(--font-sans)" fill="#3C3489" x="695" y="501" text-anchor="middle" dominant-baseline="central">Inflation = govt waste + fiscal excess · Palantir fixes it · Bessent restrains spending</text>
+</g>
+<line x1="570" y1="404" x2="695" y2="460" stroke="#7F77DD" stroke-width="0.8" stroke-dasharray="3 3" marker-end="url(#arr)"/>
+
+<!-- ══════════════════════════════════════════
+     ZONE 3: INVESTMENT THEMES
+══════════════════════════════════════════ -->
+
+<!-- AI BIOTECH -->
+<g class="mm-node" id="n-biotech" onclick="showDetail('biotech')">
+  <rect x="450" y="590" width="230" height="64" rx="10" fill="#D85A30" fill-opacity=".15" stroke="#D85A30" stroke-width="1.5"/>
+  <text font-size="14" font-weight="500" font-family="var(--font-sans)" fill="#4A1B0C" x="565" y="617" text-anchor="middle" dominant-baseline="central">AI biotech revolution</text>
+  <text font-size="11" font-family="var(--font-sans)" fill="#712B13" x="565" y="637" text-anchor="middle" dominant-baseline="central">NTRA 12.8% · INSM 5.7% · TEVA 4% · Druck MSK</text>
+</g>
+
+<!-- GOV AI -->
+<g class="mm-node" id="n-govai" onclick="showDetail('govai')">
+  <rect x="450" y="720" width="230" height="64" rx="10" fill="#D85A30" fill-opacity=".12" stroke="#D85A30" stroke-width="1"/>
+  <text font-size="13" font-weight="500" font-family="var(--font-sans)" fill="#4A1B0C" x="565" y="747" text-anchor="middle" dominant-baseline="central">Government AI infrastructure</text>
+  <text font-size="11" font-family="var(--font-sans)" fill="#712B13" x="565" y="767" text-anchor="middle" dominant-baseline="central">PLTR $13.7B contracts · IRS · DOGE · Karp</text>
+</g>
+
+<!-- COMMODITIES -->
+<g class="mm-node" id="n-commod" onclick="showDetail('commod')">
+  <rect x="450" y="850" width="230" height="64" rx="10" fill="#D85A30" fill-opacity=".12" stroke="#D85A30" stroke-width="1"/>
+  <text font-size="13" font-weight="500" font-family="var(--font-sans)" fill="#4A1B0C" x="565" y="877" text-anchor="middle" dominant-baseline="central">Commodities — copper + gold</text>
+  <text font-size="11" font-family="var(--font-sans)" fill="#712B13" x="565" y="897" text-anchor="middle" dominant-baseline="central">FCX · COPX · GLD · 8yr supply deficit</text>
+</g>
+
+<!-- EM / DOLLAR INVERSION -->
+<g class="mm-node" id="n-em" onclick="showDetail('em')">
+  <rect x="700" y="590" width="240" height="64" rx="10" fill="#D85A30" fill-opacity=".12" stroke="#D85A30" stroke-width="1"/>
+  <text font-size="13" font-weight="500" font-family="var(--font-sans)" fill="#4A1B0C" x="820" y="617" text-anchor="middle" dominant-baseline="central">EM + dollar inversion</text>
+  <text font-size="11" font-family="var(--font-sans)" fill="#712B13" x="820" y="637" text-anchor="middle" dominant-baseline="central">EWZ · CPNG · SE · BRL · trade diversion</text>
+</g>
+
+<!-- FINANCIALS DEREG -->
+<g class="mm-node" id="n-fins" onclick="showDetail('fins')">
+  <rect x="700" y="720" width="240" height="64" rx="10" fill="#D85A30" fill-opacity=".12" stroke="#D85A30" stroke-width="1"/>
+  <text font-size="13" font-weight="500" font-family="var(--font-sans)" fill="#4A1B0C" x="820" y="747" text-anchor="middle" dominant-baseline="central">Financial deregulation</text>
+  <text font-size="11" font-family="var(--font-sans)" fill="#712B13" x="820" y="767" text-anchor="middle" dominant-baseline="central">XLF 6.7% · GS · WWD · capital freed</text>
+</g>
+
+<!-- STABLECOINS -->
+<g class="mm-node" id="n-crypto" onclick="showDetail('crypto')">
+  <rect x="700" y="850" width="240" height="64" rx="10" fill="#BA7517" fill-opacity=".12" stroke="#BA7517" stroke-width="1"/>
+  <text font-size="13" font-weight="500" font-family="var(--font-sans)" fill="#412402" x="820" y="877" text-anchor="middle" dominant-baseline="central">Stablecoins + crypto</text>
+  <text font-size="11" font-family="var(--font-sans)" fill="#633806" x="820" y="897" text-anchor="middle" dominant-baseline="central">COIN · BITW · Bessent legislation · 10–15yr</text>
+</g>
+
+<!-- Theme connectors -->
+<path d="M695 516 Q565 550 565 590" fill="none" stroke="#D85A30" stroke-width="1" marker-end="url(#arr)"/>
+<path d="M695 516 Q565 680 565 720" fill="none" stroke="#D85A30" stroke-width="0.8" marker-end="url(#arr)"/>
+<path d="M695 516 Q565 810 565 850" fill="none" stroke="#D85A30" stroke-width="0.8" marker-end="url(#arr)"/>
+<path d="M695 516 Q820 550 820 590" fill="none" stroke="#D85A30" stroke-width="0.8" marker-end="url(#arr)"/>
+<path d="M695 516 Q820 680 820 720" fill="none" stroke="#D85A30" stroke-width="0.8" marker-end="url(#arr)"/>
+<path d="M695 516 Q820 810 820 850" fill="none" stroke="#BA7517" stroke-width="0.8" marker-end="url(#arr)"/>
+
+<!-- ══════════════════════════════════════════
+     ZONE 4: MARKET TRADES
+══════════════════════════════════════════ -->
+
+<!-- CURVE STEEPENER -->
+<g class="mm-node" id="n-steepen" onclick="showDetail('steepen')">
+  <rect x="1000" y="70" width="350" height="64" rx="10" fill="#BA7517" fill-opacity=".15" stroke="#BA7517" stroke-width="1.5"/>
+  <text font-size="14" font-weight="500" font-family="var(--font-sans)" fill="#412402" x="1175" y="97" text-anchor="middle" dominant-baseline="central">2s10s curve steepener</text>
+  <text font-size="11" font-family="var(--font-sans)" fill="#633806" x="1175" y="117" text-anchor="middle" dominant-baseline="central">Long 2Y · short 10Y · target +100–150bps</text>
+</g>
+<line x1="940" y1="102" x2="1000" y2="102" stroke="#BA7517" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- SHORT DOLLAR -->
+<g class="mm-node" id="n-shortdollar" onclick="showDetail('shortdollar')">
+  <rect x="1000" y="200" width="350" height="64" rx="10" fill="#BA7517" fill-opacity=".12" stroke="#BA7517" stroke-width="1"/>
+  <text font-size="13" font-weight="500" font-family="var(--font-sans)" fill="#412402" x="1175" y="227" text-anchor="middle" dominant-baseline="central">Short USD / long commodity FX</text>
+  <text font-size="11" font-family="var(--font-sans)" fill="#633806" x="1175" y="247" text-anchor="middle" dominant-baseline="central">UUP puts · long BRL · long AUD · DXY top</text>
+</g>
+<line x1="940" y1="237" x2="1000" y2="237" stroke="#BA7517" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- BELLY PLAY -->
+<g class="mm-node" id="n-belly" onclick="showDetail('belly')">
+  <rect x="1000" y="330" width="350" height="56" rx="8" fill="#BA7517" fill-opacity=".1" stroke="#BA7517" stroke-width="0.8"/>
+  <text font-size="13" font-weight="500" font-family="var(--font-sans)" fill="#412402" x="1175" y="353" text-anchor="middle" dominant-baseline="central">5-year belly play</text>
+  <text font-size="11" font-family="var(--font-sans)" fill="#633806" x="1175" y="371" text-anchor="middle" dominant-baseline="central">IEF · front-end cuts lift 5Y · +5–10% total return</text>
+</g>
+<line x1="940" y1="372" x2="1000" y2="358" stroke="#BA7517" stroke-width="0.8" marker-end="url(#arr)"/>
+
+<!-- COPPER LONG -->
+<g class="mm-node" id="n-copper" onclick="showDetail('copper')">
+  <rect x="1000" y="450" width="350" height="56" rx="8" fill="#BA7517" fill-opacity=".1" stroke="#BA7517" stroke-width="0.8"/>
+  <text font-size="13" font-weight="500" font-family="var(--font-sans)" fill="#412402" x="1175" y="473" text-anchor="middle" dominant-baseline="central">Long copper</text>
+  <text font-size="11" font-family="var(--font-sans)" fill="#633806" x="1175" y="491" text-anchor="middle" dominant-baseline="central">FCX · COPX · HG futures · Druck "big consensus"</text>
+</g>
+<line x1="680" y1="877" x2="1000" y2="478" stroke="#BA7517" stroke-width="0.8" stroke-dasharray="3 3" marker-end="url(#arr)"/>
+
+<!-- ══════════════════════════════════════════
+     ZONE 5: RISK / KILL SWITCHES
+══════════════════════════════════════════ -->
+
+<!-- IRAN / OIL RISK -->
+<g class="mm-node" id="n-iran" onclick="showDetail('iran')">
+  <rect x="1000" y="590" width="350" height="64" rx="10" fill="#888780" fill-opacity=".15" stroke="#888780" stroke-width="1.5"/>
+  <text font-size="14" font-weight="500" font-family="var(--font-sans)" fill="#2C2C2A" x="1175" y="617" text-anchor="middle" dominant-baseline="central">Kill #1 — Iran / oil shock</text>
+  <text font-size="11" font-family="var(--font-sans)" fill="#444441" x="1175" y="637" text-anchor="middle" dominant-baseline="central">WTI above $95 → Core PCE re-fires → hold rates</text>
+</g>
+
+<!-- AI NO SHOW -->
+<g class="mm-node" id="n-ainomaterialise" onclick="showDetail('ainomaterialise')">
+  <rect x="1000" y="720" width="350" height="64" rx="10" fill="#888780" fill-opacity=".12" stroke="#888780" stroke-width="1"/>
+  <text font-size="13" font-weight="500" font-family="var(--font-sans)" fill="#2C2C2A" x="1175" y="747" text-anchor="middle" dominant-baseline="central">Kill #2 — AI productivity stalls</text>
+  <text font-size="11" font-family="var(--font-sans)" fill="#444441" x="1175" y="767" text-anchor="middle" dominant-baseline="central">TFP flat 2 quarters → no cut justification</text>
+</g>
+
+<!-- SOCK PUPPET -->
+<g class="mm-node" id="n-sockpuppet" onclick="showDetail('sockpuppet')">
+  <rect x="1000" y="850" width="350" height="64" rx="10" fill="#888780" fill-opacity=".12" stroke="#888780" stroke-width="1"/>
+  <text font-size="13" font-weight="500" font-family="var(--font-sans)" fill="#2C2C2A" x="1175" y="877" text-anchor="middle" dominant-baseline="central">Kill #3 — political capitulation</text>
+  <text font-size="11" font-family="var(--font-sans)" fill="#444441" x="1175" y="897" text-anchor="middle" dominant-baseline="central">Cuts before TFP → inflation reignites → gold</text>
+</g>
+
+<!-- Risk connectors from AI thesis -->
+<line x1="570" y1="654" x2="1000" y2="617" stroke="#888780" stroke-width="0.6" stroke-dasharray="3 3" opacity=".5"/>
+<line x1="570" y1="654" x2="1000" y2="747" stroke="#888780" stroke-width="0.6" stroke-dasharray="3 3" opacity=".5"/>
+<line x1="570" y1="654" x2="1000" y2="877" stroke="#888780" stroke-width="0.6" stroke-dasharray="3 3" opacity=".5"/>
+
+<!-- ── Cross-zone connectors ── -->
+<!-- Warsh → QT+Cuts -->
+<path d="M370 215 Q410 180 450 102" fill="none" stroke="#7F77DD" stroke-width="1.2" marker-end="url(#arr)"/>
+<!-- Bessent → New Accord -->
+<path d="M260 396 Q350 372 450 372" fill="none" stroke="#1D9E75" stroke-width="0.8" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+<!-- Karp → Gov AI -->
+<path d="M370 368 Q450 430 565 720" fill="none" stroke="#D85A30" stroke-width="0.8" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+<!-- MSK → Biotech -->
+<path d="M370 888 Q430 840 565 654" fill="none" stroke="#1D9E75" stroke-width="0.8" stroke-dasharray="3 3" marker-end="url(#arr)"/>
+<!-- Steepener from QT+Cuts -->
+<line x1="940" y1="102" x2="1000" y2="102" stroke="#BA7517" stroke-width="1" marker-end="url(#arr)"/>
+<!-- Short dollar from AI thesis -->
+<line x1="940" y1="237" x2="1000" y2="237" stroke="#BA7517" stroke-width="1" marker-end="url(#arr)"/>
+
+</svg>
+</div>
+</div>
+
+<div id="detail-panel">
+  <div id="dp-tag" class="dp-tag"></div>
+  <div id="dp-title" class="dp-title"></div>
+  <div id="dp-sub" class="dp-sub"></div>
+  <div id="dp-body" class="dp-body"></div>
+  <div id="dp-grid" class="dp-grid"></div>
+  <div id="dp-links" class="dp-links"></div>
+</div>
+
+<script>
+const DATA = {
+  druck:{tag:'Apex node',tagColor:'#E1F5EE',tagText:'#085041',title:'Stanley Druckenmiller',sub:'Duquesne Family Office · $4.49B AUM · 30% avg annual return · 0 losing years 1981–2010',body:'Druckenmiller is the true apex of the entire network — not just Warsh\'s mentor but the common intellectual parent of both Warsh and Bessent. He hired Bessent at Quantum Fund in the early 1990s, mentored Warsh at Duquesne for 15 years with 10+ daily contacts, and seeded the Silicon Valley private deal flow (including Palantir) through Warsh\'s introductions. His $4.49B equity portfolio is a live expression of the macro thesis: 29% in AI biotech (NTRA, INSM, TEVA), 6.7% in financials (XLF), 3.55% in Coupang, 2.99% in Brazil (EWZ). He is simultaneously long copper and gold in the non-disclosed derivatives book, and explicitly short the USD. The FT described the Bessent-Warsh pairing as "the way Druckenmiller interprets markets and economic policy" — two protégés now controlling the two most powerful economic institutions in the US simultaneously.',stats:[['Portfolio size','$4.49B Q4 2025'],['Largest position','NTRA 12.8% ($575M)'],['Mentorship span','15 years at Duquesne'],['Black Wednesday','Bessent & Druck vs BoE']],links:['Long copper thesis','Biotech AI thesis','Short USD thesis','MSK board seat']},
+  warsh:{tag:'Convergence node',tagColor:'#EEEDFE',tagText:'#3C3489',title:'Kevin Warsh',sub:'Fed Chair nominee · $10.2M Duquesne fees · $100M+ Juggernaut Fund · Stanford \'92 · Harvard Law \'95',body:'Warsh is the single node that bridges three completely different worlds simultaneously: Wall Street capital (Druckenmiller/Bessent), Silicon Valley tech (Karp/Thiel/Andreessen), and academic institutionalism (Friedman/Shultz at Hoover). No prior Fed Chair straddled all three. His 15 years at Duquesne gave him Druckenmiller\'s empirical method — real-time network intelligence over lagged government data. His Stanford network gave him the AI disruption worldview. His Hoover mentorship gave him the rules-based monetary framework. These three inputs fuse into the "Warsh Doctrine": shrink the balance sheet, restore rules, let AI productivity justify rate cuts, and never let the Fed wander into fiscal or social policy. Financially, his $10.2M consulting fee from Duquesne and $100M+ in the opaque Juggernaut Fund make him the wealthiest Fed Chair nominee in history.',stats:[['Consulting income','$10.2M from Duquesne'],['Juggernaut Fund','$100M+ undisclosed'],['Total net worth','$192M+ (disclosed)'],['Coupang board','Member since 2019']],links:['QT + cuts doctrine','AI deflationary thesis','New 1951 Accord','Rules-based policy']},
+  bess:{tag:'Treasury · Bessent',tagColor:'#E1F5EE',tagText:'#085041',title:'Scott Bessent',sub:'Treasury Secretary · Druckenmiller protégé · Black Wednesday architect · Key Square Capital founder',body:'Bessent is the operational mirror of Warsh — both trained by Druckenmiller, both fluent in the language of central bank confrontation (Black Wednesday 1992 proved a macro fund could break a central bank\'s currency peg). His "Gain-of-Function Monetary Policy" essay (Spring 2025) used language nearly identical to Warsh\'s Hoover papers: QE is for "true emergencies only," the Fed\'s independence is a "jewel box" — narrow and walled. The critical operational expression: Bessent prefers Treasury issuance weighted toward the short end (T-bills) while Warsh\'s QT drains the long end — creating coordinated supply pressure that steepens the curve without requiring explicit agreement. The "New 1951 Accord" between them is already operating: on April 22 2026, Bessent treated Fed and Treasury swap lines as legally interchangeable in Senate testimony — exactly as Warsh had signaled at his own hearing the prior day.',stats:[['Bessent-Druck link','Black Wednesday 1992'],['Key Square seed','Druckenmiller anchor capital'],['Published doctrine','"Gain-of-Function" essay'],['Live coordination','Apr 22 2026 swap line testimony']],links:['New 1951 Accord','Short USD thesis','5Y belly play','Bank deregulation']},
+  karp:{tag:'Palantir · Stanford network',tagColor:'#FAECE7',tagText:'#712B13',title:'Alex Karp',sub:'Palantir CEO · Stanford Law · Goethe PhD · $13.7B federal contracts · DOGE axis',body:'Karp is where Warsh\'s monetary theory and Druckenmiller\'s capital meet the operational execution of government AI. Palantir\'s federal contracts nearly doubled in 2025 to $970.5M, and multi-year ceilings awarded that year exceed $13.7B. Palantir is embedded at the IRS (fraud detection, $130M contract), Treasury (unified API layer), Army (readiness analytics), and is rumored to be a primary DOGE vendor. This is not incidental — Warsh\'s core inflation theory holds that fiscal waste causes price pressure, and Palantir is the AI tool being deployed to cut that waste. The Stanford connection (Karp met Thiel at Stanford Law, Thiel co-founded Palantir with him) creates a triangle: Warsh knew Thiel from Stanford student government, Thiel and Karp built Palantir, Warsh introduced Druckenmiller to the Palantir investment. The 2022 Stanford Hoover podcast between Warsh and Karp is the ideological alignment on record.',stats:[['2025 federal revenue','$970.5M · 2x YoY'],['Total multi-year ceilings','$13.7B awarded 2025'],['IRS contract','$130M · fraud/data'],['Stock multiple','~509x earnings']],links:['Government AI theme','Fiscal inflation theory','Palantir IRS contract']},
+  fried:{tag:'Mentorship · Hoover',tagColor:'#F1EFE8',tagText:'#444441',title:'Milton Friedman',sub:'Hoover Institution · monetarist · "inflation is always and everywhere a monetary phenomenon"',body:'Warsh served as Friedman\'s research assistant at Hoover — a direct intellectual apprenticeship, not passive influence. Friedman\'s core axiom: inflation is always a policy choice. Central banks cause it by expanding money supply and can stop it by refusing to do so. No supply shocks, no external factors, no excuses. This is why Warsh called the post-2020 "Team Transitory" narrative the "biggest policy mistake in 40 years" — Friedman\'s framework allows zero tolerance for self-deception. Friedman also championed rules-based policy — the Fed should follow a fixed framework (like the Taylor Rule) rather than making discretionary judgments. Warsh\'s determination to eliminate dot plots and forward guidance flows directly from this. The axiom "inflation is a choice" is the intellectual spine of everything Warsh will do at the Fed.',stats:[['Warsh role','Research assistant at Hoover'],['Core axiom','"Inflation is a choice"'],['Policy implication','Rules over discretion'],['Legacy','Taylor Rule · eliminate dot plots']],links:['Rules-based policy','End of Fed put','QT + cuts doctrine']},
+  shultz:{tag:'Mentorship · Statesman',tagColor:'#F1EFE8',tagText:'#444441',title:'George Shultz',sub:'Hoover Institution · Nixon Treasury · Reagan Secretary of State · "Commanding Heights" philosophy',body:'Shultz served as Nixon\'s Treasury Secretary during the era when the Fed\'s independence was informally compromised — and watched the 1970s inflation disaster that followed. His lesson, passed to Warsh through the Hoover mentorship: a central bank\'s credibility is its most fragile and most valuable possession. Once lost, it takes a decade of pain to recover. This is the source of Warsh\'s insistence that the Fed "stay in its lane" — never wandering into climate policy, social justice debates, or fiscal support — because every venture outside the mandate erodes the trust that makes anti-inflation promises believable. Shultz also bequeathed the "Commanding Heights" framework: the idea that major institutions must maintain stability and rule-of-law above short-term political demands. Warsh uses this exact language in his Hoover speeches.',stats:[['Shultz role at Hoover','Distinguished statesman fellow'],['Core lesson','1970s inflation via compromised Fed'],['Legacy for Warsh','"Commanding Heights" philosophy'],['Application','Fed must not do climate/DEI']],links:['Rules-based policy','Institutional independence']},
+  thiel:{tag:'Stanford network',tagColor:'#F1EFE8',tagText:'#444441',title:'Peter Thiel',sub:'Stanford Review founder · Palantir co-founder · Founders Fund · PayPal Mafia · Marc Andreessen ally',body:'Thiel is the bridge between Warsh\'s college relationships and the Silicon Valley investment universe he later brought to Druckenmiller. Warsh was president of the Stanford student association while Thiel was comptroller — they shared actual institutional governance as undergraduates. Thiel later co-founded Palantir with Karp (whom he met at Stanford Law), creating a direct chain: Warsh\'s college relationship with Thiel → Thiel\'s co-founding of Palantir → Warsh\'s introduction of Palantir to Druckenmiller → Druckenmiller\'s early Palantir investment. The Stanford Review Thiel founded in 1987 is the most underreported node in the entire network — it produced Warsh, Palantir\'s co-founders, David Sacks (now Trump\'s White House AI Czar), and Keith Rabois. The same undergraduate newspaper is now represented at the Fed, Palantir, and the White House AI policy function simultaneously.',stats:[['Stanford Review','Founded 1987 by Thiel'],['Warsh-Thiel overlap','Student govt. 1990–1992'],['Palantir co-founders','Thiel + Karp + Cohen + Lonsdale'],['David Sacks','White House AI Czar — same network']],links:['Government AI theme','Stanford network thesis','Karp connection']},
+  jane:{tag:'Familial · Social capital',tagColor:'#FBEAF0',tagText:'#72243E',title:'Jane Lauder',sub:'Estée Lauder heiress · ~$1.9B · Stanford \'95 · Ronald Lauder → Trump → Greenland · Stanford board 2025',body:'The Lauder connection is more consequential than it appears. Jane\'s father Ronald Lauder is a Trump intimate who first planted the Greenland acquisition idea — and is president of the World Jewish Congress and a former US ambassador to Austria. The marriage in 2002 — the same year Bush brought Warsh into the White House NEC — gave Warsh immediate access to New York-Washington elite networks that an M&A banker from Albany would not otherwise have possessed. The $1.9B Lauder fortune beneath Warsh\'s personal $192M means he operates from genuine financial independence — which paradoxically makes his actual conflicts of interest (Duquesne, Palantir) more concerning since they appear voluntary rather than necessary. Jane\'s election to the Stanford Board of Trustees in 2025 deepens the family\'s institutional stake in the same ecosystem where Warsh\'s Silicon Valley relationships originated.',stats:[['Jane net worth','~$1.9B (Forbes)'],['Ronald Lauder','Greenland idea · Trump intimate'],['Marriage timing','2002 · same yr Bush NEC role'],['Stanford board','Elected 2025']],links:['Warsh independence paradox','Trump political access']},
+  msk:{tag:'Institutional edge',tagColor:'#E1F5EE',tagText:'#085041',title:'Memorial Sloan Kettering Cancer Center',sub:'30-year Druckenmiller board seat · Druckenmiller Center for Lung Cancer · AI biotech edge · liquid biopsy pioneer',body:'Druckenmiller has been on the MSK board since 1997 — 30 years of frontrow access to the most important secular trend in healthcare: the compression of drug discovery timelines through AI. This is not a philanthropic side note. It is the source of his biotech conviction. He stated explicitly: "I\'ve been on the board of Memorial Sloan Kettering for 30 years. Probably the best use case out there of AI is biotech — through drug discovery, diagnostics, monitoring everything." The Druckenmiller Center for Lung Cancer Research (established 2015 at MSK) funded early breakthroughs in liquid biopsy — the exact technology that Natera commercializes through Signatera. MSK also launched Paige AI (FDA-approved AI pathology diagnostics) and partnered with Insilico Medicine for AI-driven oncology drug discovery. Druckenmiller\'s NTRA position ($575M, 12.8% of portfolio) is the financial expression of three decades of institutional knowledge.',stats:[['Board tenure','30 years · since 1997'],['Druckenmiller Center','Lung cancer research · 2015'],['Key breakthrough','Liquid biopsy funding → NTRA'],['MSK AI spinout','Paige AI · FDA-approved']],links:['Natera thesis','Insmed thesis','AI biotech revolution']},
+  qtcuts:{tag:'Core doctrine',tagColor:'#EEEDFE',tagText:'#3C3489',title:'QT + rate cuts simultaneously',sub:'The "regime change" — $6.7T → $4T balance sheet · cuts to 2.75–3% · no prior Fed has attempted this combination',body:'The most distinctive and unprecedented element of the Warsh doctrine: shrink the balance sheet aggressively while simultaneously cutting short-term rates. Powell\'s framework treated QT and rate cuts as sequential — you finish one, then start the other. Warsh views them as simultaneous tools for different problems. Balance sheet reduction removes the "distortions" of an oversized portfolio and forces markets to price risk without a guaranteed Fed buyer of last resort. Rate cuts reflect the AI productivity argument — if TFP is rising, the neutral rate (R-star) is lower than currently assumed, so current rates are more restrictive than intended. The practical expression: 2s10s yield curve steepens aggressively (front end falls on cuts, back end stays elevated as QT removes the buyer). The balance sheet target is approximately $4–4.5T from $6.7T today — a $2–2.7T reduction.',stats:[['Current balance sheet','$6.7T (May 2026)'],['Target balance sheet','$4–4.5T'],['Rate target','2.75–3% if AI confirms'],['Curve implication','2s10s → +100–150bps']],links:['2s10s steepener','5Y belly play','Fiscal dominance theory']},
+  aidef:{tag:'Core thesis',tagColor:'#EEEDFE',tagText:'#3C3489',title:'AI deflationary thesis',sub:'J-curve productivity boom · 1990s New Economy redux · TFP surge allows 4% growth without inflation',body:'Warsh\'s central intellectual bet — and the mechanism that lets him justify rate cuts without appearing dovish. The argument: AI compresses unit labor costs (fewer workers, more output), allowing the economy to grow at 4%+ without the wage-price spirals the Phillips Curve predicts. He draws a direct parallel to the 1995–2000 productivity boom where the internet-driven TFP surge allowed the Fed to maintain accommodative policy during a sustained expansion. The "J-curve" mechanism: AI requires massive upfront investment and reorganization (downward slope) before the productivity spike materializes. Druckenmiller\'s MSK board insight is the most credible source of this thesis at the individual stock level — Natera literally IS AI applied to biology, compressing the cost of cancer detection from biopsy to blood test. Warsh\'s intellectual risk: TFP is measured with a lag, meaning he could cut based on productivity that hasn\'t officially shown up yet.',stats:[['Analog','1995–2000 New Economy'],['Mechanism','TFP surge → lower R-star'],['Warsh cut threshold','TFP positive 2 qtrs'],['Risk','Cuts before data confirms']],links:['Kill #2 — AI stalls','Biotech AI revolution','Copper thesis','TFP watch signal']},
+  accord:{tag:'Policy · Bessent-Warsh',tagColor:'#EEEDFE',tagText:'#3C3489',title:'New 1951 Accord',sub:'Fed-Treasury coordination · jointly define balance sheet · issuance maturity sync · already operating live',body:'The 1951 Treasury-Fed Accord ended the WWII-era arrangement where the Fed was required to support Treasury bond prices — restoring genuine monetary independence. Warsh explicitly invokes this: "We need a new Treasury-Fed accord like we did in 1951 after another period where we built up our nation\'s debt, and we were stuck with a central bank working across purposes with the Treasury." The new version would have both the Fed Chair and Treasury Secretary jointly describe to markets the objective for the Fed\'s balance sheet size. Critics see this as a form of Yield Curve Control in disguise. Evidence it is already operating: on April 22 2026, one day after Warsh\'s confirmation hearing, Bessent treated Fed and Treasury swap lines as legally interchangeable in Senate testimony. The coordination is not theoretical. It is live.',stats:[['Historical precedent','1951 Fed-Treasury Accord'],['Current expression','Bessent Apr 22 swap line testimony'],['Bessent doctrine','"Gain-of-Function Monetary Policy"'],['Risk','Perceived as YCC → credibility loss']],links:['Short USD thesis','T-bill issuance trade','QT + cuts doctrine']},
+  rules:{tag:'Policy doctrine',tagColor:'#EEEDFE',tagText:'#3C3489',title:'Rules-based monetary policy',sub:'Eliminate dot plots · Taylor Rule framework · end forward guidance · "institutional credibility" above all',body:'Inherited directly from Friedman and Shultz, this is Warsh\'s most consistent and deeply held position. He views "forward guidance" and dot plots as a mistake that created an artificial certainty the Fed could never deliver — when reality diverged from the guidance, credibility eroded. His preferred alternative: a rules-based framework (Taylor Rule or similar) that limits central bank discretion and anchors expectations through consistent behavior rather than promises. For markets, the practical impact is significant: the "dot plot" was the primary mechanism through which traders priced future rate paths. Its elimination forces market participants to revert to interpreting data themselves rather than reading Fed communications. Warsh described this as returning to a more "opaque, market-driven stance" — exactly how Greenspan operated in the 1990s.',stats:[['Friedman lineage','Rules over discretion · research assistant'],['Shultz lineage','Credibility as primary asset'],['Impact','End dot plots · no forward guidance'],['Market effect','Return to data-driven pricing']],links:['End of Fed put','QT + cuts doctrine']},
+  fedput:{tag:'Policy shift',tagColor:'#EEEDFE',tagText:'#3C3489',title:'End of the Fed put',sub:'No equity market backstop · discipline over stability · "sound money era" · markets must price own risk',body:'The "Fed put" — the market\'s belief that the Fed would always cut rates or launch QE to support falling equity prices — has been a structural force in markets since 1987. Warsh\'s nomination was described by some analysts as the "Warsh Shock" specifically because it signals the end of this put. His rules-based philosophy means the Fed will not respond to equity market dislocations unless they create genuine financial system risk (credit freezes, systemic liquidity failures). Ordinary equity selloffs are market function, not monetary policy triggers. For portfolio construction this is a regime change: diversification, hedging, and risk management become genuinely necessary again rather than optional add-ons to an equity portfolio with a guaranteed backstop.',stats:[['Warsh Shock','Jan 30 2026 · nomination day'],['Implication','No equity bailout without systemic risk'],['Portfolio impact','Real hedging necessary again'],['Greenspan comparison','More opaque · less interventionist']],links:['Kill #1 Iran shock','Kill #3 capitulation','2s10s steepener']},
+  dereg:{tag:'Policy · banking',tagColor:'#EEEDFE',tagText:'#3C3489',title:'Bank deregulation',sub:'Basel III Endgame rollback · CFPB curtailed · capital freed → M&A boom · financials re-rated',body:'Warsh has consistently argued that post-2008 bank regulation went too far — not in protecting financial stability, but in creating capital requirements so high they suppressed productive lending and M&A activity. His Duquesne background (Warsh ran private equity for the office) gives him a market practitioner\'s view of how capital constraints suppress deal activity. The practical policy expression: soften Basel III Endgame capital requirements, curtail CFPB enforcement, and allow banks to deploy retained earnings into lending and capital markets activity rather than regulatory buffers. Druckenmiller\'s Q4 2025 XLF position at 6.7% of portfolio is the direct financial expression of this thesis — initiated specifically around the Warsh nomination.',stats:[['Basel III impact','Softer capital requirements'],['CFPB','Enforcement curtailed'],['Druckenmiller expression','XLF 6.7% · new Q4 buy'],['Best single name','GS · capital markets leverage']],links:['Financial deregulation theme','XLF trade']},
+  fiscalinf:{tag:'Unified theory',tagColor:'#EEEDFE',tagText:'#3C3489',title:'Fiscal dominance theory',sub:'Inflation is fiscal · government waste causes price pressure · AI eliminates waste · Palantir executes it',body:'The unifying theory underneath Warsh\'s entire framework: inflation is not primarily a monetary phenomenon in the post-2020 era — it is a fiscal one. When government spends money on unproductive programs (fraudulent Medicare claims, duplicate federal contracts, wasteful procurement), it injects purchasing power into the economy without creating corresponding output. This is inflationary. The solution is not just monetary tightening but fiscal surgery: cutting the waste. Palantir IS that surgery — deployed at the IRS (fraud detection), Treasury (unified data layer), and across federal agencies to identify and eliminate unproductive spending. Bessent restrains new fiscal expansion from the Treasury side. Warsh restrains monetary accommodation from the Fed side. Together they create a coordinated fiscal-monetary squeeze on inflation that is more powerful than either acting alone.',stats:[['Theory source','Friedman + Warsh synthesis'],['Palantir role','Cuts govt waste = anti-inflationary'],['Bessent role','Spending restraint at Treasury'],['Warsh role','No monetary accommodation for waste']],links:['Government AI theme','New 1951 Accord','Palantir contracts']},
+  biotech:{tag:'Investment theme · 29% of Druck',tagColor:'#FAECE7',tagText:'#712B13',title:'AI biotech revolution',sub:'NTRA 12.8% · INSM 5.74% · TEVA 4.08% · 30-year MSK board · sector lagged 4yr → leadership rotation',body:'Druckenmiller\'s largest investment theme by weight — 29% of the $4.49B portfolio across three biotech names. The thesis is compound: (1) biotech lagged the market for four years while AI was the dominant narrative, creating valuation compression despite improving fundamentals; (2) AI is transforming drug discovery and diagnostics, compressing timelines from 12 years to 2–3 years; (3) Druckenmiller\'s 30-year MSK board seat gives him institutional knowledge of which technologies are genuinely transformative before Wall Street prices them in. Natera (NTRA, $575M, +2411% Q4 add) is the purest expression: AI applied to circulating cell-free DNA, catching cancer at the molecular level before imaging can detect it. Insmed (INSM) has a first-mover monopoly on non-cystic fibrosis bronchiectasis treatment — a 500,000-patient market with zero prior therapeutic options. Teva (TEVA) is a classic Druckenmiller "pricing error" — bought at 6x P/E when value investors hated its generics-to-biosimilars transition and growth investors hadn\'t recognized it.',stats:[['NTRA weight','12.8% · $575M · +2411%'],['INSM weight','5.74% · $258M · -39% trim'],['TEVA weight','4.08% · entry $16 → now $32'],['Theme driver','MSK edge + AI drug discovery']],links:['Natera liquid biopsy','Insmed BRINSUPRI','Teva turnaround']},
+  govai:{tag:'Investment theme · Karp axis',tagColor:'#FAECE7',tagText:'#712B13',title:'Government AI infrastructure',sub:'PLTR $13.7B contracts · IRS fraud · DOGE · AIP platform · Karp-Warsh ideological alignment',body:'Palantir is the investment that sits at the exact intersection of Warsh\'s monetary theory, Druckenmiller\'s capital, and Karp\'s operational execution. Federal contracts nearly doubled in 2025 to $970.5M; multi-year ceilings awarded that year exceed $13.7B. The company\'s "Ontology" framework — a digital twin of any organization — is what gives government agencies the ability to run AI on their own data without surrendering control. At the IRS, Palantir built a single access point to all taxpayer data (SSNs, tax returns, employment records, bank information) for fraud detection. At the Army, it runs readiness and logistics analytics. At DOGE, it is helping eliminate legacy COBOL systems and map the "data layer" of the federal government. The stock trades at ~509x earnings — priced for sustained government AI spending acceleration for a decade.',stats:[['2025 federal revenue','$970.5M · 2x YoY'],['Multi-year ceilings','$13.7B awarded 2025'],['IRS contract','$130M · fraud/data mining'],['Total FY25 revenue','$4.48B · +56% YoY']],links:['Karp connection','Fiscal inflation theory','MSFT / SNOW AI stack']},
+  commod:{tag:'Investment theme · Druckenmiller stated',tagColor:'#FAECE7',tagText:'#712B13',title:'Commodities — copper + gold',sub:'Copper: 8yr supply deficit · AI data center demand · FCX/COPX · Gold: both-scenario hedge · GLD/GDX',body:'Druckenmiller stated his positions explicitly in the January 30 2026 Morgan Stanley interview: "We own copper. It\'s not a genius trade. It\'s a big consensus trade. There\'s no supply coming, meaningful supply, very tight, for the next eight years. And obviously, you have a big add on from AI and data centers." Copper is the AI infrastructure commodity — a single AI data center consumes as much copper as three conventional facilities. JPMorgan targets $12,500/t in Q2 2026; Citi targets $13,000+ with $15,000 possible under supply disruption scenarios. S&P Global projects the supply deficit reaching 10 million metric tons by 2040. Gold works in both regime scenarios: dollar weakness and rate cuts make it attractive in the boom path; fiscal dominance fears and Fed credibility erosion make it attractive in the stagflation path. Druckenmiller\'s reported allocation is 25–30% to gold in the non-disclosed book.',stats:[['Copper: JPM target','$12,500/t Q2 2026'],['Copper: supply gap','8yr tight · 150k+ ton deficit 2026'],['Gold: scenario','Works in boom AND stagflation'],['Druckenmiller gold alloc','~25–30% of non-disclosed book']],links:['Long copper trade','Short USD thesis','Kill #1 Iran risk']},
+  em:{tag:'Investment theme · dollar inversion',tagColor:'#FAECE7',tagText:'#712B13',title:'EM + dollar inversion',sub:'EWZ 2.99% · CPNG 3.55% · SE +244% Q4 · BRL · trade diversion from US tariff regime',body:'The EM book is the equity expression of the dollar weakness thesis. As the dollar weakens and US tariffs redirect global trade flows away from US destinations, countries positioned as trade-diversion beneficiaries capture incremental demand. Druckenmiller\'s Q4 2025 EM positions are thematically consistent: EWZ (Brazil — commodity exporter, widest positive real rate differential globally), Coupang (South Korea — trade diversion beneficiary as US-China friction redirects Asian manufacturing), Sea Limited (Southeast Asia — captures manufacturing migration to Vietnam, Indonesia, Malaysia). The historical precedent is compelling: during the last major commodity supercycle (Oct 2002–May 2008), Brazilian equities outpaced the S&P 500 by over 1,000%. Druckenmiller\'s broader "lost decade for US equities" thesis suggests the EM book may be his core position, not a satellite.',stats:[['EWZ','2.99% · new Q4 buy · +20% Jan \'26'],['CPNG','3.55% · Warsh is board member'],['SE','New Q4 · +244% added'],['Druckenmiller macro','US equities flat 10yr thesis']],links:['Short USD thesis','Brazil trade anatomy','Coupang-Warsh board connection']},
+  fins:{tag:'Investment theme · Bessent axis',tagColor:'#FAECE7',tagText:'#712B13',title:'Financial deregulation play',sub:'XLF 6.7% · GS capital markets · WWD industrial · Basel III rollback · M&A pipeline reopens',body:'The financials book is not primarily a rate trade — it is a deregulation and capital markets activity trade driven by Bessent\'s regulatory philosophy and Warsh\'s bank supervision retreat. XLF (financial sector ETF) entered Druckenmiller\'s portfolio at 6.7% in Q4 2025 — a new buy timed to the Warsh nomination. Woodward Inc. (WWD at 3.97%) is the industrial expression: aerospace and industrial control systems, direct beneficiary of the defense spending surge (Iran war + NATO pressure) and reshoring manufacturing theme. Goldman Sachs is the best single-name expression of the financials thesis — most leveraged to capital markets reopening (M&A, IPOs, trading revenue) and least exposed to consumer credit stress. XLF is currently trading ~13% below its 52-week high — the deregulation thesis creates a structural discount entry.',stats:[['XLF weight (Druck)','6.7% · new Q4 buy'],['XLF vs 52W high','~13% discount'],['Best single name','GS · cap mkts leverage'],['WWD weight','3.97% · defense + industrial']],links:['Bank deregulation policy','Capital markets thesis','Bessent issuance trade']},
+  crypto:{tag:'Wildcard · 10–15yr',tagColor:'#FAEEDA',tagText:'#633806',title:'Stablecoins + crypto infrastructure',sub:'Druckenmiller: "10–15yr payment backbone" · Warsh THSDFS LLC positions · Bessent legislation · COIN/BITW',body:'The most overlooked convergence point in the entire network. Druckenmiller said stablecoins could "power global payments in 10–15 years." Warsh\'s financial disclosure revealed dozens of crypto and blockchain positions inside THSDFS LLC — DeFi lending, Layer 1/Layer 2 networks, prediction markets (Polymarket), Bitcoin payment infrastructure, and a stake in Bitwise Asset Management (spot bitcoin ETF). Bessent\'s Treasury is actively working on stablecoin legislation. Warsh\'s Fed would oversee bank crypto custody policy and stablecoin regulation directly. Three of the five most powerful people in US economic policy in 2026 are aligned on the legitimacy of stablecoin payment infrastructure. The investment expression: Coinbase (COIN) as the primary regulated stablecoin infrastructure player, Circle (private, pre-IPO) as USDC issuer. Size as a 3–5% speculation, not a core position.',stats:[['Druckenmiller view','"10–15yr payment backbone"'],['Warsh crypto','Dozens of positions in THSDFS'],['Bessent action','Active stablecoin legislation'],['Sizing','3–5% · long-duration wildcard']],links:['Short USD thesis','Dollar replacement narrative']},
+  steepen:{tag:'Rates trade',tagColor:'#FAEEDA',tagText:'#633806',title:'2s10s curve steepener',sub:'Long 2Y (SOFR futures) · short 10Y (TBT) · target +100–150bps · most direct Warsh expression',body:'The single trade that most directly bets on the Warsh doctrine. Front-end cuts from Warsh lower 2-year yields. QT removes the Fed as the marginal buyer of long-dated Treasuries, keeping 10-year yields elevated or rising. The 2s10s spread — deeply inverted during the Powell era — steepens aggressively. Bessent\'s preference for short-end Treasury issuance concentrates supply pressure at the long end, amplifying the steepening. The 10Y is currently 4.35–4.45%, having already begun to reprice the Warsh regime. Duration-neutral positioning: long SOFR futures (front end) against short TBT (inverse 20+ year Treasury ETF) captures the shape move without directional rate risk. Target: 2s10s at +100–150bps within 12–18 months if Warsh executes.',stats:[['Current 2s10s','~+40–60bps'],['Target','100–150bps'],['Long leg','SOFR futures · 2Y Treasuries'],['Short leg','TBT · 10Y+ Treasuries']],links:['QT + cuts doctrine','Bessent issuance trade','End of Fed put']},
+  shortdollar:{tag:'FX trade',tagColor:'#FAEEDA',tagText:'#633806',title:'Short USD / long commodity FX',sub:'UUP puts · long BRL · long AUD · DXY at historic purchasing power top · Druckenmiller stated position',body:'Druckenmiller stated this explicitly: "We are bearish on the US dollar mainly because sort of the top of the historic range in terms of purchasing power. And foreigners are way, way overloaded in dollars." The mechanism: US current account deficit narrows under tariff pressure, reducing net capital inflows that support dollar demand. Simultaneously, Warsh\'s rate cuts reduce the carry advantage of holding dollars. The dollar falls under its own weight, not because of a crisis. For non-US investors, dollar weakness amplifies returns on EM equities and commodities (both priced in dollars). The FX expression: long BRL (widest positive real rate differential globally), long AUD (copper currency), long commodity-linked currencies broadly. Instrument: UUP (dollar bull ETF) puts for defined risk dollar short exposure.',stats:[['Druckenmiller stated','Explicitly bearish on USD'],['Mechanism','CA deficit + rate cuts + carry reduction'],['BRL rationale','Widest real rate diff globally'],['Instrument','UUP puts · long BRL · long AUD']],links:['EM theme','Copper thesis','New 1951 Accord']},
+  belly:{tag:'Rates trade',tagColor:'#FAEEDA',tagText:'#633806',title:'5-year belly play',sub:'IEF · front-end cuts lift 5Y · shorter duration insulates from QT · +5–10% total return target',body:'iShares described the belly of the yield curve (3–7 year) as where the Warsh "regime change" expresses most clearly. If Warsh delivers 75–100bps of cuts on the front end while the long end stays anchored by Treasury supply (Bessent\'s issuance calendar) and QT removal of the Fed buyer, the 5-year benefits from both dynamics: falling short rates drag it lower, while its shorter duration insulates it from long-end supply pressure. The 5-year offers better risk/reward than duration extremes — less curve risk than a 2s10s steepener, more rate sensitivity than T-bills. Total return target: 5–10% if Warsh delivers 2–3 cuts in 2026.',stats:[['Instrument','IEF (7–10Y Treasury ETF)'],['Duration','~7Y DV01 · moderate'],['Scenario trigger','2–3 Fed cuts in 2026'],['Return target','+5–10% total return']],links:['QT + cuts doctrine','2s10s steepener','Bessent issuance trade']},
+  copper:{tag:'Commodities trade',tagColor:'#FAEEDA',tagText:'#633806',title:'Long copper',sub:'FCX · COPX · HG futures · 8yr supply deficit · AI data centers · "not a genius trade" — Druckenmiller',body:'Druckenmiller called it "a big consensus trade" — unusual for him, since he generally avoids consensus. His comfort with consensus here reflects the structural nature of the bull case: no meaningful new copper supply for 8 years, combined with AI data center demand (a single hyperscale facility uses as much copper as three conventional buildings), EV electrification, and grid upgrade requirements. JPMorgan targets $12,500/t in Q2 2026; Deutsche Bank targets $12,125 average for full year 2026. S&P Global projects the supply deficit reaching 10 million metric tons by 2040. Dollar weakness amplifies the trade — copper is dollar-denominated, so a weaker dollar is a direct tailwind to non-USD investors. Best equity expressions: FCX (Freeport-McMoRan, largest pure copper producer with operational leverage to price), COPX (diversified copper miners ETF).',stats:[['Druckenmiller view','"Big consensus trade · no genius required"'],['JPM target','$12,500/t Q2 2026'],['Supply deficit','150k+ tons by 2026 · 8yr tight'],['Best equity','FCX · COPX · HG futures']],links:['AI deflationary thesis','Short USD thesis','Brazil EWZ']},
+  iran:{tag:'Kill switch #1',tagColor:'#F1EFE8',tagText:'#444441',title:'Kill #1 — Iran / oil shock',sub:'WTI above $95 sustained · Core PCE re-accelerates → Warsh cannot cut → dollar safe-haven bid → unwind everything',body:'The primary tail risk to the entire regime. If the Iran war escalates into a full Middle East conflict, WTI crude above $95 sustained would re-accelerate Core PCE above 3.5–4% on a monthly trend basis. Warsh has no intellectual cover for rate cuts in that environment — his own Friedmanite framework demands he hold or hike. The dollar gets a geopolitical safe-haven bid, completely inverting the short-USD thesis. The EM book bleeds as dollar strength and commodity price volatility hit Brazil and Southeast Asia simultaneously. The curve steepener collapses as rate cut expectations are repriced. Protective position: 2–3% of portfolio in crude upside (USO call spreads, XLE options) — this hedge pays in the exact scenario that wipes everything else.',stats:[['Trigger','WTI above $95 sustained'],['Core PCE threshold','Above 3.5% monthly trend'],['Impact','No cuts · dollar safe-haven · EM unwind'],['Hedge','USO calls · XLE options · 2–3%']],links:['Copper thesis (survives)','Gold thesis (amplified)']},
+  ainomaterialise:{tag:'Kill switch #2',tagColor:'#F1EFE8',tagText:'#444441',title:'Kill #2 — AI productivity stalls',sub:'TFP flat 2 consecutive quarters · Warsh has no cut justification · AI equity book loses fundamental base',body:'If the AI productivity boom doesn\'t show up in TFP data by Q3 2026, Warsh has no intellectual cover for rate cuts — his entire dovish case rests on the thesis that AI is compressing unit labor costs and raising the economy\'s productive capacity. Without TFP confirmation, cutting rates becomes "politically driven" rather than "productivity justified" — exactly the sock puppet accusation he is trying to avoid. The AI equity book (GOOGL, AMZN, TSM) loses its fundamental justification simultaneously. The kill signal: two consecutive quarters of flat or negative BLS TFP data. Action: rotate from AI application equities (GOOGL/AMZN) into defensive tech (MSFT/ORCL), reduce overall equity beta, and wait for the productivity inflection.',stats:[['Trigger','BLS TFP flat 2+ consecutive quarters'],['First indicator','Hyperscaler CapEx guidance reduction'],['Second indicator','NVDA forward orders rolling over'],['Action','Rotate to defensive tech · reduce beta']],links:['AI deflationary thesis','Biotech AI theme (less affected)','CapEx watch signal']},
+  sockpuppet:{tag:'Kill switch #3',tagColor:'#F1EFE8',tagText:'#444441',title:'Kill #3 — political capitulation',sub:'Cuts before TFP confirms · inflation reignites · Fed credibility destroyed · gold explodes · curve chaos',body:'The "sock puppet" scenario — Warsh cuts rates not because the AI productivity data supports it, but because Trump political pressure overrides his institutional judgment. His 2018 precedent (called for the Fed to "cease" hikes when inflation was near 2% and unemployment at 50-year lows) is the empirical evidence that his independence has limits. If he cuts prematurely, inflation reignites (energy + tariffs + loose monetary policy = 1970s redux), and the market re-prices the Fed as a political institution rather than an independent one. The curve steepener explodes as the front end was cut for political reasons but the long end surges on inflation expectations. Gold is the primary beneficiary — Fed credibility erosion is gold\'s cleanest catalyst. Action: short the long end more aggressively (TBT), exit financials (NIM collapse from re-inflation), buy gold hard.',stats:[['Trigger','Rate cut without TFP confirmation'],['Signal','Trump tweets + Warsh dovish pivot timing'],['Market impact','Gold surge · long-end yield explosion'],['Action','TBT · GLD · exit banks']],links:['Gold thesis','2s10s steepener (amplified)','End of Fed put']},
+};
+
+function showDetail(id){
+  const d=DATA[id];if(!d)return;
+  document.querySelectorAll('.mm-node').forEach(n=>n.classList.remove('active'));
+  const nd=document.getElementById('n-'+id);
+  if(nd)nd.classList.add('active');
+  document.getElementById('dp-tag').textContent=d.tag;
+  document.getElementById('dp-tag').style.cssText=`background:${d.tagColor};color:${d.tagText}`;
+  document.getElementById('dp-title').textContent=d.title;
+  document.getElementById('dp-sub').textContent=d.sub;
+  document.getElementById('dp-body').textContent=d.body;
+  const g=document.getElementById('dp-grid');
+  g.innerHTML=d.stats.map(s=>`<div class="dp-stat"><div class="dp-sl">${s[0]}</div><div class="dp-sv">${s[1]}</div></div>`).join('');
+  const l=document.getElementById('dp-links');
+  l.innerHTML=d.links.map(lk=>`<span class="dp-link" onclick="sendPrompt('Tell me more about: ${lk}')">${lk} ↗</span>`).join('');
+  const p=document.getElementById('detail-panel');
+  p.classList.add('open');
+  p.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+let scale=1,tx=0,ty=0,dragging=false,sx=0,sy=0,stx=0,sty=0;
+const canvas=document.getElementById('mm-canvas');
+const svg=document.getElementById('mm-svg');
+
+function applyTransform(){
+  svg.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`;
+  svg.style.transformOrigin='0 0';
+}
+canvas.addEventListener('mousedown',e=>{if(e.button!==0)return;dragging=true;sx=e.clientX;sy=e.clientY;stx=tx;sty=ty;canvas.classList.add('dragging');e.preventDefault();});
+window.addEventListener('mousemove',e=>{if(!dragging)return;tx=stx+(e.clientX-sx);ty=sty+(e.clientY-sy);applyTransform();});
+window.addEventListener('mouseup',()=>{dragging=false;canvas.classList.remove('dragging');});
+canvas.addEventListener('wheel',e=>{e.preventDefault();const delta=e.deltaY>0?0.9:1.11;scale=Math.max(0.3,Math.min(2.5,scale*delta));applyTransform();},{passive:false});
+
+function zoom(f){scale=Math.max(0.3,Math.min(2.5,scale*f));applyTransform();}
+function resetZoom(){scale=1;tx=0;ty=0;applyTransform();}
+</script>

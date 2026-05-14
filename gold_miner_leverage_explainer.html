@@ -1,0 +1,113 @@
+
+<style>
+  @keyframes growBar { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.85;transform:scale(1.03)} }
+  .bar-wrap { transform-origin: bottom; animation: growBar .7s cubic-bezier(.22,1,.36,1) both; }
+  .fade-in { animation: fadeIn .5s ease both; }
+  .highlight { animation: pulse 2.2s ease-in-out infinite; }
+  .bar-seg { transition: opacity .2s; }
+</style>
+
+<svg width="100%" viewBox="0 0 680 460">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <!-- ── TITLE ── -->
+  <text class="th" x="340" y="34" text-anchor="middle" font-size="15">Why gold miners are a leveraged bet on gold</text>
+
+  <!-- ══════════════════════════════════════
+       LEFT COLUMN  — Gold price bar
+  ══════════════════════════════════════ -->
+
+  <!-- column label -->
+  <text class="ts" x="172" y="65" text-anchor="middle">Gold price</text>
+
+  <!-- BEFORE bar  ($2,000)  height=220  y=200 -->
+  <!-- cost layer -->
+  <g class="bar-wrap" style="animation-delay:.1s">
+    <rect x="100" y="200" width="70" height="165" rx="4" fill="#3B8BD4" opacity=".55"/>
+    <text class="ts" x="135" y="354" text-anchor="middle" fill="#0C447C">$1,500</text>
+    <text class="ts" x="135" y="367" text-anchor="middle" fill="#0C447C">cost</text>
+  </g>
+  <!-- profit layer $500 -->
+  <g class="bar-wrap" style="animation-delay:.2s">
+    <rect x="100" y="145" width="70" height="55" rx="4" fill="#639922" opacity=".8"/>
+    <text class="ts" x="135" y="130" text-anchor="middle" fill="#3B6D11">$500</text>
+    <text class="ts" x="135" y="143" text-anchor="middle" fill="#3B6D11">profit</text>
+  </g>
+  <!-- price cap line -->
+  <line x1="90" y1="145" x2="190" y2="145" stroke="var(--t)" stroke-width=".5" opacity=".3"/>
+  <text class="ts" x="93" y="141" text-anchor="start" font-size="11">$2,000</text>
+  <line x1="90" y1="365" x2="190" y2="365" stroke="var(--t)" stroke-width=".5" opacity=".3"/>
+  <text class="ts" x="93" y="380" text-anchor="start" font-size="11">$0</text>
+
+  <!-- AFTER bar ($2,500) height=275 -->
+  <!-- cost layer -->
+  <g class="bar-wrap" style="animation-delay:.35s">
+    <rect x="205" y="200" width="70" height="165" rx="4" fill="#3B8BD4" opacity=".55"/>
+    <text class="ts" x="240" y="354" text-anchor="middle" fill="#0C447C">$1,500</text>
+    <text class="ts" x="240" y="367" text-anchor="middle" fill="#0C447C">cost</text>
+  </g>
+  <!-- profit layer $1,000 = 110px -->
+  <g class="bar-wrap highlight" style="animation-delay:.45s">
+    <rect x="205" y="90" width="70" height="110" rx="4" fill="#639922" opacity=".9"/>
+    <text class="th" x="240" y="74" text-anchor="middle" fill="#3B6D11">$1,000</text>
+    <text class="ts" x="240" y="87" text-anchor="middle" fill="#3B6D11">profit</text>
+  </g>
+  <!-- price cap line -->
+  <line x1="195" y1="90" x2="295" y2="90" stroke="var(--t)" stroke-width=".5" opacity=".3"/>
+  <text class="ts" x="198" y="86" text-anchor="start" font-size="11">$2,500</text>
+
+  <!-- under-bar labels -->
+  <text class="ts" x="135" y="392" text-anchor="middle">Before</text>
+  <text class="ts" x="240" y="392" text-anchor="middle">After</text>
+
+  <!-- gold price arrow between bars -->
+  <line x1="178" y1="145" x2="198" y2="90" class="arr" marker-end="url(#arrow)" stroke="#EF9F27" stroke-width="2"/>
+  <text class="ts" x="196" y="130" text-anchor="start" fill="#BA7517">+25%</text>
+
+  <!-- ══════════════════════════════════════
+       RIGHT COLUMN  — Miner profit bar
+  ══════════════════════════════════════ -->
+
+  <text class="ts" x="500" y="65" text-anchor="middle">Miner's profit</text>
+
+  <!-- BEFORE profit bar $500 = 55px -->
+  <g class="bar-wrap" style="animation-delay:.6s">
+    <rect x="425" y="310" width="70" height="55" rx="4" fill="#639922" opacity=".8"/>
+    <text class="th" x="460" y="300" text-anchor="middle" fill="#3B6D11">$500</text>
+  </g>
+  <line x1="415" y1="310" x2="515" y2="310" stroke="var(--t)" stroke-width=".5" opacity=".3"/>
+  <line x1="415" y1="365" x2="515" y2="365" stroke="var(--t)" stroke-width=".5" opacity=".3"/>
+  <text class="ts" x="418" y="380" text-anchor="start" font-size="11">$0</text>
+
+  <!-- AFTER profit bar $1,000 = 110px -->
+  <g class="bar-wrap highlight" style="animation-delay:.75s">
+    <rect x="530" y="255" width="70" height="110" rx="4" fill="#639922" opacity=".95"/>
+    <text class="th" x="565" y="245" text-anchor="middle" fill="#3B6D11">$1,000</text>
+  </g>
+  <line x1="520" y1="255" x2="620" y2="255" stroke="var(--t)" stroke-width=".5" opacity=".3"/>
+
+  <text class="ts" x="460" y="392" text-anchor="middle">Before</text>
+  <text class="ts" x="565" y="392" text-anchor="middle">After</text>
+
+  <!-- profit arrow between bars -->
+  <line x1="503" y1="310" x2="523" y2="255" class="arr" marker-end="url(#arrow)" stroke="#639922" stroke-width="2.5"/>
+  <text class="ts" x="520" y="293" text-anchor="start" fill="#3B6D11">+100%</text>
+
+  <!-- ══════════════════════════════════════
+       CENTRE DIVIDER + formula
+  ══════════════════════════════════════ -->
+  <line x1="340" y1="55" x2="340" y2="415" stroke="var(--t)" stroke-width=".5" opacity=".2" stroke-dasharray="4 4"/>
+
+  <!-- ══════════════════════════════════════
+       BOTTOM CALLOUT
+  ══════════════════════════════════════ -->
+  <rect x="60" y="415" width="560" height="36" rx="8" fill="none" stroke="var(--t)" stroke-width=".5" opacity=".2"/>
+  <text class="ts" x="340" y="430" text-anchor="middle">Fixed cost ($1,500) stays constant — so every $1 rise in gold goes straight to profit</text>
+  <text class="ts" x="340" y="446" text-anchor="middle">This is <tspan font-weight="500">operating leverage</tspan>: a small move in revenue = a large move in earnings</text>
+</svg>

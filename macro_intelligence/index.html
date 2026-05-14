@@ -17,6 +17,61 @@
   </head>
   <body>
     <div id="root"></div>
+  <!-- ── InsightInvest live-data config ──────────────────────────────────
+       Set your FRED API key below (free at fred.stlouisfed.org/docs/api/api_key.html).
+       The key is passed to the service worker and stored locally in your browser.
+       It never leaves your machine. Leave empty ("") to use the static data files.
+  ─────────────────────────────────────────────────────────────────────── -->
+  <script>
+  (function () {
+    var FRED_API_KEY = "14c2e2df5cd903e2e7c7b882cabb899f";  // FRED API key
+
+    // AI Layer button — injected after React mounts
+    setTimeout(function () {
+      var a = document.createElement('a');
+      a.href = '/macro_intelligence/ai-layer.html';
+      a.title = 'AI Layer';
+      a.style.cssText = [
+        'position:fixed', 'bottom:24px', 'right:24px', 'z-index:9999',
+        'display:flex', 'align-items:center', 'gap:7px',
+        'padding:10px 16px', 'border-radius:8px',
+        'background:hsl(213,94%,58%)', 'color:hsl(222,47%,6%)',
+        'font-family:Inter,sans-serif', 'font-size:13px', 'font-weight:600',
+        'box-shadow:0 4px 16px hsl(213,94%,58%,0.35)',
+        'text-decoration:none', 'letter-spacing:-0.01em',
+        'transition:opacity 0.15s',
+      ].join(';');
+      a.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.469V19a2 2 0 1 1-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>AI Layer';
+      a.addEventListener('mouseover', function(){ a.style.opacity='0.85'; });
+      a.addEventListener('mouseout',  function(){ a.style.opacity='1'; });
+      document.body.appendChild(a);
+    }, 800);
+
+    if (!("serviceWorker" in navigator)) return;
+    navigator.serviceWorker.register("/macro_intelligence/sw.js", { scope: "/macro_intelligence/" })
+      .then(function (reg) {
+        var sw = reg.installing || reg.waiting || reg.active;
+        if (!sw || !FRED_API_KEY) return;
+        function sendKey(worker) {
+          var ch = new MessageChannel();
+          worker.postMessage({ type: "SET_FRED_KEY", key: FRED_API_KEY }, [ch.port2]);
+        }
+        if (sw.state === "activated") { sendKey(sw); return; }
+        sw.addEventListener("statechange", function () {
+          if (sw.state === "activated") sendKey(sw);
+        });
+        // also handle the case where a new SW activates after the page loads
+        reg.addEventListener("updatefound", function () {
+          var nw = reg.installing;
+          nw.addEventListener("statechange", function () {
+            if (nw.state === "activated") sendKey(nw);
+          });
+        });
+      })
+      .catch(function (e) { console.warn("InsightInvest SW registration failed:", e); });
+  })();
+  </script>
+
   <script data-pplx-inline-edit>
 (function () {
   if (window === window.top) return;

@@ -1,0 +1,459 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap');
+  :root{--gold:#C9A84C;--gold-light:#E8D5A3;--gold-pale:#FAF6EC;--teal:#1D9E75;--coral:#D85A30;--ink:var(--color-text-primary);--muted:var(--color-text-secondary);--border:var(--color-border-tertiary)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;color:var(--ink);background:transparent}
+  .doc{max-width:900px;margin:0 auto;padding:0 0 3rem}
+  .masthead{border-bottom:1px solid var(--gold);padding:2rem 0 1.5rem;margin-bottom:2.5rem}
+  .tag{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:.75rem}
+  h1{font-family:'DM Serif Display',Georgia,serif;font-size:2rem;font-weight:400;line-height:1.2;color:var(--ink);margin-bottom:.5rem}
+  .meta{font-size:12px;color:var(--muted);display:flex;gap:1.5rem;flex-wrap:wrap}
+  .meta span{display:flex;align-items:center;gap:5px}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);display:inline-block}
+  .nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:2.5rem}
+  .nav button{font-family:'DM Sans',sans-serif;font-size:12px;padding:6px 14px;border:0.5px solid var(--border);border-radius:20px;background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;font-weight:400}
+  .nav button.active,.nav button:hover{background:var(--color-background-secondary);color:var(--ink);border-color:var(--color-border-secondary)}
+  .nav button.active{font-weight:500;border-color:var(--gold);color:var(--gold)}
+  .section{display:none;animation:fadeIn .25s ease}
+  .section.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+  h2{font-family:'DM Serif Display',Georgia,serif;font-size:1.35rem;font-weight:400;margin-bottom:1.25rem;color:var(--ink)}
+  h3{font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem;margin-top:1.75rem}
+  p{font-size:14px;color:var(--color-text-secondary);line-height:1.7;margin-bottom:.75rem}
+  .hypothesis-box{background:var(--color-background-secondary);border-left:3px solid var(--gold);padding:1.25rem 1.5rem;border-radius:0 8px 8px 0;margin-bottom:2rem}
+  .hypothesis-box p{font-size:15px;color:var(--ink);font-style:italic;line-height:1.65;margin:0}
+  .pillar-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:2rem}
+  .pillar{background:var(--color-background-primary);border:0.5px solid var(--border);border-radius:12px;padding:1.25rem}
+  .pillar-num{font-family:'DM Serif Display',Georgia,serif;font-size:2rem;color:var(--gold);opacity:.5;line-height:1;margin-bottom:.5rem}
+  .pillar h4{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:.4rem}
+  .pillar p{font-size:12px;margin:0}
+  .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:1.25rem 0}
+  .stat{background:var(--color-background-secondary);border-radius:8px;padding:.9rem;text-align:center}
+  .stat .val{font-size:1.4rem;font-weight:500;color:var(--ink);line-height:1}
+  .stat .lbl{font-size:11px;color:var(--muted);margin-top:4px}
+  .chain{display:flex;align-items:flex-start;gap:0;margin:1.5rem 0;flex-wrap:wrap}
+  .chain-step{flex:1;min-width:140px;text-align:center;position:relative}
+  .chain-step:not(:last-child)::after{content:'→';position:absolute;right:-12px;top:20px;color:var(--gold);font-size:16px}
+  .chain-box{background:var(--color-background-primary);border:0.5px solid var(--border);border-radius:10px;padding:.9rem .75rem;margin:0 8px}
+  .chain-box .c-label{font-size:11px;font-weight:500;color:var(--gold);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+  .chain-box .c-text{font-size:12px;color:var(--ink);line-height:1.45}
+  .assumption-list{list-style:none;margin:1rem 0}
+  .assumption-list li{display:flex;gap:12px;padding:.75rem 0;border-bottom:0.5px solid var(--border);align-items:flex-start}
+  .assumption-list li:last-child{border-bottom:none}
+  .conf-badge{font-size:10px;font-weight:500;padding:3px 8px;border-radius:4px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+  .high{background:var(--color-background-success);color:var(--color-text-success)}
+  .med{background:var(--color-background-warning);color:var(--color-text-warning)}
+  .low{background:var(--color-background-danger);color:var(--color-text-danger)}
+  .a-text h5{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:3px}
+  .a-text p{font-size:12px;margin:0}
+  .risk-grid{display:grid;gap:10px;margin:1.25rem 0}
+  .risk-card{background:var(--color-background-primary);border:0.5px solid var(--border);border-radius:10px;padding:1rem 1.25rem;display:flex;gap:14px;align-items:flex-start}
+  .risk-sev{width:44px;height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;letter-spacing:.04em;flex-shrink:0;text-align:center;line-height:1.2;padding:4px}
+  .sev-h{background:var(--color-background-danger);color:var(--color-text-danger)}
+  .sev-m{background:var(--color-background-warning);color:var(--color-text-warning)}
+  .sev-l{background:var(--color-background-success);color:var(--color-text-success)}
+  .risk-body h5{font-size:13px;font-weight:500;margin-bottom:4px}
+  .risk-body p{font-size:12px;margin:0}
+  .risk-body .mitigation{font-size:11px;color:var(--muted);margin-top:5px;font-style:italic}
+  .timeline{position:relative;margin:1.5rem 0}
+  .tl-item{display:flex;gap:16px;margin-bottom:1.25rem;position:relative}
+  .tl-left{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:24px}
+  .tl-dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--gold);background:var(--color-background-primary);flex-shrink:0;margin-top:4px}
+  .tl-dot.filled{background:var(--gold)}
+  .tl-line{flex:1;width:1px;background:var(--border);margin:4px 0}
+  .tl-content h5{font-size:13px;font-weight:500;margin-bottom:3px}
+  .tl-content p{font-size:12px;margin:0}
+  .tl-qtr{font-size:10px;color:var(--gold);font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px}
+  .decision-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:1.25rem 0}
+  .decision-card{border-radius:10px;padding:1rem 1.25rem}
+  .bull-card{background:var(--color-background-success);border:0.5px solid var(--color-border-success)}
+  .bear-card{background:var(--color-background-danger);border:0.5px solid var(--color-border-danger)}
+  .decision-card h5{font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem}
+  .bull-card h5{color:var(--color-text-success)}
+  .bear-card h5{color:var(--color-text-danger)}
+  .decision-card ul{list-style:none}
+  .decision-card ul li{font-size:12px;padding:4px 0;display:flex;gap:6px;align-items:flex-start;color:var(--color-text-primary)}
+  .decision-card ul li::before{content:'•';flex-shrink:0;margin-top:1px}
+  .verdict{background:var(--color-background-secondary);border:0.5px solid var(--border);border-radius:10px;padding:1.25rem 1.5rem;margin-top:1.5rem}
+  .verdict .v-label{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+  .verdict p{font-size:13px;margin:0;line-height:1.6}
+  @media(max-width:600px){.decision-grid{grid-template-columns:1fr}.chain{flex-direction:column}.chain-step:not(:last-child)::after{content:'↓';right:50%;top:auto;bottom:-16px;transform:translateX(50%)}}
+</style>
+
+<div class="doc">
+  <div class="masthead">
+    <div class="tag">Investment Thesis Framework</div>
+    <h1>Reddit Inc. (RDDT)<br>AI-Social Data Sovereignty</h1>
+    <div class="meta">
+      <span><span class="dot"></span> As of March 14, 2026</span>
+      <span><span class="dot"></span> Price ~$140</span>
+      <span><span class="dot"></span> Analyst Consensus: Moderate Buy | PT $232–$238</span>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="active" onclick="show('hypothesis')">Core Hypothesis</button>
+    <button onclick="show('logic')">Logic Chain</button>
+    <button onclick="show('assumptions')">Assumptions</button>
+    <button onclick="show('risks')">Risk Matrix</button>
+    <button onclick="show('timeline')">Milestones</button>
+    <button onclick="show('decision')">Decision Criteria</button>
+  </div>
+
+  <!-- SECTION 1: HYPOTHESIS -->
+  <div class="section active" id="s-hypothesis">
+    <h2>The Central Bet</h2>
+    <div class="hypothesis-box">
+      <p>Reddit is the world's last large-scale archive of unfiltered human conversation — and in an era of synthetic AI content proliferation, this authenticity has become a structural competitive moat that will command a durable pricing premium from both AI model trainers and performance advertisers, producing a re-rating of intrinsic value that the current ~$140 price significantly underappreciates.</p>
+    </div>
+
+    <h3>Two Primary Value Pillars</h3>
+    <div class="pillar-grid">
+      <div class="pillar">
+        <div class="pillar-num">01</div>
+        <h4>AI Data Sovereignty</h4>
+        <p>22B+ human comments form the "alignment layer" for LLMs. Google and OpenAI are primary licensees. Renewal and pricing-tier escalation is the highest-conviction upside catalyst.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">02</div>
+        <h4>Performance Advertising Maturation</h4>
+        <p>CAPI + Dynamic Product Ads unlock lower-funnel budgets. Purchase conversions doubled YoY in 2025. Shift from cyclical brand spend toward measurable ROAS creates durable revenue.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">03</div>
+        <h4>Social Search Dominance</h4>
+        <p>Organic search traffic +600% since mid-2023. Now #2 U.S. search destination behind Wikipedia. 80M weekly search users are currently unmonetized — the biggest hidden option value.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">04</div>
+        <h4>International ARPU Expansion</h4>
+        <p>Only 0.9% global population penetration. Intl revenue +78% in Q4 2025. Machine translation now covering 35 languages creates a multiplicative ARPU lever.</p>
+      </div>
+    </div>
+
+    <h3>Key Financial Anchors (FY 2025)</h3>
+    <div class="stat-row">
+      <div class="stat"><div class="val">$2.2B</div><div class="lbl">Total Revenue (+69% YoY)</div></div>
+      <div class="stat"><div class="val">$684M</div><div class="lbl">Free Cash Flow (+217%)</div></div>
+      <div class="stat"><div class="val">31%</div><div class="lbl">FCF Margin (elite tier)</div></div>
+      <div class="stat"><div class="val">$2.48B</div><div class="lbl">Net Cash (Zero LT Debt)</div></div>
+      <div class="stat"><div class="val">121M</div><div class="lbl">DAUq (+19% YoY)</div></div>
+      <div class="stat"><div class="val">50.78</div><div class="lbl">Altman Z-Score</div></div>
+    </div>
+
+    <p style="font-size:12px;color:var(--muted);font-style:italic">Note: This framework is analytical in nature and is not a personal investment recommendation. Always apply independent due diligence and consult a qualified financial advisor before making investment decisions.</p>
+  </div>
+
+  <!-- SECTION 2: LOGIC CHAIN -->
+  <div class="section" id="s-logic">
+    <h2>The Logic Chain</h2>
+    <p>Each step must hold for the thesis to be intact. A break at any node is a thesis-invalidation trigger.</p>
+
+    <h3>Opportunity → Advantage → Outcome</h3>
+    <div class="chain">
+      <div class="chain-step">
+        <div class="chain-box">
+          <span class="c-label">Market Shift</span>
+          <div class="c-text">Internet saturates with AI-generated synthetic content. Authentic human signal becomes scarce.</div>
+        </div>
+      </div>
+      <div class="chain-step">
+        <div class="chain-box">
+          <span class="c-label">Reddit's Moat</span>
+          <div class="c-text">22B comments, community trust, and moderation culture cannot be replicated by synthetic scraping.</div>
+        </div>
+      </div>
+      <div class="chain-step">
+        <div class="chain-box">
+          <span class="c-label">Dual Monetization</span>
+          <div class="c-text">AI companies pay licensing fees. Advertisers pay for high-intent, contextually rich ad placements.</div>
+        </div>
+      </div>
+      <div class="chain-step">
+        <div class="chain-box">
+          <span class="c-label">Operating Leverage</span>
+          <div class="c-text">CapEx <1% of revenue. 31% FCF margin. Every incremental dollar of revenue flows disproportionately to FCF.</div>
+        </div>
+      </div>
+      <div class="chain-step">
+        <div class="chain-box">
+          <span class="c-label">Re-Rating</span>
+          <div class="c-text">Market reprices from ad-platform comparables to AI data utility comps. DCF fair value: $177–$360.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Compounding Mechanism</h3>
+    <div class="pillar-grid">
+      <div class="pillar">
+        <div class="pillar-num" style="font-size:1.4rem">↑</div>
+        <h4>Social Search → Users</h4>
+        <p>High-intent search users arrive via Google indexing Reddit results. They become registered users. DAU compounds.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num" style="font-size:1.4rem">↑</div>
+        <h4>Users → Data Density</h4>
+        <p>More users generate more authentic comments, deepening the data moat and increasing licensing value for AI partners.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num" style="font-size:1.4rem">↑</div>
+        <h4>Data Density → Ad Quality</h4>
+        <p>Richer community signal enables better ad targeting. Advertisers see higher ROAS. Budgets shift toward Reddit.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num" style="font-size:1.4rem">↑</div>
+        <h4>Ad Quality → ARPU</h4>
+        <p>U.S. ARPU grew 53% YoY in Q4 2025. As tools mature, international ARPU follows, unlocking the largest user cohort.</p>
+      </div>
+    </div>
+
+    <h3>Identified Logic Gaps (Flag for Due Diligence)</h3>
+    <ul class="assumption-list">
+      <li>
+        <span class="conf-badge low">Gap</span>
+        <div class="a-text"><h5>Data licensing pricing opacity</h5><p>Google and OpenAI contract values are undisclosed. The "decay risk" — LLMs needing less data as they improve — is unquantified. Revenue contribution is real; durability is assumed.</p></div>
+      </li>
+      <li>
+        <span class="conf-badge low">Gap</span>
+        <div class="a-text"><h5>Search monetization timeline</h5><p>80M weekly search users are unmonetized today. The thesis assumes this is converted. There is no disclosed product roadmap with committed dates or pricing models.</p></div>
+      </li>
+      <li>
+        <span class="conf-badge med">Gap</span>
+        <div class="a-text"><h5>International ARPU bridgeable gap</h5><p>U.S. ARPU is $10.79 vs a far lower international rate. The assumption that localization closes this gap has limited comp evidence from peer platforms.</p></div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- SECTION 3: ASSUMPTIONS -->
+  <div class="section" id="s-assumptions">
+    <h2>Critical Assumptions</h2>
+    <p>Ranked by sensitivity to thesis outcome. High-sensitivity assumptions that prove wrong most damage the thesis.</p>
+
+    <ul class="assumption-list">
+      <li>
+        <span class="conf-badge high">High Conviction</span>
+        <div class="a-text">
+          <h5>Data moat is defensible in the near term (2–4 years)</h5>
+          <p>Evidence: 22B comments, community culture, active moderation. The authentic-vs-synthetic divide is real and widening. Competitors cannot replicate this on a comparable timeline. <em>What would disprove: a major LLM provider successfully training on synthetic human-mimicry data with equivalent performance.</em></p>
+        </div>
+      </li>
+      <li>
+        <span class="conf-badge high">High Conviction</span>
+        <div class="a-text">
+          <h5>FCF margin expansion continues as revenue scales</h5>
+          <p>Evidence: CapEx was only $6.7M in FY2025 (<1% of revenue). Earnings quality ratio of 1.30x. The platform is fundamentally capital-light; incremental users cost near zero. <em>What would disprove: regulatory compliance costs (DSA, Section 230) or moderation infrastructure demands explode SBC or OpEx.</em></p>
+        </div>
+      </li>
+      <li>
+        <span class="conf-badge high">High Conviction</span>
+        <div class="a-text">
+          <h5>Performance ad pivot is durable, not cyclical</h5>
+          <p>Evidence: CAPI adoption addresses Apple ATT signal loss directly. Lower-funnel budgets (purchase conversions, app installs) doubled YoY. Tools have now been validated by advertiser behavior, not just product launches. <em>What would disprove: macroeconomic contraction causing performance budgets, not just brand budgets, to be cut.</em></p>
+        </div>
+      </li>
+      <li>
+        <span class="conf-badge med">Medium Conviction</span>
+        <div class="a-text">
+          <h5>Section 230 remains largely intact through 2026–2027</h5>
+          <p>Evidence: Legislative momentum is present but bipartisan consensus for full repeal remains elusive. DSA compliance shows Reddit can adapt to moderation mandates. <em>What would disprove: passage of U.S. legislation materially restructuring platform liability, triggering over-moderation.</em></p>
+        </div>
+      </li>
+      <li>
+        <span class="conf-badge med">Medium Conviction</span>
+        <div class="a-text">
+          <h5>Google and OpenAI renew data licenses at equal or higher rates</h5>
+          <p>Evidence: Both partners have publicly acknowledged Reddit's data value. But contract terms are opaque. If LLM training efficiency improves dramatically, Reddit's pricing leverage weakens. <em>What would disprove: non-renewal or significant step-down in pricing from either partner.</em></p>
+        </div>
+      </li>
+      <li>
+        <span class="conf-badge low">Low Conviction</span>
+        <div class="a-text">
+          <h5>Volunteer moderator base remains engaged and stable</h5>
+          <p>Evidence: History of moderator revolts (June 2024, >60% expressed frustration). Management has improved tooling and communication, but this is a structurally fragile dependency. If moderators disengage, content quality and ad safety deteriorate simultaneously. <em>This is the single most underappreciated structural risk in the thesis.</em></p>
+        </div>
+      </li>
+      <li>
+        <span class="conf-badge low">Low Conviction</span>
+        <div class="a-text">
+          <h5>Reddit successfully monetizes search at meaningful scale by 2027</h5>
+          <p>Evidence: 80M weekly search users exist. No product has been launched. No pricing model disclosed. This is hope, not evidence. Model it as an upside option, not a base case driver.</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- SECTION 4: RISKS -->
+  <div class="section" id="s-risks">
+    <h2>Risk Matrix</h2>
+
+    <h3>High Severity</h3>
+    <div class="risk-grid">
+      <div class="risk-card">
+        <div class="risk-sev sev-h">HIGH</div>
+        <div class="risk-body">
+          <h5>Data licensing revenue decay</h5>
+          <p>Google/OpenAI develop proprietary data collection or LLM efficiency reduces need for Reddit's corpus. Currently $140M "Other Revenue" — small in isolation but high-margin and strategically priced into the AI narrative premium.</p>
+          <div class="mitigation">Mitigation: Watch for contract renewal language in Q1-Q2 2026 earnings. Any non-renewal language is a hard exit signal.</div>
+        </div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-sev sev-h">HIGH</div>
+        <div class="risk-body">
+          <h5>Section 230 legislative repeal</h5>
+          <p>Forces over-moderation, killing the authentic community content that drives both ad value and data licensing value simultaneously. Bipartisan support remains fragile but is the single largest binary risk.</p>
+          <div class="mitigation">Mitigation: Monitor Congressional filings quarterly. DSA compliance track record suggests Reddit can adapt; U.S. repeal without transition period is a different magnitude.</div>
+        </div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-sev sev-h">HIGH</div>
+        <div class="risk-body">
+          <h5>Valuation multiple compression</h5>
+          <p>RDDT trades at ~47.7x trailing P/E vs industry average 15.5x. If revenue decelerates toward guided low-50% (from 69%), the AI narrative premium may compress materially even while the company remains profitable.</p>
+          <div class="mitigation">Mitigation: $1B buyback provides a floor. Entry at $140 with PT of $232–$238 gives 65–70% upside, partially offsetting compression risk.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Medium Severity</h3>
+    <div class="risk-grid">
+      <div class="risk-card">
+        <div class="risk-sev sev-m">MED</div>
+        <div class="risk-body">
+          <h5>Advertising cyclicality</h5>
+          <p>~95% revenue concentration in advertising. Performance ads are more resilient than brand, but not immune. Macro contraction cuts all digital ad budgets.</p>
+          <div class="mitigation">Mitigation: Data licensing diversification is growing at 22% YoY; accelerating this diversification is key.</div>
+        </div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-sev sev-m">MED</div>
+        <div class="risk-body">
+          <h5>Moderator revolt / community degradation</h5>
+          <p>Volunteer moderators are structurally underpaid for high-value labor. If a major platform policy change triggers mass moderator exodus, content quality collapses faster than it can be replaced.</p>
+          <div class="mitigation">Mitigation: Reddit has improved moderator tooling and communication since the June 2024 protest. Watch for community health metrics in earnings calls.</div>
+        </div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-sev sev-m">MED</div>
+        <div class="risk-body">
+          <h5>U.S. market saturation</h5>
+          <p>Domestic DAU growth slowing to single digits. ARPU expansion carries the growth narrative, but this shifts the story from platform scale to monetization efficiency — a harder-to-prove thesis.</p>
+          <div class="mitigation">Mitigation: International at 78% YoY growth with 0.9% global penetration is the credible growth engine through 2028+.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Low Severity / Tail Risk</h3>
+    <div class="risk-grid">
+      <div class="risk-card">
+        <div class="risk-sev sev-l">LOW</div>
+        <div class="risk-body">
+          <h5>TikTok/YouTube user time competition</h5>
+          <p>Users spend less time on Reddit vs Instagram/TikTok. But Reddit serves a different intent (search and community vs entertainment). These are not fully substitutable. Risk is real but overstated by bears.</p>
+        </div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-sev sev-l">LOW</div>
+        <div class="risk-body">
+          <h5>EU DSA compliance cost escalation</h5>
+          <p>52.2M EU monthly active recipients means ongoing audit and legal overhead. DSA compliance is a barrier to entry for competitors, partially flipping this risk to a moat.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: TIMELINE -->
+  <div class="section" id="s-timeline">
+    <h2>Milestone Timeline & Thesis Validation</h2>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot filled"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-qtr">Q1 2026 Earnings (Feb–May 2026)</div>
+          <h5>Revenue guidance validation</h5>
+          <p>Management guided 52–54% YoY revenue growth for Q1 2026. A beat here confirms the deceleration is controlled and within thesis range. Watch: International ARPU disclosure, CAPI adoption update, any language on data licensing contract status.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-qtr">Q2 2026 (May–Aug 2026)</div>
+          <h5>Search monetization product launch signal</h5>
+          <p>Management has signaled "Reddit Answers" sponsored results are being explored. Any concrete product announcement in this window would be a significant bull catalyst. 80M weekly search users are currently zero-revenue.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-qtr">H2 2026 (Aug–Dec 2026)</div>
+          <h5>Data licensing renewal disclosure</h5>
+          <p>Google and OpenAI contracts reportedly expire or come up for renewal in 2026–2027. Any public disclosure of renewal terms, especially usage-based pricing tiers, would materially re-rate the stock. This is the single highest-impact event in the 12-month horizon.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-content">
+          <div class="tl-qtr">Full Year 2026 (Ongoing)</div>
+          <h5>International ARPU trajectory</h5>
+          <p>Monitor whether gap between U.S. ARPU ($10.79) and international ARPU is closing. Machine translation across 35 languages is live. The question is whether local ad monetization follows. This is a slow-burn but critical signal of long-term ARPU ceiling.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-dot"></div></div>
+        <div class="tl-content">
+          <div class="tl-qtr">2027+ (Long Horizon)</div>
+          <h5>Agentic commerce and SaaS business model emergence</h5>
+          <p>Reddit Pro (free today) becomes the foundation for a B2B SaaS layer (sentiment analytics, CRM integrations). If agentic commerce captures transaction fees rather than ad clicks, ARPU ceiling rises dramatically. Model these as real options, not base case.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: DECISION CRITERIA -->
+  <div class="section" id="s-decision">
+    <h2>Decision Criteria</h2>
+    <p>Clear triggers that strengthen or invalidate the thesis. Remove ambiguity from position management decisions.</p>
+
+    <div class="decision-grid">
+      <div class="decision-card bull-card">
+        <h5>Thesis Strengtheners (Add / Hold)</h5>
+        <ul>
+          <li>Google or OpenAI data licensing renewed at higher price points or usage-based tiers disclosed in earnings</li>
+          <li>Q1 2026 revenue beats 52–54% guidance range; management raises full-year</li>
+          <li>International ARPU shows consistent quarter-on-quarter convergence toward U.S. levels</li>
+          <li>Reddit Answers search monetization product officially announced with timeline</li>
+          <li>$1B buyback meaningfully deployed at <$160 — management demonstrating valuation conviction</li>
+          <li>SBC as % of revenue declines below 15% (currently ~18%) — GAAP earnings acceleration</li>
+          <li>TikTok regulatory disruption in U.S./EU driving ad budget displacement to Reddit</li>
+        </ul>
+      </div>
+      <div class="decision-card bear-card">
+        <h5>Thesis Invalidators (Reduce / Exit)</h5>
+        <ul>
+          <li>Non-renewal or price step-down on Google or OpenAI data licensing contracts</li>
+          <li>U.S. Section 230 repeal legislation passes committee vote with bipartisan support</li>
+          <li>Revenue growth decelerates below 35% for two consecutive quarters</li>
+          <li>Major moderator revolt causing measurable decline in DAU or content quality metrics</li>
+          <li>LLM efficiency breakthrough publicly announced reducing demand for large-scale human data</li>
+          <li>Macro conditions cause overall digital ad market contraction >15% — even performance budgets cut</li>
+          <li>Competitive platform (emerging or existing) successfully replicates community search behavior at scale</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="verdict">
+      <div class="v-label">Managing Director's Summary Verdict</div>
+      <p>At ~$140, RDDT offers an asymmetric entry point: downside is cushioned by $2.48B net cash, zero debt, a 31% FCF margin, and a $1B buyback program. Upside is anchored by a DCF range of $177–$360, with analyst consensus at $232–$238. The thesis is genuine but not without fragility: data licensing durability and moderator stability are the two weakest links in the logic chain. Position sizing should reflect that this is a thesis with high-conviction structural pillars and two material unresolved assumptions. The 12-month catalyst schedule (Q1 earnings, search monetization signal, licensing renewal) provides multiple forcing functions to update conviction.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('s-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>

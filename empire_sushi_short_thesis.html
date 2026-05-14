@@ -1,0 +1,242 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:var(--color-text-primary);
+  --ink2:var(--color-text-secondary);
+  --ink3:var(--color-text-tertiary);
+  --red-bg:#FCEBEB;--red:#A32D2D;--red-mid:#E24B4A;--red-light:#F7C1C1;
+  --amber-bg:#FAEEDA;--amber:#854F0B;--amber-mid:#BA7517;
+  --border:var(--color-border-tertiary);
+}
+@media(prefers-color-scheme:dark){
+  :root{--red-bg:#501313;--red:#F7C1C1;--red-mid:#E24B4A;--red-light:#791F1F;--amber-bg:#412402;--amber:#FAC775;--amber-mid:#EF9F27;}
+}
+body{font-family:'IBM Plex Sans',sans-serif;line-height:1.6;background:transparent;color:var(--ink);}
+
+.masthead{padding:2rem 2rem 1.5rem;border-bottom:2px solid var(--red-mid);}
+.pub-line{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.15em;color:var(--ink3);text-transform:uppercase;margin-bottom:0.75rem;display:flex;gap:1.5rem;flex-wrap:wrap;}
+.pub-line span{display:flex;align-items:center;gap:4px;}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--red-mid);display:inline-block;}
+.report-type{display:inline-block;background:var(--red-mid);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0.12em;padding:3px 10px;border-radius:3px;margin-bottom:0.75rem;text-transform:uppercase;}
+h1{font-family:'Playfair Display',serif;font-size:clamp(26px,5vw,42px);line-height:1.1;color:var(--ink);margin-bottom:0.5rem;}
+h1 em{font-style:italic;color:var(--red-mid);}
+.deck{font-size:15px;color:var(--ink2);line-height:1.6;max-width:620px;margin-top:0.5rem;}
+
+.verdict-strip{display:flex;align-items:stretch;gap:0;margin:0;border-bottom:1px solid var(--border);}
+.verdict-left{background:var(--red-bg);padding:1.25rem 2rem;flex:0 0 auto;}
+.verdict-rating-lbl{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.15em;color:var(--red);text-transform:uppercase;margin-bottom:2px;}
+.verdict-rating{font-family:'Playfair Display',serif;font-size:32px;color:var(--red);font-weight:700;line-height:1;}
+.verdict-right{padding:1.25rem 2rem;display:flex;align-items:center;}
+.verdict-text{font-size:13px;color:var(--ink2);line-height:1.6;}
+
+.body{padding:0 2rem 2rem;}
+
+.section{margin:2rem 0;padding-bottom:1.5rem;border-bottom:0.5px solid var(--border);}
+.section:last-child{border-bottom:none;}
+.s-num{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--red-mid);letter-spacing:0.1em;margin-bottom:4px;}
+h2{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--ink);margin-bottom:1rem;}
+h2 em{font-style:italic;color:var(--red-mid);}
+p{font-size:14px;color:var(--ink2);line-height:1.75;margin-bottom:0.75rem;}
+p strong{font-weight:500;color:var(--ink);}
+
+.pullquote{border-left:3px solid var(--red-mid);padding:0.75rem 1rem 0.75rem 1.25rem;margin:1.25rem 0;background:var(--red-bg);border-radius:0 8px 8px 0;}
+.pullquote p{font-family:'Playfair Display',serif;font-style:italic;font-size:15px;color:var(--red);margin:0;line-height:1.5;}
+
+.data-pill-row{display:flex;flex-wrap:wrap;gap:8px;margin:1rem 0;}
+.data-pill{background:var(--color-background-secondary);border:0.5px solid var(--border);border-radius:6px;padding:6px 12px;display:flex;flex-direction:column;gap:1px;}
+.pill-val{font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:500;color:var(--ink);}
+.pill-lbl{font-size:10px;color:var(--ink3);}
+.pill-val.bad{color:var(--red-mid);}
+
+.finding{display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--border);}
+.finding:last-child{border-bottom:none;}
+.f-num{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--red-mid);flex-shrink:0;margin-top:2px;min-width:20px;}
+.f-body{font-size:13px;color:var(--ink2);line-height:1.6;}
+.f-body strong{font-weight:500;color:var(--ink);}
+
+.table-wrap{overflow-x:auto;margin:1rem 0;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--ink3);text-transform:uppercase;padding:6px 10px;border-bottom:1px solid var(--border);}
+td{padding:8px 10px;border-bottom:0.5px solid var(--border);color:var(--ink2);vertical-align:top;}
+td:first-child{font-weight:500;color:var(--ink);}
+tr:last-child td{border-bottom:none;}
+.bad-val{color:var(--red-mid);font-family:'IBM Plex Mono',monospace;}
+.ok-val{color:#3B6D11;font-family:'IBM Plex Mono',monospace;}
+@media(prefers-color-scheme:dark){.ok-val{color:#97C459;}}
+
+.conclusion{background:var(--red-bg);border:1px solid var(--red-mid);border-radius:10px;padding:1.5rem;margin:1.5rem 0;}
+.conc-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.15em;color:var(--red);text-transform:uppercase;margin-bottom:0.5rem;}
+.conc-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--red);font-weight:700;margin-bottom:0.75rem;}
+.conc-body{font-size:13px;color:var(--ink2);line-height:1.75;}
+.conc-body strong{font-weight:500;color:var(--ink);}
+
+.catalyst-list{list-style:none;margin:0.75rem 0;}
+.catalyst-list li{font-size:13px;color:var(--ink2);padding:5px 0 5px 16px;position:relative;border-bottom:0.5px solid var(--border);}
+.catalyst-list li:last-child{border-bottom:none;}
+.catalyst-list li::before{content:'';position:absolute;left:0;top:13px;width:6px;height:6px;border-radius:50%;background:var(--red-mid);}
+
+.disclaimer{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink3);line-height:1.6;margin-top:1.5rem;padding-top:1rem;border-top:0.5px solid var(--border);}
+</style>
+
+<div class="masthead">
+  <div class="pub-line">
+    <span><span class="dot"></span> Short-seller research note</span>
+    <span>March 2025</span>
+    <span>Bursa Malaysia · ACE / Main Market IPO</span>
+    <span>QSR · Food &amp; Beverage</span>
+  </div>
+  <div class="report-type">Avoid / Do Not Subscribe</div>
+  <h1>Empire Sushi's IPO is a<br><em>controlled exit,</em> not a growth story</h1>
+  <div class="deck">The prospectus is dressed up in impressive CAGRs and national ambition. Strip it back and you find a chain whose core business has effectively stopped growing, a founder monetising at the peak, and a rollout plan that demands perfection from a team that has never operated at this scale.</div>
+</div>
+
+<div class="verdict-strip">
+  <div class="verdict-left">
+    <div class="verdict-rating-lbl">Verdict</div>
+    <div class="verdict-rating">AVOID</div>
+  </div>
+  <div class="verdict-right">
+    <div class="verdict-text">Three compounding problems: (1) organic growth is dead, (2) the founder is leaving via the OFS door, and (3) the expansion plan papers over both with promises that require near-perfect execution at exactly the wrong moment in the business cycle.</div>
+  </div>
+</div>
+
+<div class="body">
+
+  <div class="section">
+    <div class="s-num">01 — THE CORE PROBLEM</div>
+    <h2>The business <em>stopped growing</em> three years ago. Nobody noticed because they kept opening new shops.</h2>
+
+    <div class="data-pill-row">
+      <div class="data-pill"><span class="pill-val bad">1.6%</span><span class="pill-lbl">SSSG — H1 FY2025</span></div>
+      <div class="data-pill"><span class="pill-val bad">12.2%</span><span class="pill-lbl">SSSG — FY2022 (peak)</span></div>
+      <div class="data-pill"><span class="pill-val bad">-87%</span><span class="pill-lbl">SSSG decline, 3 years</span></div>
+      <div class="data-pill"><span class="pill-val">31.1%</span><span class="pill-lbl">Revenue CAGR (new outlets)</span></div>
+    </div>
+
+    <p>Same-store sales growth — the only metric that tells you whether a QSR's existing outlets are getting better or worse — has collapsed from 12.2% in FY2022 to 1.6% in the first half of FY2025. That is not a slowdown. That is a near-complete stall.</p>
+
+    <div class="pullquote"><p>"At 1.6% SSSG against Malaysian CPI averaging 2–3%, existing Empire Sushi outlets are losing real revenue per unit, every single month."</p></div>
+
+    <p>The headline 31.1% revenue CAGR is not a sign of a thriving business — it is the output of a location-addition machine. Revenue is growing because they keep bolting new outlets onto the network. The moment that machine slows or pauses, the top line decelerates sharply. And the machine is already showing signs of strain.</p>
+
+    <p>This matters enormously because the entire IPO growth narrative is premised on opening 59 more outlets over 24 months. <strong>You cannot solve a SSSG problem with more outlets.</strong> You can hide it for another 18 months — until the new outlets themselves show up in the SSSG calculation, at which point the whole picture gets worse.</p>
+  </div>
+
+  <div class="section">
+    <div class="s-num">02 — THE OFS: READ THE ROOM</div>
+    <h2>The founder is <em>cashing out</em> RM96.3 million at the IPO. Ask yourself why.</h2>
+
+    <div class="data-pill-row">
+      <div class="data-pill"><span class="pill-val bad">RM96.3M</span><span class="pill-lbl">OFS proceeds to selling shareholder</span></div>
+      <div class="data-pill"><span class="pill-val bad">~63%</span><span class="pill-lbl">Est. share of gross proceeds exiting to insider</span></div>
+      <div class="data-pill"><span class="pill-val">RM56.3M</span><span class="pill-lbl">Est. net new capital to company</span></div>
+    </div>
+
+    <p>In a textbook growth IPO, the founder raises primary capital to fund expansion, takes minimal liquidity, and stays fully invested in the upside. That is not what is happening here.</p>
+
+    <p>Of the RM152.6M in gross proceeds, approximately RM96.3M is an Offer for Sale — meaning it flows directly to the selling shareholder, not to the company. After listing expenses, the company is left with perhaps RM50–56M to fund a 59-outlet expansion that, by our estimate, requires upwards of RM55–65M in capex alone. The math is already thin before a single lease deposit is paid.</p>
+
+    <div class="pullquote"><p>"A founder raising RM96 million for themselves while asking the public to fund their expansion is not a partnership. It is an exit with extra steps."</p></div>
+
+    <p><strong>The OFS is the most honest signal in this entire prospectus.</strong> Insiders have better information than you do. They know the SSSG trend. They know which sites are available for expansion. They know what margin pressure looks like from the inside. And they have chosen this moment — after three years of decelerating organic growth — to monetise a large portion of their position. That is not the behaviour of people who believe the best is yet to come.</p>
+  </div>
+
+  <div class="section">
+    <div class="s-num">03 — THE EXPANSION PLAN: AMBITION MEETS ARITHMETIC</div>
+    <h2>59 outlets in 24 months is not a plan. It is a <em>prayer.</em></h2>
+
+    <div class="data-pill-row">
+      <div class="data-pill"><span class="pill-val bad">59</span><span class="pill-lbl">New outlets planned (24 months)</span></div>
+      <div class="data-pill"><span class="pill-val bad">41%</span><span class="pill-lbl">Network expansion required</span></div>
+      <div class="data-pill"><span class="pill-val bad">2.5x/mo</span><span class="pill-lbl">Required opening cadence</span></div>
+      <div class="data-pill"><span class="pill-val">143</span><span class="pill-lbl">Current outlets (baseline)</span></div>
+    </div>
+
+    <p>The company currently operates 143 outlets. It wants to open 59 more in two years. That is a 41% expansion of its entire network in 24 months — roughly 2.5 new openings every single month, without interruption, for two straight years.</p>
+
+    <p>Consider what that actually requires: site identification and lease negotiation for 59 locations simultaneously, fit-out contractors (who are in high demand across Malaysia's competitive mall development pipeline), equipment procurement, staff hiring and training at each location, supply chain scaling, and quality control across a network that will have grown by nearly half. All of this while the existing 143-outlet base is stagnating on SSSG.</p>
+
+    <div class="pullquote"><p>"Aggressive expansion during organic stagnation does not accelerate a business. It accelerates the dilution of management bandwidth — and the detection of underlying problems."</p></div>
+
+    <p>There is a name for the pattern of using rapid unit growth to mask deteriorating same-store metrics: <strong>it is the oldest trick in the QSR playbook, and it almost always ends badly</strong>. The market eventually asks why SSSG is not recovering despite all the new locations — and the answer is usually that the concept has matured, competition has intensified, or the brand has been diluted by overexpansion. Empire Sushi is exhibiting all three warning signs simultaneously.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Risk dimension</th><th>What could go wrong</th><th>Severity</th></tr></thead>
+        <tbody>
+          <tr><td>Site quality</td><td>Best mall locations are taken; forced into B-grade sites that underperform from day one</td><td><span class="bad-val">High</span></td></tr>
+          <tr><td>Management bandwidth</td><td>Two simultaneous demands: fix SSSG in 143 outlets + open 59 new ones — management cannot do both</td><td><span class="bad-val">High</span></td></tr>
+          <tr><td>Capex vs. proceeds</td><td>Net IPO proceeds to company barely cover estimated fit-out costs; any overrun requires debt</td><td><span class="bad-val">High</span></td></tr>
+          <tr><td>SSSG drag</td><td>New outlets eventually enter SSSG base, making headline organic growth look worse, not better</td><td><span class="bad-val">High</span></td></tr>
+          <tr><td>Brand dilution</td><td>Rapid expansion into marginal locations weakens brand perception and average ticket quality</td><td><span class="bad-val">Medium</span></td></tr>
+          <tr><td>Labour availability</td><td>F&amp;B sector faces persistent labour shortages in Malaysia; hiring 59 outlet teams is non-trivial</td><td><span class="bad-val">Medium</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="s-num">04 — THE COMPETITIVE REALITY</div>
+    <h2>This is not a <em>moat.</em> It is a category that anyone can replicate.</h2>
+
+    <p>Sushi King exists. It is larger, more entrenched, and has been operating in Malaysia since 1995. Every mall that Empire Sushi wants to enter is a mall that Sushi King, Genki Sushi, and a proliferating number of local concepts are also targeting. The sushi QSR format has no meaningful intellectual property, no proprietary supply chain, no technology platform, and no switching costs for the consumer.</p>
+
+    <p><strong>The consumer walking past an Empire Sushi outlet is two steps away from a competitor offering an identical experience.</strong> In that environment, brand loyalty is thin, pricing power is limited, and the only real differentiator is location — which brings us back to the expansion plan, and the diminishing returns of chasing B-grade sites.</p>
+
+    <p>The airport and hypermarket locations are genuinely defensible — these are captive audiences with limited alternatives, and lease renewals in these formats tend to be stickier. But they represent a small fraction of the 143-outlet network. The bulk of the portfolio sits in shopping malls where competition is intense, footfall is under structural pressure from e-commerce, and landlords hold substantial negotiating power at renewal.</p>
+
+    <div class="pullquote"><p>"Empire Sushi's competitive advantage is: it got there first, in most Malaysian malls. That is not a moat. That is a head start — and competitors have been running hard for years."</p></div>
+  </div>
+
+  <div class="section">
+    <div class="s-num">05 — THE VALUATION TRAP</div>
+    <h2>You are being asked to pay <em>growth multiples</em> for a business that has stopped growing organically.</h2>
+
+    <p>Malaysian QSR companies with genuine growth profiles trade at 22–28x trailing P/E. Empire Sushi's 61.2% profit CAGR will tempt analysts to apply a growth premium. Do not fall for this.</p>
+
+    <p>That profit CAGR is the product of two temporary tailwinds: post-pandemic recovery (FY2022–FY2023 base effect) and operating leverage from new outlets being added to an already-profitable network. Neither is structural. The SSSG data tells you the underlying business is running out of organic steam. Applying a 25x multiple to a business with 1.6% SSSG is a category error.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Scenario</th><th>Justified P/E</th><th>Rationale</th></tr></thead>
+        <tbody>
+          <tr><td>SSSG recovers to 5–7% within 18 months</td><td><span class="ok-val">22–26x</span></td><td>Growth story intact; sector-average multiple warranted</td></tr>
+          <tr><td>SSSG stabilises at 2–4%, expansion delivers</td><td><span class="bad-val">16–20x</span></td><td>Moderate growth; discount to sector peers appropriate</td></tr>
+          <tr><td>SSSG continues to trend toward zero; execution slips</td><td><span class="bad-val">10–14x</span></td><td>Mature/ex-growth QSR; material de-rating from IPO price</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>If the IPO prices anywhere above 20x trailing P/E — which is likely given the headline CAGR numbers and the investment bank mandate to maximise proceeds — there is a meaningful probability of a significant de-rating once the market digests the first post-IPO quarterly results showing continued SSSG weakness.</p>
+  </div>
+
+  <div class="section">
+    <div class="s-num">06 — SHORT CATALYSTS</div>
+    <h2>What will make this <em>unravel</em> — and when.</h2>
+    <ul class="catalyst-list">
+      <li><strong>First post-IPO quarterly result:</strong> SSSG data published in the investor relations release. If it prints below 3%, expect the market to re-rate sharply.</li>
+      <li><strong>Month 6 — moratorium expiry:</strong> The selling shareholder and other lock-up holders become free to sell. With RM96.3M already banked from OFS, additional supply hitting the market is a known overhang. Expect price pressure.</li>
+      <li><strong>Outlet rollout slippage:</strong> Any announcement that the 59-outlet target will be missed — a near-inevitability given the cadence required — will trigger a re-rating of the growth narrative.</li>
+      <li><strong>Margin compression:</strong> Seafood and rice commodity costs are structurally elevated. A company with stagnating SSSG and rising raw material costs has no pricing power to offset the squeeze.</li>
+      <li><strong>Competitor announcements:</strong> Any significant expansion announcement by Sushi King or entry of a new sushi QSR format will amplify market concern about structural SSSG deterioration.</li>
+      <li><strong>Mall footfall data:</strong> A deterioration in Malaysian consumer discretionary spending — already under pressure from household debt levels — directly impacts the 80%+ of outlets sitting in mall locations.</li>
+    </ul>
+  </div>
+
+  <div class="conclusion">
+    <div class="conc-label">Bottom line</div>
+    <div class="conc-title">Do not subscribe. This is an exit in disguise.</div>
+    <div class="conc-body">
+      <p>Empire Sushi is a real business with a genuine brand and a national presence. None of that is in dispute. What is in dispute is whether the IPO price fairly reflects the risks — and whether subscribing puts you on the right side of the information asymmetry.</p>
+      <p style="margin-top:0.75rem;">The selling shareholder knows more than you do and is taking RM96.3M off the table. The SSSG has been deteriorating for three consecutive years with no evidence of reversal. The expansion plan requires 2.5 new outlets per month for 24 straight months from a team that has never operated at this scale. And you are likely being asked to pay a multiple that only makes sense if SSSG recovers — despite every available data point suggesting it will not.</p>
+      <p style="margin-top:0.75rem;"><strong>If you want exposure to Malaysian consumer spending, buy a business where insiders are buying, not selling. This is not that business.</strong></p>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    DISCLAIMER — This note is a hypothetical short-seller research exercise based on prospectus data provided and analyst inference. It does not constitute financial advice, a solicitation, or an offer to buy or sell securities. Figures marked as estimates are analyst interpolations where specific prospectus data was not available. All investment decisions should be made with independent professional advice. The author may hold no position in the securities discussed.
+  </div>
+
+</div>

@@ -1,0 +1,904 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0b;
+    --surface: #111113;
+    --surface2: #18181c;
+    --surface3: #1e1e24;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #e8e6df;
+    --muted: #888580;
+    --gold: #c9a84c;
+    --gold2: #e6c76b;
+    --cyan: #4ecdc4;
+    --cyan2: #7ef0e8;
+    --red: #e05252;
+    --green: #52c472;
+    --amber: #e09840;
+    --purple: #9b7fe8;
+    --sans: 'Instrument Sans', sans-serif;
+    --serif: 'DM Serif Display', serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── LAYOUT ── */
+  .app { display: flex; flex-direction: column; min-height: 100vh; }
+
+  .header {
+    padding: 20px 28px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    background: var(--surface);
+  }
+
+  .logo {
+    font-family: var(--serif);
+    font-size: 18px;
+    color: var(--gold2);
+    letter-spacing: 0.01em;
+  }
+  .logo span { color: var(--muted); font-style: italic; font-size: 13px; font-family: var(--sans); }
+
+  .phase-tabs {
+    display: flex;
+    gap: 2px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 3px;
+    flex-wrap: wrap;
+  }
+
+  .tab {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 500;
+    font-family: var(--sans);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    transition: all 0.18s;
+    white-space: nowrap;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  .tab:hover { color: var(--text); background: var(--surface3); }
+  .tab.active { background: var(--gold); color: #0a0a0b; font-weight: 600; }
+
+  .body { display: flex; flex: 1; }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+    background: var(--surface);
+  }
+
+  .sidebar-section { margin-bottom: 24px; }
+  .sidebar-label {
+    padding: 0 16px 8px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 12.5px;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+  .sidebar-item:hover { color: var(--text); background: var(--surface2); }
+  .sidebar-item.active { color: var(--gold2); border-left-color: var(--gold); background: rgba(201,168,76,0.06); }
+  .sidebar-item .dot {
+    width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0;
+  }
+  .badge {
+    margin-left: auto;
+    background: rgba(201,168,76,0.15);
+    color: var(--gold);
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+  .badge.red { background: rgba(224,82,82,0.15); color: var(--red); }
+  .badge.green { background: rgba(82,196,114,0.15); color: var(--green); }
+  .badge.cyan { background: rgba(78,205,196,0.15); color: var(--cyan); }
+
+  /* ── MAIN ── */
+  .main { flex: 1; overflow-y: auto; padding: 24px 28px; }
+
+  .section-title {
+    font-family: var(--serif);
+    font-size: 22px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .section-sub {
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 24px;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+  }
+  .card-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .card-title {
+    font-weight: 600; font-size: 13px; color: var(--text);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-body { color: var(--muted); font-size: 12.5px; line-height: 1.65; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+
+  /* ── SIGNAL ITEMS ── */
+  .signal-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .signal-item:last-child { border-bottom: none; }
+  .signal-icon {
+    width: 28px; height: 28px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; flex-shrink: 0; margin-top: 2px;
+  }
+  .signal-meta { font-size: 10.5px; color: var(--muted); margin-top: 3px; }
+  .signal-text { font-size: 12.5px; color: var(--text); line-height: 1.5; }
+
+  /* ── THESIS BLOCK ── */
+  .thesis-block {
+    border-left: 3px solid var(--gold);
+    padding: 12px 16px;
+    background: rgba(201,168,76,0.05);
+    border-radius: 0 8px 8px 0;
+    margin: 14px 0;
+  }
+  .thesis-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 6px; }
+  .thesis-text { font-family: var(--serif); font-size: 15px; color: var(--text); line-height: 1.5; font-style: italic; }
+
+  /* ── OPPORTUNITY ── */
+  .opp-card {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+  }
+  .opp-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .opp-ticker {
+    font-family: var(--mono); font-size: 14px; font-weight: 500;
+    color: var(--cyan2); letter-spacing: 0.05em;
+  }
+  .opp-title { font-size: 13px; font-weight: 600; color: var(--text); margin-top: 2px; }
+
+  .rr-bar {
+    display: flex; align-items: center; gap: 10px; margin: 10px 0;
+  }
+  .rr-label { font-size: 10.5px; color: var(--muted); width: 44px; }
+  .rr-track {
+    flex: 1; height: 5px; background: var(--surface3); border-radius: 3px; overflow: hidden;
+  }
+  .rr-fill { height: 100%; border-radius: 3px; transition: width 0.4s; }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 8px; border-radius: 12px;
+    font-size: 10.5px; font-weight: 500;
+    margin: 2px 3px 2px 0;
+  }
+  .tag-gold { background: rgba(201,168,76,0.15); color: var(--gold); }
+  .tag-cyan { background: rgba(78,205,196,0.12); color: var(--cyan); }
+  .tag-red { background: rgba(224,82,82,0.12); color: var(--red); }
+  .tag-green { background: rgba(82,196,114,0.12); color: var(--green); }
+  .tag-purple { background: rgba(155,127,232,0.12); color: var(--purple); }
+
+  /* ── LESSON BOX ── */
+  .lesson-box {
+    background: rgba(78,205,196,0.04);
+    border: 1px solid rgba(78,205,196,0.15);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+  .lesson-header {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--cyan); font-weight: 600; margin-bottom: 8px;
+  }
+  .lesson-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .lesson-body { font-size: 12.5px; color: var(--muted); line-height: 1.65; }
+  .lesson-formula {
+    font-family: var(--mono); font-size: 12px;
+    background: var(--surface3); padding: 8px 12px; border-radius: 6px;
+    color: var(--cyan2); margin: 8px 0;
+  }
+
+  /* ── FRAMEWORK FLOW ── */
+  .flow-step {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 14px 0; border-bottom: 1px solid var(--border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .step-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--gold); color: #0a0a0b;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 2px;
+  }
+  .step-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .step-body { font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+  .step-q {
+    margin-top: 8px; padding-left: 10px;
+    border-left: 2px solid var(--border2);
+    font-style: italic; color: var(--muted); font-size: 12px;
+  }
+
+  /* ── EXAMPLE CASE ── */
+  .case-header {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 20px;
+  }
+  .case-icon {
+    width: 44px; height: 44px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .case-name { font-family: var(--serif); font-size: 18px; color: var(--text); }
+  .case-sub { font-size: 12px; color: var(--muted); }
+
+  .pipeline {
+    display: flex; gap: 0; margin: 16px 0; overflow-x: auto;
+  }
+  .pipe-step {
+    flex: 1; min-width: 100px;
+    padding: 10px 12px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    position: relative;
+    font-size: 11.5px;
+  }
+  .pipe-step:first-child { border-radius: 8px 0 0 8px; }
+  .pipe-step:last-child { border-radius: 0 8px 8px 0; }
+  .pipe-step + .pipe-step { border-left: none; }
+  .pipe-label { font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .pipe-val { font-weight: 500; color: var(--text); }
+
+  /* ── BIAS CHECKER ── */
+  .bias-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 0; border-bottom: 1px solid var(--border);
+  }
+  .bias-icon { font-size: 15px; flex-shrink: 0; margin-top: 2px; }
+  .bias-name { font-size: 12.5px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .bias-desc { font-size: 12px; color: var(--muted); }
+
+  /* ── CHECKLIST ── */
+  .check-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 0; font-size: 12.5px; color: var(--text);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-box {
+    width: 16px; height: 16px; border-radius: 4px;
+    border: 1.5px solid var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all 0.15s; font-size: 10px;
+  }
+  .check-box.checked { background: var(--gold); border-color: var(--gold); color: #0a0a0b; }
+
+  /* ── STAT CARD ── */
+  .stat-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 14px;
+  }
+  .stat-val { font-family: var(--mono); font-size: 20px; font-weight: 500; color: var(--text); }
+  .stat-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .stat-delta { font-size: 11px; font-weight: 600; margin-top: 4px; }
+  .up { color: var(--green); }
+  .down { color: var(--red); }
+  .neutral { color: var(--amber); }
+
+  /* ── NAV STATES ── */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ── DIVIDER ── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+
+  /* ── QUOTE ── */
+  .pull-quote {
+    font-family: var(--serif); font-size: 15px; font-style: italic;
+    color: var(--muted); border-top: 2px solid var(--gold);
+    padding-top: 10px; margin: 16px 0;
+    line-height: 1.55;
+  }
+
+  /* ── RED FLAG ── */
+  .red-flag {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 10px 12px;
+    background: rgba(224,82,82,0.06);
+    border: 1px solid rgba(224,82,82,0.2);
+    border-radius: 8px; margin: 6px 0;
+  }
+  .red-flag-icon { color: var(--red); font-size: 14px; flex-shrink: 0; margin-top: 2px; }
+  .red-flag-text { font-size: 12.5px; color: var(--text); }
+  .red-flag-text strong { color: var(--red); }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <div class="logo">InsightInvest <span>Intelligence Framework</span></div>
+      <div style="color:var(--muted);font-size:11px;margin-top:4px;">monitoring · synthesis · opportunity · education</div>
+    </div>
+    <div class="phase-tabs">
+      <button class="tab active" onclick="switchPanel('monitoring')">Monitor</button>
+      <button class="tab" onclick="switchPanel('synthesis')">Synthesis</button>
+      <button class="tab" onclick="switchPanel('opportunity')">Opportunity</button>
+      <button class="tab" onclick="switchPanel('teaching')">Teach</button>
+      <button class="tab" onclick="switchPanel('examples')">Case Studies</button>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <!-- Monitoring nav -->
+      <div class="sidebar-section" id="nav-monitoring">
+        <div class="sidebar-label">Signal Sources</div>
+        <div class="sidebar-item active"><div class="dot"></div>Macro / Geopolitical <span class="badge">7</span></div>
+        <div class="sidebar-item"><div class="dot"></div>Market Structure <span class="badge cyan">3</span></div>
+        <div class="sidebar-item"><div class="dot"></div>Earnings & Filings <span class="badge green">2</span></div>
+        <div class="sidebar-item"><div class="dot"></div>Central Banks <span class="badge">4</span></div>
+        <div class="sidebar-item"><div class="dot"></div>Network / Social <span class="badge red">!</span></div>
+        <div class="sidebar-label" style="margin-top:16px;">Red Flags</div>
+        <div class="sidebar-item"><div class="dot" style="background:var(--red)"></div>Narrative saturation</div>
+        <div class="sidebar-item"><div class="dot" style="background:var(--amber)"></div>Consensus crowding</div>
+        <div class="sidebar-item"><div class="dot" style="background:var(--amber)"></div>Liquidity stress</div>
+      </div>
+
+      <!-- Synthesis nav -->
+      <div class="sidebar-section" id="nav-synthesis" style="display:none">
+        <div class="sidebar-label">Frameworks</div>
+        <div class="sidebar-item active"><div class="dot"></div>Venezuela Formula</div>
+        <div class="sidebar-item"><div class="dot"></div>Second-Order Map</div>
+        <div class="sidebar-item"><div class="dot"></div>Bias Checklist</div>
+        <div class="sidebar-item"><div class="dot"></div>Thesis Builder</div>
+        <div class="sidebar-label" style="margin-top:16px;">Questions</div>
+        <div class="sidebar-item"><div class="dot"></div>Who is on wrong side?</div>
+        <div class="sidebar-item"><div class="dot"></div>What isn't priced in?</div>
+        <div class="sidebar-item"><div class="dot"></div>What breaks the thesis?</div>
+      </div>
+
+      <!-- Opportunity nav -->
+      <div class="sidebar-section" id="nav-opportunity" style="display:none">
+        <div class="sidebar-label">Live Theses</div>
+        <div class="sidebar-item active"><div class="dot" style="background:var(--gold)"></div>Private Credit Stress</div>
+        <div class="sidebar-item"><div class="dot" style="background:var(--cyan)"></div>PCHEM / Oil Surge</div>
+        <div class="sidebar-item"><div class="dot" style="background:var(--green)"></div>Rubber Comeback</div>
+        <div class="sidebar-label" style="margin-top:16px;">Position Type</div>
+        <div class="sidebar-item"><div class="dot"></div>Long equity</div>
+        <div class="sidebar-item"><div class="dot"></div>Sector rotation</div>
+        <div class="sidebar-item"><div class="dot"></div>Hedge / Short</div>
+      </div>
+
+      <!-- Teaching nav -->
+      <div class="sidebar-section" id="nav-teaching" style="display:none">
+        <div class="sidebar-label">Fundamentals</div>
+        <div class="sidebar-item active"><div class="dot"></div>Valuation</div>
+        <div class="sidebar-item"><div class="dot"></div>Risk & Position Sizing</div>
+        <div class="sidebar-item"><div class="dot"></div>Market Mechanics</div>
+        <div class="sidebar-item"><div class="dot"></div>Behavioral Finance</div>
+        <div class="sidebar-label" style="margin-top:16px;">Applied</div>
+        <div class="sidebar-item"><div class="dot"></div>Intrinsic vs. Price</div>
+        <div class="sidebar-item"><div class="dot"></div>Margin of Safety</div>
+        <div class="sidebar-item"><div class="dot"></div>Catalysts & Timing</div>
+      </div>
+
+      <!-- Examples nav -->
+      <div class="sidebar-section" id="nav-examples" style="display:none">
+        <div class="sidebar-label">Case Studies</div>
+        <div class="sidebar-item active"><div class="dot" style="background:var(--red)"></div>Iran / Stagflation</div>
+        <div class="sidebar-item"><div class="dot" style="background:var(--cyan)"></div>CRCL / USDC</div>
+        <div class="sidebar-item"><div class="dot" style="background:var(--green)"></div>MY Rubber</div>
+        <div class="sidebar-label" style="margin-top:16px;">Pipeline Stages</div>
+        <div class="sidebar-item"><div class="dot"></div>Monitor</div>
+        <div class="sidebar-item"><div class="dot"></div>Synthesize</div>
+        <div class="sidebar-item"><div class="dot"></div>Opportunity</div>
+        <div class="sidebar-item"><div class="dot"></div>Lesson</div>
+      </div>
+    </div>
+
+    <!-- MAIN PANELS -->
+    <div class="main">
+
+      <!-- ══ MONITORING ══ -->
+      <div class="panel active" id="panel-monitoring">
+        <div class="section-title">The Monitoring System</div>
+        <div class="section-sub">What to track, what signals matter, and how to aggregate noise into signal</div>
+
+        <div class="grid3">
+          <div class="stat-card"><div class="stat-val">5</div><div class="stat-label">Source tiers</div><div class="stat-delta neutral">structured hierarchy</div></div>
+          <div class="stat-card"><div class="stat-val">3x</div><div class="stat-label">Daily review cadence</div><div class="stat-delta up">morning · midday · close</div></div>
+          <div class="stat-card"><div class="stat-val">1</div><div class="stat-label">Weekly synthesis session</div><div class="stat-delta neutral">Sunday 60-min deep work</div></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span style="color:var(--gold)">◆</span> Tier 1 — Macro & Geopolitical Layer</div>
+            <span class="badge">Primary</span>
+          </div>
+          <div class="card-body" style="margin-bottom:10px;">The highest-signal layer. Geopolitical events cause capital to reprice risk globally before most retail investors process the news. Monitor this tier for structural shifts, not daily noise.</div>
+          <div class="signal-item">
+            <div class="signal-icon" style="background:rgba(201,168,76,0.12);color:var(--gold)">◈</div>
+            <div><div class="signal-text">Central bank policy signals — Fed, ECB, BNM. Focus on forward guidance language changes, not just rate decisions. The word "persistent" vs "transitory" moved markets more than the rates themselves.</div><div class="signal-meta">Sources: FOMC minutes, BIS quarterly, BNM MPC statements</div></div>
+          </div>
+          <div class="signal-item">
+            <div class="signal-icon" style="background:rgba(224,82,82,0.12);color:var(--red)">◈</div>
+            <div><div class="signal-text">Conflict escalation nodes — Middle East, Taiwan Strait, Russia-Ukraine. Track shipping route disruptions and commodity supply chain nodes specifically, not the geopolitics for its own sake.</div><div class="signal-meta">Sources: ISW maps, Freightos Baltic Index, Lloyd's of London alerts</div></div>
+          </div>
+          <div class="signal-item">
+            <div class="signal-icon" style="background:rgba(78,205,196,0.12);color:var(--cyan)">◈</div>
+            <div><div class="signal-text">Fiscal policy pivots — subsidy changes, capital controls, sovereign debt dynamics. Malaysia's fuel subsidy rationalisation is a live example: fiscal risk that creates sector winners and losers simultaneously.</div><div class="signal-meta">Sources: MOF budgets, IMF Article IV, World Bank fiscal monitors</div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span style="color:var(--cyan)">◆</span> Tier 2 — Market Structure Layer</div>
+            <span class="badge cyan">High frequency</span>
+          </div>
+          <div class="card-body" style="margin-bottom:10px;">Price action, flows, and positioning. These signals tell you where the herd is and where dislocations are forming. The goal is to find where price has diverged from value.</div>
+          <div class="signal-item">
+            <div class="signal-icon" style="background:rgba(78,205,196,0.1);color:var(--cyan)">◈</div>
+            <div><div class="signal-text">Sector rotation signals — relative strength of defensive vs cyclicals, small vs large cap breadth, credit spreads (IG vs HY). A flattening yield curve combined with widening HY spreads is a recession pricing signal.</div><div class="signal-meta">Sources: Finviz sector maps, FRED, Bloomberg credit spreads</div></div>
+          </div>
+          <div class="signal-item">
+            <div class="signal-icon" style="background:rgba(201,168,76,0.1);color:var(--gold)">◈</div>
+            <div><div class="signal-text">Options market flow — put/call ratio extremes, VIX term structure, unusual options activity (UOA). When retail buys puts aggressively, the move is often already over. When institutions quietly buy calls, pay attention.</div><div class="signal-meta">Sources: Options flow aggregators, CBOE data, unusual_whales</div></div>
+          </div>
+          <div class="signal-item">
+            <div class="signal-icon" style="background:rgba(155,127,232,0.1);color:var(--purple)">◈</div>
+            <div><div class="signal-text">KOSPI / EM currency stress — KRW, MYR, IDR moves against DXY as real-time risk appetite gauges. When EM currencies weaken simultaneously, global capital is fleeing to safety — and creating buying opportunities in quality EM names.</div><div class="signal-meta">Sources: Investing.com, TradingView currency heatmaps</div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span style="color:var(--green)">◆</span> Tier 3 — Corporate Intelligence Layer</div>
+          </div>
+          <div class="card-body" style="margin-bottom:10px;">Earnings calls, SEC filings, insider activity. This is where the story gets confirmed or denied at the company level.</div>
+          <div class="signal-item">
+            <div class="signal-icon" style="background:rgba(82,196,114,0.1);color:var(--green)">◈</div>
+            <div><div class="signal-text">Management language shifts — compare this quarter's earnings call transcript to the prior two. Watch for hedging language replacing confident guidance. Tools: earnings call analysis, FactSet, Motley Fool transcripts.</div></div>
+          </div>
+          <div class="signal-item">
+            <div class="signal-icon" style="background:rgba(82,196,114,0.1);color:var(--green)">◈</div>
+            <div><div class="signal-text">Insider buying clusters — a single insider buy is noise. Three insiders at the same company buying in the same month is a signal worth investigating. Form 4 filings via SEC EDGAR.</div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span style="color:var(--red)">⚑</span> Red Flags — When to Distrust Your Sources</div>
+          </div>
+          <div class="red-flag">
+            <div class="red-flag-icon">⚠</div>
+            <div class="red-flag-text"><strong>Narrative saturation:</strong> When your thesis is on the cover of Bloomberg, the trade is usually over. Measure media mentions — if a theme has 10x'd in coverage in 30 days, assume the opportunity has compressed significantly.</div>
+          </div>
+          <div class="red-flag">
+            <div class="red-flag-icon">⚠</div>
+            <div class="red-flag-text"><strong>Consensus crowding:</strong> Track hedge fund 13F filings quarterly. If 80%+ of large funds own the same position, the marginal buyer is gone. The thesis may still be correct but the trade is already crowded — your edge has evaporated.</div>
+          </div>
+          <div class="red-flag">
+            <div class="red-flag-icon">⚠</div>
+            <div class="red-flag-text"><strong>Social media FOMO signals:</strong> When retail influencers with zero track record are calling the same trade, you're looking at the last leg of a momentum trade. Note it, don't enter it. Use it as a contrary indicator for your next setup.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SYNTHESIS ══ -->
+      <div class="panel" id="panel-synthesis">
+        <div class="section-title">The Synthesis Process</div>
+        <div class="section-sub">Connecting disparate information into investment-ready insights</div>
+
+        <div class="pull-quote">"The most profitable investment ideas live at the intersection of two domains most people treat as unrelated."</div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">The Venezuela Formula — Core Synthesis Method</div>
+            <span class="badge">Framework</span>
+          </div>
+          <div class="card-body" style="margin-bottom:14px;">Every enduring investment thesis follows a three-part narrative structure. Build your synthesis around this arc.</div>
+          <div class="flow-step">
+            <div class="step-num">1</div>
+            <div>
+              <div class="step-title">Crisis Layer — The visible disruption</div>
+              <div class="step-body">Identify the headline event that everyone is reacting to. This is never the opportunity itself — it's the entry point to the analysis. The crisis creates irrational selling in related assets and temporarily obscures the second-order winners.</div>
+              <div class="step-q">Ask: "What asset class or sector is being irrationally sold because it's adjacent to the crisis, even if it's not actually exposed to the damage?"</div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">2</div>
+            <div>
+              <div class="step-title">Hidden Asset — The non-obvious beneficiary</div>
+              <div class="step-body">Map the second and third-order effects of the crisis. Who wins when this particular input becomes scarce or expensive? Which competitor gains market share? Which country's trade balance improves? This is where your edge lives — the beneficiary that the crisis narrative obscures.</div>
+              <div class="step-q">Ask: "If I had to bet on who profits from this crisis, which name would be hardest to explain at a dinner party?" That difficulty often signals non-consensus thinking.</div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">3</div>
+            <div>
+              <div class="step-title">FOMO / Identity Signal — The narrative catalyst</div>
+              <div class="step-body">The opportunity closes when the story becomes obvious. Map the trigger that will make the hidden asset visible to mainstream investors. This is your exit indicator: when CNBC is covering your thesis as the trade du jour, you should already be reducing exposure.</div>
+              <div class="step-q">Ask: "What would have to happen for this to become consensus? How far away is that event?" That distance = your opportunity window.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Second-Order Mapping — The Connection Protocol</div>
+          </div>
+          <div class="card-body" style="margin-bottom:14px;">A structured method for finding non-obvious connections across domains.</div>
+          <div class="flow-step">
+            <div class="step-num">A</div>
+            <div>
+              <div class="step-title">Map the supply chain in both directions</div>
+              <div class="step-body">Every commodity event affects both upstream (producers, miners, drillers) and downstream (manufacturers, consumers, distributors) players. Most investors only price in the direct. The non-obvious trade is almost always in the indirect.</div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">B</div>
+            <div>
+              <div class="step-title">Cross geography — find the substitute market</div>
+              <div class="step-body">When a supply disruption hits one region, capital and demand flow to the nearest substitute supplier. Iranian oil off the market → Saudi, UAE, and US producers benefit. Russian fertilizer sanctions → Moroccan OCP and Norwegian Yara gain pricing power.</div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">C</div>
+            <div>
+              <div class="step-title">Follow the capital, not just the narrative</div>
+              <div class="step-body">Track where institutional money is actually flowing using ETF flows, fund positioning, and 13F data — not where they say they're going in interviews. Institutional commentary is often backward-looking or positioning-motivated. The flows tell the real story.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Bias Checklist — Before You Commit to a Thesis</div>
+          </div>
+          <div class="bias-item">
+            <div class="bias-icon">🔎</div>
+            <div><div class="bias-name">Confirmation Bias</div><div class="bias-desc">Actively search for the strongest possible counter-argument to your thesis. If you can't articulate why a smart bear would reject it, you haven't done the work. Write the bear case first, then the bull case.</div></div>
+          </div>
+          <div class="bias-item">
+            <div class="bias-icon">📣</div>
+            <div><div class="bias-name">Narrative Bias</div><div class="bias-desc">Stories are memorable but companies have to be bought at a price. Verify that the narrative you're excited about is not already priced into the multiple. A great story at 40x earnings is often a bad investment.</div></div>
+          </div>
+          <div class="bias-item">
+            <div class="bias-icon">⏱</div>
+            <div><div class="bias-name">Recency Bias</div><div class="bias-desc">Last quarter's winner is rarely next quarter's winner. When evaluating a thesis, extend the time frame deliberately: what did this sector look like 2 years ago? 5 years? Zoom out before committing.</div></div>
+          </div>
+          <div class="bias-item">
+            <div class="bias-icon">🧲</div>
+            <div><div class="bias-name">Anchoring</div><div class="bias-desc">If you've held a position that went against you, your brain anchors to the entry price as a reference for "fair value." It isn't. Evaluate every position as if you were entering today from scratch.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ OPPORTUNITY ══ -->
+      <div class="panel" id="panel-opportunity">
+        <div class="section-title">The Opportunity Framework</div>
+        <div class="section-sub">Translating synthesis into specific positions with clear risk/reward thinking</div>
+
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header">
+            <div class="card-title">Position Construction Protocol</div>
+          </div>
+          <div class="card-body">Every opportunity must pass four gates before entering a watchlist. An idea that clears fewer than three gates stays on the drawing board.</div>
+          <div style="margin-top:14px;">
+            <div class="flow-step">
+              <div class="step-num">1</div>
+              <div>
+                <div class="step-title">Asymmetry Gate — Does the risk/reward justify the position?</div>
+                <div class="step-body">Minimum 3:1 reward-to-risk ratio. Define your downside before your upside. "I could lose X if wrong, I could make 3X if right." If you can't define both clearly, the thesis is incomplete.</div>
+              </div>
+            </div>
+            <div class="flow-step">
+              <div class="step-num">2</div>
+              <div>
+                <div class="step-title">Catalyst Gate — What will close the gap between price and value?</div>
+                <div class="step-body">A cheap stock that stays cheap forever is a trap. Identify the specific catalyst: earnings beat, regulatory change, management change, M&A event, or narrative shift. Without a catalyst, your timeline becomes infinite and your capital is dead.</div>
+              </div>
+            </div>
+            <div class="flow-step">
+              <div class="step-num">3</div>
+              <div>
+                <div class="step-title">Moat Gate — Why is this opportunity still available?</div>
+                <div class="step-body">Assume markets are mostly efficient. If an obvious opportunity exists, ask why smarter, better-resourced investors haven't taken it. Valid answers: it's too small for institutions, it's in an ignored market (Malaysian small caps), the thesis requires holding through volatility, or it requires domain knowledge most funds lack.</div>
+              </div>
+            </div>
+            <div class="flow-step">
+              <div class="step-num">4</div>
+              <div>
+                <div class="step-title">Sizing Gate — How much should this position be?</div>
+                <div class="step-body">Kelly Criterion adjusted for maximum conviction: no single position more than 15% of portfolio for high conviction, 5% for speculative. Scale position size to your certainty level, not your excitement level. Excitement and certainty are inversely correlated.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-header" style="margin-bottom:10px;">
+          <div class="card-title" style="font-size:14px;">Live Opportunity Stack</div>
+        </div>
+
+        <div class="opp-card">
+          <div class="opp-header">
+            <div><div class="opp-ticker">PCHEM.KL</div><div class="opp-title">Petronas Chemicals — Oil Surge Beneficiary</div></div>
+            <div><span class="tag tag-gold">High Conviction</span><span class="tag tag-red">Active</span></div>
+          </div>
+          <div class="rr-bar"><div class="rr-label">Upside</div><div class="rr-track"><div class="rr-fill" style="width:72%;background:var(--green)"></div></div><div style="font-size:11px;color:var(--green);font-family:var(--mono)">+38%</div></div>
+          <div class="rr-bar"><div class="rr-label">Downside</div><div class="rr-track"><div class="rr-fill" style="width:24%;background:var(--red)"></div></div><div style="font-size:11px;color:var(--red);font-family:var(--mono)">-12%</div></div>
+          <div class="card-body" style="margin-top:10px;">Iran conflict pushes Brent above $90 → PCHEM benefits from higher petrochemical margins AND higher parent company (Petronas) revenue, which supports dividend capacity. Catalyst: next MPC/earnings revision cycle. Thesis breaks if ceasefire + supply release simultaneously.</div>
+          <div style="margin-top:10px;"><span class="tag tag-cyan">Second-order</span><span class="tag tag-gold">Dividend play</span><span class="tag tag-purple">3.2x R/R</span></div>
+        </div>
+
+        <div class="opp-card">
+          <div class="opp-header">
+            <div><div class="opp-ticker">CRCL</div><div class="opp-title">Circle Internet — USDC / Venezuela Stablecoin Thesis</div></div>
+            <div><span class="tag tag-green">Closed +34%</span></div>
+          </div>
+          <div class="rr-bar"><div class="rr-label">Entry</div><div class="rr-track"><div class="rr-fill" style="width:55%;background:var(--cyan)"></div></div><div style="font-size:11px;color:var(--cyan);font-family:var(--mono)">$78</div></div>
+          <div class="rr-bar"><div class="rr-label">Exit</div><div class="rr-track"><div class="rr-fill" style="width:80%;background:var(--green)"></div></div><div style="font-size:11px;color:var(--green);font-family:var(--mono)">~$105</div></div>
+          <div class="card-body" style="margin-top:10px;">USDC adoption in dollarization-seeking economies (Venezuela, Argentina, Turkey) creates durable, uncorrelated revenue for Circle. Mainstream ignored this because they anchored to crypto narrative rather than the underlying fintech/remittance angle. Catalyst was regulatory clarity milestone.</div>
+          <div style="margin-top:10px;"><span class="tag tag-cyan">Closed</span><span class="tag tag-gold">Non-consensus entry</span></div>
+        </div>
+
+        <div class="opp-card">
+          <div class="opp-header">
+            <div><div class="opp-ticker">MY Rubber</div><div class="opp-title">Malaysian Rubber Sector — Glove Recovery Thesis</div></div>
+            <div><span class="tag tag-cyan">Watching</span></div>
+          </div>
+          <div class="card-body">Post-pandemic oversupply has cleared. China medical sector reopening + supply rationalisation creating setup for margin recovery. Sector hated by all analysts due to COVID boom/bust memory (recency bias). Asymmetric if earnings recovery materialises Q3-Q4. Monitoring capacity utilisation data monthly.</div>
+          <div style="margin-top:10px;"><span class="tag tag-purple">Contrarian</span><span class="tag tag-gold">Patience required</span></div>
+        </div>
+      </div>
+
+      <!-- ══ TEACHING ══ -->
+      <div class="panel" id="panel-teaching">
+        <div class="section-title">The Teaching Layer</div>
+        <div class="section-sub">Fundamentals embedded inside each insight — not separate from the analysis</div>
+
+        <div class="pull-quote">"Every market event is a lesson in disguise. The investor who learns fastest compounds fastest."</div>
+
+        <div class="lesson-box">
+          <div class="lesson-header">◈ Lesson 1 — Valuation</div>
+          <div class="lesson-title">Why price ≠ value (and why this creates your edge)</div>
+          <div class="lesson-body">Applied to PCHEM: The market prices PCHEM based on trailing earnings when oil is flat. But PCHEM's intrinsic value includes the optionality of oil price spikes — which shows up in earnings with a 6–9 month lag. This means the market's price is perpetually wrong in both directions.</div>
+          <div class="lesson-formula">Intrinsic Value = DCF(base case) + Option Value(oil spike probability × earnings uplift)</div>
+          <div class="lesson-body">The "hidden" component — the oil price option — is rarely modelled by sell-side analysts because it makes their models harder to defend. That's exactly where your edge comes from.</div>
+        </div>
+
+        <div class="lesson-box">
+          <div class="lesson-header">◈ Lesson 2 — Risk</div>
+          <div class="lesson-title">The difference between volatility and permanent loss of capital</div>
+          <div class="lesson-body">Most retail investors treat price drops as risk. Professional investors treat permanent impairment of business value as risk. When PCHEM drops 15% because oil fell temporarily, that is volatility, not risk — if the underlying thesis (petrochemical demand + ASEAN exposure) is intact. Know which one you're experiencing.</div>
+          <div class="lesson-formula">True Risk = P(thesis is fundamentally wrong) × (entry price - intrinsic value on downside case)</div>
+          <div class="lesson-body">Position sizing should be based on true risk, not on how much the price moves day-to-day. Most retail investors size positions inversely to their actual merit — they buy more of the stable names and avoid volatile names, which is exactly backwards for building wealth.</div>
+        </div>
+
+        <div class="lesson-box">
+          <div class="lesson-header">◈ Lesson 3 — Market Mechanics</div>
+          <div class="lesson-title">How liquidity events create temporary mispricings</div>
+          <div class="lesson-body">When the KOSPI crashed on Korean geopolitical fears (Operation Epic Fury thesis), the sell-off was driven by forced liquidation — margin calls, ETF rebalancing, and panic. This is a mechanical event, not a fundamental one. The underlying Korean companies didn't become 20% less valuable overnight. The opportunity exists because mechanical sellers and fundamental buyers are playing different games.</div>
+          <div class="lesson-formula">Dislocation = (forced seller price) - (patient buyer's fundamental value) → your opportunity window</div>
+        </div>
+
+        <div class="lesson-box">
+          <div class="lesson-header">◈ Lesson 4 — Behavioral Finance</div>
+          <div class="lesson-title">Why herd psychology creates systematic, repeatable mispricings</div>
+          <div class="lesson-body">The Malaysia rubber glove sector is currently suffering from narrative contamination: everyone remembers the boom-bust of 2020-2022 and has anchored their view of the sector to that memory. This is textbook recency bias creating a systematic undervaluation of recovery potential. When all analysts have the same bearish narrative, it's worth asking: who's left to sell?</div>
+          <div class="lesson-formula">When everyone is bearish → ask who's left to sell → ask what happens when sentiment turns → that gap is your return</div>
+        </div>
+
+        <div class="card" style="margin-top:20px;">
+          <div class="card-header">
+            <div class="card-title">Pre-Trade Checklist — Did you learn the lesson?</div>
+          </div>
+          <div id="checklist">
+            <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div> I can state the valuation basis in one sentence (not "it's cheap")</div>
+            <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div> I have written the bear case before the bull case</div>
+            <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div> I know the specific catalyst and its expected timing</div>
+            <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div> I have checked whether this thesis is consensus (if so, is my edge the timing?)</div>
+            <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div> My position size reflects certainty, not excitement</div>
+            <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div> I have defined the price at which I know the thesis is broken</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ EXAMPLES ══ -->
+      <div class="panel" id="panel-examples">
+        <div class="section-title">End-to-End Case Studies</div>
+        <div class="section-sub">Full pipeline walkthroughs: monitor → synthesize → opportunity → lesson</div>
+
+        <!-- CASE 1 -->
+        <div class="card" style="border-color:rgba(224,82,82,0.25)">
+          <div class="case-header">
+            <div class="case-icon" style="background:rgba(224,82,82,0.12)">⚑</div>
+            <div><div class="case-name">Iran Conflict / Stagflation Macro</div><div class="case-sub">Crisis → Oil shock → PCHEM + EM energy trade</div></div>
+          </div>
+
+          <div class="pipeline">
+            <div class="pipe-step"><div class="pipe-label">Monitor</div><div class="pipe-val">Iran escalation + Brent spike</div></div>
+            <div class="pipe-step"><div class="pipe-label">Synthesize</div><div class="pipe-val">2nd-order: petrochemical margins, EM energy</div></div>
+            <div class="pipe-step"><div class="pipe-label">Opportunity</div><div class="pipe-val">Long PCHEM.KL + short transport</div></div>
+            <div class="pipe-step"><div class="pipe-label">Lesson</div><div class="pipe-val">Oil option value hidden in DCF</div></div>
+          </div>
+
+          <div class="thesis-block">
+            <div class="thesis-label">Thesis Statement</div>
+            <div class="thesis-text">"Iran conflict removes ~1.5M bbl/day from market. Brent reprices above $95. Malaysian petrochemical companies — downstream of crude, upstream of global plastics chains — will see 2-quarter margin expansion while the market anchors to geopolitical fear, not sector fundamentals."</div>
+          </div>
+
+          <div class="card-body" style="margin-top:12px;">
+            <strong style="color:var(--text)">What most investors did:</strong> Sold global equities on fear. Rotated to gold and oil futures directly. Missed the second-order beneficiary in ASEAN energy infrastructure.<br><br>
+            <strong style="color:var(--text)">What the synthesis revealed:</strong> PCHEM earns from the spread between crude input costs and petrochemical product prices — not from crude itself. When oil spikes, demand for substitutes for petroleum-derived products (plastics, fertilisers) actually stays inelastic. The margin expansion opportunity was invisible to generalist investors.<br><br>
+            <strong style="color:var(--text)">Risk management:</strong> Position sized at 8% of portfolio. Stop-loss trigger: ceasefire announcement + OPEC production increase simultaneously. Thesis held for 90-day window, not indefinitely.
+          </div>
+
+          <div class="lesson-box" style="margin-top:14px;">
+            <div class="lesson-header">◈ Embedded Lesson — Stagflation Investing</div>
+            <div class="lesson-title">Which assets win in stagflation vs. pure inflation?</div>
+            <div class="lesson-body">Stagflation (high inflation + low growth) is the hardest environment to navigate. Stocks suffer (growth headwinds), bonds suffer (inflation), cash suffers (erosion). Winners: real assets, commodity producers, pricing-power businesses. PCHEM falls into "pricing power + commodity leverage" — exactly what stagflation rewards. This is why sector selection matters more than stock selection in macro-driven markets.</div>
+          </div>
+        </div>
+
+        <!-- CASE 2 -->
+        <div class="card" style="border-color:rgba(78,205,196,0.2)">
+          <div class="case-header">
+            <div class="case-icon" style="background:rgba(78,205,196,0.1)">₿</div>
+            <div><div class="case-name">Circle Internet (CRCL) — Venezuela/USDC Trade</div><div class="case-sub">+34% return from non-consensus fintech thesis</div></div>
+          </div>
+
+          <div class="pipeline">
+            <div class="pipe-step"><div class="pipe-label">Monitor</div><div class="pipe-val">USDC adoption in EM + dollarisation trend</div></div>
+            <div class="pipe-step"><div class="pipe-label">Synthesize</div><div class="pipe-val">Circle = fintech play, not crypto play</div></div>
+            <div class="pipe-step"><div class="pipe-label">Opportunity</div><div class="pipe-val">Long CRCL ~$78, target $105+</div></div>
+            <div class="pipe-step"><div class="pipe-label">Lesson</div><div class="pipe-val">Narrative contamination → category error</div></div>
+          </div>
+
+          <div class="thesis-block">
+            <div class="thesis-label">Thesis Statement</div>
+            <div class="thesis-text">"Circle earns yield on USDC reserves — a structurally superior business model to payments incumbents. As EM citizens in hyperinflationary economies adopt USDC as a dollar substitute, Circle's addressable market is the entire global remittance and savings market, not just crypto trading. Market is pricing it as a crypto company. It's actually a regulated fintech with Fed reserve exposure."</div>
+          </div>
+
+          <div class="card-body" style="margin-top:12px;">
+            <strong style="color:var(--text)">The non-consensus insight:</strong> Most investors rejected CRCL because they filed it under "crypto" — a narrative-contaminated category post-FTX collapse. This category error created the opportunity. The business model — collecting yield on stablecoin reserves — is closer to a money market fund than to Bitcoin.<br><br>
+            <strong style="color:var(--text)">The catalyst:</strong> US stablecoin regulation clarity (anticipated legislative progress) + growing USDC volumes in Venezuela, Argentina, and Turkey as documented by on-chain analytics.
+          </div>
+
+          <div class="lesson-box" style="margin-top:14px;">
+            <div class="lesson-header">◈ Embedded Lesson — Category Error & Valuation</div>
+            <div class="lesson-title">How narrative contamination creates mispricings</div>
+            <div class="lesson-body">When the market assigns the wrong business model framework to a company, it applies the wrong valuation multiple. CRCL was being valued like a volatile crypto exchange (low multiple, high discount rate) when it should have been valued like a fintech platform with recurring revenue (higher multiple, lower discount). That framework difference alone was worth 20-30% of the move. Spotting category errors is one of the highest-return skills in investing.</div>
+            <div class="lesson-formula">Value gap = (correct multiple × earnings) - (current multiple × earnings) = market's framework error</div>
+          </div>
+        </div>
+
+        <!-- CASE 3 -->
+        <div class="card" style="border-color:rgba(82,196,114,0.2)">
+          <div class="case-header">
+            <div class="case-icon" style="background:rgba(82,196,114,0.1)">🌿</div>
+            <div><div class="case-name">Malaysia Rubber Industry — Contrarian Recovery</div><div class="case-sub">Patient setup: post-crisis mean reversion</div></div>
+          </div>
+
+          <div class="pipeline">
+            <div class="pipe-step"><div class="pipe-label">Monitor</div><div class="pipe-val">Capacity utilisation, China medical demand</div></div>
+            <div class="pipe-step"><div class="pipe-label">Synthesize</div><div class="pipe-val">Supply rationalised, demand recovering</div></div>
+            <div class="pipe-step"><div class="pipe-label">Opportunity</div><div class="pipe-val">Stage-in across 2 quarters, target +45%</div></div>
+            <div class="pipe-step"><div class="pipe-label">Lesson</div><div class="pipe-val">Mean reversion + recency bias</div></div>
+          </div>
+
+          <div class="thesis-block">
+            <div class="thesis-label">Thesis Statement (in progress)</div>
+            <div class="thesis-text">"The Malaysian rubber glove sector is universally hated due to 2021-2022 boom-bust trauma. That universal hatred — when paired with recovering fundamentals — is exactly the setup for a mean-reversion trade. Waiting for capacity utilisation data to confirm the bottom before sizing up."</div>
+          </div>
+
+          <div class="card-body" style="margin-top:12px;">
+            <strong style="color:var(--text)">What the monitoring reveals:</strong> Top 3 producers (Top Glove, Hartalega, Kossan) have shut down 30%+ of COVID-era capacity. China's medical procurement normalisation creating new stable demand floor. Analyst coverage has collapsed — fewer than 5 active buy-side models on the sector.<br><br>
+            <strong style="color:var(--text)">Why it's not a buy yet:</strong> No catalyst confirmed. Waiting for Q2 utilisation data above 60% as entry trigger. Patient positioning — this is a 12-18 month thesis, not a trade.
+          </div>
+
+          <div class="lesson-box" style="margin-top:14px;">
+            <div class="lesson-header">◈ Embedded Lesson — Mean Reversion & Cycle Investing</div>
+            <div class="lesson-title">Why industries that almost everyone hates often outperform</div>
+            <div class="lesson-body">Industries with severe oversupply eventually rationalise — marginal producers exit, capex collapses, and supply contracts. At that point, any demand recovery hits a tight supply base and margins explode. This is the commodity cycle in microcosm. The difficulty: you must be willing to buy when the narrative is at maximum pessimism — the point of maximum journalistic contempt. Most investors can't stomach it emotionally, which is exactly why the returns exist for those who can.</div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- end main -->
+  </div><!-- end body -->
+</div>
+
+<script>
+function switchPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  event.target.classList.add('active');
+
+  document.querySelectorAll('[id^="nav-"]').forEach(n => n.style.display='none');
+  const nav = document.getElementById('nav-'+name);
+  if (nav) nav.style.display='block';
+}
+
+function toggleCheck(el) {
+  const box = el.querySelector('.check-box');
+  box.classList.toggle('checked');
+}
+
+// init sidebar
+document.querySelectorAll('[id^="nav-"]').forEach(n => n.style.display='none');
+document.getElementById('nav-monitoring').style.display='block';
+</script>
+</body>
+</html>

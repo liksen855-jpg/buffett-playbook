@@ -1,0 +1,328 @@
+
+<style>
+  * { box-sizing: border-box; }
+  .tabs { display: flex; gap: 6px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .tab-btn { padding: 7px 14px; font-size: 12px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-secondary); cursor: pointer; transition: all 0.15s; }
+  .tab-btn.active { background: var(--color-background-secondary); color: var(--color-text-primary); border-color: var(--color-border-primary); font-weight: 500; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .row label { font-size: 12px; color: var(--color-text-secondary); width: 160px; flex-shrink: 0; }
+  .row input[type=range] { flex: 1; }
+  .row span { font-size: 13px; font-weight: 500; min-width: 60px; text-align: right; }
+  .metrics { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; margin-bottom: 1.5rem; }
+  .metric { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 11px 13px; }
+  .metric .lbl { font-size: 11px; color: var(--color-text-secondary); margin: 0 0 3px; }
+  .metric .val { font-size: 17px; font-weight: 500; margin: 0; }
+  .metric .sub { font-size: 11px; color: var(--color-text-secondary); margin: 2px 0 0; }
+  .insight { font-size: 12px; color: var(--color-text-secondary); margin-top: 10px; line-height: 1.6; padding: 10px 12px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); border-left: 2px solid #3266ad; }
+  .insight span { color: var(--color-text-primary); font-weight: 500; }
+  .metrics2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; margin-bottom: 1.5rem; }
+  .age-bar { height: 28px; border-radius: 4px; display: flex; align-items: center; padding: 0 10px; font-size: 12px; font-weight: 500; margin-bottom: 6px; transition: width 0.4s; }
+</style>
+
+<div style="padding: 0.5rem 0;">
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('delay')">Cost of delay</button>
+  <button class="tab-btn" onclick="showTab('spend')">Spend vs invest</button>
+  <button class="tab-btn" onclick="showTab('rate')">Rate asymmetry</button>
+  <button class="tab-btn" onclick="showTab('age')">Start age race</button>
+</div>
+
+<div id="panel-delay" class="panel active">
+  <div class="row"><label>Current portfolio (RM)</label><input type="range" id="d-port" min="0" max="200000" step="5000" value="50000"><span id="d-port-o">50k</span></div>
+  <div class="row"><label>Monthly savings (RM)</label><input type="range" id="d-save" min="500" max="10000" step="500" value="2000"><span id="d-save-o">2,000</span></div>
+  <div class="row"><label>Annual return (%)</label><input type="range" id="d-rate" min="4" max="15" step="0.5" value="8"><span id="d-rate-o">8%</span></div>
+  <div class="row"><label>Years delayed</label><input type="range" id="d-delay" min="1" max="10" step="1" value="3"><span id="d-delay-o">3 yrs</span></div>
+  <div class="row"><label>Invest for (years)</label><input type="range" id="d-years" min="10" max="35" step="1" value="20"><span id="d-years-o">20 yrs</span></div>
+  <div class="metrics" id="delay-metrics"></div>
+  <div style="position:relative;width:100%;height:280px;"><canvas id="chart-delay"></canvas></div>
+  <div style="display:flex;gap:16px;margin-top:8px;font-size:11px;color:var(--color-text-secondary);">
+    <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#3266ad;"></span>Start today</span>
+    <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#e24b4a;"></span>Delayed start</span>
+  </div>
+  <div class="insight" id="delay-insight"></div>
+</div>
+
+<div id="panel-spend" class="panel">
+  <div class="row"><label>Daily spend (RM)</label><input type="range" id="s-daily" min="5" max="200" step="5" value="30"><span id="s-daily-o">30</span></div>
+  <div class="row"><label>Annual return (%)</label><input type="range" id="s-rate" min="4" max="15" step="0.5" value="8"><span id="s-rate-o">8%</span></div>
+  <div class="row"><label>Over (years)</label><input type="range" id="s-years" min="5" max="40" step="1" value="20"><span id="s-years-o">20 yrs</span></div>
+  <div class="metrics" id="spend-metrics"></div>
+  <div style="position:relative;width:100%;height:280px;"><canvas id="chart-spend"></canvas></div>
+  <div style="display:flex;gap:16px;margin-top:8px;font-size:11px;color:var(--color-text-secondary);">
+    <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#3266ad;"></span>Invested value</span>
+    <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#e09f26;"></span>Cash spent</span>
+  </div>
+  <div class="insight" id="spend-insight"></div>
+</div>
+
+<div id="panel-rate" class="panel">
+  <div class="row"><label>Starting capital (RM)</label><input type="range" id="r-cap" min="10000" max="500000" step="10000" value="100000"><span id="r-cap-o">100k</span></div>
+  <div class="row"><label>Monthly addition (RM)</label><input type="range" id="r-monthly" min="0" max="5000" step="100" value="1000"><span id="r-monthly-o">1,000</span></div>
+  <div class="row"><label>Years</label><input type="range" id="r-years" min="5" max="40" step="1" value="25"><span id="r-years-o">25 yrs</span></div>
+  <div class="metrics2" id="rate-metrics"></div>
+  <div style="position:relative;width:100%;height:300px;"><canvas id="chart-rate"></canvas></div>
+  <div style="display:flex;gap:12px;margin-top:8px;font-size:11px;color:var(--color-text-secondary);flex-wrap:wrap;" id="rate-legend"></div>
+  <div class="insight" id="rate-insight"></div>
+</div>
+
+<div id="panel-age" class="panel">
+  <div class="row"><label>Monthly savings (RM)</label><input type="range" id="a-save" min="500" max="5000" step="500" value="1500"><span id="a-save-o">1,500</span></div>
+  <div class="row"><label>Annual return (%)</label><input type="range" id="a-rate" min="4" max="15" step="0.5" value="8"><span id="a-rate-o">8%</span></div>
+  <div class="row"><label>Target age</label><input type="range" id="a-target" min="50" max="70" step="1" value="60"><span id="a-target-o">60</span></div>
+  <div id="age-bars" style="margin-bottom:1.5rem;"></div>
+  <div style="position:relative;width:100%;height:300px;"><canvas id="chart-age"></canvas></div>
+  <div style="display:flex;gap:12px;margin-top:8px;font-size:11px;color:var(--color-text-secondary);flex-wrap:wrap;" id="age-legend"></div>
+  <div class="insight" id="age-insight"></div>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const fmt = v => v >= 1000000 ? 'RM ' + (v/1000000).toFixed(2) + 'M' : v >= 1000 ? 'RM ' + Math.round(v/1000) + 'k' : 'RM ' + Math.round(v);
+const fmtS = v => v >= 1000000 ? (v/1000000).toFixed(1)+'M' : v >= 1000 ? Math.round(v/1000)+'k' : Math.round(v);
+const charts = {};
+
+function growMonthly(start, monthly, annualRate, years) {
+  const mr = annualRate / 100 / 12;
+  let p = start;
+  const vals = [Math.round(p)];
+  for (let y = 1; y <= years; y++) {
+    for (let m = 0; m < 12; m++) p = p * (1 + mr) + monthly;
+    vals.push(Math.round(p));
+  }
+  return vals;
+}
+
+function makeLabels(years) {
+  const l = ['Now'];
+  for (let y = 1; y <= years; y++) l.push('Yr ' + y);
+  return l;
+}
+
+function showTab(id) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelector('[onclick="showTab(\'' + id + '\')"]').classList.add('active');
+  document.getElementById('panel-' + id).classList.add('active');
+  if (id === 'delay') updateDelay();
+  if (id === 'spend') updateSpend();
+  if (id === 'rate') updateRate();
+  if (id === 'age') updateAge();
+}
+
+function sl(id, outId, fmt2) {
+  const el = document.getElementById(id);
+  const out = document.getElementById(outId);
+  el.addEventListener('input', () => { out.textContent = fmt2(+el.value); });
+}
+
+function metricHTML(label, val, sub) {
+  return `<div class="metric"><p class="lbl">${label}</p><p class="val">${val}</p>${sub ? '<p class="sub">' + sub + '</p>' : ''}</div>`;
+}
+
+function makeChart(canvasId, type, labels, datasets, yFmt, extra) {
+  if (charts[canvasId]) charts[canvasId].destroy();
+  charts[canvasId] = new Chart(document.getElementById(canvasId), {
+    type,
+    data: { labels, datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': RM ' + ctx.parsed.y.toLocaleString() } } },
+      scales: {
+        x: { ticks: { autoSkip: true, maxTicksLimit: 10, font: { size: 11 }, color: '#888' }, grid: { color: 'rgba(128,128,128,0.1)' } },
+        y: { ticks: { callback: v => 'RM ' + fmtS(v), font: { size: 11 }, color: '#888' }, grid: { color: 'rgba(128,128,128,0.1)' } }
+      },
+      ...(extra || {})
+    }
+  });
+}
+
+function updateDelay() {
+  const port = +document.getElementById('d-port').value;
+  const save = +document.getElementById('d-save').value;
+  const rate = +document.getElementById('d-rate').value;
+  const delay = +document.getElementById('d-delay').value;
+  const years = +document.getElementById('d-years').value;
+
+  document.getElementById('d-port-o').textContent = port >= 1000 ? Math.round(port/1000)+'k' : port;
+  document.getElementById('d-save-o').textContent = save.toLocaleString();
+  document.getElementById('d-rate-o').textContent = rate + '%';
+  document.getElementById('d-delay-o').textContent = delay + ' yrs';
+  document.getElementById('d-years-o').textContent = years + ' yrs';
+
+  const nowVals = growMonthly(port, save, rate, years);
+  const delayVals = [port];
+  const mr = rate / 100 / 12;
+  let p = port;
+  for (let y = 1; y <= delay; y++) { for (let m = 0; m < 12; m++) p = p * (1 + mr); delayVals.push(Math.round(p)); }
+  const delayedFull = growMonthly(p, save, rate, years - delay);
+  for (let i = 1; i < delayedFull.length; i++) delayVals.push(delayedFull[i]);
+
+  const nowFinal = nowVals[nowVals.length - 1];
+  const delFinal = delayVals[delayVals.length - 1];
+  const cost = nowFinal - delFinal;
+  const extraDeposited = save * 12 * delay;
+
+  document.getElementById('delay-metrics').innerHTML =
+    metricHTML('Start today → ' + years + ' yrs', fmt(nowFinal), null) +
+    metricHTML('Delay ' + delay + ' yr(s) → ' + years + ' yrs', fmt(delFinal), null) +
+    metricHTML('True cost of waiting', fmt(cost), 'lost wealth, not just returns');
+
+  const labels = makeLabels(years);
+  makeChart('chart-delay', 'line', labels, [
+    { label: 'Start today', data: nowVals, borderColor: '#3266ad', backgroundColor: 'rgba(50,102,173,0.1)', fill: true, borderWidth: 2, pointRadius: 0, tension: 0.3 },
+    { label: 'Delayed start', data: delayVals, borderColor: '#e24b4a', backgroundColor: 'rgba(226,75,74,0.07)', fill: true, borderWidth: 2, pointRadius: 0, tension: 0.3 }
+  ]);
+
+  document.getElementById('delay-insight').innerHTML = `Waiting <span>${delay} year(s)</span> costs you <span>${fmt(cost)}</span> in final wealth — that's <span>${Math.round(cost / (save * 12 * delay))}x</span> the extra deposits you'd have made in that time. Time is the only input you can't buy back.`;
+}
+
+function updateSpend() {
+  const daily = +document.getElementById('s-daily').value;
+  const rate = +document.getElementById('s-rate').value;
+  const years = +document.getElementById('s-years').value;
+
+  document.getElementById('s-daily-o').textContent = daily;
+  document.getElementById('s-rate-o').textContent = rate + '%';
+  document.getElementById('s-years-o').textContent = years + ' yrs';
+
+  const monthly = daily * 30;
+  const investedVals = growMonthly(0, monthly, rate, years);
+  const spentVals = [];
+  for (let y = 0; y <= years; y++) spentVals.push(Math.round(monthly * 12 * y));
+
+  const finalInvested = investedVals[investedVals.length - 1];
+  const totalSpent = spentVals[spentVals.length - 1];
+  const multiplier = totalSpent > 0 ? (finalInvested / totalSpent).toFixed(1) : 1;
+
+  document.getElementById('spend-metrics').innerHTML =
+    metricHTML('Daily habit cost', 'RM ' + daily, 'RM ' + Math.round(monthly * 12).toLocaleString() + '/yr') +
+    metricHTML('If invested over ' + years + ' yrs', fmt(finalInvested), multiplier + 'x your cash out') +
+    metricHTML('Cash you actually spent', fmt(totalSpent), 'the real comparison');
+
+  const labels = makeLabels(years);
+  makeChart('chart-spend', 'line', labels, [
+    { label: 'Invested value', data: investedVals, borderColor: '#3266ad', backgroundColor: 'rgba(50,102,173,0.1)', fill: true, borderWidth: 2, pointRadius: 0, tension: 0.3 },
+    { label: 'Cash spent', data: spentVals, borderColor: '#e09f26', backgroundColor: 'rgba(224,159,38,0.1)', fill: true, borderWidth: 2, pointRadius: 0, tension: 0.3 }
+  ]);
+
+  document.getElementById('spend-insight').innerHTML = `RM ${daily}/day sounds trivial. Over ${years} years it's <span>${fmt(totalSpent)}</span> out of pocket — but invested, it becomes <span>${fmt(finalInvested)}</span>. The gap is pure compounding. Every daily habit has an opportunity cost the price tag never shows.`;
+}
+
+function updateRate() {
+  const cap = +document.getElementById('r-cap').value;
+  const monthly = +document.getElementById('r-monthly').value;
+  const years = +document.getElementById('r-years').value;
+
+  document.getElementById('r-cap-o').textContent = cap >= 1000 ? Math.round(cap/1000)+'k' : cap;
+  document.getElementById('r-monthly-o').textContent = monthly.toLocaleString();
+  document.getElementById('r-years-o').textContent = years + ' yrs';
+
+  const rates = [4, 7, 10, 14];
+  const colors = ['#888780', '#3266ad', '#1D9E75', '#e24b4a'];
+  const labels2 = ['4% (FD)', '7% (index)', '10% (equity)', '14% (active)'];
+  const datasets = rates.map((r, i) => ({
+    label: labels2[i],
+    data: growMonthly(cap, monthly, r, years),
+    borderColor: colors[i],
+    backgroundColor: colors[i] + '18',
+    fill: false,
+    borderWidth: 2,
+    pointRadius: 0,
+    tension: 0.3
+  }));
+
+  const finals = rates.map(r => growMonthly(cap, monthly, r, years).slice(-1)[0]);
+  const fdFinal = finals[0];
+  const eqFinal = finals[2];
+  const diff = eqFinal - fdFinal;
+
+  document.getElementById('rate-metrics').innerHTML =
+    metricHTML('FD at 4% → ' + years + ' yrs', fmt(fdFinal), 'baseline') +
+    metricHTML('Equity at 10% → ' + years + ' yrs', fmt(eqFinal), '+' + fmt(diff) + ' vs FD');
+
+  const labels = makeLabels(years);
+  makeChart('chart-rate', 'line', labels, datasets);
+
+  document.getElementById('rate-legend').innerHTML = rates.map((r, i) =>
+    `<span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:${colors[i]};"></span>${labels2[i]}: ${fmt(finals[i])}</span>`
+  ).join('');
+
+  const mult = (eqFinal / fdFinal).toFixed(1);
+  document.getElementById('rate-insight').innerHTML = `A 6% difference in annual return produces a <span>${mult}x</span> difference in final wealth over ${years} years — that's <span>${fmt(diff)}</span> extra. Rate asymmetry is the most underestimated lever most people have access to.`;
+}
+
+function updateAge() {
+  const save = +document.getElementById('a-save').value;
+  const rate = +document.getElementById('a-rate').value;
+  const target = +document.getElementById('a-target').value;
+
+  document.getElementById('a-save-o').textContent = save.toLocaleString();
+  document.getElementById('a-rate-o').textContent = rate + '%';
+  document.getElementById('a-target-o').textContent = target;
+
+  const startAges = [20, 25, 30, 35, 40];
+  const colors = ['#1D9E75', '#3266ad', '#e09f26', '#D85A30', '#e24b4a'];
+  const finals = startAges.map(age => {
+    const yrs = Math.max(0, target - age);
+    if (yrs === 0) return 0;
+    return growMonthly(0, save, rate, yrs).slice(-1)[0];
+  });
+
+  const barsHTML = startAges.map((age, i) => {
+    const pct = finals[0] > 0 ? Math.round(finals[i] / finals[0] * 100) : 0;
+    const w = Math.max(4, pct);
+    return `<div style="margin-bottom:8px;">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-secondary);margin-bottom:3px;">
+        <span>Start age ${age}</span><span style="color:var(--color-text-primary);font-weight:500;">${fmt(finals[i])}</span>
+      </div>
+      <div style="height:20px;background:var(--color-background-secondary);border-radius:4px;overflow:hidden;">
+        <div style="height:100%;width:${w}%;background:${colors[i]};border-radius:4px;transition:width 0.4s;"></div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('age-bars').innerHTML = barsHTML;
+
+  const maxYrs = target - 20;
+  const labels = makeLabels(maxYrs);
+  const datasets = startAges.map((age, i) => {
+    const yrs = Math.max(0, target - age);
+    const delay = target - 20 - yrs;
+    const vals = [];
+    for (let y = 0; y <= delay; y++) vals.push(0);
+    const grown = growMonthly(0, save, rate, yrs);
+    for (let y = 1; y < grown.length; y++) vals.push(grown[y]);
+    return {
+      label: 'Age ' + age,
+      data: vals,
+      borderColor: colors[i],
+      fill: false,
+      borderWidth: 1.5,
+      pointRadius: 0,
+      tension: 0.3
+    };
+  });
+
+  makeChart('chart-age', 'line', labels, datasets);
+
+  document.getElementById('age-legend').innerHTML = startAges.map((age, i) =>
+    `<span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:${colors[i]};"></span>Age ${age}: ${fmt(finals[i])}</span>`
+  ).join('');
+
+  const best = finals[0], worst = finals[finals.length - 1];
+  const ratio = best > 0 && worst > 0 ? (best / worst).toFixed(1) : '—';
+  document.getElementById('age-insight').innerHTML = `Starting at 20 vs 40 — same monthly savings, same return — produces <span>${ratio}x</span> more wealth by ${target}. The difference isn't discipline or intelligence. It's purely the number of years the money has to compound.`;
+}
+
+['d-port','d-save','d-rate','d-delay','d-years'].forEach(id => document.getElementById(id).addEventListener('input', updateDelay));
+['s-daily','s-rate','s-years'].forEach(id => document.getElementById(id).addEventListener('input', updateSpend));
+['r-cap','r-monthly','r-years'].forEach(id => document.getElementById(id).addEventListener('input', updateRate));
+['a-save','a-rate','a-target'].forEach(id => document.getElementById(id).addEventListener('input', updateAge));
+
+updateDelay();
+</script>

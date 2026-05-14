@@ -1,0 +1,179 @@
+
+<style>
+  body { margin: 0; }
+  .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .filter-btn { padding: 5px 14px; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-secondary); font-size: 12px; cursor: pointer; transition: all .15s; }
+  .filter-btn.active { background: var(--color-background-info); color: var(--color-text-info); border-color: transparent; font-weight: 500; }
+  .row-card { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); margin-bottom: 10px; overflow: hidden; }
+  .row-header { display: flex; align-items: center; justify-content: space-between; padding: 11px 14px; cursor: pointer; background: var(--color-background-secondary); gap: 12px; }
+  .row-header:hover { background: var(--color-background-tertiary); }
+  .cat-label { font-size: 13px; font-weight: 500; color: var(--color-text-primary); flex: 1; }
+  .balance-badge { font-size: 11px; padding: 2px 9px; border-radius: 20px; white-space: nowrap; }
+  .b-heavy   { background: #FCEBEB; color: #A32D2D; }
+  .b-moderate{ background: #FAEEDA; color: #854F0B; }
+  .b-mutual  { background: #EAF3DE; color: #3B6D11; }
+  .chevron { font-size: 11px; color: var(--color-text-secondary); transition: transform .2s; }
+  .chevron.open { transform: rotate(180deg); }
+  .row-body { display: none; }
+  .row-body.open { display: grid; grid-template-columns: 1fr 1fr; }
+  .col { padding: 12px 14px; font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; }
+  .col:first-child { border-right: 0.5px solid var(--color-border-tertiary); border-top: 0.5px solid var(--color-border-tertiary); }
+  .col:last-child  { border-top: 0.5px solid var(--color-border-tertiary); }
+  .col-header { font-size: 11px; font-weight: 500; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .col-my .col-header { color: #854F0B; }
+  .col-us .col-header { color: #185FA5; }
+  .summary-bar { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 16px; }
+  .sum-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; text-align: center; }
+  .sum-n { font-size: 22px; font-weight: 500; color: var(--color-text-primary); }
+  .sum-l { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+  ul { margin: 0; padding-left: 16px; }
+  li { margin-bottom: 3px; }
+</style>
+
+<div style="padding: 0 0 1rem;">
+
+  <div class="summary-bar">
+    <div class="sum-card">
+      <div class="sum-n" style="color:#A32D2D;">6</div>
+      <div class="sum-l">Malaysia carries most burden</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-n" style="color:#854F0B;">3</div>
+      <div class="sum-l">Moderate imbalance</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-n" style="color:#3B6D11;">2</div>
+      <div class="sum-l">Somewhat mutual</div>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filter('all', this)">All categories</button>
+    <button class="filter-btn" onclick="filter('heavy', this)">Malaysia-heavy</button>
+    <button class="filter-btn" onclick="filter('moderate', this)">Moderate</button>
+    <button class="filter-btn" onclick="filter('mutual', this)">Mutual</button>
+  </div>
+
+  <div id="rows"></div>
+</div>
+
+<script>
+const data = [
+  {
+    cat: "Tariffs",
+    balance: "moderate",
+    badge: "Moderate imbalance",
+    my: "Cut or eliminate tariffs on nearly all US goods over time — chemicals, machinery, electrical equipment, metals, cars, dairy, poultry, pork, rice, ethanol, and more (schedules in Annex I).",
+    us: "Cap its reciprocal tariff on Malaysian goods at 19% (vs. higher threats). Give 0% tariff on selected Malaysian products (Annex III — semiconductors & integrated circuits)."
+  },
+  {
+    cat: "Market access",
+    balance: "heavy",
+    badge: "Malaysia carries most",
+    my: "Give US products preferential, non-discriminatory access in almost every sector. Remove quotas unless both sides agree.",
+    us: "No new market access promises for Malaysian goods beyond the tariff cap."
+  },
+  {
+    cat: "Non-tariff barriers",
+    balance: "heavy",
+    badge: "Malaysia carries most",
+    my: `<ul><li>Accept US car safety & emissions standards</li><li>Accept US FDA approvals for medicines & medical devices</li><li>Streamline licences for steel & pipes</li><li>Remove bans on remanufactured goods</li><li>Recognise US meat, poultry & dairy safety systems</li><li>Simplify halal certification for US food</li><li>Open market for US sorghum</li></ul>`,
+    us: "None specific — only general cooperation."
+  },
+  {
+    cat: "Intellectual property",
+    balance: "heavy",
+    badge: "Malaysia carries most",
+    my: "Stronger IP protection & enforcement (civil, criminal, border). Prioritise fighting piracy & counterfeits. Join more international IP treaties.",
+    us: "Nothing new — already covered under existing US laws."
+  },
+  {
+    cat: "Digital trade & data",
+    balance: "heavy",
+    badge: "Malaysia carries most",
+    my: `<ul><li>Allow trusted cross-border data flows</li><li>No discriminatory digital services tax on US companies</li><li>No customs duties on electronic transmissions</li><li>Remove broadcasting restrictions on US content</li></ul>`,
+    us: "Nothing specific."
+  },
+  {
+    cat: "Critical minerals & rare earths",
+    balance: "moderate",
+    badge: "Moderate imbalance",
+    my: `<ul><li>No export bans or quotas to the US</li><li>Extended mining & processing licences</li><li>No restrictions on selling rare earth magnets to US firms</li><li>Prioritise US investment in mines & processing plants</li></ul>`,
+    us: `<ul><li>Work in "good faith" to prioritise US companies in asset sales</li><li>Cooperate on supply-chain projects & quarterly meetings</li><li>Consider financing via US banks (EXIM, DFC)</li></ul>`
+  },
+  {
+    cat: "Investment & big purchases",
+    balance: "heavy",
+    badge: "Malaysia carries most",
+    my: `<ul><li>Facilitate ~US$70B in Malaysian investment into the US over 10 years</li><li>"Intend to" help buy US aircraft, LNG, semiconductors, data-centre equipment (Annex IV)</li><li>Treat US investors fairly</li></ul>`,
+    us: `<ul><li>Use government financing tools to support projects in Malaysia</li><li>Nothing binding on buying Malaysian goods</li></ul>`
+  },
+  {
+    cat: "SOEs & subsidies",
+    balance: "heavy",
+    badge: "Malaysia carries most",
+    my: "Make government-linked companies act commercially (no unfair advantages). Address subsidy distortions.",
+    us: "Nothing specific."
+  },
+  {
+    cat: "Labour & environment",
+    balance: "moderate",
+    badge: "Moderate imbalance",
+    my: "Ban forced-labour imports, strengthen labour rights enforcement, maintain high environmental standards.",
+    us: "Nothing new — share best practices only."
+  },
+  {
+    cat: "Economic security alignment",
+    balance: "mutual",
+    badge: "Somewhat mutual",
+    my: "Cooperate on US export controls, investment screening, sanctions lists, and measures against third-country practices (e.g. China). Align on shipbuilding & steel excess capacity.",
+    us: "Notify Malaysia of US security measures so Malaysia can align. Streamline defence trade with Malaysia."
+  },
+  {
+    cat: "Regulatory & other",
+    balance: "mutual",
+    badge: "Somewhat mutual",
+    my: "Adopt good regulatory practices (transparency). Fight transshipment & duty evasion.",
+    us: "General cooperation on supply-chain resilience and unfair trade from third countries."
+  }
+];
+
+const colourMap = { heavy: 'b-heavy', moderate: 'b-moderate', mutual: 'b-mutual' };
+
+function render(filterVal) {
+  const container = document.getElementById('rows');
+  container.innerHTML = '';
+  data.filter(d => filterVal === 'all' || d.balance === filterVal).forEach((d, i) => {
+    const id = 'r' + i;
+    const div = document.createElement('div');
+    div.className = 'row-card';
+    div.dataset.balance = d.balance;
+    div.innerHTML = `
+      <div class="row-header" onclick="toggle('${id}')">
+        <span class="cat-label">${d.cat}</span>
+        <span class="balance-badge ${colourMap[d.balance]}">${d.badge}</span>
+        <span class="chevron" id="chev-${id}">▼</span>
+      </div>
+      <div class="row-body" id="${id}">
+        <div class="col col-my"><div class="col-header">Malaysia commits to</div>${d.my}</div>
+        <div class="col col-us"><div class="col-header">US commits to</div>${d.us}</div>
+      </div>`;
+    container.appendChild(div);
+  });
+}
+
+function toggle(id) {
+  const body = document.getElementById(id);
+  const chev = document.getElementById('chev-' + id);
+  const open = body.classList.toggle('open');
+  chev.classList.toggle('open', open);
+}
+
+function filter(val, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render(val);
+}
+
+render('all');
+</script>

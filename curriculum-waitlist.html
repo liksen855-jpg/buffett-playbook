@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Free Investing Curriculum — Insight Invest</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --bg:#08090c;--bg2:#0d0f14;--bg3:#13151d;
+      --border:#222533;
+      --text:#8a91aa;--text-bright:#e4e8f2;--text-dim:#444a60;
+      --gold:#c9a84c;--gold-dim:#7a6028;--gold-faint:rgba(201,168,76,0.06);
+      --green:#3dd68c;--red:#e05555;
+      --f-xs:11px;--f-sm:13px;--f-base:15px;--f-md:17px;--f-lg:21px;--f-xl:26px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:#1e2130 var(--bg)}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#1e2130;border-radius:2px}
+    body{font-family:'Source Sans 3',sans-serif;font-size:var(--f-base);font-weight:400;line-height:1.65;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+    body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+    h1,h2,h3{font-family:'Libre Baskerville',Georgia,serif;font-weight:400;line-height:1.15;color:var(--text-bright)}
+
+    /* NAV */
+    nav{padding:20px 52px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+    .nav-logo{display:flex;align-items:center;gap:13px;text-decoration:none}
+    .nav-logo-mark{width:34px;height:34px;border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Libre Baskerville',serif;font-size:17px;color:var(--gold)}
+    .nav-logo-text{font-size:var(--f-sm);font-weight:600;color:var(--text-bright);letter-spacing:.1em;text-transform:uppercase}
+    .nav-back{display:inline-flex;align-items:center;gap:8px;font-size:var(--f-xs);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);text-decoration:none;transition:color .25s}
+    .nav-back:hover{color:var(--gold)}
+    .nav-back svg{transition:transform .25s}
+    .nav-back:hover svg{transform:translateX(-3px)}
+
+    /* HERO */
+    .hero{position:relative;overflow:hidden;padding:96px 52px 80px;border-bottom:1px solid var(--border);text-align:center}
+    .hero-orb-1{position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(120px);background:rgba(201,168,76,.055);top:-30%;left:50%;transform:translateX(-50%);pointer-events:none}
+    .hero-orb-2{position:absolute;width:300px;height:300px;border-radius:50%;filter:blur(80px);background:rgba(61,214,140,.03);bottom:-20%;left:10%;pointer-events:none}
+    .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(34,37,51,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(34,37,51,.16) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 20%,transparent 80%)}
+    .hero-content{position:relative;z-index:2;max-width:720px;margin:0 auto}
+
+    .hero-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:var(--f-xs);font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:24px}
+    .hero-eyebrow-line{width:28px;height:1px;background:linear-gradient(90deg,var(--gold),transparent)}
+    .hero-free-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(61,214,140,.07);border:1px solid rgba(61,214,140,.22);padding:7px 18px;font-size:var(--f-xs);font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:28px}
+    .hero-free-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2.5s ease-in-out infinite}
+    @keyframes pulse{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:1;transform:scale(1.2)}}
+
+    .hero-h1{font-family:'Libre Baskerville',serif;font-size:clamp(32px,5vw,56px);font-weight:400;color:var(--text-bright);line-height:1.1;letter-spacing:-.01em;margin-bottom:20px}
+    .hero-h1 em{font-style:italic;color:var(--gold)}
+    .hero-h1 strong{font-weight:700;color:var(--text-bright)}
+    .hero-sub{font-size:var(--f-md);font-weight:300;color:var(--text);line-height:1.78;max-width:560px;margin:0 auto 36px}
+
+    /* SOCIAL PROOF BAR */
+    .social-bar{display:flex;align-items:center;justify-content:center;gap:28px;margin-bottom:44px;flex-wrap:wrap}
+    .social-item{display:flex;align-items:center;gap:8px;font-size:var(--f-sm);font-weight:400;color:var(--text-dim)}
+    .social-item svg{color:var(--gold);flex-shrink:0}
+    .social-divider{width:1px;height:16px;background:var(--border)}
+
+    /* FORM */
+    .form-wrap{max-width:480px;margin:0 auto}
+    .form-row{display:flex;gap:1px;background:var(--border)}
+    .form-input{flex:1;background:var(--bg2);border:none;outline:none;font-family:'Source Sans 3',sans-serif;font-size:var(--f-base);font-weight:400;color:var(--text-bright);padding:16px 20px}
+    .form-input::placeholder{color:var(--text-dim)}
+    .form-btn{padding:16px 28px;background:var(--gold);color:var(--bg);font-family:'Source Sans 3',sans-serif;font-size:var(--f-xs);font-weight:700;letter-spacing:.12em;text-transform:uppercase;border:none;cursor:pointer;white-space:nowrap;transition:all .3s;position:relative;overflow:hidden}
+    .form-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent,rgba(255,255,255,.12));transform:translateX(-100%);transition:transform .5s}
+    .form-btn:hover::before{transform:translateX(100%)}
+    .form-btn:hover{box-shadow:0 6px 24px rgba(201,168,76,.3)}
+    .form-note{font-size:var(--f-xs);font-weight:400;color:var(--text-dim);text-align:center;margin-top:12px}
+    .form-note span{color:var(--green);font-weight:600}
+
+    /* SUCCESS STATE */
+    .success-state{display:none;text-align:center;padding:28px;border:1px solid rgba(61,214,140,.2);background:rgba(61,214,140,.04)}
+    .success-state.visible{display:block}
+    .success-icon{width:48px;height:48px;border-radius:50%;background:rgba(61,214,140,.1);border:1px solid rgba(61,214,140,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+    .success-title{font-family:'Libre Baskerville',serif;font-size:var(--f-xl);font-weight:400;color:var(--text-bright);margin-bottom:8px}
+    .success-sub{font-size:var(--f-sm);color:var(--text);line-height:1.65}
+
+    /* MODULES */
+    .modules-section{padding:88px 52px;max-width:1000px;margin:0 auto}
+    .section-label{display:flex;align-items:center;gap:16px;margin-bottom:44px}
+    .section-label-text{font-size:var(--f-xs);font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);white-space:nowrap}
+    .section-label-line{flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+
+    .modules-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
+    .module-card{background:var(--bg2);padding:34px 30px;position:relative;overflow:hidden;transition:background .3s}
+    .module-card:hover{background:var(--bg3)}
+    .module-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+    .module-card:hover::after{transform:scaleX(1)}
+    .mod-num{font-family:'Libre Baskerville',serif;font-size:var(--f-xl);font-weight:400;color:rgba(201,168,76,.25);line-height:1;margin-bottom:20px}
+    .mod-title{font-family:'Libre Baskerville',serif;font-size:var(--f-lg);font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:10px}
+    .mod-desc{font-size:var(--f-sm);font-weight:400;color:var(--text);line-height:1.7;margin-bottom:20px}
+    .mod-lessons{display:flex;flex-direction:column;gap:6px}
+    .mod-lesson{font-size:var(--f-xs);font-weight:400;color:var(--text-dim);display:flex;align-items:baseline;gap:8px}
+    .mod-lesson::before{content:'—';color:var(--gold);flex-shrink:0;font-size:10px}
+
+    /* FEAR SECTION */
+    .fear-section{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:88px 52px}
+    .fear-inner{max-width:960px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
+    .fear-left h2{font-family:'Libre Baskerville',serif;font-size:clamp(26px,3.5vw,38px);font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:16px}
+    .fear-left h2 em{font-style:italic;color:var(--gold)}
+    .fear-left p{font-size:var(--f-md);font-weight:300;color:var(--text);line-height:1.78}
+    .fear-list{display:flex;flex-direction:column;gap:1px}
+    .fear-item{background:var(--bg);border:1px solid var(--border);padding:18px 22px;display:flex;align-items:flex-start;gap:14px;transition:border-color .25s}
+    .fear-item:not(:first-child){border-top:none}
+    .fear-item:hover{border-color:rgba(201,168,76,.2)}
+    .fear-icon{width:28px;height:28px;border-radius:50%;background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+    .fear-icon svg{width:12px;height:12px;color:var(--gold)}
+    .fear-title{font-size:var(--f-base);font-weight:600;color:var(--text-bright);margin-bottom:3px}
+    .fear-desc{font-size:var(--f-sm);font-weight:400;color:var(--text-dim);line-height:1.6}
+
+    /* FOR YOU SECTION */
+    .for-you{padding:88px 52px;max-width:900px;margin:0 auto;text-align:center}
+    .for-you h2{font-family:'Libre Baskerville',serif;font-size:clamp(26px,3.5vw,38px);font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:12px}
+    .for-you h2 em{font-style:italic;color:var(--gold)}
+    .for-you-sub{font-size:var(--f-md);font-weight:300;color:var(--text);line-height:1.75;max-width:560px;margin:0 auto 48px}
+    .for-you-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);text-align:left}
+    .fy-card{background:var(--bg2);padding:28px 26px}
+    .fy-check{width:24px;height:24px;border-radius:50%;background:rgba(61,214,140,.07);border:1px solid rgba(61,214,140,.2);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+    .fy-check svg{width:11px;height:11px}
+    .fy-title{font-size:var(--f-base);font-weight:600;color:var(--text-bright);margin-bottom:6px}
+    .fy-desc{font-size:var(--f-sm);font-weight:400;color:var(--text-dim);line-height:1.65}
+
+    /* BOTTOM CTA */
+    .bottom-cta{position:relative;overflow:hidden;padding:88px 52px;text-align:center;border-top:1px solid var(--border)}
+    .bottom-cta::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent)}
+    .bottom-cta-orb{position:absolute;width:500px;height:500px;border-radius:50%;filter:blur(110px);background:rgba(201,168,76,.05);top:-30%;left:50%;transform:translateX(-50%);pointer-events:none}
+    .bottom-cta-inner{position:relative;z-index:2;max-width:600px;margin:0 auto}
+    .bottom-cta h2{font-family:'Libre Baskerville',serif;font-size:clamp(28px,4vw,44px);font-weight:400;color:var(--text-bright);line-height:1.15;margin-bottom:14px}
+    .bottom-cta h2 em{font-style:italic;color:var(--gold)}
+    .bottom-cta p{font-size:var(--f-md);font-weight:300;color:var(--text);line-height:1.75;margin-bottom:36px}
+    .bottom-form-row{display:flex;gap:1px;background:var(--border);max-width:440px;margin:0 auto 12px}
+
+    /* FOOTER */
+    footer{border-top:1px solid var(--border);padding:32px 52px;display:flex;align-items:center;justify-content:space-between}
+    .footer-logo{font-family:'Libre Baskerville',serif;font-size:var(--f-md);color:var(--gold);font-weight:400}
+    .footer-copy{font-size:var(--f-xs);font-weight:400;color:var(--text-dim)}
+    .footer-links{display:flex;gap:28px}
+    .footer-links a{font-size:var(--f-xs);font-weight:600;color:var(--text-dim);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:color .3s}
+    .footer-links a:hover{color:var(--gold)}
+
+    .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+
+    @media(max-width:900px){
+      nav{padding:16px 24px}
+      .hero{padding:72px 24px 56px}
+      .modules-section,.fear-section,.for-you,.bottom-cta{padding:64px 24px}
+      .modules-grid,.for-you-grid{grid-template-columns:1fr}
+      .fear-inner{grid-template-columns:1fr;gap:36px}
+      .form-row,.bottom-form-row{flex-direction:column;background:none;gap:10px}
+      .form-input,.form-btn{width:100%}
+      footer{flex-direction:column;gap:16px;padding:28px 24px;text-align:center}
+      .footer-links{flex-wrap:wrap;justify-content:center}
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">
+    <div class="nav-logo-mark">I</div>
+    <span class="nav-logo-text">Insight Invest</span>
+  </a>
+  <a href="brief-rddt.html" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 7H2M5 3L1 7l4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Back to Brief
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-orb-1"></div>
+  <div class="hero-orb-2"></div>
+  <div class="hero-content">
+
+    <div class="hero-eyebrow"><span class="hero-eyebrow-line"></span>Free Curriculum · Insight Invest<span class="hero-eyebrow-line" style="transform:scaleX(-1)"></span></div>
+    <div class="hero-free-badge">100% Free · No credit card required</div>
+
+    <h1 class="hero-h1">
+      6 modules that will prepare you<br>to invest your <em>first dollar.</em>
+    </h1>
+    <p class="hero-sub">Most people never start because they feel they're not ready. This curriculum was built to get you ready — fast. No jargon. No fluff. Just the six things that actually matter before you put real money to work.</p>
+
+    <div class="social-bar">
+      <div class="social-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.6 3.3 3.6.5-2.6 2.5.6 3.6L7 9.4l-3.2 1.5.6-3.6L1.8 4.8l3.6-.5L7 1z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+        Built for complete beginners
+      </div>
+      <div class="social-divider"></div>
+      <div class="social-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M7 4v3l2 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Self-paced, read in your own time
+      </div>
+      <div class="social-divider"></div>
+      <div class="social-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="3" width="10" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M5 3V2M9 3V2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Join the waitlist — spots are limited
+      </div>
+    </div>
+
+    <div class="form-wrap" id="heroForm">
+      <div class="form-row">
+        <input class="form-input" type="email" placeholder="Your email address" id="heroEmail" autocomplete="email"/>
+        <button class="form-btn" onclick="submitForm('heroEmail','heroForm','heroSuccess')">
+          Join Waitlist
+        </button>
+      </div>
+      <div class="form-note"><span>Free forever.</span> &nbsp;We'll notify you the moment it launches.</div>
+    </div>
+
+    <div class="success-state" id="heroSuccess">
+      <div class="success-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10l5 5 7-8" stroke="#3dd68c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="success-title">You're on the list.</div>
+      <div class="success-sub">We'll email you the moment the curriculum goes live.<br>Check your inbox for a confirmation.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- MODULES GRID -->
+<section class="modules-section">
+  <div class="section-label reveal">
+    <span class="section-label-text">The 6 Modules</span>
+    <span class="section-label-line"></span>
+  </div>
+  <div class="modules-grid reveal">
+
+    <div class="module-card">
+      <div class="mod-num">01</div>
+      <div class="mod-title">How markets really work</div>
+      <div class="mod-desc">Before you buy a single share, you need to understand what you're actually participating in — and why prices are almost never right.</div>
+      <div class="mod-lessons">
+        <div class="mod-lesson">Price vs. intrinsic value</div>
+        <div class="mod-lesson">Why markets misprice assets</div>
+        <div class="mod-lesson">How to exploit the gap</div>
+        <div class="mod-lesson">Short-term noise vs. long-term signal</div>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="mod-num">02</div>
+      <div class="mod-title">Reading a company's financials</div>
+      <div class="mod-desc">Three documents tell you everything. Most people never learn to read them. After this module, you'll be in the minority who can.</div>
+      <div class="mod-lessons">
+        <div class="mod-lesson">The income statement, line by line</div>
+        <div class="mod-lesson">What the balance sheet actually tells you</div>
+        <div class="mod-lesson">Why cash flow beats reported profit</div>
+        <div class="mod-lesson">The five numbers that matter most</div>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="mod-num">03</div>
+      <div class="mod-title">Valuation from scratch</div>
+      <div class="mod-desc">What is this company actually worth? Not what the market says — what it's worth. This is the skill that separates investors from speculators.</div>
+      <div class="mod-lessons">
+        <div class="mod-lesson">Intrinsic value, explained simply</div>
+        <div class="mod-lesson">DCF without the complexity</div>
+        <div class="mod-lesson">Margin of safety: your error buffer</div>
+        <div class="mod-lesson">When to buy and when to wait</div>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="mod-num">04</div>
+      <div class="mod-title">Risk &amp; position sizing</div>
+      <div class="mod-desc">The difference between investors who survive decades and those who blow up isn't intelligence — it's how they manage risk on every single trade.</div>
+      <div class="mod-lessons">
+        <div class="mod-lesson">How much to put in each position</div>
+        <div class="mod-lesson">When to cut a loss without emotion</div>
+        <div class="mod-lesson">Concentration vs. diversification</div>
+        <div class="mod-lesson">The portfolio-level view</div>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="mod-num">05</div>
+      <div class="mod-title">Building your first watchlist</div>
+      <div class="mod-desc">The best investors spend more time watching and waiting than acting. This module teaches you the patience framework that changes how you see markets.</div>
+      <div class="mod-lessons">
+        <div class="mod-lesson">How to find quality businesses</div>
+        <div class="mod-lesson">Setting your buy price in advance</div>
+        <div class="mod-lesson">Tracking without obsessing</div>
+        <div class="mod-lesson">The patience advantage</div>
+      </div>
+    </div>
+
+    <div class="module-card">
+      <div class="mod-num">06</div>
+      <div class="mod-title">Making your first investment</div>
+      <div class="mod-desc">The checklist you run before clicking buy. After six modules, you'll know what to look for, how to size it, and exactly when the timing is right.</div>
+      <div class="mod-lessons">
+        <div class="mod-lesson">Pre-investment checklist</div>
+        <div class="mod-lesson">Choosing the right account &amp; broker</div>
+        <div class="mod-lesson">Executing without second-guessing</div>
+        <div class="mod-lesson">What to do after you buy</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FEAR SECTION — objection handling -->
+<section class="fear-section">
+  <div class="fear-inner">
+    <div class="fear-left reveal">
+      <h2>If this sounds familiar,<br><em>this is for you.</em></h2>
+      <p>Every investor was a complete beginner once. The ones who succeed are not smarter — they simply found a clear starting point and followed it through.</p>
+    </div>
+    <div class="fear-list reveal">
+      <div class="fear-item">
+        <div class="fear-icon"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <div class="fear-title">"I don't know where to start"</div>
+          <div class="fear-desc">Module 1 starts at zero. No assumed knowledge. No prior experience required.</div>
+        </div>
+      </div>
+      <div class="fear-item">
+        <div class="fear-icon"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <div class="fear-title">"I'm afraid of losing money"</div>
+          <div class="fear-desc">Module 4 is entirely about protecting capital. Risk management before returns.</div>
+        </div>
+      </div>
+      <div class="fear-item">
+        <div class="fear-icon"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <div class="fear-title">"I don't have enough money to invest"</div>
+          <div class="fear-desc">You don't need much to start. You need the right knowledge first. That's what this builds.</div>
+        </div>
+      </div>
+      <div class="fear-item">
+        <div class="fear-icon"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <div class="fear-title">"I don't understand financial jargon"</div>
+          <div class="fear-desc">Every term is explained in plain language the first time it appears. No glossary needed.</div>
+        </div>
+      </div>
+      <div class="fear-item">
+        <div class="fear-icon"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <div class="fear-title">"I don't have time for another course"</div>
+          <div class="fear-desc">Six modules. Each designed to be read in one sitting. Total time: under two hours.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOR YOU SECTION -->
+<section class="for-you">
+  <h2 class="reveal">This is <em>specifically</em> for you if…</h2>
+  <p class="for-you-sub reveal">We designed this for one person — someone who knows investing matters but doesn't know where to begin.</p>
+  <div class="for-you-grid reveal">
+    <div class="fy-card">
+      <div class="fy-check"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="#3dd68c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="fy-title">You've never bought a stock before</div>
+      <div class="fy-desc">And you want to understand what you're doing before you do it.</div>
+    </div>
+    <div class="fy-card">
+      <div class="fy-check"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="#3dd68c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="fy-title">You've tried before and felt lost</div>
+      <div class="fy-desc">YouTube rabbit holes and Reddit threads left you more confused, not less.</div>
+    </div>
+    <div class="fy-card">
+      <div class="fy-check"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="#3dd68c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="fy-title">You want to think long-term</div>
+      <div class="fy-desc">Not trading, not crypto speculation — building real wealth over time.</div>
+    </div>
+    <div class="fy-card">
+      <div class="fy-check"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="#3dd68c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="fy-title">You read the RDDT brief and felt behind</div>
+      <div class="fy-desc">Terms like FCF, DCF, or EV/Revenue felt unfamiliar. That's exactly what this fixes.</div>
+    </div>
+    <div class="fy-card">
+      <div class="fy-check"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="#3dd68c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="fy-title">You want to do your own research</div>
+      <div class="fy-desc">Not just follow tips — actually understand what you're buying and why.</div>
+    </div>
+    <div class="fy-card">
+      <div class="fy-check"><svg viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="#3dd68c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="fy-title">You're ready to take it seriously</div>
+      <div class="fy-desc">No more "I'll start when I'm ready." Six modules from now, you will be.</div>
+    </div>
+  </div>
+</section>
+
+<!-- BOTTOM CTA -->
+<section class="bottom-cta">
+  <div class="bottom-cta-orb"></div>
+  <div class="bottom-cta-inner reveal">
+    <h2>Reserve your spot.<br><em>It's completely free.</em></h2>
+    <p>The curriculum launches soon. Join the waitlist now and be first in line when it does.</p>
+
+    <div id="bottomForm">
+      <div class="bottom-form-row">
+        <input class="form-input" type="email" placeholder="Your email address" id="bottomEmail" autocomplete="email"/>
+        <button class="form-btn" onclick="submitForm('bottomEmail','bottomForm','bottomSuccess')">
+          Join Waitlist
+        </button>
+      </div>
+      <div class="form-note" style="text-align:center;margin-top:10px"><span>Free forever.</span> &nbsp;No spam. Unsubscribe any time.</div>
+    </div>
+
+    <div class="success-state" id="bottomSuccess">
+      <div class="success-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10l5 5 7-8" stroke="#3dd68c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="success-title">You're on the list.</div>
+      <div class="success-sub">We'll email you the moment the curriculum goes live.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Insight Invest</div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="members.html">Members</a>
+    <a href="brief-rddt.html">RDDT Brief</a>
+    <a href="curriculum-vsl.html">Watch Intro</a>
+  </div>
+  <div class="footer-copy">© 2026 Insight Invest</div>
+</footer>
+
+<script>
+  function submitForm(inputId, formId, successId) {
+    const email = document.getElementById(inputId).value.trim();
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!re.test(email)) {
+      const input = document.getElementById(inputId);
+      input.style.outline = '2px solid #e05555';
+      input.focus();
+      setTimeout(() => input.style.outline = '', 2000);
+      return;
+    }
+    document.getElementById(formId).style.display = 'none';
+    document.getElementById(successId).classList.add('visible');
+    // Hook up your email provider here (Mailchimp, ConvertKit, Formspree etc.)
+    // fetch('/api/waitlist', { method:'POST', body: JSON.stringify({email}), headers:{'Content-Type':'application/json'} })
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), i * 80); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.06 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
