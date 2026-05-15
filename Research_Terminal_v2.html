@@ -386,6 +386,64 @@
   }
   footer .end { color: var(--amber-dim); letter-spacing: 0.16em; align-self: end; }
 
+  /* ---------- cta ---------- */
+  .soft-cta {
+    padding: 36px 22px;
+    border-bottom: 1px solid var(--rule2);
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--panel2);
+    gap: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .soft-cta::before {
+    content: 'INSIGHTINVEST';
+    position: absolute; right: -10px; top: 50%; transform: translateY(-50%);
+    font-size: 96px; font-weight: 700; letter-spacing: 0.04em;
+    color: var(--amber); opacity: 0.025; pointer-events: none;
+    white-space: nowrap;
+  }
+  .soft-cta .cta-left { flex: 1; min-width: 0; position: relative; z-index: 1; }
+  .soft-cta .cta-badge {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 9px; letter-spacing: 0.16em; color: var(--green);
+    margin-bottom: 14px; font-weight: 500;
+  }
+  .soft-cta .cta-badge::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green); flex-shrink: 0;
+    box-shadow: 0 0 5px var(--green);
+    animation: pulse 1.6s infinite;
+  }
+  .soft-cta .cta-headline {
+    font-size: 18px; line-height: 1.3; color: var(--white);
+    margin-bottom: 10px; font-weight: 600; letter-spacing: 0.04em;
+  }
+  .soft-cta .cta-headline em {
+    font-style: normal; color: var(--amber);
+  }
+  .soft-cta .cta-sub {
+    font-size: 10.5px; color: var(--dim); line-height: 1.8;
+    max-width: 440px; letter-spacing: 0.03em;
+  }
+  .soft-cta .cta-right {
+    flex-shrink: 0; display: flex; align-items: center;
+    gap: 16px; position: relative; z-index: 1;
+  }
+  .soft-cta .cta-meta {
+    text-align: right; font-size: 9px; letter-spacing: 0.1em; color: var(--dimmer); line-height: 2;
+  }
+  .soft-cta .cta-meta span { display: block; color: var(--dim); }
+  .soft-cta .cta-link {
+    flex-shrink: 0;
+    font-size: 10px; letter-spacing: 0.14em; font-weight: 600;
+    color: var(--bg); background: var(--amber);
+    padding: 11px 22px; white-space: nowrap;
+    transition: background 0.2s; font-family: inherit;
+    border: none; cursor: pointer;
+  }
+  .soft-cta .cta-link:hover { background: var(--amber2); }
+
   /* ---------- responsive ---------- */
   @media (max-width: 980px) {
     .dash { grid-template-columns: 1fr; }
@@ -464,8 +522,8 @@
       <div class="nm">ENERGY FUELS INC</div>
       <div class="row2">
         <div>
-          <div class="px">10.86</div>
-          <div class="chg up">+38.1% YTD</div>
+          <div class="px">20.18</div>
+          <div class="chg up">+86.1% YTD</div>
         </div>
         <svg class="spark" viewBox="0 0 200 46" preserveAspectRatio="none">
           <polyline fill="none" stroke="#5ad9d9" stroke-width="1.4"
@@ -520,19 +578,19 @@
     <div class="mr">
       <div class="lbl">BASE UPSIDE</div>
       <div class="upside up">+43 / +65%</div>
-      <div class="upside up">+38 / +84%</div>
+      <div class="upside up">+7 / +35%</div>
       <div class="upside up">+14 / +28%</div>
     </div>
     <div class="mr">
       <div class="lbl">BEAR DOWNSIDE</div>
       <div class="upside dn">−23 / −7%</div>
-      <div class="upside dn">−45 / −17%</div>
+      <div class="upside dn">−7 / −35%</div>
       <div class="upside dn">−19 / −12%</div>
     </div>
     <div class="mr">
       <div class="lbl">R / R RATIO</div>
       <div class="v"><b>~3.0×</b></div>
-      <div class="v"><b>~5.0×</b></div>
+      <div class="v"><b>~1.9×</b></div>
       <div class="v"><b>~2.0×</b></div>
     </div>
     <div class="mr">
@@ -669,8 +727,8 @@
       <div class="tk">UUUU</div>
       <div class="ex">NYSE AM</div>
       <div class="name">ENERGY FUELS INC</div>
-      <div class="px">$10.86</div>
-      <div class="ch">38.1% YTD</div>
+      <div class="px">$20.18</div>
+      <div class="ch">+86.1% YTD</div>
       <div>RTG ▸ SPECULATIVE</div>
     </div>
 
@@ -682,7 +740,7 @@
         <div class="kpi"><div class="lbl">U PROD '26E</div><div class="v cyan">2.0M lb</div><div class="s">up from 1M in '25</div></div>
         <div class="kpi"><div class="lbl">NET DEBT</div><div class="v g">ZERO</div><div class="s">~$1B liquidity</div></div>
         <div class="kpi"><div class="lbl">Dy PURITY</div><div class="v cyan">99.9%</div><div class="s">vs 99.5% spec</div></div>
-        <div class="kpi"><div class="lbl">SELL-SIDE PT</div><div class="v cyan">$27.25</div><div class="s">+150% vs spot</div></div>
+        <div class="kpi"><div class="lbl">SELL-SIDE PT</div><div class="v cyan">$27.25</div><div class="s">+35% vs spot</div></div>
       </div>
     </div>
 
@@ -737,28 +795,28 @@
     </div>
 
     <div class="scen">
-      <h3>PRICE SCENARIOS <small>12–24M horizon · spot $10.86 · R/R ~5.0×</small></h3>
+      <h3>PRICE SCENARIOS <small>12–24M horizon · spot $20.18 · R/R ~1.9×</small></h3>
       <div class="schart">
         <div class="head"><div>CASE</div><div>TARGET</div><div>RANGE</div><div>VS SPOT</div><div>PROB</div></div>
         <div class="srow">
           <div class="lab bu">BULL</div>
-          <div class="px">$25–35+</div>
-          <div class="barwrap"><div class="bar bu" style="width:62%; margin-left:30%;"></div><div class="spot" style="left:30%;"></div></div>
-          <div class="rr up">+130 / +222%</div>
+          <div class="px">$34–40+</div>
+          <div class="barwrap"><div class="bar bu" style="width:45%; margin-left:50%;"></div><div class="spot" style="left:50%;"></div></div>
+          <div class="rr up">+17 / +87%</div>
           <div class="prob">25%</div>
         </div>
         <div class="srow">
           <div class="lab ba">BASE</div>
-          <div class="px">$15–20</div>
-          <div class="barwrap"><div class="bar ba" style="width:20%; margin-left:30%;"></div><div class="spot" style="left:30%;"></div></div>
-          <div class="rr up">+38 / +84%</div>
+          <div class="px">$25–29</div>
+          <div class="barwrap"><div class="bar ba" style="width:20%; margin-left:50%;"></div><div class="spot" style="left:50%;"></div></div>
+          <div class="rr up">+7 / +35%</div>
           <div class="prob">45%</div>
         </div>
         <div class="srow">
           <div class="lab be">BEAR</div>
-          <div class="px">$6–9</div>
-          <div class="barwrap"><div class="bar be" style="width:12%; margin-left:18%;"></div><div class="spot" style="left:30%;"></div></div>
-          <div class="rr dn">−45 / −17%</div>
+          <div class="px">$12–14</div>
+          <div class="barwrap"><div class="bar be" style="width:18%; margin-left:30%;"></div><div class="spot" style="left:50%;"></div></div>
+          <div class="rr dn">−7 / −35%</div>
           <div class="prob">30%</div>
         </div>
       </div>
@@ -867,6 +925,23 @@
     </div>
   </section>
 
+  <!-- soft cta -->
+  <div class="soft-cta">
+    <div class="cta-left">
+      <div class="cta-badge">NOW BOOKING · LIMITED SPOTS</div>
+      <div class="cta-headline">Investing advice built around <em>you</em></div>
+      <div class="cta-sub">A private 60-min session personalised to your portfolio, your strategy, and where the market is creating opportunity — right now.</div>
+    </div>
+    <div class="cta-right">
+      <div class="cta-meta">
+        <span>DURATION · 60 MIN</span>
+        <span>FORMAT · PRIVATE 1-ON-1</span>
+        <span>PREP · 24 HRS</span>
+      </div>
+      <a class="cta-link" href="https://www.leiholding.com/insightinvest-1on1.html" target="_blank">BOOK A SESSION ▸</a>
+    </div>
+  </div>
+
   <!-- portfolio chain -->
   <section class="sec" id="portfolio" data-screen-label="Portfolio Chain">
     <div class="chain">
@@ -916,7 +991,7 @@
           <div class="ph"><span class="t">UUUU</span><span class="badge">HIGH RISK</span></div>
           <div class="role">OPTIONALITY</div>
           <div class="meter"><i class="on r"></i><i class="on r"></i><i class="on r"></i><i class="on r"></i><i class="on r"></i></div>
-          <p>Treat as long-dated option. <b>Size accordingly.</b> Stop near $12–13.</p>
+          <p>Treat as long-dated option. <b>Size accordingly.</b> Stop near $14–15.</p>
         </div>
       </div>
     </div>
