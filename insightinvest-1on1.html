@@ -724,6 +724,147 @@ footer{
   .hcm-stats{grid-template-columns:1fr 1fr;gap:12px;}
   .hcm-stats > div:last-child{grid-column:span 2;}
 }
+
+/* ─── MODAL ─── */
+.modal-overlay{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(22,20,18,0.72);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.25s ease;
+}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{
+  background:var(--off);
+  border-radius:24px;
+  width:100%;max-width:520px;
+  max-height:90vh;overflow-y:auto;
+  position:relative;
+  transform:translateY(20px) scale(0.97);
+  transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow:0 32px 80px rgba(22,20,18,0.28);
+}
+.modal-overlay.open .modal{transform:none;}
+.modal-header{
+  padding:36px 36px 0;
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:16px;
+}
+.modal-header-text{}
+.modal-eyebrow{
+  font-size:11px;font-weight:500;letter-spacing:1.8px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:6px;
+  display:flex;align-items:center;gap:6px;
+}
+.modal-eyebrow::before{content:'';width:14px;height:1.5px;background:var(--gold);}
+.modal-title{
+  font-family:'Playfair Display',serif;
+  font-size:26px;font-weight:400;line-height:1.15;
+  color:var(--ink);
+}
+.modal-title em{font-style:italic;color:var(--gold);}
+.modal-close{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--stone);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:2px;
+  transition:background 0.2s;color:var(--ink-soft);
+}
+.modal-close:hover{background:var(--stone-dark);color:var(--ink);}
+.modal-body{padding:28px 36px 36px;}
+.modal-tier-select{
+  display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;
+}
+.tier-tab{
+  flex:1;min-width:100px;
+  padding:10px 8px;text-align:center;
+  border-radius:8px;border:1.5px solid var(--stone-dark);
+  background:var(--white);cursor:pointer;
+  transition:all 0.18s;font-family:'Outfit',sans-serif;
+}
+.tier-tab:hover{border-color:var(--ink-faint);}
+.tier-tab.active-beg{border-color:#2BAD8A;background:#EAF4F1;}
+.tier-tab.active-mid{border-color:var(--gold);background:var(--gold-pale);}
+.tier-tab.active-adv{border-color:#6B5FD4;background:#F0EEFF;}
+.tier-tab-dot{width:7px;height:7px;border-radius:50%;margin:0 auto 5px;}
+.tier-tab-label{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;}
+.tier-tab-sub{font-size:10px;color:var(--ink-faint);margin-top:1px;}
+.form-group{margin-bottom:18px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;}
+label{
+  display:block;font-size:12px;font-weight:500;
+  color:var(--ink-soft);letter-spacing:0.4px;
+  margin-bottom:6px;
+}
+input,select,textarea{
+  width:100%;
+  padding:12px 14px;
+  border-radius:10px;
+  border:1.5px solid var(--stone-dark);
+  background:var(--white);
+  font-family:'Outfit',sans-serif;font-size:14px;
+  color:var(--ink);
+  transition:border-color 0.2s,box-shadow 0.2s;
+  outline:none;
+  -webkit-appearance:none;appearance:none;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(184,151,58,0.1);
+}
+input::placeholder,textarea::placeholder{color:var(--ink-faint);}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23A09B95' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;}
+textarea{resize:vertical;min-height:90px;line-height:1.6;}
+.modal-submit{
+  width:100%;padding:15px;
+  background:var(--ink);color:var(--white);
+  font-family:'Outfit',sans-serif;font-size:14px;font-weight:500;
+  letter-spacing:0.4px;border-radius:10px;
+  border:none;cursor:pointer;
+  transition:background 0.2s,transform 0.15s;
+  margin-top:8px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.modal-submit:hover{background:var(--gold);transform:translateY(-1px);}
+.modal-submit:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+.modal-note{
+  text-align:center;font-size:11px;color:var(--ink-faint);
+  margin-top:14px;line-height:1.5;
+}
+.modal-success{
+  display:none;flex-direction:column;align-items:center;
+  text-align:center;padding:16px 0 8px;
+}
+.modal-success.show{display:flex;}
+.success-icon{
+  width:64px;height:64px;border-radius:50%;
+  background:var(--teal-pale);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:20px;color:var(--teal);
+}
+.success-title{
+  font-family:'Playfair Display',serif;
+  font-size:24px;font-weight:400;color:var(--ink);
+  margin-bottom:10px;
+}
+.success-sub{font-size:14px;color:var(--ink-soft);line-height:1.7;max-width:320px;}
+.modal-form-wrap{}
+
+/* Spinner */
+@keyframes spin{to{transform:rotate(360deg);}}
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;display:none;}
+.modal-submit.loading .spinner{display:block;}
+.modal-submit.loading .btn-text{display:none;}
+
+@media(max-width:520px){
+  .modal-header{padding:28px 24px 0;}
+  .modal-body{padding:24px 24px 28px;}
+  .modal-title{font-size:22px;}
+  .form-row{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body>
@@ -1035,6 +1176,90 @@ footer{
   <div class="footer-copy">© 2026 InsightInvest · All rights reserved</div>
 </footer>
 
+<!-- BOOKING MODAL -->
+<div class="modal-overlay" id="bookingModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-header-text">
+        <div class="modal-eyebrow">Book a session</div>
+        <div class="modal-title" id="modalTitle">Reserve your <em>private</em> session</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-success" id="modalSuccess">
+        <div class="success-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="success-title">You're booked in</div>
+        <p class="success-sub">Thanks — we'll be in touch within 24 hours to confirm your session time and send you the pre-session brief.</p>
+      </div>
+      <div class="modal-form-wrap" id="modalFormWrap">
+        <div class="modal-tier-select">
+          <div class="tier-tab active-beg" data-tier="Beginner" onclick="selectTier(this)">
+            <div class="tier-tab-dot" style="background:#4DC8A0;"></div>
+            <div class="tier-tab-label" style="color:#2BAD8A;">Beginner</div>
+            <div class="tier-tab-sub">Foundations</div>
+          </div>
+          <div class="tier-tab" data-tier="Mid-level" onclick="selectTier(this)">
+            <div class="tier-tab-dot" style="background:var(--gold-bright);"></div>
+            <div class="tier-tab-label" style="color:var(--gold);">Mid-level</div>
+            <div class="tier-tab-sub">Growth</div>
+          </div>
+          <div class="tier-tab" data-tier="Advanced" onclick="selectTier(this)">
+            <div class="tier-tab-dot" style="background:#9B8FE8;"></div>
+            <div class="tier-tab-label" style="color:#6B5FD4;">Advanced</div>
+            <div class="tier-tab-sub">Precision</div>
+          </div>
+        </div>
+        <form id="bookingForm" onsubmit="submitForm(event)">
+          <input type="hidden" name="session_tier" id="tierInput" value="Beginner">
+          <div class="form-row">
+            <div>
+              <label for="firstName">First name</label>
+              <input type="text" id="firstName" name="first_name" placeholder="Jane" required>
+            </div>
+            <div>
+              <label for="lastName">Last name</label>
+              <input type="text" id="lastName" name="last_name" placeholder="Smith" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" id="email" name="email" placeholder="jane@example.com" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone number <span style="color:var(--ink-faint);font-weight:400;">(optional)</span></label>
+            <input type="tel" id="phone" name="phone" placeholder="+60 12 345 6789">
+          </div>
+          <div class="form-group">
+            <label for="portfolio">Approximate portfolio size</label>
+            <select id="portfolio" name="portfolio_size" required>
+              <option value="" disabled selected>Select a range</option>
+              <option>Under $10,000</option>
+              <option>$10,000 – $50,000</option>
+              <option>$50,000 – $150,000</option>
+              <option>$150,000 – $500,000</option>
+              <option>Over $500,000</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="goals">What do you most want to get out of this session?</label>
+            <textarea id="goals" name="goals" placeholder="e.g. Understand if my current holdings are well-positioned, or build a plan to start investing…"></textarea>
+          </div>
+          <button type="submit" class="modal-submit" id="submitBtn">
+            <span class="btn-text">Request your session →</span>
+            <span class="spinner"></span>
+          </button>
+          <p class="modal-note">Fully confidential · We'll confirm your time within 24 hours</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 function selectPill(el){
   document.querySelectorAll('.tier-pill').forEach(p=>p.classList.remove('sel'));
@@ -1045,19 +1270,87 @@ function toggleMenu(btn){
   btn.classList.toggle('open');
   document.getElementById('mobileNav').classList.toggle('open');
 }
-
 function closeMenu(){
   document.querySelector('.nav-menu-btn').classList.remove('open');
   document.getElementById('mobileNav').classList.remove('open');
 }
-
-// Close mobile nav on outside click
 document.addEventListener('click', function(e){
   const nav = document.getElementById('mobileNav');
   const btn = document.querySelector('.nav-menu-btn');
   if(nav.classList.contains('open') && !nav.contains(e.target) && !btn.contains(e.target)){
     closeMenu();
   }
+});
+
+/* ── Modal ── */
+const TIER_CLASSES = {'Beginner':'active-beg','Mid-level':'active-mid','Advanced':'active-adv'};
+
+function openModal(tier){
+  const overlay = document.getElementById('bookingModal');
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  if(tier) preselectTier(tier);
+}
+function closeModal(){
+  document.getElementById('bookingModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('bookingModal').addEventListener('click', function(e){
+  if(e.target === this) closeModal();
+});
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') closeModal();
+});
+
+function selectTier(el){
+  document.querySelectorAll('.tier-tab').forEach(t=>{ t.className='tier-tab'; });
+  const tier = el.dataset.tier;
+  el.classList.add(TIER_CLASSES[tier]);
+  document.getElementById('tierInput').value = tier;
+}
+function preselectTier(tier){
+  document.querySelectorAll('.tier-tab').forEach(t=>{
+    t.className='tier-tab';
+    if(t.dataset.tier===tier) t.classList.add(TIER_CLASSES[tier]);
+  });
+  document.getElementById('tierInput').value = tier || 'Beginner';
+}
+
+async function submitForm(e){
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  btn.classList.add('loading');
+  btn.disabled = true;
+  const data = new FormData(document.getElementById('bookingForm'));
+  try {
+    const res = await fetch('https://formspree.io/f/xykoojwo', {
+      method:'POST', body:data, headers:{'Accept':'application/json'}
+    });
+    if(res.ok){
+      document.getElementById('modalFormWrap').style.display='none';
+      document.getElementById('modalSuccess').classList.add('show');
+    } else {
+      const json = await res.json();
+      alert(json.errors ? json.errors.map(e=>e.message).join(', ') : 'Something went wrong. Please try again.');
+      btn.classList.remove('loading'); btn.disabled=false;
+    }
+  } catch(err){
+    alert('Network error. Please check your connection and try again.');
+    btn.classList.remove('loading'); btn.disabled=false;
+  }
+}
+
+/* Wire up buttons */
+document.querySelectorAll('a[href="#book"], .nav-btn, .mobile-nav-btn').forEach(btn=>{
+  if(btn.classList.contains('cta-btn')) return;
+  btn.addEventListener('click', function(e){ e.preventDefault(); openModal('Beginner'); });
+});
+document.querySelectorAll('.cta-btn').forEach(btn=>{
+  btn.addEventListener('click', function(e){
+    e.preventDefault();
+    const tier = btn.classList.contains('beg')?'Beginner':btn.classList.contains('mid')?'Mid-level':'Advanced';
+    openModal(tier);
+  });
 });
 
 const obs=new IntersectionObserver((entries)=>{
