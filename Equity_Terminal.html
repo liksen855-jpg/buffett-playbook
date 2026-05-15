@@ -455,17 +455,82 @@
     .pipe { grid-template-columns: 1fr; }
     .arrow { transform: rotate(90deg); padding: 4px 0; }
     .rmix { grid-template-columns: 1fr; }
+    .soft-cta { flex-direction: column; align-items: flex-start; gap: 20px; padding: 28px 18px; }
+    .soft-cta .cta-right { width: 100%; justify-content: space-between; }
+    .soft-cta .cta-meta { text-align: left; }
   }
   @media (max-width: 640px) {
-    .mast { grid-template-columns: 1fr; }
+    /* global */
+    html, body { font-size: 12px; }
+
+    /* topbar */
+    .topbar { padding: 6px 12px; font-size: 10px; flex-wrap: wrap; gap: 4px; }
+    .topbar .meta { gap: 10px; flex-wrap: wrap; }
+
+    /* masthead */
+    .mast { grid-template-columns: 1fr; padding: 14px 14px 12px; gap: 10px; }
+    .mast h1 { font-size: 20px; }
     .mast .stamp { text-align: left; }
-    .matrix .mh, .matrix .mr { grid-template-columns: 1fr; gap: 2px; }
+
+    /* dashboard cards */
+    .dash { grid-template-columns: 1fr; }
+    .dcard { padding: 12px 14px; }
+    .dcard .px { font-size: 20px; }
+    .dcard .tk { font-size: 18px; }
+
+    /* matrix */
+    .matrix .mh, .matrix .mr { grid-template-columns: 1fr; gap: 2px; padding: 8px 14px; }
     .matrix .mh > div, .matrix .mr > div { padding: 2px 0; }
-    .bbgrid { grid-template-columns: 1fr; }
-    .tlitems { grid-template-columns: 1fr; }
-    .schart .head, .srow { grid-template-columns: 50px 80px 1fr 70px; gap: 8px; }
+    .matrix .mh { display: none; }
+    .matrix .mr { border-left: 2px solid var(--rule2); }
+
+    /* section bars */
+    .sbar {
+      grid-template-columns: auto auto 1fr;
+      row-gap: 4px; flex-wrap: wrap; padding: 6px 12px; font-size: 10px;
+    }
+    .sbar .name { display: none; }
+    .sbar .px, .sbar .ch { font-size: 11px; }
+
+    /* hero strip */
+    .hero { grid-template-columns: 1fr; }
+    .hero .left { padding: 14px; border-right: none; border-bottom: 1px solid var(--rule); }
+    .hero .tagline { font-size: 14px; }
+    .hero .right { padding: 14px; grid-template-columns: 1fr 1fr; }
+    .hero .right .kpi .v { font-size: 16px; }
+
+    /* scenario chart */
+    .schart .head, .srow { grid-template-columns: 50px 70px 1fr 60px; gap: 6px; }
     .schart .head > div:nth-child(5), .srow .prob { display: none; }
-    .sbar { grid-template-columns: auto 1fr; row-gap: 4px; }
+    .schart { padding: 0 14px 14px; }
+
+    /* bull bear grid */
+    .bbgrid { grid-template-columns: 1fr; }
+
+    /* catalyst timeline */
+    .tlitems { grid-template-columns: 1fr; }
+
+    /* pipeline */
+    .pipe { grid-template-columns: 1fr; padding: 14px; }
+    .arrow { transform: rotate(90deg); padding: 4px 0; }
+
+    /* risk mix */
+    .rmix { grid-template-columns: 1fr; }
+
+    /* portfolio chain */
+    .pchain { padding: 14px; }
+
+    /* CTA */
+    .soft-cta { flex-direction: column; align-items: flex-start; gap: 18px; padding: 22px 14px; }
+    .soft-cta::before { font-size: 52px; }
+    .soft-cta .cta-headline { font-size: 15px; }
+    .soft-cta .cta-sub { font-size: 10px; }
+    .soft-cta .cta-right { flex-direction: column; align-items: flex-start; gap: 12px; width: 100%; }
+    .soft-cta .cta-meta { text-align: left; }
+    .soft-cta .cta-link { width: 100%; text-align: center; padding: 13px; }
+
+    /* general padding */
+    .sec > div:not(.sbar):not(.soft-cta) { padding-left: 14px; padding-right: 14px; }
   }
 </style>
 </head>
