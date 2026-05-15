@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EQUITY RESEARCH // NOW · UUUU · MSFT</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0a0907;
+    --panel:     #11100c;
+    --panel2:    #181612;
+    --rule:      #2a2620;
+    --rule2:     #3d362c;
+    --amber:     #ffb547;
+    --amber2:    #ffd17e;
+    --amber-dim: #b07f31;
+    --amber-bg:  #1a1409;
+    --green:     #4cd97a;
+    --green-dim: #2a7d44;
+    --red:       #ff5c5c;
+    --red-dim:   #803333;
+    --cyan:      #5ad9d9;
+    --magenta:   #d97acf;
+    --white:     #f0ebe0;
+    --text:      #d6cfbf;
+    --dim:       #7d7466;
+    --dimmer:    #4d4639;
+  }
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html,body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    font-variant-numeric: tabular-nums;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content:''; position: fixed; inset:0;
+    background: repeating-linear-gradient(0deg, rgba(255,181,71,0.012) 0 1px, transparent 1px 3px);
+    pointer-events:none; z-index: 100;
+  }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 1280px; margin: 0 auto; }
+
+  /* ---------- top bar ---------- */
+  .topbar {
+    display:flex; justify-content:space-between; align-items:center;
+    padding: 7px 18px; font-size: 11px;
+    background: var(--panel); border-bottom: 1px solid var(--rule2);
+  }
+  .topbar .brand { color: var(--amber); letter-spacing: 0.12em; font-weight: 700; }
+  .topbar .brand i { display:inline-block; width:7px; height:7px; border-radius:50%;
+    background: var(--amber); margin-right: 8px; box-shadow: 0 0 6px var(--amber); vertical-align: 1px; }
+  .topbar .meta { display:flex; gap: 18px; color: var(--dim); letter-spacing: 0.06em; }
+  .topbar .live { color: var(--green); }
+  .topbar .live::before { content:''; display:inline-block; width:6px; height:6px; background: var(--green); border-radius:50%; margin-right:6px; vertical-align:1px; animation: pulse 1.6s infinite; }
+  @keyframes pulse { 50% { opacity: 0.35; } }
+
+  /* ---------- masthead ---------- */
+  .mast {
+    padding: 24px 22px 18px;
+    border-bottom: 1px solid var(--rule2);
+    display:grid; grid-template-columns: 1fr auto; gap: 24px; align-items: end;
+  }
+  .mast h1 {
+    color: var(--amber); font-size: 28px; font-weight: 600;
+    letter-spacing: 0.06em; line-height: 1.1;
+  }
+  .mast h1 small {
+    display:block; color: var(--dim); font-size: 11px;
+    letter-spacing: 0.18em; font-weight: 400; margin-top: 6px;
+  }
+  .mast .stamp { text-align:right; color: var(--dim); font-size: 10px; letter-spacing: 0.08em; line-height: 1.7; }
+  .mast .stamp b { color: var(--amber); font-weight: 500; }
+
+  /* ---------- dashboard 3 cards ---------- */
+  .dash { display:grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--rule2); }
+  .dcard {
+    padding: 16px 18px;
+    border-right: 1px solid var(--rule);
+    position: relative;
+  }
+  .dcard:last-child { border-right: none; }
+  .dcard .row1 { display:flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+  .dcard .tk { font-size: 22px; font-weight: 700; letter-spacing: 0.1em; }
+  .dcard .ex { font-size: 10px; color: var(--dim); letter-spacing: 0.08em; }
+  .dcard .nm { color: var(--dim); font-size: 11px; letter-spacing: 0.04em; margin-bottom: 14px; }
+  .dcard .row2 { display:grid; grid-template-columns: auto 1fr; gap: 14px; align-items: end; }
+  .dcard .px { font-size: 26px; font-weight: 600; color: var(--white); line-height: 1; }
+  .dcard .chg { font-size: 12px; font-weight: 600; margin-top: 4px; letter-spacing: 0.04em; }
+  .dcard .chg.up { color: var(--green); }
+  .dcard .chg.dn { color: var(--red); }
+  .dcard .chg::before { display:inline-block; margin-right: 4px; }
+  .dcard .chg.up::before { content:'▲'; }
+  .dcard .chg.dn::before { content:'▼'; }
+  .dcard .spark { width: 100%; height: 46px; }
+  .dcard.now .tk { color: var(--amber); }
+  .dcard.uuuu .tk { color: var(--cyan); }
+  .dcard.msft .tk { color: #8fb5ff; }
+  .dcard .rt {
+    margin-top: 10px; display:flex; gap: 6px; font-size: 10px; letter-spacing: 0.1em;
+  }
+  .dcard .rt span {
+    padding: 2px 6px; border: 1px solid var(--rule2);
+  }
+  .dcard .rt .g { color: var(--green); border-color: #2a4d2e; }
+  .dcard .rt .m { color: var(--magenta); border-color: #4d2a48; }
+
+  /* ---------- at-a-glance matrix ---------- */
+  .matrix {
+    border-bottom: 1px solid var(--rule2);
+    background: var(--panel);
+  }
+  .matrix .mh {
+    display: grid; grid-template-columns: 130px repeat(3, 1fr);
+    padding: 8px 18px; color: var(--dim); font-size: 10px;
+    letter-spacing: 0.12em; border-bottom: 1px solid var(--rule);
+  }
+  .matrix .mh > div { padding: 0 8px; }
+  .matrix .mh .h-now { color: var(--amber); }
+  .matrix .mh .h-uuuu { color: var(--cyan); }
+  .matrix .mh .h-msft { color: #8fb5ff; }
+  .matrix .mr {
+    display:grid; grid-template-columns: 130px repeat(3, 1fr);
+    padding: 12px 18px; border-bottom: 1px solid var(--rule);
+    font-size: 12px; align-items: center;
+  }
+  .matrix .mr:last-child { border-bottom: none; }
+  .matrix .mr > div { padding: 0 8px; }
+  .matrix .mr .lbl { color: var(--dim); font-size: 10px; letter-spacing: 0.12em; }
+  .matrix .mr .v { color: var(--text); }
+  .matrix .mr .v b { color: var(--white); font-weight: 600; }
+  .matrix .upside { font-weight: 600; }
+  .matrix .upside.up { color: var(--green); }
+  .matrix .upside.dn { color: var(--red); }
+  .matrix .pill {
+    display:inline-block; font-size: 10px; padding: 2px 8px;
+    letter-spacing: 0.08em; border: 1px solid var(--rule2);
+  }
+  .matrix .pill.lo { color: var(--green); border-color: #2a4d2e; }
+  .matrix .pill.md { color: var(--amber); border-color: #4d3a1f; }
+  .matrix .pill.hi { color: var(--red); border-color: #4d2a2a; }
+  .matrix .dotscale { display:flex; gap: 3px; }
+  .matrix .dotscale i {
+    width: 8px; height: 8px; background: var(--dimmer);
+  }
+  .matrix .dotscale i.on { background: var(--amber); }
+
+  /* ---------- section ---------- */
+  .sec { border-bottom: 1px solid var(--rule2); }
+  .sbar {
+    display:grid; grid-template-columns: auto auto 1fr auto auto auto;
+    gap: 16px; align-items: center;
+    padding: 7px 18px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+  }
+  .sbar.now { background: var(--amber); color: #1a1409; }
+  .sbar.uuuu { background: var(--cyan); color: #0a1a1a; }
+  .sbar.msft { background: #8fb5ff; color: #0a1020; }
+  .sbar .tk { font-size: 15px; letter-spacing: 0.14em; }
+  .sbar .ex { padding: 2px 8px; font-size: 10px; letter-spacing: 0.1em; background: #1a1409; color: var(--amber); }
+  .sbar.uuuu .ex { background: #0a1a1a; color: var(--cyan); }
+  .sbar.msft .ex { background: #0a1020; color: #8fb5ff; }
+  .sbar .name { font-weight: 500; opacity: 0.8; letter-spacing: 0.05em; }
+  .sbar .px { font-size: 14px; }
+  .sbar .ch::before { content:'▲ '; }
+  .sbar .ch.dn::before { content:'▼ '; }
+
+  /* ---------- hero strip per stock ---------- */
+  .hero {
+    display:grid; grid-template-columns: 1.4fr 1fr;
+    border-bottom: 1px solid var(--rule);
+  }
+  .hero .left {
+    padding: 22px 22px; border-right: 1px solid var(--rule);
+  }
+  .hero .tagline {
+    color: var(--white); font-size: 17px; font-weight: 500;
+    line-height: 1.45; letter-spacing: 0.005em;
+  }
+  .hero .tagline b.amber { color: var(--amber); font-weight: 600; }
+  .hero .tagline b.cyan  { color: var(--cyan);  font-weight: 600; }
+  .hero .tagline b.blue  { color: #8fb5ff;      font-weight: 600; }
+  .hero .tagline b.green { color: var(--green); font-weight: 600; }
+  .hero .tagline b.red   { color: var(--red);   font-weight: 600; }
+  .hero .right {
+    padding: 22px;
+    display:grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    background: var(--rule);
+  }
+  .hero .right .kpi { background: var(--bg); padding: 14px; }
+  .hero .right .kpi .lbl { color: var(--dim); font-size: 10px; letter-spacing: 0.1em; margin-bottom: 6px; }
+  .hero .right .kpi .v { color: var(--white); font-size: 22px; font-weight: 600; line-height: 1; }
+  .hero .right .kpi .v.amber { color: var(--amber); }
+  .hero .right .kpi .v.cyan  { color: var(--cyan); }
+  .hero .right .kpi .v.blue  { color: #8fb5ff; }
+  .hero .right .kpi .v.g     { color: var(--green); }
+  .hero .right .kpi .s { font-size: 10px; color: var(--dim); margin-top: 5px; }
+
+  /* ---------- bull/bear balance ---------- */
+  .balance {
+    padding: 18px 22px; border-bottom: 1px solid var(--rule);
+  }
+  .balance .bhead {
+    display:grid; grid-template-columns: 1fr auto 1fr; gap: 18px; align-items: center;
+    color: var(--dim); font-size: 10px; letter-spacing: 0.14em; margin-bottom: 10px;
+  }
+  .balance .bhead .lab { display:flex; align-items: center; gap: 8px; }
+  .balance .bhead .lab.g { color: var(--green); }
+  .balance .bhead .lab.r { color: var(--red); justify-content: flex-end; }
+  .balance .bhead .vs { color: var(--amber); letter-spacing: 0.2em; }
+  .balance .bar {
+    display:grid; height: 14px; background: var(--panel);
+    border: 1px solid var(--rule); position: relative;
+  }
+  .balance .bar .fg { background: var(--green-dim); position: relative; }
+  .balance .bar .fr { background: var(--red-dim); position: relative; }
+  .balance .bar .midline {
+    position: absolute; top:-4px; bottom:-4px; width: 2px; background: var(--amber);
+  }
+  .balance .pct {
+    display:grid; grid-template-columns: auto 1fr auto;
+    color: var(--dim); font-size: 10px; letter-spacing: 0.08em; margin-top: 6px;
+  }
+  .balance .pct .l { color: var(--green); }
+  .balance .pct .r { color: var(--red); text-align: right; }
+
+  .bbgrid {
+    display:grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    background: var(--rule); margin-top: 16px;
+  }
+  .bbgrid .col { background: var(--bg); padding: 14px 16px; }
+  .bbgrid .col h4 {
+    font-size: 10px; letter-spacing: 0.14em; margin-bottom: 10px;
+    display:flex; gap:8px; align-items:center;
+  }
+  .bbgrid .col h4 i {
+    display:inline-block; width: 14px; height: 14px;
+    text-align:center; line-height:14px; font-size: 11px; font-weight: 700;
+  }
+  .bbgrid .g h4 { color: var(--green); }
+  .bbgrid .g h4 i { background: #0e2417; color: var(--green); }
+  .bbgrid .r h4 { color: var(--red); }
+  .bbgrid .r h4 i { background: #240e0e; color: var(--red); }
+  .bbgrid ul { list-style:none; display:flex; flex-direction: column; gap: 6px; }
+  .bbgrid li {
+    display:grid; grid-template-columns: 80px 1fr;
+    gap: 10px; align-items: center; font-size: 11.5px;
+    border-top: 1px solid var(--rule);
+    padding: 6px 0;
+  }
+  .bbgrid li:first-child { border-top: none; padding-top: 2px; }
+  .bbgrid li b { color: var(--white); font-weight: 600; }
+  .bbgrid .ic {
+    height: 8px; border-radius: 0; background: linear-gradient(90deg, transparent, var(--green));
+  }
+  .bbgrid .r .ic { background: linear-gradient(90deg, transparent, var(--red)); }
+  .bbgrid li .key { color: var(--text); letter-spacing: 0.04em; font-size: 11px; }
+
+  /* ---------- catalyst timeline ---------- */
+  .timeline {
+    padding: 18px 22px; border-bottom: 1px solid var(--rule);
+  }
+  .timeline h3, .balance h3, .scen h3 {
+    color: var(--amber); font-size: 11px; letter-spacing: 0.16em;
+    margin-bottom: 14px; display:flex; align-items:center; gap: 10px;
+  }
+  .timeline h3 small, .balance h3 small, .scen h3 small {
+    color: var(--dim); font-size: 10px; letter-spacing: 0.08em; font-weight: 400; flex:1;
+  }
+  .timeline h3::before, .balance h3::before, .scen h3::before {
+    content:'▸'; color: var(--amber);
+  }
+  .tlrail {
+    position: relative; padding: 8px 0 6px;
+    border-top: 1px dashed var(--rule);
+    border-bottom: 1px dashed var(--rule);
+  }
+  .tlticks {
+    display:grid; grid-template-columns: repeat(5, 1fr);
+    font-size: 9.5px; color: var(--dim); letter-spacing: 0.08em;
+    padding: 4px 0;
+  }
+  .tlticks div { border-left: 1px solid var(--rule); padding-left: 6px; }
+  .tlticks div:first-child { border-left: none; padding-left: 0; }
+  .tlitems { display:grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--rule); margin-top: 12px; }
+  .tlitem { background: var(--panel); padding: 12px; }
+  .tlitem .when {
+    font-size: 9.5px; letter-spacing: 0.12em; margin-bottom: 6px;
+    display:flex; justify-content: space-between;
+  }
+  .tlitem .when .id { color: var(--amber); }
+  .tlitem .when .dt { color: var(--dim); }
+  .tlitem .t { color: var(--white); font-size: 12px; font-weight: 600; line-height: 1.3; }
+
+  /* ---------- scenario chart ---------- */
+  .scen { padding: 18px 22px; }
+  .schart {
+    background: var(--panel); border: 1px solid var(--rule);
+  }
+  .schart .head {
+    display:grid; grid-template-columns: 70px 100px 1fr 110px 70px;
+    gap: 14px; padding: 8px 16px;
+    font-size: 9.5px; color: var(--dim); letter-spacing: 0.1em;
+    border-bottom: 1px solid var(--rule);
+  }
+  .schart .head > div:last-child { text-align:right; }
+  .srow {
+    display:grid; grid-template-columns: 70px 100px 1fr 110px 70px;
+    gap: 14px; padding: 14px 16px; align-items: center;
+    border-bottom: 1px solid var(--rule); font-size: 12px;
+  }
+  .srow:last-child { border-bottom: none; }
+  .srow .lab { font-weight: 700; letter-spacing: 0.1em; font-size: 11px; }
+  .srow .lab.bu { color: var(--green); }
+  .srow .lab.ba { color: var(--cyan); }
+  .srow .lab.be { color: var(--red); }
+  .srow .px { color: var(--white); font-weight: 600; }
+  .srow .rr { font-weight: 700; }
+  .srow .rr.up { color: var(--green); }
+  .srow .rr.dn { color: var(--red); }
+  .srow .prob { text-align: right; color: var(--dim); font-size: 11px; }
+  .srow .barwrap { position: relative; height: 14px; background: rgba(255,255,255,0.025); }
+  .srow .bar { height: 100%; }
+  .srow .bar.bu { background: linear-gradient(90deg, var(--green-dim), var(--green)); }
+  .srow .bar.ba { background: linear-gradient(90deg, #2a5b6f, var(--cyan)); }
+  .srow .bar.be { background: linear-gradient(90deg, var(--red-dim), var(--red)); }
+  .srow .spot {
+    position: absolute; top: -4px; bottom: -4px;
+    width: 2px; background: var(--amber);
+  }
+  .srow .spot::before {
+    content:'SPOT'; position: absolute; top: -14px; left: 50%;
+    transform: translateX(-50%); font-size: 8px; color: var(--amber); letter-spacing: 0.1em;
+  }
+
+  /* ---------- comparison/heatmap row inside per-stock ---------- */
+
+  /* ---------- portfolio chain ---------- */
+  .chain { padding: 24px 22px; border-bottom: 1px solid var(--rule2); }
+  .chain h2 { color: var(--amber); font-size: 14px; letter-spacing: 0.14em; margin-bottom: 4px; }
+  .chain .sub { color: var(--dim); font-size: 11px; max-width: 700px; line-height: 1.6; margin-bottom: 20px; }
+  .pipe {
+    display:grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+    gap: 0; align-items: stretch; margin-bottom: 22px;
+  }
+  .pnode {
+    background: var(--panel); border: 1px solid var(--rule2); padding: 12px 14px;
+  }
+  .pnode .id { font-weight: 700; font-size: 14px; letter-spacing: 0.08em; color: var(--amber); }
+  .pnode.msft .id { color: #8fb5ff; }
+  .pnode.now .id { color: var(--amber); }
+  .pnode.uuuu .id { color: var(--cyan); }
+  .pnode .role { color: var(--dim); font-size: 10px; letter-spacing: 0.08em; margin-top: 3px; }
+  .pnode .stage { color: var(--dimmer); font-size: 9px; letter-spacing: 0.12em; margin-top: 6px; }
+  .arrow { align-self: stretch; display:flex; align-items: center; justify-content: center; color: var(--amber-dim); padding: 0 6px; font-size: 16px; }
+
+  .rmix { display:grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--rule); }
+  .rmix .r { background: var(--panel); padding: 14px 16px; }
+  .rmix .r .ph { display:flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .rmix .r .ph .t { font-weight: 700; letter-spacing: 0.08em; font-size: 13px; }
+  .rmix .r.now .t { color: var(--amber); }
+  .rmix .r.uuuu .t { color: var(--cyan); }
+  .rmix .r.msft .t { color: #8fb5ff; }
+  .rmix .r .ph .badge {
+    font-size: 9.5px; padding: 2px 8px; letter-spacing: 0.1em;
+  }
+  .rmix .r.lo .badge { background: #0e2417; color: var(--green); }
+  .rmix .r.md .badge { background: #1a1409; color: var(--amber); }
+  .rmix .r.hi .badge { background: #240e0e; color: var(--red); }
+  .rmix .r .role { font-size: 10px; color: var(--dim); letter-spacing: 0.08em; margin-bottom: 8px; }
+  /* risk meter */
+  .meter { display:flex; gap: 3px; height: 14px; margin-bottom: 10px; }
+  .meter i { flex: 1; background: var(--dimmer); }
+  .meter i.on { background: var(--amber); }
+  .meter i.r { background: var(--red); }
+  .meter i.g { background: var(--green); }
+  .rmix .r p { color: var(--text); font-size: 11.5px; line-height: 1.55; }
+
+  footer {
+    padding: 16px 22px 22px;
+    color: var(--dimmer); font-size: 10px; letter-spacing: 0.04em; line-height: 1.7;
+    display:grid; grid-template-columns: 1fr auto; gap: 18px;
+  }
+  footer .end { color: var(--amber-dim); letter-spacing: 0.16em; align-self: end; }
+
+  /* ---------- cta ---------- */
+  .soft-cta {
+    padding: 36px 22px;
+    border-bottom: 1px solid var(--rule2);
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--panel2);
+    gap: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .soft-cta::before {
+    content: 'INSIGHTINVEST';
+    position: absolute; right: -10px; top: 50%; transform: translateY(-50%);
+    font-size: 96px; font-weight: 700; letter-spacing: 0.04em;
+    color: var(--amber); opacity: 0.025; pointer-events: none;
+    white-space: nowrap;
+  }
+  .soft-cta .cta-left { flex: 1; min-width: 0; position: relative; z-index: 1; }
+  .soft-cta .cta-badge {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 9px; letter-spacing: 0.16em; color: var(--green);
+    margin-bottom: 14px; font-weight: 500;
+  }
+  .soft-cta .cta-badge::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green); flex-shrink: 0;
+    box-shadow: 0 0 5px var(--green);
+    animation: pulse 1.6s infinite;
+  }
+  .soft-cta .cta-headline {
+    font-size: 18px; line-height: 1.3; color: var(--white);
+    margin-bottom: 10px; font-weight: 600; letter-spacing: 0.04em;
+  }
+  .soft-cta .cta-headline em {
+    font-style: normal; color: var(--amber);
+  }
+  .soft-cta .cta-sub {
+    font-size: 10.5px; color: var(--dim); line-height: 1.8;
+    max-width: 440px; letter-spacing: 0.03em;
+  }
+  .soft-cta .cta-right {
+    flex-shrink: 0; display: flex; align-items: center;
+    gap: 16px; position: relative; z-index: 1;
+  }
+  .soft-cta .cta-meta {
+    text-align: right; font-size: 9px; letter-spacing: 0.1em; color: var(--dimmer); line-height: 2;
+  }
+  .soft-cta .cta-meta span { display: block; color: var(--dim); }
+  .soft-cta .cta-link {
+    flex-shrink: 0;
+    font-size: 10px; letter-spacing: 0.14em; font-weight: 600;
+    color: var(--bg); background: var(--amber);
+    padding: 11px 22px; white-space: nowrap;
+    transition: background 0.2s; font-family: inherit;
+    border: none; cursor: pointer;
+  }
+  .soft-cta .cta-link:hover { background: var(--amber2); }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 980px) {
+    .dash { grid-template-columns: 1fr; }
+    .dcard { border-right: none; border-bottom: 1px solid var(--rule); }
+    .matrix .mh, .matrix .mr { grid-template-columns: 110px repeat(3, 1fr); font-size: 11px; }
+    .hero { grid-template-columns: 1fr; }
+    .hero .left { border-right: none; border-bottom: 1px solid var(--rule); }
+    .tlitems { grid-template-columns: repeat(2, 1fr); }
+    .pipe { grid-template-columns: 1fr; }
+    .arrow { transform: rotate(90deg); padding: 4px 0; }
+    .rmix { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .mast { grid-template-columns: 1fr; }
+    .mast .stamp { text-align: left; }
+    .matrix .mh, .matrix .mr { grid-template-columns: 1fr; gap: 2px; }
+    .matrix .mh > div, .matrix .mr > div { padding: 2px 0; }
+    .bbgrid { grid-template-columns: 1fr; }
+    .tlitems { grid-template-columns: 1fr; }
+    .schart .head, .srow { grid-template-columns: 50px 80px 1fr 70px; gap: 8px; }
+    .schart .head > div:nth-child(5), .srow .prob { display: none; }
+    .sbar { grid-template-columns: auto 1fr; row-gap: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap" data-screen-label="01 Research Terminal v2">
+
+  <!-- top bar -->
+  <div class="topbar">
+    <div class="brand"><i></i>RSCH&nbsp;//&nbsp;EQUITY DESK</div>
+    <div class="meta">
+      <span>SESSION 06:42:18 ET</span>
+      <span class="live">LIVE</span>
+      <span>PG 1 / 1</span>
+    </div>
+  </div>
+
+  <!-- masthead -->
+  <div class="mast">
+    <h1>AI INFRASTRUCTURE THESIS
+      <small>3 STOCKS · 1 CHAIN · 12–24 MONTH HORIZON</small>
+    </h1>
+    <div class="stamp">
+      <div><b>DOC</b>&nbsp;RSCH-26-0515-AI3</div>
+      <div>PUBLISHED 15 MAY 2026</div>
+    </div>
+  </div>
+
+  <!-- dashboard 3-card -->
+  <div class="dash">
+    <a class="dcard now" href="#now">
+      <div class="row1"><div class="tk">NOW</div><div class="ex">NYSE</div></div>
+      <div class="nm">SERVICENOW INC</div>
+      <div class="row2">
+        <div>
+          <div class="px">91.04</div>
+          <div class="chg dn">−40.2% YTD</div>
+        </div>
+        <svg class="spark" viewBox="0 0 200 46" preserveAspectRatio="none">
+          <polyline fill="none" stroke="#b07f31" stroke-width="1.4"
+            points="0,8 14,10 28,7 42,12 56,15 70,11 84,18 98,22 112,28 126,25 140,32 154,35 168,40 182,38 200,42"/>
+          <polyline fill="url(#gnow)" stroke="none"
+            points="0,8 14,10 28,7 42,12 56,15 70,11 84,18 98,22 112,28 126,25 140,32 154,35 168,40 182,38 200,42 200,46 0,46"/>
+          <defs><linearGradient id="gnow" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#ffb547" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#ffb547" stop-opacity="0"/>
+          </linearGradient></defs>
+        </svg>
+      </div>
+      <div class="rt"><span class="g">BUY · DISLOCATION</span></div>
+    </a>
+    <a class="dcard uuuu" href="#uuuu">
+      <div class="row1"><div class="tk">UUUU</div><div class="ex">NYSE AM</div></div>
+      <div class="nm">ENERGY FUELS INC</div>
+      <div class="row2">
+        <div>
+          <div class="px">20.18</div>
+          <div class="chg up">+86.1% YTD</div>
+        </div>
+        <svg class="spark" viewBox="0 0 200 46" preserveAspectRatio="none">
+          <polyline fill="none" stroke="#5ad9d9" stroke-width="1.4"
+            points="0,40 14,35 28,38 42,28 56,30 70,22 84,25 98,18 112,20 126,12 140,16 154,8 168,12 182,6 200,9"/>
+          <polyline fill="url(#guuuu)" stroke="none"
+            points="0,40 14,35 28,38 42,28 56,30 70,22 84,25 98,18 112,20 126,12 140,16 154,8 168,12 182,6 200,9 200,46 0,46"/>
+          <defs><linearGradient id="guuuu" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#5ad9d9" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="#5ad9d9" stop-opacity="0"/>
+          </linearGradient></defs>
+        </svg>
+      </div>
+      <div class="rt"><span class="m">SPECULATIVE</span></div>
+    </a>
+    <a class="dcard msft" href="#msft">
+      <div class="row1"><div class="tk">MSFT</div><div class="ex">NASDAQ</div></div>
+      <div class="nm">MICROSOFT CORP</div>
+      <div class="row2">
+        <div>
+          <div class="px">422.15</div>
+          <div class="chg dn">−12.0% YTD</div>
+        </div>
+        <svg class="spark" viewBox="0 0 200 46" preserveAspectRatio="none">
+          <polyline fill="none" stroke="#8fb5ff" stroke-width="1.4"
+            points="0,12 14,14 28,11 42,18 56,16 70,22 84,20 98,26 112,24 126,28 140,26 154,32 168,30 182,34 200,32"/>
+          <polyline fill="url(#gmsft)" stroke="none"
+            points="0,12 14,14 28,11 42,18 56,16 70,22 84,20 98,26 112,24 126,28 140,26 154,32 168,30 182,34 200,32 200,46 0,46"/>
+          <defs><linearGradient id="gmsft" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#8fb5ff" stop-opacity="0.28"/>
+            <stop offset="100%" stop-color="#8fb5ff" stop-opacity="0"/>
+          </linearGradient></defs>
+        </svg>
+      </div>
+      <div class="rt"><span class="g">BUY · QUALITY</span></div>
+    </a>
+  </div>
+
+  <!-- at-a-glance matrix -->
+  <div class="matrix">
+    <div class="mh">
+      <div>METRIC</div>
+      <div class="h-now">NOW</div>
+      <div class="h-uuuu">UUUU</div>
+      <div class="h-msft">MSFT</div>
+    </div>
+    <div class="mr">
+      <div class="lbl">ONE-LINE</div>
+      <div class="v">enterprise AI <b>governance layer</b></div>
+      <div class="v">only US <b>heavy rare-earth</b> mill</div>
+      <div class="v">AI <b>monetised at scale</b></div>
+    </div>
+    <div class="mr">
+      <div class="lbl">BASE UPSIDE</div>
+      <div class="upside up">+43 / +65%</div>
+      <div class="upside up">+7 / +35%</div>
+      <div class="upside up">+14 / +28%</div>
+    </div>
+    <div class="mr">
+      <div class="lbl">BEAR DOWNSIDE</div>
+      <div class="upside dn">−23 / −7%</div>
+      <div class="upside dn">−7 / −35%</div>
+      <div class="upside dn">−19 / −12%</div>
+    </div>
+    <div class="mr">
+      <div class="lbl">R / R RATIO</div>
+      <div class="v"><b>~3.0×</b></div>
+      <div class="v"><b>~1.9×</b></div>
+      <div class="v"><b>~2.0×</b></div>
+    </div>
+    <div class="mr">
+      <div class="lbl">RISK</div>
+      <div><span class="pill md">MEDIUM</span></div>
+      <div><span class="pill hi">HIGH</span></div>
+      <div><span class="pill lo">LOW</span></div>
+    </div>
+    <div class="mr">
+      <div class="lbl">CONVICTION</div>
+      <div class="dotscale"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+      <div class="dotscale"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
+      <div class="dotscale"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+    </div>
+    <div class="mr">
+      <div class="lbl">SIZE</div>
+      <div class="v">core position</div>
+      <div class="v">option-sized</div>
+      <div class="v">portfolio anchor</div>
+    </div>
+  </div>
+
+  <!-- ================ NOW ================ -->
+  <section class="sec" id="now" data-screen-label="NOW">
+    <div class="sbar now">
+      <div class="tk">NOW</div>
+      <div class="ex">NYSE</div>
+      <div class="name">SERVICENOW INC</div>
+      <div class="px">$91.04</div>
+      <div class="ch dn">40.2% YTD</div>
+      <div>RTG ▸ DISLOCATION</div>
+    </div>
+
+    <div class="hero">
+      <div class="left">
+        <div class="tagline">Software running on every enterprise. AI agents need it to <b class="amber">stay governed</b>. Stock down <b class="red">40%</b> while revenue still <b class="green">+22% YoY</b>.</div>
+      </div>
+      <div class="right">
+        <div class="kpi"><div class="lbl">REV Q1'26</div><div class="v amber">$3.77B</div><div class="s">+22% YoY</div></div>
+        <div class="kpi"><div class="lbl">AI REV TGT</div><div class="v g">$1.5B</div><div class="s">+50% vs Jan guide</div></div>
+        <div class="kpi"><div class="lbl">BACKLOG</div><div class="v amber">$27.7B</div><div class="s">contracted, +25%</div></div>
+        <div class="kpi"><div class="lbl">FWD P/E</div><div class="v">18×</div><div class="s">multi-yr low</div></div>
+      </div>
+    </div>
+
+    <!-- balance -->
+    <div class="balance">
+      <h3>BULL ↔ BEAR <small>analyst weight, qualitative</small></h3>
+      <div class="bhead">
+        <div class="lab g">+ BULL CASE</div>
+        <div class="vs">VS</div>
+        <div class="lab r">BEAR CASE −</div>
+      </div>
+      <div class="bar" style="grid-template-columns: 65fr 35fr;">
+        <div class="fg"></div>
+        <div class="fr"></div>
+        <div class="midline" style="left: 50%;"></div>
+      </div>
+      <div class="pct">
+        <div class="l">65%</div>
+        <div></div>
+        <div class="r">35%</div>
+      </div>
+
+      <div class="bbgrid">
+        <div class="col g">
+          <h4><i>+</i>WHY BULLS WIN</h4>
+          <ul>
+            <li><div class="key">AI demand</div><div>governance + agents <b>need orchestrator</b></div></li>
+            <li><div class="key">Backlog</div><div><b>$27.7B</b> already contracted</div></li>
+            <li><div class="key">Pricing</div><div>AI SKUs <b>+30%</b> ASP uplift</div></li>
+            <li><div class="key">Buyback</div><div>20M shares Q1, <b>$5B auth</b></div></li>
+          </ul>
+        </div>
+        <div class="col r">
+          <h4><i>−</i>WHY BEARS FEAR</h4>
+          <ul>
+            <li><div class="key">AI = ↓SaaS</div><div>agents could <b>compress seats</b></div></li>
+            <li><div class="key">Margins</div><div>Armis deal <b>pushes 2027+</b></div></li>
+            <li><div class="key">MSFT comp.</div><div>Copilot eats same workflows</div></li>
+            <li><div class="key">Not cheap</div><div>needs <b>20%+ growth</b> to hold</div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- timeline -->
+    <div class="timeline">
+      <h3>CATALYST TIMELINE <small>next 18 months</small></h3>
+      <div class="tlrail">
+        <div class="tlticks"><div>NOW</div><div>+6M</div><div>+12M</div><div>+18M</div><div>+24M</div></div>
+      </div>
+      <div class="tlitems">
+        <div class="tlitem"><div class="when"><span class="id">CAT 01</span><span class="dt">H2 2026</span></div><div class="t">NVIDIA AI Factory integration</div></div>
+        <div class="tlitem"><div class="when"><span class="id">CAT 02</span><span class="dt">2026</span></div><div class="t">Project Arc desktop agent launch</div></div>
+        <div class="tlitem"><div class="when"><span class="id">CAT 03</span><span class="dt">ONGOING</span></div><div class="t">Large-deal acceleration ($5M+)</div></div>
+        <div class="tlitem"><div class="when"><span class="id">CAT 04</span><span class="dt">12M</span></div><div class="t">Sentiment / multiple re-rate</div></div>
+      </div>
+    </div>
+
+    <!-- scenario -->
+    <div class="scen">
+      <h3>PRICE SCENARIOS <small>12–18M horizon · spot $91 · R/R ~3.0×</small></h3>
+      <div class="schart">
+        <div class="head"><div>CASE</div><div>TARGET</div><div>RANGE</div><div>VS SPOT</div><div>PROB</div></div>
+        <div class="srow">
+          <div class="lab bu">BULL</div>
+          <div class="px">$170–200</div>
+          <div class="barwrap"><div class="bar bu" style="width:92%; margin-left:35%;"></div><div class="spot" style="left:35%;"></div></div>
+          <div class="rr up">+87 / +120%</div>
+          <div class="prob">30%</div>
+        </div>
+        <div class="srow">
+          <div class="lab ba">BASE</div>
+          <div class="px">$130–150</div>
+          <div class="barwrap"><div class="bar ba" style="width:30%; margin-left:35%;"></div><div class="spot" style="left:35%;"></div></div>
+          <div class="rr up">+43 / +65%</div>
+          <div class="prob">50%</div>
+        </div>
+        <div class="srow">
+          <div class="lab be">BEAR</div>
+          <div class="px">$70–85</div>
+          <div class="barwrap"><div class="bar be" style="width:11%; margin-left:24%;"></div><div class="spot" style="left:35%;"></div></div>
+          <div class="rr dn">−23 / −7%</div>
+          <div class="prob">20%</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================ UUUU ================ -->
+  <section class="sec" id="uuuu" data-screen-label="UUUU">
+    <div class="sbar uuuu">
+      <div class="tk">UUUU</div>
+      <div class="ex">NYSE AM</div>
+      <div class="name">ENERGY FUELS INC</div>
+      <div class="px">$20.18</div>
+      <div class="ch">+86.1% YTD</div>
+      <div>RTG ▸ SPECULATIVE</div>
+    </div>
+
+    <div class="hero">
+      <div class="left">
+        <div class="tagline">Only US producer of <b class="cyan">heavy rare earths</b> + uranium. China just <b class="red">banned exports</b> of both. Zero debt, <b class="green">$1B</b> liquidity, commercial output <b class="cyan">Q4 2026</b>.</div>
+      </div>
+      <div class="right">
+        <div class="kpi"><div class="lbl">U PROD '26E</div><div class="v cyan">2.0M lb</div><div class="s">up from 1M in '25</div></div>
+        <div class="kpi"><div class="lbl">NET DEBT</div><div class="v g">ZERO</div><div class="s">~$1B liquidity</div></div>
+        <div class="kpi"><div class="lbl">Dy PURITY</div><div class="v cyan">99.9%</div><div class="s">vs 99.5% spec</div></div>
+        <div class="kpi"><div class="lbl">SELL-SIDE PT</div><div class="v cyan">$27.25</div><div class="s">+35% vs spot</div></div>
+      </div>
+    </div>
+
+    <div class="balance">
+      <h3>BULL ↔ BEAR <small>analyst weight, qualitative</small></h3>
+      <div class="bhead">
+        <div class="lab g">+ BULL CASE</div>
+        <div class="vs">VS</div>
+        <div class="lab r">BEAR CASE −</div>
+      </div>
+      <div class="bar" style="grid-template-columns: 58fr 42fr;">
+        <div class="fg"></div><div class="fr"></div>
+        <div class="midline" style="left: 50%;"></div>
+      </div>
+      <div class="pct">
+        <div class="l">58%</div><div></div><div class="r">42%</div>
+      </div>
+
+      <div class="bbgrid">
+        <div class="col g">
+          <h4><i>+</i>WHY BULLS WIN</h4>
+          <ul>
+            <li><div class="key">Optionality</div><div>HREE arm priced <b>~zero</b></div></li>
+            <li><div class="key">China cut-off</div><div>only US Dy/Tb at <b>scale</b></div></li>
+            <li><div class="key">Nuclear</div><div>AI data centers = <b>U demand</b></div></li>
+            <li><div class="key">Balance sheet</div><div><b>0 debt</b>, $1B cash</div></li>
+          </ul>
+        </div>
+        <div class="col r">
+          <h4><i>−</i>WHY BEARS FEAR</h4>
+          <ul>
+            <li><div class="key">No EPS</div><div>~$0.01 EPS in 2026</div></li>
+            <li><div class="key">Commodity</div><div><b>no pricing power</b></div></li>
+            <li><div class="key">Scale-up</div><div>1kg/wk → commercial = risk</div></li>
+            <li><div class="key">Geopolitics</div><div>Madagascar asset <b>unstable</b></div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <h3>CATALYST TIMELINE <small>next 24 months</small></h3>
+      <div class="tlrail">
+        <div class="tlticks"><div>NOW</div><div>+6M</div><div>+12M</div><div>+18M</div><div>+24M</div></div>
+      </div>
+      <div class="tlitems">
+        <div class="tlitem"><div class="when"><span class="id">CAT 01</span><span class="dt">Q4 2026</span></div><div class="t">Commercial HREE production starts</div></div>
+        <div class="tlitem"><div class="when"><span class="id">CAT 02</span><span class="dt">2026</span></div><div class="t">DoD / strategic stockpile contracts</div></div>
+        <div class="tlitem"><div class="when"><span class="id">CAT 03</span><span class="dt">YE 2026</span></div><div class="t">Uranium spot breakout $95–110/lb</div></div>
+        <div class="tlitem"><div class="when"><span class="id">CAT 04</span><span class="dt">ONGOING</span></div><div class="t">US utility long-term contracting</div></div>
+      </div>
+    </div>
+
+    <div class="scen">
+      <h3>PRICE SCENARIOS <small>12–24M horizon · spot $20.18 · R/R ~1.9×</small></h3>
+      <div class="schart">
+        <div class="head"><div>CASE</div><div>TARGET</div><div>RANGE</div><div>VS SPOT</div><div>PROB</div></div>
+        <div class="srow">
+          <div class="lab bu">BULL</div>
+          <div class="px">$34–40+</div>
+          <div class="barwrap"><div class="bar bu" style="width:45%; margin-left:50%;"></div><div class="spot" style="left:50%;"></div></div>
+          <div class="rr up">+17 / +87%</div>
+          <div class="prob">25%</div>
+        </div>
+        <div class="srow">
+          <div class="lab ba">BASE</div>
+          <div class="px">$25–29</div>
+          <div class="barwrap"><div class="bar ba" style="width:20%; margin-left:50%;"></div><div class="spot" style="left:50%;"></div></div>
+          <div class="rr up">+7 / +35%</div>
+          <div class="prob">45%</div>
+        </div>
+        <div class="srow">
+          <div class="lab be">BEAR</div>
+          <div class="px">$12–14</div>
+          <div class="barwrap"><div class="bar be" style="width:18%; margin-left:30%;"></div><div class="spot" style="left:50%;"></div></div>
+          <div class="rr dn">−7 / −35%</div>
+          <div class="prob">30%</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================ MSFT ================ -->
+  <section class="sec" id="msft" data-screen-label="MSFT">
+    <div class="sbar msft">
+      <div class="tk">MSFT</div>
+      <div class="ex">NASDAQ</div>
+      <div class="name">MICROSOFT CORP</div>
+      <div class="px">$422.15</div>
+      <div class="ch dn">12.0% YTD</div>
+      <div>RTG ▸ QUALITY ON SALE</div>
+    </div>
+
+    <div class="hero">
+      <div class="left">
+        <div class="tagline">Only Big Tech name <b class="blue">actually monetising AI</b> at scale — $37B AI ARR up <b class="green">+123%</b>, $627B booked, trading at <b class="amber">3-yr low</b> multiple.</div>
+      </div>
+      <div class="right">
+        <div class="kpi"><div class="lbl">REV Q3 FY26</div><div class="v blue">$82.9B</div><div class="s">+18% YoY, beat</div></div>
+        <div class="kpi"><div class="lbl">AZURE</div><div class="v g">+40%</div><div class="s">vs 39% cons.</div></div>
+        <div class="kpi"><div class="lbl">AI ARR</div><div class="v blue">$37B</div><div class="s">+123% YoY</div></div>
+        <div class="kpi"><div class="lbl">RPO</div><div class="v blue">$627B</div><div class="s">+99% YoY</div></div>
+      </div>
+    </div>
+
+    <div class="balance">
+      <h3>BULL ↔ BEAR <small>analyst weight, qualitative</small></h3>
+      <div class="bhead">
+        <div class="lab g">+ BULL CASE</div>
+        <div class="vs">VS</div>
+        <div class="lab r">BEAR CASE −</div>
+      </div>
+      <div class="bar" style="grid-template-columns: 70fr 30fr;">
+        <div class="fg"></div><div class="fr"></div>
+        <div class="midline" style="left:50%;"></div>
+      </div>
+      <div class="pct">
+        <div class="l">70%</div><div></div><div class="r">30%</div>
+      </div>
+
+      <div class="bbgrid">
+        <div class="col g">
+          <h4><i>+</i>WHY BULLS WIN</h4>
+          <ul>
+            <li><div class="key">Backlog</div><div><b>$627B</b> RPO, +99%</div></li>
+            <li><div class="key">Azure</div><div>demand &gt; supply, <b>+40%</b></div></li>
+            <li><div class="key">Copilot</div><div>20M seats = <b>only 4%</b> of base</div></li>
+            <li><div class="key">Multiple</div><div><b>22× fwd</b>, 3-yr low</div></li>
+          </ul>
+        </div>
+        <div class="col r">
+          <h4><i>−</i>WHY BEARS FEAR</h4>
+          <ul>
+            <li><div class="key">Capex</div><div><b>$190B</b> spend — returns?</div></li>
+            <li><div class="key">Usage</div><div>only <b>36%</b> active Copilot users</div></li>
+            <li><div class="key">Regulator</div><div>FTC bundling probe</div></li>
+            <li><div class="key">OpenAI</div><div>partnership <b>friction</b></div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <h3>CATALYST TIMELINE <small>next 18 months</small></h3>
+      <div class="tlrail">
+        <div class="tlticks"><div>NOW</div><div>+6M</div><div>+12M</div><div>+18M</div><div>+24M</div></div>
+      </div>
+      <div class="tlitems">
+        <div class="tlitem"><div class="when"><span class="id">CAT 01</span><span class="dt">EACH QTR</span></div><div class="t">Copilot seat acceleration prints</div></div>
+        <div class="tlitem"><div class="when"><span class="id">CAT 02</span><span class="dt">2026</span></div><div class="t">Azure supply constraints lift</div></div>
+        <div class="tlitem"><div class="when"><span class="id">CAT 03</span><span class="dt">12–24M</span></div><div class="t">OpenAI stake mark-up / IPO</div></div>
+        <div class="tlitem"><div class="when"><span class="id">CAT 04</span><span class="dt">FY27</span></div><div class="t">Capex peak, FCF re-accelerates</div></div>
+      </div>
+    </div>
+
+    <div class="scen">
+      <h3>PRICE SCENARIOS <small>12–18M horizon · spot $422 · R/R ~2.0×</small></h3>
+      <div class="schart">
+        <div class="head"><div>CASE</div><div>TARGET</div><div>RANGE</div><div>VS SPOT</div><div>PROB</div></div>
+        <div class="srow">
+          <div class="lab bu">BULL</div>
+          <div class="px">$580–655</div>
+          <div class="barwrap"><div class="bar bu" style="width:45%; margin-left:42%;"></div><div class="spot" style="left:42%;"></div></div>
+          <div class="rr up">+37 / +55%</div>
+          <div class="prob">30%</div>
+        </div>
+        <div class="srow">
+          <div class="lab ba">BASE</div>
+          <div class="px">$480–540</div>
+          <div class="barwrap"><div class="bar ba" style="width:20%; margin-left:42%;"></div><div class="spot" style="left:42%;"></div></div>
+          <div class="rr up">+14 / +28%</div>
+          <div class="prob">55%</div>
+        </div>
+        <div class="srow">
+          <div class="lab be">BEAR</div>
+          <div class="px">$340–370</div>
+          <div class="barwrap"><div class="bar be" style="width:11%; margin-left:30%;"></div><div class="spot" style="left:42%;"></div></div>
+          <div class="rr dn">−19 / −12%</div>
+          <div class="prob">15%</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- soft cta -->
+  <div class="soft-cta">
+    <div class="cta-left">
+      <div class="cta-badge">NOW BOOKING · LIMITED SPOTS</div>
+      <div class="cta-headline">Investing advice built around <em>you</em></div>
+      <div class="cta-sub">A private 60-min session personalised to your portfolio, your strategy, and where the market is creating opportunity — right now.</div>
+    </div>
+    <div class="cta-right">
+      <div class="cta-meta">
+        <span>DURATION · 60 MIN</span>
+        <span>FORMAT · PRIVATE 1-ON-1</span>
+        <span>PREP · 24 HRS</span>
+      </div>
+      <a class="cta-link" href="https://www.leiholding.com/insightinvest-1on1.html" target="_blank">BOOK A SESSION ▸</a>
+    </div>
+  </div>
+
+  <!-- portfolio chain -->
+  <section class="sec" id="portfolio" data-screen-label="Portfolio Chain">
+    <div class="chain">
+      <h2>▸ PORTFOLIO CHAIN</h2>
+      <div class="sub">Three names mapped along the AI deployment stack — compute → cloud → governance → energy / materials.</div>
+
+      <div class="pipe">
+        <div class="pnode">
+          <div class="id">NVDA</div>
+          <div class="role">AI COMPUTE</div>
+          <div class="stage">[REF · NOT IN BASKET]</div>
+        </div>
+        <div class="arrow">▶</div>
+        <div class="pnode msft">
+          <div class="id">MSFT</div>
+          <div class="role">CLOUD + SOFTWARE</div>
+          <div class="stage">ANCHOR</div>
+        </div>
+        <div class="arrow">▶</div>
+        <div class="pnode now">
+          <div class="id">NOW</div>
+          <div class="role">GOVERNANCE LAYER</div>
+          <div class="stage">CORE</div>
+        </div>
+        <div class="arrow">▶</div>
+        <div class="pnode uuuu">
+          <div class="id">UUUU</div>
+          <div class="role">ENERGY + MATERIALS</div>
+          <div class="stage">OPTION</div>
+        </div>
+      </div>
+
+      <div class="rmix">
+        <div class="r msft lo">
+          <div class="ph"><span class="t">MSFT</span><span class="badge">LOW RISK</span></div>
+          <div class="role">QUALITY ANCHOR</div>
+          <div class="meter"><i class="on g"></i><i></i><i></i><i></i><i></i></div>
+          <p>Stable, liquid AI exposure with proven monetisation. <b>Largest position.</b></p>
+        </div>
+        <div class="r now md">
+          <div class="ph"><span class="t">NOW</span><span class="badge">MEDIUM RISK</span></div>
+          <div class="role">VALUE DISLOCATION</div>
+          <div class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
+          <p>Quality business at significant discount. <b>Core position</b>, 12–18m payoff.</p>
+        </div>
+        <div class="r uuuu hi">
+          <div class="ph"><span class="t">UUUU</span><span class="badge">HIGH RISK</span></div>
+          <div class="role">OPTIONALITY</div>
+          <div class="meter"><i class="on r"></i><i class="on r"></i><i class="on r"></i><i class="on r"></i><i class="on r"></i></div>
+          <p>Treat as long-dated option. <b>Size accordingly.</b> Stop near $14–15.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>▸ INTERNAL RESEARCH / EDUCATIONAL USE. Does not constitute investment advice. Prices approximate as of 15 May 2026.</div>
+    <div class="end">— END —</div>
+  </footer>
+
+</div>
+</body>
+</html>
