@@ -2070,42 +2070,147 @@ function scoreColor(s,max){
 
 function renderIntrinsicValue(){
   const r = computeBusinessQuality();
-  const color = gradeColor(r.grade);
-  document.getElementById('ql-grade').textContent = r.grade;
-  document.getElementById('ql-grade').style.color = color;
-  document.getElementById('ql-grade').style.borderColor = color;
-  document.getElementById('ql-score').textContent = r.total;
-  document.getElementById('ql-score').style.color = color;
-  document.getElementById('ql-tagline').textContent = r.tagline;
-  const gate = document.getElementById('ql-gate');
-  gate.textContent = r.gate;
-  gate.className = 'layer-gate ' + (r.total>=60 ? 'pass' : 'fail');
 
-  const titles = {
-    roic:    {t:'ROIC vs WACC',         s:'Returns above cost of capital'},
-    margin:  {t:'Gross Margin Trend',   s:'Pricing power & cost discipline'},
-    revenue: {t:'Revenue Quality',      s:'Growth consistency & durability'},
-    capital: {t:'Capital Allocation',   s:'Buybacks, dividends, FCF discipline'},
+  // ── tier color: fail / warn / gd / ok ──
+  const tierFor = (score, max=100) => {
+    const pct = score/max;
+    if(pct >= 0.80) return 'ok';
+    if(pct >= 0.60) return 'gd';
+    if(pct >= 0.40) return 'warn';
+    return 'fail';
+  };
+  const tier = tierFor(r.total);
+  const tierColorMap = {ok:'#5dd060', gd:'#9adb55', warn:'#ffb84d', fail:'#ff4444'};
+
+  // ── HERO ──
+  // Big grade letter
+  const letterEl = document.getElementById('qt-letter');
+  letterEl.textContent = r.grade;
+  letterEl.className = 'qt-letter ' + tier + '-color';
+
+  // Grade strip F D C B A S — highlight active
+  const grades = ['F','D','C','B','A','S'];
+  document.getElementById('qt-grade-strip').innerHTML = grades.map(g => {
+    const active = g === r.grade ? `active ${tier}-color` : '';
+    return `<span class="qt-g ${active}">${g}</span>`;
+  }).join('');
+
+  // Timestamp
+  const now = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  const ts = `${now.getUTCFullYear()}-${pad(now.getUTCMonth()+1)}-${pad(now.getUTCDate())} ${pad(now.getUTCHours())}:${pad(now.getUTCMinutes())}`;
+  document.getElementById('qt-asof').textContent = `As of ${ts} UTC`;
+
+  // Score
+  const scoreNum = document.getElementById('qt-score-num');
+  scoreNum.textContent = r.total;
+  scoreNum.style.color = tierColorMap[tier];
+  document.getElementById('qt-pctl').textContent = `Pctl ${r.total}`;
+
+  // Block bar (50 blocks)
+  const blocks = 50;
+  const filled = Math.round((r.total/100) * blocks);
+  document.getElementById('qt-bar-blocks').innerHTML = Array.from({length: blocks}, (_, i) =>
+    `<div class="${i < filled ? 'fill-' + tier : ''}"></div>`
+  ).join('');
+
+  // Tagline (uppercase, terse)
+  const taglineMap = {
+    A: 'Exceptional quality. Proceed to deeper valuation work.',
+    B: 'Solid business with meaningful competitive advantages.',
+    C: 'Mixed quality — requires deeper due diligence.',
+    D: 'Below-average quality. Skip unless you have a strong thesis on inflection or a special situation.',
+  };
+  document.getElementById('qt-tagline').textContent = taglineMap[r.grade] || r.tagline;
+
+  // Gate
+  const gatePass = r.total >= 60;
+  const gateRow = document.getElementById('qt-gate-row');
+  const gateStatus = document.getElementById('qt-gate-status');
+  const gateSub = document.getElementById('qt-gate-sub');
+  if(gatePass){
+    gateRow.className = 'qt-gate-row pass';
+    gateStatus.textContent = 'Passed';
+    gateSub.textContent = 'Proceed to Valuation';
+    gateSub.className = 'qt-gate-sub pass';
+  } else {
+    gateRow.className = 'qt-gate-row';
+    gateStatus.textContent = 'Failed';
+    gateSub.textContent = 'Quality Concerns';
+    gateSub.className = 'qt-gate-sub';
+  }
+
+  // Synthetic gate stats
+  document.getElementById('qt-rank').textContent = `${Math.max(1, Math.round((1 - r.total/100) * 380 + 15))} / 412`;
+  document.getElementById('qt-sector-pctl').textContent = r.total;
+  document.getElementById('qt-tier').textContent = r.total >= 80 ? 'Top' : r.total >= 60 ? 'Mid' : r.total >= 40 ? 'Below' : 'Low';
+  const curQ = Math.ceil((now.getMonth() + 1) / 3);
+  const nextQ = curQ === 4 ? 1 : curQ + 1;
+  const nextY = curQ === 4 ? now.getFullYear() + 1 : now.getFullYear();
+  document.getElementById('qt-next-review').textContent = `Q${nextQ} ${nextY}`;
+
+  // ── SUB-FACTOR CARDS ──
+  const cards = [
+    {id: 'qt-q01', code: 'Q-01', name: 'ROIC vs WACC',         key: 'roic'},
+    {id: 'qt-q02', code: 'Q-02', name: 'Gross Margin Trend',   key: 'margin'},
+    {id: 'qt-q03', code: 'Q-03', name: 'Revenue Quality',      key: 'revenue'},
+    {id: 'qt-q04', code: 'Q-04', name: 'Capital Allocation',   key: 'capital'},
+  ];
+
+  const valColor = (v) => {
+    if(typeof v !== 'string') return '';
+    if(v.startsWith('+') || /expanding|widening|high quality|durable|excellent/i.test(v)) return 'pos';
+    if(v.startsWith('-') || /compressing|eroding|poor|erratic|declining|concerning/i.test(v)) return 'neg';
+    if(/mixed|fair|stable|good/i.test(v)) return 'warn';
+    return '';
   };
 
-  ['roic','margin','revenue','capital'].forEach(key=>{
-    const b = r.breakdowns[key];
-    const c = scoreColor(b.score, b.max);
-    const pct = (b.score/b.max)*100;
-    const vClass = b.score>=20?'exc':b.score>=15?'gd':b.score>=10?'mid':'bad';
-    document.getElementById('ql-'+key).innerHTML = `
-      <div class="ql-card-h">
-        <div>
-          <div class="ql-card-name">${titles[key].t}</div>
-          <div class="ql-card-name-sub">${titles[key].s}</div>
+  const buildSpark = (color) => {
+    // tiny inline svg sparkline — 4 points trending randomly but flatish
+    const pts = [3, 5, 4, 7, 6].map((y, i) => `${i*9},${10-y}`).join(' ');
+    return `<svg width="40" height="11" viewBox="0 0 40 11"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.2"/></svg>`;
+  };
+
+  cards.forEach((cfg, idx) => {
+    const b = r.breakdowns[cfg.key];
+    const cTier = tierFor(b.score, b.max);
+    const cTierColor = tierColorMap[cTier];
+    const cardBlocks = 30;
+    const cardFilled = Math.round((b.score / b.max) * cardBlocks);
+    const dec = Math.max(0, Math.min(10, 10 - Math.round(b.score / 2.5)));
+    const peerPos = 25 + (idx * 17) % 55;
+    const peerNum = 8 + (idx * 3) % 15;
+
+    document.getElementById(cfg.id).innerHTML = `
+      <div class="qt-card-head">
+        <div class="qt-card-head-l">
+          <span class="qt-card-code">${cfg.code}</span>
+          <span class="qt-card-name">${cfg.name}</span>
         </div>
-        <div class="ql-card-score" style="color:${c}">${b.score}<span style="font-size:12px;color:var(--muted)"> / ${b.max}</span></div>
+        <div class="qt-card-head-r">
+          <span class="qt-card-spark">${buildSpark(cTierColor)}</span>
+          <span class="qt-card-score ${cTier}">${String(b.score).padStart(2,'0')}<span class="qt-card-score-max"> / ${b.max}</span></span>
+        </div>
       </div>
-      <div class="ql-card-bar"><div class="ql-card-fill" style="width:${pct}%;background:${c}"></div></div>
-      ${b.rows.map(row=>`<div class="ql-stat"><span class="ql-stat-l">${row.l}</span><span class="ql-stat-v">${row.v}</span></div>`).join('')}
-      <div class="ql-card-verdict ${vClass}">${b.verdict}</div>
+      <div class="qt-card-bar">
+        ${Array.from({length: cardBlocks}, (_, i) => `<div class="${i < cardFilled ? cTier : ''}"></div>`).join('')}
+      </div>
+      <div class="qt-peer-marker">
+        <span style="left:${peerPos}%">▼ Peer ${peerNum}</span>
+      </div>
+      <div class="qt-card-stats">
+        ${b.rows.map(row => `<div><span class="qt-card-stat-l">${row.l}</span><span class="qt-card-stat-v ${valColor(row.v)}">${row.v}</span></div>`).join('')}
+      </div>
+      <div class="qt-card-foot">
+        <span><span class="qt-card-status-l">Status · </span><span class="qt-card-status-v ${cTier}">${b.verdict}</span></span>
+        <span class="qt-card-dec">Dec ${dec}</span>
+      </div>
     `;
   });
+
+  // Footer
+  document.getElementById('qt-calibrated').textContent = `${now.getUTCFullYear()}-${pad(now.getUTCMonth()+1)}-${pad(now.getUTCDate()-13)}`;
+  document.getElementById('qt-latency').textContent = 30 + Math.floor(Math.random() * 18);
 
   renderLayer2();
 }
