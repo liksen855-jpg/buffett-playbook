@@ -6,7 +6,7 @@
 <title>Stock Research — InsightInvest</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%233b82f6'/><path d='M6 22L12 14L18 18L26 8' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/><circle cx='26' cy='8' r='2.5' fill='white'/></svg>"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=JetBrains+Mono:wght@400;500;600&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,500&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 :root{
@@ -495,40 +495,116 @@ td.strong{color:var(--fg);font-weight:600}
 .l4-verdict::before{content:'STATUS  ·  ';color:var(--muted);font-weight:600}
 .l4-flag{margin-top:8px;padding:8px 12px;font-size:10.5px;color:var(--muted);background:transparent;border-left:2px solid hsl(45,93%,58%,.4);border-radius:0;letter-spacing:.02em}
 
-/* Valuation Summary chart — editorial */
-.vchart-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px 22px;margin-bottom:18px}
-.vchart-head{padding-bottom:14px;border-bottom:1px solid var(--border);margin-bottom:18px}
-.vchart-title{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--fg);margin-bottom:2px}
-.vchart-subtitle{font-size:11px;color:var(--muted);line-height:1.5;letter-spacing:.02em}
-.vchart-composite-banner{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:18px;padding:14px 18px;background:var(--bg);border:1px solid var(--border2);border-radius:6px;margin-bottom:16px}
-.vchart-comp-label{font-size:9.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
-.vchart-comp-value{font-family:var(--mono);font-size:26px;font-weight:800;letter-spacing:-.02em;color:var(--fg);line-height:1}
-.vchart-comp-delta{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
-.vchart-comp-delta.pos{color:var(--green)}
-.vchart-comp-delta.neg{color:var(--red)}
-.vchart-comp-group{display:flex;flex-direction:column;gap:4px}
-.vchart-rows{position:relative}
-.vchart-row{display:grid;grid-template-columns:210px 1fr 100px;gap:14px;align-items:center;height:32px;margin-bottom:4px}
-@media(max-width:760px){.vchart-row{grid-template-columns:130px 1fr 80px;gap:10px}}
-.vchart-label{font-size:12px;color:var(--fg2);text-align:right;line-height:1.25}
-.vchart-bar-area{position:relative;height:22px;background:hsl(220,25%,14%,.3);border-radius:4px;overflow:visible}
-.vchart-bar{height:100%;border-radius:4px;transition:width .8s ease-out;position:relative;z-index:1}
-.vchart-bar-value{position:absolute;top:50%;left:100%;transform:translate(8px,-50%);font-family:var(--mono);font-size:11.5px;font-weight:600;color:var(--fg);white-space:nowrap;z-index:3}
-.vchart-stockline{position:absolute;top:-3px;bottom:-3px;width:0;border-left:2px dashed hsl(160,65%,55%);pointer-events:none;z-index:4}
-.vchart-pct{font-family:var(--mono);font-size:12px;font-weight:600;text-align:right}
-.vchart-pct.pos{color:var(--green)}
-.vchart-pct.neg{color:var(--red)}
-/* color tiers */
-.vchart-bar.tier-deep    {background:hsl(160,65%,45%)}
-.vchart-bar.tier-value   {background:hsl(140,55%,55%)}
-.vchart-bar.tier-fair    {background:hsl(50,90%,55%)}
-.vchart-bar.tier-rich    {background:hsl(30,88%,55%)}
-.vchart-bar.tier-exp     {background:hsl(0,68%,55%)}
-.vchart-bar.tier-composite{background:hsl(213,94%,58%);box-shadow:0 0 0 1px hsl(213,94%,75%,.5)}
-.vchart-stockfooter{text-align:center;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);font-family:var(--mono);font-size:13px;color:hsl(160,65%,55%);font-weight:600;letter-spacing:.02em}
-.vchart-legend{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:12px;font-size:10.5px;color:var(--muted)}
-.vchart-legend-item{display:inline-flex;align-items:center;gap:5px}
-.vchart-legend-dot{width:10px;height:10px;border-radius:2px}
+/* Valuation Framework — editorial v2 (Geist + Source Serif 4) */
+.vf-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:32px 36px;
+  margin-bottom:18px;
+  display:flex;
+  flex-direction:column;
+  gap:32px;
+  font-family:'Geist','Inter',ui-sans-serif,system-ui,sans-serif;
+  font-feature-settings:"ss01","cv11";
+  --vf-c-deep-up:oklch(0.74 0.08 160);
+  --vf-c-up:     oklch(0.72 0.06 160);
+  --vf-c-fair:   oklch(0.78 0.06 85);
+  --vf-c-rich:   oklch(0.70 0.08 50);
+  --vf-c-down:   oklch(0.66 0.09 25);
+  --vf-c-comp:   oklch(0.80 0.06 235);
+  --vf-line:     hsl(220,25%,17%);
+  --vf-line-soft:hsl(220,25%,14%);
+  --vf-t1:hsl(210,20%,96%);
+  --vf-t2:hsl(210,15%,70%);
+  --vf-t3:hsl(210,12%,52%);
+  --vf-t4:hsl(210,10%,42%);
+}
+.vf-mono{font-family:'Geist Mono','JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;letter-spacing:-.005em}
+.vf-serif{font-family:'Source Serif 4',ui-serif,Georgia,serif}
+.vf-eyebrow{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--vf-t3);font-weight:500}
+
+/* Header */
+.vf-header{display:flex;justify-content:space-between;align-items:flex-start;gap:32px;flex-wrap:wrap}
+.vf-h1{font-family:'Source Serif 4',ui-serif,Georgia,serif;font-weight:400;font-size:28px;line-height:1.15;margin:8px 0 6px;letter-spacing:-.01em;color:var(--vf-t1)}
+.vf-sub{font-size:12.5px;color:var(--vf-t3);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.vf-dot{color:var(--vf-t4)}
+.vf-header-meta{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.vf-coverage{display:flex;align-items:baseline;gap:8px}
+.vf-coverage-num{font-size:14px;color:var(--vf-t1);font-weight:500}
+.vf-coverage-lbl{font-size:12px;color:var(--vf-t3)}
+
+/* Hero */
+.vf-hero{
+  display:grid;
+  grid-template-columns:1.2fr 1px 1fr 1px 1fr;
+  column-gap:36px;
+  padding:22px 0;
+  border-top:1px solid var(--vf-line-soft);
+  border-bottom:1px solid var(--vf-line-soft);
+}
+@media(max-width:760px){.vf-hero{grid-template-columns:1fr;gap:18px}.vf-hero-divider{display:none}}
+.vf-hero-col{display:flex;flex-direction:column;gap:12px}
+.vf-hero-divider{width:1px;background:var(--vf-line-soft)}
+.vf-hero-num{font-size:56px;line-height:1;font-weight:400;letter-spacing:-.02em;color:var(--vf-t1)}
+.vf-hero-num2{font-size:32px;line-height:1;font-weight:400;letter-spacing:-.01em;color:var(--vf-t1)}
+.vf-hero-foot{font-size:12px;color:var(--vf-t3)}
+.vf-hero-pos{color:var(--vf-c-deep-up)}
+.vf-hero-neg{color:var(--vf-c-down)}
+
+/* Chart */
+.vf-chart{display:flex;flex-direction:column;gap:14px}
+.vf-chart-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:6px}
+.vf-legend-inline{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--vf-t3)}
+.vf-legend-dash{display:inline-block;width:22px;height:0;border-top:1px dashed var(--vf-t3);opacity:.8}
+
+.vf-chart-body{position:relative}
+.vf-axis-row{display:grid;grid-template-columns:220px 1fr 180px;column-gap:18px;margin-bottom:4px;position:relative}
+.vf-axis-ticks{position:relative;height:22px}
+.vf-axis-tick{position:absolute;transform:translateX(-50%)}
+.vf-axis-label{font-size:10.5px;color:var(--vf-t4);letter-spacing:.02em}
+
+.vf-row{display:grid;grid-template-columns:220px 1fr 180px;column-gap:18px;align-items:center;height:38px;border-top:1px solid var(--vf-line-soft)}
+.vf-label-col-inner{display:flex;flex-direction:column;gap:1px;text-align:right;padding-right:6px}
+.vf-method-label{font-size:13px;color:var(--vf-t2);letter-spacing:-.005em}
+.vf-method-label.composite{color:var(--vf-t1);font-weight:500}
+.vf-method-qual{font-size:11px;color:var(--vf-t4);letter-spacing:.005em}
+.vf-bar-col{position:relative;height:38px;display:flex;align-items:center}
+.vf-track{position:absolute;left:0;right:0;height:10px;background:var(--vf-line-soft);border-radius:2px;opacity:.55}
+.vf-bar{position:absolute;left:0;height:10px;border-radius:2px;transition:width .4s cubic-bezier(.2,.7,.2,1);opacity:.85}
+.vf-bar.composite{opacity:.95}
+.vf-value-col-inner{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding-left:6px}
+.vf-value-num{font-size:13.5px;color:var(--vf-t1)}
+.vf-value-num.composite{font-weight:500}
+.vf-gap-num{font-size:12.5px;font-weight:500}
+.vf-gap-num.pos{color:var(--vf-c-deep-up)}
+.vf-gap-num.neg{color:var(--vf-c-down)}
+
+/* Bar tone classes */
+.vf-bar.deep-up  {background:var(--vf-c-deep-up)}
+.vf-bar.up       {background:var(--vf-c-up)}
+.vf-bar.fair     {background:var(--vf-c-fair)}
+.vf-bar.rich     {background:var(--vf-c-rich)}
+.vf-bar.down     {background:var(--vf-c-down)}
+.vf-bar.composite{background:var(--vf-c-comp)}
+
+.vf-group-div{height:18px}
+
+/* Vertical price line overlay */
+.vf-price-overlay{position:absolute;pointer-events:none;z-index:2;width:0;top:0}
+.vf-price-line{width:1px;height:100%;border-left:1px dashed var(--vf-t3);opacity:.5}
+.vf-price-cap{position:absolute;top:-26px;left:-1px;transform:translateX(-50%);display:flex;flex-direction:row;align-items:baseline;gap:6px;padding:4px 9px;background:var(--card);border:1px solid var(--vf-line);border-radius:999px;white-space:nowrap}
+.vf-price-cap-lbl{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--vf-t3)}
+.vf-price-cap-num{font-size:11px;color:var(--vf-t1);font-weight:500;font-family:'Geist Mono',monospace;font-variant-numeric:tabular-nums}
+
+/* Legend */
+.vf-legend-row{border-top:1px solid var(--vf-line-soft);padding-top:18px;display:flex;justify-content:space-between;gap:24px;align-items:flex-start;flex-wrap:wrap}
+.vf-legend-cats{display:flex;flex-wrap:wrap;gap:18px}
+.vf-legend-item{display:inline-flex;align-items:center;gap:7px}
+.vf-legend-dot{width:8px;height:8px;border-radius:2px;display:inline-block}
+.vf-legend-lbl{font-size:11.5px;color:var(--vf-t2)}
+.vf-legend-note{font-size:11px;color:var(--vf-t4)}
+.vf-legend-foot{font-size:11.5px;color:var(--vf-t3);max-width:360px;text-align:right}
 
 /* MoatHeat */
 .mh-hero{display:flex;align-items:center;gap:24px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px 22px;margin-bottom:16px}
@@ -796,24 +872,71 @@ td.strong{color:var(--fg);font-weight:600}
   <!-- ══ INTRINSIC VALUE — LAYER 1 BUSINESS QUALITY ══ -->
   <div class="tab-page" id="page-intrinsic">
 
-    <!-- Valuation Summary chart -->
-    <div class="vchart-card">
-      <div class="vchart-head">
-        <div class="vchart-title">Valuation Framework — Composite View</div>
-        <div class="vchart-subtitle">12 methods · trimmed mean composite · dashed line marks current price</div>
-      </div>
-      <div class="vchart-composite-banner" id="vchart-composite">—</div>
-      <div class="vchart-rows" id="vchart-rows"></div>
-      <div class="vchart-stockfooter" id="vchart-stockfooter">—</div>
-      <div class="vchart-legend">
-        <span class="vchart-legend-item"><span class="vchart-legend-dot" style="background:hsl(160,65%,45%)"></span> Deep value · &gt;30% upside</span>
-        <span class="vchart-legend-item"><span class="vchart-legend-dot" style="background:hsl(140,55%,55%)"></span> Value · 0–30% upside</span>
-        <span class="vchart-legend-item"><span class="vchart-legend-dot" style="background:hsl(50,90%,55%)"></span> Fair · within ±15%</span>
-        <span class="vchart-legend-item"><span class="vchart-legend-dot" style="background:hsl(30,88%,55%)"></span> Rich · 15–30% downside</span>
-        <span class="vchart-legend-item"><span class="vchart-legend-dot" style="background:hsl(0,68%,55%)"></span> Expensive · &gt;30% downside</span>
-        <span class="vchart-legend-item"><span class="vchart-legend-dot" style="background:hsl(213,94%,58%)"></span> InsightValue™ Composite</span>
-      </div>
-    </div>
+    <!-- Valuation Framework — editorial composite -->
+    <section class="vf-card">
+      <header class="vf-header">
+        <div>
+          <div class="vf-eyebrow">Valuation framework</div>
+          <h1 class="vf-h1">Composite fair value</h1>
+          <div class="vf-sub">
+            <span id="vf-ticker">—</span>
+            <span class="vf-dot">·</span>
+            <span id="vf-method-count">— methods, trimmed-mean composite</span>
+            <span class="vf-dot">·</span>
+            <span class="vf-mono" id="vf-date">—</span>
+          </div>
+        </div>
+        <div class="vf-header-meta">
+          <div class="vf-eyebrow" style="text-align:right">Coverage</div>
+          <div class="vf-coverage">
+            <span class="vf-mono vf-coverage-num" id="vf-coverage">— / —</span>
+            <span class="vf-coverage-lbl">methods reporting</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="vf-hero">
+        <div class="vf-hero-col">
+          <div class="vf-eyebrow">Composite fair value</div>
+          <div class="vf-hero-num vf-serif vf-mono" id="vf-composite-val">—</div>
+          <div class="vf-hero-foot">per share</div>
+        </div>
+        <div class="vf-hero-divider"></div>
+        <div class="vf-hero-col">
+          <div class="vf-eyebrow">Market price</div>
+          <div class="vf-hero-num2 vf-mono" id="vf-market-val">—</div>
+          <div class="vf-hero-foot" id="vf-market-change">—</div>
+        </div>
+        <div class="vf-hero-divider"></div>
+        <div class="vf-hero-col">
+          <div class="vf-eyebrow">Implied gap</div>
+          <div class="vf-hero-num2 vf-mono" id="vf-gap-val">—</div>
+          <div class="vf-hero-foot" id="vf-gap-note">—</div>
+        </div>
+      </section>
+
+      <section class="vf-chart">
+        <div class="vf-chart-head">
+          <div class="vf-eyebrow">Method-by-method</div>
+          <div class="vf-legend-inline">
+            <span class="vf-legend-dash"></span>
+            <span>Market price</span>
+          </div>
+        </div>
+        <div class="vf-chart-body" id="vf-chart-body"></div>
+      </section>
+
+      <section class="vf-legend-row">
+        <div class="vf-legend-cats">
+          <span class="vf-legend-item"><span class="vf-legend-dot" style="background:var(--vf-c-deep-up)"></span><span class="vf-legend-lbl">Undervalued</span><span class="vf-legend-note">&gt;30% upside</span></span>
+          <span class="vf-legend-item"><span class="vf-legend-dot" style="background:var(--vf-c-up)"></span><span class="vf-legend-lbl">Below fair value</span><span class="vf-legend-note">0–30% upside</span></span>
+          <span class="vf-legend-item"><span class="vf-legend-dot" style="background:var(--vf-c-fair)"></span><span class="vf-legend-lbl">Fair</span><span class="vf-legend-note">within ±15%</span></span>
+          <span class="vf-legend-item"><span class="vf-legend-dot" style="background:var(--vf-c-rich)"></span><span class="vf-legend-lbl">Above fair value</span><span class="vf-legend-note">15–30% downside</span></span>
+          <span class="vf-legend-item"><span class="vf-legend-dot" style="background:var(--vf-c-down)"></span><span class="vf-legend-lbl">Overvalued</span><span class="vf-legend-note">&gt;30% downside</span></span>
+        </div>
+        <div class="vf-legend-foot">Bands relative to market price. Composite excludes the highest and lowest method.</div>
+      </section>
+    </section>
 
     <!-- Quality Gate Terminal -->
     <section class="ql-terminal">
@@ -2429,6 +2552,8 @@ function renderValuationSummary(){
   const totalDebt = bal0.totalDebt || 0;
   const cash = bal0.cashAndCashEquivalents || 0;
   const sectorMed = getSectorMedians();
+  const p = S.profile || {};
+  const q = S.quote || {};
 
   const bearG = parseFloat(document.getElementById('dcf-bear')?.value)/100;
   const baseG = parseFloat(document.getElementById('dcf-base')?.value)/100;
@@ -2441,102 +2566,149 @@ function renderValuationSummary(){
   };
 
   const epv = computeEPV();
-  const hist_pfcf = computeHistAvg(S.metrics, 'pfcfRatio', 5) || computeHistAvg(S.metrics, 'priceToFreeCashFlowsRatio', 5);
-  const hist_pe   = computeHistAvg(S.metrics, 'peRatio', 5);
-  const hist_evEb = computeHistAvg(S.metrics, 'evToEBITDA', 5) || computeHistAvg(S.metrics, 'enterpriseValueOverEBITDA', 5);
-  const hist_evRev= computeHistAvg(S.metrics, 'evToSales', 5);
+  const hist_pfcf  = computeHistAvg(S.metrics, 'pfcfRatio', 5) || computeHistAvg(S.metrics, 'priceToFreeCashFlowsRatio', 5);
+  const hist_pe    = computeHistAvg(S.metrics, 'peRatio', 5);
+  const hist_evEb  = computeHistAvg(S.metrics, 'evToEBITDA', 5) || computeHistAvg(S.metrics, 'enterpriseValueOverEBITDA', 5);
+  const hist_evRev = computeHistAvg(S.metrics, 'evToSales', 5);
   const fcfPerShare = shares>0 ? fcf/shares : 0;
 
-  const evMultPrice = (mult, kpi) => (mult && kpi>0 && shares>0) ? (mult*kpi - totalDebt + cash) / shares : null;
-  const peMultPrice = (mult)      => (mult && eps && eps>0)      ? mult*eps                          : null;
-  const pfcfMultPrice= (mult)     => (mult && fcfPerShare>0)     ? mult*fcfPerShare                  : null;
+  const evMultPrice  = (mult, kpi) => (mult && kpi>0 && shares>0) ? (mult*kpi - totalDebt + cash) / shares : null;
+  const peMultPrice  = (mult)      => (mult && eps && eps>0)      ? mult*eps                              : null;
+  const pfcfMultPrice= (mult)      => (mult && fcfPerShare>0)     ? mult*fcfPerShare                      : null;
 
   const methods = [
-    {label:'Forward DCF · Bull',         value: dcfPS(bullG, 0.035)},
-    {label:'Forward DCF · Base',         value: dcfPS(baseG, 0.030)},
-    {label:'Forward DCF · Bear',         value: dcfPS(bearG, 0.020)},
-    {label:'EPV (zero-growth)',          value: epv.epvPerShare>0 ? epv.epvPerShare : null},
-    {label:'P/E · 5Y average',           value: peMultPrice(hist_pe)},
-    {label:'P/E · sector median',        value: peMultPrice(sectorMed.pe)},
-    {label:'P/FCF · 5Y average',         value: pfcfMultPrice(hist_pfcf)},
-    {label:'P/FCF · sector median',      value: pfcfMultPrice(sectorMed.pfcf)},
-    {label:'EV/EBITDA · 5Y average',     value: evMultPrice(hist_evEb, ebitda)},
-    {label:'EV/EBITDA · sector median',  value: evMultPrice(sectorMed.evEbitda, ebitda)},
-    {label:'EV/Revenue · 5Y average',    value: evMultPrice(hist_evRev, revenue)},
-    {label:'EV/Revenue · sector median', value: evMultPrice(sectorMed.evRev, revenue)},
+    {id:'dcf-bull', group:'Discounted cash flow', label:'Forward DCF',  qualifier:'Bull',          value: dcfPS(bullG, 0.035)},
+    {id:'dcf-base', group:'Discounted cash flow', label:'Forward DCF',  qualifier:'Base',          value: dcfPS(baseG, 0.030)},
+    {id:'dcf-bear', group:'Discounted cash flow', label:'Forward DCF',  qualifier:'Bear',          value: dcfPS(bearG, 0.020)},
+    {id:'epv',      group:'Discounted cash flow', label:'EPV',          qualifier:'zero-growth',   value: epv.epvPerShare>0 ? epv.epvPerShare : null},
+    {id:'pe-5y',    group:'Earnings multiples',   label:'P / E',        qualifier:'5Y average',    value: peMultPrice(hist_pe)},
+    {id:'pe-sec',   group:'Earnings multiples',   label:'P / E',        qualifier:'sector median', value: peMultPrice(sectorMed.pe)},
+    {id:'pfcf-5y',  group:'Earnings multiples',   label:'P / FCF',      qualifier:'5Y average',    value: pfcfMultPrice(hist_pfcf)},
+    {id:'pfcf-sec', group:'Earnings multiples',   label:'P / FCF',      qualifier:'sector median', value: pfcfMultPrice(sectorMed.pfcf)},
+    {id:'eve-5y',   group:'Enterprise multiples', label:'EV / EBITDA',  qualifier:'5Y average',    value: evMultPrice(hist_evEb, ebitda)},
+    {id:'eve-sec',  group:'Enterprise multiples', label:'EV / EBITDA',  qualifier:'sector median', value: evMultPrice(sectorMed.evEbitda, ebitda)},
+    {id:'evr-5y',   group:'Enterprise multiples', label:'EV / Revenue', qualifier:'5Y average',    value: evMultPrice(hist_evRev, revenue)},
+    {id:'evr-sec',  group:'Enterprise multiples', label:'EV / Revenue', qualifier:'sector median', value: evMultPrice(sectorMed.evRev, revenue)},
   ];
 
   const valid = methods.filter(m => m.value !== null && isFinite(m.value) && m.value>0);
-  const rowsEl = document.getElementById('vchart-rows');
-  const compEl = document.getElementById('vchart-composite');
-  const footEl = document.getElementById('vchart-stockfooter');
+  const totalMethods = methods.length;
+  const bodyEl = document.getElementById('vf-chart-body');
+
+  // Header info
+  document.getElementById('vf-ticker').textContent = `${p.symbol||''}${p.companyName?' · '+p.companyName:''}`;
+  document.getElementById('vf-method-count').textContent = `${valid.length} methods, trimmed-mean composite`;
+  document.getElementById('vf-coverage').textContent = `${valid.length} / ${totalMethods}`;
+  const dStr = new Date().toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+  document.getElementById('vf-date').textContent = `${dStr} close`;
 
   if(!valid.length){
-    rowsEl.innerHTML = '<div style="padding:24px;text-align:center;color:var(--muted);font-size:13px">Insufficient data to compute valuation summary.</div>';
-    compEl.textContent = '—';
-    footEl.textContent = cur ? `Stock Price: $${cur.toFixed(2)}` : '—';
+    bodyEl.innerHTML = '<div style="padding:32px 0;text-align:center;color:var(--vf-t3);font-size:13px">Insufficient data to compute composite.</div>';
+    document.getElementById('vf-composite-val').textContent = '—';
+    document.getElementById('vf-market-val').textContent = cur ? '$'+cur.toFixed(2) : '—';
+    document.getElementById('vf-gap-val').textContent = '—';
+    document.getElementById('vf-gap-note').textContent = '—';
     return;
   }
 
-  // Composite = trimmed mean (drop highest + lowest if 5+ methods)
+  // Trimmed-mean composite
   let pool = valid.map(m => m.value).sort((a,b)=>a-b);
   if(pool.length >= 5) pool = pool.slice(1, -1);
   const composite = pool.reduce((s,v)=>s+v, 0) / pool.length;
 
   // Append composite row
-  const all = [...valid, {label:'InsightValue™ Composite', value:composite, composite:true}];
+  const all = [...valid, {id:'composite', group:'Composite', label:'InsightValue', qualifier:'trimmed mean', value: composite, isComposite:true}];
 
-  // Scale: max value or stock price, whichever is larger, plus 18% headroom
-  const maxValue = Math.max(...all.map(m=>m.value), cur || 0) * 1.18;
-  const stockPct = cur>0 && maxValue>0 ? (cur/maxValue)*100 : 50;
+  // Hero values
+  document.getElementById('vf-composite-val').textContent = '$' + composite.toFixed(2);
+  document.getElementById('vf-market-val').textContent = cur ? '$' + cur.toFixed(2) : '—';
+  const dayChange = q.change || p.change || 0;
+  const dayChangePct = q.changePercentage || p.changePercentage || 0;
+  const sign = (n) => (n >= 0 ? '+' : '');
+  document.getElementById('vf-market-change').textContent =
+    cur ? `${sign(dayChange)}${dayChange.toFixed(2)} (${sign(dayChangePct)}${dayChangePct.toFixed(2)}%) today` : '—';
 
-  function tier(v, isComposite){
-    if(isComposite) return 'tier-composite';
-    if(!cur || cur<=0) return 'tier-fair';
-    const d = (v - cur) / cur;
-    if(d >=  0.30) return 'tier-deep';
-    if(d >=  0.00) return 'tier-value';
-    if(d >= -0.15) return 'tier-fair';
-    if(d >= -0.30) return 'tier-rich';
-    return 'tier-exp';
-  }
+  const gap = cur>0 ? (composite - cur)/cur : 0;
+  const gapEl = document.getElementById('vf-gap-val');
+  gapEl.textContent = `${sign(gap*100)}${(gap*100).toFixed(1)}%`;
+  gapEl.className = 'vf-hero-num2 vf-mono ' + (gap>=0 ? 'vf-hero-pos' : 'vf-hero-neg');
+  document.getElementById('vf-gap-note').textContent =
+    `price is ${gap>=0 ? 'below' : 'above'} composite fair value`;
 
-  rowsEl.innerHTML = all.map(m => {
-    const widthPct = (m.value / maxValue) * 100;
-    const discount = cur>0 ? (m.value - cur) / cur * 100 : 0;
-    const t = tier(m.value, m.composite);
-    const pctCls = discount>=0 ? 'pos' : 'neg';
-    const labelHtml = m.composite ? `<strong>${m.label}</strong>` : m.label;
-    return `<div class="vchart-row">
-      <div class="vchart-label" ${m.composite?'style="font-weight:700;color:var(--primary)"':''}>${labelHtml}</div>
-      <div class="vchart-bar-area">
-        <div class="vchart-bar ${t}" style="width:${widthPct}%"></div>
-        <div class="vchart-bar-value">$${m.value.toFixed(2)}</div>
-        <div class="vchart-stockline" style="left:${stockPct}%"></div>
+  // Chart scale (max value or market price, rounded up to 50)
+  const rawMax = Math.max(...all.map(m=>m.value), cur || 0);
+  const chartMax = Math.ceil(rawMax / 50) * 50;
+  const pricePct = cur>0 && chartMax>0 ? (cur/chartMax)*100 : 50;
+
+  // Axis ticks
+  const step = chartMax > 600 ? 200 : chartMax > 300 ? 100 : 50;
+  const ticks = [];
+  for(let v = 0; v <= chartMax; v += step) ticks.push(v);
+
+  // Categorize by gap
+  const categorize = (v) => {
+    if(!cur || cur<=0) return 'fair';
+    const g = (v - cur) / cur;
+    if(g >=  0.30) return 'deep-up';
+    if(g >=  0)    return 'up';
+    if(g >= -0.15) return 'fair';
+    if(g >= -0.30) return 'rich';
+    return 'down';
+  };
+
+  // Build rows with group dividers
+  let rowsHtml = '';
+  // Axis row
+  rowsHtml += `<div class="vf-axis-row"><div></div><div class="vf-axis-ticks">${
+    ticks.map(v => `<div class="vf-axis-tick" style="left:${(v/chartMax)*100}%"><span class="vf-axis-label vf-mono">$${v}</span></div>`).join('')
+  }</div><div></div></div>`;
+
+  let prevGroup = null;
+  all.forEach(m => {
+    if(prevGroup !== null && m.group !== prevGroup){
+      rowsHtml += `<div class="vf-group-div"></div>`;
+    }
+    prevGroup = m.group;
+    const tone = m.isComposite ? 'composite' : categorize(m.value);
+    const widthPct = (m.value / chartMax) * 100;
+    const g = cur>0 ? (m.value - cur)/cur : 0;
+    const gapCls = g>=0 ? 'pos' : 'neg';
+    const labelCls = m.isComposite ? 'vf-method-label composite' : 'vf-method-label';
+    const valCls   = m.isComposite ? 'vf-value-num vf-mono composite' : 'vf-value-num vf-mono';
+    const barCls   = m.isComposite ? 'vf-bar composite' : `vf-bar ${tone}`;
+    rowsHtml += `<div class="vf-row">
+      <div class="vf-label-col-inner">
+        <span class="${labelCls}">${m.label}</span>
+        <span class="vf-method-qual">${m.qualifier}</span>
       </div>
-      <div class="vchart-pct ${pctCls}">${discount>=0?'+':''}${discount.toFixed(1)}%</div>
+      <div class="vf-bar-col">
+        <div class="vf-track"></div>
+        <div class="${barCls}" style="width:${widthPct}%"></div>
+      </div>
+      <div class="vf-value-col-inner">
+        <span class="${valCls}">$${m.value.toFixed(2)}</span>
+        <span class="vf-gap-num vf-mono ${gapCls}">${sign(g*100)}${(g*100).toFixed(1)}%</span>
+      </div>
     </div>`;
-  }).join('');
+  });
 
-  const compDiscount = cur>0 ? (composite - cur)/cur*100 : 0;
-  const deltaSign = compDiscount>=0 ? '+' : '−';
-  const deltaCls = compDiscount>=0 ? 'pos' : 'neg';
-  const direction = compDiscount>=0 ? 'BELOW MARKET' : 'ABOVE MARKET';
-  compEl.innerHTML = `
-    <div class="vchart-comp-group">
-      <span class="vchart-comp-label">Composite Fair Value</span>
-      <span class="vchart-comp-value">$${composite.toFixed(2)}</span>
+  bodyEl.innerHTML = rowsHtml;
+
+  // Overlay the price line — single element spanning the chart body, positioned over the bar column
+  // Grid: 220px (label) + 18px gap + 1fr (bar) + 18px gap + 180px (value)
+  // Bar column starts at 220+18=238px, width = 100% - 220 - 180 - 36 = 100% - 436px
+  const overlay = document.createElement('div');
+  overlay.className = 'vf-price-overlay';
+  overlay.style.left = `calc(238px + (100% - 436px) * ${pricePct/100})`;
+  overlay.style.height = bodyEl.offsetHeight + 'px';
+  overlay.innerHTML = `
+    <div class="vf-price-cap">
+      <span class="vf-price-cap-lbl">Market</span>
+      <span class="vf-price-cap-num">$${cur.toFixed(2)}</span>
     </div>
-    <div class="vchart-comp-group" style="align-items:flex-end">
-      <span class="vchart-comp-label">Market Price</span>
-      <span class="vchart-comp-value" style="font-size:20px;color:var(--fg2)">$${cur.toFixed(2)}</span>
-    </div>
-    <div class="vchart-comp-group" style="align-items:flex-end">
-      <span class="vchart-comp-label">Implied Gap</span>
-      <span class="vchart-comp-delta ${deltaCls}">${deltaSign}${Math.abs(compDiscount).toFixed(1)}%  ·  ${direction}</span>
-    </div>
+    <div class="vf-price-line"></div>
   `;
-  footEl.textContent = '';
+  bodyEl.appendChild(overlay);
 }
 
 // ═══════════════════════════════════════════════════════════════════
