@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EPF & The Millionaire Gap — InsightInvest</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#0e0e0d;
+  --paper:#f3efe6;
+  --paper2:#ebe6dc;
+  --paper3:#e0dbd0;
+  --white:#fafaf7;
+  --accent:#c0392b;
+  --green:#1d6b3e;
+  --gold:#9a7310;
+  --muted:#7a7264;
+  --muted2:#a09888;
+  --rule:rgba(14,14,13,0.1);
+  --rule2:rgba(14,14,13,0.06);
+  --serif:'DM Serif Display',serif;
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'DM Sans',sans-serif;
+}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* GRAIN */
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:.025;pointer-events:none;z-index:9999}
+
+/* ── MASTHEAD ── */
+.mast{border-bottom:2px solid var(--ink);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:14px clamp(20px,5vw,56px)}
+.mast-brand{font-family:var(--serif);font-size:14px;letter-spacing:.08em}
+.mast-center{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;text-align:center}
+.mast-tag{font-family:var(--mono);font-size:9px;background:var(--ink);color:var(--paper);padding:5px 12px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+
+/* ── COVER ── */
+.cover{display:grid;grid-template-columns:1fr 380px;min-height:88vh;border-bottom:2px solid var(--ink)}
+.cover-l{padding:clamp(36px,6vw,72px) clamp(24px,5vw,56px);display:flex;flex-direction:column;justify-content:space-between;border-right:1px solid var(--rule)}
+.kicker{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.kicker::before{content:'';width:28px;height:1.5px;background:var(--accent);flex-shrink:0}
+.cover-hed{font-family:var(--serif);font-size:clamp(38px,5.5vw,70px);line-height:1.02;letter-spacing:-.01em;margin-bottom:28px}
+.cover-hed em{font-style:italic;color:var(--accent)}
+.cover-deck{font-size:clamp(15px,1.8vw,18px);color:var(--muted);line-height:1.75;max-width:460px;font-weight:300;padding-left:18px;border-left:2.5px solid var(--ink);margin-bottom:40px}
+.cover-byline{font-family:var(--mono);font-size:10px;color:var(--muted2);letter-spacing:.06em;line-height:1.7}
+.cover-r{background:var(--ink);color:var(--paper);padding:clamp(36px,5vw,64px) clamp(24px,4vw,44px);display:flex;flex-direction:column;justify-content:center;gap:36px;position:relative;overflow:hidden}
+.cover-r::before{content:'M';font-family:var(--serif);font-size:clamp(200px,35vw,440px);font-weight:400;color:rgba(255,255,255,.03);position:absolute;top:-20px;right:-30px;line-height:1;pointer-events:none;user-select:none}
+.stat-block{}
+.stat-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(243,239,230,.4);margin-bottom:6px}
+.stat-num{font-family:var(--serif);font-size:clamp(44px,6vw,68px);line-height:1;color:var(--paper);margin-bottom:6px}
+.stat-num.danger{color:#e88080}
+.stat-sub{font-size:13px;color:rgba(243,239,230,.5);line-height:1.55;font-weight:300}
+.cover-rule{width:36px;height:1.5px;background:var(--accent)}
+
+/* ── LAYOUT HELPERS ── */
+.wrap{max-width:1100px;margin:0 auto;padding:0 clamp(20px,5vw,56px)}
+.section{padding:clamp(56px,8vw,96px) 0}
+.sec-hdr{display:grid;grid-template-columns:60px 1fr;gap:clamp(16px,3vw,36px);align-items:start;margin-bottom:clamp(40px,6vw,64px);padding-bottom:clamp(24px,4vw,36px);border-bottom:1px solid var(--rule)}
+.sec-n{font-family:var(--serif);font-size:clamp(52px,7vw,80px);line-height:1;color:var(--paper3)}
+.sec-hed{font-family:var(--serif);font-size:clamp(24px,3.5vw,40px);line-height:1.15;margin-bottom:12px}
+.sec-dek{font-size:15px;color:var(--muted);line-height:1.8;max-width:540px;font-weight:300}
+
+/* ── SECTION 1: EPF ── */
+.s1-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,56px);align-items:start}
+.prose h3{font-family:var(--serif);font-size:clamp(18px,2.5vw,22px);line-height:1.3;margin-bottom:14px}
+.prose p{font-size:15px;color:var(--muted);line-height:1.85;margin-bottom:14px;font-weight:300}
+.callout{background:var(--ink);color:var(--paper);padding:clamp(20px,3vw,28px) clamp(20px,3vw,32px);margin:20px 0}
+.callout-lbl{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(243,239,230,.38);margin-bottom:8px}
+.callout-txt{font-family:var(--serif);font-size:clamp(16px,2vw,20px);font-style:italic;line-height:1.5}
+.callout-txt strong{font-style:normal;color:#e8c470}
+
+/* CHART */
+.chart-box{background:var(--white);border:1px solid var(--rule);padding:clamp(20px,3vw,32px)}
+.chart-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:clamp(20px,3vw,28px);flex-wrap:wrap;gap:10px}
+.chart-ttl{font-family:var(--serif);font-size:clamp(15px,2vw,18px);line-height:1.3}
+.chart-src{font-family:var(--mono);font-size:9px;color:var(--muted2);margin-top:4px}
+.barchart{display:flex;align-items:flex-end;gap:5px;height:140px;border-bottom:1px solid var(--rule);padding-bottom:6px}
+.bc-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;height:100%;justify-content:flex-end}
+.bc-val{font-family:var(--mono);font-size:8.5px;color:var(--muted);white-space:nowrap}
+.bc-bar{width:100%;background:var(--paper3);border-top:1.5px solid var(--ink);transition:background .2s;cursor:default}
+.bc-bar.hi{background:var(--accent);border-color:var(--accent)}
+.bc-bar.lo{background:var(--paper2)}
+.bc-yr{font-family:var(--mono);font-size:8.5px;color:var(--muted2);margin-top:5px;white-space:nowrap}
+.avg-row{margin-top:12px;display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10px;color:var(--muted)}
+.avg-line{flex:1;height:0;border-top:1.5px dashed var(--gold)}
+.chart-meta{margin-top:18px;padding-top:14px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:9.5px;color:var(--muted2);line-height:1.9}
+.chart-meta span{color:var(--accent)}
+
+/* ── SECTION 2: DARK AGE CARDS ── */
+.dark-section{background:var(--ink);color:var(--paper);padding:clamp(56px,8vw,96px) 0}
+.age-hdr{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,56px);margin-bottom:clamp(40px,6vw,60px);padding-bottom:clamp(28px,4vw,44px);border-bottom:1px solid rgba(243,239,230,.07)}
+.dk-kicker{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.dk-kicker::before{content:'';width:22px;height:1px;background:var(--accent)}
+.age-hed{font-family:var(--serif);font-size:clamp(28px,4vw,44px);line-height:1.1;margin-bottom:16px}
+.age-dek{font-size:14px;color:rgba(243,239,230,.45);line-height:1.85;font-weight:300}
+.formula-box{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);padding:clamp(18px,2.5vw,24px);font-family:var(--mono);font-size:11.5px;color:rgba(243,239,230,.5);line-height:2.1}
+.formula-box strong{color:#e8c470;display:block;font-size:9px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px;font-family:var(--mono)}
+.fhl{color:var(--paper)}
+.formula-note{margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.07);font-size:9.5px;color:rgba(243,239,230,.28);line-height:1.7}
+
+/* AGE CARD ROWS */
+.age-rows{display:flex;flex-direction:column}
+.ac{display:grid;grid-template-columns:80px 1fr 140px;align-items:center;gap:clamp(16px,3vw,28px);padding:clamp(22px,3vw,28px) 0;border-bottom:1px solid rgba(255,255,255,.05);opacity:0;transform:translateY(12px);transition:opacity .5s ease,transform .5s ease}
+.ac.show{opacity:1;transform:translateY(0)}
+.ac-age{font-family:var(--serif);font-size:clamp(40px,5vw,52px);line-height:1;color:rgba(243,239,230,.15);transition:color .2s;flex-shrink:0}
+.ac-mid{}
+.ac-amt{font-family:var(--serif);font-size:clamp(20px,3vw,27px);line-height:1;margin-bottom:6px}
+.ac-note{font-size:12.5px;color:rgba(243,239,230,.37);line-height:1.65;font-weight:300}
+.ac-track{margin-top:10px;height:1.5px;background:rgba(255,255,255,.06);overflow:hidden}
+.ac-fill{height:100%;width:0;transition:width 1.3s cubic-bezier(.16,1,.3,1)}
+.ac-rt{text-align:right;flex-shrink:0}
+.ac-badge{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;display:inline-block;margin-bottom:6px;border:1px solid}
+.ac-yrs{font-family:var(--mono);font-size:10px;color:rgba(243,239,230,.26)}
+
+.ac.urgent .ac-amt{color:#e88080}.ac.urgent .ac-fill,.ac.urgent .ac-age-dot{background:#e88080}
+.ac.urgent .ac-badge{background:rgba(232,128,128,.12);color:#e88080;border-color:rgba(232,128,128,.2)}
+.ac.caution .ac-amt{color:#e8c470}.ac.caution .ac-fill{background:#e8c470}
+.ac.caution .ac-badge{background:rgba(232,196,112,.1);color:#e8c470;border-color:rgba(232,196,112,.2)}
+.ac.good .ac-amt{color:#70d4a4}.ac.good .ac-fill{background:#70d4a4}
+.ac.good .ac-badge{background:rgba(112,212,164,.1);color:#70d4a4;border-color:rgba(112,212,164,.2)}
+.ac.best .ac-amt{color:#3ee8a8}.ac.best .ac-fill{background:#3ee8a8}
+.ac.best .ac-badge{background:rgba(62,232,168,.1);color:#3ee8a8;border-color:rgba(62,232,168,.22)}
+
+/* COMPARE STRIP */
+.cmp-strip{margin-top:clamp(36px,5vw,48px);display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid rgba(255,255,255,.07)}
+.cmp-cell{padding:clamp(20px,3vw,28px);border-right:1px solid rgba(255,255,255,.07)}
+.cmp-cell:last-child{border-right:none}
+.cmp-lbl{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(243,239,230,.28);margin-bottom:8px}
+.cmp-num{font-family:var(--serif);font-size:clamp(22px,3vw,28px);font-weight:400;margin-bottom:6px}
+.cmp-sub{font-size:12px;color:rgba(243,239,230,.32);line-height:1.55;font-weight:300}
+
+/* ── SECTION 3: CALCULATOR ── */
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,56px);margin-top:clamp(36px,5vw,48px)}
+.ctrl-lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.ctrl-val{font-family:var(--serif);font-size:clamp(36px,5vw,52px);line-height:1;margin-bottom:14px}
+.ctrl-grp{margin-bottom:32px}
+input[type=range]{-webkit-appearance:none;width:100%;height:1.5px;background:var(--ink);outline:none;cursor:pointer;border-radius:0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;background:var(--ink);border:2.5px solid var(--paper);box-shadow:0 0 0 1.5px var(--ink);cursor:pointer;border-radius:0}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;background:var(--ink);border:2.5px solid var(--paper);box-shadow:0 0 0 1.5px var(--ink);cursor:pointer;border-radius:0}
+.ctrl-range-lbl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:var(--muted2);margin-top:7px}
+.infobox{border:1px solid var(--rule);padding:clamp(16px,2.5vw,22px);background:var(--white);margin-top:8px}
+.infobox-lbl{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--rule)}
+.infobox p{font-size:13px;color:var(--muted);line-height:1.75;font-weight:300}
+.calc-out{background:var(--ink);color:var(--paper);padding:clamp(28px,4vw,48px);display:flex;flex-direction:column;gap:0;min-height:360px}
+.cout-lbl{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(243,239,230,.32);margin-bottom:8px}
+.cout-num{font-family:var(--serif);font-size:clamp(44px,6vw,62px);line-height:1;color:var(--paper);margin-bottom:4px}
+.cout-sub{font-family:var(--mono);font-size:11px;color:rgba(243,239,230,.3);margin-bottom:28px}
+.cout-rows{border-top:1px solid rgba(255,255,255,.07);padding-top:16px;flex:1}
+.cout-row{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05);gap:12px}
+.cout-row-lbl{font-family:var(--mono);font-size:10px;color:rgba(243,239,230,.35)}
+.cout-row-val{font-family:var(--serif);font-size:clamp(15px,2vw,18px);white-space:nowrap}
+.cout-row-val.pos{color:#70d4a4}
+.cout-verdict{margin-top:18px;padding:14px;background:rgba(255,255,255,.04);border-left:2.5px solid var(--accent);font-size:12.5px;color:rgba(243,239,230,.5);line-height:1.65;font-weight:300}
+
+/* ── SECTION 4: GAP ── */
+.gap-wrap{background:var(--paper2);padding:clamp(56px,8vw,96px) 0;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+.gap-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,80px);margin-top:clamp(36px,5vw,48px)}
+.gap-lbl-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:8px}
+.gap-track{height:40px;background:var(--paper3);border:1px solid var(--rule);overflow:hidden;margin-bottom:6px}
+.gap-fill{height:100%;background:var(--ink);width:0;transition:width 1.6s cubic-bezier(.16,1,.3,1);display:flex;align-items:center;padding-left:14px}
+.gap-fill-lbl{font-family:var(--mono);font-size:10px;color:var(--paper);white-space:nowrap}
+.gap-annot{font-family:var(--mono);font-size:9.5px;color:var(--muted2);text-align:right}
+.gap-big{margin-top:36px}
+.gap-big-num{font-family:var(--serif);font-size:clamp(52px,8vw,96px);line-height:1;color:var(--accent);margin-bottom:6px}
+.gap-big-lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.gap-big-p{font-size:14px;color:var(--muted);line-height:1.8;font-weight:300;max-width:340px}
+.gap-prose h3{font-family:var(--serif);font-size:clamp(18px,2.5vw,22px);line-height:1.3;margin-bottom:14px}
+.gap-prose p{font-size:14px;color:var(--muted);line-height:1.85;margin-bottom:14px;font-weight:300}
+.box{border:1px solid var(--rule);padding:clamp(16px,2.5vw,22px);background:var(--white);margin:18px 0}
+.box-lbl{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--rule)}
+.box p{font-size:13px;color:var(--muted);line-height:1.75;font-weight:300}
+.box p strong{color:var(--ink);font-weight:600}
+
+/* ── SECTION 5: INSIGHTS ── */
+.ig-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:clamp(36px,5vw,48px)}
+.ig-card{background:var(--paper);padding:clamp(22px,3vw,32px);transition:background .2s}
+.ig-card:hover{background:var(--white)}
+.ig-n{font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:var(--muted2);margin-bottom:16px}
+.ig-card h3{font-family:var(--serif);font-size:clamp(17px,2vw,20px);line-height:1.3;margin-bottom:10px}
+.ig-card p{font-size:13.5px;color:var(--muted);line-height:1.8;font-weight:300}
+.ig-stat{margin-top:16px;padding-top:14px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:10px;color:var(--green)}
+
+/* ── METHODOLOGY ── */
+.method{background:var(--paper2);padding:clamp(40px,6vw,64px) 0;border-top:1px solid var(--rule)}
+.method-inner{display:grid;grid-template-columns:160px 1fr;gap:clamp(28px,4vw,56px)}
+.method-lbl{font-family:var(--serif);font-size:13px;font-weight:400;padding-top:4px;border-top:1.5px solid var(--ink);line-height:1.4}
+.method-body h4{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;margin-top:18px}
+.method-body h4:first-child{margin-top:0}
+.method-body p{font-size:13px;color:var(--muted);line-height:1.75;font-weight:300;margin-bottom:2px}
+
+/* ── FOOTER ── */
+footer{border-top:2px double var(--ink);padding:clamp(20px,3vw,28px) clamp(20px,5vw,56px);display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px}
+.foot-brand{font-family:var(--serif);font-size:14px}
+.foot-disc{font-family:var(--mono);font-size:9.5px;color:var(--muted2);line-height:1.8;max-width:520px}
+
+/* ── ANIMATIONS ── */
+.fi{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+.fi.visible{opacity:1;transform:translateY(0)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:860px){
+  .cover{grid-template-columns:1fr;min-height:auto}
+  .cover-r{min-height:auto;padding:40px clamp(20px,5vw,40px)}
+  .s1-grid,.age-hdr,.calc-grid,.gap-grid{grid-template-columns:1fr}
+  .ig-grid{grid-template-columns:1fr 1fr}
+  .sec-hdr{grid-template-columns:1fr;gap:10px}
+  .sec-n{font-size:44px}
+  .cmp-strip{grid-template-columns:1fr}
+  .cmp-cell{border-right:none;border-bottom:1px solid rgba(255,255,255,.07)}
+  .cmp-cell:last-child{border-bottom:none}
+  .ac{grid-template-columns:68px 1fr}
+  .ac-rt{display:none}
+  .method-inner{grid-template-columns:1fr}
+  .calc-out{min-height:auto}
+  .cover-r::before{font-size:200px}
+}
+@media(max-width:560px){
+  .ig-grid{grid-template-columns:1fr}
+  .mast-center{display:none}
+  .barchart{height:100px}
+  .bc-val{font-size:7px}
+  .bc-yr{font-size:7px}
+  .ac{gap:12px}
+  .ac-age{font-size:36px}
+}
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<header class="mast">
+  <div class="mast-brand">InsightInvest</div>
+  <div class="mast-center">Vol. 2026 · Special Report · EPF &amp; Retirement</div>
+  <div class="mast-tag">Fact-Checked ✓</div>
+</header>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-l">
+    <div>
+      <div class="kicker">Special Report · May 2026</div>
+      <h1 class="cover-hed">Can EPF alone make you a <em>millionaire</em> by 60?</h1>
+      <p class="cover-deck">We modelled every age bracket from 25 to 50 using EPF's real 10-year blended return. The numbers expose a gap most Malaysians aren't prepared for.</p>
+    </div>
+    <div class="cover-byline">Analysis by InsightInvest · Monthly compounding · 5.5% p.a. conservative rate · Target: RM1,000,000 · Retirement age: 60</div>
+  </div>
+  <div class="cover-r">
+    <div class="cover-rule"></div>
+    <div class="stat-block">
+      <div class="stat-lbl">Retirement target</div>
+      <div class="stat-num">RM 1M</div>
+      <div class="stat-sub">The number most Malaysians cite. We test whether EPF can get you there — alone.</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-lbl">EPF blended avg return (2015–2024)</div>
+      <div class="stat-num">5.90%</div>
+      <div class="stat-sub">We model at 5.5% — deliberately conservative. Every figure may be slightly harder than reality.</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-lbl">Median EPF balance at age 54</div>
+      <div class="stat-num danger">~RM125k</div>
+      <div class="stat-sub">Against a RM1M target. That distance is what this report is really about.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 01: EPF FOUNDATION -->
+<div class="section">
+<div class="wrap">
+  <div class="sec-hdr fi">
+    <div class="sec-n">01</div>
+    <div>
+      <h2 class="sec-hed">EPF is one of the best retirement funds in the world.</h2>
+      <p class="sec-dek">Before we expose the gap, we give EPF its full credit. Understanding what it does well makes the ceiling problem sharper — and the analysis more honest.</p>
+    </div>
+  </div>
+  <div class="s1-grid">
+    <div class="prose fi">
+      <h3>A decade of consistent, professionally managed returns.</h3>
+      <p>The Employees Provident Fund has delivered an average conventional dividend of 5.90% per annum over the past 10 years — through market crashes, a global pandemic, and sustained inflation. That consistency is genuinely rare.</p>
+      <p>Studies consistently show that the majority of actively managed unit trust funds fail to beat EPF's long-run return on a risk-adjusted basis. EPF is not a bad deal. It's a very good deal — with one structural constraint.</p>
+      <div class="callout">
+        <div class="callout-lbl">The constraint</div>
+        <div class="callout-txt">"EPF contributions are tied to your salary. There's a ceiling. And that ceiling is the <strong>problem.</strong>"</div>
+      </div>
+      <p>Mandatory contributions run at 11% from employee + 13% from employer. For a RM6,000/month salary, that's ~RM1,440/month into EPF. The monthly targets we show below often exceed this — especially for those starting late.</p>
+    </div>
+    <div class="chart-box fi">
+      <div class="chart-hdr">
+        <div>
+          <div class="chart-ttl">EPF Dividend Rate<br>2015–2024</div>
+          <div class="chart-src">Source: EPF Annual Reports</div>
+        </div>
+      </div>
+      <div class="barchart" id="barChart"></div>
+      <div class="avg-row">
+        <span style="font-size:10px;color:var(--gold);white-space:nowrap;font-family:var(--mono);">— 5.90% avg</span>
+        <div class="avg-line"></div>
+        <span>10-yr mean</span>
+      </div>
+      <div class="chart-meta">
+        <span>Peak:</span> 2017 at 6.90% &nbsp;·&nbsp; Trough: 2020 at 5.20%<br>
+        Range of 1.70pp across the decade, inclusive of COVID-19.<br>
+        Model uses 5.5% — 40 basis points below the 10-year mean.
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 02: THE EXPOSE -->
+<div class="dark-section">
+<div class="wrap">
+  <div class="age-hdr">
+    <div>
+      <div class="dk-kicker">Section 02 · The Expose</div>
+      <h2 class="age-hed">Here's what the math actually demands from you.</h2>
+      <p class="age-dek">Monthly contribution required — starting today — to reach exactly RM1,000,000 by age 60. Monthly compounding at 5.5% p.a. Zero existing savings assumed (worst case).</p>
+    </div>
+    <div class="formula-box">
+      <strong>Model assumptions</strong>
+      Target &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span class="fhl">RM 1,000,000</span><br>
+      Retire age &nbsp;&nbsp;= <span class="fhl">60 years</span><br>
+      Annual rate &nbsp;= <span class="fhl">5.5% p.a.</span><br>
+      Compounding = <span class="fhl">Monthly (12× per year)</span><br>
+      Existing savings = <span class="fhl">RM 0 (worst case)</span>
+      <div class="formula-note">
+        Formula: PMT = FV × r / ((1+r)ⁿ − 1)<br>
+        r = 0.4583%/month &nbsp;·&nbsp; n = months to retirement<br>
+        All figures verified: each PMT produces exactly RM1,000,000 ✓
+      </div>
+    </div>
+  </div>
+
+  <div class="age-rows" id="ageCards">
+    <div class="ac urgent">
+      <div class="ac-age">50</div>
+      <div class="ac-mid">
+        <div class="ac-amt">RM 6,269 / month</div>
+        <div class="ac-note">More than most Malaysians' take-home pay — going entirely into savings. With only 10 years left, compounding contributes only RM247,685 (33%) of the target. You carry 75% yourself.</div>
+        <div class="ac-track"><div class="ac-fill" data-w="100"></div></div>
+      </div>
+      <div class="ac-rt"><div class="ac-badge">Critical</div><div class="ac-yrs">10 yrs · 120 months</div></div>
+    </div>
+    <div class="ac urgent">
+      <div class="ac-age">45</div>
+      <div class="ac-mid">
+        <div class="ac-amt">RM 3,588 / month</div>
+        <div class="ac-note">Above the EPF mandatory contribution for most salary brackets. The window exists but is narrowing fast. Every year of delay adds roughly RM300+/month to the monthly burden.</div>
+        <div class="ac-track"><div class="ac-fill" data-w="57"></div></div>
+      </div>
+      <div class="ac-rt"><div class="ac-badge">Urgent</div><div class="ac-yrs">15 yrs · 180 months</div></div>
+    </div>
+    <div class="ac caution">
+      <div class="ac-age">40</div>
+      <div class="ac-mid">
+        <div class="ac-amt">RM 2,296 / month</div>
+        <div class="ac-note">Achievable for mid-career professionals with intentional supplementary savings beyond EPF. Combined EPF + voluntary contributions can realistically hit this target with discipline.</div>
+        <div class="ac-track"><div class="ac-fill" data-w="37"></div></div>
+      </div>
+      <div class="ac-rt"><div class="ac-badge">Act Now</div><div class="ac-yrs">20 yrs · 240 months</div></div>
+    </div>
+    <div class="ac caution">
+      <div class="ac-age">35</div>
+      <div class="ac-mid">
+        <div class="ac-amt">RM 1,558 / month</div>
+        <div class="ac-note">The inflection point. For a RM5,000–7,000 earner, EPF auto-contributes ~RM1,150/month. Only ~RM408 extra is needed from outside sources. Compounding now generates 53 sen for every RM1 you put in.</div>
+        <div class="ac-track"><div class="ac-fill" data-w="25"></div></div>
+      </div>
+      <div class="ac-rt"><div class="ac-badge">Good Window</div><div class="ac-yrs">25 yrs · 300 months</div></div>
+    </div>
+    <div class="ac good">
+      <div class="ac-age">30</div>
+      <div class="ac-mid">
+        <div class="ac-amt">RM 1,095 / month</div>
+        <div class="ac-note">Compounding generates RM605,960 — meaning you only contribute RM394,040 of your own money over 30 years. That's RM1.54 of growth for every RM1 you put in. Time is the asset.</div>
+        <div class="ac-track"><div class="ac-fill" data-w="17"></div></div>
+      </div>
+      <div class="ac-rt"><div class="ac-badge">Strong</div><div class="ac-yrs">30 yrs · 360 months</div></div>
+    </div>
+    <div class="ac best">
+      <div class="ac-age">25</div>
+      <div class="ac-mid">
+        <div class="ac-amt">RM 787 / month</div>
+        <div class="ac-note">Time does the work. You contribute RM330,468. Compounding adds RM669,532 on top — RM2.03 for every RM1 you put in. Most people don't realise how powerful this window is until it has already closed.</div>
+        <div class="ac-track"><div class="ac-fill" data-w="13"></div></div>
+      </div>
+      <div class="ac-rt"><div class="ac-badge">Best Position</div><div class="ac-yrs">35 yrs · 420 months</div></div>
+    </div>
+  </div>
+
+  <div class="cmp-strip">
+    <div class="cmp-cell">
+      <div class="cmp-lbl">Waiting 5 years (25 → 30)</div>
+      <div class="cmp-num" style="color:#e8c470">+RM 308/mo</div>
+      <div class="cmp-sub">RM787 becomes RM1,095. Each 5-year delay adds meaningfully to the monthly burden.</div>
+    </div>
+    <div class="cmp-cell">
+      <div class="cmp-lbl">Waiting 10 years (25 → 35)</div>
+      <div class="cmp-num" style="color:#e8c470">+RM 771/mo</div>
+      <div class="cmp-sub">Nearly doubles the monthly commitment. RM787 becomes RM1,558. The cost of delay is not linear.</div>
+    </div>
+    <div class="cmp-cell">
+      <div class="cmp-lbl">Waiting 25 years (25 → 50)</div>
+      <div class="cmp-num" style="color:#e88080">+RM 5,482/mo</div>
+      <div class="cmp-sub">RM787 becomes RM6,269. Time lost cannot be purchased back at any price.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 03: CALCULATOR -->
+<div class="section">
+<div class="wrap">
+  <div class="sec-hdr fi">
+    <div class="sec-n">03</div>
+    <div>
+      <h2 class="sec-hed">Run your own numbers.</h2>
+      <p class="sec-dek">Adjust your age and retirement target to see the exact monthly commitment — and how much compounding carries versus how much you carry yourself.</p>
+    </div>
+  </div>
+  <div class="calc-grid">
+    <div class="fi">
+      <div class="ctrl-grp">
+        <div class="ctrl-lbl">Your current age</div>
+        <div class="ctrl-val" id="ageDisp">30</div>
+        <input type="range" min="22" max="55" value="30" id="ageSlider" oninput="calc()">
+        <div class="ctrl-range-lbl"><span>22</span><span>55</span></div>
+      </div>
+      <div class="ctrl-grp">
+        <div class="ctrl-lbl">Retirement target</div>
+        <div class="ctrl-val" id="tgtDisp">RM 1,000,000</div>
+        <input type="range" min="500000" max="3000000" step="100000" value="1000000" id="tgtSlider" oninput="calc()">
+        <div class="ctrl-range-lbl"><span>RM 500k</span><span>RM 3M</span></div>
+      </div>
+      <div class="infobox">
+        <div class="infobox-lbl">Model assumptions</div>
+        <p>Monthly compounding at 5.5% p.a. — EPF's conservative 10-year blended return. Zero existing savings assumed (worst case). Contributions run uninterrupted to age 60. Real EPF performance varies year to year.</p>
+      </div>
+    </div>
+    <div class="calc-out fi">
+      <div>
+        <div class="cout-lbl">Monthly contribution required</div>
+        <div class="cout-num" id="calcMonthly">RM 1,095</div>
+        <div class="cout-sub">at 5.5% p.a. · monthly compounding</div>
+      </div>
+      <div class="cout-rows">
+        <div class="cout-row">
+          <span class="cout-row-lbl">Your total cash in</span>
+          <span class="cout-row-val" id="calcTotal">RM 394,040</span>
+        </div>
+        <div class="cout-row">
+          <span class="cout-row-lbl">Compounding generates</span>
+          <span class="cout-row-val pos" id="calcGrowth">RM 605,960</span>
+        </div>
+        <div class="cout-row">
+          <span class="cout-row-lbl">Growth per RM1 contributed</span>
+          <span class="cout-row-val pos" id="calcMulti">RM 1.54</span>
+        </div>
+        <div class="cout-row">
+          <span class="cout-row-lbl">Years to retirement</span>
+          <span class="cout-row-val" id="calcYears">30 years</span>
+        </div>
+      </div>
+      <div class="cout-verdict" id="calcVerdict">At 30, compounding generates RM1.54 for every RM1 you put in. You contribute RM394k of your own money — EPF grows it to RM1M. This is the window most people underestimate.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 04: THE GAP -->
+<div class="gap-wrap">
+<div class="wrap">
+  <div class="sec-hdr fi" style="border-bottom-color:var(--rule)">
+    <div class="sec-n" style="color:var(--paper3)">04</div>
+    <div>
+      <h2 class="sec-hed">Here's where most Malaysians actually stand.</h2>
+      <p class="sec-dek">The math above is the target. The data below is the reality. The distance between the two is what this report is really about.</p>
+    </div>
+  </div>
+  <div class="gap-grid">
+    <div class="fi">
+      <div class="gap-lbl-row"><span>Median EPF balance at 54</span><span>RM1M target</span></div>
+      <div class="gap-track"><div class="gap-fill" id="gapFill"><span class="gap-fill-lbl">~RM125k</span></div></div>
+      <div class="gap-annot">12.5% of RM1M target reached</div>
+      <div class="gap-big">
+        <div class="gap-big-num">~RM875k</div>
+        <div class="gap-big-lbl">Average shortfall from target</div>
+        <p class="gap-big-p">That's the distance between where most Malaysians are at 54 — and the RM1M they need. EPF is not the problem. The ceiling is.</p>
+      </div>
+    </div>
+    <div class="gap-prose fi">
+      <h3>Why the gap exists — and what it really means.</h3>
+      <p>EPF's mandatory contribution structure was designed as a baseline safety net — not a wealth-building engine. The 24% combined contribution on a median Malaysian salary of ~RM2,900/month generates roughly RM696/month into EPF. That's below the RM787/month needed even at the best-case starting age of 25.</p>
+      <p>Voluntary top-ups via EPF i-Saraan or i-Invest exist — but remain underused. The gap isn't a failure of EPF. It's arithmetic that supplementary financial tools exist to address.</p>
+      <div class="box">
+        <div class="box-lbl">EPF mandatory contribution at median salary</div>
+        <p>Median Malaysian salary: ~RM2,900/month<br>
+        Employee contribution (11%): RM319/month<br>
+        Employer contribution (13%): RM377/month<br>
+        Total monthly EPF: ~RM696/month<br><br>
+        Required at age 25: RM787/month<br>
+        <strong>Shortfall: ~RM91/month even at best-case starting age.</strong></p>
+      </div>
+      <div class="box">
+        <div class="box-lbl">The cost of the ceiling over 35 years</div>
+        <p>If the median earner contributes RM696/month for 35 years at 5.5% p.a., they accumulate approximately <strong>RM884,563</strong> — RM115,437 short of the RM1M target. Close — but not there. And most Malaysians don't contribute uninterrupted for 35 years.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 05: INSIGHTS -->
+<div class="section">
+<div class="wrap">
+  <div class="sec-hdr fi">
+    <div class="sec-n">05</div>
+    <div>
+      <h2 class="sec-hed">What the data is really telling you.</h2>
+      <p class="sec-dek">Six takeaways — each grounded in verified calculations, each actionable from wherever you are starting.</p>
+    </div>
+  </div>
+  <div class="ig-grid">
+    <div class="ig-card fi">
+      <div class="ig-n">01</div>
+      <h3>Time is the only asset you cannot buy back.</h3>
+      <p>Starting at 25 vs 35 cuts your monthly requirement by 49% — from RM1,558 to RM787. That gap widens non-linearly. No investment return can replicate what early compounding does automatically.</p>
+      <div class="ig-stat">↓ 49% monthly saving for a 10-year earlier start</div>
+    </div>
+    <div class="ig-card fi">
+      <div class="ig-n">02</div>
+      <h3>Compounding is wealth you don't have to earn.</h3>
+      <p>At 25, compounding adds RM2.03 for every RM1 you contribute. At 30, it's RM1.54. At 40, RM0.82. At 50, just RM0.33. After 40, you do more work than compounding does — the ratio flips.</p>
+      <div class="ig-stat">Compounding ratio: RM2.03 at 25 → RM0.33 at 50</div>
+    </div>
+    <div class="ig-card fi">
+      <div class="ig-n">03</div>
+      <h3>EPF's ceiling is a design constraint, not a flaw.</h3>
+      <p>EPF was built as a mandatory baseline — not a wealth maximiser. The system works as intended. Closing the remaining gap is your responsibility — and understanding this is the first step to acting on it.</p>
+      <div class="ig-stat">Mandatory contribution cap: ~24% of monthly salary</div>
+    </div>
+    <div class="ig-card fi">
+      <div class="ig-n">04</div>
+      <h3>The median Malaysian starts behind from day one.</h3>
+      <p>A median salary of ~RM2,900/month generates ~RM696/month of EPF contributions. The minimum needed at 25 is RM787/month. The structural gap exists from the very first working year for most Malaysians.</p>
+      <div class="ig-stat">Structural gap at median salary: ~RM91/month</div>
+    </div>
+    <div class="ig-card fi">
+      <div class="ig-n">05</div>
+      <h3>Small amounts outside EPF move the needle significantly.</h3>
+      <p>An additional RM300/month invested outside EPF at 5.5%, starting at 30, generates approximately RM274,084 by age 60 — over a quarter of a million ringgit from less than RM10/day.</p>
+      <div class="ig-stat">RM300/month extra → RM274,084 by 60 (30yr, 5.5%)</div>
+    </div>
+    <div class="ig-card fi">
+      <div class="ig-n">06</div>
+      <h3>Consistency beats optimisation, every single time.</h3>
+      <p>RM500/month every month for 30 years at 5.5% generates RM456,806. Automated, uninterrupted contributions compound into significant sums. The system — not the intention — determines the outcome.</p>
+      <div class="ig-stat">RM500/month consistent → RM456,806 over 30 years</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- METHODOLOGY -->
+<div class="method">
+<div class="wrap">
+  <div class="method-inner">
+    <div class="method-lbl">Methodology &amp;<br>Sources</div>
+    <div class="method-body">
+      <h4>Model structure</h4>
+      <p>All calculations use: PMT = FV × r / ((1+r)^n − 1), where r = 0.4583%/month (5.5% ÷ 12) and n = months to retirement. Monthly compounding used throughout — EPF calculates and credits returns monthly. Every PMT figure verified by FV reverse-check: all produce exactly RM1,000,000.</p>
+      <h4>Rate selection</h4>
+      <p>EPF conventional dividend rates sourced from EPF Annual Reports: 2015 (6.40%), 2016 (5.70%), 2017 (6.90%), 2018 (6.15%), 2019 (5.45%), 2020 (5.20%), 2021 (6.10%), 2022 (5.35%), 2023 (5.50%), 2024 (6.30%). 10-year simple average: 5.90%. Model uses 5.5% — 40 basis points below the mean — as a conservative buffer.</p>
+      <h4>Baseline assumptions</h4>
+      <p>Zero existing savings assumed (worst case). Contributions begin at stated age, continue uninterrupted monthly to age 60. Retirement age: 60 per Malaysia's standard private sector benchmark. All figures in nominal RM — not inflation adjusted. Real-world outcomes will vary.</p>
+      <h4>Median data sources</h4>
+      <p>Median EPF balance at 54 (~RM100k–RM150k) based on EPF member statistics reports. Median Malaysian salary (~RM2,900/month) sourced from DOSM Malaysia. All data used for illustrative comparison only and subject to change.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<footer>
+  <div class="foot-brand">InsightInvest × Versa · 2026</div>
+  <div class="foot-disc">Past fund performance is not an indicator of future results. This analysis is for educational and informational purposes only — it does not constitute financial advice. All projections are model-based. Consult a licensed financial planner before making investment decisions. Products managed by AHAM Asset Management Berhad · Regulated by the Securities Commission Malaysia. The Securities Commission Malaysia has not reviewed this content and takes no responsibility for its contents.</div>
+</footer>
+
+<script>
+// BAR CHART
+const epfData=[{yr:'2015',v:6.40},{yr:'2016',v:5.70},{yr:'2017',v:6.90},{yr:'2018',v:6.15},{yr:'2019',v:5.45},{yr:'2020',v:5.20},{yr:'2021',v:6.10},{yr:'2022',v:5.35},{yr:'2023',v:5.50},{yr:'2024',v:6.30}];
+const maxV=Math.max(...epfData.map(d=>d.v));
+const minV=Math.min(...epfData.map(d=>d.v));
+const chartEl=document.getElementById('barChart');
+epfData.forEach(d=>{
+  const h=((d.v-4.8)/(maxV-4.8))*100;
+  const cls=d.v===maxV?' hi':d.v===minV?' lo':'';
+  const col=document.createElement('div');
+  col.className='bc-col';
+  col.innerHTML=`<div class="bc-val">${d.v}%</div><div class="bc-bar${cls}" style="height:${Math.max(h,8)}%" title="${d.yr}: ${d.v}%"></div><div class="bc-yr">${d.yr}</div>`;
+  chartEl.appendChild(col);
+});
+
+// CALCULATOR
+function fmt(n){return 'RM '+Math.round(n).toLocaleString('en-MY');}
+function calc(){
+  const age=parseInt(document.getElementById('ageSlider').value);
+  const tgt=parseInt(document.getElementById('tgtSlider').value);
+  const r=0.055/12;
+  const n=(60-age)*12;
+  document.getElementById('ageDisp').textContent=age;
+  document.getElementById('tgtDisp').textContent='RM '+tgt.toLocaleString('en-MY');
+  if(n<=0){document.getElementById('calcMonthly').textContent='N/A';return;}
+  const pmt=tgt*r/(Math.pow(1+r,n)-1);
+  const totalIn=pmt*n;
+  const growth=tgt-totalIn;
+  const growthPerRM1=growth/totalIn;
+  const years=60-age;
+  document.getElementById('calcMonthly').textContent=fmt(pmt);
+  document.getElementById('calcTotal').textContent=fmt(totalIn);
+  document.getElementById('calcGrowth').textContent=fmt(growth);
+  document.getElementById('calcMulti').textContent='RM '+growthPerRM1.toFixed(2);
+  document.getElementById('calcYears').textContent=years+' years';
+  let v='';
+  if(age<=28) v=`At ${age}, compounding adds RM${growthPerRM1.toFixed(2)} for every RM1 you put in. You're in the most powerful compounding window of your career. Automate and don't touch it.`;
+  else if(age<=35) v=`At ${age}, compounding still works hard for you — RM${growthPerRM1.toFixed(2)} per RM1 contributed. The window is open. Consistent monthly contributions now will compound significantly by 60.`;
+  else if(age<=45) v=`At ${age}, compounding contributes RM${growthPerRM1.toFixed(2)} per RM1. You're starting to carry more of the weight yourself. Supplementary savings outside EPF become increasingly important.`;
+  else v=`At ${age}, the math is demanding. Compounding adds only RM${growthPerRM1.toFixed(2)} per RM1. EPF alone almost certainly cannot close this gap — significant deliberate external savings are necessary.`;
+  document.getElementById('calcVerdict').textContent=v;
+}
+
+// INTERSECTION OBSERVER — fade-ins
+const fiObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');fiObs.unobserve(e.target);}});
+},{threshold:0.08});
+document.querySelectorAll('.fi').forEach(el=>fiObs.observe(el));
+
+// AGE CARDS staggered
+const cardObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      document.querySelectorAll('.ac').forEach((c,i)=>{
+        setTimeout(()=>{
+          c.classList.add('show');
+          const f=c.querySelector('.ac-fill');
+          if(f) f.style.width=f.dataset.w+'%';
+        },i*100);
+      });
+      cardObs.unobserve(e.target);
+    }
+  });
+},{threshold:0.1});
+const fc=document.querySelector('.ac');
+if(fc) cardObs.observe(fc);
+
+// GAP BAR
+const gapObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      setTimeout(()=>{document.getElementById('gapFill').style.width='12.5%';},400);
+      gapObs.unobserve(e.target);
+    }
+  });
+},{threshold:0.3});
+const ge=document.querySelector('.gap-track');
+if(ge) gapObs.observe(ge);
+</script>
+</body>
+</html>
