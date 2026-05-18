@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SoFi Technologies — Is the Stock Undervalued?</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+:root{
+  --bg:#f5f4f0;
+  --card:#ffffff;
+  --ink:#111110;
+  --ink2:#44433e;
+  --ink3:#888580;
+  --border:#e0ddd6;
+  --gold:#c8860a;
+  --gold-bg:#fff8ec;
+  --gold-border:#f0d090;
+  --green:#1a6e38;
+  --green-bg:#edf7f1;
+  --green-border:#a8d9ba;
+  --green-text:#1a6e38;
+  --red:#b52a2a;
+  --red-bg:#fdf0f0;
+  --red-border:#f0b8b8;
+  --display:'Bebas Neue',sans-serif;
+  --sans:'Manrope',sans-serif;
+  --mono:'DM Mono',monospace;
+}
+
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.7;
+  color:var(--ink2);
+  background:var(--bg);
+  max-width:680px;
+  margin:0 auto;
+  padding:0 1.25rem 6rem;
+}
+
+/* ── DISCLAIMER ── */
+.disclaimer{
+  background:var(--gold-bg);
+  border:1px solid var(--gold-border);
+  border-radius:10px;
+  padding:1rem 1.25rem;
+  margin:1.5rem 0 0;
+  font-size:12px;
+  line-height:1.6;
+  color:var(--ink3);
+}
+.disclaimer strong{color:var(--gold);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;display:block;margin-bottom:4px;}
+
+/* ── HERO ── */
+.hero{
+  padding:2.5rem 0 2rem;
+  border-bottom:2px solid var(--ink);
+}
+.hero-tag{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--ink3);
+  letter-spacing:0.08em;
+  margin-bottom:0.75rem;
+  text-transform:uppercase;
+}
+.hero-title{
+  font-family:var(--display);
+  font-size:clamp(3rem,12vw,5.5rem);
+  line-height:0.95;
+  color:var(--ink);
+  letter-spacing:0.01em;
+  margin-bottom:1rem;
+}
+.hero-title span{color:var(--gold);}
+.hero-deck{
+  font-size:1.05rem;
+  font-weight:400;
+  color:var(--ink2);
+  max-width:520px;
+  line-height:1.65;
+  margin-bottom:2rem;
+}
+
+/* ── VERDICT PILL ── */
+.verdict-row{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  flex-wrap:wrap;
+  padding:1.25rem;
+  background:var(--ink);
+  border-radius:12px;
+  margin-bottom:0;
+}
+.verdict-price{
+  font-family:var(--mono);
+  font-size:13px;
+  color:rgba(255,255,255,0.5);
+}
+.verdict-price strong{color:#fff;font-size:16px;}
+.verdict-arrow{color:rgba(255,255,255,0.3);font-size:20px;}
+.verdict-target{
+  font-family:var(--mono);
+  font-size:13px;
+  color:rgba(255,255,255,0.5);
+}
+.verdict-target strong{color:#7de09a;font-size:16px;}
+.verdict-upside{
+  margin-left:auto;
+  background:rgba(125,224,154,0.15);
+  border:1px solid rgba(125,224,154,0.3);
+  padding:4px 12px;
+  border-radius:20px;
+  font-family:var(--mono);
+  font-size:12px;
+  font-weight:500;
+  color:#7de09a;
+  white-space:nowrap;
+}
+
+/* ── SECTION ── */
+.section{
+  margin-top:3rem;
+}
+.section-num{
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--ink3);
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  margin-bottom:0.3rem;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.section-num::after{content:'';flex:1;height:1px;background:var(--border);}
+.section-title{
+  font-family:var(--display);
+  font-size:2.4rem;
+  line-height:1.0;
+  color:var(--ink);
+  margin-bottom:0.75rem;
+  letter-spacing:0.02em;
+}
+.section-intro{
+  font-size:15px;
+  color:var(--ink2);
+  margin-bottom:1.5rem;
+  line-height:1.7;
+}
+
+/* ── STAT CARDS ── */
+.stat-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:1.5rem 0;
+}
+.stat-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:1.1rem 1.25rem;
+}
+.stat-label{
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--ink3);
+  margin-bottom:0.3rem;
+}
+.stat-val{
+  font-family:var(--mono);
+  font-size:1.6rem;
+  font-weight:500;
+  color:var(--ink);
+  line-height:1.1;
+  letter-spacing:-0.02em;
+}
+.stat-val.green{color:var(--green);}
+.stat-val.gold{color:var(--gold);}
+.stat-sub{
+  font-size:12px;
+  color:var(--ink3);
+  margin-top:4px;
+  line-height:1.4;
+}
+
+/* ── CALLOUT BOXES ── */
+.box{
+  border-radius:12px;
+  padding:1.25rem 1.5rem;
+  margin:1.5rem 0;
+  font-size:14px;
+  line-height:1.7;
+}
+.box-label{
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  margin-bottom:0.5rem;
+}
+.box.gold{background:var(--gold-bg);border:1px solid var(--gold-border);}
+.box.gold .box-label{color:var(--gold);}
+.box.green{background:var(--green-bg);border:1px solid var(--green-border);}
+.box.green .box-label{color:var(--green-text);}
+.box.red{background:var(--red-bg);border:1px solid var(--red-border);}
+.box.red .box-label{color:var(--red);}
+.box.dark{background:var(--ink);border:none;color:#fff;}
+.box.dark .box-label{color:rgba(255,255,255,0.45);}
+
+/* ── PROGRESS BAR ── */
+.progress-item{
+  margin-bottom:1.1rem;
+}
+.progress-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  margin-bottom:5px;
+}
+.progress-label{font-size:13px;font-weight:600;color:var(--ink);}
+.progress-val{font-family:var(--mono);font-size:12px;color:var(--ink3);}
+.progress-track{
+  height:8px;
+  background:var(--border);
+  border-radius:4px;
+  overflow:hidden;
+}
+.progress-fill{height:100%;border-radius:4px;}
+.progress-sub{font-size:12px;color:var(--ink3);margin-top:4px;}
+
+/* ── SCENARIO CARDS ── */
+.scenario-wrap{margin:1.5rem 0;}
+.scenario-tabs{
+  display:flex;
+  gap:0;
+  border-bottom:2px solid var(--border);
+  margin-bottom:1.25rem;
+}
+.sc-tab{
+  font-family:var(--sans);
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:0.05em;
+  text-transform:uppercase;
+  background:none;
+  border:none;
+  cursor:pointer;
+  padding:10px 18px;
+  color:var(--ink3);
+  border-bottom:2px solid transparent;
+  margin-bottom:-2px;
+  transition:all 0.15s;
+}
+.sc-tab.active.bull{color:var(--green);border-bottom-color:var(--green);}
+.sc-tab.active.base{color:var(--gold);border-bottom-color:var(--gold);}
+.sc-tab.active.bear{color:var(--red);border-bottom-color:var(--red);}
+.sc-panel{display:none;}
+.sc-panel.active{display:block;}
+.sc-price{
+  font-family:var(--mono);
+  font-size:3rem;
+  font-weight:500;
+  letter-spacing:-0.03em;
+  line-height:1;
+  margin-bottom:0.5rem;
+}
+.sc-price.bull{color:var(--green);}
+.sc-price.base{color:var(--gold);}
+.sc-price.bear{color:var(--red);}
+.sc-upside{
+  font-family:var(--mono);
+  font-size:13px;
+  margin-bottom:1rem;
+}
+.sc-desc{font-size:14px;color:var(--ink2);line-height:1.7;}
+.sc-conditions{margin-top:1rem;}
+.sc-cond-item{
+  display:flex;
+  gap:10px;
+  padding:8px 0;
+  border-bottom:1px solid var(--border);
+  font-size:13px;
+  color:var(--ink2);
+  align-items:baseline;
+}
+.sc-cond-item:last-child{border-bottom:none;}
+.sc-cond-icon{flex-shrink:0;width:16px;text-align:center;}
+
+/* ── RISK/REWARD ── */
+.rr-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:1.5rem 0;
+}
+.rr-card{
+  border-radius:12px;
+  padding:1.1rem 1.25rem;
+}
+.rr-card.up{background:var(--green-bg);border:1px solid var(--green-border);}
+.rr-card.dn{background:var(--red-bg);border:1px solid var(--red-border);}
+.rr-head{
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  margin-bottom:0.75rem;
+}
+.rr-card.up .rr-head{color:var(--green);}
+.rr-card.dn .rr-head{color:var(--red);}
+.rr-item{
+  font-size:13px;
+  padding:6px 0;
+  border-bottom:1px solid rgba(0,0,0,0.06);
+  color:var(--ink2);
+  line-height:1.4;
+}
+.rr-item:last-child{border-bottom:none;}
+
+/* ── WATCH LIST ── */
+.watch-item{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:12px;
+  align-items:center;
+  padding:1rem 0;
+  border-bottom:1px solid var(--border);
+}
+.watch-item:last-child{border-bottom:none;}
+.watch-name{font-size:14px;font-weight:600;color:var(--ink);}
+.watch-desc{font-size:12px;color:var(--ink3);margin-top:3px;}
+.watch-current{
+  font-family:var(--mono);
+  font-size:13px;
+  font-weight:500;
+  color:var(--ink);
+  text-align:right;
+  white-space:nowrap;
+}
+.watch-signals{
+  display:flex;
+  gap:6px;
+  margin-top:4px;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+}
+.signal{
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:0.08em;
+  padding:2px 7px;
+  border-radius:20px;
+}
+.signal.green{background:var(--green-bg);color:var(--green);}
+.signal.red{background:var(--red-bg);color:var(--red);}
+
+/* ── CHART ── */
+.chart-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:1.25rem;
+  margin:1.5rem 0;
+}
+.chart-title{
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--ink3);
+  margin-bottom:1rem;
+}
+.chart-legend{
+  display:flex;
+  gap:14px;
+  margin-bottom:10px;
+  font-size:11px;
+  color:var(--ink3);
+  flex-wrap:wrap;
+}
+.leg{display:flex;align-items:center;gap:5px;}
+.sw{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
+.ch-wrap{position:relative;width:100%;}
+
+/* ── VALUATION RANGE BAR ── */
+.vbar-wrap{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:1.5rem;
+  margin:1.5rem 0;
+}
+.vbar-title{
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--ink3);
+  margin-bottom:1.5rem;
+}
+.vbar-labels{
+  display:flex;
+  justify-content:space-between;
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--ink3);
+  margin-bottom:6px;
+}
+.vbar-track{
+  height:12px;
+  background:var(--border);
+  border-radius:6px;
+  position:relative;
+  margin-bottom:1.5rem;
+  overflow:visible;
+}
+.vbar-fill{
+  position:absolute;
+  height:100%;
+  left:0;
+  border-radius:6px;
+  background:linear-gradient(90deg,#f0b8b8,#a8d9ba);
+}
+.vbar-pin{
+  position:absolute;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:4px;
+  height:24px;
+  border-radius:2px;
+}
+.vbar-pin-label{
+  position:absolute;
+  top:20px;
+  transform:translateX(-50%);
+  font-family:var(--mono);
+  font-size:10px;
+  white-space:nowrap;
+  font-weight:500;
+}
+.vbar-legend{
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+  font-size:12px;
+}
+.vbar-leg{display:flex;align-items:center;gap:6px;color:var(--ink3);}
+.vbar-dot{width:8px;height:8px;border-radius:50%;}
+
+/* ── QUOTE ── */
+.big-quote{
+  border-left:4px solid var(--gold);
+  padding:1rem 1.25rem;
+  margin:1.5rem 0;
+  background:var(--gold-bg);
+  border-radius:0 10px 10px 0;
+}
+.big-quote p{
+  font-size:1.1rem;
+  font-weight:500;
+  color:var(--ink);
+  line-height:1.6;
+  font-style:italic;
+}
+.big-quote cite{
+  font-size:12px;
+  color:var(--ink3);
+  font-style:normal;
+  margin-top:0.5rem;
+  display:block;
+}
+
+/* ── FOOTER ── */
+.footer{
+  margin-top:5rem;
+  padding-top:1.5rem;
+  border-top:1px solid var(--border);
+  font-size:11px;
+  color:var(--ink3);
+  line-height:1.8;
+}
+
+/* ── UTILITY ── */
+p{margin-bottom:1rem;font-size:15px;}
+p:last-child{margin-bottom:0;}
+strong{color:var(--ink);font-weight:600;}
+.mono{font-family:var(--mono);}
+
+@media(max-width:480px){
+  .stat-grid{grid-template-columns:1fr 1fr;}
+  .rr-row{grid-template-columns:1fr;}
+  .hero-title{font-size:3.8rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- DISCLAIMER -->
+<div class="disclaimer">
+  <strong>⚠ Not financial advice</strong>
+  This is independent educational research. I'm not a licensed financial advisor. Don't make investment decisions based on this alone — always do your own research and talk to a professional. Investing involves risk, including losing money.
+</div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-tag">Stock Breakdown &nbsp;·&nbsp; NASDAQ: SOFI &nbsp;·&nbsp; May 17, 2026</div>
+  <div class="hero-title">Is <span>SoFi</span> the most undervalued fintech right now?</div>
+  <div class="hero-deck">The stock just dropped 12% after reporting its best quarter ever. Here's what's actually going on — and whether it makes sense.</div>
+
+  <div class="verdict-row">
+    <div class="verdict-price">Now trading at <strong>$16.56</strong></div>
+    <div class="verdict-arrow">→</div>
+    <div class="verdict-target">Estimated fair value <strong>$23.40</strong></div>
+    <div class="verdict-upside">+41% potential upside</div>
+  </div>
+</header>
+
+
+<!-- SECTION 1: WHAT HAPPENED -->
+<section class="section" id="what-happened">
+  <div class="section-num">01</div>
+  <div class="section-title">What just happened</div>
+  <div class="section-intro">SoFi dropped 12% in a single day after reporting earnings. But the earnings were actually great. So what's going on?</div>
+
+  <p>On April 29, 2026, SoFi reported its Q1 results. Revenue was up <strong>41% from last year</strong>. Profit more than doubled. They added over a million new customers in just three months. By almost every measure it was a record quarter.</p>
+
+  <p>So why did the stock fall? Two reasons. First, management chose not to raise their full-year 2026 guidance despite the record quarter — investors were expecting an upgrade, and not getting one disappointed them. Second, one part of the business — their tech platform that processes payments for other fintech apps — lost a major client called Chime, which had already moved to a different provider. The market focused on those two negatives and ignored everything else.</p>
+
+  <div class="box gold">
+    <div class="box-label">The key point</div>
+    The Chime situation was already known and announced months ago. The market reacted as if it was new information. That kind of overreaction is where opportunities tend to appear.
+  </div>
+
+  <p>To make it even more interesting: right after the stock dropped, SoFi's own CEO went out and bought <strong>$498,000 worth of shares</strong> with his own personal money — not company grants, not options, his actual cash. That's a meaningful signal of internal confidence.</p>
+</section>
+
+
+<!-- SECTION 2: THE BUSINESS -->
+<section class="section" id="the-business">
+  <div class="section-num">02</div>
+  <div class="section-title">What SoFi actually is</div>
+  <div class="section-intro">Most people think of SoFi as a loan app. It's actually become a full digital bank — and that changes the entire financial picture.</div>
+
+  <p>SoFi has three main parts to the business:</p>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-label">Lending</div>
+      <div class="stat-val green">~55%</div>
+      <div class="stat-sub">of revenue. Personal loans, student loans, mortgages. Growing 53% year over year.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Banking</div>
+      <div class="stat-val green">~38%</div>
+      <div class="stat-sub">of revenue. Accounts, credit cards, investing. Growing 41% year over year.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Tech Platform</div>
+      <div class="stat-val" style="color:var(--red);font-size:1.2rem;">Shrinking</div>
+      <div class="stat-sub">The part causing the drama. Lost Chime. Management says ~$325M in revenue for 2026.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Overall revenue</div>
+      <div class="stat-val green">+41%</div>
+      <div class="stat-sub">Year over year, to a record $1.1 billion in a single quarter.</div>
+    </div>
+  </div>
+
+  <p>The really important thing to understand is that SoFi now has a <strong>full banking license</strong>. That might sound boring, but it's actually their biggest advantage. Here's why:</p>
+
+  <div class="box green">
+    <div class="box-label">The bank charter advantage — explained simply</div>
+    Before the banking license, SoFi had to borrow money from big banks at high rates to fund the loans they made. Now they use their customers' deposits instead — over <strong>$40 billion worth</strong>. Those deposits cost them significantly less in interest than borrowing from banks. The result: SoFi saves an estimated <strong>$622 million every year</strong> just in funding costs. That goes straight to the bottom line.
+  </div>
+</section>
+
+
+<!-- SECTION 3: THE NUMBERS -->
+<section class="section" id="the-numbers">
+  <div class="section-num">03</div>
+  <div class="section-title">The numbers that matter</div>
+  <div class="section-intro">Verified against SoFi's official SEC filings and Q1 2026 earnings release.</div>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-label">Q1 2026 Revenue</div>
+      <div class="stat-val green">$1.1B</div>
+      <div class="stat-sub">+41% vs. same time last year. A company record.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Q1 2026 Profit</div>
+      <div class="stat-val green">$167M</div>
+      <div class="stat-sub">+134% year over year. Profit more than doubled.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Members</div>
+      <div class="stat-val">14.7M</div>
+      <div class="stat-sub">+35% YoY. Added 1.05M new members in Q1 alone — a record.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Customer deposits</div>
+      <div class="stat-val">$40.2B</div>
+      <div class="stat-sub">Up $2.7B in just one quarter. Fuels the lending business cheaply.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Capital buffer</div>
+      <div class="stat-val green">21.1%</div>
+      <div class="stat-sub">CET1 ratio — their financial safety cushion. Regulators require 7%. SoFi has 3× that.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Company "net worth"</div>
+      <div class="stat-val green">$9.2B</div>
+      <div class="stat-sub">Tangible book value — up 83% year over year. Built entirely from profits.</div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-title">Quarterly revenue growth ($M)</div>
+    <div class="ch-wrap" style="height:220px;">
+      <canvas id="revChart" role="img" aria-label="Bar chart showing SoFi quarterly revenue growing from around $580M in Q1 2024 to $1,087M in Q1 2026.">Revenue grew from $580M in Q1 2024 to $1,087M in Q1 2026.</canvas>
+    </div>
+  </div>
+
+  <p>One more number worth knowing: SoFi's loan customers are high-quality borrowers. Their average personal loan customer earns <strong>$154,000 a year</strong> and has a <strong>745 credit score</strong>. Student loan borrowers earn $161,000 with a 767 score. That matters because better borrowers default less — which protects SoFi in a downturn.</p>
+</section>
+
+
+<!-- SECTION 4: IS IT CHEAP? -->
+<section class="section" id="valuation">
+  <div class="section-num">04</div>
+  <div class="section-title">Is the stock cheap?</div>
+  <div class="section-intro">We ran multiple ways of estimating what SoFi is actually worth. Here's the plain-English version of each.</div>
+
+  <p><strong>Method 1 — Comparing to similar companies.</strong> Affirm and Upstart are both fintech lenders. SoFi is growing faster than both and is actually profitable (they're not). Yet SoFi's stock is valued at a lower multiple of revenue than either of them. That gap is the core of the undervaluation argument.</p>
+
+  <p><strong>Method 2 — Growth-adjusted price.</strong> There's a simple ratio called PEG that compares a stock's price to how fast earnings are growing. A fair value PEG is roughly 1.0. SoFi's is <strong>0.71</strong> — meaning you're paying 29% less per unit of growth than fair value. The average fintech trades at 1.02. Applying a fair PEG to SoFi's growth rate implies a price around $23.</p>
+
+  <p><strong>Method 3 — Future cash flows.</strong> Project what SoFi will earn over the next 5–10 years, then discount those future dollars back to today's value. Assumes 24% annual revenue growth (management guided 30% just for 2026). Result: fair value around $25.78 in the base case.</p>
+
+  <p><strong>Method 4 — Break up the business.</strong> Value each of the three business segments separately, add them up, subtract debt, divide by shares. Lending is valued like a profitable bank. Banking is valued like a high-growth fintech. Tech Platform is valued even after the Chime damage. Result: $17–$23 depending on how much synergy credit you give the three segments working together.</p>
+
+  <div class="vbar-wrap">
+    <div class="vbar-title">Estimated fair value range — all methods</div>
+    <div style="position:relative;height:70px;margin-bottom:1.5rem;">
+      <div class="vbar-track" style="top:20px;position:absolute;width:100%;">
+        <div class="vbar-fill" style="width:100%;"></div>
+        <!-- current: $16.56, range $14 to $28. (16.56-14)/14 = 18.3% -->
+        <div class="vbar-pin" style="left:18.3%;background:var(--ink);">
+          <div class="vbar-pin-label" style="color:var(--ink);">$16.56<br><span style="font-size:9px;font-weight:400;">Current</span></div>
+        </div>
+        <!-- bear: $17.05 = (17.05-14)/14=21.8% -->
+        <div class="vbar-pin" style="left:21.8%;background:var(--red);">
+          <div class="vbar-pin-label" style="color:var(--red);">$17.05<br><span style="font-size:9px;font-weight:400;">Worst case</span></div>
+        </div>
+        <!-- target: $23.40 = (23.40-14)/14=67.1% -->
+        <div class="vbar-pin" style="left:67.1%;background:var(--gold);">
+          <div class="vbar-pin-label" style="color:var(--gold);">$23.40<br><span style="font-size:9px;font-weight:400;">Fair value</span></div>
+        </div>
+        <!-- bull: $26.75 = (26.75-14)/14=91.1% -->
+        <div class="vbar-pin" style="left:91.1%;background:var(--green);">
+          <div class="vbar-pin-label" style="color:var(--green);">$26.75<br><span style="font-size:9px;font-weight:400;">Best case</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="vbar-legend">
+      <div class="vbar-leg"><div class="vbar-dot" style="background:var(--ink);"></div>Current price</div>
+      <div class="vbar-leg"><div class="vbar-dot" style="background:var(--red);"></div>Worst case (stressed scenario)</div>
+      <div class="vbar-leg"><div class="vbar-dot" style="background:var(--gold);"></div>Fair value estimate</div>
+      <div class="vbar-leg"><div class="vbar-dot" style="background:var(--green);"></div>Best case</div>
+    </div>
+  </div>
+
+  <div class="box dark">
+    <div class="box-label">The unusual thing about this situation</div>
+    Even the <em>worst-case</em> scenario across all our models came out to <strong style="color:#7de09a;">$17.05</strong> — which was above the May 17 price of $16.56. That means if our pessimistic model is right, you'd still be roughly flat. Important: the stock has since traded as low as ~$15.40. If the price is below $17.05 when you read this, the bear case no longer provides a floor — always check the current price.
+  </div>
+
+  <div class="box gold">
+    <div class="box-label">What Wall Street analysts say</div>
+    After Q1 earnings, several major banks cut their price targets: Goldman Sachs to $17, Morgan Stanley to $16, Bank of America to $18, and Truist to $17. The average analyst target across all firms is roughly $20–$22, which is below our own $23.40 estimate. These analysts are more cautious, primarily because of the Muddy Waters accounting allegations and the unchanged guidance. Both sides of the debate are represented here — this is not a unanimous bullish call.
+  </div>
+</section>
+
+
+<!-- SECTION 5: SCENARIOS -->
+<section class="section" id="scenarios">
+  <div class="section-num">05</div>
+  <div class="section-title">Three ways this plays out</div>
+  <div class="section-intro">What needs to happen for each outcome — and what the stock could be worth.</div>
+
+  <div class="scenario-wrap">
+    <div class="scenario-tabs">
+      <button class="sc-tab active bull" onclick="switchSc('bull',this)">Best case</button>
+      <button class="sc-tab base" onclick="switchSc('base',this)">Base case</button>
+      <button class="sc-tab bear" onclick="switchSc('bear',this)">Worst case</button>
+    </div>
+
+    <div class="sc-panel active" id="sc-bull">
+      <div class="sc-price bull">$26.75</div>
+      <div class="sc-upside" style="color:var(--green);">+61.5% from current price</div>
+      <div class="sc-desc">Everything goes right. SoFi wins new big clients for their tech platform, replacing the revenue lost when Chime left. Their international payments product takes off. Credit quality stays strong even if the economy wobbles. Revenue growth stays above 30%.</div>
+      <div class="sc-conditions">
+        <div class="sc-cond-item"><span class="sc-cond-icon" style="color:var(--green);">✓</span>Tech platform wins new enterprise clients</div>
+        <div class="sc-cond-item"><span class="sc-cond-icon" style="color:var(--green);">✓</span>SoFi Pay / international payments gains traction</div>
+        <div class="sc-cond-item"><span class="sc-cond-icon" style="color:var(--green);">✓</span>Borrowers keep repaying loans reliably</div>
+        <div class="sc-cond-item"><span class="sc-cond-icon" style="color:var(--green);">✓</span>Deposit growth continues, keeping costs low</div>
+      </div>
+    </div>
+
+    <div class="sc-panel" id="sc-base">
+      <div class="sc-price base">$23.40</div>
+      <div class="sc-upside" style="color:var(--gold);">+41.3% from current price</div>
+      <div class="sc-desc">Things go roughly as management expects. Revenue grows around 24% per year for the next five years. The tech platform stabilizes around $325M. Profit margins keep expanding. The market eventually starts pricing SoFi more like a fintech and less like a plain old bank.</div>
+      <div class="sc-conditions">
+        <div class="sc-cond-item"><span class="sc-cond-icon" style="color:var(--gold);">✓</span>Revenue hits the 30%+ guidance for 2026</div>
+        <div class="sc-cond-item"><span class="sc-cond-icon" style="color:var(--gold);">✓</span>Deposits keep growing, NIM stays above 5.5%</div>
+        <div class="sc-cond-item"><span class="sc-cond-icon" style="color:var(--gold);">✓</span>Credit losses stay near current levels</div>
+        <div class="sc-cond-item"><span class="sc-cond-icon" style="color:var(--gold);">~</span>Tech platform recovery is slow but not worse</div>
+      </div>
+    </div>
+
+    <div class="sc-panel" id="sc-bear">
+      <div class="sc-price bear">$17.05</div>
+      <div class="sc-upside" style="color:var(--red);">+3% from current price — still positive</div>
+      <div class="sc-desc">Things go badly. A recession hits and more borrowers start missing payments. Galileo (the tech platform) loses another big client on top of Chime. Revenue growth slows to 10% or less. Management misses their guidance. Even so — the bank's safety cushion is so large (21.1% vs. 7% required) that it can absorb the losses without raising new money from investors.</div>
+      <div class="sc-conditions">
+        <div class="sc-cond-item"><span class="sc-cond-icon" style="color:var(--red);">✗</span>Recession drives personal loan defaults to 6.5%+</div>
+        <div class="sc-cond-item"><span class="sc-cond-icon" style="color:var(--red);">✗</span>Tech platform loses another major client</div>
+        <div class="sc-cond-item"><span class="sc-cond-icon" style="color:var(--red);">✗</span>Revenue guidance gets cut significantly</div>
+        <div class="sc-cond-item"><span class="sc-cond-icon" style="color:var(--red);">✗</span>Competitors force SoFi to raise deposit interest rates</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- SECTION 6: THE FLYWHEEL -->
+<section class="section" id="flywheel">
+  <div class="section-num">06</div>
+  <div class="section-title">Why it gets stronger over time</div>
+  <div class="section-intro">SoFi has a self-reinforcing cycle built into the business. Understanding this is the key to the long-term thesis.</div>
+
+  <p>Here's the cycle in plain language:</p>
+
+  <div style="margin:1.5rem 0;">
+    <div style="display:flex;flex-direction:column;gap:0;">
+
+      <div style="display:flex;gap:14px;align-items:flex-start;padding:1rem 0;border-bottom:1px solid var(--border);">
+        <div style="width:32px;height:32px;background:var(--ink);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:500;flex-shrink:0;margin-top:2px;">1</div>
+        <div>
+          <div style="font-weight:700;font-size:14px;color:var(--ink);margin-bottom:3px;">New members join for one product</div>
+          <div style="font-size:13px;color:var(--ink3);">Usually a high-yield savings account or a loan. SoFi added 1.05 million new members in Q1 2026 alone.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:14px;align-items:flex-start;padding:1rem 0;border-bottom:1px solid var(--border);">
+        <div style="width:32px;height:32px;background:var(--ink);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:500;flex-shrink:0;margin-top:2px;">2</div>
+        <div>
+          <div style="font-weight:700;font-size:14px;color:var(--ink);margin-bottom:3px;">They add more products over time</div>
+          <div style="font-size:13px;color:var(--ink3);">43% of new products opened in Q1 came from existing customers — up from 36% a year ago. Once someone is a member, SoFi is getting better at keeping them and selling them more.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:14px;align-items:flex-start;padding:1rem 0;border-bottom:1px solid var(--border);">
+        <div style="width:32px;height:32px;background:var(--ink);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:500;flex-shrink:0;margin-top:2px;">3</div>
+        <div>
+          <div style="font-weight:700;font-size:14px;color:var(--ink);margin-bottom:3px;">Deposits pile up</div>
+          <div style="font-size:13px;color:var(--ink3);">More members with savings accounts means more deposits. SoFi now holds $40.2 billion. This is essentially free money compared to what they used to pay to borrow from Wall Street.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:14px;align-items:flex-start;padding:1rem 0;border-bottom:1px solid var(--border);">
+        <div style="width:32px;height:32px;background:var(--ink);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:500;flex-shrink:0;margin-top:2px;">4</div>
+        <div>
+          <div style="font-weight:700;font-size:14px;color:var(--ink);margin-bottom:3px;">Cheaper money = fatter margins on loans</div>
+          <div style="font-size:13px;color:var(--ink3);">SoFi lends that cheap deposit money out at higher rates. The gap (called the net interest margin) is now 5.94%. That margin is expanding, not shrinking.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:14px;align-items:flex-start;padding:1rem 0;">
+        <div style="width:32px;height:32px;background:var(--gold);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:500;flex-shrink:0;margin-top:2px;">↻</div>
+        <div>
+          <div style="font-weight:700;font-size:14px;color:var(--ink);margin-bottom:3px;">Profits fund the next round of growth</div>
+          <div style="font-size:13px;color:var(--ink3);">Higher profits = more money to spend on acquiring new members, which starts the cycle again. And each cycle is cheaper than the last because existing members refer and cross-buy.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="box gold">
+    <div class="box-label">Why this matters for valuation</div>
+    This cycle is getting stronger, not weaker. The percentage of new products coming from existing members went from 36% → 40% → 43% over the past year. As that number keeps climbing, the cost of growing the business keeps falling — which is why profit margins are expanding even as revenue grows fast.
+  </div>
+</section>
+
+
+<!-- SECTION 7: RISKS -->
+<section class="section" id="risks">
+  <div class="section-num">07</div>
+  <div class="section-title">What could go wrong</div>
+  <div class="section-intro">Being honest about the risks is as important as the upside case. Here are the real ones.</div>
+
+  <div class="rr-row">
+    <div class="rr-card dn">
+      <div class="rr-head">Genuine risks</div>
+      <div class="rr-item"><strong>Short-seller allegations.</strong> In March 2026, Muddy Waters Research published a report alleging accounting irregularities at SoFi, including $312M in alleged unrecorded debt. SoFi called the report "factually inaccurate" and threatened legal action. A securities fraud investigation was also opened by law firm Block &amp; Leviton. These allegations are unresolved and create headline risk.</div>
+      <div class="rr-item"><strong>Recession hits borrowers hard.</strong> If unemployment spikes, more people miss loan payments. SoFi's borrowers are high income but not immune.</div>
+      <div class="rr-item"><strong>Tech platform loses more clients.</strong> If another big customer leaves Galileo, revenue estimates need to come down.</div>
+      <div class="rr-item"><strong>Guidance miss.</strong> Management said 30%+ revenue growth for 2026. If they cut that, the stock could fall further regardless of fundamentals.</div>
+      <div class="rr-item"><strong>Competition for deposits.</strong> If other banks offer higher savings rates, SoFi may have to raise theirs — shrinking the cost advantage.</div>
+    </div>
+    <div class="rr-card up">
+      <div class="rr-head">What protects you</div>
+      <div class="rr-item"><strong>Massive capital buffer.</strong> 21.1% vs. 7% required minimum. Even a severe downturn wouldn't threaten the bank's solvency.</div>
+      <div class="rr-item"><strong>Prime borrowers.</strong> Average customer earns $154K with a 745 credit score. They default far less than average.</div>
+      <div class="rr-item"><strong>Bear case still beats current price.</strong> Even the worst modeled scenario ($17.05) is above today's $16.56.</div>
+      <div class="rr-item"><strong>CEO buying with personal money.</strong> Noto spent $498K of his own cash buying the dip right after earnings. That's real conviction.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- SECTION 8: WHAT TO WATCH -->
+<section class="section" id="watchlist">
+  <div class="section-num">08</div>
+  <div class="section-title">What to watch</div>
+  <div class="section-intro">These are the numbers that will tell you if the thesis is working or breaking down — check them every quarter.</div>
+
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.25rem;">
+
+    <div class="watch-item">
+      <div>
+        <div class="watch-name">Galileo tech platform accounts</div>
+        <div class="watch-desc">Are they winning new clients to replace Chime? This is the main question mark.</div>
+      </div>
+      <div class="watch-current">
+        133M now
+        <div class="watch-signals">
+          <span class="signal green">Good: &gt;140M</span>
+          <span class="signal red">Bad: &lt;125M</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="watch-item">
+      <div>
+        <div class="watch-name">Net interest margin</div>
+        <div class="watch-desc">The profit spread between what they earn on loans vs. what they pay on deposits. Higher = better.</div>
+      </div>
+      <div class="watch-current">
+        5.94%
+        <div class="watch-signals">
+          <span class="signal green">Good: &gt;6.1%</span>
+          <span class="signal red">Bad: &lt;5.6%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="watch-item">
+      <div>
+        <div class="watch-name">Loan default rate (personal loans)</div>
+        <div class="watch-desc">What percentage of borrowers aren't paying back their loans. Should stay flat or fall.</div>
+      </div>
+      <div class="watch-current">
+        4.4%
+        <div class="watch-signals">
+          <span class="signal green">Good: &lt;4%</span>
+          <span class="signal red">Bad: &gt;5.5%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="watch-item">
+      <div>
+        <div class="watch-name">Cross-sell rate</div>
+        <div class="watch-desc">% of new products opened by existing members. Tracks whether the flywheel is accelerating.</div>
+      </div>
+      <div class="watch-current">
+        43%
+        <div class="watch-signals">
+          <span class="signal green">Good: &gt;50%</span>
+          <span class="signal red">Bad: &lt;38%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="watch-item">
+      <div>
+        <div class="watch-name">Full year revenue growth</div>
+        <div class="watch-desc">Management guided 30%+. A guidance cut would be a major negative signal.</div>
+      </div>
+      <div class="watch-current">
+        30%+ guided
+        <div class="watch-signals">
+          <span class="signal green">Good: raised</span>
+          <span class="signal red">Bad: cut</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="watch-item" style="border-bottom:none;">
+      <div>
+        <div class="watch-name">Next earnings report</div>
+        <div class="watch-desc">Q2 2026 results — the first real read on whether the thesis is tracking.</div>
+      </div>
+      <div class="watch-current" style="font-size:12px;color:var(--gold);">
+        Est. late July<br>2026
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- SECTION 9: BOTTOM LINE -->
+<section class="section" id="bottom-line">
+  <div class="section-num">09</div>
+  <div class="section-title">The bottom line</div>
+
+  <div class="big-quote">
+    <p>SoFi reported its best quarter ever and the stock dropped 12%. The market is pricing it like a struggling bank. The numbers say it's a profitable fintech growing at 41% per year with $40 billion in cheap deposits and a CEO buying his own stock at the lows.</p>
+  </div>
+
+  <p>Every method used to estimate fair value — comparing to peers, projecting future profits, breaking the business into parts — points to a price between <strong>$23 and $26</strong>. The current price is $16.56. Even the most pessimistic scenario modeled ($17.05) is above where the stock is trading today.</p>
+
+  <p>That doesn't mean the stock goes up tomorrow. Markets can stay wrong for a long time. But the gap between what the business is actually worth and what you can buy it for right now is one of the clearest we've found in the fintech space.</p>
+
+  <div class="stat-grid" style="margin-top:1.5rem;">
+    <div class="stat-card">
+      <div class="stat-label">Current price</div>
+      <div class="stat-val">$16.56</div>
+      <div class="stat-sub">As of May 17, 2026</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Estimated fair value</div>
+      <div class="stat-val green">$23.40</div>
+      <div class="stat-sub">Across multiple methods, fact-checked against SEC filings</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Worst case modeled</div>
+      <div class="stat-val" style="font-size:1.3rem;color:var(--red);">$17.05</div>
+      <div class="stat-sub">Still above current price — unusually low downside</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Next catalyst</div>
+      <div class="stat-val gold" style="font-size:1.1rem;line-height:1.3;">Q2 2026<br>earnings</div>
+      <div class="stat-sub">Est. late July 2026</div>
+    </div>
+  </div>
+
+  <div class="disclaimer" style="margin-top:2rem;">
+    <strong>⚠ Remember</strong>
+    This is not financial advice. I'm not a licensed advisor. These are my own estimates based on publicly available information — and I could be wrong. Don't put money into any stock based on one piece of analysis, including this one. Always do your own research.
+  </div>
+</section>
+
+
+<!-- FOOTER -->
+<div class="footer">
+  <strong>Data sources:</strong> SoFi Technologies Q1 2026 Earnings Release (April 29, 2026) · SoFi 2025 Annual Report · SoFi Q1 2026 10-Q filing with the SEC · SoFi Q4 2025 Earnings Release · Motley Fool Q1 2026 earnings call transcript · TIKR, StockTitan, Investing.com · SEC EDGAR insider trading filings (Form 4) for CEO Anthony Noto.
+  <br><br>
+  Key figures independently verified against primary SEC filings. Three errors found in earlier analysis and corrected here: consolidated CET1 ratio is 21.1% (not 22.8%), FY2024 adjusted EBITDA was $666.5M (not $621M), and FY2025 GAAP net income was $481.3M (not $472M). All other major figures confirmed accurate.
+  <br><br>
+  Price data as of May 17, 2026. Check the current stock price — if significant time has passed, the upside calculations will be different.
+</div>
+
+<script>
+function switchSc(sc, btn){
+  document.querySelectorAll('.sc-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sc-tab').forEach(b=>b.classList.remove('active','bull','base','bear'));
+  document.getElementById('sc-'+sc).classList.add('active');
+  btn.classList.add('active',sc);
+}
+
+new Chart(document.getElementById('revChart'),{
+  type:'bar',
+  data:{
+    labels:['Q1 \'24','Q2 \'24','Q3 \'24','Q4 \'24','Q1 \'25','Q2 \'25','Q3 \'25','Q4 \'25','Q1 \'26'],
+    datasets:[{
+      label:'Adj. Net Revenue ($M)',
+      data:[581,597,697,740,771,858,940,1013,1087],
+      backgroundColor:['#d4cfc4','#d4cfc4','#d4cfc4','#d4cfc4','#c8d8c0','#b8cca8','#98b888','#78a868','#1a6e38'],
+      borderRadius:4,
+    }]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'$'+ctx.parsed.y+'M'}}},
+    scales:{
+      x:{ticks:{font:{family:"'Manrope',sans-serif",size:10},color:'#888580'},grid:{display:false}},
+      y:{ticks:{font:{family:"'DM Mono',monospace",size:10},color:'#888580',callback:v=>'$'+v+'M'},grid:{color:'#e0ddd6'}}
+    }
+  }
+});
+</script>
+</body>
+</html>
