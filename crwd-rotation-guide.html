@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRWD Rotation Framework — InsightInvest</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+
+:root{
+  --navy:    #0A1628;
+  --navy-2:  #0F1E38;
+  --navy-3:  #162444;
+  --border:  rgba(255,255,255,0.08);
+  --border-2:rgba(255,255,255,0.14);
+  --gold:    #C9A84C;
+  --gold-dim:rgba(201,168,76,0.1);
+  --gold-bd: rgba(201,168,76,0.25);
+  --cream:   #E8E2D4;
+  --muted:   #7A8BA0;
+  --faint:   #3A4D65;
+  --green:   #2ECC94;
+  --red:     #E05C5C;
+  --white:   #F4F1EB;
+}
+
+body{
+  background:var(--navy);
+  color:var(--cream);
+  font-family:'IBM Plex Sans',sans-serif;
+  font-size:13px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:0 40px;height:52px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(10,22,40,0.96);
+  border-bottom:0.5px solid var(--border-2);
+  backdrop-filter:blur(10px);
+}
+.nav-brand{
+  font-family:'EB Garamond',serif;font-size:16px;font-weight:500;
+  color:var(--white);text-decoration:none;
+}
+.nav-right{display:flex;align-items:center;gap:24px}
+.nav-links{display:flex;gap:20px;list-style:none}
+.nav-links a{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;
+  color:var(--muted);text-decoration:none;letter-spacing:.08em;
+  text-transform:uppercase;transition:color .15s;
+}
+.nav-links a:hover{color:var(--cream)}
+.nav-tag{
+  font-family:'IBM Plex Mono',monospace;font-size:9px;
+  color:var(--gold);letter-spacing:.1em;text-transform:uppercase;
+  border:0.5px solid var(--gold-bd);padding:3px 10px;border-radius:2px;
+  white-space:nowrap;
+}
+
+/* ── DISCLAIMER ── */
+.disclaimer{
+  margin-top:52px;
+  background:rgba(224,92,92,0.04);
+  border-bottom:0.5px solid rgba(224,92,92,0.15);
+  padding:10px 40px;
+  display:flex;gap:16px;align-items:baseline;
+}
+.disc-tag{
+  font-family:'IBM Plex Mono',monospace;font-size:9px;
+  color:var(--red);letter-spacing:.1em;text-transform:uppercase;
+  white-space:nowrap;flex-shrink:0;
+}
+.disc-text{font-size:11px;color:rgba(224,92,92,0.55);line-height:1.5}
+.disc-text b{color:var(--red)}
+
+/* ── PAGE ── */
+.page{max-width:1160px;margin:0 auto;padding:0 40px}
+
+/* ── HERO ── */
+.hero{
+  padding:64px 0 48px;
+  border-bottom:0.5px solid var(--border);
+  display:grid;grid-template-columns:1fr auto;gap:48px;align-items:end;
+}
+.hero-eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:9px;
+  color:var(--gold);letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px;
+}
+.hero h1{
+  font-family:'EB Garamond',serif;
+  font-size:clamp(28px,4vw,52px);font-weight:400;
+  line-height:1.1;letter-spacing:-.01em;color:var(--white);margin-bottom:12px;
+}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero-desc{font-size:13px;color:var(--muted);line-height:1.7;max-width:460px}
+.hero-right{text-align:right;flex-shrink:0}
+.hero-ticker{
+  font-family:'EB Garamond',serif;font-size:clamp(48px,7vw,72px);
+  font-weight:400;color:var(--white);line-height:1;letter-spacing:-.02em;
+}
+.hero-return{
+  font-family:'IBM Plex Mono',monospace;font-size:clamp(22px,3vw,32px);
+  font-weight:300;color:var(--green);letter-spacing:-.02em;margin:6px 0;
+}
+.hero-meta{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;
+  color:var(--muted);letter-spacing:.02em;
+}
+
+/* ── STATS STRIP ── */
+.stats-strip{
+  display:grid;grid-template-columns:repeat(6,1fr);
+  border-bottom:0.5px solid var(--border);
+}
+.stat{padding:20px 16px;border-right:0.5px solid var(--border)}
+.stat:last-child{border-right:none}
+.stat-val{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:clamp(14px,1.8vw,18px);font-weight:400;
+  color:var(--white);margin-bottom:5px;letter-spacing:-.01em;
+}
+.stat-val.gold{color:var(--gold)}
+.stat-val.green{color:var(--green)}
+.stat-label{font-size:10px;color:var(--muted);line-height:1.4}
+
+/* ── SECTION ── */
+.section{padding:48px 0;border-bottom:0.5px solid var(--border)}
+.section-head{
+  display:grid;grid-template-columns:80px 1fr;gap:16px;
+  align-items:baseline;margin-bottom:32px;
+}
+.section-num{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;
+  color:var(--faint);letter-spacing:.08em;text-transform:uppercase;padding-top:6px;
+}
+.section-title{
+  font-family:'EB Garamond',serif;
+  font-size:clamp(20px,3vw,34px);font-weight:400;
+  color:var(--white);line-height:1.15;
+}
+.section-title em{font-style:italic;color:var(--gold)}
+
+/* ── GRID CELLS ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-bottom:1px}
+.grid-cell{background:var(--navy);padding:24px}
+.cell-tag{
+  font-family:'IBM Plex Mono',monospace;font-size:9px;
+  color:var(--faint);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;
+}
+.cell-title{
+  font-family:'EB Garamond',serif;font-size:18px;
+  font-weight:400;color:var(--white);margin-bottom:8px;
+}
+.cell-num{
+  font-family:'IBM Plex Mono',monospace;font-size:30px;font-weight:300;
+  color:var(--gold);margin:10px 0 6px;letter-spacing:-.02em;
+}
+.cell-body{font-size:12px;color:var(--muted);line-height:1.65}
+.cell-body b{color:var(--cream);font-weight:500}
+
+/* ── TIMELINE ── */
+.tl-wrap{margin-top:36px}
+.tl-label{
+  font-family:'IBM Plex Mono',monospace;font-size:9px;
+  color:var(--faint);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;
+}
+.timeline{display:grid;grid-template-columns:116px 1fr}
+.tl-date{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;
+  color:var(--muted);padding:13px 16px 13px 0;
+  border-right:0.5px solid var(--border-2);
+  border-bottom:0.5px solid var(--border);
+  text-align:right;letter-spacing:.02em;
+}
+.tl-content{
+  padding:13px 0 13px 22px;
+  border-bottom:0.5px solid var(--border);
+  display:flex;gap:11px;align-items:flex-start;
+}
+.tl-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.tl-head{font-size:12px;font-weight:500;color:var(--white);margin-bottom:2px}
+.tl-sub{font-size:11px;color:var(--muted);line-height:1.5}
+
+/* ── SIGNAL GRID ── */
+.signal-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--border);
+}
+.signal-cell{background:var(--navy);padding:22px;transition:background .15s}
+.signal-cell:hover{background:var(--navy-2)}
+.sig-num{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;
+  color:var(--faint);letter-spacing:.06em;margin-bottom:10px;
+}
+.sig-title{
+  font-family:'EB Garamond',serif;font-size:16px;
+  color:var(--white);margin-bottom:7px;
+}
+.sig-body{font-size:11px;color:var(--muted);line-height:1.6}
+.sig-body b{color:var(--cream);font-weight:500}
+.sig-note{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;
+  color:var(--gold);margin-top:10px;
+  border-top:0.5px solid var(--border-2);padding-top:9px;
+}
+
+/* ── DATA TABLE ── */
+.data-table{width:100%;border-collapse:collapse;margin:24px 0}
+.data-table th{
+  font-family:'IBM Plex Mono',monospace;font-size:9px;
+  color:var(--muted);letter-spacing:.1em;text-transform:uppercase;
+  text-align:left;padding:8px 14px;
+  border-bottom:0.5px solid var(--border-2);
+  background:var(--navy-2);font-weight:400;
+}
+.data-table td{
+  font-size:11px;color:var(--muted);
+  padding:11px 14px;border-bottom:0.5px solid var(--border);
+}
+.data-table td.name{color:var(--cream);font-weight:500;font-family:'IBM Plex Mono',monospace;font-size:12px}
+.data-table td.up{color:var(--green);font-family:'IBM Plex Mono',monospace}
+.data-table td.gold{color:var(--gold);font-family:'IBM Plex Mono',monospace}
+.data-table td.dn{color:var(--red);font-family:'IBM Plex Mono',monospace}
+.data-table tr:hover td{background:var(--navy-2)}
+
+/* ── SCORECARD ── */
+.scorecard{border:0.5px solid var(--border-2);border-radius:2px;overflow:hidden}
+.score-row{
+  display:grid;grid-template-columns:44px 1fr 90px;
+  border-bottom:0.5px solid var(--border);
+}
+.score-row:last-child{border-bottom:none}
+.score-idx{
+  font-family:'IBM Plex Mono',monospace;font-size:12px;
+  color:var(--faint);padding:16px 0 16px 18px;
+  border-right:0.5px solid var(--border);
+  display:flex;align-items:flex-start;
+}
+.score-mid{padding:16px 18px}
+.score-label{font-size:12px;font-weight:500;color:var(--cream);margin-bottom:4px}
+.score-desc{font-size:11px;color:var(--muted);line-height:1.6}
+.score-desc b{color:var(--cream);font-weight:500}
+.score-right{
+  padding:16px 14px;border-left:0.5px solid var(--border);
+  display:flex;align-items:flex-start;justify-content:center;
+}
+.badge{
+  font-family:'IBM Plex Mono',monospace;font-size:9px;
+  font-weight:500;padding:3px 9px;border-radius:2px;
+  letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;
+}
+.pass{background:rgba(46,204,148,0.08);color:var(--green);border:0.5px solid rgba(46,204,148,0.2)}
+.watch{background:var(--gold-dim);color:var(--gold);border:0.5px solid var(--gold-bd)}
+
+/* ── TRANCHES ── */
+.tranche-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--border);
+}
+.tranche-cell{background:var(--navy);padding:24px;position:relative;overflow:hidden}
+.tranche-bar{position:absolute;top:0;left:0;right:0;height:2px}
+.t1 .tranche-bar{background:var(--gold)}
+.t2 .tranche-bar{background:var(--green)}
+.t3 .tranche-bar{background:var(--faint)}
+.tranche-pct{
+  font-family:'IBM Plex Mono',monospace;font-size:40px;font-weight:300;
+  line-height:1;margin-bottom:8px;letter-spacing:-.02em;
+}
+.t1 .tranche-pct{color:var(--gold)}
+.t2 .tranche-pct{color:var(--green)}
+.t3 .tranche-pct{color:var(--muted)}
+.tranche-label{font-size:11px;font-weight:500;color:var(--cream);margin-bottom:9px}
+.tranche-desc{font-size:11px;color:var(--muted);line-height:1.6}
+
+/* ── INVALIDATION ── */
+.inv-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1px;background:var(--border);margin-top:28px;
+}
+.inv-cell{background:var(--navy);padding:18px 22px;display:flex;gap:12px}
+.inv-x{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--red);opacity:.6;flex-shrink:0}
+.inv-title{font-size:11px;font-weight:500;color:var(--cream);margin-bottom:3px}
+.inv-desc{font-size:11px;color:var(--muted);line-height:1.5}
+
+/* ── STEPS ── */
+.steps-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--border);
+}
+.step-cell{background:var(--navy);padding:22px;transition:background .15s}
+.step-cell:hover{background:var(--navy-2)}
+.step-n{
+  font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:300;
+  color:var(--faint);line-height:1;margin-bottom:12px;letter-spacing:-.02em;
+}
+.step-title{
+  font-family:'EB Garamond',serif;font-size:16px;
+  color:var(--white);margin-bottom:7px;
+}
+.step-desc{font-size:11px;color:var(--muted);line-height:1.6}
+.step-desc b{color:var(--cream);font-weight:500}
+
+/* ── CALLOUT ── */
+.callout{
+  border-left:2px solid var(--gold);padding:12px 18px;
+  margin:22px 0;font-size:12px;color:var(--muted);line-height:1.7;
+}
+.callout b{color:var(--gold);font-weight:500}
+
+/* ── CTA ── */
+.patreon-strip{
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+  padding:18px 0;
+  border-top:0.5px solid var(--border);
+  border-bottom:0.5px solid var(--border);
+}
+.pt-left{display:flex;flex-direction:column;gap:3px}
+.pt-label{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;
+  color:var(--cream);font-weight:400;letter-spacing:.02em;
+}
+.pt-sub{font-size:11px;color:var(--muted)}
+.pt-btn{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;
+  color:var(--gold);text-decoration:none;white-space:nowrap;
+  border:0.5px solid var(--gold-bd);padding:7px 14px;border-radius:2px;
+  transition:background .15s;flex-shrink:0;
+  letter-spacing:.03em;
+}
+.pt-btn:hover{background:var(--gold-dim)}
+@media(max-width:600px){
+  .patreon-strip{flex-direction:column;align-items:flex-start;gap:12px}
+  .pt-btn{align-self:flex-start}
+}
+
+.cta-section{
+  background:var(--navy-2);
+  border-top:0.5px solid var(--border-2);
+  border-bottom:0.5px solid var(--border-2);
+  padding:56px 0;position:relative;overflow:hidden;
+}
+.cta-section::before{
+  content:'';position:absolute;top:-60px;right:8%;
+  width:280px;height:280px;
+  background:radial-gradient(circle,rgba(201,168,76,0.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+.cta-inner{
+  display:grid;grid-template-columns:1fr auto;
+  gap:48px;align-items:center;
+}
+.cta-eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:9px;
+  color:var(--gold);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;
+}
+.cta-title{
+  font-family:'EB Garamond',serif;
+  font-size:clamp(24px,3.5vw,42px);font-weight:400;
+  color:var(--white);line-height:1.15;letter-spacing:-.01em;margin-bottom:12px;
+}
+.cta-title em{font-style:italic;color:var(--gold)}
+.cta-desc{font-size:13px;color:var(--muted);line-height:1.7;max-width:400px}
+.cta-right{
+  display:flex;flex-direction:column;
+  align-items:flex-end;gap:18px;flex-shrink:0;
+}
+.cta-meta-row{display:flex;gap:24px}
+.cta-meta-item{text-align:center}
+.cta-meta-val{
+  font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:300;
+  color:var(--white);letter-spacing:-.01em;line-height:1;margin-bottom:4px;
+}
+.cta-meta-label{
+  font-family:'IBM Plex Mono',monospace;font-size:9px;
+  color:var(--muted);letter-spacing:.08em;text-transform:uppercase;
+}
+.cta-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--gold);color:#0A1628;
+  font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:500;
+  padding:12px 26px;border-radius:2px;text-decoration:none;
+  letter-spacing:.02em;transition:background .15s,transform .1s;white-space:nowrap;
+}
+.cta-btn:hover{background:#d4b05a;transform:translateY(-1px)}
+.cta-btn:active{transform:translateY(0)}
+.cta-arrow{font-size:15px;transition:transform .15s}
+.cta-btn:hover .cta-arrow{transform:translateX(3px)}
+.cta-sub{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;
+  color:var(--faint);letter-spacing:.06em;
+}
+
+/* ── FOOTER ── */
+.footer{
+  padding:24px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-top:0.5px solid var(--border);
+  max-width:1160px;margin:0 auto;
+}
+.footer-brand{font-family:'EB Garamond',serif;font-size:15px;color:var(--faint)}
+.footer-disc{font-size:10px;color:var(--faint);max-width:520px;text-align:right;line-height:1.5}
+
+/* ── COLOR HELPERS ── */
+.dot-red{background:var(--red)}
+.dot-gold{background:var(--gold)}
+.dot-green{background:var(--green)}
+.dot-muted{background:var(--faint)}
+
+/* ── ANIMATION ── */
+@keyframes fadein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.hero{animation:fadein .5s ease both}
+
+/* ════════════════════════════════
+   MOBILE RESPONSIVE
+════════════════════════════════ */
+@media(max-width:900px){
+  nav{padding:0 20px}
+  .nav-links{display:none}
+  .page{padding:0 20px}
+  .disclaimer{padding:10px 20px}
+
+  /* Hero */
+  .hero{
+    grid-template-columns:1fr;
+    padding:48px 0 36px;gap:28px;
+  }
+  .hero-right{text-align:left}
+  .hero-ticker{font-size:clamp(40px,10vw,64px)}
+  .hero-return{font-size:clamp(20px,5vw,28px)}
+
+  /* Stats strip — 3 col on mobile */
+  .stats-strip{grid-template-columns:repeat(3,1fr)}
+  .stat{padding:16px 12px}
+  .stat-val{font-size:14px}
+
+  /* Grids → single column */
+  .two-col{grid-template-columns:1fr}
+  .signal-grid{grid-template-columns:1fr 1fr}
+  .tranche-grid{grid-template-columns:1fr}
+  .inv-grid{grid-template-columns:1fr}
+  .steps-grid{grid-template-columns:1fr 1fr}
+
+  /* Section head */
+  .section-head{grid-template-columns:1fr;gap:6px}
+  .section-num{padding-top:0}
+
+  /* Timeline — tighter on mobile */
+  .timeline{grid-template-columns:80px 1fr}
+  .tl-date{font-size:9px;padding:11px 10px 11px 0}
+  .tl-content{padding:11px 0 11px 14px;gap:8px}
+
+  /* Scorecard */
+  .score-row{grid-template-columns:36px 1fr 72px}
+  .score-idx{padding:14px 0 14px 14px;font-size:11px}
+  .score-mid{padding:14px}
+  .score-right{padding:14px 10px}
+
+  /* CTA */
+  .cta-inner{grid-template-columns:1fr;gap:28px}
+  .cta-right{align-items:flex-start}
+
+  /* Footer */
+  .footer{
+    flex-direction:column;align-items:flex-start;
+    gap:10px;padding:20px;
+  }
+  .footer-disc{text-align:left;max-width:100%}
+
+  /* Data table — hide last col */
+  .data-table th:last-child,
+  .data-table td:last-child{display:none}
+}
+
+@media(max-width:500px){
+  .stats-strip{grid-template-columns:repeat(2,1fr)}
+  .signal-grid{grid-template-columns:1fr}
+  .steps-grid{grid-template-columns:1fr}
+  .score-row{grid-template-columns:1fr}
+  .score-idx{border-right:none;border-bottom:0.5px solid var(--border);padding:12px 14px 8px}
+  .score-right{border-left:none;border-top:0.5px solid var(--border);justify-content:flex-start;padding:8px 14px 12px}
+  .timeline{grid-template-columns:70px 1fr}
+  .tl-date{font-size:8.5px;padding:10px 8px 10px 0}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#">InsightInvest</a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#macro">Macro</a></li>
+      <li><a href="#signals">Signals</a></li>
+      <li><a href="#scoring">Scoring</a></li>
+      <li><a href="#position">Position</a></li>
+      <li><a href="#framework">Framework</a></li>
+    </ul>
+    <span class="nav-tag">Rotation Series</span>
+  </div>
+</nav>
+
+<!-- DISCLAIMER -->
+<div class="disclaimer">
+  <span class="disc-tag">Hindsight</span>
+  <p class="disc-text"><b>Constructed in hindsight.</b> These signals aligned — they didn't have to. A framework for thinking, not a guarantee of results. Not financial advice.</p>
+</div>
+
+<div class="page">
+
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow">InsightInvest · Rotation Framework · $CRWD · April 2026</div>
+    <h1>Reading <em>sector rotation</em><br>before it gets crowded</h1>
+    <p class="hero-desc">How macro regime shifts, ETF flows, and price behavior pointed to cybersecurity — before the trade became consensus.</p>
+  </div>
+  <div class="hero-right">
+    <div class="hero-ticker">CRWD</div>
+    <div class="hero-return">+138%</div>
+    <div class="hero-meta">Leveraged ETF · Entry ~$407 · ATH $598.25 · Apr 22 → May 15, 2026</div>
+  </div>
+</div>
+
+<!-- STATS STRIP -->
+<!-- All figures verified: ATH $598.25 intraday May 15 (MacroTrends/TradingView); closing ATH $594.08 May 15 (MacroTrends); prior peak $566.90 Nov 12, 2025 (financecharts); 52-wk low $342.72 (Robinhood/Investing.com); revenue $4.81B +22% YoY (SEC 8-K Mar 3 2026); ARR $5.25B +24% (SEC 8-K); 48 analysts Buy (StockAnalysis) -->
+<div class="stats-strip">
+  <div class="stat">
+    <div class="stat-val gold">~$407</div>
+    <div class="stat-label">Entry · Apr 22, 2026</div>
+  </div>
+  <div class="stat">
+    <div class="stat-val green">$598.25</div>
+    <div class="stat-label">ATH (intraday) · May 15, 2026</div>
+  </div>
+  <div class="stat">
+    <div class="stat-val">$566.90</div>
+    <div class="stat-label">Prior peak · Nov 12, 2025</div>
+  </div>
+  <div class="stat">
+    <div class="stat-val">$4.81B</div>
+    <div class="stat-label">FY2026 revenue · +22% YoY</div>
+  </div>
+  <div class="stat">
+    <div class="stat-val">$5.25B</div>
+    <div class="stat-label">Ending ARR · +24% YoY</div>
+  </div>
+  <div class="stat">
+    <div class="stat-val green">48</div>
+    <div class="stat-label">Analyst ratings · Buy consensus</div>
+  </div>
+</div>
+
+<!-- 01 MACRO -->
+<div class="section" id="macro">
+  <div class="section-head">
+    <div class="section-num">01 · Macro</div>
+    <div class="section-title">The regime that <em>set it up</em></div>
+  </div>
+
+  <div class="two-col">
+    <div class="grid-cell">
+      <div class="cell-tag">Regime driver</div>
+      <div class="cell-title">Rising yields killed growth</div>
+      <div class="cell-num">~4.5%</div>
+      <div class="cell-body">10-year Treasury near 4.5%. High yields compress long-duration multiples. Semis and mega-cap AI sold off first and hardest. <b>This wasn't a CRWD problem. It was a math problem.</b> Indiscriminate selling creates the entry.</div>
+    </div>
+    <div class="grid-cell">
+      <div class="cell-tag">Structural tailwind</div>
+      <div class="cell-title">Cyber budgets don't get cut</div>
+      <div class="cell-num">$4.4M</div>
+      <div class="cell-body">Average cost of a breach in 2026. At that number, cybersecurity isn't discretionary — it's survival. <b>While every other tech budget faced scrutiny, cyber spend had non-negotiable demand underpinning it.</b></div>
+    </div>
+  </div>
+  <div class="two-col">
+    <div class="grid-cell">
+      <div class="cell-tag">Geopolitical layer</div>
+      <div class="cell-title">The Iran conflict misread</div>
+      <div class="cell-body">Markets sold everything in early April 2026, dragging CRWD down with the broader selloff. What most missed: Iran has sophisticated state-sponsored cyber capabilities. <b>The same event that scared everyone was a spending catalyst for cybersecurity specifically.</b> Wedbush flagged it on Apr 13.</div>
+    </div>
+    <div class="grid-cell">
+      <div class="cell-tag">The AI paradox</div>
+      <div class="cell-title">Threat amplifier, not disruptor</div>
+      <div class="cell-body">Markets sold CRWD in March 2026 on fears AI would replace cybersecurity software. Wolfe Research had a cleaner read: <b>"We don't think anyone hears 'war is coming' and chooses to spend less on guns and ammo."</b> More powerful AI = more attacks = more demand for Falcon.</div>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="tl-wrap">
+    <div class="tl-label">Price & catalyst timeline — verified</div>
+    <div class="timeline">
+
+      <div class="tl-date">Nov 12, 2025</div>
+      <div class="tl-content"><div class="tl-dot dot-muted"></div><div><div class="tl-head">CRWD peaks at $566.90</div><div class="tl-sub">52-week high. Mega-cap tech and semis at highs. Former leader cycle at its top.</div></div></div>
+
+      <div class="tl-date">Nov–Mar 2026</div>
+      <div class="tl-content"><div class="tl-dot dot-red"></div><div><div class="tl-head">Broad tech selloff. CRWD falls into the high $300s</div><div class="tl-sub">Rising yields, tariff uncertainty, GDP deceleration. Stock down significantly from peak.</div></div></div>
+
+      <div class="tl-date">Mar 30, 2026</div>
+      <div class="tl-content"><div class="tl-dot dot-gold"></div><div><div class="tl-head">Wolfe Research upgrades CRWD — $450 target</div><div class="tl-sub">Cites AI-driven "machine-speed cyberwar" as security spending catalyst. First institutional signal.</div></div></div>
+
+      <div class="tl-date">~Apr 7, 2026</div>
+      <div class="tl-content"><div class="tl-dot dot-red"></div><div><div class="tl-head">52-week low: $342.72</div><div class="tl-sub">Iran conflict intensifies. Broad market selloff. CRWD hits its trough — down ~40% from Nov peak.</div></div></div>
+
+      <div class="tl-date">Apr 13, 2026</div>
+      <div class="tl-content"><div class="tl-dot dot-gold"></div><div><div class="tl-head">Wedbush flags CRWD as top pick</div><div class="tl-sub">Geopolitical tensions = cyber tailwind. Narrative accelerating as stock begins to recover from lows.</div></div></div>
+
+      <div class="tl-date">Apr 22, 2026</div>
+      <div class="tl-content"><div class="tl-dot" style="background:var(--gold)"></div><div><div class="tl-head" style="color:var(--gold)">Entry posted publicly — ~$407</div><div class="tl-sub">Leveraged cybersecurity ETF. Stock has recovered ~19% from its lows. All signals aligned.</div></div></div>
+
+      <div class="tl-date">Apr 27, 2026</div>
+      <div class="tl-content"><div class="tl-dot dot-green"></div><div><div class="tl-head">Mizuho upgrades — Outperform</div><div class="tl-sub">"Numerous exciting growth avenues." Analyst flywheel begins post-entry.</div></div></div>
+
+      <div class="tl-date">May 14, 2026</div>
+      <div class="tl-content"><div class="tl-dot dot-green"></div><div><div class="tl-head">BTIG raises target to $621 from $499</div><div class="tl-sub">Platform consolidation confirmed via channel checks. Institutional coverage compounding.</div></div></div>
+
+      <div class="tl-date">May 15, 2026</div>
+      <div class="tl-content"><div class="tl-dot dot-green"></div><div><div class="tl-head" style="color:var(--green)">CRWD hits all-time high — $598.25 intraday · $594.08 close</div><div class="tl-sub">+47% on the stock from entry. +138% via leveraged ETF. Rotation fully played out.</div></div></div>
+
+    </div>
+  </div>
+</div>
+
+<!-- 02 SIGNALS -->
+<div class="section" id="signals">
+  <div class="section-head">
+    <div class="section-num">02 · Signals</div>
+    <div class="section-title">Six things to <em>watch for</em></div>
+  </div>
+
+  <div class="signal-grid">
+    <div class="signal-cell">
+      <div class="sig-num">01</div>
+      <div class="sig-title">Former leader fatigue</div>
+      <div class="sig-body">Leadership narrows to 1–2 names. Good news gets sold. Lower highs form. In 2026: semis stalling despite strong earnings.</div>
+      <div class="sig-note">→ Watch: sector ETF making lower highs</div>
+    </div>
+    <div class="signal-cell">
+      <div class="sig-num">02</div>
+      <div class="sig-title">ETF flows shifting</div>
+      <div class="sig-body"><b>CIBR: +$1.71B</b> 1-year inflows. +$118M in 6 months. Institutional money moved before price did. Flows lead. Price follows.</div>
+      <div class="sig-note">→ Tool: Finviz, ranked by 1W / 1M / 1Q</div>
+    </div>
+    <div class="signal-cell">
+      <div class="sig-num">03</div>
+      <div class="sig-title">Narrative — structural</div>
+      <div class="sig-body">AI attacks + geopolitical risk + $4.4M breach cost + regulatory mandates. <b>Three or more independent forces</b> = a theme, not a trade.</div>
+      <div class="sig-note">→ Ask: 6-month trade or 6-year theme?</div>
+    </div>
+    <div class="signal-cell">
+      <div class="sig-num">04</div>
+      <div class="sig-title">Bad news doesn't break it</div>
+      <div class="sig-body">CRWD dropped on AI replacement fears in March — and held. The market threw its worst thesis at the stock. Key levels refused to break.</div>
+      <div class="sig-note">→ Watch: 48 hrs after bad news drops</div>
+    </div>
+    <div class="signal-cell">
+      <div class="sig-num">05</div>
+      <div class="sig-title">First analyst upgrade</div>
+      <div class="sig-body">Wolfe Research, Mar 30 — before the move. The first upgrade in a beaten-down sector is the earliest visible institutional signal.</div>
+      <div class="sig-note">→ Watch: upgrades in low-coverage sectors</div>
+    </div>
+    <div class="signal-cell">
+      <div class="sig-num">06</div>
+      <div class="sig-title">Macro event as tailwind</div>
+      <div class="sig-body">Iran conflict crashed markets. <b>Same event = spending catalyst for CRWD.</b> When a macro shock is structurally bullish for one sector — that asymmetry is the edge.</div>
+      <div class="sig-note">→ Ask: who actually benefits from this?</div>
+    </div>
+  </div>
+
+  <!-- ETF Table -->
+  <!-- CIBR flows verified: +$1.71B 1-year, +$118M 6-month (ETFdb.com); HACK positive flows (Tickeron); SMH outflows reflect broader semi rotation (multiple sources) -->
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>ETF</th>
+        <th>Focus</th>
+        <th>1-Year flows</th>
+        <th>6-Month flows</th>
+        <th>Signal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="name gold">CIBR</td>
+        <td>Large-cap cyber, liquidity-weighted</td>
+        <td class="up">+$1.71B</td>
+        <td class="gold">+$118M</td>
+        <td>Institutional rotation underway</td>
+      </tr>
+      <tr>
+        <td class="name">HACK</td>
+        <td>Broader cyber, small-cap tilt</td>
+        <td class="up">Positive</td>
+        <td class="up">Positive</td>
+        <td>Stabilising near support</td>
+      </tr>
+      <tr>
+        <td class="name">BUG</td>
+        <td>Emerging cybersecurity companies</td>
+        <td>Mixed</td>
+        <td>Mixed</td>
+        <td>Higher volatility vehicle</td>
+      </tr>
+      <tr>
+        <td class="name">SMH</td>
+        <td>Semiconductors — former leader</td>
+        <td class="dn">Outflows</td>
+        <td class="dn">Outflows</td>
+        <td style="color:var(--red)">Leadership narrowing</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- PATREON STRIP -->
+<div class="patreon-strip">
+  <div class="pt-left">
+    <span class="pt-label">if you find this useful</span>
+    <span class="pt-sub">this is the kind of thing i break down weekly for members.</span>
+  </div>
+  <a class="pt-btn" href="https://www.patreon.com/15273026/join" target="_blank" rel="noopener">join the community →</a>
+</div>
+
+<!-- 03 SCORING -->
+<div class="section" id="scoring">
+  <div class="section-head">
+    <div class="section-num">03 · Scoring</div>
+    <div class="section-title">The validity <em>scorecard</em></div>
+  </div>
+
+  <div class="callout">Run every rotation through these five tests before sizing up. If one fails — diagnose it, don't force it.</div>
+
+  <div class="scorecard">
+    <div class="score-row">
+      <div class="score-idx">01</div>
+      <div class="score-mid">
+        <div class="score-label">Does the macro regime reward this sector?</div>
+        <div class="score-desc">Rising yields reward near-term, non-discretionary cash flows. <b>Cybersecurity fits exactly.</b> Breach budgets don't get cut in uncertainty — they get raised.</div>
+      </div>
+      <div class="score-right"><span class="badge pass">Pass</span></div>
+    </div>
+    <div class="score-row">
+      <div class="score-idx">02</div>
+      <div class="score-mid">
+        <div class="score-label">Is the narrative structural — not just a headline?</div>
+        <div class="score-desc">AI attacks + geopolitical risk + $4.4M breach cost + regulatory mandates = <b>four independent structural forces.</b> One driver is a trade. Four is a theme.</div>
+      </div>
+      <div class="score-right"><span class="badge pass">Pass</span></div>
+    </div>
+    <div class="score-row">
+      <div class="score-idx">03</div>
+      <div class="score-mid">
+        <div class="score-label">Are ETF flows confirming?</div>
+        <div class="score-desc">CIBR +$1.71B in 1-year flows. <b>Institutional capital moving before price.</b> Flows are the most honest signal available — stories can be wrong, money moving is real.</div>
+      </div>
+      <div class="score-right"><span class="badge pass">Pass</span></div>
+    </div>
+    <div class="score-row">
+      <div class="score-idx">04</div>
+      <div class="score-mid">
+        <div class="score-label">Is the category leader identifiable and discounted?</div>
+        <div class="score-desc">CRWD: dominant platform, 22% revenue growth (FY2026), trading ~28% below the Nov 2025 peak of $566.90 on macro noise — <b>not fundamental deterioration.</b> Business compounding while stock was sold.</div>
+      </div>
+      <div class="score-right"><span class="badge pass">Pass</span></div>
+    </div>
+    <div class="score-row">
+      <div class="score-idx">05</div>
+      <div class="score-mid">
+        <div class="score-label">Is the timing window right?</div>
+        <div class="score-desc">Always the hardest test. <b>Sweet spot: first upgrades arriving, institutional flows building, retail still absent.</b> April 22 fit — Wolfe had upgraded March 30 but the broad market was still treating cyber as a sell.</div>
+      </div>
+      <div class="score-right"><span class="badge watch">Watch</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- 04 POSITION -->
+<div class="section" id="position">
+  <div class="section-head">
+    <div class="section-num">04 · Position</div>
+    <div class="section-title">Building the <em>position</em></div>
+  </div>
+
+  <div class="tranche-grid">
+    <div class="tranche-cell t1">
+      <div class="tranche-bar"></div>
+      <div class="tranche-pct">40%</div>
+      <div class="tranche-label">Conviction starter</div>
+      <div class="tranche-desc">Enter when the thesis is validated but before the broad market sees it. Define your stop at a technical level — not just "stock is down." Entry ~$407, stop below the $342.72 52-week low.</div>
+    </div>
+    <div class="tranche-cell t2">
+      <div class="tranche-bar"></div>
+      <div class="tranche-pct">35%</div>
+      <div class="tranche-label">Confirmation add</div>
+      <div class="tranche-desc">Add when the first catalyst fires and stock holds or accelerates. Mizuho upgrade Apr 27 + stock holding above $420. Move tranche 1 stop to breakeven.</div>
+    </div>
+    <div class="tranche-cell t3">
+      <div class="tranche-bar"></div>
+      <div class="tranche-pct">25%</div>
+      <div class="tranche-label">Re-rating add</div>
+      <div class="tranche-desc">Add when CRWD becomes the consensus AI-cybersecurity play. Expensive relative to entry but justified — TAM expanded publicly and most models haven't updated.</div>
+    </div>
+  </div>
+
+  <div style="margin-top:32px">
+    <div class="cell-tag" style="margin-bottom:4px">What actually invalidates the thesis</div>
+    <p style="font-size:11px;color:var(--muted);margin:6px 0 16px">A 20% drawdown is not a thesis exit. Price volatility is noise. These are signals.</p>
+    <div class="inv-grid">
+      <div class="inv-cell">
+        <div class="inv-x">✕</div>
+        <div><div class="inv-title">Macro regime flips</div><div class="inv-desc">Yields drop sharply, risk-on returns, growth outperforms. The rotation rationale disappears.</div></div>
+      </div>
+      <div class="inv-cell">
+        <div class="inv-x">✕</div>
+        <div><div class="inv-title">Revenue growth decelerates 2 quarters</div><div class="inv-desc">The 22% ARR growth thesis is the foundation. Material slowdown = re-examine everything.</div></div>
+      </div>
+      <div class="inv-cell">
+        <div class="inv-x">✕</div>
+        <div><div class="inv-title">ETF flows reverse</div><div class="inv-desc">CIBR and HACK showing consistent outflows while the broader market is stable.</div></div>
+      </div>
+      <div class="inv-cell">
+        <div class="inv-x">✕</div>
+        <div><div class="inv-title">Competitor captures Falcon's consolidation trade</div><div class="inv-desc">Takes quarters to confirm. Monitor win rates, not stock price.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 05 FRAMEWORK -->
+<div class="section" id="framework">
+  <div class="section-head">
+    <div class="section-num">05 · Framework</div>
+    <div class="section-title">The <em>repeatable</em> process</div>
+  </div>
+
+  <div class="callout">The next rotation is forming somewhere right now. Run this on any sector, any cycle.</div>
+
+  <div class="steps-grid">
+    <div class="step-cell">
+      <div class="step-n">01</div>
+      <div class="step-title">Read the macro regime</div>
+      <div class="step-desc">Rising yields? Tariff uncertainty? Geopolitical stress? Each regime rewards different sector characteristics. <b>Know this before looking at any ticker.</b></div>
+    </div>
+    <div class="step-cell">
+      <div class="step-n">02</div>
+      <div class="step-title">Find what the regime is punishing</div>
+      <div class="step-desc">Narrowing leadership, good news getting sold, lower highs forming. <b>Don't exit the winner until you see confirmation of weakness</b> — not just slowing strength.</div>
+    </div>
+    <div class="step-cell">
+      <div class="step-n">03</div>
+      <div class="step-title">Find what the regime rewards</div>
+      <div class="step-desc">Ask: what kind of business does well in this specific environment? Find which sector fits and isn't yet crowded. <b>Non-discretionary in uncertainty = cybersecurity.</b></div>
+    </div>
+    <div class="step-cell">
+      <div class="step-n">04</div>
+      <div class="step-title">Confirm via ETF flows</div>
+      <div class="step-desc">Finviz: major sector ETFs, ranked by 1W / 1M / 1Q weekly. <b>When a sector climbs the rankings while the former leader drops</b> — that's real capital rotating.</div>
+    </div>
+    <div class="step-cell">
+      <div class="step-n">05</div>
+      <div class="step-title">Validate the narrative</div>
+      <div class="step-desc">One structural reason = a trade. Three or more = a theme. <b>Size accordingly.</b></div>
+    </div>
+    <div class="step-cell">
+      <div class="step-n">06</div>
+      <div class="step-title">Find the category leader</div>
+      <div class="step-desc">In a rotation, the leader moves first and furthest. Highest revenue exposure to the theme, clearest moat. <b>Don't buy the basket when you can identify the best name.</b></div>
+    </div>
+    <div class="step-cell">
+      <div class="step-n">07</div>
+      <div class="step-title">Check price behavior</div>
+      <div class="step-desc">Does bad news break it? Dip bought fast? CRWD held above its lows on the AI threat headlines. <b>The stock tells you something the price hasn't reflected yet.</b></div>
+    </div>
+    <div class="step-cell">
+      <div class="step-n">08</div>
+      <div class="step-title">Size to your conviction</div>
+      <div class="step-desc">5/5 scorecard pass → full position. 3–4 pass → smaller, spot only. 1–2 → watchlist only. <b>The setup strength determines the bet size.</b></div>
+    </div>
+    <div class="step-cell">
+      <div class="step-n">09</div>
+      <div class="step-title">Let the flywheel run</div>
+      <div class="step-desc">Upgrades → institutional adds → news flow → narrative confirmation. <b>Exit only when rotation signals appear in this sector</b> — flows reversing, leadership narrowing.</div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:28px">
+    <b>The honest note:</b> This framework read CRWD correctly in April 2026. It will not be correct every time. The edge is in running the process consistently — not in any single outcome.
+  </div>
+</div>
+
+</div><!-- end .page -->
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="page">
+    <div class="cta-inner">
+      <div>
+        <div class="cta-eyebrow">InsightInvest · 1-on-1</div>
+        <div class="cta-title">Want to apply this to<br><em>your</em> portfolio?</div>
+        <p class="cta-desc">60 minutes. Your stocks, your strategy, your questions. We work through it together — no generic advice, no templates.</p>
+      </div>
+      <div class="cta-right">
+        <div class="cta-meta-row">
+          <div class="cta-meta-item">
+            <div class="cta-meta-val">60</div>
+            <div class="cta-meta-label">minutes</div>
+          </div>
+          <div class="cta-meta-item">
+            <div class="cta-meta-val">1:1</div>
+            <div class="cta-meta-label">private</div>
+          </div>
+          <div class="cta-meta-item">
+            <div class="cta-meta-val">24h</div>
+            <div class="cta-meta-label">prep</div>
+          </div>
+        </div>
+        <a class="cta-btn" href="https://www.leiholding.com/insightinvest-1on1" target="_blank" rel="noopener">
+          Book your session <span class="cta-arrow">→</span>
+        </a>
+        <div class="cta-sub">Limited spots available</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-brand">InsightInvest</div>
+  <div class="footer-disc">For informational and educational purposes only. Not financial advice. All analysis constructed in hindsight. Past performance does not predict future results. Conduct your own research.</div>
+</div>
+
+</body>
+</html>
