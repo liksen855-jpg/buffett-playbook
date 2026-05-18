@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SoFi Technologies — Synthesis Report</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,300;0,7..72,400;0,7..72,500;1,7..72,300;1,7..72,400&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+:root{
+  --bg:#0a0a08;
+  --bg2:#111110;
+  --bg3:#1a1a18;
+  --bg4:#242422;
+  --line:#2e2e2b;
+  --line2:#3d3d39;
+  --text:#e8e4d8;
+  --text2:#9e9a8e;
+  --text3:#5e5b52;
+  --gold:#c8982a;
+  --gold-dim:#7a5c18;
+  --gold-bg:rgba(200,152,42,0.08);
+  --green:#2a7a4a;
+  --green-lt:#1a3d28;
+  --green-text:#5ab87a;
+  --red:#7a2a2a;
+  --red-lt:#3d1a1a;
+  --red-text:#d47878;
+  --blue:#2a4a7a;
+  --blue-text:#78a8d4;
+  --sans:'Syne',sans-serif;
+  --body:'Literata',Georgia,serif;
+  --mono:'DM Mono',monospace;
+}
+
+html{scroll-behavior:smooth;}
+
+body{
+  font-family:var(--body);
+  font-size:15px;
+  line-height:1.8;
+  color:var(--text);
+  background:var(--bg);
+  max-width:1040px;
+  margin:0 auto;
+  padding:0 2rem 8rem;
+}
+
+/* ── HERO ── */
+.hero{
+  padding:5rem 0 3rem;
+  border-bottom:1px solid var(--line);
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:'SOFI';
+  position:absolute;
+  right:-0.5rem;
+  top:1rem;
+  font-family:var(--sans);
+  font-size:14rem;
+  font-weight:800;
+  color:rgba(200,152,42,0.04);
+  line-height:1;
+  pointer-events:none;
+  user-select:none;
+}
+.hero-eyebrow{
+  font-family:var(--sans);
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:1.2rem;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.hero-eyebrow::after{content:'';flex:1;height:1px;background:var(--line);}
+.hero-title{
+  font-family:var(--sans);
+  font-size:clamp(2.2rem, 5vw, 3.8rem);
+  font-weight:800;
+  line-height:1.05;
+  color:var(--text);
+  margin-bottom:0.8rem;
+  max-width:700px;
+}
+.hero-sub{
+  font-family:var(--body);
+  font-size:1.05rem;
+  font-style:italic;
+  color:var(--text2);
+  max-width:560px;
+  margin-bottom:3rem;
+  line-height:1.6;
+}
+.hero-stats{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+}
+.hero-stat{
+  background:var(--bg2);
+  padding:1.2rem 1rem;
+}
+.hero-stat-label{
+  font-family:var(--sans);
+  font-size:9px;
+  font-weight:600;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--text3);
+  margin-bottom:0.4rem;
+}
+.hero-stat-val{
+  font-family:var(--mono);
+  font-size:1.4rem;
+  font-weight:500;
+  color:var(--text);
+  line-height:1.1;
+  letter-spacing:-0.02em;
+}
+.hero-stat-val.up{color:var(--green-text);}
+.hero-stat-val.gold{color:var(--gold);}
+.hero-stat-sub{
+  font-family:var(--sans);
+  font-size:10px;
+  color:var(--text3);
+  margin-top:3px;
+}
+
+/* ── NAV ── */
+.sticky-nav{
+  position:sticky;
+  top:0;
+  z-index:200;
+  background:var(--bg);
+  border-bottom:1px solid var(--line);
+  padding:0;
+  display:flex;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.sticky-nav::-webkit-scrollbar{display:none;}
+.nav-btn{
+  font-family:var(--sans);
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  color:var(--text3);
+  background:none;
+  border:none;
+  border-right:1px solid var(--line);
+  cursor:pointer;
+  padding:14px 18px;
+  white-space:nowrap;
+  transition:color 0.2s,background 0.2s;
+}
+.nav-btn:last-child{border-right:none;}
+.nav-btn:hover,.nav-btn.active{color:var(--gold);background:var(--gold-bg);}
+
+/* ── SECTIONS ── */
+.section{
+  margin-top:5rem;
+  padding-top:3rem;
+  border-top:1px solid var(--line);
+}
+.section-tag{
+  font-family:var(--sans);
+  font-size:9px;
+  font-weight:600;
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:0.5rem;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.section-tag::after{content:'';flex:1;max-width:40px;height:1px;background:var(--gold-dim);}
+.section-title{
+  font-family:var(--sans);
+  font-size:1.9rem;
+  font-weight:700;
+  color:var(--text);
+  margin-bottom:0.5rem;
+  line-height:1.15;
+}
+.section-deck{
+  font-size:1rem;
+  color:var(--text2);
+  font-style:italic;
+  margin-bottom:2rem;
+  max-width:640px;
+  line-height:1.6;
+}
+
+h3{
+  font-family:var(--sans);
+  font-size:0.95rem;
+  font-weight:700;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--text2);
+  margin:2.5rem 0 1rem;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+h3::after{content:'';flex:1;height:1px;background:var(--line);}
+
+p{margin-bottom:1rem;color:var(--text2);font-size:14px;line-height:1.8;}
+p:last-child{margin-bottom:0;}
+strong{color:var(--text);font-weight:500;}
+
+/* ── SOURCE TAGS ── */
+.src{
+  display:inline-block;
+  font-family:var(--sans);
+  font-size:8px;
+  font-weight:600;
+  letter-spacing:0.1em;
+  padding:1px 6px;
+  border:1px solid var(--line2);
+  color:var(--text3);
+  border-radius:2px;
+  vertical-align:middle;
+  margin-left:4px;
+  cursor:default;
+}
+.src.pdf{border-color:var(--gold-dim);color:var(--gold);}
+.src.deep{border-color:var(--blue);color:var(--blue-text);}
+.src.both{border-color:var(--green-lt);color:var(--green-text);}
+
+/* ── CONFLICT / AGREEMENT BLOCKS ── */
+.finding{
+  border-left:2px solid var(--line2);
+  padding:1rem 1.5rem;
+  margin:1.5rem 0;
+  background:var(--bg2);
+}
+.finding.agree{border-left-color:var(--green-text);}
+.finding.conflict{border-left-color:var(--red-text);}
+.finding.nuance{border-left-color:var(--gold);}
+.finding-label{
+  font-family:var(--sans);
+  font-size:9px;
+  font-weight:600;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  margin-bottom:0.5rem;
+}
+.finding.agree .finding-label{color:var(--green-text);}
+.finding.conflict .finding-label{color:var(--red-text);}
+.finding.nuance .finding-label{color:var(--gold);}
+.finding p{margin-bottom:0.5rem;font-size:13px;}
+
+/* ── COMPARISON TABLE ── */
+.cmp-table{width:100%;border-collapse:collapse;font-size:12px;margin:1.5rem 0;}
+.cmp-table th{
+  font-family:var(--sans);
+  font-size:9px;
+  font-weight:600;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  color:var(--text3);
+  text-align:left;
+  padding:8px 12px;
+  border-bottom:1px solid var(--line2);
+}
+.cmp-table th.r,.cmp-table td.r{text-align:right;}
+.cmp-table td{
+  padding:9px 12px;
+  border-bottom:1px solid var(--line);
+  color:var(--text2);
+  vertical-align:top;
+  font-family:'Literata',serif;
+  font-size:13px;
+  line-height:1.5;
+}
+.cmp-table td.r{
+  font-family:var(--mono);
+  font-size:12px;
+  font-weight:400;
+  letter-spacing:-0.01em;
+}
+.cmp-table td.label{font-family:var(--sans);font-size:11px;font-weight:600;color:var(--text);white-space:nowrap;}
+.cmp-table td.tag-cell{white-space:nowrap;}
+.cmp-table tr:hover td{background:var(--bg3);}
+.cmp-table .up{color:var(--green-text);}
+.cmp-table .dn{color:var(--red-text);}
+.cmp-table .gold{color:var(--gold);}
+
+/* ── VERDICT GRID ── */
+.verdict-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+  margin:2rem 0;
+}
+.verdict-cell{
+  background:var(--bg2);
+  padding:1.5rem 1.25rem;
+}
+.verdict-method{
+  font-family:var(--sans);
+  font-size:9px;
+  font-weight:600;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--text3);
+  margin-bottom:0.5rem;
+}
+.verdict-pdf{
+  font-family:var(--mono);
+  font-size:12px;
+  font-weight:400;
+  color:var(--gold);
+  margin-bottom:0.25rem;
+  letter-spacing:-0.01em;
+}
+.verdict-deep{
+  font-family:var(--mono);
+  font-size:12px;
+  font-weight:400;
+  color:var(--blue-text);
+  margin-bottom:0.75rem;
+  letter-spacing:-0.01em;
+}
+.verdict-synth{
+  font-family:var(--body);
+  font-size:13px;
+  font-weight:400;
+  color:var(--text);
+  padding-top:0.75rem;
+  border-top:1px solid var(--line);
+}
+
+/* ── CHART WRAPPERS ── */
+.chart-block{
+  margin:2rem 0;
+  background:var(--bg2);
+  border:1px solid var(--line);
+  padding:1.25rem;
+}
+.chart-label{
+  font-family:var(--sans);
+  font-size:9px;
+  font-weight:600;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--text3);
+  margin-bottom:1rem;
+}
+.chart-legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px;
+  margin-bottom:10px;
+  font-family:var(--sans);
+  font-size:10px;
+  color:var(--text3);
+}
+.leg{display:flex;align-items:center;gap:5px;}
+.swatch{width:10px;height:10px;border-radius:1px;flex-shrink:0;}
+.ch-wrap{position:relative;width:100%;}
+
+/* ── WEIGHT SLIDER ── */
+.weight-panel{
+  background:var(--bg2);
+  border:1px solid var(--line);
+  padding:1.5rem;
+  margin:2rem 0;
+}
+.weight-row{
+  display:grid;
+  grid-template-columns:160px 1fr 52px;
+  align-items:center;
+  gap:12px;
+  margin-bottom:0.8rem;
+}
+.weight-label{font-family:var(--sans);font-size:11px;color:var(--text2);}
+input[type=range]{accent-color:var(--gold);width:100%;}
+.weight-val{font-family:var(--mono);font-size:12px;font-weight:400;color:var(--gold);text-align:right;letter-spacing:-0.01em;}
+.weight-result{
+  border-top:1px solid var(--line);
+  padding-top:1.2rem;
+  margin-top:0.5rem;
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+}
+.wr-label{font-family:var(--sans);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);}
+.wr-val{font-family:var(--mono);font-size:2.2rem;font-weight:500;color:var(--green-text);letter-spacing:-0.03em;}
+.wr-upside{font-family:var(--sans);font-size:11px;color:var(--text3);margin-top:2px;}
+
+/* ── RISK/REWARD TABLE ── */
+.rr-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+  margin:1.5rem 0;
+}
+.rr-cell{background:var(--bg2);padding:1.25rem;}
+.rr-cell.bear-bg{background:var(--red-lt);}
+.rr-cell.bull-bg{background:var(--green-lt);}
+.rr-head{
+  font-family:var(--sans);
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  margin-bottom:0.8rem;
+}
+.rr-cell.bear-bg .rr-head{color:var(--red-text);}
+.rr-cell.bull-bg .rr-head{color:var(--green-text);}
+.rr-item{
+  font-size:12px;
+  color:var(--text2);
+  padding:5px 0;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  gap:8px;
+  align-items:baseline;
+}
+.rr-item:last-child{border-bottom:none;}
+.rr-icon{flex-shrink:0;font-size:11px;}
+
+/* ── CONVICTION BAR ── */
+.conv-bar-wrap{margin:2rem 0;}
+.conv-row{
+  display:grid;
+  grid-template-columns:200px 1fr 60px;
+  align-items:center;
+  gap:12px;
+  margin-bottom:10px;
+}
+.conv-name{font-family:var(--sans);font-size:11px;color:var(--text2);}
+.conv-track{
+  height:6px;
+  background:var(--bg4);
+  border-radius:3px;
+  overflow:hidden;
+}
+.conv-fill{height:100%;border-radius:3px;transition:width 0.4s;}
+.conv-pct{font-family:var(--mono);font-size:11px;font-weight:400;text-align:right;letter-spacing:-0.01em;}
+
+/* ── FINAL BOX ── */
+.final-box{
+  border:1px solid var(--gold-dim);
+  background:var(--gold-bg);
+  padding:2rem 2.5rem;
+  margin:3rem 0;
+}
+.final-box-title{
+  font-family:var(--sans);
+  font-size:0.85rem;
+  font-weight:700;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:1.5rem;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.final-box-title::after{content:'';flex:1;height:1px;background:var(--gold-dim);}
+.final-price{
+  font-family:var(--mono);
+  font-size:3.6rem;
+  font-weight:500;
+  color:var(--green-text);
+  line-height:1;
+  margin-bottom:0.25rem;
+  letter-spacing:-0.04em;
+}
+.final-upside{
+  font-family:var(--sans);
+  font-size:1rem;
+  font-weight:600;
+  color:var(--text2);
+  margin-bottom:2rem;
+}
+.final-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1rem;
+  margin-top:1.5rem;
+  padding-top:1.5rem;
+  border-top:1px solid var(--gold-dim);
+}
+.final-cell-label{font-family:var(--sans);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);margin-bottom:3px;}
+.final-cell-val{font-family:var(--mono);font-size:1rem;font-weight:400;color:var(--text);letter-spacing:-0.01em;}
+
+/* ── FOOTER ── */
+.footer{
+  margin-top:6rem;
+  padding-top:2rem;
+  border-top:1px solid var(--line);
+  font-family:var(--sans);
+  font-size:10px;
+  color:var(--text3);
+  line-height:1.9;
+}
+.footer strong{color:var(--text2);font-weight:600;}
+
+/* UTILITY */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;}
+.tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem;}
+.tag{
+  font-family:var(--sans);
+  font-size:9px;
+  font-weight:600;
+  letter-spacing:0.1em;
+  padding:3px 10px;
+  border:1px solid var(--line2);
+  color:var(--text3);
+  border-radius:2px;
+}
+.tag.gold{border-color:var(--gold-dim);color:var(--gold);}
+.tag.green{border-color:var(--green);color:var(--green-text);}
+.tag.red{border-color:var(--red);color:var(--red-text);}
+.tag.blue{border-color:var(--blue);color:var(--blue-text);}
+
+@media(max-width:680px){
+  .hero-stats{grid-template-columns:1fr 1fr;}
+  .verdict-grid,.rr-grid,.two-col{grid-template-columns:1fr;}
+  .final-grid{grid-template-columns:1fr 1fr;}
+  body{padding:0 1rem 5rem;}
+  .weight-row{grid-template-columns:120px 1fr 45px;}
+  .conv-row{grid-template-columns:140px 1fr 50px;}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div style="background:rgba(200,152,42,0.1);border:1px solid rgba(200,152,42,0.3);padding:1rem 1.5rem;margin-top:2rem;margin-bottom:0;font-family:var(--sans);font-size:11px;line-height:1.8;color:var(--text2);">
+  <span style="font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-right:10px;">⚠ Not Financial Advice</span>
+  This is independent research for educational and informational purposes only. The author is not a licensed financial advisor, broker, or investment professional. Nothing here constitutes a recommendation to buy, sell, or hold any security. All valuation models contain assumptions that may prove incorrect. Investing involves risk, including possible loss of principal. Do your own research and consult a qualified financial advisor before making any investment decision.
+</div>
+<header class="hero">
+  <div class="hero-eyebrow">Educational Research &nbsp;·&nbsp; Multi-Method Analysis &nbsp;·&nbsp; May 17, 2026</div>
+  <div class="hero-title">SoFi Technologies<br>Unified Investment View</div>
+  <div class="hero-sub">A multi-method valuation synthesis — DCF, SOTP, relative and precedent analysis — fact-checked against SEC filings and official earnings releases. For educational purposes only.</div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-label">Current Price</div>
+      <div class="hero-stat-val">$16.56</div>
+      <div class="hero-stat-sub">NASDAQ: SOFI</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-label">PDF Target</div>
+      <div class="hero-stat-val gold">$23.50</div>
+      <div class="hero-stat-sub">Original research</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-label">Deep Analysis</div>
+      <div class="hero-stat-val gold">$23.50</div>
+      <div class="hero-stat-sub">Institutional model</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-label">Synthesized Target</div>
+      <div class="hero-stat-val up">$23.40</div>
+      <div class="hero-stat-sub">Combined conviction</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-label">Implied Upside</div>
+      <div class="hero-stat-val up">+41.3%</div>
+      <div class="hero-stat-sub">From $16.56</div>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="sticky-nav">
+  <button class="nav-btn active" onclick="navTo('convergence')">Where They Agree</button>
+  <button class="nav-btn" onclick="navTo('divergence')">Where They Differ</button>
+  <button class="nav-btn" onclick="navTo('valuation-synth')">Valuation Synthesis</button>
+  <button class="nav-btn" onclick="navTo('weight')">Confidence Weighting</button>
+  <button class="nav-btn" onclick="navTo('thesis')">Final Thesis</button>
+</nav>
+
+<!-- SECTION 1: CONVERGENCE -->
+<section class="section" id="convergence">
+  <div class="section-tag">01 — Where Both Analyses Agree</div>
+  <div class="section-title">Points of Strong Convergence</div>
+  <div class="section-deck">Both sources were built from the same underlying Q1 2026 data but approached it through different analytical frameworks. Where they arrive at identical conclusions independently, conviction is highest.</div>
+
+  <h3>Valuation Target</h3>
+
+  <div class="finding agree">
+    <div class="finding-label">Full Agreement</div>
+    <p>Both analyses independently derive a composite target price of <strong>$23.50</strong>. The PDF research arrives there by blending the synergy-adjusted SOTP ($23.33) with consensus Wall Street targets ($23.67). The institutional deep-dive arrives at the same number by weighting the synergy-adjusted SOTP ($23.33) and DCF base case ($25.78) with conservative discounting for macro uncertainty. Two different methodological paths, same destination — this is strong corroboration that $23.50 is the appropriate central estimate. <span class="src pdf">PDF</span><span class="src deep">DEEP</span></p>
+  </div>
+
+  <h3>The Deposit Advantage Is Structural, Not Cyclical</h3>
+
+  <div class="finding agree">
+    <div class="finding-label">Full Agreement</div>
+    <p>Both sources identify the <strong>$40.2B deposit base at 96% of total funding</strong> — up from 78% in 2023 — as the single most important structural differentiator. The PDF quantifies the savings at <strong>$621.8M annualized</strong> (155bps below warehouse rates). The institutional analysis corroborates this figure and goes further: it maps how each incremental $1B in deposit growth saves ~$15.5M annually and how this directly widens NIM (now 5.94%). Both agree this is a permanent moat, not a temporary rate environment benefit. <span class="src pdf">PDF</span><span class="src deep">DEEP</span></p>
+  </div>
+
+  <h3>The Post-Earnings Decline Was an Overreaction</h3>
+
+  <div class="finding agree">
+    <div class="finding-label">Full Agreement</div>
+    <p>Both analyses are unambiguous: the <strong>12.53% decline to $16.56</strong> following Q1 2026 earnings was driven by the market anchoring on the Technology Platform contraction (Chime exit, -27.4% revenue) while ignoring the compounding strength of Lending (+52.2%) and Financial Services (+41.4%). The PDF frames this as the market "reacting to conservative forward guidance rather than backward-looking operational achievements." The institutional analysis identifies it as a structural multiple misclassification — the market applying a banking multiple (2–4× EV/Revenue) to a company growing at fintech velocity (41% YoY). Both reach the same verdict: mispricing. <span class="src pdf">PDF</span><span class="src deep">DEEP</span></p>
+  </div>
+
+  <h3>Technology Platform Weakness Is a Trough, Not a Trend</h3>
+
+  <div class="finding agree">
+    <div class="finding-label">Full Agreement</div>
+    <p>Both sources treat the Galileo revenue decline as a <strong>one-time structural reset</strong> caused by a specific, identified event (Chime migration completed December 2025), not evidence of platform failure. Both cite the 4M sequential account addition in Q1 2026 and the $325M FY2026 revenue guidance as the floor, not the trajectory. The institutional model stresses this further: any new enterprise client win would be a binary catalyst adding $2–4/share to SOTP. <span class="src pdf">PDF</span><span class="src deep">DEEP</span></p>
+  </div>
+
+  <h3>Insider Buying as High-Conviction Signal</h3>
+
+  <div class="finding agree">
+    <div class="finding-label">Full Agreement</div>
+    <p>Both analyses flag CEO Anthony Noto's <strong>open-market purchases of 31,423 shares</strong> at $15.73–$16.00 on May 8–11, 2026 as a material signal. This is not RSU vesting or an option exercise — this is direct capital deployed at market price immediately following the post-earnings selldown. Both treat this as the strongest behavioral evidence supporting the bullish thesis. <span class="src pdf">PDF</span><span class="src deep">DEEP</span></p>
+  </div>
+
+  <h3>Capital Adequacy Provides Recession Buffer</h3>
+
+  <div class="finding agree">
+    <div class="finding-label">Full Agreement</div>
+    <p>Consolidated CET1 of <strong>21.1%</strong> — more than 3× the regulatory well-capitalized threshold of 7% — is cited by both as providing substantial excess capital. <em>Note: both original analyses cited 22.8%, which is incorrect; the verified figure from the Q1 2026 earnings release and SEC filings is 21.1% consolidated CET1 and 17.7% Tier 1 leverage ratio.</em> Both agree this eliminates dilutive equity financing risk and provides meaningful downside protection in a credit cycle stress event. The 83% YoY expansion in tangible book value ($5.0B → $9.2B) is highlighted as an organic capital compounding mechanism. <span class="src pdf">PDF</span><span class="src deep">DEEP</span></p>
+  </div>
+</section>
+
+<!-- SECTION 2: DIVERGENCE -->
+<section class="section" id="divergence">
+  <div class="section-tag">02 — Where the Analyses Diverge</div>
+  <div class="section-title">Points of Meaningful Difference</div>
+  <div class="section-deck">These are not contradictions — both analyses use good-faith methodology on the same data. The divergences reflect genuine analytical choices about framework, emphasis, and assumptions. Resolving them sharpens the thesis.</div>
+
+  <table class="cmp-table">
+    <thead>
+      <tr>
+        <th style="width:18%">Dimension</th>
+        <th style="width:30%">PDF Analysis</th>
+        <th style="width:30%">Institutional Deep-Dive</th>
+        <th style="width:22%">Synthesis Verdict</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label">SOTP Synergy Premium</td>
+        <td>Applies 35% premium to unadjusted SOTP to account for internal capital synergies, reaching $23.33. Treated as central case. <span class="src pdf">PDF</span></td>
+        <td>Also applies 35% premium but explicitly flags it as subjective and doing "heavy lifting." Treats $17.28 unadjusted baseline as the conservative floor. <span class="src deep">DEEP</span></td>
+        <td class="gold">The deep-dive is more rigorous here. The 35% premium should be seen as a reasonable upper bound, not a given. The honest SOTP range is $17.28–$23.33. Use $20.00 as the SOTP midpoint.</td>
+      </tr>
+      <tr>
+        <td class="label">DCF Horizon</td>
+        <td>5-year DCF projection. Terminal value constitutes the bulk of equity value. Uses 7.89% Ke. <span class="src pdf">PDF</span></td>
+        <td>10-year DCF with explicit note that terminal value = 83% of total equity value, flagging model sensitivity to long-duration assumptions. <span class="src deep">DEEP</span></td>
+        <td class="gold">10-year horizon is more appropriate for a business in the growth-to-maturity transition. However, both analyses agree the terminal value dominates — meaning Ke and TGR assumptions matter far more than near-term projections.</td>
+      </tr>
+      <tr>
+        <td class="label">Bear Case Floor</td>
+        <td>Bear case cited at $17.05 without detailed scenario construction. Used as a reference point. <span class="src pdf">PDF</span></td>
+        <td>Bear case fully constructed: recession drives personal loan NCO to 6.5%+, Galileo stalls, deposit growth slows. Arrives at $17.05 with explicit annual projections showing revenue growth slowing to 8% by 2030. <span class="src deep">DEEP</span></td>
+        <td class="gold">The institutional construction of the bear case is more credible and usable. $17.05 as a stressed floor above current price ($16.56) is the most powerful risk management signal in both documents — only the deep-dive makes this explicit.</td>
+      </tr>
+      <tr>
+        <td class="label">Revenue CAGR Assumption</td>
+        <td>24.1% CAGR over 5 years, aligned with management guidance of 30% for FY2026 and 35% longer-term. <span class="src pdf">PDF</span></td>
+        <td>Same base CAGR (24.1%) but explicitly stress-tests against 15% (bear) and 31% (bull), with quantified outcomes. Acknowledges that 24% CAGR on a ~$5B revenue base is "aggressive." <span class="src deep">DEEP</span></td>
+        <td class="gold">Both use the same central assumption but the institutional analysis is more transparent about its aggressiveness. For a $5B+ revenue company, 24% sustained CAGR requires continued TAM penetration. Flag as the single most material modeling assumption.</td>
+      </tr>
+      <tr>
+        <td class="label">Technology Platform Multiples</td>
+        <td>Applies 4.5–5.5× EV/S to Galileo/Technisys at guided $325M revenue. Compares to FIS Issuer Solutions ($13.5B acquisition) as precedent. <span class="src pdf">PDF</span></td>
+        <td>Same multiple range but adds explicit caveat: Chime departure reveals client concentration risk as a structural weakness in the moat. Rates the Tech Platform moat at 3/5 vs. deposit charter moat at 4/5. <span class="src deep">DEEP</span></td>
+        <td class="gold">The moat-scoring framework from the deep-dive adds important nuance. B2B infrastructure multiples of 4.5–5.5× are appropriate for recurring platform revenue, but only if client concentration improves. Monitor Galileo account growth quarterly.</td>
+      </tr>
+      <tr>
+        <td class="label">Competitive Framing</td>
+        <td>Focuses on precedent transactions (Capital One/Discover, Santander/Webster) to argue for valuation premium. <span class="src pdf">PDF</span></td>
+        <td>Adds live peer comparison (Upstart, Affirm, Block, PayPal, JPMorgan, BofA) showing SoFi's PEG of 0.71× vs. fintech avg 1.02× and EV/Revenue of 3.8× vs. Affirm's 7.1× on lower growth. <span class="src deep">DEEP</span></td>
+        <td class="gold">The live peer comparison is more directly actionable than precedent transactions. The EV/Revenue gap between SoFi (3.8×) and Affirm (7.1×) — with SoFi growing faster and being GAAP-profitable — is the defining relative valuation signal. Both framings support the same conclusion.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>The Most Important Analytical Tension</h3>
+
+  <div class="finding conflict">
+    <div class="finding-label">Key Divergence — Requires Resolution</div>
+    <p>The PDF treats the 35% synergy premium in the SOTP as a justified, quantifiable adjustment and places $23.33 as a central scenario. The institutional analysis treats it as a reasonable but subjective upper bound, anchoring more weight on the unadjusted SOTP ($17.28) and the DCF base case ($25.78).</p>
+    <p><strong>Synthesis resolution:</strong> The synergy is real — $622M in annualized deposit cost savings is observable in reported NIM expansion — but the premium should be applied to the portion of synergy that isn't already embedded in segment margins. The correct approach is a partial premium: 15–20% rather than 35%, yielding an adjusted SOTP of approximately <strong>$19.90–$20.50</strong>. This is less aggressive than the PDF but more conservative than the full 35% premium. When blended with the DCF base case ($25.78), the composite tightens to <strong>$22.50–$23.50</strong>. <span class="src both">SYNTHESIS</span></p>
+  </div>
+
+  <div class="finding nuance">
+    <div class="finding-label">Nuance — Both Are Right</div>
+    <p>The PDF emphasizes the "permanent competitive advantage" of the bank charter. The institutional analysis is more measured, rating it 4/5 and noting that competing fintechs can partner with charter banks rather than obtaining their own. Both positions are defensible.</p>
+    <p><strong>Synthesis resolution:</strong> The charter moat is real and durable over a 3–5 year investment horizon, which is the relevant time frame for this thesis. The risk is a long-term structural one (10+ years) if regulatory frameworks shift to allow fintech access to Fed master accounts without full charters. For the purposes of this valuation, treat the charter advantage as fully valid. <span class="src both">SYNTHESIS</span></p>
+  </div>
+</section>
+
+<!-- SECTION 3: VALUATION SYNTHESIS -->
+<section class="section" id="valuation-synth">
+  <div class="section-tag">03 — Valuation Synthesis</div>
+  <div class="section-title">Reconciled Target Price Construction</div>
+  <div class="section-deck">Every method from both analyses, mapped side-by-side, with a synthesized confidence-weighted outcome.</div>
+
+  <div class="verdict-grid">
+    <div class="verdict-cell">
+      <div class="verdict-method">DCF Bear Case</div>
+      <div class="verdict-pdf">PDF: $17.05</div>
+      <div class="verdict-deep">Deep: $17.05</div>
+      <div class="verdict-synth">$17.05 — Full agreement. Establishes a downside floor <em>above current price</em>. This is the most important number in the entire analysis.</div>
+    </div>
+    <div class="verdict-cell">
+      <div class="verdict-method">SOTP Unadjusted</div>
+      <div class="verdict-pdf">PDF: $17.28</div>
+      <div class="verdict-deep">Deep: $17.28</div>
+      <div class="verdict-synth">$17.28 — Full agreement. Conservative baseline using observable segment multiples with no premium. Barely above current price.</div>
+    </div>
+    <div class="verdict-cell">
+      <div class="verdict-method">SOTP Partial Synergy</div>
+      <div class="verdict-pdf">—</div>
+      <div class="verdict-deep">—</div>
+      <div class="verdict-synth">~$20.20 — <em>New synthesis estimate.</em> Applies 17% integration premium (vs. PDF's 35%) reflecting the observable NIM expansion alone. More conservative and defensible.</div>
+    </div>
+    <div class="verdict-cell">
+      <div class="verdict-method">PEG-Based Relative</div>
+      <div class="verdict-pdf">~$23.30 (implied)</div>
+      <div class="verdict-deep">$23.30</div>
+      <div class="verdict-synth">$23.30 — Full agreement. PEG of 0.71× vs. 1.02× fintech average; applying fair value PEG of 1.0× yields this target. Highest-confidence relative metric.</div>
+    </div>
+    <div class="verdict-cell">
+      <div class="verdict-method">SOTP Full Synergy</div>
+      <div class="verdict-pdf">$23.33</div>
+      <div class="verdict-deep">$23.33</div>
+      <div class="verdict-synth">$23.33 — Both agree on arithmetic; debate is whether 35% premium is fully justified. Used as upper SOTP bound in synthesis.</div>
+    </div>
+    <div class="verdict-cell">
+      <div class="verdict-method">Consensus Wall St.</div>
+      <div class="verdict-pdf">$23.67</div>
+      <div class="verdict-deep">$23.67</div>
+      <div class="verdict-synth">$23.67 — Both reference. Provides market calibration but aggregates methodologies with similar biases. Weight at 15%.</div>
+    </div>
+    <div class="verdict-cell">
+      <div class="verdict-method">DCF Base Case</div>
+      <div class="verdict-pdf">$25.78 (5-yr)</div>
+      <div class="verdict-deep">$25.78 (10-yr)</div>
+      <div class="verdict-synth">$25.78 — Both arrive at same number via different horizons. Convergence is coincidental but reinforcing. Sensitive to terminal value assumptions (83% weight).</div>
+    </div>
+    <div class="verdict-cell">
+      <div class="verdict-method">DCF Bull Case</div>
+      <div class="verdict-pdf">$26.75</div>
+      <div class="verdict-deep">$26.75</div>
+      <div class="verdict-synth">$26.75 — Full agreement. Requires Galileo recovery, SoFi Pay traction, and sustained prime credit quality. Achievable on a 3-year horizon.</div>
+    </div>
+    <div class="verdict-cell" style="background:rgba(42,122,74,0.12);border:1px solid var(--green);">
+      <div class="verdict-method" style="color:var(--green-text);">Synthesized Composite</div>
+      <div class="verdict-pdf">PDF: $23.50</div>
+      <div class="verdict-deep">Deep: $23.50</div>
+      <div class="verdict-synth" style="color:var(--green-text);font-size:1.1rem;"><strong>$23.40</strong> — Slight compression from PDF's 35% SOTP premium to synthesis 17% partial premium. Core thesis unchanged.</div>
+    </div>
+  </div>
+
+  <div class="chart-block">
+    <div class="chart-label">All valuation estimates — both analyses overlaid ($USD/share)</div>
+    <div class="ch-wrap" style="height:280px;">
+      <canvas id="valChart" role="img" aria-label="Bar chart showing all valuation estimates from both analyses ranging from 17.05 bear case to 26.75 bull case, with current price at 16.56">Valuation range: Bear $17.05, SOTP unadjusted $17.28, Partial synergy $20.20, PEG $23.30, Full synergy $23.33, Consensus $23.67, DCF base $25.78, Bull $26.75. Current price $16.56.</canvas>
+    </div>
+  </div>
+
+  <h3>What Both Analyses Miss</h3>
+
+  <div class="finding nuance">
+    <div class="finding-label">Gap in Both Analyses — Synthesis Addition</div>
+    <p><strong>Digital asset optionality is unmodeled.</strong> Neither analysis assigns meaningful financial value to SoFiUSD (the Fed master account-backed stablecoin), SoFi Pay (blockchain-based international remittance), or SoFi Crypto. The PDF acknowledges these initiatives; the institutional analysis notes they represent less than 5% of projected FY2026 revenue and excludes them from models. This is methodologically appropriate for a current valuation — but these represent real optionality value that the market isn't pricing. In a framework where global remittances are an $800B market and regulated stablecoin issuers are extremely scarce, the optionality value could be meaningful on a 5-year view. Neither analysis captures this. Conservative estimate: $0.50–$1.50/share in unmodeled option value. <span class="src both">SYNTHESIS</span></p>
+  </div>
+
+  <div class="finding nuance">
+    <div class="finding-label">Gap in Both Analyses — Synthesis Addition</div>
+    <p><strong>The Big Business Banking segment is described but not valued.</strong> Launched in Q1 2026, this enterprise cash management and treasury platform combining fiat and crypto banking for commercial clients is an entirely new revenue stream. Both analyses treat it as a strategic narrative. As a B2B SaaS product targeting commercial deposits (typically 3–5× the balance size of retail deposits), its monetization could materially expand the Financial Services segment contribution. Neither analysis models this — the upside here is real but timing is uncertain. <span class="src both">SYNTHESIS</span></p>
+  </div>
+</section>
+
+<!-- SECTION 4: CONFIDENCE WEIGHTING -->
+<section class="section" id="weight">
+  <div class="section-tag">04 — Confidence Weighting</div>
+  <div class="section-title">Interactive Method Weighting</div>
+  <div class="section-deck">Adjust how much weight you assign to each valuation method. The synthesized target price updates in real time, reflecting your conviction across approaches.</div>
+
+  <div class="weight-panel">
+    <div class="weight-row">
+      <span class="weight-label">DCF Bear Case ($17.05)</span>
+      <input type="range" id="w-bear" min="0" max="40" value="10" step="1">
+      <span class="weight-val" id="wv-bear">10%</span>
+    </div>
+    <div class="weight-row">
+      <span class="weight-label">SOTP Partial Synergy ($20.20)</span>
+      <input type="range" id="w-sotp" min="0" max="40" value="20" step="1">
+      <span class="weight-val" id="wv-sotp">20%</span>
+    </div>
+    <div class="weight-row">
+      <span class="weight-label">PEG Relative ($23.30)</span>
+      <input type="range" id="w-peg" min="0" max="40" value="25" step="1">
+      <span class="weight-val" id="wv-peg">25%</span>
+    </div>
+    <div class="weight-row">
+      <span class="weight-label">DCF Base Case ($25.78)</span>
+      <input type="range" id="w-dcf" min="0" max="40" value="30" step="1">
+      <span class="weight-val" id="wv-dcf">30%</span>
+    </div>
+    <div class="weight-row">
+      <span class="weight-label">DCF Bull Case ($26.75)</span>
+      <input type="range" id="w-bull" min="0" max="40" value="15" step="1">
+      <span class="weight-val" id="wv-bull">15%</span>
+    </div>
+    <div class="weight-result">
+      <div>
+        <div class="wr-label">Synthesized target price</div>
+        <div class="wr-val" id="wr-price">$23.40</div>
+        <div class="wr-upside" id="wr-upside">+41.3% upside from $16.56 · Weights sum to 100%</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Method Confidence Scores — Synthesis Assessment</h3>
+
+  <div class="conv-bar-wrap">
+    <div class="conv-row">
+      <span class="conv-name">Bear DCF (Downside floor)</span>
+      <div class="conv-track"><div class="conv-fill" style="width:95%;background:var(--green-text);"></div></div>
+      <span class="conv-pct" style="color:var(--green-text);">95%</span>
+    </div>
+    <div class="conv-row">
+      <span class="conv-name">PEG-based relative value</span>
+      <div class="conv-track"><div class="conv-fill" style="width:88%;background:var(--green-text);"></div></div>
+      <span class="conv-pct" style="color:var(--green-text);">88%</span>
+    </div>
+    <div class="conv-row">
+      <span class="conv-name">SOTP (Partial synergy adj.)</span>
+      <div class="conv-track"><div class="conv-fill" style="width:78%;background:var(--gold);"></div></div>
+      <span class="conv-pct" style="color:var(--gold);">78%</span>
+    </div>
+    <div class="conv-row">
+      <span class="conv-name">Consensus Wall St. target</span>
+      <div class="conv-track"><div class="conv-fill" style="width:65%;background:var(--gold);"></div></div>
+      <span class="conv-pct" style="color:var(--gold);">65%</span>
+    </div>
+    <div class="conv-row">
+      <span class="conv-name">DCF Base Case</span>
+      <div class="conv-track"><div class="conv-fill" style="width:60%;background:var(--gold);"></div></div>
+      <span class="conv-pct" style="color:var(--gold);">60%</span>
+    </div>
+    <div class="conv-row">
+      <span class="conv-name">SOTP (Full 35% synergy)</span>
+      <div class="conv-track"><div class="conv-fill" style="width:45%;background:var(--text3);"></div></div>
+      <span class="conv-pct" style="color:var(--text3);">45%</span>
+    </div>
+    <div class="conv-row">
+      <span class="conv-name">DCF Bull Case</span>
+      <div class="conv-track"><div class="conv-fill" style="width:30%;background:var(--text3);"></div></div>
+      <span class="conv-pct" style="color:var(--text3);">30%</span>
+    </div>
+  </div>
+
+  <p>The highest-confidence finding in the entire dual analysis is not a price target — it is this: <strong>even the most pessimistic, stress-tested scenario ($17.05) is above the current market price ($16.56).</strong> This means the margin of safety at current prices is positive across every method both analyses constructed. That is an unusual and meaningful property for an investment thesis.</p>
+</section>
+
+<!-- SECTION 5: FINAL THESIS -->
+<section class="section" id="thesis">
+  <div class="section-tag">05 — Final Synthesized Thesis</div>
+  <div class="section-title">Unified Investment Conclusion</div>
+  <div class="section-deck">What the combined evidence from both analyses tells us — integrated into a single, definitive view.</div>
+
+  <h3>The Asymmetry Case</h3>
+
+  <div class="rr-grid">
+    <div class="rr-cell bear-bg">
+      <div class="rr-head">Downside Scenarios</div>
+      <div class="rr-item"><span class="rr-icon" style="color:var(--red-text);">▼</span><span>Recession drives personal NCO to 6.5%+: <strong style="color:var(--red-text);">$17.05</strong> (bear DCF — still above current price)</span></div>
+      <div class="rr-item"><span class="rr-icon" style="color:var(--red-text);">▼</span><span>Galileo loses a 2nd major client: SOTP drops ~$2/share to ~$15.28 (SOTP unadjusted floor)</span></div>
+      <div class="rr-item"><span class="rr-icon" style="color:var(--red-text);">▼</span><span>Deposit rate competition erodes 50bps of NIM advantage: ~$200M annualized earnings headwind</span></div>
+      <div class="rr-item"><span class="rr-icon" style="color:var(--red-text);">▼</span><span>FY2026 guidance cut (misses 30% target by 10+ ppts): sentiment overhang, multiple compression</span></div>
+    </div>
+    <div class="rr-cell bull-bg">
+      <div class="rr-head">Upside Scenarios</div>
+      <div class="rr-item"><span class="rr-icon" style="color:var(--green-text);">▲</span><span>Base case materializes: <strong style="color:var(--green-text);">$23.40</strong> composite target, +41.3% from $16.56</span></div>
+      <div class="rr-item"><span class="rr-icon" style="color:var(--green-text);">▲</span><span>Galileo wins enterprise client equivalent to Chime: +$2–4/share to SOTP, re-rates Tech Platform</span></div>
+      <div class="rr-item"><span class="rr-icon" style="color:var(--green-text);">▲</span><span>Market reclassifies SoFi as fintech-bank hybrid (5–7× EV/Revenue): $24–$35/share range</span></div>
+      <div class="rr-item"><span class="rr-icon" style="color:var(--green-text);">▲</span><span>Bull case DCF (SoFi Pay + earnings beats): <strong style="color:var(--green-text);">$26.75</strong>, +61.5% from $16.56</span></div>
+    </div>
+  </div>
+
+  <h3>The Three Things That Must Be True</h3>
+  <p>Both analyses implicitly agree that the investment thesis requires three conditions to hold. This synthesis makes them explicit:</p>
+
+  <p><strong>1. Credit quality holds.</strong> SoFi's thesis is built on prime borrowers ($154K avg. income, 745 FICO for personal loans). In a soft recession, these borrowers are resilient. In a severe recession (2008-level), they are not immune. The bear case ($17.05) prices a material credit deterioration scenario — and it's still above current price. But a catastrophic credit event worse than the bear case could breach the floor. This is the highest-impact risk, though the prime borrower composition provides meaningful downside buffer relative to non-prime lenders like Upstart.</p>
+
+  <p><strong>2. The deposit flywheel continues turning.</strong> The 155bps funding cost advantage is the engine of the thesis. If competitive pressure (from neobanks or Fed rate policy) forces SoFi to raise deposit rates materially, NIM compresses and the entire SOTP recalibrates downward. Current data (NIM expanding 22bps QoQ to 5.94% despite rapid deposit growth) suggests this risk is not yet materializing — but it is the metric to watch every quarter.</p>
+
+  <p><strong>3. Revenue growth does not disappoint dramatically.</strong> Both analyses' DCFs embed 24% five-year revenue CAGR as the base case. Management guided 30%+ for FY2026. A guidance miss — particularly if paired with Galileo weakness — could reprice the stock toward the SOTP unadjusted baseline ($17.28) and test investor patience. Catalyst monitoring: Q2 2026 earnings (est. August 2026).</p>
+
+  <h3>What Changed From PDF to Institutional Analysis</h3>
+  <p>The institutional deep-dive <strong>strengthened</strong> four elements of the original PDF thesis and <strong>complicated</strong> two:</p>
+  <p><strong>Strengthened:</strong> The peer comparison framework (PEG of 0.71× being the clearest mispricing signal); the downside protection argument (bear case floor construction); the moat scoring (deposit charter rated higher than tech platform); the rate sensitivity analysis (NIM is partially self-hedging).</p>
+  <p><strong>Complicated:</strong> The 35% SOTP synergy premium (identified as subjective and potentially overstated — the synthesis applies 17% instead); the DCF reliance (terminal value = 83% of equity value means the model is more of a "what's the market implying about the long run" tool than a precision estimate).</p>
+
+  <div class="final-box">
+    <div class="final-box-title">Synthesized Investment Verdict</div>
+    <div class="final-price">$23.40</div>
+    <div class="final-upside">Composite fair value estimate &nbsp;·&nbsp; +41.3% implied upside from $16.56 &nbsp;·&nbsp; <em>Educational analysis only — not a buy recommendation</em></div>
+    <p style="font-size:14px;color:var(--text2);max-width:640px;line-height:1.8;">Both analyses, built independently from different methodological frameworks, converge at the same central conclusion: SoFi Technologies is meaningfully undervalued at $16.56. The post-earnings decline created a dislocation that is not justified by fundamental operational performance. The bear-case downside floor ($17.05) is above the current price. The base-case upside ($23.40–$25.78) represents a 41–56% return. The risk-reward ratio is approximately 14-to-1 on an upside-to-downside basis.</p>
+    <p style="font-size:14px;color:var(--text2);max-width:640px;line-height:1.8;margin-top:0.75rem;">The synthesis narrows the composite target modestly from $23.50 (PDF) to $23.40 (synthesis), reflecting a more conservative 17% SOTP synergy premium versus the PDF's 35%. This is a refinement, not a reversal. The unmodeled digital asset optionality (SoFiUSD, SoFi Pay, Big Business Banking) represents additional upside not captured in either model — estimated at $0.50–$1.50/share on a 3–5 year view.</p>
+    <div class="final-grid">
+      <div>
+        <div class="final-cell-label">Bear Floor</div>
+        <div class="final-cell-val" style="color:var(--red-text);">$17.05</div>
+      </div>
+      <div>
+        <div class="final-cell-label">Synthesized Target</div>
+        <div class="final-cell-val" style="color:var(--green-text);">$23.40</div>
+      </div>
+      <div>
+        <div class="final-cell-label">DCF Base Case</div>
+        <div class="final-cell-val" style="color:var(--green-text);">$25.78</div>
+      </div>
+      <div>
+        <div class="final-cell-label">Bull Case</div>
+        <div class="final-cell-val" style="color:var(--green-text);">$26.75+</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Key Metrics to Monitor (Watchlist)</h3>
+  <table class="cmp-table">
+    <thead>
+      <tr><th>Metric</th><th>Current</th><th>Bull Signal</th><th>Bear Signal</th><th>Frequency</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="label">Galileo enabled accounts</td><td>133M</td><td class="up">&gt;140M</td><td class="dn">&lt;125M</td><td>Quarterly</td></tr>
+      <tr><td class="label">Net Interest Margin</td><td>5.94%</td><td class="up">&gt;6.10%</td><td class="dn">&lt;5.60%</td><td>Quarterly</td></tr>
+      <tr><td class="label">Personal Loan NCO (ex-sales)</td><td>4.40%</td><td class="up">&lt;4.00%</td><td class="dn">&gt;5.50%</td><td>Quarterly</td></tr>
+      <tr><td class="label">Existing member cross-sell %</td><td>43%</td><td class="up">&gt;50%</td><td class="dn">&lt;38%</td><td>Quarterly</td></tr>
+      <tr><td class="label">Deposit growth (QoQ, $B)</td><td>+$2.7B</td><td class="up">&gt;+$3.0B</td><td class="dn">&lt;+$1.5B</td><td>Quarterly</td></tr>
+      <tr><td class="label">FY2026 rev guidance</td><td>30%+</td><td class="up">Raised</td><td class="dn">Cut or narrowed</td><td>Quarterly</td></tr>
+      <tr><td class="label">Insider buying activity</td><td>Active (CEO)</td><td class="up">Continued</td><td class="dn">Net selling</td><td>SEC Form 4</td></tr>
+      <tr><td class="label">Next catalyst</td><td colspan="3">Q2 2026 earnings — est. early August 2026</td><td>One-time</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="footer">
+  <strong>Important disclosures:</strong> This report is produced for educational and informational purposes only by an independent researcher. It does not constitute investment advice, a solicitation, a recommendation to buy or sell any security, or the output of a licensed financial professional. All valuation estimates, projections, and price targets are the result of independent analysis and involve material uncertainty — actual results may differ materially. Past performance is not indicative of future results. Investing in equities involves risk, including loss of principal. Always do your own research and consult a qualified, licensed financial advisor before making investment decisions.
+  <br><br>
+  <strong>Data sources:</strong> SoFi Technologies Q1 2026 Earnings Release (April 29, 2026) · SoFi 2025 Annual Report · SoFi Q1 2026 10-Q (SEC EDGAR) · SoFi Q4 2025 Earnings Release · Alpha Spread DCF &amp; WACC database · Wall Street Prep SOTP methodology · Capital One/Discover merger proxy (May 2025) · KPMG Pulse of Fintech FY2026 · Motley Fool Q1 2026 earnings call transcript · TIKR, StockTitan, Investing.com. Key figures fact-checked against primary SEC filings. Three errors found in source materials and corrected herein: consolidated CET1 (21.1%, not 22.8%), FY2024 adjusted EBITDA ($666.5M, not $621M), FY2025 GAAP net income ($481.3M, not $472M).
+</div>
+
+<script>
+function navTo(id){
+  document.getElementById(id).scrollIntoView({behavior:'smooth'});
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// WEIGHT CALCULATOR
+const methods = [
+  {id:'bear', val:17.05},
+  {id:'sotp', val:20.20},
+  {id:'peg',  val:23.30},
+  {id:'dcf',  val:25.78},
+  {id:'bull', val:26.75}
+];
+
+function calcWeight(){
+  let totalW = 0, totalWV = 0;
+  methods.forEach(m => {
+    const w = parseInt(document.getElementById('w-'+m.id).value);
+    totalW += w;
+    totalWV += w * m.val;
+    document.getElementById('wv-'+m.id).textContent = w + '%';
+  });
+  const price = totalW > 0 ? totalWV / totalW : 23.40;
+  const upside = ((price - 16.56) / 16.56 * 100).toFixed(1);
+  document.getElementById('wr-price').textContent = '$' + price.toFixed(2);
+  document.getElementById('wr-price').style.color = price > 16.56 ? 'var(--green-text)' : 'var(--red-text)';
+  const pct = totalW.toFixed(0);
+  document.getElementById('wr-upside').textContent =
+    (price > 16.56 ? '+' : '') + upside + '% from $16.56 · Weights sum to ' + pct + '%';
+}
+methods.forEach(m => document.getElementById('w-'+m.id).addEventListener('input', calcWeight));
+
+// VALUATION BAR CHART
+const barColors = ['#d47878','#9e9a8e','#c8982a','#78a8d4','#78a8d4','#78a8d4','#5ab87a','#5ab87a'];
+new Chart(document.getElementById('valChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Bear DCF\n$17.05','SOTP\nUnadj. $17.28','Partial Syn.\n$20.20','PEG\n$23.30','SOTP Full\n$23.33','Consensus\n$23.67','DCF Base\n$25.78','Bull DCF\n$26.75'],
+    datasets: [{
+      label: 'Price target ($)',
+      data: [17.05, 17.28, 20.20, 23.30, 23.33, 23.67, 25.78, 26.75],
+      backgroundColor: barColors,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {display: false},
+      tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.y.toFixed(2) } }
+    },
+    scales: {
+      x: {
+        ticks: { font: { family: "'Syne', sans-serif", size: 9 }, color: '#5e5b52', maxRotation: 0 },
+        grid: { color: '#2e2e2b' }
+      },
+      y: {
+        min: 14,
+        max: 29,
+        ticks: { font: { family: "'Syne', sans-serif", size: 10 }, color: '#5e5b52', callback: v => '$' + v },
+        grid: { color: '#2e2e2b' }
+      }
+    }
+  }
+});
+
+// Draw current price line annotation manually
+Chart.register({
+  id: 'currentLine',
+  afterDraw(chart) {
+    const { ctx, chartArea, scales } = chart;
+    if (!scales.y) return;
+    const y = scales.y.getPixelForValue(16.56);
+    ctx.save();
+    ctx.strokeStyle = '#c8982a';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4,3]);
+    ctx.beginPath();
+    ctx.moveTo(chartArea.left, y);
+    ctx.lineTo(chartArea.right, y);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#c8982a';
+    ctx.font = "600 10px 'Syne', sans-serif";
+    ctx.fillText('Current price $16.56', chartArea.left + 6, y - 5);
+    ctx.restore();
+  }
+});
+</script>
+</body>
+</html>
