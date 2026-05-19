@@ -1150,7 +1150,224 @@
   }
   .faq-a strong { color: var(--ink); font-weight: 500; }
 
-  /* ── DISCLAIMER ── */
+  /* ── CTA SECTION ── */
+  .cta-shell {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 72px;
+    align-items: center;
+  }
+  @media (max-width: 860px) {
+    .cta-shell { grid-template-columns: 1fr; gap: 48px; }
+  }
+
+  .cta-kicker {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--green-mid);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+  .cta-kicker::before {
+    content: '';
+    width: 20px;
+    height: 1px;
+    background: var(--green-mid);
+    display: block;
+  }
+  .cta-headline {
+    font-family: var(--serif);
+    font-size: clamp(34px, 4.8vw, 54px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: 22px;
+    font-variation-settings: "opsz" 144;
+    text-wrap: balance;
+  }
+  .cta-headline em { font-style: italic; color: var(--green); font-weight: 600; }
+  .cta-body {
+    font-size: 16px;
+    color: var(--ink-soft);
+    font-weight: 300;
+    line-height: 1.75;
+    margin-bottom: 28px;
+    max-width: 42ch;
+  }
+  .cta-trust {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 36px;
+  }
+  .cta-trust span {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 13px;
+    color: var(--ink-muted);
+    font-family: var(--mono);
+    letter-spacing: 0.02em;
+  }
+  .cta-trust svg { flex-shrink: 0; color: var(--ink-muted); }
+  .cta-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+  .cta-btn-primary {
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    background: var(--ink);
+    padding: 14px 28px;
+    border-radius: 3px;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+    letter-spacing: -0.01em;
+  }
+  .cta-btn-primary:hover { background: var(--green-deep); transform: translateY(-1px); }
+  .cta-btn-ghost {
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--rule);
+    padding: 14px 28px;
+    border-radius: 3px;
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+    letter-spacing: -0.01em;
+  }
+  .cta-btn-ghost:hover { border-color: var(--ink-muted); background: var(--paper-warm); }
+
+  /* Session card */
+  .cta-right { position: relative; }
+  .cta-card {
+    background: #181A14;
+    border-radius: 16px;
+    padding: 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-card::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(43,166,123,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-card-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: #6B7269;
+    margin-bottom: 14px;
+  }
+  .cta-card-title {
+    font-family: var(--serif);
+    font-size: clamp(26px, 3.2vw, 36px);
+    font-weight: 700;
+    color: white;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 28px;
+    font-variation-settings: "opsz" 96;
+  }
+  .cta-card-title em {
+    font-style: italic;
+    color: var(--amber);
+    font-weight: 600;
+  }
+  .cta-levels {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+  .cta-level {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .cta-level:hover { background: rgba(255,255,255,0.07); }
+  .cta-level.active {
+    background: rgba(201,151,58,0.1);
+    border-color: rgba(201,151,58,0.3);
+  }
+  .cta-level-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .cta-level-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+    flex: 1;
+  }
+  .cta-level-sub {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #6B7269;
+    letter-spacing: 0.04em;
+  }
+  .cta-level.active .cta-level-sub { color: rgba(201,151,58,0.7); }
+
+  .cta-card-meta {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .cta-meta-item {
+    background: #181A14;
+    padding: 14px 12px;
+  }
+  .cta-meta-lbl {
+    font-family: var(--mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #6B7269;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .cta-meta-val {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+    display: block;
+    letter-spacing: -0.01em;
+    font-variation-settings: "opsz" 48;
+  }
+  .cta-card-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .cta-card-note svg { flex-shrink: 0; margin-top: 3px; }
   .disclaimer {
     background: var(--paper-warm);
     border: 1px solid var(--rule);
@@ -1759,6 +1976,7 @@
     <a href="#reality" class="nav-link"><span class="n">vi.</span>Reality Check</a>
     <a href="#action" class="nav-link"><span class="n">vii.</span>What To Do</a>
     <a href="#faq" class="nav-link"><span class="n">viii.</span>FAQs</a>
+    <a href="#cta" class="nav-link"><span class="n">↗</span>Work together</a>
   </div>
 </nav>
 
@@ -2423,6 +2641,80 @@
   </div>
 </section>
 
+<!-- CTA -->
+<section id="cta" style="padding: 0; border-top: 1px solid var(--rule);">
+  <div class="container" style="padding-top: 88px; padding-bottom: 88px;">
+    <div class="cta-shell">
+
+      <!-- LEFT: copy -->
+      <div class="cta-left">
+        <span class="cta-kicker">Work with InsightInvest</span>
+        <h2 class="cta-headline">Let's build you and<br>your child's portfolio<br><em>together.</em></h2>
+        <p class="cta-body">The numbers in this guide are honest. But numbers alone don't open accounts, automate contributions, or decide between VOO and SSPN. That's what a session is for — one hour, your portfolio, your starting point, your child's age.</p>
+        <div class="cta-trust">
+          <span><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M1 5h12" stroke="currentColor" stroke-width="1.2"/></svg>100% confidential</span>
+          <span><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M5 7l1.5 1.5L9 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Written action plan included</span>
+          <span><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.5C4 1.5 1.5 4 1.5 7S4 12.5 7 12.5 12.5 10 12.5 7 10 1.5 7 1.5z" stroke="currentColor" stroke-width="1.2"/><path d="M7 4.5v3l2 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>60 minutes, no filler</span>
+        </div>
+        <div class="cta-btns">
+          <a href="https://www.leiholding.com/insightinvest-1on1.html" target="_blank" rel="noopener" class="cta-btn-primary">Book a session</a>
+          <a href="https://www.leiholding.com/insightinvest-1on1.html" target="_blank" rel="noopener" class="cta-btn-ghost">See how it works</a>
+        </div>
+      </div>
+
+      <!-- RIGHT: session card -->
+      <div class="cta-right">
+        <div class="cta-card">
+          <div class="cta-card-tag">YOUR SESSION</div>
+          <div class="cta-card-title">60 minutes of<br><em>pure clarity</em></div>
+
+          <div class="cta-levels">
+            <div class="cta-level" data-dot="green">
+              <span class="cta-level-dot" style="background:#4CAF82"></span>
+              <span class="cta-level-name">Just starting out</span>
+              <span class="cta-level-sub">Foundations</span>
+            </div>
+            <div class="cta-level active" data-dot="amber">
+              <span class="cta-level-dot" style="background:#C9973A"></span>
+              <span class="cta-level-name">Have a portfolio</span>
+              <span class="cta-level-sub">Growth</span>
+            </div>
+            <div class="cta-level" data-dot="purple">
+              <span class="cta-level-dot" style="background:#8B7EC8"></span>
+              <span class="cta-level-name">Want to optimise</span>
+              <span class="cta-level-sub">Precision</span>
+            </div>
+          </div>
+
+          <div class="cta-card-meta">
+            <div class="cta-meta-item">
+              <span class="cta-meta-lbl">DURATION</span>
+              <span class="cta-meta-val">60 min</span>
+            </div>
+            <div class="cta-meta-item">
+              <span class="cta-meta-lbl">FORMAT</span>
+              <span class="cta-meta-val">Private</span>
+            </div>
+            <div class="cta-meta-item">
+              <span class="cta-meta-lbl">PREP</span>
+              <span class="cta-meta-val">24 hrs</span>
+            </div>
+          </div>
+
+          <div class="cta-card-note">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polyline points="2,7 5.5,10.5 12,4" stroke="#2BA67B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div>
+              <div style="font-size:12px; color:#C7C9C2; font-family: var(--mono); letter-spacing:0.02em;">Personalised to your portfolio</div>
+              <div style="font-size:13px; color:#fff; font-weight:500; margin-top:2px;">Not a template session</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- DISCLAIMER -->
 <section style="padding: 40px 0 64px;">
   <div class="container">
@@ -2452,6 +2744,14 @@
 </footer>
 
 <script>
+// ── CTA LEVEL SELECTOR ──
+document.querySelectorAll('.cta-level').forEach(level => {
+  level.addEventListener('click', () => {
+    document.querySelectorAll('.cta-level').forEach(l => l.classList.remove('active'));
+    level.classList.add('active');
+  });
+});
+
 // ── MAIN GROWTH CHART ──
 const ctx = document.getElementById('growthChart').getContext('2d');
 const labels = [5,10,15,20,25,30,35,40,45,50,55,60,65];
