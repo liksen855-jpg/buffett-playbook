@@ -3,454 +3,600 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Insight Invest — markets, intelligence, edge</title>
+  <title>Tools — Insight Invest</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,18..72,400;0,18..72,500;0,18..72,600;1,18..72,400;1,18..72,500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --paper: #faf7f1; --paper-2: #f3eee2; --ink: #0f0d09;
-      --ink-2: rgba(15,13,9,0.72); --ink-3: rgba(15,13,9,0.50); --ink-4: rgba(15,13,9,0.28);
-      --rule: rgba(15,13,9,0.12); --rule-soft: rgba(15,13,9,0.06);
-      --red: #d8341c; --red-deep: #a8261a;
-      --up: #167a3e; --down: #c1331c;
-      --sans: 'Geist', system-ui, sans-serif;
-      --mono: 'Geist Mono', ui-monospace, monospace;
-      --serif: 'Newsreader', Georgia, serif;
+      --paper:#faf7f1; --paper-2:#f3eee2; --ink:#0f0d09;
+      --ink-2:rgba(15,13,9,0.72); --ink-3:rgba(15,13,9,0.50); --ink-4:rgba(15,13,9,0.28);
+      --rule:rgba(15,13,9,0.12); --rule-soft:rgba(15,13,9,0.06);
+      --red:#d8341c; --red-deep:#a8261a; --red-tint:#fbe5dd;
+      --up:#167a3e;
+      --sans:'Geist',system-ui,sans-serif;
+      --mono:'Geist Mono',ui-monospace,monospace;
+      --serif:'Newsreader',Georgia,serif;
+      --ease-out-quart:cubic-bezier(0.25,1,0.5,1);
+      --ease-spring:cubic-bezier(0.34,1.56,0.64,1);
     }
-    *, *::before, *::after { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
-    h1,h2,h3,h4,h5,h6 { margin: 0; font-weight: 600; letter-spacing: -0.02em; }
-    p { margin: 0; } a { color: inherit; text-decoration: none; cursor: pointer; }
-    ul, ol { margin: 0; padding: 0; list-style: none; }
-    button { font: inherit; cursor: pointer; border: 0; background: none; color: inherit; padding: 0; }
-    svg { display: block; }
+    *,*::before,*::after{box-sizing:border-box;}
+    html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+    h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-0.02em;}
+    p{margin:0;} a{color:inherit;text-decoration:none;cursor:pointer;}
+    ul,ol{margin:0;padding:0;list-style:none;}
+    button{font:inherit;cursor:pointer;border:0;background:none;color:inherit;padding:0;}
+    svg{display:block;}
 
-    /* ── TopBar ── */
-    .topbar { border-bottom: 1px solid var(--rule); }
-    .topbar-inner { max-width: 1280px; margin: 0 auto; padding: 20px 56px; display: flex; justify-content: space-between; align-items: center; }
-    .logo { display: flex; align-items: center; gap: 4px; font-weight: 700; font-size: 18px; letter-spacing: -0.02em; }
-    .logo-dot { color: var(--red); }
-    .topbar nav { display: flex; gap: 32px; font-size: 14px; color: var(--ink-2); }
-    .topbar-actions { display: flex; gap: 20px; align-items: center; font-size: 13.5px; color: var(--ink-2); }
-    .btn-subscribe { padding: 8px 16px; border: 1px solid var(--ink); font-weight: 500; }
+    /* ── TOPBAR ── */
+    .topbar{border-bottom:1px solid var(--rule);position:sticky;top:0;z-index:100;background:var(--paper);backdrop-filter:blur(12px);}
+    .topbar-inner{max-width:1280px;margin:0 auto;padding:18px 48px;display:flex;justify-content:space-between;align-items:center;gap:24px;}
+    .logo{display:flex;align-items:center;gap:3px;font-weight:700;font-size:17px;letter-spacing:-0.02em;flex-shrink:0;}
+    .logo-dot{color:var(--red);}
+    .topbar-nav{display:flex;gap:28px;font-size:13.5px;color:var(--ink-2);}
+    .topbar-nav a{transition:color 0.15s ease;}
+    .topbar-nav a:hover{color:var(--ink);}
+    .topbar-nav a.active{color:var(--ink);font-weight:600;border-bottom:1px solid var(--ink);padding-bottom:1px;}
+    .topbar-actions{display:flex;gap:16px;align-items:center;font-size:13px;color:var(--ink-2);}
+    .btn-subscribe{padding:8px 16px;border:1px solid var(--ink);font-weight:500;font-size:13px;transition:background 0.15s,color 0.15s;}
+    .btn-subscribe:hover{background:var(--ink);color:var(--paper);}
+    /* hamburger */
+    .hamburger{display:none;flex-direction:column;gap:5px;padding:4px;cursor:pointer;}
+    .hamburger span{display:block;width:22px;height:1.5px;background:var(--ink);transition:transform 0.3s var(--ease-out-quart),opacity 0.3s;}
+    .hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+    .hamburger.open span:nth-child(2){opacity:0;}
+    .hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+    /* mobile menu */
+    .mobile-menu{display:none;flex-direction:column;background:var(--paper);border-top:1px solid var(--rule);padding:24px 24px 32px;gap:0;}
+    .mobile-menu a{padding:14px 0;font-size:18px;font-weight:500;border-bottom:1px solid var(--rule-soft);letter-spacing:-0.01em;}
+    .mobile-menu a:last-child{border-bottom:none;}
+    .mobile-menu .m-subscribe{margin-top:20px;padding:14px 20px;background:var(--ink);color:var(--paper);text-align:center;font-weight:600;font-size:14px;}
 
-    /* ── Hero ── */
-    .hero { position: relative; }
-    .folio { position: absolute; top: 36px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; color: var(--ink-4); text-transform: uppercase; }
-    .folio-l { left: 56px; } .folio-r { right: 56px; }
-    .hero-inner { max-width: 1280px; margin: 0 auto; padding: 180px 56px 140px; text-align: center; }
-    .hero h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(52px, 6.6vw, 92px); line-height: 1.08; letter-spacing: -0.025em; max-width: 1100px; margin: 0 auto; }
-    .hero-accent { color: var(--red); font-style: italic; font-weight: 500; }
-    .hero-sub { margin-top: 40px; font-size: 19px; line-height: 1.55; color: var(--ink-3); max-width: 620px; margin: 40px auto 0; letter-spacing: -0.005em; }
-    .hero-ctas { margin-top: 44px; display: flex; gap: 14px; justify-content: center; align-items: center; }
-    .cta-primary { padding: 14px 24px; background: var(--ink); color: var(--paper); font-size: 14px; font-weight: 500; letter-spacing: -0.005em; }
-    .cta-ghost { padding: 14px 22px; color: var(--ink); font-size: 14px; font-weight: 500; letter-spacing: -0.005em; }
-    .stats-band { max-width: 1280px; margin: 0 auto; padding: 0 56px; }
-    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--ink); border-bottom: 1px solid var(--rule); }
-    .stat-cell { padding: 20px 24px; display: flex; align-items: baseline; gap: 12px; }
-    .stat-cell + .stat-cell { border-left: 1px solid var(--rule); }
-    .stat-n { font-weight: 600; font-size: 32px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
-    .stat-l { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.14em; text-transform: uppercase; }
+    /* ── PAGE HEADER ── */
+    .page-header{padding:80px 48px 64px;border-bottom:2px solid var(--ink);overflow:hidden;position:relative;}
+    .page-header::before{content:'';position:absolute;right:-120px;top:-120px;width:480px;height:480px;border-radius:50%;border:1px solid var(--rule);pointer-events:none;}
+    .page-header::after{content:'';position:absolute;right:-60px;top:-60px;width:320px;height:320px;border-radius:50%;border:1px solid var(--rule-soft);pointer-events:none;}
+    .folio{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--ink-4);text-transform:uppercase;margin-bottom:48px;display:flex;justify-content:space-between;}
+    .page-header-inner{max-width:1280px;margin:0 auto;}
+    .page-kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-3);margin-bottom:20px;}
+    .page-h1{font-family:var(--serif);font-weight:400;font-size:clamp(44px,6vw,84px);line-height:1.05;letter-spacing:-0.025em;max-width:820px;}
+    .page-h1 em{font-style:italic;color:var(--red);}
+    .header-bottom{display:flex;justify-content:space-between;align-items:flex-end;margin-top:40px;gap:40px;flex-wrap:wrap;}
+    .page-dek{font-size:17px;line-height:1.65;color:var(--ink-3);max-width:520px;letter-spacing:-0.005em;}
+    .filter-row{display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap;}
+    .filter-btn{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;padding:8px 16px;border:1px solid var(--rule);color:var(--ink-3);cursor:pointer;transition:all 0.15s ease;background:transparent;}
+    .filter-btn:hover,.filter-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
 
-    /* ── Latest ── */
-    .latest { padding: 120px 56px; }
-    .latest-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 160px 1fr; gap: 56px; align-items: start; }
-    .section-label { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-3); padding-top: 16px; }
-    .meta-row { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
-    .meta-item { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--ink-3); }
-    .meta-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--ink-4); }
-    .essay-title { font-weight: 600; font-size: 56px; line-height: 1.02; letter-spacing: -0.035em; }
-    .essay-dek { margin-top: 24px; font-size: 19px; line-height: 1.55; color: var(--ink-2); max-width: 720px; letter-spacing: -0.005em; }
-    .underline-link { margin-top: 32px; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; padding-bottom: 4px; border-bottom: 1px solid currentColor; }
+    /* ── TOOLS LIST ── */
+    .tools-section{padding:0 48px 100px;}
+    .tools-inner{max-width:1280px;margin:0 auto;}
 
-    /* ── What's Here ── */
-    .whats-here { padding: 80px 56px 140px; border-top: 1px solid var(--rule); }
-    .whats-here-inner { max-width: 1280px; margin: 0 auto; }
-    .whats-header { display: grid; grid-template-columns: 160px 1fr; gap: 56px; align-items: start; margin-bottom: 64px; }
-    .whats-tagline { font-weight: 500; font-size: 32px; line-height: 1.15; letter-spacing: -0.025em; max-width: 760px; }
-    .cols3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 56px; }
-    .col-card { padding-top: 20px; border-top: 1px solid var(--ink); }
-    .col-top { display: flex; justify-content: space-between; align-items: baseline; }
-    .col-n { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--red); font-weight: 600; }
-    .col-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
-    .col-title { margin-top: 28px; font-size: 40px; font-weight: 600; letter-spacing: -0.03em; }
-    .col-body { margin-top: 14px; font-size: 15px; line-height: 1.6; color: var(--ink-2); min-height: 100px; }
-    .col-meta { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; color: var(--ink-3); text-transform: uppercase; margin-top: 20px; }
-    .col-cta { margin-top: 24px; display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; padding-bottom: 3px; border-bottom: 1px solid var(--ink); }
-    .mono-arrow { font-family: var(--mono); font-size: 12px; }
+    /* accordion-style cards on mobile, full cards on desktop */
+    .tool-item{border-bottom:1px solid var(--rule);overflow:hidden;}
+    .tool-item:first-child{border-top:1px solid var(--rule);margin-top:0;}
 
-    /* ── Tool Showcase ── */
-    .tool-section { padding: 80px 56px 120px; border-top: 1px solid var(--rule); background: var(--paper-2); }
-    .tool-section-inner { max-width: 1280px; margin: 0 auto; }
-    .tool-header { display: grid; grid-template-columns: 160px 1fr; gap: 56px; align-items: start; margin-bottom: 48px; }
-    .tool-tagline { font-weight: 500; font-size: 32px; line-height: 1.15; letter-spacing: -0.025em; max-width: 760px; }
-    .tool-sub { margin-top: 16px; font-size: 16px; line-height: 1.6; color: var(--ink-3); max-width: 640px; }
+    /* desktop: full expanded card */
+    .tool-row{display:grid;grid-template-columns:64px 1fr auto;gap:0;align-items:stretch;min-height:180px;cursor:pointer;transition:background 0.2s ease;}
+    .tool-row:hover{background:var(--paper-2);}
+    .tool-row.expanded{background:var(--paper-2);}
 
-    /* IV Calculator */
-    .ivc { background: var(--paper); border: 1px solid var(--ink); box-shadow: 0 1px 0 var(--ink), 6px 6px 0 var(--ink); }
-    .ivc-titlebar { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; border-bottom: 1px solid var(--ink); background: var(--paper-2); }
-    .ivc-dots { display: flex; gap: 5px; }
-    .ivc-dot { width: 9px; height: 9px; border-radius: 50%; }
-    .ivc-url { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; margin-left: 14px; }
-    .ivc-status { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--ink-3); }
-    .ivc-connected { color: var(--up); display: inline-flex; align-items: center; gap: 4px; }
-    .ivc-live { width: 6px; height: 6px; border-radius: 50%; background: var(--up); }
-    .ivc-body { display: grid; grid-template-columns: 260px 1fr 240px; min-height: 480px; }
-    .ivc-inputs { padding: 24px 20px; border-right: 1px solid var(--ink); }
-    .ivc-kicker { font-family: var(--mono); font-size: 10.5px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 14px; }
-    .ivc-ticker-box { margin-top: 6px; padding: 10px 12px; border: 1px solid var(--ink); background: var(--paper-2); display: flex; justify-content: space-between; align-items: center; }
-    .ivc-ticker-sym { font-family: var(--mono); font-weight: 600; font-size: 17px; letter-spacing: 0.06em; }
-    .ivc-ticker-ex { font-family: var(--mono); font-size: 10px; color: var(--ink-3); }
-    .slider-row { margin-bottom: 18px; }
-    .slider-labels { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
-    .slider-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--ink-2); text-transform: uppercase; }
-    .slider-val { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--red); }
-    .slider-track { position: relative; height: 4px; background: var(--rule); }
-    .slider-fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--ink); }
-    .slider-thumb { position: absolute; top: -4px; width: 12px; height: 12px; background: var(--red); border: 1px solid var(--ink); }
-    .slider-hint { font-family: var(--mono); font-size: 9.5px; color: var(--ink-4); letter-spacing: 0.04em; margin-top: 4px; }
-    .ivc-center { padding: 24px 28px; display: flex; flex-direction: column; }
-    .ivc-price-row { display: flex; align-items: baseline; gap: 14px; margin-top: 6px; }
-    .ivc-price { font-size: 76px; font-weight: 700; letter-spacing: -0.035em; line-height: 0.95; font-variant-numeric: tabular-nums; }
-    .ivc-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: var(--up); color: var(--paper); font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.04em; }
-    .ivc-market { font-family: var(--mono); font-size: 11px; color: var(--ink-3); margin-top: 8px; }
-    .ivc-confidence { text-align: right; }
-    .conf-squares { display: inline-flex; gap: 2px; }
-    .conf-sq { width: 8px; height: 8px; }
-    .ivc-chart { margin-top: 24px; flex: 1; }
-    .ivc-verdict { margin-top: 24px; padding: 14px 18px; background: var(--ink); color: var(--paper); display: flex; justify-content: space-between; align-items: center; }
-    .verdict-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; color: rgba(243,238,226,0.55); text-transform: uppercase; }
-    .verdict-text { font-size: 17px; font-weight: 600; margin-top: 2px; letter-spacing: -0.01em; }
-    .verdict-pill { padding: 6px 10px; border: 1px solid rgba(243,238,226,0.3); font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; }
-    .ivc-assumptions { padding: 24px 20px; border-left: 1px solid var(--ink); background: var(--paper-2); }
-    .assump-list { display: flex; flex-direction: column; gap: 12px; margin-top: 0; }
-    .assump-row { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--rule); padding-bottom: 8px; }
-    .assump-key { font-family: var(--mono); font-size: 10.5px; color: var(--ink-2); letter-spacing: 0.04em; }
-    .assump-val { font-family: var(--mono); font-size: 11.5px; font-weight: 500; }
-    .scenario-toggle { display: flex; border: 1px solid var(--ink); }
-    .scenario-btn { flex: 1; padding: 8px 0; font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
-    .scenario-btn.active { background: var(--ink); color: var(--paper); }
-    .scenario-btn:not(:last-child) { border-right: 1px solid var(--ink); }
-    .scenario-range { font-family: var(--mono); font-size: 10px; color: var(--ink-4); letter-spacing: 0.04em; margin-top: 8px; }
-    .ivc-statusbar { display: flex; justify-content: space-between; align-items: center; padding: 8px 16px; border-top: 1px solid var(--ink); background: var(--ink); color: rgba(243,238,226,0.7); font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; }
+    .tool-row-num{padding:40px 24px;border-right:1px solid var(--rule);display:flex;align-items:flex-start;justify-content:center;flex-shrink:0;}
+    .tool-num-txt{font-family:var(--mono);font-size:11px;letter-spacing:0.16em;color:var(--red);font-weight:600;writing-mode:vertical-lr;transform:rotate(180deg);}
 
-    /* ── Editor ── */
-    .editor-section { padding: 120px 56px; border-top: 1px solid var(--rule); }
-    .editor-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 160px 1fr 160px; gap: 56px; align-items: start; }
-    .editor-quote { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 32px; line-height: 1.4; letter-spacing: -0.01em; max-width: 720px; }
-    .editor-byline { margin-top: 32px; display: flex; align-items: center; gap: 14px; }
-    .editor-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--paper-2); border: 1px solid var(--rule); flex-shrink: 0; }
-    .editor-name { font-size: 14px; font-weight: 600; }
-    .editor-title { font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); letter-spacing: 0.06em; margin-top: 2px; }
+    .tool-row-body{padding:36px 40px;display:flex;flex-direction:column;justify-content:center;}
+    .tool-row-top{display:flex;align-items:center;gap:16px;margin-bottom:10px;}
+    .tool-badge{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;padding:4px 10px;border:1px solid;border-radius:0;}
+    .badge-free{border-color:var(--up);color:var(--up);}
+    .badge-members{border-color:var(--red);color:var(--red);}
+    .tool-row-title{font-size:clamp(22px,2.5vw,32px);font-weight:600;letter-spacing:-0.025em;line-height:1.1;}
+    .tool-row-sub{margin-top:8px;font-size:14.5px;line-height:1.6;color:var(--ink-3);max-width:680px;}
+    .tool-tags{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;}
+    .tool-tag{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding:4px 10px;background:var(--paper);border:1px solid var(--rule);color:var(--ink-3);}
 
-    /* ── Members ── */
-    .members { background: var(--ink); color: var(--paper); padding: 96px 56px; }
-    .members-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 160px 1fr auto; gap: 56px; align-items: center; }
-    .members-label { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(243,238,226,0.55); }
-    .members-h2 { font-size: 56px; font-weight: 600; line-height: 1.0; letter-spacing: -0.035em; color: var(--paper); }
-    .members-muted { color: rgba(243,238,226,0.5); }
-    .members-body { margin-top: 22px; font-size: 17px; line-height: 1.5; color: rgba(243,238,226,0.72); max-width: 620px; letter-spacing: -0.005em; }
-    .btn-join { padding: 20px 28px; background: var(--red); color: var(--paper); font-weight: 600; font-size: 14px; letter-spacing: -0.005em; white-space: nowrap; display: inline-block; }
+    .tool-row-action{padding:36px 40px 36px 24px;display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;flex-shrink:0;border-left:1px solid var(--rule);}
+    .expand-icon{width:36px;height:36px;border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;transition:transform 0.3s var(--ease-out-quart),background 0.15s,border-color 0.15s;}
+    .expand-icon svg{transition:transform 0.3s var(--ease-out-quart);}
+    .tool-row:hover .expand-icon,.tool-row.expanded .expand-icon{background:var(--ink);border-color:var(--ink);}
+    .tool-row:hover .expand-icon svg,.tool-row.expanded .expand-icon svg{filter:invert(1);}
+    .tool-row.expanded .expand-icon svg{transform:rotate(45deg);}
+    .tool-icon-wrap{width:52px;height:52px;border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;background:var(--paper);transition:background 0.2s;}
+    .tool-row:hover .tool-icon-wrap,.tool-row.expanded .tool-icon-wrap{background:var(--paper-2);}
 
-    /* ── Footer ── */
-    .footer { padding: 64px 56px 36px; border-top: 1px solid var(--rule); }
-    .footer-inner { max-width: 1280px; margin: 0 auto; }
-    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 56px; align-items: start; }
-    .footer-logo { font-weight: 700; font-size: 16px; letter-spacing: -0.02em; }
-    .footer-desc { margin-top: 10px; font-size: 13px; color: var(--ink-3); max-width: 320px; line-height: 1.6; }
-    .footer-col-head { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 12px; }
-    .footer-links { display: flex; flex-direction: column; gap: 6px; }
-    .footer-links li { font-size: 13px; color: var(--ink-2); }
-    .footer-base { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em; color: var(--ink-3); }
+    /* expanded panel */
+    .tool-panel{display:none;border-top:1px solid var(--rule);background:var(--paper-2);}
+    .tool-panel.open{display:block;animation:slideDown 0.35s var(--ease-out-quart) forwards;}
+    @keyframes slideDown{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+    .tool-panel-inner{display:grid;grid-template-columns:1fr 360px;gap:0;max-width:100%;}
+    .tool-panel-left{padding:40px 40px 40px 104px;border-right:1px solid var(--rule);}
+    .tool-panel-right{padding:40px;display:flex;flex-direction:column;gap:28px;}
 
-    /* ── Patreon ── */
-    .patreon { padding: 96px 56px; border-top: 1px solid var(--rule); }
-    .patreon-inner { max-width: 1280px; margin: 0 auto; }
-    .patreon-header { display: grid; grid-template-columns: 160px 1fr; gap: 56px; align-items: start; margin-bottom: 64px; }
-    .patreon-tagline { font-weight: 500; font-size: 32px; line-height: 1.15; letter-spacing: -0.025em; max-width: 760px; }
-    .patreon-tagline em { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--red); }
-    .patreon-tiers { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; border: 1px solid var(--ink); }
-    .tier { padding: 36px 40px 40px; position: relative; }
-    .tier + .tier { border-left: 1px solid var(--ink); }
-    .tier-featured { background: var(--ink); color: var(--paper); }
-    .tier-badge { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--red); margin-bottom: 20px; }
-    .tier-featured .tier-badge { color: rgba(243,238,226,0.5); }
-    .tier-name { font-size: 13px; font-weight: 600; letter-spacing: -0.01em; color: var(--ink-3); margin-bottom: 6px; }
-    .tier-featured .tier-name { color: rgba(243,238,226,0.55); }
-    .tier-price { font-size: 52px; font-weight: 700; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
-    .tier-price sup { font-size: 22px; font-weight: 600; vertical-align: super; letter-spacing: 0; }
-    .tier-price-period { font-family: var(--mono); font-size: 11px; color: var(--ink-3); letter-spacing: 0.06em; margin-top: 6px; }
-    .tier-featured .tier-price-period { color: rgba(243,238,226,0.45); }
-    .tier-divider { height: 1px; background: var(--rule); margin: 28px 0; }
-    .tier-featured .tier-divider { background: rgba(255,255,255,0.12); }
-    .tier-perks { display: flex; flex-direction: column; gap: 11px; }
-    .tier-perk { display: flex; align-items: baseline; gap: 10px; font-size: 14px; line-height: 1.45; color: var(--ink-2); }
-    .tier-featured .tier-perk { color: rgba(243,238,226,0.8); }
-    .tier-perk-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--red); flex-shrink: 0; position: relative; top: -1px; margin-top: 6px; }
-    .tier-featured .tier-perk-dot { background: var(--red); }
-    .tier-cta { margin-top: 36px; display: inline-flex; align-items: center; gap: 10px; padding: 13px 22px; font-size: 13.5px; font-weight: 600; letter-spacing: -0.005em; }
-    .tier-cta-light { background: var(--paper); color: var(--ink); border: 1px solid var(--ink); }
-    .tier-cta-dark { background: var(--red); color: var(--paper); }
-    .patreon-note { margin-top: 28px; font-family: var(--mono); font-size: 10.5px; color: var(--ink-4); letter-spacing: 0.06em; }
+    .panel-detail-label{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px;}
+    .panel-detail-body{font-size:15px;line-height:1.7;color:var(--ink-2);}
 
-    /* ── One-on-One ── */
-    .oto { padding: 96px 56px; border-top: 1px solid var(--rule); background: var(--paper-2); }
-    .oto-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 160px 1fr; gap: 56px; align-items: start; }
-    .oto-body { max-width: 900px; }
-    .oto-headline { font-family: var(--serif); font-weight: 400; font-size: clamp(40px, 4vw, 64px); line-height: 1.1; letter-spacing: -0.025em; }
-    .oto-headline em { font-style: italic; color: var(--red); }
-    .oto-sub { margin-top: 24px; font-size: 18px; line-height: 1.6; color: var(--ink-2); max-width: 680px; letter-spacing: -0.005em; }
-    .oto-offerings { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 56px; border-top: 1px solid var(--ink); border-left: 1px solid var(--ink); }
-    .oto-offer { padding: 28px 28px 32px; border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
-    .oto-offer-n { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; color: var(--red); font-weight: 600; margin-bottom: 16px; }
-    .oto-offer-title { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; }
-    .oto-offer-body { margin-top: 10px; font-size: 14px; line-height: 1.6; color: var(--ink-2); }
-    .oto-offer-detail { margin-top: 16px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); }
-    .oto-cta-row { margin-top: 52px; display: flex; align-items: center; gap: 28px; }
-    .oto-cta-primary { padding: 16px 28px; background: var(--ink); color: var(--paper); font-size: 14px; font-weight: 600; letter-spacing: -0.005em; display: inline-flex; align-items: center; gap: 10px; }
-    .oto-cta-note { font-size: 13px; color: var(--ink-3); line-height: 1.5; max-width: 380px; }
+    /* mini preview chart */
+    .mini-chart{margin-top:28px;padding:20px;background:var(--paper);border:1px solid var(--rule);}
+    .mini-chart-label{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px;}
 
-    /* mono util */
-    .mono { font-family: var(--mono); }
+    .cta-open{display:inline-flex;align-items:center;gap:10px;padding:14px 24px;background:var(--ink);color:var(--paper);font-size:13.5px;font-weight:600;letter-spacing:-0.005em;transition:background 0.15s,transform 0.15s;width:100%;}
+    .cta-open:hover{background:var(--red);transform:translateY(-1px);}
+    .cta-open:active{transform:translateY(0);}
+    .cta-arrow{margin-left:auto;transition:transform 0.2s var(--ease-spring);}
+    .cta-open:hover .cta-arrow{transform:translateX(4px);}
+
+    .panel-stat{display:flex;flex-direction:column;gap:4px;padding:16px 0;border-bottom:1px solid var(--rule);}
+    .panel-stat:last-of-type{border-bottom:none;}
+    .panel-stat-label{font-family:var(--mono);font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-3);}
+    .panel-stat-val{font-size:15px;font-weight:600;letter-spacing:-0.01em;}
+
+    /* ── MEMBERS BAND ── */
+    .members-band{margin-top:64px;padding:52px 56px;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:space-between;gap:40px;}
+    .members-band h3{font-size:26px;font-weight:600;letter-spacing:-0.02em;line-height:1.2;}
+    .members-band p{margin-top:10px;font-size:14px;line-height:1.65;color:rgba(243,238,226,0.65);max-width:520px;}
+    .btn-patreon{padding:16px 28px;background:var(--red);color:var(--paper);font-size:13.5px;font-weight:600;white-space:nowrap;flex-shrink:0;display:inline-block;transition:background 0.15s,transform 0.15s;}
+    .btn-patreon:hover{background:var(--red-deep);transform:translateY(-1px);}
+
+    /* ── FOOTER ── */
+    .footer{padding:64px 48px 36px;border-top:1px solid var(--rule);}
+    .footer-inner{max-width:1280px;margin:0 auto;}
+    .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:48px;}
+    .footer-logo{font-weight:700;font-size:16px;letter-spacing:-0.02em;}
+    .footer-desc{margin-top:10px;font-size:13px;color:var(--ink-3);max-width:300px;line-height:1.6;}
+    .footer-col-head{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px;}
+    .footer-links{display:flex;flex-direction:column;gap:8px;}
+    .footer-links li a{font-size:13px;color:var(--ink-2);transition:color 0.15s;}
+    .footer-links li a:hover{color:var(--red);}
+    .footer-base{margin-top:48px;padding-top:20px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:var(--mono);font-size:10.5px;letter-spacing:0.06em;color:var(--ink-3);}
+
+    /* ── PROGRESS BAR (scroll) ── */
+    .progress-bar{position:fixed;top:0;left:0;height:2px;background:var(--red);width:0%;z-index:200;transition:width 0.1s linear;}
+
+    /* ── CURSOR DOT (desktop only) ── */
+    .cursor-dot{position:fixed;width:6px;height:6px;background:var(--red);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.1s,width 0.2s,height 0.2s,opacity 0.2s;opacity:0;}
+    .cursor-ring{position:fixed;width:32px;height:32px;border:1px solid var(--red);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform 0.18s var(--ease-out-quart),width 0.2s,height 0.2s,opacity 0.3s;opacity:0;}
+
+    /* ── RESPONSIVE ── */
+    @media (max-width:900px){
+      .topbar-inner{padding:16px 24px;}
+      .topbar-nav,.topbar-actions .sign-in,.topbar-actions .btn-subscribe{display:none;}
+      .hamburger{display:flex;}
+      .mobile-menu.open{display:flex;}
+      .page-header{padding:56px 24px 48px;}
+      .page-header::before,.page-header::after{display:none;}
+      .folio{flex-direction:column;gap:4px;font-size:9px;margin-bottom:32px;}
+      .header-bottom{flex-direction:column;align-items:flex-start;gap:24px;}
+      .filter-row{gap:6px;}
+      .tools-section{padding:0 24px 72px;}
+      .tool-row{grid-template-columns:48px 1fr 52px;min-height:120px;}
+      .tool-row-num{padding:24px 12px;}
+      .tool-num-txt{font-size:9px;}
+      .tool-row-body{padding:24px 20px;}
+      .tool-row-sub{display:none;}
+      .tool-tags{display:none;}
+      .tool-row-action{padding:24px 16px 24px 12px;border-left:none;}
+      .tool-icon-wrap{display:none;}
+      .tool-panel-inner{grid-template-columns:1fr;}
+      .tool-panel-left{padding:28px 24px 28px 64px;}
+      .tool-panel-right{padding:24px;border-top:1px solid var(--rule);}
+      .tool-row-sub{display:none;}
+      .members-band{flex-direction:column;align-items:flex-start;padding:40px 24px;}
+      .members-band p{max-width:100%;}
+      .btn-patreon{width:100%;text-align:center;}
+      .footer{padding:48px 24px 28px;}
+      .footer-grid{grid-template-columns:1fr 1fr;gap:36px;}
+      .footer-grid>div:first-child{grid-column:1/-1;}
+    }
+    @media (max-width:560px){
+      .page-h1{font-size:40px;}
+      .tool-row-title{font-size:20px;}
+      .filter-row{gap:5px;}
+      .filter-btn{font-size:9px;padding:7px 12px;}
+      .tool-panel-left{padding:24px 20px;}
+      .footer-grid{grid-template-columns:1fr;}
+    }
   </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
+<!-- scroll progress -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- custom cursor (desktop) -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ── TOPBAR ── -->
 <header class="topbar">
   <div class="topbar-inner">
     <a href="https://www.leiholding.com" class="logo">Insight<span class="logo-dot">·</span>Invest</a>
-    <nav>
+    <nav class="topbar-nav">
       <a href="https://www.leiholding.com/reports">Reports</a>
-      <a href="tools.html">Tools</a>
+      <a href="#" class="active">Tools</a>
       <a href="https://www.leiholding.com/curriculum">Curriculum</a>
       <a href="https://www.leiholding.com/members">Members</a>
     </nav>
     <div class="topbar-actions">
-      <a href="https://www.leiholding.com/members">Sign in</a>
+      <a href="https://www.leiholding.com/members" class="sign-in">Sign in</a>
       <a href="https://www.patreon.com/15273026/join" class="btn-subscribe">Subscribe</a>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="https://www.leiholding.com/reports">Reports</a>
+    <a href="#">Tools</a>
+    <a href="https://www.leiholding.com/curriculum">Curriculum</a>
+    <a href="https://www.leiholding.com/members">Members</a>
+    <a href="https://www.leiholding.com/members">Sign in</a>
+    <a href="https://www.patreon.com/15273026/join" class="m-subscribe">Join via Patreon →</a>
   </div>
 </header>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="folio folio-l">Folio 01 / Homepage</div>
-  <div class="folio folio-r">Issue 37 · May 2026</div>
-  <div class="hero-inner">
-    <h1>Become the kind of investor <span class="hero-accent">who thinks two moves ahead</span> — by reading deeper and using sharper tools.</h1>
-    <p class="hero-sub">An independent publication for people who'd rather read the original than the take. Long-form reports, four working tools, and a 22-module curriculum.</p>
-    <div class="hero-ctas">
-      <a href="https://www.leiholding.com/reports" class="cta-primary">Read the latest →</a>
-      <a href="https://www.leiholding.com/reports" class="cta-ghost">Browse the library</a>
+<!-- ── PAGE HEADER ── -->
+<section class="page-header">
+  <div class="page-header-inner">
+    <div class="folio">
+      <span>Folio 02 / The Workshop</span>
+      <span>5 tools · May 2026</span>
     </div>
-  </div>
-  <div class="stats-band">
-    <div class="stats-grid">
-      <div class="stat-cell"><span class="stat-n">31</span><span class="stat-l">reports</span></div>
-      <div class="stat-cell"><span class="stat-n">4</span><span class="stat-l">tools</span></div>
-      <div class="stat-cell"><span class="stat-n">22</span><span class="stat-l">lessons</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- LATEST -->
-<section class="latest">
-  <div class="latest-inner">
-    <div class="section-label">From the latest issue</div>
-    <article>
-      <div class="meta-row">
-        <span class="meta-item">Macro</span>
-        <span class="meta-dot"></span>
-        <span class="meta-item">18 min read</span>
-        <span class="meta-dot"></span>
-        <span class="meta-item">May 17, 2026</span>
-      </div>
-      <h2 class="essay-title">Iran, oil, and the coming liquidity squeeze.</h2>
-      <p class="essay-dek">The market is pricing this conflict like 2003. The structural setup looks much more like 1973 — and the Strait of Hormuz isn't the only chokepoint that matters. A 4,200-word walk through the four scenarios.</p>
-      <a class="underline-link">Read the essay <span class="mono-arrow">→</span></a>
-    </article>
-  </div>
-</section>
-
-<!-- WHAT'S HERE -->
-<section class="whats-here">
-  <div class="whats-here-inner">
-    <div class="whats-header">
-      <div class="section-label" style="padding-top:8px">What's here</div>
-      <p class="whats-tagline">Three things — a publication, a workshop, a school. Each one finishes the other.</p>
-    </div>
-    <div class="cols3">
-      <div class="col-card">
-        <div class="col-top"><span class="col-n">01</span><span class="col-tag">The Publication</span></div>
-        <h3 class="col-title">Reports.</h3>
-        <p class="col-body">Long-form essays on macro, equities, and frameworks. Three new pieces a month, plus a member-only weekly. The full archive of 31 is open.</p>
-        <div class="col-meta">31 reports · open archive</div>
-        <a href="https://www.leiholding.com/reports" class="col-cta">Browse the library <span class="mono-arrow">→</span></a>
-      </div>
-      <div class="col-card">
-        <div class="col-top"><span class="col-n">02</span><span class="col-tag">The Workshop</span></div>
-        <h3 class="col-title">Tools.</h3>
-        <p class="col-body">Four interactive tools — valuation calculator, portfolio scorecard, second-level worksheet, live IV dashboard. Use without an account; save with one.</p>
-        <div class="col-meta">4 tools · free preview</div>
-        <a href="#" class="col-cta">Open the workshop <span class="mono-arrow">→</span></a>
-      </div>
-      <div class="col-card">
-        <div class="col-top"><span class="col-n">03</span><span class="col-tag">The School</span></div>
-        <h3 class="col-title">Curriculum.</h3>
-        <p class="col-body">Twenty-two modules across four tiers. Tier I is free and finishes itself. The rest unlock as you go. No quizzes between you and the next lesson.</p>
-        <div class="col-meta">22 modules · Tier I free</div>
-        <a href="https://www.leiholding.com/curriculum" class="col-cta">Begin a lesson <span class="mono-arrow">→</span></a>
+    <div class="page-kicker">The Workshop</div>
+    <h1 class="page-h1">Tools that <em>do the work</em> with you.</h1>
+    <div class="header-bottom">
+      <p class="page-dek">Five calculators and frameworks built for investors who think before they act. Use them free — save your scenarios with a membership.</p>
+      <div class="filter-row">
+        <button class="filter-btn active" data-filter="all">All tools</button>
+        <button class="filter-btn" data-filter="free">Free</button>
+        <button class="filter-btn" data-filter="members">Members</button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- TOOL SHOWCASE — sneak peek -->
-<section class="tool-section">
-  <div class="tool-section-inner">
-    <div class="tool-header">
-      <div class="section-label" style="padding-top:8px">The Workshop</div>
-      <div>
-        <p class="tool-tagline">Intrinsic value calculator.</p>
-        <p class="tool-sub">A two-stage DCF model. Adjust assumptions, toggle scenarios, export to your scorecard. Available to members.</p>
-      </div>
-    </div>
+<!-- ── TOOLS LIST ── -->
+<section class="tools-section">
+  <div class="tools-inner">
 
-    <!-- Video sneak peek -->
-    <div style="position:relative;border:1px solid var(--ink);box-shadow:0 1px 0 var(--ink),6px 6px 0 var(--ink);overflow:hidden">
-      <!-- titlebar -->
-      <div class="ivc-titlebar">
-        <div style="display:flex;align-items:center;gap:14px">
-          <div class="ivc-dots">
-            <div class="ivc-dot" style="background:var(--ink)"></div>
-            <div class="ivc-dot" style="background:var(--ink-3)"></div>
-            <div class="ivc-dot" style="background:var(--ink-3)"></div>
+    <!-- 01 -->
+    <div class="tool-item" data-access="members">
+      <div class="tool-row" onclick="toggleTool(this)">
+        <div class="tool-row-num"><span class="tool-num-txt">01</span></div>
+        <div class="tool-row-body">
+          <div class="tool-row-top">
+            <span class="tool-badge badge-members">Members</span>
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+                <path d="M3 17 L8 11 L12 14 L19 5" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="19" cy="5" r="2" fill="#d8341c"/>
+              </svg>
+            </div>
           </div>
-          <span class="ivc-url">insight-invest.com / tool / intrinsic-value</span>
+          <div class="tool-row-title">Compounding Calculator</div>
+          <p class="tool-row-sub">Model how capital grows over time with variable rates, contributions, and reinvestment assumptions. See the curve, not just the number.</p>
+          <div class="tool-tags">
+            <span class="tool-tag">Growth modelling</span>
+            <span class="tool-tag">Reinvestment curves</span>
+            <span class="tool-tag">Time horizon</span>
+          </div>
         </div>
-        <div style="display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--red);font-weight:500">
-          <svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="#d8341c"/></svg>
-          Members only
+        <div class="tool-row-action">
+          <div class="expand-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><line x1="7" y1="2" x2="7" y2="12" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="7" x2="12" y2="7" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
         </div>
       </div>
-      <!-- video -->
-      <video
-        src="https://pub-634811a9919940a6a595751343b8dcd3.r2.dev/tool-preview.mov"
-        autoplay
-        loop
-        muted
-        playsinline
-        style="display:block;width:100%;max-height:560px;object-fit:cover;background:var(--paper-2)"
-      ></video>
-      <!-- bottom bar -->
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-top:1px solid var(--ink);background:var(--paper-2)">
-        <div>
-          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px">Sneak peek</div>
-          <div style="font-size:15px;font-weight:600;letter-spacing:-0.01em">Intrinsic Value Calculator — available to members</div>
-        </div>
-        <a href="https://www.patreon.com/15273026/join" style="padding:12px 22px;background:var(--ink);color:var(--paper);font-size:13.5px;font-weight:600;letter-spacing:-0.005em;white-space:nowrap;flex-shrink:0">
-          Join to unlock &#8594;
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FROM THE EDITOR -->
-<section class="editor-section">
-  <div class="editor-inner">
-    <div class="section-label">From the editor</div>
-    <div>
-      <p class="editor-quote">I started this because I couldn't find what I wanted to read. The reports were either thirty pages of consultant boilerplate or two paragraphs of breathlessness. So I write one essay a week, build the tools I'd want as a reader, and keep the back door open for anyone who wants to come in and read.</p>
-      <div class="editor-byline">
-        <div class="editor-avatar"></div>
-        <div>
-          <div class="editor-name">The Editor</div>
-          <div class="editor-title">Editor & sole author · Kuala Lumpur</div>
+      <div class="tool-panel">
+        <div class="tool-panel-inner">
+          <div class="tool-panel-left">
+            <div class="panel-detail-label">What it does</div>
+            <p class="panel-detail-body">Enter a starting capital, annual growth rate, contribution frequency, and time horizon. The calculator shows you the compounding curve — how early years feel slow and late years feel vertical. Toggle between scenarios to see what a 2% difference in rate means over 20 years.</p>
+            <div class="mini-chart">
+              <div class="mini-chart-label">Sample output — $10k @ 10% over 20 years</div>
+              <svg viewBox="0 0 480 100" width="100%" style="overflow:visible">
+                <defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0f0d09" stop-opacity="0.12"/><stop offset="100%" stop-color="#0f0d09" stop-opacity="0"/></linearGradient></defs>
+                <path d="M0 96 C40 94 80 90 120 83 C160 75 200 63 240 47 C280 30 320 18 360 10 C400 3 440 1 480 0 L480 100 L0 100Z" fill="url(#g1)"/>
+                <path d="M0 96 C40 94 80 90 120 83 C160 75 200 63 240 47 C280 30 320 18 360 10 C400 3 440 1 480 0" fill="none" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="480" cy="0" r="3" fill="#d8341c"/>
+                <text x="460" y="14" font-family="Geist Mono" font-size="9" fill="#d8341c" text-anchor="end">$67,275</text>
+              </svg>
+            </div>
+          </div>
+          <div class="tool-panel-right">
+            <div>
+              <div class="panel-stat"><span class="panel-stat-label">Access</span><span class="panel-stat-val" style="color:var(--red)">Members only</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Time to use</span><span class="panel-stat-val">~3 minutes</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Save scenarios</span><span class="panel-stat-val">Yes — with account</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Export</span><span class="panel-stat-val">CSV / scorecard</span></div>
+            </div>
+            <a href="https://www.leiholding.com/tool-compounding" class="cta-open">Open tool <span class="cta-arrow">→</span></a>
+          </div>
         </div>
       </div>
     </div>
-    <div></div>
-  </div>
-</section>
 
-<!-- MEMBERS -->
-<section class="members">
-  <div class="members-inner">
-    <div class="members-label">Membership</div>
-    <div>
-      <h2 class="members-h2">13 dollars a month. <span class="members-muted">Everything in.</span></h2>
-      <p class="members-body">Full library archive, all four tools saving scenarios, every lesson in every tier, a quiet members' chat, and one weekly essay you won't find anywhere else. Cancel anytime.</p>
+    <!-- 02 -->
+    <div class="tool-item" data-access="members">
+      <div class="tool-row" onclick="toggleTool(this)">
+        <div class="tool-row-num"><span class="tool-num-txt">02</span></div>
+        <div class="tool-row-body">
+          <div class="tool-row-top">
+            <span class="tool-badge badge-members">Members</span>
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+                <rect x="3" y="3" width="7" height="7" stroke="#0f0d09" stroke-width="1.5"/>
+                <rect x="12" y="3" width="7" height="7" stroke="#0f0d09" stroke-width="1.5"/>
+                <rect x="3" y="12" width="7" height="7" stroke="#0f0d09" stroke-width="1.5"/>
+                <rect x="12" y="12" width="7" height="7" fill="#d8341c" stroke="#d8341c" stroke-width="1.5"/>
+              </svg>
+            </div>
+          </div>
+          <div class="tool-row-title">Portfolio Scorecard</div>
+          <p class="tool-row-sub">Rate each position across conviction, thesis clarity, valuation, and risk. Surfaces what's pulling your portfolio in the wrong direction.</p>
+          <div class="tool-tags">
+            <span class="tool-tag">Position review</span>
+            <span class="tool-tag">Conviction scoring</span>
+            <span class="tool-tag">Risk mapping</span>
+          </div>
+        </div>
+        <div class="tool-row-action">
+          <div class="expand-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><line x1="7" y1="2" x2="7" y2="12" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="7" x2="12" y2="7" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="tool-panel">
+        <div class="tool-panel-inner">
+          <div class="tool-panel-left">
+            <div class="panel-detail-label">What it does</div>
+            <p class="panel-detail-body">Score each holding across four dimensions: conviction (how strongly you believe in the thesis), thesis clarity (can you explain it in two sentences?), valuation cushion (how much margin of safety?), and tail risk (what's the worst-case?). The scorecard reveals concentration problems and weak positions before the market does.</p>
+            <div class="mini-chart">
+              <div class="mini-chart-label">Sample — position scoring radar</div>
+              <svg viewBox="0 0 240 140" width="100%">
+                <polygon points="120,20 200,70 170,130 70,130 40,70" fill="none" stroke="rgba(15,13,9,0.1)" stroke-width="1"/>
+                <polygon points="120,50 170,80 155,115 85,115 70,80" fill="none" stroke="rgba(15,13,9,0.08)" stroke-width="1"/>
+                <polygon points="120,35 185,75 162,122 78,122 55,75" fill="#d8341c" fill-opacity="0.08" stroke="#d8341c" stroke-width="1.2"/>
+                <circle cx="120" cy="35" r="3" fill="#d8341c"/>
+                <circle cx="185" cy="75" r="3" fill="#d8341c"/>
+                <circle cx="162" cy="122" r="3" fill="#d8341c"/>
+                <circle cx="78" cy="122" r="3" fill="#d8341c"/>
+                <circle cx="55" cy="75" r="3" fill="#d8341c"/>
+                <text x="120" y="14" font-family="Geist Mono" font-size="8" text-anchor="middle" fill="rgba(15,13,9,0.5)">Conviction</text>
+                <text x="210" y="76" font-family="Geist Mono" font-size="8" fill="rgba(15,13,9,0.5)">Clarity</text>
+                <text x="170" y="142" font-family="Geist Mono" font-size="8" fill="rgba(15,13,9,0.5)">Value</text>
+                <text x="58" y="142" font-family="Geist Mono" font-size="8" fill="rgba(15,13,9,0.5)">Risk</text>
+                <text x="6" y="76" font-family="Geist Mono" font-size="8" fill="rgba(15,13,9,0.5)">Edge</text>
+              </svg>
+            </div>
+          </div>
+          <div class="tool-panel-right">
+            <div>
+              <div class="panel-stat"><span class="panel-stat-label">Access</span><span class="panel-stat-val" style="color:var(--red)">Members only</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Time to use</span><span class="panel-stat-val">~10 minutes</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Positions</span><span class="panel-stat-val">Unlimited</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Export</span><span class="panel-stat-val">PDF summary</span></div>
+            </div>
+            <a href="https://www.leiholding.com/tool-portfolio-scorecard" class="cta-open">Open tool <span class="cta-arrow">→</span></a>
+          </div>
+        </div>
+      </div>
     </div>
-    <a href="https://www.patreon.com/15273026/join" class="btn-join">Join via Patreon →</a>
-  </div>
-</section>
 
-<!-- PATREON -->
-<section class="patreon">
-  <div class="patreon-inner">
-    <div class="patreon-header">
-      <div class="section-label" style="padding-top:8px">Patreon</div>
+    <!-- 03 -->
+    <div class="tool-item" data-access="free">
+      <div class="tool-row" onclick="toggleTool(this)">
+        <div class="tool-row-num"><span class="tool-num-txt">03</span></div>
+        <div class="tool-row-body">
+          <div class="tool-row-top">
+            <span class="tool-badge badge-free">Free</span>
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+                <circle cx="11" cy="8" r="5" stroke="#0f0d09" stroke-width="1.5"/>
+                <path d="M8 13.5 C8 17 14 17 14 13.5" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="11" y1="17" x2="11" y2="20" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="tool-row-title">Second-Level Thinking</div>
+          <p class="tool-row-sub">A structured worksheet that forces you to ask what the crowd is missing — and whether you actually have an edge. Pressure-tests your thesis in six steps.</p>
+          <div class="tool-tags">
+            <span class="tool-tag">Thesis testing</span>
+            <span class="tool-tag">Edge analysis</span>
+            <span class="tool-tag">Contrarian framing</span>
+          </div>
+        </div>
+        <div class="tool-row-action">
+          <div class="expand-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><line x1="7" y1="2" x2="7" y2="12" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="7" x2="12" y2="7" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="tool-panel">
+        <div class="tool-panel-inner">
+          <div class="tool-panel-left">
+            <div class="panel-detail-label">What it does</div>
+            <p class="panel-detail-body">Howard Marks' second-level thinking, turned into a six-step worksheet. You articulate the consensus view, then challenge it: what does the market think, why might the market be wrong, what would need to be true for you to be right, what's the downside if you're wrong, and what's your actual edge? Forces clarity before conviction.</p>
+            <div class="mini-chart">
+              <div class="mini-chart-label">The 6 steps</div>
+              <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+                <div style="display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10px;color:var(--ink-2)">
+                  <span style="color:var(--red);font-weight:600;width:16px">01</span><span>What does the market think?</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10px;color:var(--ink-2)">
+                  <span style="color:var(--red);font-weight:600;width:16px">02</span><span>Why might they be wrong?</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10px;color:var(--ink-2)">
+                  <span style="color:var(--red);font-weight:600;width:16px">03</span><span>What must be true for me to be right?</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10px;color:var(--ink-2)">
+                  <span style="color:var(--red);font-weight:600;width:16px">04</span><span>What's the downside if I'm wrong?</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10px;color:var(--ink-2)">
+                  <span style="color:var(--red);font-weight:600;width:16px">05</span><span>What is my actual edge?</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10px;color:var(--ink-2)">
+                  <span style="color:var(--red);font-weight:600;width:16px">06</span><span>Verdict — proceed or pass?</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tool-panel-right">
+            <div>
+              <div class="panel-stat"><span class="panel-stat-label">Access</span><span class="panel-stat-val" style="color:var(--up)">Free</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Time to use</span><span class="panel-stat-val">~15 minutes</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Based on</span><span class="panel-stat-val">Howard Marks</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Export</span><span class="panel-stat-val">Print / PDF</span></div>
+            </div>
+            <a href="https://www.leiholding.com/tool-second-level-thinking" class="cta-open">Open tool <span class="cta-arrow">→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 -->
+    <div class="tool-item" data-access="free">
+      <div class="tool-row" onclick="toggleTool(this)">
+        <div class="tool-row-num"><span class="tool-num-txt">04</span></div>
+        <div class="tool-row-body">
+          <div class="tool-row-top">
+            <span class="tool-badge badge-free">Free</span>
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+                <line x1="3" y1="19" x2="19" y2="3" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="6" cy="16" r="2.5" stroke="#0f0d09" stroke-width="1.5"/>
+                <circle cx="16" cy="6" r="2.5" fill="#d8341c" stroke="#d8341c" stroke-width="1.5"/>
+              </svg>
+            </div>
+          </div>
+          <div class="tool-row-title">Ratio Analyser</div>
+          <p class="tool-row-sub">Key financial ratios interpreted in context, not just calculated. Know what P/E, EV/EBITDA, and ROE actually mean for the stock in front of you.</p>
+          <div class="tool-tags">
+            <span class="tool-tag">Valuation ratios</span>
+            <span class="tool-tag">Financial health</span>
+            <span class="tool-tag">Peer comparison</span>
+          </div>
+        </div>
+        <div class="tool-row-action">
+          <div class="expand-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><line x1="7" y1="2" x2="7" y2="12" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="7" x2="12" y2="7" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="tool-panel">
+        <div class="tool-panel-inner">
+          <div class="tool-panel-left">
+            <div class="panel-detail-label">What it does</div>
+            <p class="panel-detail-body">Input a company's financials and the tool calculates and contextualises the ratios that matter: P/E vs. sector median, EV/EBITDA vs. historical range, debt-to-equity against industry norms, and return on equity over time. Each ratio comes with a plain-English interpretation — not just the number, but what it's telling you.</p>
+            <div class="mini-chart">
+              <div class="mini-chart-label">Ratio snapshot — sample output</div>
+              <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
+                <div style="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;">
+                  <div>
+                    <div style="font-family:var(--mono);font-size:9px;color:var(--ink-3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px">P/E Ratio</div>
+                    <div style="height:4px;background:var(--rule);position:relative">
+                      <div style="position:absolute;left:0;top:0;bottom:0;width:58%;background:var(--ink)"></div>
+                      <div style="position:absolute;left:40%;top:-3px;width:1px;height:10px;background:var(--red)"></div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:8px;color:var(--ink-4);margin-top:2px"><span>0</span><span>▲ Sector median</span><span>60×</span></div>
+                  </div>
+                  <div style="font-family:var(--mono);font-size:13px;font-weight:600;color:var(--ink)">18.4×</div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;">
+                  <div>
+                    <div style="font-family:var(--mono);font-size:9px;color:var(--ink-3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px">EV/EBITDA</div>
+                    <div style="height:4px;background:var(--rule);position:relative">
+                      <div style="position:absolute;left:0;top:0;bottom:0;width:34%;background:var(--up)"></div>
+                      <div style="position:absolute;left:50%;top:-3px;width:1px;height:10px;background:var(--red)"></div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:8px;color:var(--ink-4);margin-top:2px"><span>0</span><span>▲ Sector median</span><span>30×</span></div>
+                  </div>
+                  <div style="font-family:var(--mono);font-size:13px;font-weight:600;color:var(--up)">7.1×</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tool-panel-right">
+            <div>
+              <div class="panel-stat"><span class="panel-stat-label">Access</span><span class="panel-stat-val" style="color:var(--up)">Free</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Ratios covered</span><span class="panel-stat-val">12 key ratios</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Benchmarking</span><span class="panel-stat-val">Sector medians</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Input method</span><span class="panel-stat-val">Manual entry</span></div>
+            </div>
+            <a href="https://www.leiholding.com/ratio" class="cta-open">Open tool <span class="cta-arrow">→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 -->
+    <div class="tool-item" data-access="free">
+      <div class="tool-row" onclick="toggleTool(this)">
+        <div class="tool-row-num"><span class="tool-num-txt">05</span></div>
+        <div class="tool-row-body">
+          <div class="tool-row-top">
+            <span class="tool-badge badge-free">Free</span>
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+                <rect x="3" y="6" width="16" height="13" rx="1" stroke="#0f0d09" stroke-width="1.5"/>
+                <path d="M7 6V4a4 4 0 0 1 8 0v2" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="11" y1="10" x2="11" y2="15" stroke="#d8341c" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="8.5" y1="12.5" x2="13.5" y2="12.5" stroke="#d8341c" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="tool-row-title">EPF Retirement Calculator</div>
+          <p class="tool-row-sub">Built for Malaysian investors. Model your EPF balance, voluntary contributions, and projected retirement income against actual EPF withdrawal rules.</p>
+          <div class="tool-tags">
+            <span class="tool-tag">Malaysian EPF</span>
+            <span class="tool-tag">Retirement projections</span>
+            <span class="tool-tag">Withdrawal modelling</span>
+          </div>
+        </div>
+        <div class="tool-row-action">
+          <div class="expand-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><line x1="7" y1="2" x2="7" y2="12" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="7" x2="12" y2="7" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="tool-panel">
+        <div class="tool-panel-inner">
+          <div class="tool-panel-left">
+            <div class="panel-detail-label">What it does</div>
+            <p class="panel-detail-body">Most EPF calculators assume you retire at 55 and never revisit the assumptions. This one doesn't. Model Account 1 and Account 2 separately, layer in voluntary contributions, apply the actual EPF dividend rate, and see your projected balance at any retirement age you choose. The only EPF tool that treats you like an adult.</p>
+            <div class="mini-chart">
+              <div class="mini-chart-label">Also useful for</div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;">
+                <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 10px;border:1px solid var(--rule);color:var(--ink-2)">Early retirement</span>
+                <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 10px;border:1px solid var(--rule);color:var(--ink-2)">i-Sinar impact</span>
+                <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 10px;border:1px solid var(--rule);color:var(--ink-2)">Top-up planning</span>
+                <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 10px;border:1px solid var(--rule);color:var(--ink-2)">Dividend projection</span>
+              </div>
+            </div>
+          </div>
+          <div class="tool-panel-right">
+            <div>
+              <div class="panel-stat"><span class="panel-stat-label">Access</span><span class="panel-stat-val" style="color:var(--up)">Free</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Built for</span><span class="panel-stat-val">Malaysian investors</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Accounts</span><span class="panel-stat-val">Acc. 1 + Acc. 2</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Dividend rate</span><span class="panel-stat-val">Adjustable</span></div>
+            </div>
+            <a href="https://www.leiholding.com/epf_retirement_calculator" class="cta-open">Open tool <span class="cta-arrow">→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- members band -->
+    <div class="members-band">
       <div>
-        <p class="patreon-tagline">Support the work. Get <em>everything</em> in return.</p>
-        <p style="margin-top:16px;font-size:16px;line-height:1.6;color:var(--ink-3);max-width:640px">Two tiers, no dark patterns. The free version is genuinely useful. Membership makes it sustainable — and unlocks the parts that take the most time to build.</p>
+        <h3>Save your scenarios. Unlock every tool.</h3>
+        <p>Free tools are yours without an account. Members save assumptions across sessions, unlock the IV calculator and scorecard, and get early access to everything new.</p>
       </div>
+      <a href="https://www.patreon.com/15273026/join" class="btn-patreon">Join via Patreon →</a>
     </div>
-    <div style="border-top:1px solid var(--ink);border-bottom:1px solid var(--rule);padding:48px 0;display:flex;align-items:center;justify-content:space-between;gap:56px">
-      <ul class="tier-perks" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px 56px;max-width:720px">
-        <li class="tier-perk"><span class="tier-perk-dot"></span>Member-only weekly essay</li>
-        <li class="tier-perk"><span class="tier-perk-dot"></span>All four tools with saved scenarios</li>
-        <li class="tier-perk"><span class="tier-perk-dot"></span>Full curriculum — all 22 modules</li>
-        <li class="tier-perk"><span class="tier-perk-dot"></span>Members-only chat</li>
-        <li class="tier-perk"><span class="tier-perk-dot"></span>Full archive of 31 reports</li>
-        <li class="tier-perk"><span class="tier-perk-dot"></span>Early access to new tools &amp; reports</li>
-      </ul>
-      <div style="flex-shrink:0;text-align:right">
-        <a href="https://www.patreon.com/15273026/join" class="tier-cta tier-cta-dark" style="display:inline-flex">Support on Patreon &#8594;</a>
-        <p class="patreon-note" style="margin-top:12px;text-align:right">Cancel anytime &middot; billed via Patreon</p>
-      </div>
-    </div>
+
   </div>
 </section>
 
-<!-- ONE-ON-ONE -->
-<section class="oto">
-  <div class="oto-inner">
-    <div class="section-label" style="padding-top:8px">One-on-One</div>
-    <div class="oto-body">
-      <h2 class="oto-headline">Investing advice <em>built around you.</em></h2>
-      <p class="oto-sub">The publication gives you frameworks. The curriculum gives you structure. But sometimes a portfolio has specific questions that only a direct conversation can answer — about your position sizing, your thesis, your blind spot.</p>
-      <div class="oto-offerings">
-        <div class="oto-offer">
-          <div class="oto-offer-n">01</div>
-          <div class="oto-offer-title">Portfolio Review</div>
-          <p class="oto-offer-body">A structured walkthrough of your current holdings. We look at concentration, correlation, and whether the thesis still holds for each position.</p>
-          <div class="oto-offer-detail">60 min &middot; written summary included</div>
-        </div>
-        <div class="oto-offer">
-          <div class="oto-offer-n">02</div>
-          <div class="oto-offer-title">Thesis Pressure Test</div>
-          <p class="oto-offer-body">Bring a stock you're researching. We stress-test your assumptions — the bull case, the bear case, and the scenario you haven't modelled yet.</p>
-          <div class="oto-offer-detail">45 min &middot; model review optional</div>
-        </div>
-        <div class="oto-offer">
-          <div class="oto-offer-n">03</div>
-          <div class="oto-offer-title">Open Session</div>
-          <p class="oto-offer-body">No fixed agenda. Ask whatever you'd ask a thoughtful investor who has time. Macro, process, a decision you're sitting on — all on the table.</p>
-          <div class="oto-offer-detail">30 min &middot; members get priority</div>
-        </div>
-      </div>
-      <div class="oto-cta-row">
-        <a href="https://www.leiholding.com/insightinvest-1on1" class="oto-cta-primary">Book a session &#8594;</a>
-        <p class="oto-cta-note">Sessions are limited to keep quality high. Members are prioritised. Not investment advice — independent perspective, work shown.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
+<!-- ── FOOTER ── -->
 <footer class="footer">
   <div class="footer-inner">
     <div class="footer-grid">
@@ -469,10 +615,11 @@
       <div>
         <div class="footer-col-head">Use</div>
         <ul class="footer-links">
-          <li><a href="#">IV calculator</a></li>
-          <li><a href="#">Scorecard</a></li>
-          <li><a href="#">Worksheet</a></li>
-          <li><a href="#">Dashboard</a></li>
+          <li><a href="https://www.leiholding.com/tool-compounding">Compounding</a></li>
+          <li><a href="https://www.leiholding.com/tool-portfolio-scorecard">Scorecard</a></li>
+          <li><a href="https://www.leiholding.com/tool-second-level-thinking">Worksheet</a></li>
+          <li><a href="https://www.leiholding.com/ratio">Ratio Analyser</a></li>
+          <li><a href="https://www.leiholding.com/epf_retirement_calculator">EPF Calculator</a></li>
         </ul>
       </div>
       <div>
@@ -501,5 +648,121 @@
   </div>
 </footer>
 
+<script>
+  // ── SCROLL PROGRESS ──
+  const bar = document.getElementById('progressBar');
+  window.addEventListener('scroll', () => {
+    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+    bar.style.width = pct + '%';
+  }, { passive: true });
+
+  // ── CUSTOM CURSOR (desktop) ──
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  const isMobile = () => window.innerWidth < 900;
+
+  document.addEventListener('mousemove', e => {
+    if (isMobile()) return;
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+    dot.style.opacity = '1'; ring.style.opacity = '1';
+  });
+
+  // smooth ring follow
+  function animRing() {
+    rx += (mx - rx) * 0.14;
+    ry += (my - ry) * 0.14;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+
+  // scale ring on hover over links/buttons
+  document.querySelectorAll('a, button, .tool-row').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      ring.style.width = '56px'; ring.style.height = '56px';
+      dot.style.width = '3px'; dot.style.height = '3px';
+    });
+    el.addEventListener('mouseleave', () => {
+      ring.style.width = '32px'; ring.style.height = '32px';
+      dot.style.width = '6px'; dot.style.height = '6px';
+    });
+  });
+
+  // ── HAMBURGER ──
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+
+  // ── TOOL ACCORDION ──
+  function toggleTool(row) {
+    const panel = row.nextElementSibling;
+    const isOpen = row.classList.contains('expanded');
+
+    // close all
+    document.querySelectorAll('.tool-row.expanded').forEach(r => {
+      r.classList.remove('expanded');
+      r.nextElementSibling.classList.remove('open');
+    });
+
+    if (!isOpen) {
+      row.classList.add('expanded');
+      panel.classList.add('open');
+      // smooth scroll so panel is in view
+      setTimeout(() => {
+        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 60);
+    }
+  }
+
+  // ── FILTER BUTTONS ──
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.tool-item').forEach(item => {
+        if (filter === 'all' || item.dataset.access === filter) {
+          item.style.display = '';
+          // animate in
+          item.style.opacity = '0';
+          item.style.transform = 'translateY(6px)';
+          requestAnimationFrame(() => {
+            item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            item.style.opacity = '1';
+            item.style.transform = 'translateY(0)';
+          });
+        } else {
+          item.style.display = 'none';
+        }
+        // close any open panels
+        item.querySelector('.tool-row').classList.remove('expanded');
+        item.querySelector('.tool-panel').classList.remove('open');
+      });
+    });
+  });
+
+  // ── SCROLL-IN ANIMATIONS ──
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.tool-item').forEach((el, i) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(16px)';
+    el.style.transition = `opacity 0.5s ease ${i * 0.07}s, transform 0.5s var(--ease-out-quart) ${i * 0.07}s`;
+    observer.observe(el);
+  });
+</script>
 </body>
 </html>
