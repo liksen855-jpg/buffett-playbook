@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tools — Insight Invest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,18..72,400;0,18..72,500;0,18..72,600;1,18..72,400;1,18..72,500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper:#faf7f1; --paper-2:#f3eee2; --ink:#0f0d09;
+      --ink-2:rgba(15,13,9,0.72); --ink-3:rgba(15,13,9,0.50); --ink-4:rgba(15,13,9,0.28);
+      --rule:rgba(15,13,9,0.12); --rule-soft:rgba(15,13,9,0.06);
+      --red:#d8341c; --red-deep:#a8261a; --red-tint:#fbe5dd;
+      --up:#167a3e;
+      --sans:'Geist',system-ui,sans-serif;
+      --mono:'Geist Mono',ui-monospace,monospace;
+      --serif:'Newsreader',Georgia,serif;
+      --ease-out-quart:cubic-bezier(0.25,1,0.5,1);
+      --ease-spring:cubic-bezier(0.34,1.56,0.64,1);
+    }
+    *,*::before,*::after{box-sizing:border-box;}
+    html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+    h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-0.02em;}
+    p{margin:0;} a{color:inherit;text-decoration:none;cursor:pointer;}
+    ul,ol{margin:0;padding:0;list-style:none;}
+    button{font:inherit;cursor:pointer;border:0;background:none;color:inherit;padding:0;}
+    svg{display:block;}
+
+    /* ── TOPBAR ── */
+    .topbar{border-bottom:1px solid var(--rule);position:sticky;top:0;z-index:100;background:var(--paper);backdrop-filter:blur(12px);}
+    .topbar-inner{max-width:1280px;margin:0 auto;padding:18px 48px;display:flex;justify-content:space-between;align-items:center;gap:24px;}
+    .logo{display:flex;align-items:center;gap:3px;font-weight:700;font-size:17px;letter-spacing:-0.02em;flex-shrink:0;}
+    .logo-dot{color:var(--red);}
+    .topbar-nav{display:flex;gap:28px;font-size:13.5px;color:var(--ink-2);}
+    .topbar-nav a{transition:color 0.15s ease;}
+    .topbar-nav a:hover{color:var(--ink);}
+    .topbar-nav a.active{color:var(--ink);font-weight:600;border-bottom:1px solid var(--ink);padding-bottom:1px;}
+    .topbar-actions{display:flex;gap:16px;align-items:center;font-size:13px;color:var(--ink-2);}
+    .btn-subscribe{padding:8px 16px;border:1px solid var(--ink);font-weight:500;font-size:13px;transition:background 0.15s,color 0.15s;}
+    .btn-subscribe:hover{background:var(--ink);color:var(--paper);}
+    /* hamburger */
+    .hamburger{display:none;flex-direction:column;gap:5px;padding:4px;cursor:pointer;}
+    .hamburger span{display:block;width:22px;height:1.5px;background:var(--ink);transition:transform 0.3s var(--ease-out-quart),opacity 0.3s;}
+    .hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+    .hamburger.open span:nth-child(2){opacity:0;}
+    .hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+    /* mobile menu */
+    .mobile-menu{display:none;flex-direction:column;background:var(--paper);border-top:1px solid var(--rule);padding:24px 24px 32px;gap:0;}
+    .mobile-menu a{padding:14px 0;font-size:18px;font-weight:500;border-bottom:1px solid var(--rule-soft);letter-spacing:-0.01em;}
+    .mobile-menu a:last-child{border-bottom:none;}
+    .mobile-menu .m-subscribe{margin-top:20px;padding:14px 20px;background:var(--ink);color:var(--paper);text-align:center;font-weight:600;font-size:14px;}
+
+    /* ── PAGE HEADER ── */
+    .page-header{padding:80px 48px 64px;border-bottom:2px solid var(--ink);overflow:hidden;position:relative;}
+    .page-header::before{content:'';position:absolute;right:-120px;top:-120px;width:480px;height:480px;border-radius:50%;border:1px solid var(--rule);pointer-events:none;}
+    .page-header::after{content:'';position:absolute;right:-60px;top:-60px;width:320px;height:320px;border-radius:50%;border:1px solid var(--rule-soft);pointer-events:none;}
+    .folio{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--ink-4);text-transform:uppercase;margin-bottom:48px;display:flex;justify-content:space-between;}
+    .page-header-inner{max-width:1280px;margin:0 auto;}
+    .page-kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-3);margin-bottom:20px;}
+    .page-h1{font-family:var(--serif);font-weight:400;font-size:clamp(44px,6vw,84px);line-height:1.05;letter-spacing:-0.025em;max-width:820px;}
+    .page-h1 em{font-style:italic;color:var(--red);}
+    .header-bottom{display:flex;justify-content:space-between;align-items:flex-end;margin-top:40px;gap:40px;flex-wrap:wrap;}
+    .page-dek{font-size:17px;line-height:1.65;color:var(--ink-3);max-width:520px;letter-spacing:-0.005em;}
+    .filter-row{display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap;}
+    .filter-btn{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;padding:8px 16px;border:1px solid var(--rule);color:var(--ink-3);cursor:pointer;transition:all 0.15s ease;background:transparent;}
+    .filter-btn:hover,.filter-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+
+    /* ── TOOLS LIST ── */
+    .tools-section{padding:0 48px 100px;}
+    .tools-inner{max-width:1280px;margin:0 auto;}
+
+    /* accordion-style cards on mobile, full cards on desktop */
+    .tool-item{border-bottom:1px solid var(--rule);overflow:hidden;}
+    .tool-item:first-child{border-top:1px solid var(--rule);margin-top:0;}
+
+    /* desktop: full expanded card */
+    .tool-row{display:grid;grid-template-columns:64px 1fr auto;gap:0;align-items:stretch;min-height:180px;cursor:pointer;transition:background 0.2s ease;}
+    .tool-row:hover{background:var(--paper-2);}
+    .tool-row.expanded{background:var(--paper-2);}
+
+    .tool-row-num{padding:40px 24px;border-right:1px solid var(--rule);display:flex;align-items:flex-start;justify-content:center;flex-shrink:0;}
+    .tool-num-txt{font-family:var(--mono);font-size:11px;letter-spacing:0.16em;color:var(--red);font-weight:600;writing-mode:vertical-lr;transform:rotate(180deg);}
+
+    .tool-row-body{padding:36px 40px;display:flex;flex-direction:column;justify-content:center;}
+    .tool-row-top{display:flex;align-items:center;gap:16px;margin-bottom:10px;}
+    .tool-badge{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;padding:4px 10px;border:1px solid;border-radius:0;}
+    .badge-free{border-color:var(--up);color:var(--up);}
+    .badge-members{border-color:var(--red);color:var(--red);}
+    .tool-row-title{font-size:clamp(22px,2.5vw,32px);font-weight:600;letter-spacing:-0.025em;line-height:1.1;}
+    .tool-row-sub{margin-top:8px;font-size:14.5px;line-height:1.6;color:var(--ink-3);max-width:680px;}
+    .tool-tags{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;}
+    .tool-tag{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding:4px 10px;background:var(--paper);border:1px solid var(--rule);color:var(--ink-3);}
+
+    .tool-row-action{padding:36px 40px 36px 24px;display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;flex-shrink:0;border-left:1px solid var(--rule);}
+    .expand-icon{width:36px;height:36px;border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;transition:transform 0.3s var(--ease-out-quart),background 0.15s,border-color 0.15s;}
+    .expand-icon svg{transition:transform 0.3s var(--ease-out-quart);}
+    .tool-row:hover .expand-icon,.tool-row.expanded .expand-icon{background:var(--ink);border-color:var(--ink);}
+    .tool-row:hover .expand-icon svg,.tool-row.expanded .expand-icon svg{filter:invert(1);}
+    .tool-row.expanded .expand-icon svg{transform:rotate(45deg);}
+    .tool-icon-wrap{width:52px;height:52px;border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;background:var(--paper);transition:background 0.2s;}
+    .tool-row:hover .tool-icon-wrap,.tool-row.expanded .tool-icon-wrap{background:var(--paper-2);}
+
+    /* expanded panel */
+    .tool-panel{display:none;border-top:1px solid var(--rule);background:var(--paper-2);}
+    .tool-panel.open{display:block;animation:slideDown 0.35s var(--ease-out-quart) forwards;}
+    @keyframes slideDown{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+    .tool-panel-inner{display:grid;grid-template-columns:1fr 360px;gap:0;max-width:100%;}
+    .tool-panel-left{padding:40px 40px 40px 104px;border-right:1px solid var(--rule);}
+    .tool-panel-right{padding:40px;display:flex;flex-direction:column;gap:28px;}
+
+    .panel-detail-label{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px;}
+    .panel-detail-body{font-size:15px;line-height:1.7;color:var(--ink-2);}
+
+    /* mini preview chart */
+    .mini-chart{margin-top:28px;padding:20px;background:var(--paper);border:1px solid var(--rule);}
+    .mini-chart-label{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px;}
+
+    .cta-open{display:inline-flex;align-items:center;gap:10px;padding:14px 24px;background:var(--ink);color:var(--paper);font-size:13.5px;font-weight:600;letter-spacing:-0.005em;transition:background 0.15s,transform 0.15s;width:100%;}
+    .cta-open:hover{background:var(--red);transform:translateY(-1px);}
+    .cta-open:active{transform:translateY(0);}
+    .cta-arrow{margin-left:auto;transition:transform 0.2s var(--ease-spring);}
+    .cta-open:hover .cta-arrow{transform:translateX(4px);}
+
+    .panel-stat{display:flex;flex-direction:column;gap:4px;padding:16px 0;border-bottom:1px solid var(--rule);}
+    .panel-stat:last-of-type{border-bottom:none;}
+    .panel-stat-label{font-family:var(--mono);font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-3);}
+    .panel-stat-val{font-size:15px;font-weight:600;letter-spacing:-0.01em;}
+
+    /* ── MEMBERS BAND ── */
+    .members-band{margin-top:64px;padding:52px 56px;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:space-between;gap:40px;}
+    .members-band h3{font-size:26px;font-weight:600;letter-spacing:-0.02em;line-height:1.2;}
+    .members-band p{margin-top:10px;font-size:14px;line-height:1.65;color:rgba(243,238,226,0.65);max-width:520px;}
+    .btn-patreon{padding:16px 28px;background:var(--red);color:var(--paper);font-size:13.5px;font-weight:600;white-space:nowrap;flex-shrink:0;display:inline-block;transition:background 0.15s,transform 0.15s;}
+    .btn-patreon:hover{background:var(--red-deep);transform:translateY(-1px);}
+
+    /* ── FOOTER ── */
+    .footer{padding:64px 48px 36px;border-top:1px solid var(--rule);}
+    .footer-inner{max-width:1280px;margin:0 auto;}
+    .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:48px;}
+    .footer-logo{font-weight:700;font-size:16px;letter-spacing:-0.02em;}
+    .footer-desc{margin-top:10px;font-size:13px;color:var(--ink-3);max-width:300px;line-height:1.6;}
+    .footer-col-head{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px;}
+    .footer-links{display:flex;flex-direction:column;gap:8px;}
+    .footer-links li a{font-size:13px;color:var(--ink-2);transition:color 0.15s;}
+    .footer-links li a:hover{color:var(--red);}
+    .footer-base{margin-top:48px;padding-top:20px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:var(--mono);font-size:10.5px;letter-spacing:0.06em;color:var(--ink-3);}
+
+    /* ── PROGRESS BAR (scroll) ── */
+    .progress-bar{position:fixed;top:0;left:0;height:2px;background:var(--red);width:0%;z-index:200;transition:width 0.1s linear;}
+
+    /* ── CURSOR DOT (desktop only) ── */
+    .cursor-dot{position:fixed;width:6px;height:6px;background:var(--red);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.1s,width 0.2s,height 0.2s,opacity 0.2s;opacity:0;}
+    .cursor-ring{position:fixed;width:32px;height:32px;border:1px solid var(--red);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform 0.18s var(--ease-out-quart),width 0.2s,height 0.2s,opacity 0.3s;opacity:0;}
+
+    /* ── RESPONSIVE ── */
+    @media (max-width:900px){
+      .topbar-inner{padding:16px 24px;}
+      .topbar-nav,.topbar-actions .sign-in,.topbar-actions .btn-subscribe{display:none;}
+      .hamburger{display:flex;}
+      .mobile-menu.open{display:flex;}
+      .page-header{padding:56px 24px 48px;}
+      .page-header::before,.page-header::after{display:none;}
+      .folio{flex-direction:column;gap:4px;font-size:9px;margin-bottom:32px;}
+      .header-bottom{flex-direction:column;align-items:flex-start;gap:24px;}
+      .filter-row{gap:6px;}
+      .tools-section{padding:0 24px 72px;}
+      .tool-row{grid-template-columns:48px 1fr 52px;min-height:120px;}
+      .tool-row-num{padding:24px 12px;}
+      .tool-num-txt{font-size:9px;}
+      .tool-row-body{padding:24px 20px;}
+      .tool-row-sub{display:none;}
+      .tool-tags{display:none;}
+      .tool-row-action{padding:24px 16px 24px 12px;border-left:none;}
+      .tool-icon-wrap{display:none;}
+      .tool-panel-inner{grid-template-columns:1fr;}
+      .tool-panel-left{padding:28px 24px 28px 64px;}
+      .tool-panel-right{padding:24px;border-top:1px solid var(--rule);}
+      .tool-row-sub{display:none;}
+      .members-band{flex-direction:column;align-items:flex-start;padding:40px 24px;}
+      .members-band p{max-width:100%;}
+      .btn-patreon{width:100%;text-align:center;}
+      .footer{padding:48px 24px 28px;}
+      .footer-grid{grid-template-columns:1fr 1fr;gap:36px;}
+      .footer-grid>div:first-child{grid-column:1/-1;}
+    }
+    @media (max-width:560px){
+      .page-h1{font-size:40px;}
+      .tool-row-title{font-size:20px;}
+      .filter-row{gap:5px;}
+      .filter-btn{font-size:9px;padding:7px 12px;}
+      .tool-panel-left{padding:24px 20px;}
+      .footer-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- scroll progress -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- custom cursor (desktop) -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ── TOPBAR ── -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="https://www.leiholding.com" class="logo">Insight<span class="logo-dot">·</span>Invest</a>
+    <nav class="topbar-nav">
+      <a href="https://www.leiholding.com/reports">Reports</a>
+      <a href="#" class="active">Tools</a>
+      <a href="https://www.leiholding.com/curriculum">Curriculum</a>
+      <a href="https://www.leiholding.com/members">Members</a>
+    </nav>
+    <div class="topbar-actions">
+      <a href="https://www.leiholding.com/members" class="sign-in">Sign in</a>
+      <a href="https://www.patreon.com/15273026/join" class="btn-subscribe">Subscribe</a>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="https://www.leiholding.com/reports">Reports</a>
+    <a href="#">Tools</a>
+    <a href="https://www.leiholding.com/curriculum">Curriculum</a>
+    <a href="https://www.leiholding.com/members">Members</a>
+    <a href="https://www.leiholding.com/members">Sign in</a>
+    <a href="https://www.patreon.com/15273026/join" class="m-subscribe">Join via Patreon →</a>
+  </div>
+</header>
+
+<!-- ── PAGE HEADER ── -->
+<section class="page-header">
+  <div class="page-header-inner">
+    <div class="folio">
+      <span>Folio 02 / The Workshop</span>
+      <span>5 tools · May 2026</span>
+    </div>
+    <div class="page-kicker">The Workshop</div>
+    <h1 class="page-h1">Tools that <em>do the work</em> with you.</h1>
+    <div class="header-bottom">
+      <p class="page-dek">Five calculators and frameworks built for investors who think before they act. Use them free — save your scenarios with a membership.</p>
+      <div class="filter-row">
+        <button class="filter-btn active" data-filter="all">All tools</button>
+        <button class="filter-btn" data-filter="free">Free</button>
+        <button class="filter-btn" data-filter="members">Members</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TOOLS LIST ── -->
+<section class="tools-section">
+  <div class="tools-inner">
+
+    <!-- 01 -->
+    <div class="tool-item" data-access="members">
+      <div class="tool-row" onclick="toggleTool(this)">
+        <div class="tool-row-num"><span class="tool-num-txt">01</span></div>
+        <div class="tool-row-body">
+          <div class="tool-row-top">
+            <span class="tool-badge badge-members">Members</span>
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+                <path d="M3 17 L8 11 L12 14 L19 5" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="19" cy="5" r="2" fill="#d8341c"/>
+              </svg>
+            </div>
+          </div>
+          <div class="tool-row-title">Compounding Calculator</div>
+          <p class="tool-row-sub">Model how capital grows over time with variable rates, contributions, and reinvestment assumptions. See the curve, not just the number.</p>
+          <div class="tool-tags">
+            <span class="tool-tag">Growth modelling</span>
+            <span class="tool-tag">Reinvestment curves</span>
+            <span class="tool-tag">Time horizon</span>
+          </div>
+        </div>
+        <div class="tool-row-action">
+          <div class="expand-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><line x1="7" y1="2" x2="7" y2="12" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="7" x2="12" y2="7" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="tool-panel">
+        <div class="tool-panel-inner">
+          <div class="tool-panel-left">
+            <div class="panel-detail-label">What it does</div>
+            <p class="panel-detail-body">Enter a starting capital, annual growth rate, contribution frequency, and time horizon. The calculator shows you the compounding curve — how early years feel slow and late years feel vertical. Toggle between scenarios to see what a 2% difference in rate means over 20 years.</p>
+            <div class="mini-chart">
+              <div class="mini-chart-label">Sample output — $10k @ 10% over 20 years</div>
+              <svg viewBox="0 0 480 100" width="100%" style="overflow:visible">
+                <defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0f0d09" stop-opacity="0.12"/><stop offset="100%" stop-color="#0f0d09" stop-opacity="0"/></linearGradient></defs>
+                <path d="M0 96 C40 94 80 90 120 83 C160 75 200 63 240 47 C280 30 320 18 360 10 C400 3 440 1 480 0 L480 100 L0 100Z" fill="url(#g1)"/>
+                <path d="M0 96 C40 94 80 90 120 83 C160 75 200 63 240 47 C280 30 320 18 360 10 C400 3 440 1 480 0" fill="none" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="480" cy="0" r="3" fill="#d8341c"/>
+                <text x="460" y="14" font-family="Geist Mono" font-size="9" fill="#d8341c" text-anchor="end">$67,275</text>
+              </svg>
+            </div>
+          </div>
+          <div class="tool-panel-right">
+            <div>
+              <div class="panel-stat"><span class="panel-stat-label">Access</span><span class="panel-stat-val" style="color:var(--red)">Members only</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Time to use</span><span class="panel-stat-val">~3 minutes</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Save scenarios</span><span class="panel-stat-val">Yes — with account</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Export</span><span class="panel-stat-val">CSV / scorecard</span></div>
+            </div>
+            <a href="https://www.leiholding.com/tool-compounding" class="cta-open">Open tool <span class="cta-arrow">→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 -->
+    <div class="tool-item" data-access="members">
+      <div class="tool-row" onclick="toggleTool(this)">
+        <div class="tool-row-num"><span class="tool-num-txt">02</span></div>
+        <div class="tool-row-body">
+          <div class="tool-row-top">
+            <span class="tool-badge badge-members">Members</span>
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+                <rect x="3" y="3" width="7" height="7" stroke="#0f0d09" stroke-width="1.5"/>
+                <rect x="12" y="3" width="7" height="7" stroke="#0f0d09" stroke-width="1.5"/>
+                <rect x="3" y="12" width="7" height="7" stroke="#0f0d09" stroke-width="1.5"/>
+                <rect x="12" y="12" width="7" height="7" fill="#d8341c" stroke="#d8341c" stroke-width="1.5"/>
+              </svg>
+            </div>
+          </div>
+          <div class="tool-row-title">Portfolio Scorecard</div>
+          <p class="tool-row-sub">Rate each position across conviction, thesis clarity, valuation, and risk. Surfaces what's pulling your portfolio in the wrong direction.</p>
+          <div class="tool-tags">
+            <span class="tool-tag">Position review</span>
+            <span class="tool-tag">Conviction scoring</span>
+            <span class="tool-tag">Risk mapping</span>
+          </div>
+        </div>
+        <div class="tool-row-action">
+          <div class="expand-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><line x1="7" y1="2" x2="7" y2="12" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="7" x2="12" y2="7" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="tool-panel">
+        <div class="tool-panel-inner">
+          <div class="tool-panel-left">
+            <div class="panel-detail-label">What it does</div>
+            <p class="panel-detail-body">Score each holding across four dimensions: conviction (how strongly you believe in the thesis), thesis clarity (can you explain it in two sentences?), valuation cushion (how much margin of safety?), and tail risk (what's the worst-case?). The scorecard reveals concentration problems and weak positions before the market does.</p>
+            <div class="mini-chart">
+              <div class="mini-chart-label">Sample — position scoring radar</div>
+              <svg viewBox="0 0 240 140" width="100%">
+                <polygon points="120,20 200,70 170,130 70,130 40,70" fill="none" stroke="rgba(15,13,9,0.1)" stroke-width="1"/>
+                <polygon points="120,50 170,80 155,115 85,115 70,80" fill="none" stroke="rgba(15,13,9,0.08)" stroke-width="1"/>
+                <polygon points="120,35 185,75 162,122 78,122 55,75" fill="#d8341c" fill-opacity="0.08" stroke="#d8341c" stroke-width="1.2"/>
+                <circle cx="120" cy="35" r="3" fill="#d8341c"/>
+                <circle cx="185" cy="75" r="3" fill="#d8341c"/>
+                <circle cx="162" cy="122" r="3" fill="#d8341c"/>
+                <circle cx="78" cy="122" r="3" fill="#d8341c"/>
+                <circle cx="55" cy="75" r="3" fill="#d8341c"/>
+                <text x="120" y="14" font-family="Geist Mono" font-size="8" text-anchor="middle" fill="rgba(15,13,9,0.5)">Conviction</text>
+                <text x="210" y="76" font-family="Geist Mono" font-size="8" fill="rgba(15,13,9,0.5)">Clarity</text>
+                <text x="170" y="142" font-family="Geist Mono" font-size="8" fill="rgba(15,13,9,0.5)">Value</text>
+                <text x="58" y="142" font-family="Geist Mono" font-size="8" fill="rgba(15,13,9,0.5)">Risk</text>
+                <text x="6" y="76" font-family="Geist Mono" font-size="8" fill="rgba(15,13,9,0.5)">Edge</text>
+              </svg>
+            </div>
+          </div>
+          <div class="tool-panel-right">
+            <div>
+              <div class="panel-stat"><span class="panel-stat-label">Access</span><span class="panel-stat-val" style="color:var(--red)">Members only</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Time to use</span><span class="panel-stat-val">~10 minutes</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Positions</span><span class="panel-stat-val">Unlimited</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Export</span><span class="panel-stat-val">PDF summary</span></div>
+            </div>
+            <a href="https://www.leiholding.com/tool-portfolio-scorecard" class="cta-open">Open tool <span class="cta-arrow">→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 -->
+    <div class="tool-item" data-access="free">
+      <div class="tool-row" onclick="toggleTool(this)">
+        <div class="tool-row-num"><span class="tool-num-txt">03</span></div>
+        <div class="tool-row-body">
+          <div class="tool-row-top">
+            <span class="tool-badge badge-free">Free</span>
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+                <circle cx="11" cy="8" r="5" stroke="#0f0d09" stroke-width="1.5"/>
+                <path d="M8 13.5 C8 17 14 17 14 13.5" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="11" y1="17" x2="11" y2="20" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="tool-row-title">Second-Level Thinking</div>
+          <p class="tool-row-sub">A structured worksheet that forces you to ask what the crowd is missing — and whether you actually have an edge. Pressure-tests your thesis in six steps.</p>
+          <div class="tool-tags">
+            <span class="tool-tag">Thesis testing</span>
+            <span class="tool-tag">Edge analysis</span>
+            <span class="tool-tag">Contrarian framing</span>
+          </div>
+        </div>
+        <div class="tool-row-action">
+          <div class="expand-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><line x1="7" y1="2" x2="7" y2="12" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="7" x2="12" y2="7" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="tool-panel">
+        <div class="tool-panel-inner">
+          <div class="tool-panel-left">
+            <div class="panel-detail-label">What it does</div>
+            <p class="panel-detail-body">Howard Marks' second-level thinking, turned into a six-step worksheet. You articulate the consensus view, then challenge it: what does the market think, why might the market be wrong, what would need to be true for you to be right, what's the downside if you're wrong, and what's your actual edge? Forces clarity before conviction.</p>
+            <div class="mini-chart">
+              <div class="mini-chart-label">The 6 steps</div>
+              <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+                <div style="display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10px;color:var(--ink-2)">
+                  <span style="color:var(--red);font-weight:600;width:16px">01</span><span>What does the market think?</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10px;color:var(--ink-2)">
+                  <span style="color:var(--red);font-weight:600;width:16px">02</span><span>Why might they be wrong?</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10px;color:var(--ink-2)">
+                  <span style="color:var(--red);font-weight:600;width:16px">03</span><span>What must be true for me to be right?</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10px;color:var(--ink-2)">
+                  <span style="color:var(--red);font-weight:600;width:16px">04</span><span>What's the downside if I'm wrong?</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10px;color:var(--ink-2)">
+                  <span style="color:var(--red);font-weight:600;width:16px">05</span><span>What is my actual edge?</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10px;color:var(--ink-2)">
+                  <span style="color:var(--red);font-weight:600;width:16px">06</span><span>Verdict — proceed or pass?</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tool-panel-right">
+            <div>
+              <div class="panel-stat"><span class="panel-stat-label">Access</span><span class="panel-stat-val" style="color:var(--up)">Free</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Time to use</span><span class="panel-stat-val">~15 minutes</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Based on</span><span class="panel-stat-val">Howard Marks</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Export</span><span class="panel-stat-val">Print / PDF</span></div>
+            </div>
+            <a href="https://www.leiholding.com/tool-second-level-thinking" class="cta-open">Open tool <span class="cta-arrow">→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 -->
+    <div class="tool-item" data-access="free">
+      <div class="tool-row" onclick="toggleTool(this)">
+        <div class="tool-row-num"><span class="tool-num-txt">04</span></div>
+        <div class="tool-row-body">
+          <div class="tool-row-top">
+            <span class="tool-badge badge-free">Free</span>
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+                <line x1="3" y1="19" x2="19" y2="3" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="6" cy="16" r="2.5" stroke="#0f0d09" stroke-width="1.5"/>
+                <circle cx="16" cy="6" r="2.5" fill="#d8341c" stroke="#d8341c" stroke-width="1.5"/>
+              </svg>
+            </div>
+          </div>
+          <div class="tool-row-title">Ratio Analyser</div>
+          <p class="tool-row-sub">Key financial ratios interpreted in context, not just calculated. Know what P/E, EV/EBITDA, and ROE actually mean for the stock in front of you.</p>
+          <div class="tool-tags">
+            <span class="tool-tag">Valuation ratios</span>
+            <span class="tool-tag">Financial health</span>
+            <span class="tool-tag">Peer comparison</span>
+          </div>
+        </div>
+        <div class="tool-row-action">
+          <div class="expand-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><line x1="7" y1="2" x2="7" y2="12" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="7" x2="12" y2="7" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="tool-panel">
+        <div class="tool-panel-inner">
+          <div class="tool-panel-left">
+            <div class="panel-detail-label">What it does</div>
+            <p class="panel-detail-body">Input a company's financials and the tool calculates and contextualises the ratios that matter: P/E vs. sector median, EV/EBITDA vs. historical range, debt-to-equity against industry norms, and return on equity over time. Each ratio comes with a plain-English interpretation — not just the number, but what it's telling you.</p>
+            <div class="mini-chart">
+              <div class="mini-chart-label">Ratio snapshot — sample output</div>
+              <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
+                <div style="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;">
+                  <div>
+                    <div style="font-family:var(--mono);font-size:9px;color:var(--ink-3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px">P/E Ratio</div>
+                    <div style="height:4px;background:var(--rule);position:relative">
+                      <div style="position:absolute;left:0;top:0;bottom:0;width:58%;background:var(--ink)"></div>
+                      <div style="position:absolute;left:40%;top:-3px;width:1px;height:10px;background:var(--red)"></div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:8px;color:var(--ink-4);margin-top:2px"><span>0</span><span>▲ Sector median</span><span>60×</span></div>
+                  </div>
+                  <div style="font-family:var(--mono);font-size:13px;font-weight:600;color:var(--ink)">18.4×</div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;">
+                  <div>
+                    <div style="font-family:var(--mono);font-size:9px;color:var(--ink-3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px">EV/EBITDA</div>
+                    <div style="height:4px;background:var(--rule);position:relative">
+                      <div style="position:absolute;left:0;top:0;bottom:0;width:34%;background:var(--up)"></div>
+                      <div style="position:absolute;left:50%;top:-3px;width:1px;height:10px;background:var(--red)"></div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:8px;color:var(--ink-4);margin-top:2px"><span>0</span><span>▲ Sector median</span><span>30×</span></div>
+                  </div>
+                  <div style="font-family:var(--mono);font-size:13px;font-weight:600;color:var(--up)">7.1×</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tool-panel-right">
+            <div>
+              <div class="panel-stat"><span class="panel-stat-label">Access</span><span class="panel-stat-val" style="color:var(--up)">Free</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Ratios covered</span><span class="panel-stat-val">12 key ratios</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Benchmarking</span><span class="panel-stat-val">Sector medians</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Input method</span><span class="panel-stat-val">Manual entry</span></div>
+            </div>
+            <a href="https://www.leiholding.com/ratio" class="cta-open">Open tool <span class="cta-arrow">→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 -->
+    <div class="tool-item" data-access="free">
+      <div class="tool-row" onclick="toggleTool(this)">
+        <div class="tool-row-num"><span class="tool-num-txt">05</span></div>
+        <div class="tool-row-body">
+          <div class="tool-row-top">
+            <span class="tool-badge badge-free">Free</span>
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+                <rect x="3" y="6" width="16" height="13" rx="1" stroke="#0f0d09" stroke-width="1.5"/>
+                <path d="M7 6V4a4 4 0 0 1 8 0v2" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="11" y1="10" x2="11" y2="15" stroke="#d8341c" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="8.5" y1="12.5" x2="13.5" y2="12.5" stroke="#d8341c" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="tool-row-title">EPF Retirement Calculator</div>
+          <p class="tool-row-sub">Built for Malaysian investors. Model your EPF balance, voluntary contributions, and projected retirement income against actual EPF withdrawal rules.</p>
+          <div class="tool-tags">
+            <span class="tool-tag">Malaysian EPF</span>
+            <span class="tool-tag">Retirement projections</span>
+            <span class="tool-tag">Withdrawal modelling</span>
+          </div>
+        </div>
+        <div class="tool-row-action">
+          <div class="expand-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><line x1="7" y1="2" x2="7" y2="12" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="7" x2="12" y2="7" stroke="#0f0d09" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="tool-panel">
+        <div class="tool-panel-inner">
+          <div class="tool-panel-left">
+            <div class="panel-detail-label">What it does</div>
+            <p class="panel-detail-body">Most EPF calculators assume you retire at 55 and never revisit the assumptions. This one doesn't. Model Account 1 and Account 2 separately, layer in voluntary contributions, apply the actual EPF dividend rate, and see your projected balance at any retirement age you choose. The only EPF tool that treats you like an adult.</p>
+            <div class="mini-chart">
+              <div class="mini-chart-label">Also useful for</div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;">
+                <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 10px;border:1px solid var(--rule);color:var(--ink-2)">Early retirement</span>
+                <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 10px;border:1px solid var(--rule);color:var(--ink-2)">i-Sinar impact</span>
+                <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 10px;border:1px solid var(--rule);color:var(--ink-2)">Top-up planning</span>
+                <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:5px 10px;border:1px solid var(--rule);color:var(--ink-2)">Dividend projection</span>
+              </div>
+            </div>
+          </div>
+          <div class="tool-panel-right">
+            <div>
+              <div class="panel-stat"><span class="panel-stat-label">Access</span><span class="panel-stat-val" style="color:var(--up)">Free</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Built for</span><span class="panel-stat-val">Malaysian investors</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Accounts</span><span class="panel-stat-val">Acc. 1 + Acc. 2</span></div>
+              <div class="panel-stat"><span class="panel-stat-label">Dividend rate</span><span class="panel-stat-val">Adjustable</span></div>
+            </div>
+            <a href="https://www.leiholding.com/epf_retirement_calculator" class="cta-open">Open tool <span class="cta-arrow">→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- members band -->
+    <div class="members-band">
+      <div>
+        <h3>Save your scenarios. Unlock every tool.</h3>
+        <p>Free tools are yours without an account. Members save assumptions across sessions, unlock the IV calculator and scorecard, and get early access to everything new.</p>
+      </div>
+      <a href="https://www.patreon.com/15273026/join" class="btn-patreon">Join via Patreon →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">Insight<span style="color:var(--red)">·</span>Invest</div>
+        <p class="footer-desc">Independent publication. Edited and written by one person. Not investment advice — work shown, opinions own.</p>
+      </div>
+      <div>
+        <div class="footer-col-head">Read</div>
+        <ul class="footer-links">
+          <li><a href="https://www.leiholding.com/reports">Reports</a></li>
+          <li><a href="https://www.leiholding.com/reports">Archive</a></li>
+          <li><a href="#">RSS</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-head">Use</div>
+        <ul class="footer-links">
+          <li><a href="https://www.leiholding.com/tool-compounding">Compounding</a></li>
+          <li><a href="https://www.leiholding.com/tool-portfolio-scorecard">Scorecard</a></li>
+          <li><a href="https://www.leiholding.com/tool-second-level-thinking">Worksheet</a></li>
+          <li><a href="https://www.leiholding.com/ratio">Ratio Analyser</a></li>
+          <li><a href="https://www.leiholding.com/epf_retirement_calculator">EPF Calculator</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-head">Learn</div>
+        <ul class="footer-links">
+          <li><a href="https://www.leiholding.com/curriculum">Tier I</a></li>
+          <li><a href="https://www.leiholding.com/curriculum">Tier II</a></li>
+          <li><a href="https://www.leiholding.com/curriculum">Tier III</a></li>
+          <li><a href="https://www.leiholding.com/curriculum">Tier IV</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-head">Follow</div>
+        <ul class="footer-links">
+          <li><a href="https://www.patreon.com/15273026/join">Patreon</a></li>
+          <li><a href="#">X / Twitter</a></li>
+          <li><a href="#">YouTube</a></li>
+          <li><a href="#">Email</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-base">
+      <span>© 2026 Insight Invest · Kuala Lumpur</span>
+      <span>Set in Geist + Newsreader · built nightly</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── SCROLL PROGRESS ──
+  const bar = document.getElementById('progressBar');
+  window.addEventListener('scroll', () => {
+    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+    bar.style.width = pct + '%';
+  }, { passive: true });
+
+  // ── CUSTOM CURSOR (desktop) ──
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  const isMobile = () => window.innerWidth < 900;
+
+  document.addEventListener('mousemove', e => {
+    if (isMobile()) return;
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+    dot.style.opacity = '1'; ring.style.opacity = '1';
+  });
+
+  // smooth ring follow
+  function animRing() {
+    rx += (mx - rx) * 0.14;
+    ry += (my - ry) * 0.14;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+
+  // scale ring on hover over links/buttons
+  document.querySelectorAll('a, button, .tool-row').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      ring.style.width = '56px'; ring.style.height = '56px';
+      dot.style.width = '3px'; dot.style.height = '3px';
+    });
+    el.addEventListener('mouseleave', () => {
+      ring.style.width = '32px'; ring.style.height = '32px';
+      dot.style.width = '6px'; dot.style.height = '6px';
+    });
+  });
+
+  // ── HAMBURGER ──
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+
+  // ── TOOL ACCORDION ──
+  function toggleTool(row) {
+    const panel = row.nextElementSibling;
+    const isOpen = row.classList.contains('expanded');
+
+    // close all
+    document.querySelectorAll('.tool-row.expanded').forEach(r => {
+      r.classList.remove('expanded');
+      r.nextElementSibling.classList.remove('open');
+    });
+
+    if (!isOpen) {
+      row.classList.add('expanded');
+      panel.classList.add('open');
+      // smooth scroll so panel is in view
+      setTimeout(() => {
+        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 60);
+    }
+  }
+
+  // ── FILTER BUTTONS ──
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.tool-item').forEach(item => {
+        if (filter === 'all' || item.dataset.access === filter) {
+          item.style.display = '';
+          // animate in
+          item.style.opacity = '0';
+          item.style.transform = 'translateY(6px)';
+          requestAnimationFrame(() => {
+            item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            item.style.opacity = '1';
+            item.style.transform = 'translateY(0)';
+          });
+        } else {
+          item.style.display = 'none';
+        }
+        // close any open panels
+        item.querySelector('.tool-row').classList.remove('expanded');
+        item.querySelector('.tool-panel').classList.remove('open');
+      });
+    });
+  });
+
+  // ── SCROLL-IN ANIMATIONS ──
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.tool-item').forEach((el, i) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(16px)';
+    el.style.transition = `opacity 0.5s ease ${i * 0.07}s, transform 0.5s var(--ease-out-quart) ${i * 0.07}s`;
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
