@@ -1,450 +1,1041 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Published Reports — InsightInvest</title>
-<meta content="Deep-dive investment playbooks — comprehensive, actionable research reports you can use immediately." name="description"/>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
-<style>
-:root{--bg:#08090c;--bg2:#0e1016;--bg3:#14161e;--surface:#1a1d28;--border:#252838;--text:#9ca3b8;--text-bright:#e8ecf4;--text-dim:#555c72;--gold:#c9a84c;--gold-light:#e4cc7a;--gold-dim:#8a7234;--blue:#4a7cff;--green:#3dd68c;--red:#ff5c5c;--cyan:#38d9d9;}
-*{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--border) var(--bg);}
-::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased;}
-body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reports — Insight Invest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,18..72,400;0,18..72,500;0,18..72,600;1,18..72,400;1,18..72,500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper:#faf7f1; --paper-2:#f3eee2; --ink:#0f0d09;
+      --ink-2:rgba(15,13,9,0.72); --ink-3:rgba(15,13,9,0.50); --ink-4:rgba(15,13,9,0.28);
+      --rule:rgba(15,13,9,0.12); --rule-soft:rgba(15,13,9,0.06);
+      --red:#d8341c; --red-deep:#a8261a; --red-tint:#fbe5dd;
+      --up:#167a3e; --down:#c1331c;
+      --sans:'Geist',system-ui,sans-serif;
+      --mono:'Geist Mono',ui-monospace,monospace;
+      --serif:'Newsreader',Georgia,serif;
+    }
+    *,*::before,*::after{box-sizing:border-box;}
+    html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+    h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-0.02em;}
+    p{margin:0;} a{color:inherit;text-decoration:none;cursor:pointer;}
+    ul,ol{margin:0;padding:0;list-style:none;}
+    button{font:inherit;cursor:pointer;border:0;background:none;color:inherit;padding:0;}
+    svg{display:block;}
 
-nav{position:fixed;top:0;left:0;right:0;padding:20px 48px;display:flex;align-items:center;justify-content:space-between;z-index:100;background:linear-gradient(180deg,var(--bg) 0%,transparent 100%);transition:all 0.4s;}
-nav.scrolled{background:#08090cee;backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 48px;}
-.nav-logo{display:flex;align-items:center;gap:14px;text-decoration:none;}
-.nav-logo-mark{width:38px;height:38px;border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;}
-.nav-logo-mark::before{content:'I';font-family:'Instrument Serif',serif;font-size:20px;font-weight:400;color:var(--gold);}
-.nav-logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;color:var(--text-bright);letter-spacing:0.08em;text-transform:uppercase;}
-.nav-links{display:flex;gap:36px;align-items:center;}
-.nav-links a{font-size:12px;font-weight:500;color:var(--text-dim);text-decoration:none;letter-spacing:0.06em;text-transform:uppercase;transition:color 0.3s;position:relative;}
-.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--gold);transition:width 0.3s;}
-.nav-links a:hover{color:var(--gold);}
-.nav-links a:hover::after{width:100%;}
-.nav-cta{padding:10px 24px !important;border:1px solid var(--gold-dim) !important;color:var(--gold) !important;font-size:11px !important;letter-spacing:0.1em !important;transition:all 0.3s !important;}
-.nav-cta:hover{background:var(--gold) !important;color:var(--bg) !important;}
+    /* ── PROGRESS ── */
+    .progress-bar{position:fixed;top:0;left:0;height:2px;background:var(--red);width:0%;z-index:200;}
 
-.reports-hero{padding:120px 48px 100px;position:relative;overflow:hidden;background:var(--bg);border-bottom:1px solid var(--border);text-align:center;}
-.reports-hero::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:700px;height:700px;background:radial-gradient(circle,var(--gold)05,transparent 65%);pointer-events:none;}
-.reports-hero-inner{max-width:700px;margin:0 auto;position:relative;z-index:1;}
-.section-tag{display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;color:var(--gold);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:20px;}
-.section-tag-dot{width:6px;height:6px;background:var(--gold);border-radius:50%;animation:dotPulse 2s ease-in-out infinite;}
-@keyframes dotPulse{0%,100%{opacity:0.4;}50%{opacity:1;}}
-.section-h2{font-family:'Instrument Serif',serif;font-size:clamp(36px,4.5vw,64px);font-weight:400;color:var(--text-bright);line-height:1.1;letter-spacing:-0.02em;margin-bottom:20px;}
-.section-sub{font-size:15px;color:var(--text);max-width:560px;line-height:1.75;margin-bottom:60px;font-weight:400;}
+    /* ── CURSOR ── */
+    .cursor-dot{position:fixed;width:5px;height:5px;background:var(--red);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);opacity:0;transition:opacity 0.3s,width 0.2s,height 0.2s;}
+    .cursor-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(216,52,28,0.6);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:0;transition:opacity 0.3s,width 0.25s,height 0.25s;}
+    .cursor-dot.on{opacity:1;} .cursor-ring.on{opacity:1;}
+    .cursor-dot.big{width:3px;height:3px;} .cursor-ring.big{width:48px;height:48px;}
 
-.report-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;}
-.report-title{font-family:'Instrument Serif',serif;font-size:30px;font-weight:400;color:var(--text-bright);line-height:1.2;margin-bottom:14px;}
-.report-body{font-size:14px;color:var(--text);line-height:1.72;margin-bottom:28px;font-weight:400;}
-.report-chip{font-family:'JetBrains Mono',monospace;font-size:10px;padding:4px 12px;border:1px solid var(--border);color:var(--text-dim);}
-.report-cta{font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;font-family:'Plus Jakarta Sans',sans-serif;}
+    /* ── TOPBAR ── */
+    .topbar{border-bottom:1px solid var(--rule);position:sticky;top:0;z-index:100;background:rgba(250,247,241,0.95);backdrop-filter:blur(12px);transition:box-shadow 0.3s;}
+    .topbar.scrolled{box-shadow:0 1px 0 var(--rule),0 4px 24px rgba(15,13,9,0.06);}
+    .topbar-inner{max-width:1440px;margin:0 auto;padding:16px 48px;display:flex;justify-content:space-between;align-items:center;gap:24px;}
+    .logo{display:flex;align-items:center;gap:3px;font-weight:700;font-size:17px;letter-spacing:-0.02em;flex-shrink:0;}
+    .logo-dot{color:var(--red);}
+    .topbar-nav{display:flex;gap:28px;font-size:13.5px;color:var(--ink-2);}
+    .topbar-nav a{position:relative;transition:color 0.2s;}
+    .topbar-nav a::after{content:'';position:absolute;left:0;bottom:-2px;width:0;height:1px;background:var(--ink);transition:width 0.25s cubic-bezier(0.25,1,0.5,1);}
+    .topbar-nav a:hover::after,.topbar-nav a.active::after{width:100%;}
+    .topbar-nav a:hover,.topbar-nav a.active{color:var(--ink);font-weight:500;}
+    .topbar-actions{display:flex;gap:16px;align-items:center;font-size:13px;color:var(--ink-2);}
+    .btn-subscribe{padding:8px 16px;border:1px solid var(--ink);font-weight:500;font-size:13px;transition:background 0.15s,color 0.15s,transform 0.2s;}
+    .btn-subscribe:hover{background:var(--ink);color:var(--paper);transform:translateY(-1px);}
+    .hamburger{display:none;flex-direction:column;gap:5px;padding:4px;cursor:pointer;}
+    .hamburger span{display:block;width:22px;height:1.5px;background:var(--ink);transition:transform 0.3s,opacity 0.3s;}
+    .hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+    .hamburger.open span:nth-child(2){opacity:0;}
+    .hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+    .mobile-menu{display:none;flex-direction:column;background:var(--paper);border-top:1px solid var(--rule);padding:20px 24px 32px;}
+    .mobile-menu.open{display:flex;}
+    .mobile-menu a{padding:14px 0;font-size:18px;font-weight:500;border-bottom:1px solid var(--rule-soft);}
+    .mobile-menu a:last-child{border-bottom:none;}
+    .mobile-menu .m-sub{margin-top:20px;padding:14px 20px;background:var(--ink);color:var(--paper);text-align:center;font-weight:600;font-size:14px;border-bottom:none;}
 
-.reports-grid-wrap{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:80px 48px;}
+    /* ── TICKER ── */
+    .ticker-wrap{overflow:hidden;border-bottom:1px solid var(--rule);background:var(--ink);padding:8px 0;}
+    .ticker-track{display:flex;white-space:nowrap;animation:ticker 32s linear infinite;}
+    .ticker-track:hover{animation-play-state:paused;}
+    .ticker-item{display:inline-flex;align-items:center;gap:10px;padding:0 28px;font-family:var(--mono);font-size:10.5px;letter-spacing:0.06em;color:rgba(243,238,226,0.6);border-right:1px solid rgba(255,255,255,0.08);flex-shrink:0;}
+    .ticker-sym{font-weight:600;color:var(--paper-on-black,#f3eee2);letter-spacing:0.1em;}
+    .ticker-up{color:#4ade80;}
+    .ticker-down{color:#f87171;}
+    @keyframes ticker{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
 
-.patreon-interlude{padding:0 48px;margin:0;}
-.patreon-strip{max-width:680px;margin:0 auto;padding:40px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:32px;}
-.patreon-strip-left{display:flex;flex-direction:column;gap:4px;}
-.patreon-strip-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);}
-.patreon-strip-text{font-family:'Instrument Serif',serif;font-size:22px;font-weight:400;color:var(--text-bright);line-height:1.3;}
-.patreon-strip-text em{font-style:italic;color:var(--gold);}
-.patreon-strip-sub{font-size:13px;color:var(--text-dim);margin-top:4px;line-height:1.6;font-weight:400;}
-.patreon-strip-btn{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);text-decoration:none;border:1px solid var(--gold-dim);padding:10px 20px;white-space:nowrap;transition:all 0.25s;flex-shrink:0;}
-.patreon-strip-btn:hover{background:var(--gold);color:var(--bg);}
+    /* ── PAGE HEADER ── */
+    .page-header{padding:56px 48px 48px;border-bottom:2px solid var(--ink);position:relative;overflow:hidden;}
+    .page-header::after{content:'REPORTS';position:absolute;right:-20px;top:50%;transform:translateY(-50%);font-size:clamp(100px,14vw,200px);font-weight:800;letter-spacing:-0.05em;color:var(--ink);opacity:0.03;pointer-events:none;white-space:nowrap;}
+    .page-header-inner{max-width:1440px;margin:0 auto;}
+    .ph-top{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:32px;}
+    .ph-left .page-kicker{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-3);margin-bottom:14px;}
+    .ph-left h1{font-family:var(--serif);font-weight:400;font-size:clamp(40px,5vw,72px);line-height:1.05;letter-spacing:-0.025em;}
+    .ph-left h1 em{font-style:italic;color:var(--red);}
+    .ph-right{display:flex;flex-direction:column;align-items:flex-end;gap:12px;}
+    .report-count{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-3);}
+    .report-count span{font-size:28px;font-weight:700;color:var(--ink);letter-spacing:-0.02em;font-variant-numeric:tabular-nums;display:block;line-height:1;}
 
-.waitlist-cta{padding:100px 48px;background:var(--bg);border-top:1px solid var(--border);position:relative;overflow:hidden;}
-.waitlist-cta::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,var(--gold)06,transparent 70%);pointer-events:none;}
-.wl-inner{max-width:640px;margin:0 auto;position:relative;z-index:2;}
-.wl-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
-.wl-eyebrow::before{content:'';display:inline-block;width:24px;height:1px;background:var(--gold);}
-.wl-headline{font-family:'Instrument Serif',serif;font-size:clamp(32px,4vw,52px);font-weight:400;color:var(--text-bright);line-height:1.1;letter-spacing:-0.02em;margin-bottom:16px;}
-.wl-headline em{font-style:italic;color:var(--gold);}
-.wl-desc{font-size:15px;color:var(--text);line-height:1.75;margin-bottom:36px;max-width:520px;font-weight:400;}
-.wl-proof{display:flex;align-items:center;gap:14px;margin-bottom:32px;}
-.wl-avatars{display:flex;}
-.wl-avatar{width:30px;height:30px;border-radius:50%;border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--bg);font-weight:700;margin-left:-8px;}
-.wl-avatar:first-child{margin-left:0;}
-.wl-proof-text{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);line-height:1.5;}
-.wl-proof-text strong{color:var(--text);font-weight:500;}
-.wl-form{display:flex;gap:0;margin-bottom:14px;}
-.wl-input{flex:1;padding:15px 18px;background:var(--bg2);border:1px solid var(--border);border-right:none;color:var(--text-bright);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;outline:none;transition:border-color 0.3s;}
-.wl-input:focus{border-color:var(--gold-dim);}
-.wl-input::placeholder{color:var(--text-dim);}
-.wl-btn{padding:15px 28px;background:var(--gold);color:var(--bg);font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;border:none;cursor:pointer;transition:all 0.3s;white-space:nowrap;}
-.wl-btn:hover{background:var(--gold-light);}
-.wl-meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:0.07em;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
-.wl-spots{display:flex;align-items:center;gap:6px;color:var(--gold);}
-.wl-spots-dot{width:5px;height:5px;background:var(--gold);border-radius:50%;animation:dotPulse 2s ease-in-out infinite;}
+    /* ── CONTROLS BAR ── */
+    .controls{max-width:1440px;margin:0 auto;padding:20px 48px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid var(--rule);flex-wrap:wrap;}
+    .filter-tabs{display:flex;gap:0;border:1px solid var(--ink);}
+    .filter-tab{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;padding:9px 18px;border-right:1px solid var(--ink);cursor:pointer;transition:background 0.15s,color 0.15s;background:transparent;color:var(--ink-3);white-space:nowrap;}
+    .filter-tab:last-child{border-right:none;}
+    .filter-tab:hover,.filter-tab.active{background:var(--ink);color:var(--paper);}
+    .search-wrap{position:relative;flex:1;max-width:320px;}
+    .search-input{width:100%;padding:9px 12px 9px 36px;border:1px solid var(--rule);background:var(--paper-2);font-family:var(--mono);font-size:12px;letter-spacing:0.04em;color:var(--ink);outline:none;transition:border-color 0.2s;}
+    .search-input:focus{border-color:var(--ink);}
+    .search-input::placeholder{color:var(--ink-4);}
+    .search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--ink-4);}
+    .view-toggle{display:flex;gap:0;border:1px solid var(--rule);}
+    .view-btn{padding:9px 12px;cursor:pointer;transition:background 0.15s;color:var(--ink-3);}
+    .view-btn:hover,.view-btn.active{background:var(--ink);color:var(--paper);}
+    .view-btn:first-child{border-right:1px solid var(--rule);}
 
-.reveal{opacity:0;transform:translateY(40px);transition:all 0.8s cubic-bezier(0.22,1,0.36,1);}
-.reveal.visible{opacity:1;transform:translateY(0);}
+    /* ── LAYOUT ── */
+    .main-layout{max-width:1440px;margin:0 auto;padding:0 48px 100px;display:grid;grid-template-columns:220px 1fr;gap:0;}
 
-.report-modal-overlay{display:none;position:fixed;inset:0;z-index:10000;background:rgba(8,9,12,0.95);backdrop-filter:blur(12px);animation:modalFadeIn 0.3s ease;}
-.report-modal-overlay.active{display:flex;flex-direction:column;}
-@keyframes modalFadeIn{from{opacity:0;}to{opacity:1;}}
-.report-modal-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0;}
-.report-modal-title{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:10px;}
-.report-modal-title::before{content:'▶';font-size:8px;}
-.report-modal-close{display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:var(--text-dim);cursor:pointer;border:1px solid var(--border);padding:7px 16px;background:none;transition:all 0.2s;text-transform:uppercase;}
-.report-modal-close:hover{border-color:var(--red);color:var(--red);}
-.report-modal-iframe{flex:1;width:100%;border:none;background:white;}
-.report-modal-loading{position:absolute;inset:60px 0 0 0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
-.report-modal-loading-text{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:0.15em;text-transform:uppercase;}
-.loading-bar{width:200px;height:2px;background:var(--border);position:relative;overflow:hidden;}
-.loading-bar::after{content:'';position:absolute;left:-50%;top:0;height:100%;width:50%;background:var(--gold);animation:loadingSlide 1.2s ease-in-out infinite;}
-@keyframes loadingSlide{0%{left:-50%;}100%{left:100%;}}
+    /* ── SIDEBAR ── */
+    .sidebar{border-right:1px solid var(--rule);padding:32px 32px 32px 0;position:sticky;top:57px;align-self:start;max-height:calc(100vh - 57px);overflow-y:auto;}
+    .sidebar::-webkit-scrollbar{width:0;}
+    .sidebar-section{margin-bottom:32px;}
+    .sidebar-head{font-family:var(--mono);font-size:9.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-4);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--rule-soft);}
+    .sidebar-link{display:flex;align-items:center;justify-content:space-between;padding:7px 0;font-size:13px;color:var(--ink-2);border-bottom:1px solid var(--rule-soft);cursor:pointer;transition:color 0.15s,padding-left 0.15s;}
+    .sidebar-link:hover,.sidebar-link.active{color:var(--red);padding-left:6px;}
+    .sidebar-link.active{font-weight:600;}
+    .sidebar-count{font-family:var(--mono);font-size:10px;color:var(--ink-4);}
 
-footer{padding:60px 48px 40px;background:var(--bg);border-top:1px solid var(--border);}
-.footer-grid{display:flex;justify-content:space-between;max-width:1400px;margin:0 auto;padding-bottom:40px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:40px;}
-.footer-brand{max-width:280px;}
-.footer-brand-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;color:var(--text-bright);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;}
-.footer-brand-desc{font-size:13px;color:var(--text-dim);line-height:1.7;}
-.footer-col-title{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;color:var(--text-dim);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:16px;}
-.footer-col a{display:block;font-size:13px;color:var(--text);text-decoration:none;padding:4px 0;transition:color 0.3s;}
-.footer-col a:hover{color:var(--gold);}
-.footer-bottom{max-width:1400px;margin:24px auto 0;display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);flex-wrap:wrap;gap:12px;}
+    /* ── REPORTS GRID ── */
+    .reports-area{padding:32px 0 0 40px;}
+    .section-block{margin-bottom:56px;}
+    .section-block-head{display:flex;align-items:baseline;justify-content:space-between;padding-bottom:14px;border-bottom:2px solid var(--ink);margin-bottom:24px;}
+    .section-block-title{font-size:22px;font-weight:700;letter-spacing:-0.02em;}
+    .section-block-count{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--ink-3);text-transform:uppercase;}
 
-@media(max-width:1100px){nav{padding:16px 24px;}.nav-links{display:none;}.reports-grid-wrap,.patreon-interlude,.waitlist-cta{padding-left:24px;padding-right:24px;}.reports-hero{padding:100px 24px 60px;}.patreon-strip{flex-direction:column;align-items:flex-start;gap:20px;}.wl-form{flex-direction:column;}.wl-input{border-right:1px solid var(--border);border-bottom:none;}.wl-btn{padding:15px;}.footer-grid{flex-direction:column;}}
-</style>
+    /* grid view */
+    .reports-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);}
+    .report-card{background:var(--paper);padding:24px;position:relative;overflow:hidden;cursor:pointer;transition:background 0.2s;}
+    .report-card:hover{background:var(--paper-2);}
+    .report-card::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--red);transition:width 0.3s cubic-bezier(0.25,1,0.5,1);}
+    .report-card:hover::after{width:100%;}
+    .rc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
+    .rc-tag{font-family:var(--mono);font-size:8.5px;letter-spacing:0.16em;text-transform:uppercase;padding:3px 8px;border:1px solid;}
+    .rc-tag-macro{border-color:var(--ink-3);color:var(--ink-3);}
+    .rc-tag-stock{border-color:#7c6fad;color:#7c6fad;}
+    .rc-tag-malaysia{border-color:#c07a1a;color:#c07a1a;}
+    .rc-tag-gold{border-color:#b59528;color:#b59528;}
+    .rc-tag-epf{border-color:var(--up);color:var(--up);}
+    .rc-tag-platform{border-color:var(--red);color:var(--red);}
+    .rc-arrow{width:28px;height:28px;border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;color:var(--ink-4);transition:background 0.2s,color 0.2s,transform 0.2s;}
+    .report-card:hover .rc-arrow{background:var(--ink);color:var(--paper);transform:translate(2px,-2px);}
+    .rc-title{font-size:15px;font-weight:600;letter-spacing:-0.01em;line-height:1.3;margin-bottom:8px;}
+    .rc-sub{font-size:12.5px;line-height:1.55;color:var(--ink-3);}
+    .rc-meta{margin-top:16px;display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:9.5px;letter-spacing:0.08em;color:var(--ink-4);}
+    .rc-dot{width:3px;height:3px;border-radius:50%;background:var(--ink-4);}
+
+    /* list view */
+    .reports-list{display:none;}
+    .rl-row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:24px;padding:14px 0;border-bottom:1px solid var(--rule-soft);cursor:pointer;transition:background 0.15s,padding-left 0.2s;}
+    .rl-row:hover{background:var(--paper-2);padding-left:8px;}
+    .rl-left{display:flex;align-items:baseline;gap:14px;}
+    .rl-title{font-size:14px;font-weight:500;letter-spacing:-0.01em;}
+    .rl-tag{font-family:var(--mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;padding:2px 7px;border:1px solid;flex-shrink:0;}
+    .rl-right{display:flex;align-items:center;gap:16px;}
+    .rl-arrow{font-family:var(--mono);font-size:11px;color:var(--ink-4);transition:color 0.2s,transform 0.2s;}
+    .rl-row:hover .rl-arrow{color:var(--red);transform:translateX(4px);}
+
+    /* view toggle state */
+    body.list-view .reports-grid{display:none;}
+    body.list-view .reports-list{display:block;}
+
+    /* empty state */
+    .empty-state{padding:64px 0;text-align:center;display:none;}
+    .empty-state.show{display:block;}
+    .empty-state p{font-family:var(--mono);font-size:12px;color:var(--ink-3);letter-spacing:0.06em;}
+
+    /* ── MEMBERS BAND ── */
+    .members-band{background:var(--ink);color:var(--paper);padding:56px 48px;display:flex;align-items:center;justify-content:space-between;gap:40px;}
+    .members-band h3{font-size:28px;font-weight:600;letter-spacing:-0.02em;}
+    .members-band p{margin-top:10px;font-size:14px;line-height:1.65;color:rgba(243,238,226,0.65);max-width:520px;}
+    .btn-patreon{padding:16px 28px;background:var(--red);color:var(--paper);font-size:13.5px;font-weight:600;white-space:nowrap;flex-shrink:0;transition:background 0.15s,transform 0.2s;}
+    .btn-patreon:hover{background:var(--red-deep);transform:translateY(-2px);}
+
+    /* ── FOOTER ── */
+    .footer{padding:56px 48px 32px;border-top:1px solid var(--rule);}
+    .footer-inner{max-width:1440px;margin:0 auto;}
+    .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:48px;}
+    .footer-logo{font-weight:700;font-size:16px;letter-spacing:-0.02em;}
+    .footer-desc{margin-top:10px;font-size:13px;color:var(--ink-3);max-width:300px;line-height:1.6;}
+    .footer-col-head{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px;}
+    .footer-links{display:flex;flex-direction:column;gap:8px;}
+    .footer-links li a{font-size:13px;color:var(--ink-2);transition:color 0.15s;}
+    .footer-links li a:hover{color:var(--red);}
+    .footer-base{margin-top:48px;padding-top:20px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:var(--mono);font-size:10px;letter-spacing:0.06em;color:var(--ink-3);}
+
+    /* ── REVEAL ── */
+    .reveal{opacity:0;transform:translateY(16px);transition:opacity 0.5s ease,transform 0.5s cubic-bezier(0.25,1,0.5,1);}
+    .reveal.visible{opacity:1;transform:translateY(0);}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:1024px){
+      .main-layout{grid-template-columns:180px 1fr;}
+      .reports-grid{grid-template-columns:repeat(2,1fr);}
+    }
+    @media(max-width:900px){
+      .topbar-inner{padding:16px 24px;}
+      .topbar-nav,.topbar-actions .sign-in,.topbar-actions .btn-subscribe{display:none;}
+      .hamburger{display:flex;}
+      .mobile-menu.open{display:flex;}
+      .page-header{padding:40px 24px 36px;}
+      .controls{padding:16px 24px;}
+      .filter-tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+      .filter-tab{font-size:9px;padding:8px 12px;}
+      .search-wrap{max-width:100%;width:100%;order:3;flex:none;}
+      .main-layout{grid-template-columns:1fr;padding:0 24px 72px;}
+      .sidebar{display:none;}
+      .reports-area{padding:24px 0 0;}
+      .reports-grid{grid-template-columns:1fr;}
+      .members-band{flex-direction:column;align-items:flex-start;padding:40px 24px;}
+      .members-band p{max-width:100%;}
+      .btn-patreon{width:100%;text-align:center;}
+      .footer{padding:48px 24px 28px;}
+      .footer-grid{grid-template-columns:1fr 1fr;gap:32px;}
+      .footer-grid>div:first-child{grid-column:1/-1;}
+    }
+    @media(max-width:520px){
+      .ph-top{flex-direction:column;align-items:flex-start;}
+      .ph-right{align-items:flex-start;}
+      .controls{flex-wrap:wrap;gap:12px;}
+      .footer-grid{grid-template-columns:1fr;}
+    }
+  </style>
 </head>
 <body>
 
-<nav id="navbar">
-  <a class="nav-logo" href="/">
-    <div class="nav-logo-mark"></div>
-    <span class="nav-logo-text">InsightInvest</span>
-  </a>
-  <div class="nav-links">
-    <a href="/">Home</a>
-    <a href="/reports" style="color:var(--gold);">Reports</a>
-    <a href="/#learning">Learn</a>
-    <a href="/#waitlist">Advisory</a>
-    <a class="nav-cta" href="/#waitlist">Join Waitlist</a>
-  </div>
-</nav>
+<div class="progress-bar" id="pb"></div>
+<div class="cursor-dot" id="cd"></div>
+<div class="cursor-ring" id="cr"></div>
 
-<section class="reports-hero">
-  <div class="reports-hero-inner">
-    <div class="section-tag" style="justify-content:center;margin-bottom:24px;"><span class="section-tag-dot"></span>Published Reports</div>
-    <h1 class="section-h2" style="font-size:clamp(40px,6vw,72px);margin-bottom:24px;">Deep-dive<br/>playbooks</h1>
-    <p class="section-sub" style="max-width:560px;margin:0 auto;">Comprehensive, actionable research reports — each one a complete investment framework you can use immediately.</p>
-  </div>
-</section>
-
-<div class="reports-grid-wrap">
-  <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:20px;max-width:1400px;margin:0 auto;">
-
-    <a href="/cyber-sovereign" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#38d9d960';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(56,217,217,0.08)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#38d9d9,#4a7cff);"></div>
-      <div style="position:absolute;top:16px;right:16px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;background:rgba(56,217,217,0.1);color:#38d9d9;border:1px solid rgba(56,217,217,0.3);padding:3px 9px;">New</div>
-      <div class="report-tag" style="color:#38d9d9;">Defense Infrastructure · Cyber · 6 Equities</div>
-      <div class="report-title">The Cyber<br/>Sovereign</div>
-      <p class="report-body">Trump declared cyberspace a warfighting domain on March 6, 2026. Wall Street still prices these companies as SaaS. The government uses them as defense contractors. Full reclassification thesis — policy doctrine, procurement mechanics, company matrix, and 7 signals to watch.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">Cybersecurity</span><span class="report-chip">Defense</span><span class="report-chip">Reclassification</span><span class="report-chip">Macro</span></div>
-      <div class="report-cta" style="color:#38d9d9;">Read Framework <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
-    </a>
-
-    <div onclick="openReport('sw')" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#3dd68c60';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(61,214,140,0.08)'" style="display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);cursor:pointer;">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#3dd68c,#a9e34b);"></div>
-      <div class="report-tag" style="color:#3dd68c;">Equity Analysis · Software · 7 Dimensions</div>
-      <div class="report-title">The Contrarian<br/>Software Thesis</div>
-      <p class="report-body">Why IGV fell 16.7% in Q1 2026 — and why that collapse was the opportunity. A full-cycle sector analysis: narrative vs. fundamentals, the Anthropic inflection, and what the data actually said.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">SaaS</span><span class="report-chip">AI Narrative</span><span class="report-chip">Contrarian</span><span class="report-chip">Sector Rotation</span></div>
-      <div class="report-cta" style="color:#3dd68c;">Read Analysis <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
+<!-- TOPBAR -->
+<header class="topbar" id="topbar">
+  <div class="topbar-inner">
+    <a href="https://www.leiholding.com" class="logo">Insight<span class="logo-dot">·</span>Invest</a>
+    <nav class="topbar-nav">
+      <a href="https://www.leiholding.com/reports" class="active">Reports</a>
+      <a href="tools.html">Tools</a>
+      <a href="https://www.leiholding.com/curriculum">Curriculum</a>
+      <a href="https://www.leiholding.com/members">Members</a>
+    </nav>
+    <div class="topbar-actions">
+      <a href="https://www.leiholding.com/members" class="sign-in">Sign in</a>
+      <a href="https://www.patreon.com/15273026/join" class="btn-subscribe">Subscribe</a>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
     </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="https://www.leiholding.com/reports">Reports</a>
+    <a href="tools.html">Tools</a>
+    <a href="https://www.leiholding.com/curriculum">Curriculum</a>
+    <a href="https://www.leiholding.com/members">Members</a>
+    <a href="https://www.leiholding.com/members">Sign in</a>
+    <a href="https://www.patreon.com/15273026/join" class="m-sub">Join via Patreon →</a>
+  </div>
+</header>
 
-    <div onclick="openReport('pt')" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#4a7cff60';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(74,124,255,0.08)'" style="display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);cursor:pointer;">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#4a7cff,#38d9d9);"></div>
-      <div class="report-tag" style="color:#4a7cff;">Portfolio Strategy · Leveraged ETFs · 5 Positions</div>
-      <div class="report-title">The Amplified<br/>Contrarian</div>
-      <p class="report-body">The leveraged portfolio built to capture maximum upside from the software and semiconductor narrative reversal. Deep dives on AVGX, SMH3, CRMG, NOWL, and ZETX — why each position, why the structure.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">2x Leverage</span><span class="report-chip">Semicon</span><span class="report-chip">Software</span><span class="report-chip">AI Thesis</span></div>
-      <div class="report-cta" style="color:#4a7cff;">Read Thesis <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
-    </div>
-
-    <a href="/buffett-playbook" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='var(--gold-dim)';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(201,168,76,0.08)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#c9a84c,#f0d078);"></div>
-      <div class="report-tag" style="color:var(--gold);">Financial Learning · 8 Plays</div>
-      <div class="report-title">The Buffett<br/>Investor Playbook</div>
-      <p class="report-body">Warren Buffett's entire investment strategy — decoded into 8 actionable plays. Owner mindset, circle of competence, margin of safety, the 4-filter system, and more.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">Value Investing</span><span class="report-chip">Moats</span><span class="report-chip">Psychology</span><span class="report-chip">Portfolio</span></div>
-      <div class="report-cta" style="color:var(--gold);">Read Playbook <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
-    </a>
-
-    <a href="/iran-conflict" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#ff6b6b40';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(255,107,107,0.06)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#ff6b6b,#ffa07a);"></div>
-      <div class="report-tag" style="color:#ff6b6b;">Macro · Geopolitics · 5 Frameworks</div>
-      <div class="report-title">Iran Conflict<br/>Investment Frameworks</div>
-      <p class="report-body">Five actionable frameworks for navigating the Iran crisis — from bimodal straddles to reconstruction plays and the China squeeze. Built for both scenarios.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">Oil</span><span class="report-chip">Geopolitics</span><span class="report-chip">Options</span><span class="report-chip">Macro</span></div>
-      <div class="report-cta" style="color:#ff6b6b;">Read Report <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
-    </a>
-
-    <a href="/cash-allocation-bear-markets" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#c0392b40';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(192,57,43,0.06)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#c0392b,#e74c3c);"></div>
-      <div class="report-tag" style="color:#c0392b;">Portfolio Strategy · 8 Sections</div>
-      <div class="report-title">Cash Allocation<br/>in Bear Markets</div>
-      <p class="report-body">Evidence-based analysis of how to size, time, and deploy cash during downturns. Covers the dual-function framework, historical bear market data, and deployment triggers.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">Bear Markets</span><span class="report-chip">Cash Strategy</span><span class="report-chip">Risk Mgmt</span></div>
-      <div class="report-cta" style="color:#c0392b;">Read Analysis <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
-    </a>
-
+<!-- TICKER -->
+<div class="ticker-wrap" aria-hidden="true">
+  <div class="ticker-track">
+    <span class="ticker-item"><span class="ticker-sym">KLCI</span> 1,528.4 <span class="ticker-down">-0.3%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">AAPL</span> $213.40 <span class="ticker-up">+1.2%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">NVDA</span> $134.90 <span class="ticker-down">-0.4%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">SOFI</span> $10.32 <span class="ticker-up">+3.4%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">GOLD</span> $3,241 <span class="ticker-up">+0.8%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">RDDT</span> $148.60 <span class="ticker-up">+2.1%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">PCHEM</span> RM 3.82 <span class="ticker-down">-1.1%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">MSFT</span> $418.75 <span class="ticker-up">+0.8%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">CRWD</span> $378.20 <span class="ticker-up">+1.7%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">BRK.B</span> $452.60 <span class="ticker-up">+0.2%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">MYRIDT</span> 4.35 <span class="ticker-down">-0.2%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">WTI</span> $78.40 <span class="ticker-up">+1.3%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">KLCI</span> 1,528.4 <span class="ticker-down">-0.3%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">AAPL</span> $213.40 <span class="ticker-up">+1.2%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">NVDA</span> $134.90 <span class="ticker-down">-0.4%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">SOFI</span> $10.32 <span class="ticker-up">+3.4%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">GOLD</span> $3,241 <span class="ticker-up">+0.8%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">RDDT</span> $148.60 <span class="ticker-up">+2.1%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">PCHEM</span> RM 3.82 <span class="ticker-down">-1.1%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">MSFT</span> $418.75 <span class="ticker-up">+0.8%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">CRWD</span> $378.20 <span class="ticker-up">+1.7%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">BRK.B</span> $452.60 <span class="ticker-up">+0.2%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">MYRIDT</span> 4.35 <span class="ticker-down">-0.2%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">WTI</span> $78.40 <span class="ticker-up">+1.3%</span></span>
   </div>
 </div>
 
-<div class="patreon-interlude reveal">
-  <div class="patreon-strip">
-    <div class="patreon-strip-left">
-      <span class="patreon-strip-eyebrow">InsightInvest Community</span>
-      <div class="patreon-strip-text">The full analysis lives <em>inside.</em></div>
-      <div class="patreon-strip-sub">Weekly intelligence briefs, early frameworks, and the thinking behind the research — on Patreon.</div>
-    </div>
-    <a href="https://www.patreon.com/15273026/join" target="_blank" rel="noopener" class="patreon-strip-btn">Join on Patreon →</a>
-  </div>
-</div>
-
-<div class="reports-grid-wrap" style="border-top:none;">
-  <div class="reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:20px;max-width:1400px;margin:0 auto;">
-
-    <!-- ── PCHEM WAR TRADE — NEW ── -->
-    <a href="/pchem-thesis" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#d4a84360';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(212,168,67,0.1)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#d4a843,#f0c860,#d4a843);"></div>
-      <div style="position:absolute;top:16px;right:16px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;background:rgba(212,168,67,0.1);color:#d4a843;border:1px solid rgba(212,168,67,0.3);padding:3px 9px;">Live</div>
-      <div class="report-tag" style="color:#d4a843;">Malaysia · KLSE 5183 · 4 Scenarios · Brent $102</div>
-      <div class="report-title">PCHEM:<br/>Malaysia's War Trade</div>
-      <p class="report-body">Asia's structural Middle East crude dependency creates asymmetric exposure to Hormuz disruption — and PCHEM sits at the exact intersection of that shock and domestic insulation. Four oil price scenarios, verified FY2024 financials, a live interactive model, and a bull case that's already playing out.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">Oil Shock</span><span class="report-chip">Malaysia</span><span class="report-chip">Geopolitics</span><span class="report-chip">Interactive</span></div>
-      <div class="report-cta" style="color:#d4a843;">Read Thesis <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
-    </a>
-
-    <a href="/iran-bursa-playbook" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#e84c1e40';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(232,76,30,0.06)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#e84c1e,#f0a500);"></div>
-      <div class="report-tag" style="color:#e84c1e;">Malaysia · Bursa · 8 Stocks · 3 Scenarios</div>
-      <div class="report-title">Iran Oil Shock<br/>Bursa Playbook</div>
-      <p class="report-body">Three oil price scenarios mapped to 8 Bursa-listed stocks. Which ones win at $80, $120, and $160+ Brent — Malaysia's net exporter edge, CPO correlation, and the honest caveats.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">Oil</span><span class="report-chip">Bursa</span><span class="report-chip">Malaysia</span></div>
-      <div class="report-cta" style="color:#e84c1e;">Read Playbook <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
-    </a>
-
-    <a href="/iran-thesis-framework" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#e8450a40';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(232,69,10,0.06)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#e8450a,#d4a020);"></div>
-      <div class="report-tag" style="color:#e8450a;">Geopolitical × Macro · Thesis Grade: B+</div>
-      <div class="report-title">Iran × Stagflation<br/>Thesis Framework</div>
-      <p class="report-body">The full investment thesis chain: Hormuz closes → oil spikes → Fed paralysis → stagflation → 60/40 breaks. Scenario mapping, portfolio positioning, and causal chains.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">Stagflation</span><span class="report-chip">Fed Policy</span><span class="report-chip">Hormuz</span></div>
-      <div class="report-cta" style="color:#e8450a;">Read Framework <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
-    </a>
-
-    <a href="/halal-pharma-200b-framework" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#c9a84c40';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(201,168,76,0.06)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#c9a84c,#e8c96a);"></div>
-      <div class="report-tag" style="color:#c9a84c;">Malaysia · Halal Pharma · RM200B Opportunity</div>
-      <div class="report-title">The RM200 Billion<br/>Gold Mine</div>
-      <p class="report-body">Full framework on Malaysia's halal pharmaceutical opportunity — the gelatin gap, heparin crisis, Indonesia mandate, and the companies positioned to capture a $200B global market.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">Halal</span><span class="report-chip">Pharma</span><span class="report-chip">Malaysia</span></div>
-      <div class="report-cta" style="color:#c9a84c;">Read Framework <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
-    </a>
-
-    <a href="/tool-compounding" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#c9a84c60';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(201,168,76,0.08)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#c9a84c,#38d9d9);"></div>
-      <div style="position:absolute;top:16px;right:16px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;background:rgba(201,168,76,0.1);color:var(--gold);border:1px solid rgba(201,168,76,0.3);padding:3px 9px;">Free Tool</div>
-      <div class="report-tag" style="color:var(--gold);">Interactive · 5 Tools · Compounding Math</div>
-      <div class="report-title">Compounding<br/>Asymmetry</div>
-      <p class="report-body">The math behind why RM 100k is the threshold that changes everything. Five interactive tools — compounding curve, cost of delay, spend vs invest, rate asymmetry, and the start age race. Adjust the sliders. Feel the numbers.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">Compounding</span><span class="report-chip">Wealth Building</span><span class="report-chip">Interactive</span><span class="report-chip">Free</span></div>
-      <div class="report-cta" style="color:var(--gold);">Open Tool <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
-    </a>
-
-    <a href="/investor-profile" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#7b5ea740';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(123,94,167,0.06)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#7b5ea7,#c9a84c);"></div>
-      <div class="report-tag" style="color:#7b5ea7;">Interactive Tool · 3 Phases · Personalised Result</div>
-      <div class="report-title">Investor Profile<br/>Assessment</div>
-      <p class="report-body">Discover your investor archetype through emotional calibration, analytical filtering, and framework alignment. A diagnostic built on how you actually respond to risk, loss, and uncertainty.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">Psychology</span><span class="report-chip">Risk Profile</span><span class="report-chip">Interactive</span></div>
-      <div class="report-cta" style="color:#7b5ea7;">Take the Assessment <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
-    </a>
-
-    <a href="/member-profile" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#c9a84c40';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(201,168,76,0.06)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#c9a84c,#e4cc7a);"></div>
-      <div class="report-tag" style="color:var(--gold);">Private · 12 Questions · ~6 Minutes</div>
-      <div class="report-title">Member<br/>Profile</div>
-      <p class="report-body">A confidential profile we ask every serious candidate to complete. Your investing relationship, risk tolerance, portfolio reality, and what you're actually looking for — in your own words.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">Confidential</span><span class="report-chip">Pre-Session</span></div>
-      <div class="report-cta" style="color:var(--gold);">Begin Profile <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
-    </a>
-
-    <a href="/asymmetric-investment-framework" onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#4FC3C360';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(79,195,195,0.08)'" style="text-decoration:none;display:block;background:var(--bg);border:1px solid var(--border);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#4FC3C3,#c9a84c);"></div>
-      <div class="report-tag" style="color:#4FC3C3;">Investment Strategy · Risk/Reward · Full Framework</div>
-      <div class="report-title">Asymmetric<br/>Investment Framework</div>
-      <p class="report-body">The complete playbook for finding bets where your downside is capped and your upside is open-ended. Covers position sizing logic, entry discipline, the asymmetry ratio, and the mental models that separate professionals from everyone else.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip">Risk/Reward</span><span class="report-chip">Position Sizing</span><span class="report-chip">Framework</span><span class="report-chip">Strategy</span></div>
-      <div class="report-cta" style="color:#4FC3C3;">Read Framework <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
-    </a>
-
-    <a href="/private-advisory" onmouseout="this.style.borderColor='var(--gold-dim)';this.style.transform='translateY(0)';this.style.boxShadow='none'" onmouseover="this.style.borderColor='#c9a84c60';this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 60px rgba(201,168,76,0.1)'" style="text-decoration:none;display:block;background:linear-gradient(135deg,var(--bg),#0e0d08);border:1px solid var(--gold-dim);padding:44px 40px;position:relative;overflow:hidden;transition:all 0.5s cubic-bezier(0.22,1,0.36,1);">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#c9a84c,#e4cc7a,#c9a84c);"></div>
-      <div class="report-tag" style="color:var(--gold);">Private · 4 Sessions · Framework + Research</div>
-      <div class="report-title" style="color:var(--gold-light);">Private<br/>Advisory</div>
-      <p class="report-body">Four deep-dive sessions, a personalised investment framework, ongoing research access, and direct support. For investors ready to move from reading to acting.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;"><span class="report-chip" style="border-color:var(--gold-dim);color:var(--gold);">1-on-1</span><span class="report-chip" style="border-color:var(--gold-dim);color:var(--gold);">Framework</span></div>
-      <div class="report-cta" style="color:var(--gold);">Learn More <svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="14"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></div>
-    </a>
-
-  </div>
-</div>
-
-<section class="waitlist-cta" id="waitlist">
-  <div class="wl-inner reveal">
-    <div class="wl-eyebrow">Private advisory · Limited spots</div>
-    <h2 class="wl-headline">Some questions don't have<br/>a <em>general</em> answer.</h2>
-    <p class="wl-desc">The research here is built for everyone. But your portfolio, your risk tolerance, your timeline — those are yours alone. We open a small number of one-on-one strategy sessions for investors who want a thinking partner, not a product pitch.</p>
-    <div class="wl-proof">
-      <div class="wl-avatars">
-        <div class="wl-avatar" style="background:#4a7cff;">A</div>
-        <div class="wl-avatar" style="background:#3dd68c;">R</div>
-        <div class="wl-avatar" style="background:#c9a84c;">M</div>
-        <div class="wl-avatar" style="background:#38d9d9;">K</div>
-        <div class="wl-avatar" style="background:#ff5c5c;">S</div>
+<!-- PAGE HEADER -->
+<section class="page-header">
+  <div class="page-header-inner">
+    <div class="ph-top">
+      <div class="ph-left">
+        <div class="page-kicker">Insight Invest / The Library</div>
+        <h1>Research. <em>All of it.</em></h1>
       </div>
-      <div class="wl-proof-text"><strong>47 investors</strong> already on the waitlist</div>
-    </div>
-    <form id="wlForm">
-      <div class="wl-form">
-        <input type="email" class="wl-input" id="wlEmail" name="email" placeholder="Your email address" required/>
-        <button type="submit" class="wl-btn" id="wlBtn">Join Waitlist</button>
+      <div class="ph-right">
+        <div class="report-count">
+          <span id="totalCount">68</span>
+          total reports
+        </div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--ink-4);letter-spacing:0.1em;">Updated May 2026</div>
       </div>
-    </form>
-    <div class="wl-meta">
-      <span>No spam · We reach out when a spot opens</span>
-      <span class="wl-spots"><span class="wl-spots-dot"></span>Limited spots per month</span>
     </div>
   </div>
 </section>
 
-<footer>
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <div class="footer-brand-name">Insight Invest</div>
-      <p class="footer-brand-desc">Macro intelligence, equity analysis, and financial education for serious investors. Not financial advice.</p>
-    </div>
-    <div class="footer-col">
-      <div class="footer-col-title">Reports</div>
-      <a href="/cyber-sovereign">The Cyber Sovereign</a>
-      <a onclick="openReport('sw');return false;" href="#" style="cursor:pointer;">Software Thesis</a>
-      <a onclick="openReport('pt');return false;" href="#" style="cursor:pointer;">Portfolio Thesis</a>
-      <a href="/iran-conflict">Iran Playbook</a>
-      <a href="/buffett-playbook">Buffett Playbook</a>
-      <a href="/cash-allocation-bear-markets">Cash Strategy</a>
-      <a href="/halal-pharma-200b-framework">Halal Pharma</a>
-      <a href="/tool-compounding">Compounding Tool</a>
-      <a href="/asymmetric-investment-framework">Asymmetric Framework</a>
-      <a href="/pchem-thesis">PCHEM War Trade</a>
-    </div>
-    <div class="footer-col">
-      <div class="footer-col-title">Navigate</div>
-      <a href="/">Home</a>
-      <a href="/#learning">Learning Tracks</a>
-      <a href="#waitlist">1-on-1 Advisory</a>
-      <a href="/private-advisory">Private Advisory</a>
-      <a href="https://www.patreon.com/15273026/join" target="_blank" rel="noopener">Patreon Community</a>
-    </div>
-    <div class="footer-col">
-      <div class="footer-col-title">Company</div>
-      <a href="#">About</a>
-      <a href="#">Contact</a>
-      <a href="#">Disclaimer</a>
-    </div>
+<!-- CONTROLS -->
+<div class="controls" id="controls">
+  <div class="filter-tabs" id="filterTabs">
+    <button class="filter-tab active" data-cat="all">All</button>
+    <button class="filter-tab" data-cat="malaysia">Malaysia / Bursa</button>
+    <button class="filter-tab" data-cat="stock">Stock Theses</button>
+    <button class="filter-tab" data-cat="macro">Macro</button>
+    <button class="filter-tab" data-cat="gold">Gold / Commodities</button>
+    <button class="filter-tab" data-cat="platform">InsightInvest</button>
+    <button class="filter-tab" data-cat="epf">EPF / Property</button>
   </div>
-  <div class="footer-bottom">
-    <span>© 2026 Insight Invest. All rights reserved.</span>
-    <span>Educational content only · Not financial advice</span>
+  <div class="search-wrap">
+    <svg class="search-icon" width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.2"/><line x1="9.5" y1="9.5" x2="13" y2="13" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+    <input class="search-input" id="searchInput" type="text" placeholder="Search reports..." />
+  </div>
+  <div class="view-toggle">
+    <button class="view-btn active" id="gridBtn" title="Grid view">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" stroke="currentColor" stroke-width="1.2"/><rect x="8" y="1" width="5" height="5" stroke="currentColor" stroke-width="1.2"/><rect x="1" y="8" width="5" height="5" stroke="currentColor" stroke-width="1.2"/><rect x="8" y="8" width="5" height="5" stroke="currentColor" stroke-width="1.2"/></svg>
+    </button>
+    <button class="view-btn" id="listBtn" title="List view">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><line x1="1" y1="3" x2="13" y2="3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="1" y1="7" x2="13" y2="7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="1" y1="11" x2="13" y2="11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="main-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-head">Categories</div>
+      <div class="sidebar-link active" data-cat="all">All Reports <span class="sidebar-count">68</span></div>
+      <div class="sidebar-link" data-cat="malaysia">Malaysia / Bursa <span class="sidebar-count">13</span></div>
+      <div class="sidebar-link" data-cat="stock">Stock Theses <span class="sidebar-count">16</span></div>
+      <div class="sidebar-link" data-cat="macro">Macro / Markets <span class="sidebar-count">14</span></div>
+      <div class="sidebar-link" data-cat="gold">Gold / Commodities <span class="sidebar-count">3</span></div>
+      <div class="sidebar-link" data-cat="platform">InsightInvest <span class="sidebar-count">19</span></div>
+      <div class="sidebar-link" data-cat="epf">EPF / Property <span class="sidebar-count">3</span></div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-head">Jump to</div>
+      <div class="sidebar-link" onclick="document.getElementById('sec-malaysia').scrollIntoView({behavior:'smooth'})">Malaysia / Bursa</div>
+      <div class="sidebar-link" onclick="document.getElementById('sec-stock').scrollIntoView({behavior:'smooth'})">Stock Theses</div>
+      <div class="sidebar-link" onclick="document.getElementById('sec-macro').scrollIntoView({behavior:'smooth'})">Macro / Markets</div>
+      <div class="sidebar-link" onclick="document.getElementById('sec-gold').scrollIntoView({behavior:'smooth'})">Gold / Commodities</div>
+      <div class="sidebar-link" onclick="document.getElementById('sec-platform').scrollIntoView({behavior:'smooth'})">InsightInvest</div>
+      <div class="sidebar-link" onclick="document.getElementById('sec-epf').scrollIntoView({behavior:'smooth'})">EPF / Property</div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-head">Members</div>
+      <a href="https://www.patreon.com/15273026/join" style="display:block;padding:12px 16px;background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;text-align:center;transition:background 0.15s;" onmouseover="this.style.background='var(--red)'" onmouseout="this.style.background='var(--ink)'">Join Patreon →</a>
+    </div>
+  </aside>
+
+  <!-- REPORTS AREA -->
+  <main class="reports-area" id="reportsArea">
+
+    <!-- MALAYSIA / BURSA -->
+    <div class="section-block reveal" id="sec-malaysia" data-section="malaysia">
+      <div class="section-block-head">
+        <span class="section-block-title">Malaysia / Bursa</span>
+        <span class="section-block-count">13 reports</span>
+      </div>
+      <div class="reports-grid" id="grid-malaysia">
+        <a href="https://www.leiholding.com/malaysia-monitor" class="report-card" data-cat="malaysia" data-title="Malaysia Monitor">
+          <div class="rc-top"><span class="rc-tag rc-tag-malaysia">Malaysia</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Malaysia Monitor</div>
+          <div class="rc-sub">A running monitor of Malaysia's key economic and market indicators. Updated regularly.</div>
+          <div class="rc-meta"><span>Malaysia</span><span class="rc-dot"></span><span>Economic data</span></div>
+        </a>
+        <a href="https://www.leiholding.com/malaysia-gap-pure" class="report-card" data-cat="malaysia" data-title="Malaysia GAP Pure">
+          <div class="rc-top"><span class="rc-tag rc-tag-malaysia">Malaysia</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Malaysia GAP Pure</div>
+          <div class="rc-sub">Gap analysis framework applied to Malaysian equities — identifying mispricing across sectors.</div>
+          <div class="rc-meta"><span>Bursa</span><span class="rc-dot"></span><span>Gap analysis</span></div>
+        </a>
+        <a href="https://www.leiholding.com/malaysia-gdp-gni" class="report-card" data-cat="malaysia" data-title="Malaysia GDP vs GNI">
+          <div class="rc-top"><span class="rc-tag rc-tag-malaysia">Malaysia</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Malaysia GDP vs GNI</div>
+          <div class="rc-sub">Why the gap between GDP and GNI matters for Malaysian investors and what it signals about income leakage.</div>
+          <div class="rc-meta"><span>Macro</span><span class="rc-dot"></span><span>Economic analysis</span></div>
+        </a>
+        <a href="https://www.leiholding.com/malaysia-gold-guide" class="report-card" data-cat="malaysia" data-title="Malaysia Gold Guide">
+          <div class="rc-top"><span class="rc-tag rc-tag-malaysia">Malaysia</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Malaysia Gold Guide</div>
+          <div class="rc-sub">How Malaysians can access gold — physical, ETFs, and Amanah Saham. Tax, custody, and sizing guidance.</div>
+          <div class="rc-meta"><span>Gold</span><span class="rc-dot"></span><span>Retail investing</span></div>
+        </a>
+        <a href="https://www.leiholding.com/malaysia-three-stocks" class="report-card" data-cat="malaysia" data-title="Malaysia Three Stocks">
+          <div class="rc-top"><span class="rc-tag rc-tag-malaysia">Malaysia</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Three Stocks — Malaysia</div>
+          <div class="rc-sub">Three Bursa-listed stocks with asymmetric setups. Thesis, risk, and position sizing for each.</div>
+          <div class="rc-meta"><span>Bursa</span><span class="rc-dot"></span><span>Stock picks</span></div>
+        </a>
+        <a href="https://www.leiholding.com/malaysia-war-thesis" class="report-card" data-cat="malaysia" data-title="Malaysia War Thesis">
+          <div class="rc-top"><span class="rc-tag rc-tag-malaysia">Malaysia</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Malaysia War Thesis</div>
+          <div class="rc-sub">How regional conflict scenarios affect Malaysia's trade flows, currency, and equity market. Four scenarios mapped.</div>
+          <div class="rc-meta"><span>Geopolitics</span><span class="rc-dot"></span><span>Risk analysis</span></div>
+        </a>
+        <a href="https://www.leiholding.com/malaysia_econ_dashboard" class="report-card" data-cat="malaysia" data-title="Malaysia Economic Dashboard">
+          <div class="rc-top"><span class="rc-tag rc-tag-malaysia">Malaysia</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Malaysia Economic Dashboard</div>
+          <div class="rc-sub">Interactive dashboard tracking CPI, BNM rates, trade balance, and KLCI performance in one view.</div>
+          <div class="rc-meta"><span>Dashboard</span><span class="rc-dot"></span><span>Live data</span></div>
+        </a>
+        <a href="https://www.leiholding.com/malaysia_ogse_ib" class="report-card" data-cat="malaysia" data-title="Malaysia OGSE & IB">
+          <div class="rc-top"><span class="rc-tag rc-tag-malaysia">Malaysia</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">OGSE & Investment Banks</div>
+          <div class="rc-sub">Oil & gas services sector analysis alongside Malaysian investment bank positioning. Sector rotation thesis.</div>
+          <div class="rc-meta"><span>OGSE</span><span class="rc-dot"></span><span>Sector analysis</span></div>
+        </a>
+        <a href="https://www.leiholding.com/malaysia_subsidy_affordability" class="report-card" data-cat="malaysia" data-title="Malaysia Subsidy & Affordability">
+          <div class="rc-top"><span class="rc-tag rc-tag-malaysia">Malaysia</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Subsidy & Affordability</div>
+          <div class="rc-sub">The fiscal math behind Malaysia's subsidy rationalisation and what it means for consumer stocks and inflation.</div>
+          <div class="rc-meta"><span>Fiscal policy</span><span class="rc-dot"></span><span>Consumer impact</span></div>
+        </a>
+        <a href="https://www.leiholding.com/malaysia_us_art_obligations_table" class="report-card" data-cat="malaysia" data-title="Malaysia US ART Obligations">
+          <div class="rc-top"><span class="rc-tag rc-tag-malaysia">Malaysia</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Malaysia–US ART Obligations</div>
+          <div class="rc-sub">A reference table of Malaysia's treaty and trade obligations with the US. Impact on export-oriented sectors.</div>
+          <div class="rc-meta"><span>Trade</span><span class="rc-dot"></span><span>Reference table</span></div>
+        </a>
+        <a href="https://www.leiholding.com/bursa-drawdown" class="report-card" data-cat="malaysia" data-title="Bursa Drawdown Study">
+          <div class="rc-top"><span class="rc-tag rc-tag-malaysia">Bursa</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Bursa Drawdown Study</div>
+          <div class="rc-sub">Historical drawdown patterns on Bursa Malaysia — how deep, how long, and how to position through them.</div>
+          <div class="rc-meta"><span>History</span><span class="rc-dot"></span><span>Drawdown analysis</span></div>
+        </a>
+        <a href="https://www.leiholding.com/leiholding_bursa_report_v2" class="report-card" data-cat="malaysia" data-title="Bursa Report v2">
+          <div class="rc-top"><span class="rc-tag rc-tag-malaysia">Bursa</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Lei Holding Bursa Report v2</div>
+          <div class="rc-sub">Comprehensive Bursa equity screening with valuation, momentum, and quality filters applied.</div>
+          <div class="rc-meta"><span>Equity screening</span><span class="rc-dot"></span><span>Full report</span></div>
+        </a>
+        <a href="https://www.leiholding.com/mecon" class="report-card" data-cat="malaysia" data-title="MECON">
+          <div class="rc-top"><span class="rc-tag rc-tag-malaysia">Malaysia</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">MECON</div>
+          <div class="rc-sub">Malaysia economic conditions framework — a synthesis of macro, fiscal, and monetary signals into one read.</div>
+          <div class="rc-meta"><span>Framework</span><span class="rc-dot"></span><span>Macro synthesis</span></div>
+        </a>
+      </div>
+      <div class="reports-list" id="list-malaysia"></div>
+    </div>
+
+    <!-- STOCK THESES -->
+    <div class="section-block reveal" id="sec-stock" data-section="stock">
+      <div class="section-block-head">
+        <span class="section-block-title">Stock Theses & Reports</span>
+        <span class="section-block-count">16 reports</span>
+      </div>
+      <div class="reports-grid" id="grid-stock">
+        <a href="https://www.leiholding.com/mag7_report" class="report-card" data-cat="stock" data-title="Mag 7 Report">
+          <div class="rc-top"><span class="rc-tag rc-tag-stock">Stock</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Magnificent 7 Report</div>
+          <div class="rc-sub">Deep dive into all seven mega-cap tech stocks — valuation, AI exposure, and concentration risk.</div>
+          <div class="rc-meta"><span>US Equities</span><span class="rc-dot"></span><span>Mega-cap</span></div>
+        </a>
+        <a href="https://www.leiholding.com/SOFI_Follower_Report" class="report-card" data-cat="stock" data-title="SOFI Follower Report">
+          <div class="rc-top"><span class="rc-tag rc-tag-stock">Stock</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">SoFi — Follower Report</div>
+          <div class="rc-sub">Accessible primer on SoFi Technologies for new investors. Business model, risks, and what to watch.</div>
+          <div class="rc-meta"><span>Fintech</span><span class="rc-dot"></span><span>SOFI</span></div>
+        </a>
+        <a href="https://www.leiholding.com/SOFI_Synthesis_Report" class="report-card" data-cat="stock" data-title="SOFI Synthesis Report">
+          <div class="rc-top"><span class="rc-tag rc-tag-stock">Stock</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">SoFi — Synthesis Report</div>
+          <div class="rc-sub">Full investment thesis for SOFI. Unit economics, bank charter analysis, valuation model, and bear case.</div>
+          <div class="rc-meta"><span>Fintech</span><span class="rc-dot"></span><span>Full thesis</span></div>
+        </a>
+        <a href="https://www.leiholding.com/brief-rddt" class="report-card" data-cat="stock" data-title="Reddit Brief">
+          <div class="rc-top"><span class="rc-tag rc-tag-stock">Stock</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Reddit (RDDT) — Brief</div>
+          <div class="rc-sub">Quick-read brief on Reddit's business model, data licensing upside, and key risk factors.</div>
+          <div class="rc-meta"><span>Social media</span><span class="rc-dot"></span><span>RDDT</span></div>
+        </a>
+        <a href="https://www.leiholding.com/rddt_investment_thesis_framework" class="report-card" data-cat="stock" data-title="RDDT Framework">
+          <div class="rc-top"><span class="rc-tag rc-tag-stock">Stock</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">RDDT Investment Framework</div>
+          <div class="rc-sub">Full thesis framework for Reddit — four scenarios, monetisation timeline, and intrinsic value range.</div>
+          <div class="rc-meta"><span>Social media</span><span class="rc-dot"></span><span>Full framework</span></div>
+        </a>
+        <a href="https://www.leiholding.com/pchem-thesis" class="report-card" data-cat="stock" data-title="PCHEM Thesis">
+          <div class="rc-top"><span class="rc-tag rc-tag-malaysia">Malaysia</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Petronas Chemicals — Thesis</div>
+          <div class="rc-sub">PCHEM investment thesis: feedstock advantage, dividend sustainability, and downstream expansion optionality.</div>
+          <div class="rc-meta"><span>Petrochemicals</span><span class="rc-dot"></span><span>Bursa</span></div>
+        </a>
+        <a href="https://www.leiholding.com/empire_sushi_short_thesis" class="report-card" data-cat="stock" data-title="Empire Sushi Short">
+          <div class="rc-top"><span class="rc-tag rc-tag-stock">Stock</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Empire Sushi — Short Thesis</div>
+          <div class="rc-sub">A structured short thesis on Empire Sushi. Margin compression, unit economics deterioration, and valuation premium.</div>
+          <div class="rc-meta"><span>F&amp;B</span><span class="rc-dot"></span><span>Short thesis</span></div>
+        </a>
+        <a href="https://www.leiholding.com/software-thesis" class="report-card" data-cat="stock" data-title="Software Thesis">
+          <div class="rc-top"><span class="rc-tag rc-tag-stock">Stock</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Software Sector Thesis</div>
+          <div class="rc-sub">Why software remains the best risk-adjusted sector in public markets. AI tailwinds, pricing power, margin expansion.</div>
+          <div class="rc-meta"><span>Technology</span><span class="rc-dot"></span><span>Sector thesis</span></div>
+        </a>
+        <a href="https://www.leiholding.com/portfolio-thesis" class="report-card" data-cat="stock" data-title="Portfolio Thesis">
+          <div class="rc-top"><span class="rc-tag rc-tag-stock">Stock</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Portfolio Construction Thesis</div>
+          <div class="rc-sub">How to build a concentrated portfolio with asymmetric bets. Position sizing, correlation, and rebalancing rules.</div>
+          <div class="rc-meta"><span>Portfolio</span><span class="rc-dot"></span><span>Framework</span></div>
+        </a>
+        <a href="https://www.leiholding.com/crwd-rotation-guide" class="report-card" data-cat="stock" data-title="CrowdStrike Rotation Guide">
+          <div class="rc-top"><span class="rc-tag rc-tag-stock">Stock</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">CrowdStrike — Rotation Guide</div>
+          <div class="rc-sub">When to rotate into CRWD and when to trim. Sentiment cycle, valuation bands, and entry/exit signals.</div>
+          <div class="rc-meta"><span>Cybersecurity</span><span class="rc-dot"></span><span>CRWD</span></div>
+        </a>
+        <a href="https://www.leiholding.com/berkshire_v3" class="report-card" data-cat="stock" data-title="Berkshire v3">
+          <div class="rc-top"><span class="rc-tag rc-tag-stock">Stock</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Berkshire Hathaway — v3</div>
+          <div class="rc-sub">Third iteration of the Berkshire deep dive. Post-Buffett succession, cash deployment, and fair value estimate.</div>
+          <div class="rc-meta"><span>Conglomerate</span><span class="rc-dot"></span><span>BRK</span></div>
+        </a>
+        <a href="https://www.leiholding.com/Equity_Terminal" class="report-card" data-cat="stock" data-title="Equity Terminal">
+          <div class="rc-top"><span class="rc-tag rc-tag-stock">Stock</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Equity Terminal</div>
+          <div class="rc-sub">A live equity research terminal-style layout. Screener, fundamentals, and thesis notes in one interface.</div>
+          <div class="rc-meta"><span>Tool / Report</span><span class="rc-dot"></span><span>Interactive</span></div>
+        </a>
+        <a href="https://www.leiholding.com/investment_triple_checked" class="report-card" data-cat="stock" data-title="Triple Checked">
+          <div class="rc-top"><span class="rc-tag rc-tag-stock">Stock</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Investment — Triple Checked</div>
+          <div class="rc-sub">A checklist-driven process for stress-testing any investment before committing capital. Three rounds of questioning.</div>
+          <div class="rc-meta"><span>Process</span><span class="rc-dot"></span><span>Framework</span></div>
+        </a>
+        <a href="https://www.leiholding.com/dividend_report_v2" class="report-card" data-cat="stock" data-title="Dividend Report v2">
+          <div class="rc-top"><span class="rc-tag rc-tag-stock">Stock</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Dividend Report v2</div>
+          <div class="rc-sub">Dividend investing revisited — yield vs. growth tradeoff, payout sustainability screening, and portfolio construction.</div>
+          <div class="rc-meta"><span>Dividends</span><span class="rc-dot"></span><span>Income investing</span></div>
+        </a>
+        <a href="https://www.leiholding.com/us_dividend_stocks_table_v2" class="report-card" data-cat="stock" data-title="US Dividend Stocks Table">
+          <div class="rc-top"><span class="rc-tag rc-tag-stock">Stock</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">US Dividend Stocks Table v2</div>
+          <div class="rc-sub">Screened table of 40+ US dividend stocks — yield, payout ratio, 5-year CAGR, and quality score.</div>
+          <div class="rc-meta"><span>US Equities</span><span class="rc-dot"></span><span>Reference table</span></div>
+        </a>
+        <a href="https://www.leiholding.com/etf-breakdown" class="report-card" data-cat="stock" data-title="ETF Breakdown">
+          <div class="rc-top"><span class="rc-tag rc-tag-stock">Stock</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">ETF Breakdown</div>
+          <div class="rc-sub">Anatomy of the most-held ETFs — what's inside, concentration risk, fee drag, and when to use each.</div>
+          <div class="rc-meta"><span>ETF</span><span class="rc-dot"></span><span>Reference</span></div>
+        </a>
+      </div>
+      <div class="reports-list" id="list-stock"></div>
+    </div>
+
+    <!-- MACRO -->
+    <div class="section-block reveal" id="sec-macro" data-section="macro">
+      <div class="section-block-head">
+        <span class="section-block-title">Macro / Market Analysis</span>
+        <span class="section-block-count">14 reports</span>
+      </div>
+      <div class="reports-grid" id="grid-macro">
+        <a href="https://www.leiholding.com/macro_intelligence" class="report-card" data-cat="macro" data-title="Macro Intelligence">
+          <div class="rc-top"><span class="rc-tag rc-tag-macro">Macro</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Macro Intelligence Hub</div>
+          <div class="rc-sub">Central hub for macro research — rates, inflation, DXY, and global cross-asset signals in one read.</div>
+          <div class="rc-meta"><span>Global macro</span><span class="rc-dot"></span><span>Dashboard</span></div>
+        </a>
+        <a href="https://www.leiholding.com/macro_intelligence/ai-layer" class="report-card" data-cat="macro" data-title="Macro AI Layer">
+          <div class="rc-top"><span class="rc-tag rc-tag-macro">Macro</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Macro Intelligence — AI Layer</div>
+          <div class="rc-sub">How AI is changing macro signal generation. New data sources, nowcasting, and what it means for investors.</div>
+          <div class="rc-meta"><span>AI</span><span class="rc-dot"></span><span>Macro</span></div>
+        </a>
+        <a href="https://www.leiholding.com/fear_market_playbook" class="report-card" data-cat="macro" data-title="Fear Market Playbook">
+          <div class="rc-top"><span class="rc-tag rc-tag-macro">Macro</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Fear Market Playbook</div>
+          <div class="rc-sub">What to do when VIX spikes and everything sells off. A step-by-step decision framework for high-fear environments.</div>
+          <div class="rc-meta"><span>Volatility</span><span class="rc-dot"></span><span>Playbook</span></div>
+        </a>
+        <a href="https://www.leiholding.com/cash-allocation-bear-markets" class="report-card" data-cat="macro" data-title="Cash Allocation Bear Markets">
+          <div class="rc-top"><span class="rc-tag rc-tag-macro">Macro</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Cash Allocation in Bear Markets</div>
+          <div class="rc-sub">The case for holding meaningful cash and when to deploy it. Historical bear market patterns and optimal entry windows.</div>
+          <div class="rc-meta"><span>Bear market</span><span class="rc-dot"></span><span>Allocation</span></div>
+        </a>
+        <a href="https://www.leiholding.com/recovery-analysis" class="report-card" data-cat="macro" data-title="Recovery Analysis">
+          <div class="rc-top"><span class="rc-tag rc-tag-macro">Macro</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Recovery Analysis</div>
+          <div class="rc-sub">Post-correction recovery playbook. Which sectors lead, how long recoveries take, and how to position early.</div>
+          <div class="rc-meta"><span>Recovery</span><span class="rc-dot"></span><span>Historical</span></div>
+        </a>
+        <a href="https://www.leiholding.com/market_brief_26apr2026" class="report-card" data-cat="macro" data-title="Market Brief Apr 2026">
+          <div class="rc-top"><span class="rc-tag rc-tag-macro">Macro</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Market Brief — 26 Apr 2026</div>
+          <div class="rc-sub">Weekly market brief covering equity, rates, and cross-asset moves. Actionable positioning notes for the week ahead.</div>
+          <div class="rc-meta"><span>Weekly brief</span><span class="rc-dot"></span><span>Apr 2026</span></div>
+        </a>
+        <a href="https://www.leiholding.com/weekly_outlook_march23_synthesized_v2" class="report-card" data-cat="macro" data-title="Weekly Outlook March 23">
+          <div class="rc-top"><span class="rc-tag rc-tag-macro">Macro</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Weekly Outlook — March 23</div>
+          <div class="rc-sub">Synthesised macro outlook for the week of March 23. Rate path, equity regime, and key event risks.</div>
+          <div class="rc-meta"><span>Weekly brief</span><span class="rc-dot"></span><span>Mar 2026</span></div>
+        </a>
+        <a href="https://www.leiholding.com/iran-conflict" class="report-card" data-cat="macro" data-title="Iran Conflict">
+          <div class="rc-top"><span class="rc-tag rc-tag-macro">Geopolitics</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Iran Conflict — Market Analysis</div>
+          <div class="rc-sub">The market is pricing this like 2003. The setup looks like 1973. A 4,200-word walk through four scenarios.</div>
+          <div class="rc-meta"><span>Geopolitics</span><span class="rc-dot"></span><span>Oil</span></div>
+        </a>
+        <a href="https://www.leiholding.com/iran-bursa-playbook" class="report-card" data-cat="macro" data-title="Iran Bursa Playbook">
+          <div class="rc-top"><span class="rc-tag rc-tag-macro">Geopolitics</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Iran–Bursa Playbook</div>
+          <div class="rc-sub">How escalation in the Strait of Hormuz flows through to Malaysian equities. Sector-by-sector impact and positions.</div>
+          <div class="rc-meta"><span>Malaysia</span><span class="rc-dot"></span><span>Geopolitics</span></div>
+        </a>
+        <a href="https://www.leiholding.com/iran-thesis-framework" class="report-card" data-cat="macro" data-title="Iran Thesis Framework">
+          <div class="rc-top"><span class="rc-tag rc-tag-macro">Geopolitics</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Iran Thesis Framework</div>
+          <div class="rc-sub">Structured framework for thinking through Middle East conflict scenarios and their second-order market effects.</div>
+          <div class="rc-meta"><span>Framework</span><span class="rc-dot"></span><span>Geopolitics</span></div>
+        </a>
+        <a href="https://www.leiholding.com/halal-pharma-200b-framework" class="report-card" data-cat="macro" data-title="Halal Pharma Framework">
+          <div class="rc-top"><span class="rc-tag rc-tag-macro">Macro</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Halal Pharma — $200B Framework</div>
+          <div class="rc-sub">The investment thesis for halal pharmaceuticals as a $200B market opportunity. Demand drivers and key players.</div>
+          <div class="rc-meta"><span>Sector</span><span class="rc-dot"></span><span>Halal economy</span></div>
+        </a>
+        <a href="https://www.leiholding.com/warsh_deep_network_framework" class="report-card" data-cat="macro" data-title="Warsh Deep Network">
+          <div class="rc-top"><span class="rc-tag rc-tag-macro">Macro</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Warsh Deep Network Framework</div>
+          <div class="rc-sub">Kevin Warsh's monetary policy framework unpacked. What a Warsh Fed means for rates, dollar, and risk assets.</div>
+          <div class="rc-meta"><span>Fed policy</span><span class="rc-dot"></span><span>Framework</span></div>
+        </a>
+        <a href="https://www.leiholding.com/asymmetric-investment-framework" class="report-card" data-cat="macro" data-title="Asymmetric Framework">
+          <div class="rc-top"><span class="rc-tag rc-tag-macro">Macro</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Asymmetric Investment Framework</div>
+          <div class="rc-sub">Finding bets where the upside is multiple times the downside. How to structure, size, and exit asymmetric positions.</div>
+          <div class="rc-meta"><span>Framework</span><span class="rc-dot"></span><span>Risk/reward</span></div>
+        </a>
+        <a href="https://www.leiholding.com/wealth_asymmetry_toolkit" class="report-card" data-cat="macro" data-title="Wealth Asymmetry Toolkit">
+          <div class="rc-top"><span class="rc-tag rc-tag-macro">Macro</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Wealth Asymmetry Toolkit</div>
+          <div class="rc-sub">Practical toolkit for building asymmetric wealth — barbell strategy, tail hedging, and concentration discipline.</div>
+          <div class="rc-meta"><span>Wealth</span><span class="rc-dot"></span><span>Toolkit</span></div>
+        </a>
+      </div>
+      <div class="reports-list" id="list-macro"></div>
+    </div>
+
+    <!-- GOLD -->
+    <div class="section-block reveal" id="sec-gold" data-section="gold">
+      <div class="section-block-head">
+        <span class="section-block-title">Gold / Commodities</span>
+        <span class="section-block-count">3 reports</span>
+      </div>
+      <div class="reports-grid" id="grid-gold">
+        <a href="https://www.leiholding.com/Gold-Silver Ratio Analysis — 10-Year Divergence Study" class="report-card" data-cat="gold" data-title="Gold Silver Ratio">
+          <div class="rc-top"><span class="rc-tag rc-tag-gold">Gold</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Gold–Silver Ratio: 10-Year Divergence</div>
+          <div class="rc-sub">Decade-long analysis of the gold-silver ratio. What extreme readings have historically signalled and what to do.</div>
+          <div class="rc-meta"><span>Gold</span><span class="rc-dot"></span><span>Silver</span><span class="rc-dot"></span><span>10-year study</span></div>
+        </a>
+        <a href="https://www.leiholding.com/gold_hedge_effectiveness_stress_events" class="report-card" data-cat="gold" data-title="Gold Hedge Effectiveness">
+          <div class="rc-top"><span class="rc-tag rc-tag-gold">Gold</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Gold Hedge Effectiveness</div>
+          <div class="rc-sub">How well gold hedged portfolios across 12 major stress events from 2000–2025. The numbers, not the narrative.</div>
+          <div class="rc-meta"><span>Stress events</span><span class="rc-dot"></span><span>Hedge analysis</span></div>
+        </a>
+        <a href="https://www.leiholding.com/gold_miner_leverage_explainer" class="report-card" data-cat="gold" data-title="Gold Miner Leverage">
+          <div class="rc-top"><span class="rc-tag rc-tag-gold">Gold</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Gold Miner Leverage Explainer</div>
+          <div class="rc-sub">Why miners amplify gold price moves — and by how much. AISC math, operational leverage, and miner selection framework.</div>
+          <div class="rc-meta"><span>Mining</span><span class="rc-dot"></span><span>Leverage</span></div>
+        </a>
+      </div>
+      <div class="reports-list" id="list-gold"></div>
+    </div>
+
+    <!-- PLATFORM -->
+    <div class="section-block reveal" id="sec-platform" data-section="platform">
+      <div class="section-block-head">
+        <span class="section-block-title">InsightInvest / Platform</span>
+        <span class="section-block-count">19 reports</span>
+      </div>
+      <div class="reports-grid" id="grid-platform">
+        <a href="https://www.leiholding.com/insightinvest-offer" class="report-card" data-cat="platform" data-title="InsightInvest Offer">
+          <div class="rc-top"><span class="rc-tag rc-tag-platform">Platform</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">InsightInvest — The Offer</div>
+          <div class="rc-sub">What you get as a member. Full breakdown of reports, tools, curriculum, and community access.</div>
+          <div class="rc-meta"><span>Membership</span><span class="rc-dot"></span><span>Overview</span></div>
+        </a>
+        <a href="https://www.leiholding.com/insightinvest-1on1" class="report-card" data-cat="platform" data-title="InsightInvest 1-on-1">
+          <div class="rc-top"><span class="rc-tag rc-tag-platform">Platform</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">1-on-1 Sessions</div>
+          <div class="rc-sub">Book a direct session — portfolio review, thesis pressure test, or open conversation. How it works.</div>
+          <div class="rc-meta"><span>Advisory</span><span class="rc-dot"></span><span>1-on-1</span></div>
+        </a>
+        <a href="https://www.leiholding.com/insightinvest-theme-guide" class="report-card" data-cat="platform" data-title="Theme Guide">
+          <div class="rc-top"><span class="rc-tag rc-tag-platform">Platform</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">InsightInvest Theme Guide</div>
+          <div class="rc-sub">Design system and brand guide for InsightInvest. Typography, colours, and component reference.</div>
+          <div class="rc-meta"><span>Design</span><span class="rc-dot"></span><span>Reference</span></div>
+        </a>
+        <a href="https://www.leiholding.com/insightinvest_ai_layer" class="report-card" data-cat="platform" data-title="AI Layer">
+          <div class="rc-top"><span class="rc-tag rc-tag-platform">Platform</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">InsightInvest AI Layer</div>
+          <div class="rc-sub">How AI is embedded across the platform — report generation, tool intelligence, and member personalisation.</div>
+          <div class="rc-meta"><span>AI</span><span class="rc-dot"></span><span>Platform</span></div>
+        </a>
+        <a href="https://www.leiholding.com/insightinvest_child_invest" class="report-card" data-cat="platform" data-title="Child Invest">
+          <div class="rc-top"><span class="rc-tag rc-tag-platform">Platform</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Investing for Children</div>
+          <div class="rc-sub">How Malaysian parents can build a portfolio for their children. Accounts, instruments, and long-horizon strategy.</div>
+          <div class="rc-meta"><span>Family</span><span class="rc-dot"></span><span>Long-term</span></div>
+        </a>
+        <a href="https://www.leiholding.com/insightinvest_dashboard" class="report-card" data-cat="platform" data-title="Dashboard">
+          <div class="rc-top"><span class="rc-tag rc-tag-platform">Platform</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">InsightInvest Dashboard</div>
+          <div class="rc-sub">Member dashboard — portfolio tracker, tool access, curriculum progress, and upcoming reports in one view.</div>
+          <div class="rc-meta"><span>Members</span><span class="rc-dot"></span><span>Dashboard</span></div>
+        </a>
+        <a href="https://www.leiholding.com/insightinvest_intelligence_framework" class="report-card" data-cat="platform" data-title="Intelligence Framework">
+          <div class="rc-top"><span class="rc-tag rc-tag-platform">Platform</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Intelligence Framework</div>
+          <div class="rc-sub">The research methodology behind InsightInvest — how reports are structured, sourced, and stress-tested.</div>
+          <div class="rc-meta"><span>Methodology</span><span class="rc-dot"></span><span>Framework</span></div>
+        </a>
+        <a href="https://www.leiholding.com/insightinvest_parent_guide_v2" class="report-card" data-cat="platform" data-title="Parent Guide v2">
+          <div class="rc-top"><span class="rc-tag rc-tag-platform">Platform</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Parent's Guide to Investing v2</div>
+          <div class="rc-sub">Structured guide for parents starting their investment journey. First principles, account setup, and first allocations.</div>
+          <div class="rc-meta"><span>Beginners</span><span class="rc-dot"></span><span>Guide</span></div>
+        </a>
+        <a href="https://www.leiholding.com/insightinvest_signup_immersive" class="report-card" data-cat="platform" data-title="Signup Immersive">
+          <div class="rc-top"><span class="rc-tag rc-tag-platform">Platform</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Signup — Immersive Flow</div>
+          <div class="rc-sub">The full-screen onboarding experience. Investor profile, goals, and risk tolerance in five steps.</div>
+          <div class="rc-meta"><span>Onboarding</span><span class="rc-dot"></span><span>UX</span></div>
+        </a>
+        <a href="https://www.leiholding.com/InsightInvest_IV_Calculator" class="report-card" data-cat="platform" data-title="IV Calculator">
+          <div class="rc-top"><span class="rc-tag rc-tag-platform">Tool</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Intrinsic Value Calculator</div>
+          <div class="rc-sub">Two-stage DCF model with scenario toggles, confidence scoring, and portfolio export. Members only.</div>
+          <div class="rc-meta"><span>Tool</span><span class="rc-dot"></span><span>Members</span></div>
+        </a>
+        <a href="https://www.leiholding.com/InsightInvest_Member_Profile" class="report-card" data-cat="platform" data-title="Member Profile">
+          <div class="rc-top"><span class="rc-tag rc-tag-platform">Platform</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Member Profile</div>
+          <div class="rc-sub">Your investor profile — risk tolerance, goals, curriculum progress, and saved tool scenarios.</div>
+          <div class="rc-meta"><span>Profile</span><span class="rc-dot"></span><span>Members</span></div>
+        </a>
+        <a href="https://www.leiholding.com/InsightInvest_Portfolio_Scorecard" class="report-card" data-cat="platform" data-title="Portfolio Scorecard">
+          <div class="rc-top"><span class="rc-tag rc-tag-platform">Tool</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Portfolio Scorecard</div>
+          <div class="rc-sub">Score every position across conviction, clarity, valuation, and risk. Surfaces what's dragging the portfolio.</div>
+          <div class="rc-meta"><span>Tool</span><span class="rc-dot"></span><span>Members</span></div>
+        </a>
+        <a href="https://www.leiholding.com/InsightInvest_SecondLevel_Thinking" class="report-card" data-cat="platform" data-title="Second Level Thinking">
+          <div class="rc-top"><span class="rc-tag rc-tag-platform">Tool</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Second-Level Thinking Tool</div>
+          <div class="rc-sub">The Howard Marks framework as a six-step interactive worksheet. Free to use.</div>
+          <div class="rc-meta"><span>Tool</span><span class="rc-dot"></span><span>Free</span></div>
+        </a>
+        <a href="https://www.leiholding.com/investor-profile" class="report-card" data-cat="platform" data-title="Investor Profile">
+          <div class="rc-top"><span class="rc-tag rc-tag-platform">Platform</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Investor Profile</div>
+          <div class="rc-sub">Take the 5-minute profile quiz and get a personalised reading list and tool recommendation.</div>
+          <div class="rc-meta"><span>Onboarding</span><span class="rc-dot"></span><span>Quiz</span></div>
+        </a>
+        <a href="https://www.leiholding.com/questionnaire" class="report-card" data-cat="platform" data-title="Questionnaire">
+          <div class="rc-top"><span class="rc-tag rc-tag-platform">Platform</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Questionnaire</div>
+          <div class="rc-sub">The full InsightInvest onboarding questionnaire — goals, experience, time horizon, and risk tolerance.</div>
+          <div class="rc-meta"><span>Onboarding</span><span class="rc-dot"></span><span>Assessment</span></div>
+        </a>
+        <a href="https://www.leiholding.com/private-advisory" class="report-card" data-cat="platform" data-title="Private Advisory">
+          <div class="rc-top"><span class="rc-tag rc-tag-platform">Platform</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Private Advisory</div>
+          <div class="rc-sub">The private advisory tier — ongoing engagement, custom research, and portfolio consultation.</div>
+          <div class="rc-meta"><span>Advisory</span><span class="rc-dot"></span><span>Premium</span></div>
+        </a>
+        <a href="https://www.leiholding.com/parents_V2" class="report-card" data-cat="platform" data-title="Parents V2">
+          <div class="rc-top"><span class="rc-tag rc-tag-platform">Platform</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Parents — v2</div>
+          <div class="rc-sub">Updated guide for parents. Teaching children about money, building their first portfolio, and long-horizon compounding.</div>
+          <div class="rc-meta"><span>Family</span><span class="rc-dot"></span><span>Guide</span></div>
+        </a>
+        <a href="https://www.leiholding.com/childrens_etf_portfolio_guide" class="report-card" data-cat="platform" data-title="Children's ETF Portfolio Guide">
+          <div class="rc-top"><span class="rc-tag rc-tag-platform">Platform</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Children's ETF Portfolio Guide</div>
+          <div class="rc-sub">Choosing ETFs for a child's long-term portfolio. Low cost, diversification, and auto-reinvestment setup.</div>
+          <div class="rc-meta"><span>Family</span><span class="rc-dot"></span><span>ETF</span></div>
+        </a>
+        <a href="https://www.leiholding.com/warsh_regime_complete_mindmap" class="report-card" data-cat="platform" data-title="Warsh Regime Mindmap">
+          <div class="rc-top"><span class="rc-tag rc-tag-platform">Platform</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Warsh Regime — Complete Mindmap</div>
+          <div class="rc-sub">Visual mindmap of the Warsh monetary regime — policy levers, asset class impacts, and positioning matrix.</div>
+          <div class="rc-meta"><span>Mindmap</span><span class="rc-dot"></span><span>Fed</span></div>
+        </a>
+      </div>
+      <div class="reports-list" id="list-platform"></div>
+    </div>
+
+    <!-- EPF / PROPERTY -->
+    <div class="section-block reveal" id="sec-epf" data-section="epf">
+      <div class="section-block-head">
+        <span class="section-block-title">EPF / Property</span>
+        <span class="section-block-count">3 reports</span>
+      </div>
+      <div class="reports-grid" id="grid-epf">
+        <a href="https://www.leiholding.com/EPF_vs_SP500_Data" class="report-card" data-cat="epf" data-title="EPF vs S&P 500">
+          <div class="rc-top"><span class="rc-tag rc-tag-epf">EPF</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">EPF vs S&amp;P 500 — Data</div>
+          <div class="rc-sub">Apples-to-apples comparison of EPF dividend returns vs S&P 500 total return over 20 years. The data only.</div>
+          <div class="rc-meta"><span>EPF</span><span class="rc-dot"></span><span>Comparison</span></div>
+        </a>
+        <a href="https://www.leiholding.com/EPF_vs_SP500_Data_v2" class="report-card" data-cat="epf" data-title="EPF vs S&P 500 v2">
+          <div class="rc-top"><span class="rc-tag rc-tag-epf">EPF</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">EPF vs S&amp;P 500 — v2</div>
+          <div class="rc-sub">Updated comparison with currency-adjusted returns, MER drag, and voluntary contribution modelling.</div>
+          <div class="rc-meta"><span>EPF</span><span class="rc-dot"></span><span>Updated</span></div>
+        </a>
+        <a href="https://www.leiholding.com/property-vs-sp500" class="report-card" data-cat="epf" data-title="Property vs S&P 500">
+          <div class="rc-top"><span class="rc-tag rc-tag-epf">Property</span><div class="rc-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div></div>
+          <div class="rc-title">Property vs S&amp;P 500</div>
+          <div class="rc-sub">Malaysian property returns vs S&P 500 over 15 years. Leverage, liquidity, and the real cost of homeownership.</div>
+          <div class="rc-meta"><span>Property</span><span class="rc-dot"></span><span>Malaysia</span></div>
+        </a>
+      </div>
+      <div class="reports-list" id="list-epf"></div>
+    </div>
+
+    <div class="empty-state" id="emptyState">
+      <p>No reports match your search.</p>
+    </div>
+
+  </main>
+</div>
+
+<!-- MEMBERS BAND -->
+<div class="members-band">
+  <div>
+    <h3>New reports every month.</h3>
+    <p>Members get every new report the day it publishes, plus the full archive, all four tools, and a weekly essay that doesn't go on the public site. $7/month via Patreon.</p>
+  </div>
+  <a href="https://www.patreon.com/15273026/join" class="btn-patreon">Join via Patreon →</a>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">Insight<span style="color:var(--red)">·</span>Invest</div>
+        <p class="footer-desc">Independent publication. Edited and written by one person. Not investment advice — work shown, opinions own.</p>
+      </div>
+      <div>
+        <div class="footer-col-head">Read</div>
+        <ul class="footer-links">
+          <li><a href="https://www.leiholding.com/reports">Reports</a></li>
+          <li><a href="#">Archive</a></li>
+          <li><a href="#">RSS</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-head">Use</div>
+        <ul class="footer-links">
+          <li><a href="https://www.leiholding.com/tool-compounding">Compounding</a></li>
+          <li><a href="https://www.leiholding.com/tool-portfolio-scorecard">Scorecard</a></li>
+          <li><a href="https://www.leiholding.com/ratio">Ratio Analyser</a></li>
+          <li><a href="https://www.leiholding.com/epf_retirement_calculator">EPF Calculator</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-head">Learn</div>
+        <ul class="footer-links">
+          <li><a href="https://www.leiholding.com/curriculum">Tier I</a></li>
+          <li><a href="https://www.leiholding.com/curriculum">Tier II</a></li>
+          <li><a href="https://www.leiholding.com/curriculum">Tier III</a></li>
+          <li><a href="https://www.leiholding.com/curriculum">Tier IV</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-head">Follow</div>
+        <ul class="footer-links">
+          <li><a href="https://www.patreon.com/15273026/join">Patreon</a></li>
+          <li><a href="#">X / Twitter</a></li>
+          <li><a href="#">YouTube</a></li>
+          <li><a href="#">Email</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-base">
+      <span>© 2026 Insight Invest · Kuala Lumpur</span>
+      <span>Set in Geist + Newsreader · built nightly</span>
+    </div>
   </div>
 </footer>
 
-<div class="report-modal-overlay" id="modalSW">
-  <div class="report-modal-bar">
-    <div class="report-modal-title">The Contrarian Software Thesis — Q1 2026 Sector Analysis</div>
-    <div><button class="report-modal-close" onclick="closeReport()">✕ &nbsp;Close</button></div>
-  </div>
-  <div class="report-modal-loading" id="loadingSW">
-    <div class="report-modal-loading-text">Loading report...</div>
-    <div class="loading-bar"></div>
-  </div>
-  <iframe class="report-modal-iframe" id="iframeSW" style="display:none;" title="Software Thesis"></iframe>
-</div>
-
-<div class="report-modal-overlay" id="modalPT">
-  <div class="report-modal-bar">
-    <div class="report-modal-title">The Amplified Contrarian — Leveraged Portfolio Thesis</div>
-    <div><button class="report-modal-close" onclick="closeReport()">✕ &nbsp;Close</button></div>
-  </div>
-  <div class="report-modal-loading" id="loadingPT">
-    <div class="report-modal-loading-text">Loading report...</div>
-    <div class="loading-bar"></div>
-  </div>
-  <iframe class="report-modal-iframe" id="iframePT" style="display:none;" title="Portfolio Thesis"></iframe>
-</div>
-
 <script>
-const SW_B64="PASTE_SW_B64_HERE";
-const PT_B64="PASTE_PT_B64_HERE";
-let swLoaded=false,ptLoaded=false;
-function b64ToDataURI(b64){return 'data:text/html;base64,'+b64;}
-function openReport(type){
-  document.body.style.overflow='hidden';
-  if(type==='sw'){
-    document.getElementById('modalSW').classList.add('active');
-    if(!swLoaded){swLoaded=true;const iframe=document.getElementById('iframeSW');const loading=document.getElementById('loadingSW');iframe.onload=()=>{loading.style.display='none';iframe.style.display='block';};iframe.src=b64ToDataURI(SW_B64);}
-  } else {
-    document.getElementById('modalPT').classList.add('active');
-    if(!ptLoaded){ptLoaded=true;const iframe=document.getElementById('iframePT');const loading=document.getElementById('loadingPT');iframe.onload=()=>{loading.style.display='none';iframe.style.display='block';};iframe.src=b64ToDataURI(PT_B64);}
-  }
-}
-function closeReport(){
-  document.getElementById('modalSW').classList.remove('active');
-  document.getElementById('modalPT').classList.remove('active');
-  document.body.style.overflow='';
-}
-document.addEventListener('keydown',(e)=>{if(e.key==='Escape')closeReport();});
+  // ── PROGRESS ──
+  const pb = document.getElementById('pb');
+  window.addEventListener('scroll', () => {
+    pb.style.width = (window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100) + '%';
+    document.getElementById('topbar').classList.toggle('scrolled', window.scrollY > 10);
+  }, { passive: true });
 
-const revealEls=document.querySelectorAll('.reveal');
-const observer=new IntersectionObserver((entries)=>{entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible');});},{threshold:0.1,rootMargin:'0px 0px -30px 0px'});
-revealEls.forEach(el=>observer.observe(el));
+  // ── CURSOR ──
+  const cd = document.getElementById('cd'), cr = document.getElementById('cr');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove', e => {
+    if(window.innerWidth < 900) return;
+    mx=e.clientX; my=e.clientY;
+    cd.style.left=mx+'px'; cd.style.top=my+'px';
+    cd.classList.add('on'); cr.classList.add('on');
+  });
+  (function loop(){ rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12; cr.style.left=rx+'px'; cr.style.top=ry+'px'; requestAnimationFrame(loop); })();
+  document.querySelectorAll('a,button,.report-card,.sidebar-link').forEach(el => {
+    el.addEventListener('mouseenter',()=>{cd.classList.add('big');cr.classList.add('big');});
+    el.addEventListener('mouseleave',()=>{cd.classList.remove('big');cr.classList.remove('big');});
+  });
 
-window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>60);});
+  // ── HAMBURGER ──
+  const hb = document.getElementById('hamburger'), mm = document.getElementById('mobileMenu');
+  hb.addEventListener('click', () => { hb.classList.toggle('open'); mm.classList.toggle('open'); });
 
-document.getElementById('wlForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const btn = document.getElementById('wlBtn');
-  const email = document.getElementById('wlEmail').value.trim();
-  if (!email) return;
-  btn.textContent = 'Joining...';
-  btn.disabled = true;
-  try {
-    const res = await fetch('https://formspree.io/f/xjgabnak', {
-      method: 'POST',
-      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, source: 'reports.html waitlist' })
+  // ── VIEW TOGGLE ──
+  document.getElementById('gridBtn').addEventListener('click', function() {
+    document.body.classList.remove('list-view');
+    this.classList.add('active');
+    document.getElementById('listBtn').classList.remove('active');
+  });
+  document.getElementById('listBtn').addEventListener('click', function() {
+    document.body.classList.add('list-view');
+    this.classList.add('active');
+    document.getElementById('gridBtn').classList.remove('active');
+    buildLists();
+  });
+
+  // ── BUILD LIST VIEWS FROM GRID ──
+  function buildLists() {
+    document.querySelectorAll('.section-block').forEach(section => {
+      const sec = section.dataset.section;
+      const listEl = document.getElementById('list-' + sec);
+      if (listEl.children.length > 0) return;
+      section.querySelectorAll('.report-card').forEach(card => {
+        const row = document.createElement('a');
+        row.href = card.href;
+        row.className = 'rl-row';
+        row.dataset.cat = card.dataset.cat;
+        row.dataset.title = card.dataset.title;
+        const tag = card.querySelector('.rc-tag');
+        const title = card.querySelector('.rc-title').textContent;
+        row.innerHTML = `<div class="rl-left"><span class="rl-title">${title}</span><span class="rl-tag ${tag.className.replace('rc-tag','').trim()}" style="border-color:currentColor">${tag.textContent}</span></div><div class="rl-right"><span class="rl-arrow">→</span></div>`;
+        listEl.appendChild(row);
+      });
     });
-    if (res.ok) {
-      btn.textContent = "You're in \u2713";
-      btn.style.background = '#3dd68c';
-      btn.style.color = '#08090c';
-      document.getElementById('wlEmail').value = '';
-    } else {
-      btn.textContent = 'Try again';
-      btn.disabled = false;
-      setTimeout(() => { btn.textContent = 'Join Waitlist'; }, 3000);
-    }
-  } catch(err) {
-    btn.textContent = 'Try again';
-    btn.disabled = false;
-    setTimeout(() => { btn.textContent = 'Join Waitlist'; }, 3000);
   }
-});
+
+  // ── FILTER ──
+  let currentCat = 'all';
+  function applyFilter(cat) {
+    currentCat = cat;
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    let visibleTotal = 0;
+
+    document.querySelectorAll('.section-block').forEach(section => {
+      const secCat = section.dataset.section;
+      const showSection = cat === 'all' || cat === secCat;
+      let sectionVisible = 0;
+
+      section.querySelectorAll('.report-card').forEach(card => {
+        const matchCat = cat === 'all' || card.dataset.cat === cat;
+        const matchQ = !q || card.dataset.title.toLowerCase().includes(q) || card.querySelector('.rc-sub').textContent.toLowerCase().includes(q);
+        const show = matchCat && matchQ;
+        card.style.display = show ? '' : 'none';
+        if(show) sectionVisible++;
+      });
+
+      section.querySelectorAll('.rl-row').forEach(row => {
+        const matchCat = cat === 'all' || row.dataset.cat === cat;
+        const matchQ = !q || row.dataset.title.toLowerCase().includes(q);
+        row.style.display = matchCat && matchQ ? '' : 'none';
+      });
+
+      section.style.display = showSection && sectionVisible > 0 ? '' : 'none';
+      visibleTotal += sectionVisible;
+    });
+
+    document.getElementById('totalCount').textContent = visibleTotal;
+    document.getElementById('emptyState').classList.toggle('show', visibleTotal === 0);
+  }
+
+  // filter tabs (topbar)
+  document.querySelectorAll('.filter-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-tab,.sidebar-link').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll(`.sidebar-link[data-cat="${btn.dataset.cat}"]`).forEach(l => l.classList.add('active'));
+      applyFilter(btn.dataset.cat);
+    });
+  });
+
+  // sidebar links
+  document.querySelectorAll('.sidebar-link[data-cat]').forEach(link => {
+    link.addEventListener('click', () => {
+      document.querySelectorAll('.filter-tab,.sidebar-link').forEach(b => b.classList.remove('active'));
+      link.classList.add('active');
+      document.querySelectorAll(`.filter-tab[data-cat="${link.dataset.cat}"]`).forEach(t => t.classList.add('active'));
+      applyFilter(link.dataset.cat);
+    });
+  });
+
+  // search
+  document.getElementById('searchInput').addEventListener('input', () => applyFilter(currentCat));
+
+  // ── SCROLL REVEAL ──
+  const ro = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); ro.unobserve(e.target); }});
+  }, { threshold: 0.06 });
+  document.querySelectorAll('.reveal').forEach((el,i) => {
+    el.style.transitionDelay = (i*0.1)+'s';
+    ro.observe(el);
+  });
+
+  // ── REPORT CARD STAGGER ──
+  const cardObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting) {
+        e.target.querySelectorAll('.report-card').forEach((card,i) => {
+          card.style.opacity='0'; card.style.transform='translateY(12px)';
+          card.style.transition=`opacity 0.4s ease ${i*0.05}s, transform 0.4s cubic-bezier(0.25,1,0.5,1) ${i*0.05}s`;
+          setTimeout(()=>{ card.style.opacity='1'; card.style.transform='translateY(0)'; }, 50);
+        });
+        cardObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.05 });
+  document.querySelectorAll('.section-block').forEach(s => cardObs.observe(s));
 </script>
 </body>
 </html>
