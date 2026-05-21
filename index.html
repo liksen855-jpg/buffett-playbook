@@ -192,7 +192,11 @@
     .tier-cta { margin-top: 36px; display: inline-flex; align-items: center; gap: 10px; padding: 13px 22px; font-size: 13.5px; font-weight: 600; letter-spacing: -0.005em; }
     .tier-cta-light { background: var(--paper); color: var(--ink); border: 1px solid var(--ink); }
     .tier-cta-dark { background: var(--red); color: var(--paper); }
-    .patreon-note { margin-top: 28px; font-family: var(--mono); font-size: 10.5px; color: var(--ink-4); letter-spacing: 0.06em; }
+    .patreon-desc { margin-top: 16px; font-size: 16px; line-height: 1.6; color: var(--ink-3); max-width: 640px; }
+    .patreon-band { border-top: 1px solid var(--ink); border-bottom: 1px solid var(--rule); padding: 48px 0; display: flex; align-items: center; justify-content: space-between; gap: 56px; }
+    .tier-perks { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px 56px; max-width: 720px; }
+    .patreon-cta-wrap { flex-shrink: 0; text-align: right; }
+    .patreon-note { margin-top: 12px; font-family: var(--mono); font-size: 10.5px; color: var(--ink-4); letter-spacing: 0.06em; }
 
     /* ── One-on-One ── */
     .oto { padding: 96px 56px; border-top: 1px solid var(--rule); background: var(--paper-2); }
@@ -356,25 +360,29 @@
       .btn-join { width: 100%; text-align: center; padding: 16px 24px; }
 
       /* patreon */
-      .patreon { padding: 56px 24px; }
-      .patreon-header { grid-template-columns: 1fr; gap: 16px; margin-bottom: 36px; }
-      .patreon-tagline { font-size: 24px; }
-      .patreon-inner [style*="display:flex;align-items:center;justify-content:space-between"] {
-        flex-direction: column; align-items: flex-start; gap: 28px; padding: 32px 0;
-      }
-      .tier-perks[style] { grid-template-columns: 1fr !important; max-width: 100% !important; }
-      .tier-cta-dark { width: 100%; justify-content: center; }
+      .patreon { padding: 48px 24px; }
+      .patreon-header { grid-template-columns: 1fr; gap: 12px; margin-bottom: 28px; }
+      .patreon-tagline { font-size: 22px; }
+      .patreon-desc { font-size: 14px; }
+      .patreon-band { flex-direction: column; align-items: flex-start; gap: 28px; padding: 28px 0; }
+      .tier-perks { grid-template-columns: 1fr !important; gap: 10px; max-width: 100% !important; }
+      .patreon-cta-wrap { width: 100%; text-align: left; }
+      .tier-cta-dark { width: 100%; justify-content: center; display: flex; }
+      .patreon-note { text-align: left !important; }
 
       /* one-on-one */
-      .oto { padding: 56px 24px; }
-      .oto-inner { grid-template-columns: 1fr; gap: 16px; }
-      .oto-headline { font-size: clamp(32px, 7vw, 48px); }
-      .oto-sub { font-size: 16px; }
-      .oto-offerings { grid-template-columns: 1fr; border-left: none; margin-top: 36px; }
-      .oto-offer { border-left: 1px solid var(--ink); border-right: none; }
-      .oto-cta-row { flex-direction: column; align-items: flex-start; gap: 16px; margin-top: 36px; }
-      .oto-cta-primary { width: 100%; justify-content: center; }
-      .oto-cta-note { max-width: 100%; }
+      .oto { padding: 48px 24px; }
+      .oto-inner { grid-template-columns: 1fr; gap: 0; }
+      .oto-label { display: none; }
+      .oto-headline { font-size: clamp(28px, 7vw, 40px); }
+      .oto-sub { font-size: 15px; margin-top: 16px; }
+      .oto-offerings { grid-template-columns: 1fr; border-left: none; border-top: 1px solid var(--ink); margin-top: 32px; }
+      .oto-offer { border-left: 1px solid var(--ink); border-right: 1px solid var(--ink); }
+      .oto-offer-title { font-size: 18px; }
+      .oto-offer-body { font-size: 14px; }
+      .oto-cta-row { flex-direction: column; align-items: stretch; gap: 14px; margin-top: 32px; }
+      .oto-cta-primary { width: 100%; justify-content: center; text-align: center; }
+      .oto-cta-note { max-width: 100%; font-size: 12px; }
 
       /* footer */
       .footer { padding: 48px 24px 28px; }
@@ -433,7 +441,7 @@
     <p class="hero-sub">Most people guess. The best investors read, think, and act with conviction. This is where you build that edge.</p>
     <div class="hero-ctas">
       <a href="reports.html" class="cta-primary">Read the latest →</a>
-      <a href="https://www.leiholding.com/insightinvest-1on1" class="cta-ghost">Start investing smarter</a>
+      <a href="https://www.leiholding.com/reports" class="cta-ghost">Start investing smarter</a>
     </div>
   </div>
   <div class="stats-band">
@@ -587,8 +595,8 @@
       <div class="editor-byline">
         <div class="editor-avatar"></div>
         <div>
-          <div class="editor-name">INSIHGTINVEST</div>
-          <div class="editor-title">sole author · Kuala Lumpur</div>
+          <div class="editor-name">The Editor</div>
+          <div class="editor-title">Editor & sole author · Kuala Lumpur</div>
         </div>
       </div>
     </div>
@@ -601,7 +609,7 @@
   <div class="members-inner">
     <div class="members-label">Membership</div>
     <div>
-      <h2 class="members-h2">13 dollars a month. <span class="members-muted">Everything in.</span></h2>
+      <h2 class="members-h2">Seven dollars a month. <span class="members-muted">Everything in.</span></h2>
       <p class="members-body">Full library archive, all four tools saving scenarios, every lesson in every tier, a quiet members' chat, and one weekly essay you won't find anywhere else. Cancel anytime.</p>
     </div>
     <a href="https://www.patreon.com/15273026/join" class="btn-join">Join via Patreon →</a>
@@ -615,11 +623,11 @@
       <div class="section-label" style="padding-top:8px">Patreon</div>
       <div>
         <p class="patreon-tagline">Support the work. Get <em>everything</em> in return.</p>
-        <p style="margin-top:16px;font-size:16px;line-height:1.6;color:var(--ink-3);max-width:640px">Two tiers, no dark patterns. The free version is genuinely useful. Membership makes it sustainable — and unlocks the parts that take the most time to build.</p>
+        <p class="patreon-desc">Two tiers, no dark patterns. The free version is genuinely useful. Membership makes it sustainable — and unlocks the parts that take the most time to build.</p>
       </div>
     </div>
-    <div style="border-top:1px solid var(--ink);border-bottom:1px solid var(--rule);padding:48px 0;display:flex;align-items:center;justify-content:space-between;gap:56px">
-      <ul class="tier-perks" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px 56px;max-width:720px">
+    <div class="patreon-band">
+      <ul class="tier-perks">
         <li class="tier-perk"><span class="tier-perk-dot"></span>Member-only weekly essay</li>
         <li class="tier-perk"><span class="tier-perk-dot"></span>All four tools with saved scenarios</li>
         <li class="tier-perk"><span class="tier-perk-dot"></span>Full curriculum — all 22 modules</li>
@@ -627,9 +635,9 @@
         <li class="tier-perk"><span class="tier-perk-dot"></span>Full archive of 31 reports</li>
         <li class="tier-perk"><span class="tier-perk-dot"></span>Early access to new tools &amp; reports</li>
       </ul>
-      <div style="flex-shrink:0;text-align:right">
-        <a href="https://www.patreon.com/15273026/join" class="tier-cta tier-cta-dark" style="display:inline-flex">Support on Patreon &#8594;</a>
-        <p class="patreon-note" style="margin-top:12px;text-align:right">Cancel anytime &middot; billed via Patreon</p>
+      <div class="patreon-cta-wrap">
+        <a href="https://www.patreon.com/15273026/join" class="tier-cta tier-cta-dark">Support on Patreon &#8594;</a>
+        <p class="patreon-note">Cancel anytime &middot; billed via Patreon</p>
       </div>
     </div>
   </div>
@@ -638,7 +646,7 @@
 <!-- ONE-ON-ONE -->
 <section class="oto">
   <div class="oto-inner">
-    <div class="section-label" style="padding-top:8px">One-on-One</div>
+    <div class="section-label oto-label">One-on-One</div>
     <div class="oto-body">
       <h2 class="oto-headline">Investing advice <em>built around you.</em></h2>
       <p class="oto-sub">The publication gives you frameworks. The curriculum gives you structure. But sometimes a portfolio has specific questions that only a direct conversation can answer — about your position sizing, your thesis, your blind spot.</p>
