@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FD vs Malaysian REITs · Insight Invest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0a;--fg:#fafaf7;
+  --g3:#b8b5ae;--g5:#7a7873;--g7:#3d3c3a;
+  --acc:#c8a96e;--acc-d:rgba(200,169,110,0.1);--acc-b:rgba(200,169,110,0.2);
+  --bdr:rgba(255,255,255,0.07);--sfc:rgba(255,255,255,0.03);
+  --red:#e06060;--red-d:rgba(224,96,96,0.08);--red-b:rgba(224,96,96,0.18);
+  --grn:#5ab87a;
+  --sans:'Geist',system-ui,sans-serif;--serif:'Newsreader',Georgia,serif;
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 1.75rem;height:50px;background:rgba(10,10,10,0.96);backdrop-filter:blur(20px);border-bottom:0.5px solid var(--bdr)}
+.nb{font-size:.875rem;font-weight:500;color:var(--fg);text-decoration:none}.nb span{color:var(--acc)}
+.nr{display:flex;gap:1.25rem;align-items:center}
+.nr a{font-size:.78rem;color:var(--g5);text-decoration:none;transition:color .2s}.nr a:hover{color:var(--fg)}
+.nj{color:var(--acc)!important;border:0.5px solid var(--acc-b);padding:.3rem .8rem;border-radius:4px}
+.nj:hover{background:var(--acc)!important;color:var(--bg)!important}
+
+/* TICKER */
+.tkw{overflow:hidden;background:rgba(255,255,255,0.015);border-bottom:0.5px solid var(--bdr);padding:.4rem 0;margin-top:50px}
+.tk{display:flex;gap:2.25rem;animation:tk 28s linear infinite;white-space:nowrap;width:max-content}
+.ti{font-size:.68rem;font-weight:500;color:var(--g5);letter-spacing:.05em}
+.u{color:var(--grn)}.dn{color:var(--red)}
+@keyframes tk{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* LAYOUT */
+.hero{max-width:720px;margin:0 auto;padding:4rem 1.75rem 3rem;border-bottom:0.5px solid var(--bdr)}
+.wrap{max-width:720px;margin:0 auto;padding:0 1.75rem}
+.sec{padding:3.5rem 0;border-bottom:0.5px solid var(--bdr)}
+.sec:last-of-type{border-bottom:none}
+
+/* EYEBROW */
+.ey{display:flex;align-items:center;gap:.625rem;margin-bottom:1.375rem}
+.eyn{font-size:.62rem;color:var(--acc);font-family:var(--serif);font-style:italic}
+.eyl{font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--acc)}
+.eyli{flex:1;height:.5px;background:var(--acc-b)}
+
+/* TYPE */
+h2{font-family:var(--serif);font-size:clamp(1.5rem,3vw,2rem);font-weight:400;line-height:1.2;letter-spacing:-.02em;margin-bottom:1rem;color:var(--fg)}
+h3{font-size:.9375rem;font-weight:500;color:var(--fg);margin:1.75rem 0 .625rem;letter-spacing:-.01em}
+p{font-size:.9875rem;line-height:1.78;color:rgba(255,255,255,.62);margin-bottom:1rem}
+p:last-child{margin-bottom:0}
+strong{color:rgba(255,255,255,.88);font-weight:500}
+
+.pq{margin:2rem 0;padding:1.5rem 1.625rem 1.5rem 1.375rem;border-left:2px solid var(--acc);background:rgba(200,169,110,0.04);border-radius:0 8px 8px 0}
+.pq p{font-family:var(--serif);font-size:1.1rem;font-style:italic;font-weight:300;color:rgba(255,255,255,.85);margin:0}
+
+/* STAT GRIDS */
+.sg3{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bdr);border-radius:10px;overflow:hidden}
+.sg2{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--bdr);border-radius:10px;overflow:hidden}
+.sg4{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--bdr);border-radius:10px;overflow:hidden}
+.st{background:var(--bg);padding:1.25rem 1rem}
+.st.hl{background:rgba(200,169,110,0.04)}
+.stn{font-size:1.625rem;font-weight:500;letter-spacing:-.03em;display:block;margin-bottom:.2rem;color:var(--fg)}
+.stn.p{color:var(--acc)}.stn.n{color:var(--red)}
+.stl{font-size:.62rem;color:var(--g5);text-transform:uppercase;letter-spacing:.07em;line-height:1.4}
+.stn-sm{font-size:1.125rem;font-weight:500;letter-spacing:-.02em;display:block;margin-bottom:.2rem;color:var(--fg)}
+.stn-sm.p{color:var(--acc)}.stn-sm.n{color:var(--red)}
+
+/* VS BLOCK */
+.vs{display:grid;grid-template-columns:1fr 48px 1fr;gap:1px;background:var(--bdr);border-radius:10px;overflow:hidden;margin:1.75rem 0}
+.vsc{background:var(--bg);padding:1.625rem}
+.vsc.w{background:rgba(200,169,110,0.04)}
+.vsm{background:var(--bg);display:flex;align-items:center;justify-content:center}
+.vsm span{font-family:var(--serif);font-size:.875rem;font-style:italic;color:var(--g7)}
+.vsl{font-size:.62rem;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--g5);margin-bottom:.75rem}
+.vsn{font-size:1.875rem;font-weight:500;letter-spacing:-.035em;color:var(--fg);margin-bottom:.2rem}
+.vsn.p{color:var(--acc)}
+.vss{font-size:.8rem;color:var(--g5);margin-bottom:.875rem}
+.vsb{font-size:.875rem;color:var(--g5);line-height:1.6}
+
+/* REIT CARDS */
+.rc{border:0.5px solid var(--bdr);border-radius:12px;overflow:hidden;margin:2rem 0}
+.rc.pos{border-color:rgba(200,169,110,0.18)}
+.rc.neg{border-color:var(--red-b)}
+.rch{display:flex;justify-content:space-between;align-items:flex-start;padding:1.5rem;background:var(--sfc);border-bottom:0.5px solid var(--bdr)}
+.rcn{font-size:1rem;font-weight:500;color:var(--fg);margin-bottom:.2rem}
+.rcm{font-size:.72rem;color:var(--g5);line-height:1.5}
+.rcr{text-align:right;flex-shrink:0;margin-left:1.25rem}
+.rcrn{font-size:1.875rem;font-weight:500;letter-spacing:-.03em;line-height:1}
+.rcrn.p{color:var(--acc)}.rcrn.n{color:var(--red)}
+.rcrv{font-size:.75rem;color:var(--g5);margin-top:.2rem}
+.rcb{padding:1.5rem}
+.rcb p{font-size:.9375rem;line-height:1.78;margin-bottom:.875rem}
+.rcb p:last-child{margin-bottom:0}
+
+/* FACT ROW */
+.facts{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0}
+.fact{font-size:.75rem;padding:.3rem .75rem;border-radius:20px;border:0.5px solid var(--bdr);color:var(--g3);background:var(--sfc)}
+.fact.bull{border-color:var(--acc-b);color:var(--acc);background:var(--acc-d)}
+.fact.bear{border-color:var(--red-b);color:var(--red);background:var(--red-d)}
+
+/* BOX */
+.box{border-radius:8px;padding:1.125rem 1.25rem;margin:1.125rem 0}
+.box.bull{background:var(--acc-d);border:0.5px solid var(--acc-b)}
+.box.bear{background:var(--red-d);border:0.5px solid var(--red-b)}
+.box.info{background:var(--sfc);border:0.5px solid var(--bdr)}
+.box-lbl{font-size:.62rem;font-weight:500;letter-spacing:.09em;text-transform:uppercase;margin-bottom:.5rem}
+.box-lbl.bull{color:var(--acc)}.box-lbl.bear{color:var(--red)}.box-lbl.info{color:var(--g5)}
+.box p{font-size:.9rem;line-height:1.7;color:rgba(255,255,255,.6);margin:0}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.875rem}
+.tbl th{font-size:.62rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--g5);padding:0 .625rem .75rem;text-align:left;border-bottom:0.5px solid var(--bdr)}
+.tbl th:not(:first-child){text-align:right}
+.tbl td{padding:.75rem .625rem;border-bottom:0.5px solid rgba(255,255,255,.04);color:rgba(255,255,255,.6);vertical-align:top}
+.tbl td:not(:first-child){text-align:right;font-weight:500;color:var(--fg)}
+.tbl td.p{color:var(--acc)!important}.tbl td.n{color:var(--red)!important}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr.tot td{border-top:0.5px solid var(--bdr);color:var(--fg)!important;font-weight:500}
+.tbl small{display:block;font-size:.7rem;color:var(--g5);font-weight:400;margin-top:.15rem;line-height:1.4}
+
+/* INCOME BARS */
+.ib{margin:1.25rem 0}
+.ibr{display:flex;align-items:center;gap:.875rem;margin-bottom:.75rem}
+.ibl{width:95px;flex-shrink:0}
+.ibn{font-size:.78rem;font-weight:500;color:var(--g3)}
+.iba{font-size:.7rem;color:var(--g5);margin-top:.1rem}
+.ibt{flex:1;height:34px;background:rgba(255,255,255,.03);border-radius:4px;overflow:hidden}
+.ibf{height:100%;border-radius:4px;display:flex;align-items:center;padding:0 .75rem;font-size:.75rem;font-weight:500}
+.ibf.fd{background:rgba(255,255,255,.08);color:var(--g3);width:43%}
+.ibf.rt{background:rgba(200,169,110,.22);color:var(--acc);width:100%}
+
+/* RISK LIST */
+.rl{border:0.5px solid var(--bdr);border-radius:10px;overflow:hidden;margin:1.5rem 0}
+.rr{display:flex;gap:1rem;padding:1rem 1.25rem;border-bottom:0.5px solid var(--bdr);align-items:flex-start}
+.rr:last-child{border-bottom:none}
+.rb{flex-shrink:0;font-size:.6rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:.2rem .45rem;border-radius:3px;margin-top:.15rem}
+.rh{background:var(--red-d);color:var(--red);border:0.5px solid var(--red-b)}
+.rm{background:var(--acc-d);color:var(--acc);border:0.5px solid var(--acc-b)}
+.rl-low{background:rgba(90,184,122,.08);color:var(--grn);border:0.5px solid rgba(90,184,122,.2)}
+.rrt{font-size:.875rem;font-weight:500;color:var(--fg);margin-bottom:.2rem}
+.rrd{font-size:.82rem;color:rgba(255,255,255,.5);line-height:1.6}
+
+/* CHART */
+.cw{margin:1.75rem 0}
+.cl{font-size:.62rem;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--g5);margin-bottom:.75rem}
+.cleg{display:flex;gap:1.125rem;margin-bottom:.75rem;flex-wrap:wrap}
+.cli{display:flex;align-items:center;gap:.375rem;font-size:.72rem;color:var(--g5)}
+.cld{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.cb{position:relative;width:100%}
+
+/* MACRO STRIP */
+.ms{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--bdr);border-radius:10px;overflow:hidden;margin:1.5rem 0}
+.mc{background:var(--bg);padding:1.125rem 1rem}
+.mcl{font-size:.62rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--g5);margin-bottom:.375rem}
+.mcv{font-size:1.25rem;font-weight:500;letter-spacing:-.025em;color:var(--fg)}
+.mcv.p{color:var(--acc)}.mcv.n{color:var(--red)}
+.mcs{font-size:.72rem;color:var(--g5);margin-top:.2rem;line-height:1.4}
+
+/* CTA */
+.cta{background:rgba(200,169,110,.05);border:0.5px solid var(--acc-b);border-radius:12px;padding:2.75rem 2rem;text-align:center;margin:3rem 0}
+.ctae{font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);margin-bottom:.875rem}
+.ctat{font-family:var(--serif);font-size:1.625rem;font-weight:400;color:var(--fg);line-height:1.3;margin-bottom:.75rem}
+.ctab{font-size:.9rem;color:var(--g5);line-height:1.7;max-width:440px;margin:0 auto 1.75rem}
+.ctakw{display:inline-block;font-family:monospace;font-size:1.1rem;font-weight:600;letter-spacing:.14em;color:var(--bg);background:var(--acc);padding:.6rem 2rem;border-radius:5px;margin-bottom:.75rem}
+.ctan{font-size:.78rem;color:var(--g7)}
+
+.disc{background:var(--sfc);border:0.5px solid var(--bdr);border-radius:8px;padding:1rem 1.25rem;margin:2rem 0}
+.disc p{font-size:.75rem;color:var(--g7);line-height:1.7;margin:0}
+
+footer{border-top:0.5px solid var(--bdr);padding:2rem 1.75rem;max-width:720px;margin:0 auto}
+footer p{font-size:.75rem;color:var(--g7);line-height:1.65}
+.fb{font-size:.7rem;color:rgba(255,255,255,.08);margin-top:1rem}
+
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .55s ease,transform .55s ease}
+.reveal.in{opacity:1;transform:none}
+
+.oneon{border:0.5px solid var(--bdr);border-radius:12px;padding:2rem;margin:0 0 3rem;display:flex;justify-content:space-between;align-items:center;gap:2rem}
+.oneon-left{flex:1}
+.oneon-ey{font-size:.62rem;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--g5);margin-bottom:.625rem}
+.oneon-title{font-family:var(--serif);font-size:1.125rem;font-weight:400;font-style:italic;color:var(--fg);line-height:1.4;margin-bottom:.5rem}
+.oneon-body{font-size:.875rem;color:var(--g5);line-height:1.65;margin:0}
+.oneon-link{flex-shrink:0;font-size:.875rem;font-weight:500;color:var(--acc);text-decoration:none;border:0.5px solid var(--acc-b);padding:.625rem 1.375rem;border-radius:6px;transition:background .2s;white-space:nowrap}
+.oneon-link:hover{background:rgba(200,169,110,0.1)}
+
+@media(max-width:580px){
+  .sg3,.sg4,.ms{grid-template-columns:1fr 1fr}
+  .vs{grid-template-columns:1fr}
+  .vsm{padding:.75rem;border-top:0.5px solid var(--bdr);border-bottom:0.5px solid var(--bdr)}
+  .rch{flex-direction:column;gap:.875rem}
+  .rcr{text-align:left}
+  nav .nr a:not(.nj){display:none}
+  .oneon{flex-direction:column;align-items:flex-start;gap:1.25rem}
+  .oneon-link{width:100%;text-align:center;display:block;box-sizing:border-box}
+  .tbl{font-size:.8rem}
+  .tbl th,.tbl td{padding:.625rem .4rem}
+  .hero{padding:3rem 1.25rem 2.5rem}
+  .wrap{padding:0 1.25rem}
+  .rcb,.rch{padding:1.125rem}
+  .facts{gap:.375rem}
+  .fact{font-size:.7rem;padding:.25rem .6rem}
+  .sg3{grid-template-columns:1fr}
+  h2{font-size:1.5rem}
+  .pq p{font-size:1rem}
+  .ms{grid-template-columns:1fr 1fr}
+  .ib .ibf{font-size:.7rem;padding:0 .5rem}
+  .ibf.fd{width:35%}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="https://www.leiholding.com" class="nb">Insight<span>·</span>Invest</a>
+  <div class="nr">
+    <a href="https://www.leiholding.com/reports.html">Reports</a>
+    <a href="https://www.leiholding.com/tools">Tools</a>
+    <a href="https://www.patreon.com/15273026/join" class="nj">Join →</a>
+  </div>
+</nav>
+
+<div class="tkw"><div class="tk">
+  <span class="ti">KLCC 5235SS <span class="u">RM9.15 +0.54%</span></span>
+  <span class="ti">PAVREIT 5212 <span class="u">RM1.76 +1.2%</span></span>
+  <span class="ti">CLMT 5180 <span class="dn">RM0.63 −0.8%</span></span>
+  <span class="ti">AMEREIT 5307 <span class="u">RM1.73 +2.3%</span></span>
+  <span class="ti">KIPREIT 5280 <span class="u">RM0.895 +0.6%</span></span>
+  <span class="ti">OPR <span class="dn">2.75%</span></span>
+  <span class="ti">M-REIT avg yield <span class="u">5.6%</span></span>
+  <span class="ti">MGS 10Y spread <span class="u">+230bps</span></span>
+  <span class="ti">KLCC 5235SS <span class="u">RM9.15 +0.54%</span></span>
+  <span class="ti">PAVREIT 5212 <span class="u">RM1.76 +1.2%</span></span>
+  <span class="ti">CLMT 5180 <span class="dn">RM0.63 −0.8%</span></span>
+  <span class="ti">AMEREIT 5307 <span class="u">RM1.73 +2.3%</span></span>
+  <span class="ti">KIPREIT 5280 <span class="u">RM0.895 +0.6%</span></span>
+  <span class="ti">OPR <span class="dn">2.75%</span></span>
+  <span class="ti">M-REIT avg yield <span class="u">5.6%</span></span>
+  <span class="ti">MGS 10Y spread <span class="u">+230bps</span></span>
+</div></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div style="display:inline-flex;align-items:center;gap:.5rem;background:var(--acc-d);border:0.5px solid var(--acc-b);border-radius:20px;padding:.28rem .875rem;margin-bottom:1.75rem">
+    <span style="font-size:.62rem;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--acc)">Companion Report · Post-video deep dive · Prices indicative as at May 2026</span>
+  </div>
+  <h2 style="font-size:clamp(1.75rem,4vw,2.6rem);margin-bottom:.875rem">You saw the gap.<br>Here's <em style="color:var(--acc)">why it exists.</em></h2>
+  <p style="max-width:580px;margin-bottom:2rem">The full breakdown — macroeconomic context, each REIT dissected, verified numbers, and what it means for your money in 2026.</p>
+  <div class="sg3">
+    <div class="st"><span class="stn p">+51.1%</span><span class="stl">REIT portfolio · 5 years</span></div>
+    <div class="st"><span class="stn">+18.8%</span><span class="stl">FD · 3.5% flat · 5 years</span></div>
+    <div class="st"><span class="stn p">RM16,173</span><span class="stl">The gap on RM50,000</span></div>
+  </div>
+</section>
+
+<div class="wrap">
+
+<!-- 01 MACRO -->
+<section class="sec reveal">
+  <div class="ey"><span class="eyn">01</span><span class="eyl">The Environment</span><span class="eyli"></span></div>
+  <h2>Why Malaysia. Why now.</h2>
+  <p>This isn't just about REITs. Three macro forces are converging in 2026 that make Malaysian real estate income a structurally interesting place to allocate capital.</p>
+
+  <div class="ms">
+    <div class="mc"><div class="mcl">GDP growth Q4 2025</div><div class="mcv p">5.7%</div><div class="mcs">Broad-based — services, manufacturing, construction</div></div>
+    <div class="mc"><div class="mcl">FDI approved (9M 2025)</div><div class="mcv p">RM285B</div><div class="mcs">+13.2% YoY · 52.9% foreign capital</div></div>
+    <div class="mc"><div class="mcl">OPR (Jul 2025)</div><div class="mcv n">2.75%</div><div class="mcs">25bps cut · eased REIT borrowing costs</div></div>
+    <div class="mc"><div class="mcl">REIT vs MGS spread</div><div class="mcv p">+230bps</div><div class="mcs">5.6% avg yield vs 3.3% 10Y bond</div></div>
+  </div>
+
+  <p>FDI is concentrated in digital services — data centres — and semiconductor manufacturing. Both need physical infrastructure. Both benefit industrial REITs directly. The 230bps yield spread over government bonds means you're being paid meaningfully more to own real assets versus the risk-free rate.</p>
+
+  <div class="box info">
+    <div class="box-lbl info">Withholding tax — the one policy risk</div>
+    <p>The concessionary 10% WHT on REIT distributions was due to expire Dec 2025. Non-renewal means distributions taxed at personal brackets (up to 24%) — compressing post-tax yields by 50–100bps and valuations by up to 14%. Base case is renewal: the fiscal gain is less than 0.2% of total 2026 tax revenue. Not worth the political cost of damaging a major retail investment class.</p>
+  </div>
+</section>
+
+<!-- 02 FD REALITY -->
+<section class="sec reveal">
+  <div class="ey"><span class="eyn">02</span><span class="eyl">The FD Reality</span><span class="eyli"></span></div>
+  <h2>What the bank actually paid.</h2>
+  <p>We used 3.5% flat in the video — deliberately generous to FD. Here's what Maybank and CIMB were actually offering.</p>
+
+  <table class="tbl">
+    <thead><tr><th>Period</th><th>OPR</th><th>Maybank 12M</th><th>CIMB 12M</th></tr></thead>
+    <tbody>
+      <tr><td>Jan 2020</td><td>3.00%</td><td>~3.00%</td><td>~3.00%</td></tr>
+      <tr><td>H2 2020 (post-cut)</td><td>1.75%</td><td class="n">~1.85%</td><td class="n">~1.85%</td></tr>
+      <tr><td>2021</td><td>1.75%</td><td class="n">~1.85%</td><td class="n">~1.85%</td></tr>
+      <tr><td>2022 (rising)</td><td>2.75%</td><td>~2.00–2.75%</td><td>~2.00–2.75%</td></tr>
+      <tr><td>2023–2024</td><td>3.00%</td><td>~3.05%</td><td>~3.05%</td></tr>
+      <tr><td>2025</td><td>2.75%</td><td>~2.90%</td><td>~2.90%</td></tr>
+      <tr class="tot"><td>Blended avg</td><td>—</td><td class="n">~2.61%</td><td class="n">~2.61%</td></tr>
+    </tbody>
+  </table>
+
+  <p>The real blended 5-year rate is ~2.61%, not 3.5%. At 2.61%, FD ends at ~RM57,100 — not RM59,384. <strong>The actual gap is closer to RM18,400.</strong> We showed you the smaller number because we gave FD every advantage. REITs still won by RM16,173.</p>
+</section>
+
+<!-- 03 VS -->
+<section class="sec reveal">
+  <div class="ey"><span class="eyn">03</span><span class="eyl">Head to Head</span><span class="eyli"></span></div>
+  <h2>RM50,000. Same period. Two outcomes.</h2>
+
+  <div class="vs">
+    <div class="vsc">
+      <div class="vsl">Fixed Deposit</div>
+      <div class="vsn">RM 59,384</div>
+      <div class="vss">+RM9,384 · +18.8% · Capital guaranteed</div>
+      <div class="vsb">Annual income today: <strong style="color:rgba(255,255,255,.75)">RM2,078/year</strong></div>
+    </div>
+    <div class="vsm"><span>vs</span></div>
+    <div class="vsc w">
+      <div class="vsl">5 Malaysian REITs</div>
+      <div class="vsn p">RM 75,558</div>
+      <div class="vss">+RM25,558 · +51.1% · One went negative. Still won.</div>
+      <div class="vsb">Annual income today: <strong style="color:var(--acc)">~RM4,836/year</strong></div>
+    </div>
+  </div>
+
+  <div class="cw">
+    <div class="cl">Portfolio growth · Jan 2020 – Dec 2025</div>
+    <div class="cleg">
+      <div class="cli"><div class="cld" style="background:#c8a96e"></div>REIT Portfolio</div>
+      <div class="cli"><div class="cld" style="background:rgba(255,255,255,.22);border:1px dashed rgba(255,255,255,.3)"></div>Fixed Deposit</div>
+    </div>
+    <div class="cb" style="height:240px"><canvas id="gc" role="img" aria-label="REIT portfolio vs FD growth chart">REITs RM75,558 vs FD RM59,384.</canvas></div>
+  </div>
+
+  <div class="ib">
+    <div class="ibr">
+      <div class="ibl"><div class="ibn">Fixed Deposit</div><div class="iba">RM2,078/yr</div></div>
+      <div class="ibt"><div class="ibf fd">RM 2,078/year</div></div>
+    </div>
+    <div class="ibr">
+      <div class="ibl"><div class="ibn">REIT Portfolio</div><div class="iba">RM4,836/yr</div></div>
+      <div class="ibt"><div class="ibf rt">RM 4,836/year</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 REITS -->
+<section class="sec reveal">
+  <div class="ey"><span class="eyn">04</span><span class="eyl">The Portfolio — Each REIT</span><span class="eyli"></span></div>
+  <h2>Five REITs. Different reasons. What happened to each.</h2>
+
+  <!-- KLCC -->
+  <div class="rc pos reveal">
+    <div class="rch">
+      <div>
+        <div class="rcn">KLCC Stapled Group</div>
+        <div class="rcm">5235SS · Office/Retail · RM16.65B · P/B 1.2x · Yield 5.1% · Neutral</div>
+      </div>
+      <div class="rcr"><div class="rcrn p">+55.7%</div><div class="rcrv">RM10,000 → RM15,574</div></div>
+    </div>
+    <div class="rcb">
+      <div class="facts">
+        <span class="fact bull">PETRONAS Twin Towers</span>
+        <span class="fact bull">Triple Net Leases</span>
+        <span class="fact bull">98% Suria KLCC occupancy</span>
+        <span class="fact bull">Record RM1.74B revenue FY2025</span>
+        <span class="fact bull">47 sen DPU (record)</span>
+      </div>
+      <p><strong>Why it's in the portfolio:</strong> TNL leases mean PETRONAS absorbs all operating costs — maintenance, insurance, utilities. KLCC collects a clean rent cheque. This is why distributions were untouched during COVID while every other commercial landlord was granting concessions.</p>
+      <p><strong>Role:</strong> Defensive anchor. Low beta. Protect capital while it compounds. Not the highest yield — the most reliable one.</p>
+      <div class="sg4" style="margin:1rem 0">
+        <div class="st"><span class="stn-sm p">+55.7%</span><span class="stl">5Y return</span></div>
+        <div class="st"><span class="stn-sm">98%</span><span class="stl">Retail occ.</span></div>
+        <div class="st"><span class="stn-sm p">47 sen</span><span class="stl">FY2025 DPU</span></div>
+        <div class="st"><span class="stn-sm">33.4%</span><span class="stl">Gearing</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAVILION -->
+  <div class="rc pos reveal">
+    <div class="rch">
+      <div>
+        <div class="rcn">Pavilion Real Estate Investment Trust</div>
+        <div class="rcm">5212 · Prime Retail + Hospitality · RM7.38B · P/B 1.3x · Yield 5.32% · Buy</div>
+      </div>
+      <div class="rcr"><div class="rcrn p">+32.7%</div><div class="rcrv">RM10,000 → RM13,271</div></div>
+    </div>
+    <div class="rcb">
+      <div class="facts">
+        <span class="fact bear">2020 DPU: 1.61 sen (from 8+ sen)</span>
+        <span class="fact bull">Tourism recovery thesis</span>
+        <span class="fact bull">2 five-star hotels added</span>
+        <span class="fact bull">Bukit Jalil 90% occupancy</span>
+        <span class="fact bull">FY2026 DPU: 10.7 sen projected</span>
+      </div>
+      <p><strong>The honest story:</strong> COVID crushed distributions — 1.61 sen in 2020 vs a normal 8+ sen. If you needed income in 2020, Pavilion failed you. But those depressed distributions bought units at low prices, which recovered. That's the reinvestment mechanism working exactly as it should.</p>
+      <p><strong>Forward thesis:</strong> 30 million international visitors projected for 2026 (+11%). They shop at Pavilion KL. Hotel assets at stable 80% occupancy. FY2026 DPU of 10.7 sen exceeds pre-COVID levels.</p>
+      <div class="sg4" style="margin:1rem 0">
+        <div class="st"><span class="stn-sm p">+32.7%</span><span class="stl">5Y return</span></div>
+        <div class="st"><span class="stn-sm n">1.61 sen</span><span class="stl">2020 DPU</span></div>
+        <div class="st"><span class="stn-sm p">10.7 sen</span><span class="stl">FY2026 proj.</span></div>
+        <div class="st"><span class="stn-sm">40.0%</span><span class="stl">Gearing</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLMT -->
+  <div class="rc neg reveal">
+    <div class="rch">
+      <div>
+        <div class="rcn">CapitaLand Malaysia Trust</div>
+        <div class="rcm">5180 · Retail → Industrial pivot · RM2.12B · P/B 0.7x · Yield 7.68% · Strong Buy</div>
+      </div>
+      <div class="rcr"><div class="rcrn n">−6.2%</div><div class="rcrv">RM10,000 → RM9,376</div></div>
+    </div>
+    <div class="rcb">
+      <div class="facts">
+        <span class="fact bear">Price: RM0.98 → RM0.63 (−35.7%)</span>
+        <span class="fact bear">Distributions couldn't cover the loss</span>
+        <span class="fact bull">Industrial pivot accelerating</span>
+        <span class="fact bull">+22.7% distributable income Q1 2026</span>
+        <span class="fact bull">30% NAV discount · 7.68% yield</span>
+      </div>
+      <div class="box bear" style="margin:.875rem 0">
+        <div class="box-lbl bear">The honest disclosure</div>
+        <p>CLMT lost money. Unit price fell 35.7%. This happened in a portfolio of five carefully chosen REITs during an economic recovery. It's in the data. We're not hiding it. The other four REITs more than covered it — that's the point of a portfolio.</p>
+      </div>
+      <p><strong>Why the forward case exists:</strong> CLMT acquired 7 industrial/logistics properties in 2025 for RM279M. Industrial assets are now 11.5% of AUM (up from 7.9%). Logistics NPI margins exceed 85% vs 50–65% for retail. Q1 2026: +22.7% distributable income growth. Market still prices it as a struggling retailer — it's becoming an industrial operator.</p>
+      <div class="sg4" style="margin:1rem 0">
+        <div class="st"><span class="stn-sm n">−6.2%</span><span class="stl">5Y return</span></div>
+        <div class="st"><span class="stn-sm n">−35.7%</span><span class="stl">Price decline</span></div>
+        <div class="st"><span class="stn-sm p">+22.7%</span><span class="stl">Q1 2026 income</span></div>
+        <div class="st"><span class="stn-sm p">0.7x</span><span class="stl">P/B (NAV −30%)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AME -->
+  <div class="rc pos reveal">
+    <div class="rch">
+      <div>
+        <div class="rcn">AME Real Estate Investment Trust</div>
+        <div class="rcm">5307 · Industrial · RM877.8M · P/B 1.3x · Yield 4.85% · Buy · Shariah-compliant</div>
+      </div>
+      <div class="rcr"><div class="rcrn p">+94.1%</div><div class="rcrv">RM10,000 → RM19,412</div></div>
+    </div>
+    <div class="rcb">
+      <div class="box info" style="margin:0 0 .875rem">
+        <div class="box-lbl info">Disclosure</div>
+        <p>AME REIT listed 20 Sept 2022 — not investable in Jan 2020. The RM10,000 allocation sat at FD rate (3.5% p.a.) from Jan 2020 to Sept 2022, growing to RM11,087, then deployed at IPO price RM1.15. The 94.1% return accounts for this. Full transparency.</p>
+      </div>
+      <div class="facts">
+        <span class="fact bull">100% portfolio occupancy</span>
+        <span class="fact bull">91% NPI margin</span>
+        <span class="fact bull">MNC tenants: E&E, medical devices</span>
+        <span class="fact bull">JS-SEZ direct proxy</span>
+        <span class="fact bull">+13% core earnings FY2026</span>
+      </div>
+      <p><strong>The structural story:</strong> Every factory, every warehouse, every dormitory — fully occupied by multinational exporters whose supply chains are embedded in Johor. They don't leave because moving a manufacturing facility is not a realistic option at lease renewal.</p>
+      <p><strong>The unpriced upside:</strong> Malaysia's data centre market: USD4B → USD13.5B by 2030. Axis REIT already sold a Johor industrial asset to a data centre operator for RM162M. Industrial land near power substations is being repriced as digital infrastructure. AME's corridor is in the middle of this.</p>
+      <div class="sg4" style="margin:1rem 0">
+        <div class="st"><span class="stn-sm p">+94.1%</span><span class="stl">5Y return</span></div>
+        <div class="st"><span class="stn-sm p">100%</span><span class="stl">Occupancy</span></div>
+        <div class="st"><span class="stn-sm p">91%</span><span class="stl">NPI margin</span></div>
+        <div class="st"><span class="stn-sm">29.0%</span><span class="stl">Gearing</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KIP -->
+  <div class="rc pos reveal">
+    <div class="rch">
+      <div>
+        <div class="rcn">KIP Real Estate Investment Trust</div>
+        <div class="rcm">5280 · Suburban Community Retail · RM819.6M · P/B 0.8x · Yield 8.32% · Strong Buy</div>
+      </div>
+      <div class="rcr"><div class="rcrn p">+79.3%</div><div class="rcrv">RM10,000 → RM17,925</div></div>
+    </div>
+    <div class="rcb">
+      <div class="facts">
+        <span class="fact bull">98.3% portfolio occupancy</span>
+        <span class="fact bull">74.9% tenant renewal rate</span>
+        <span class="fact bull">1,172 tenants</span>
+        <span class="fact bull">AUM grew 2.6× in 9 years</span>
+        <span class="fact bull">8.32% trailing yield</span>
+        <span class="fact bull">20% NAV discount</span>
+      </div>
+      <p><strong>Why necessity retail is different:</strong> KIPMall tenants are grocers, pharmacies, F&B, wet markets. People visit every week regardless of the economy. When COVID closed Pavilion KL, KIPMall Tampoi kept operating. That 98.3% occupancy is not marketing — it's the structural result of owning assets that serve actual human needs.</p>
+      <p><strong>The re-rating catalyst:</strong> Many institutional mandates set eligibility thresholds around RM1B+ market cap. KIP sits at RM819.6M. As it crosses that threshold through organic growth and acquisitions, institutional money enters — compressing the NAV discount and driving the unit price. Existing holders capture both the income and the re-rating.</p>
+      <div class="sg4" style="margin:1rem 0">
+        <div class="st"><span class="stn-sm p">+79.3%</span><span class="stl">5Y return</span></div>
+        <div class="st"><span class="stn-sm p">98.3%</span><span class="stl">Occupancy</span></div>
+        <div class="st"><span class="stn-sm p">8.32%</span><span class="stl">Yield</span></div>
+        <div class="st"><span class="stn-sm">0.8x</span><span class="stl">P/B</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 RESULTS -->
+<section class="sec reveal">
+  <div class="ey"><span class="eyn">05</span><span class="eyl">The Full Numbers</span><span class="eyli"></span></div>
+  <h2>Verified. No omissions.</h2>
+
+  <table class="tbl">
+    <thead><tr><th>REIT</th><th>Invested</th><th>Final</th><th>Return</th></tr></thead>
+    <tbody>
+      <tr><td>KLCC (5235SS)<small>TNL leases · Petronas anchor · record FY2025</small></td><td>RM10,000</td><td class="p">RM15,574</td><td class="p">+55.7%</td></tr>
+      <tr><td>Pavilion REIT (5212)<small>COVID hit hard · strong recovery · hotel added</small></td><td>RM10,000</td><td class="p">RM13,271</td><td class="p">+32.7%</td></tr>
+      <tr><td>CLMT (5180)<small>Price −35.7% · distributions couldn't cover · pivot underway</small></td><td>RM10,000</td><td class="n">RM9,376</td><td class="n">−6.2%</td></tr>
+      <tr><td>AME REIT (5307)<small>IPO Sept 2022 · pre-IPO at FD · 100% occ. · Johor</small></td><td>RM10,000</td><td class="p">RM19,412</td><td class="p">+94.1%</td></tr>
+      <tr><td>KIP REIT (5280)<small>98.3% occ. · necessity retail · consistent distributions</small></td><td>RM10,000</td><td class="p">RM17,925</td><td class="p">+79.3%</td></tr>
+      <tr class="tot"><td>Portfolio total</td><td>RM50,000</td><td class="p">RM75,558</td><td class="p">+51.1%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="cw">
+    <div class="cl">Annual distributions received per REIT · RM10,000 starting allocation</div>
+    <div class="cleg">
+      <div class="cli"><div class="cld" style="background:#c8a96e"></div>KLCC</div>
+      <div class="cli"><div class="cld" style="background:rgba(255,255,255,.38)"></div>Pavilion</div>
+      <div class="cli"><div class="cld" style="background:rgba(200,169,110,.38)"></div>KIP REIT</div>
+      <div class="cli"><div class="cld" style="background:rgba(255,255,255,.14)"></div>CLMT</div>
+    </div>
+    <div class="cb" style="height:200px"><canvas id="dc" role="img" aria-label="Annual REIT distributions 2020-2025">Annual distributions per REIT.</canvas></div>
+  </div>
+</section>
+
+<!-- 06 RISKS -->
+<section class="sec reveal">
+  <div class="ey"><span class="eyn">06</span><span class="eyl">What Could Go Wrong</span><span class="eyli"></span></div>
+  <h2>The real risks. Not hypothetical ones.</h2>
+
+  <div class="rl">
+    <div class="rr">
+      <div class="rb rh">High</div>
+      <div><div class="rrt">Unit price volatility</div><div class="rrd">CLMT fell 35.7% and lost money despite consistent distributions. Single-REIT concentration is the biggest mistake retail investors make. Diversification is the mechanism — not optional.</div></div>
+    </div>
+    <div class="rr">
+      <div class="rb rh">High</div>
+      <div><div class="rrt">Withholding tax non-renewal</div><div class="rrd">If the 10% WHT concession lapses, individual tax reverts to up to 24%. Post-tax yields compress 50–100bps. Sector valuations fall up to 14%. Base case is renewal — but it's a live risk until confirmed.</div></div>
+    </div>
+    <div class="rr">
+      <div class="rb rm">Medium</div>
+      <div><div class="rrt">OPR reversal</div><div class="rrd">BNM cut to 2.75% in July 2025. If inflationary pressure forces rate hikes, REIT borrowing costs rise and the yield spread over MGS compresses. Most impact on high-floating-rate trusts.</div></div>
+    </div>
+    <div class="rr">
+      <div class="rb rm">Medium</div>
+      <div><div class="rrt">Mid-tier retail structural decline</div><div class="rrd">CLMT's price decline partly reflects structural e-commerce pressure on non-destination retail. Malaysian private office occupancy sits at 72% — an oversupplied market. REITs not pivoting face sustained pressure.</div></div>
+    </div>
+    <div class="rr">
+      <div class="rb rl-low">Lower</div>
+      <div><div class="rrt">JS-SEZ / RTS Link delays</div><div class="rrd">RTS Link on track for January 2027. If delayed, the Johor near-shoring thesis and the AME / Paradigm REIT catalysts push out. Infrastructure projects can and do slip.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 FORWARD -->
+<section class="sec reveal">
+  <div class="ey"><span class="eyn">07</span><span class="eyl">Going Forward</span><span class="eyli"></span></div>
+  <h2>The same decision. In 2026. With five years behind you.</h2>
+
+  <div class="pq"><p>"FD protects your money from risk. REITs protect your money from irrelevance."</p></div>
+
+  <p>The M-REIT sector enters 2026 with disciplined balance sheets (avg 34% gearing), stable OPR at 2.75%, and a 230bps spread over government bonds. That spread is backed by real assets generating rent in a recovering economy with structural growth corridors in the south that the market hasn't fully priced.</p>
+
+  <div class="sg3" style="margin:1.5rem 0">
+    <div class="st"><div class="stl" style="margin-bottom:.5rem">Core Income (40%)</div><p style="font-size:.82rem;color:var(--g5);line-height:1.6;margin:0">KLCC + Pavilion. TNL leases and tourism tailwind. Low beta. Protect and compound.</p></div>
+    <div class="st"><div class="stl" style="margin-bottom:.5rem">Growth (35%)</div><p style="font-size:.82rem;color:var(--g5);line-height:1.6;margin:0">AME REIT + CLMT. Johor corridor, data centre optionality, industrial pivot. 3–5 year horizon.</p></div>
+    <div class="st"><div class="stl" style="margin-bottom:.5rem">High Yield (25%)</div><p style="font-size:.82rem;color:var(--g5);line-height:1.6;margin:0">KIP REIT + Sentral REIT. 8%+ yield, NAV discounts, approaching re-rating thresholds.</p></div>
+  </div>
+
+  <div class="disc">
+    <p>FD modelled at 3.5% flat — actual Maybank/CIMB rates were ~1.85% in 2020–2021. Real gap is wider. All REIT figures gross of 10% WHT. DPU from annual reports. Prices from Digrin.com ex-dividend date closes. CLMT entry price RM0.98 is Feb 2020 ex-div close. AME REIT pre-IPO capital at FD rate (not investable before Sept 2022). Past performance does not guarantee future results. Educational only — not financial advice.</p>
+  </div>
+</section>
+
+<div class="oneon reveal">
+  <div class="oneon-left">
+    <p class="oneon-ey">If you want to go further</p>
+    <p class="oneon-title">Sometimes a portfolio needs a conversation, not a report.</p>
+    <p class="oneon-body">If you're thinking about how REITs fit into your specific situation — your timeline, your existing holdings, your risk tolerance — that's what the 1-on-1 is for. No templates. Sixty minutes, your portfolio.</p>
+  </div>
+  <a href="https://www.leiholding.com/insightinvest-1on1" class="oneon-link">See how it works →</a>
+</div>
+
+</div>
+
+<footer>
+  <p>Insight·Invest is an independent publication. Not investment advice — work shown, opinions own.</p>
+  <p class="fb">© 2026 Insight·Invest · Kuala Lumpur · Geist + Newsreader</p>
+</footer>
+
+<script>
+const acc='#c8a96e',grid='rgba(255,255,255,0.06)',tx='rgba(255,255,255,0.32)';
+new Chart(document.getElementById('gc'),{type:'line',data:{labels:['Jan 2020','Dec 2020','Dec 2021','Dec 2022','Dec 2023','Dec 2024','Dec 2025'],datasets:[{label:'REITs',data:[50000,52800,55400,58900,63200,69500,75558],borderColor:acc,backgroundColor:'rgba(200,169,110,0.07)',borderWidth:2,pointRadius:4,pointBackgroundColor:acc,pointBorderColor:'#0a0a0a',pointBorderWidth:2,fill:true,tension:.35},{label:'FD',data:[50000,51750,53561,55436,57376,59368,59384],borderColor:'rgba(255,255,255,.2)',backgroundColor:'transparent',borderWidth:1.5,pointRadius:3,pointBackgroundColor:'rgba(255,255,255,.2)',fill:false,tension:.35,borderDash:[5,5]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(10,10,10,.97)',borderColor:'rgba(255,255,255,.08)',borderWidth:.5,titleColor:'rgba(255,255,255,.4)',bodyColor:'#fff',padding:12,callbacks:{label:c=>' RM '+c.parsed.y.toLocaleString()}}},scales:{x:{grid:{color:grid},ticks:{color:tx,font:{size:11}}},y:{grid:{color:grid},ticks:{color:tx,font:{size:11},callback:v=>'RM'+(v/1000).toFixed(0)+'k'},min:46000,max:80000}}}});
+new Chart(document.getElementById('dc'),{type:'bar',data:{labels:['2020','2021','2022','2023','2024','2025'],datasets:[{label:'KLCC',data:[301,370,512,593,654,742],backgroundColor:acc,borderRadius:2},{label:'Pavilion',data:[161,252,300,76,453,481],backgroundColor:'rgba(255,255,255,.35)',borderRadius:2},{label:'KIP REIT',data:[651,682,650,644,709,791],backgroundColor:'rgba(200,169,110,.35)',borderRadius:2},{label:'CLMT',data:[101,199,293,521,460,522],backgroundColor:'rgba(255,255,255,.13)',borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(10,10,10,.97)',borderColor:'rgba(255,255,255,.08)',borderWidth:.5,titleColor:'rgba(255,255,255,.4)',bodyColor:'#fff',padding:10,callbacks:{label:c=>' '+c.dataset.label+': RM'+c.parsed.y}}},scales:{x:{stacked:true,grid:{display:false},ticks:{color:tx,font:{size:11}}},y:{stacked:true,grid:{color:grid},ticks:{color:tx,font:{size:11},callback:v=>'RM'+v}}}}});
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.07});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
