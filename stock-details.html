@@ -671,6 +671,59 @@ td.strong{color:var(--fg);font-weight:600}
 .error-banner.active{display:block}
 
 @media(max-width:640px){.hero{padding:14px 16px 0}.tab-page{padding:16px}.header{padding:0 14px}.price-main{font-size:26px}.mh-hero{flex-direction:column}}
+
+/* =============================================================
+   INSIGHTINVEST — NEWS · MARKETS · SCREENER CSS
+   ============================================================= */
+.news-list{display:flex;flex-direction:column;gap:10px}
+.news-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:7px;cursor:pointer;transition:border-color .15s}
+.news-card:hover{border-color:var(--primary)}
+.news-card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.news-card-title{font-size:13.5px;font-weight:500;color:var(--fg);line-height:1.45;flex:1}
+.news-card-snippet{font-size:12px;color:var(--muted);line-height:1.55}
+.news-card-meta{font-size:11px;color:var(--muted)}
+.news-card-sentiment{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0;align-self:flex-start}
+.sent-positive{background:rgba(34,197,94,.15);color:#22c55e}
+.sent-negative{background:rgba(239,68,68,.15);color:#ef4444}
+.sent-neutral{background:rgba(148,163,184,.12);color:var(--muted)}
+.news-empty{font-size:13px;color:var(--muted);padding:2rem 0;text-align:center}
+
+/* pill-toggle — sub-tab buttons inside News/Markets/Stock-News pages */
+.pill-toggle{background:transparent;border:1px solid var(--border);color:var(--muted);font-size:12.5px;font-weight:500;padding:7px 14px;border-radius:999px;cursor:pointer;transition:all .15s;font-family:'Geist','Inter',ui-sans-serif,sans-serif}
+.pill-toggle:hover{color:var(--fg2);border-color:var(--border2)}
+.pill-toggle.active{background:hsl(220,28%,90%);color:hsl(222,40%,8%);border-color:hsl(220,28%,90%);font-weight:600}
+
+/* Markets */
+.markets-search{width:100%;max-width:260px;padding:7px 10px;border-radius:7px;border:1px solid var(--border);background:var(--card);color:var(--fg);font-size:12px;margin-bottom:12px;outline:none}
+.markets-search:focus{border-color:var(--primary)}
+.markets-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.markets-table th{text-align:left;padding:8px 10px;font-size:11px;font-weight:500;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap}
+.markets-table td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--fg);white-space:nowrap}
+.markets-table tr:last-child td{border-bottom:none}
+.markets-table tr:hover td{background:hsl(220,28%,13%)}
+.markets-table .sym{font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px}
+.markets-table .chg-pos{color:#22c55e;font-weight:500}
+.markets-table .chg-neg{color:#ef4444;font-weight:500}
+
+/* Screener */
+.scr-filter-group{display:flex;flex-direction:column}
+.scr-label{display:block;font-size:11px;font-weight:500;color:var(--muted);margin-bottom:5px}
+.scr-select,.scr-input{width:100%;padding:7px 10px;border-radius:7px;border:1px solid var(--border);background:var(--card);color:var(--fg);font-size:12px;outline:none;box-sizing:border-box}
+.scr-select:focus,.scr-input:focus{border-color:var(--primary)}
+.scr-run-btn{width:100%;padding:8px 0;border-radius:7px;border:none;background:var(--primary);color:hsl(222,47%,6%);font-size:13px;font-weight:600;cursor:pointer;transition:opacity .15s}
+.scr-run-btn:hover{opacity:.85}
+.scr-run-btn:disabled{opacity:.45;cursor:default}
+.screener-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.screener-table th{text-align:left;padding:8px 10px;font-size:11px;font-weight:500;color:var(--muted);border-bottom:1px solid var(--border);cursor:pointer;white-space:nowrap;user-select:none}
+.screener-table th:hover{color:var(--fg)}
+.screener-table th.sort-asc::after{content:' ↑'}
+.screener-table th.sort-desc::after{content:' ↓'}
+.screener-table td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--fg);white-space:nowrap}
+.screener-table tr:last-child td{border-bottom:none}
+.screener-table tr:hover td{background:hsl(220,28%,13%);cursor:pointer}
+.screener-table .sym{font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px}
+.screener-table .chg-pos{color:#22c55e}
+.screener-table .chg-neg{color:#ef4444}
 </style>
 </head>
 <body>
@@ -761,6 +814,10 @@ td.strong{color:var(--fg);font-weight:600}
     <button class="tab-btn" data-tab="moatheat"         onclick="switchTab('moatheat')">InsightInvest™</button>
     <button class="tab-btn" data-tab="ai"               onclick="switchTab('ai')">AI Insights</button>
     <button class="tab-btn" data-tab="earnings"         onclick="switchTab('earnings')">Earnings</button>
+    <button class="tab-btn" data-tab="stock-news"       onclick="switchTab('stock-news')">News</button>
+    <button class="tab-btn" data-tab="news"             onclick="switchTab('news')">Market News</button>
+    <button class="tab-btn" data-tab="markets"          onclick="switchTab('markets')">Markets</button>
+    <button class="tab-btn" data-tab="screener"         onclick="switchTab('screener')">Screener</button>
   </nav>
 
   <!-- ══ OVERVIEW ══ -->
@@ -1254,6 +1311,121 @@ td.strong{color:var(--fg);font-weight:600}
     </div>
   </div>
 
+  <!-- STOCK PAGE NEWS TAB -->
+  <div id="page-stock-news" class="tab-page">
+    <div class="fin-section">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+        <div style="display:flex;gap:8px">
+          <button class="pill-toggle active" data-sn-tab="articles"
+                  onclick="switchStockNewsTab('articles',this)">Articles</button>
+          <button class="pill-toggle" data-sn-tab="press"
+                  onclick="switchStockNewsTab('press',this)">Press releases</button>
+        </div>
+        <span id="stock-news-label"
+              style="font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace"></span>
+      </div>
+      <div id="stock-news-status"
+           style="font-size:12px;color:var(--muted);margin-bottom:10px"></div>
+      <div id="stock-news-articles" class="news-list"></div>
+      <div id="stock-news-press"    class="news-list" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- GLOBAL NEWS PAGE -->
+  <div id="page-news" class="tab-page">
+    <div class="fin-section">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+        <div style="display:flex;gap:8px">
+          <button class="pill-toggle active" data-news-tab="market"
+                  onclick="switchNewsTab('market',this)">Market news</button>
+          <button class="pill-toggle" data-news-tab="stock"
+                  onclick="switchNewsTab('stock',this)">This stock</button>
+          <button class="pill-toggle" data-news-tab="press"
+                  onclick="switchNewsTab('press',this)">Press releases</button>
+        </div>
+        <span id="news-ticker-label"
+              style="font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace"></span>
+      </div>
+      <div id="news-market-list" class="news-list"></div>
+      <div id="news-stock-list"  class="news-list" style="display:none"></div>
+      <div id="news-press-list"  class="news-list" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- GLOBAL MARKETS PAGE -->
+  <div id="page-markets" class="tab-page">
+    <div class="fin-section">
+      <div style="display:flex;gap:8px;margin-bottom:1rem">
+        <button class="pill-toggle active" data-markets-tab="crypto"
+                onclick="switchMarketsTab('crypto',this)">Crypto</button>
+        <button class="pill-toggle" data-markets-tab="forex"
+                onclick="switchMarketsTab('forex',this)">Forex</button>
+      </div>
+      <div id="markets-crypto-wrap"></div>
+      <div id="markets-forex-wrap" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- GLOBAL SCREENER PAGE -->
+  <div id="page-screener" class="tab-page">
+    <div class="fin-section">
+      <div id="screener-filters"
+           style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.25rem">
+        <div class="scr-filter-group">
+          <label class="scr-label">Sector</label>
+          <select id="scr-sector" class="scr-select">
+            <option value="">All sectors</option>
+            <option>Technology</option>
+            <option>Healthcare</option>
+            <option>Financials</option>
+            <option>Consumer Cyclical</option>
+            <option>Consumer Defensive</option>
+            <option>Industrials</option>
+            <option>Energy</option>
+            <option>Utilities</option>
+            <option>Real Estate</option>
+            <option>Basic Materials</option>
+            <option>Communication Services</option>
+          </select>
+        </div>
+        <div class="scr-filter-group">
+          <label class="scr-label">Market cap</label>
+          <select id="scr-mktcap" class="scr-select">
+            <option value="">Any</option>
+            <option value="mega">Mega (&gt;$200B)</option>
+            <option value="large">Large ($10B–$200B)</option>
+            <option value="mid">Mid ($2B–$10B)</option>
+            <option value="small">Small ($300M–$2B)</option>
+            <option value="micro">Micro (&lt;$300M)</option>
+          </select>
+        </div>
+        <div class="scr-filter-group">
+          <label class="scr-label">Min price ($)</label>
+          <input id="scr-price-min" type="number" class="scr-input" placeholder="0" min="0">
+        </div>
+        <div class="scr-filter-group">
+          <label class="scr-label">Max price ($)</label>
+          <input id="scr-price-max" type="number" class="scr-input" placeholder="Any" min="0">
+        </div>
+        <div class="scr-filter-group">
+          <label class="scr-label">Min volume</label>
+          <input id="scr-vol-min" type="number" class="scr-input" placeholder="0" min="0">
+        </div>
+        <div class="scr-filter-group">
+          <label class="scr-label">Min dividend yield (%)</label>
+          <input id="scr-div-min" type="number" class="scr-input"
+                 placeholder="0" min="0" step="0.1">
+        </div>
+        <div class="scr-filter-group" style="align-self:end">
+          <button class="scr-run-btn" onclick="runScreener()">Run screener</button>
+        </div>
+      </div>
+      <div id="screener-status"
+           style="font-size:12px;color:var(--muted);margin-bottom:8px"></div>
+      <div id="screener-results"></div>
+    </div>
+  </div>
+
 </div><!-- /stock-content -->
 
 <script>
@@ -1471,6 +1643,12 @@ function switchTab(id){
   document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));
   document.getElementById('page-'+id).classList.add('active');
+  switch(id){
+    case 'news':       loadNewsTab();      break;
+    case 'markets':    loadMarketsTab();   break;
+    case 'screener':   /* fires on demand */ break;
+    case 'stock-news': loadStockNewsTab(); break;
+  }
 }
 
 // ── Render all ──
@@ -3315,6 +3493,514 @@ async function aiAnalysis(type){
   }catch(e){el.textContent=`Error: ${e.message}`;}
   el.classList.remove('streaming');
   document.querySelectorAll('.btn').forEach(b=>b.disabled=false);
+}
+
+// =============================================================
+//  INSIGHTINVEST — NEWS · MARKETS · SCREENER MODULES
+// =============================================================
+
+
+// ─────────────────────────────────────────────────────────────
+//  NEWS MODULE — global news tab (market + stock + press)
+// ─────────────────────────────────────────────────────────────
+
+let _newsFetched  = false;   // market news fetched once per session
+let _newsStockSym = null;    // last ticker fetched for stock news
+
+async function loadNewsTab() {
+  const key = getFmpKey();
+  if (!key) { showNewsError('Add your FMP key to load news.'); return; }
+
+  // Market news — fetch once per session
+  if (!_newsFetched) {
+    document.getElementById('news-market-list').innerHTML = newsLoadingHTML();
+    try {
+      const data = await fmpFetch(`/stock_market/news?limit=40&apikey=${key}`);
+      _newsFetched = true;
+      renderNewsListWithSnippet('news-market-list', Array.isArray(data) ? data : []);
+    } catch (e) {
+      document.getElementById('news-market-list').innerHTML =
+        `<p class="news-empty">Failed to load market news.</p>`;
+    }
+  }
+
+  // Stock-specific news — re-fetch only if ticker changed
+  const sym = S.profile?.symbol;
+  const label = document.getElementById('news-ticker-label');
+  if (label) label.textContent = sym || '';
+
+  if (sym && sym !== _newsStockSym) {
+    _newsStockSym = sym;
+    document.getElementById('news-stock-list').innerHTML = newsLoadingHTML();
+    document.getElementById('news-press-list').innerHTML = newsLoadingHTML();
+    try {
+      const [stockNews, pressRel] = await Promise.all([
+        fmpFetch(`/stock_news?tickers=${sym}&limit=30&apikey=${key}`),
+        fmpFetch(`/press-releases/${sym}?limit=20&apikey=${key}`)
+      ]);
+      renderNewsListWithSnippet('news-stock-list', Array.isArray(stockNews) ? stockNews : []);
+      renderPressListWithSnippet('news-press-list', Array.isArray(pressRel) ? pressRel : []);
+    } catch (e) {
+      document.getElementById('news-stock-list').innerHTML =
+        `<p class="news-empty">Failed to load stock news.</p>`;
+    }
+  }
+}
+
+function switchNewsTab(tab, btn) {
+  ['market', 'stock', 'press'].forEach(t => {
+    document.getElementById(`news-${t}-list`).style.display = t === tab ? '' : 'none';
+  });
+  document.querySelectorAll('[data-news-tab]').forEach(b =>
+    b.classList.toggle('active', b.dataset.newsTab === tab));
+  if ((tab === 'stock' || tab === 'press') && S.profile?.symbol) loadNewsTab();
+}
+
+function showNewsError(msg) {
+  ['market', 'stock', 'press'].forEach(t =>
+    document.getElementById(`news-${t}-list`).innerHTML =
+      `<p class="news-empty">${msg}</p>`);
+}
+
+function newsLoadingHTML() {
+  return `<p class="news-empty">Loading…</p>`;
+}
+
+
+// ─────────────────────────────────────────────────────────────
+//  STOCK NEWS TAB — per-ticker, lives on the stock research page
+// ─────────────────────────────────────────────────────────────
+
+let _stockNewsSym = null;   // last ticker loaded on the stock news tab
+
+async function loadStockNewsTab() {
+  const key = getFmpKey();
+  const sym = S.profile?.symbol;
+
+  const label = document.getElementById('stock-news-label');
+  if (label) label.textContent = sym || '';
+
+  if (!key) {
+    document.getElementById('stock-news-status').textContent =
+      'Add your FMP key to load news.';
+    return;
+  }
+  if (!sym) {
+    document.getElementById('stock-news-status').textContent =
+      'Search for a stock first.';
+    return;
+  }
+
+  // Skip re-fetch if same ticker
+  if (sym === _stockNewsSym) return;
+  _stockNewsSym = sym;
+
+  document.getElementById('stock-news-status').textContent = 'Loading…';
+  document.getElementById('stock-news-articles').innerHTML = '';
+  document.getElementById('stock-news-press').innerHTML    = '';
+
+  try {
+    const [articles, press] = await Promise.all([
+      fmpFetch(`/stock_news?tickers=${sym}&limit=40&apikey=${key}`),
+      fmpFetch(`/press-releases/${sym}?limit=20&apikey=${key}`)
+    ]);
+
+    const articleList = Array.isArray(articles) ? articles : [];
+    const pressList   = Array.isArray(press)    ? press    : [];
+
+    document.getElementById('stock-news-status').textContent =
+      `${articleList.length} article${articleList.length !== 1 ? 's' : ''} · ` +
+      `${pressList.length} press release${pressList.length !== 1 ? 's' : ''}`;
+
+    renderNewsListWithSnippet('stock-news-articles', articleList);
+    renderPressListWithSnippet('stock-news-press',   pressList);
+
+    // Sync into global News tab so it doesn't re-fetch
+    const gStock = document.getElementById('news-stock-list');
+    const gPress = document.getElementById('news-press-list');
+    if (gStock) renderNewsListWithSnippet('news-stock-list', articleList);
+    if (gPress) renderPressListWithSnippet('news-press-list', pressList);
+    _newsStockSym = sym;
+
+  } catch (e) {
+    document.getElementById('stock-news-status').textContent = 'Failed to load news.';
+    document.getElementById('stock-news-articles').innerHTML =
+      `<p class="news-empty">Something went wrong. Check your FMP key.</p>`;
+  }
+}
+
+function switchStockNewsTab(tab, btn) {
+  document.getElementById('stock-news-articles').style.display =
+    tab === 'articles' ? '' : 'none';
+  document.getElementById('stock-news-press').style.display =
+    tab === 'press' ? '' : 'none';
+  document.querySelectorAll('[data-sn-tab]').forEach(b =>
+    b.classList.toggle('active', b.dataset.snTab === tab));
+}
+
+
+// ─────────────────────────────────────────────────────────────
+//  SHARED NEWS RENDERERS
+// ─────────────────────────────────────────────────────────────
+
+function renderNewsListWithSnippet(containerId, items) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  if (!items.length) {
+    el.innerHTML = `<p class="news-empty">No articles found.</p>`;
+    return;
+  }
+  el.innerHTML = items.map(n => {
+    const sent      = (n.sentiment || '').toLowerCase();
+    const sentClass = sent === 'positive' ? 'sent-positive'
+                    : sent === 'negative' ? 'sent-negative'
+                    : 'sent-neutral';
+    const sentLabel = sent === 'positive' ? 'Positive'
+                    : sent === 'negative' ? 'Negative'
+                    : 'Neutral';
+    const age     = timeAgo(n.publishedDate || n.date);
+    const snippet = n.text ? n.text.slice(0, 180).trim() + '…' : '';
+    return `
+      <div class="news-card" onclick="window.open('${esc(n.url)}','_blank')">
+        <div class="news-card-header">
+          <div class="news-card-title">${esc(n.title)}</div>
+          <div class="news-card-sentiment ${sentClass}">${sentLabel}</div>
+        </div>
+        ${snippet ? `<div class="news-card-snippet">${esc(snippet)}</div>` : ''}
+        <div class="news-card-meta">${esc(n.site || n.source || '')} · ${age}</div>
+      </div>`;
+  }).join('');
+}
+
+function renderPressListWithSnippet(containerId, items) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  if (!items.length) {
+    el.innerHTML = `<p class="news-empty">No press releases found.</p>`;
+    return;
+  }
+  el.innerHTML = items.map(n => {
+    const age     = timeAgo(n.date);
+    const snippet = n.text ? n.text.slice(0, 180).trim() + '…' : '';
+    return `
+      <div class="news-card" onclick="window.open('${esc(n.url || '#')}','_blank')">
+        <div class="news-card-header">
+          <div class="news-card-title">${esc(n.title)}</div>
+          <div class="news-card-sentiment sent-neutral">PR</div>
+        </div>
+        ${snippet ? `<div class="news-card-snippet">${esc(snippet)}</div>` : ''}
+        <div class="news-card-meta">${esc(n.symbol || '')} · ${age}</div>
+      </div>`;
+  }).join('');
+}
+
+
+// ─────────────────────────────────────────────────────────────
+//  MARKETS MODULE — crypto + forex (ticker-independent)
+// ─────────────────────────────────────────────────────────────
+
+let _marketsFetched = false;
+let _cryptoData     = [];
+let _forexData      = [];
+
+async function loadMarketsTab() {
+  const key = getFmpKey();
+  if (!key) {
+    document.getElementById('markets-crypto-wrap').innerHTML =
+      `<p class="news-empty">Add your FMP key to load market data.</p>`;
+    return;
+  }
+  if (_marketsFetched) return;
+
+  document.getElementById('markets-crypto-wrap').innerHTML =
+    `<p class="news-empty">Loading crypto…</p>`;
+  document.getElementById('markets-forex-wrap').innerHTML =
+    `<p class="news-empty">Loading forex…</p>`;
+
+  try {
+    const [crypto, forex] = await Promise.all([
+      fmpFetch(`/quotes/crypto?apikey=${key}`),
+      fmpFetch(`/quotes/forex?apikey=${key}`)
+    ]);
+    _cryptoData     = Array.isArray(crypto) ? crypto : [];
+    _forexData      = Array.isArray(forex)  ? forex  : [];
+    _marketsFetched = true;
+    renderCryptoTable(_cryptoData);
+    renderForexTable(_forexData);
+  } catch (e) {
+    document.getElementById('markets-crypto-wrap').innerHTML =
+      `<p class="news-empty">Failed to load market data.</p>`;
+  }
+}
+
+function renderCryptoTable(data) {
+  const wrap = document.getElementById('markets-crypto-wrap');
+  if (!data.length) { wrap.innerHTML = `<p class="news-empty">No data.</p>`; return; }
+
+  const rows = [...data]
+    .filter(d => d.marketCap > 0)
+    .sort((a, b) => b.marketCap - a.marketCap)
+    .slice(0, 80);
+
+  wrap.innerHTML = `
+    <input class="markets-search" placeholder="Search crypto…"
+           oninput="filterMarketsTable(this,'crypto-tbody')">
+    <table class="markets-table">
+      <thead><tr>
+        <th>#</th>
+        <th>Symbol</th>
+        <th>Name</th>
+        <th style="text-align:right">Price</th>
+        <th style="text-align:right">24h change</th>
+        <th style="text-align:right">Market cap</th>
+        <th style="text-align:right">Volume</th>
+      </tr></thead>
+      <tbody id="crypto-tbody">
+        ${rows.map((d, i) => {
+          const chg  = d.changesPercentage ?? 0;
+          const cls  = chg >= 0 ? 'chg-pos' : 'chg-neg';
+          const sign = chg >= 0 ? '+' : '';
+          return `<tr>
+            <td style="color:var(--muted)">${i + 1}</td>
+            <td class="sym">${esc(d.symbol?.replace('/USD', '') || '')}</td>
+            <td style="color:var(--muted);font-size:12px">${esc(d.name || '')}</td>
+            <td style="text-align:right">$${fmtN(d.price)}</td>
+            <td style="text-align:right" class="${cls}">${sign}${chg.toFixed(2)}%</td>
+            <td style="text-align:right">$${fmtCap(d.marketCap)}</td>
+            <td style="text-align:right">$${fmtCap(d.volume)}</td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>`;
+}
+
+function renderForexTable(data) {
+  const wrap = document.getElementById('markets-forex-wrap');
+  if (!data.length) { wrap.innerHTML = `<p class="news-empty">No data.</p>`; return; }
+
+  const major = ['USD','EUR','GBP','JPY','AUD','CAD','CHF','NZD','SGD','HKD'];
+  const rows  = data
+    .filter(d => major.some(c => (d.symbol || '').includes(c)))
+    .sort((a, b) => (a.symbol || '').localeCompare(b.symbol || ''))
+    .slice(0, 60);
+
+  wrap.innerHTML = `
+    <input class="markets-search" placeholder="Search pair…"
+           oninput="filterMarketsTable(this,'forex-tbody')">
+    <table class="markets-table">
+      <thead><tr>
+        <th>Pair</th>
+        <th style="text-align:right">Rate</th>
+        <th style="text-align:right">Bid</th>
+        <th style="text-align:right">Ask</th>
+        <th style="text-align:right">Change</th>
+        <th style="text-align:right">Change %</th>
+      </tr></thead>
+      <tbody id="forex-tbody">
+        ${rows.map(d => {
+          const chg  = d.changesPercentage ?? 0;
+          const cls  = chg >= 0 ? 'chg-pos' : 'chg-neg';
+          const sign = chg >= 0 ? '+' : '';
+          return `<tr>
+            <td class="sym">${esc(d.symbol || '')}</td>
+            <td style="text-align:right">${(d.price  || 0).toFixed(4)}</td>
+            <td style="text-align:right;color:var(--muted)">${(d.bid || 0).toFixed(4)}</td>
+            <td style="text-align:right;color:var(--muted)">${(d.ask || 0).toFixed(4)}</td>
+            <td style="text-align:right" class="${cls}">${sign}${(d.change || 0).toFixed(4)}</td>
+            <td style="text-align:right" class="${cls}">${sign}${chg.toFixed(2)}%</td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>`;
+}
+
+function switchMarketsTab(tab, btn) {
+  document.getElementById('markets-crypto-wrap').style.display =
+    tab === 'crypto' ? '' : 'none';
+  document.getElementById('markets-forex-wrap').style.display =
+    tab === 'forex' ? '' : 'none';
+  document.querySelectorAll('[data-markets-tab]').forEach(b =>
+    b.classList.toggle('active', b.dataset.marketsTab === tab));
+}
+
+function filterMarketsTable(input, tbodyId) {
+  const q = input.value.toLowerCase();
+  document.querySelectorAll(`#${tbodyId} tr`).forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+
+// ─────────────────────────────────────────────────────────────
+//  SCREENER MODULE
+// ─────────────────────────────────────────────────────────────
+
+let _screenerSort = { col: 'marketCap', dir: 'desc' };
+let _screenerData = [];
+
+async function runScreener() {
+  const key = getFmpKey();
+  if (!key) {
+    document.getElementById('screener-status').textContent = 'Add your FMP key first.';
+    return;
+  }
+
+  const btn = document.querySelector('.scr-run-btn');
+  btn.disabled    = true;
+  btn.textContent = 'Fetching…';
+  document.getElementById('screener-status').textContent  = '';
+  document.getElementById('screener-results').innerHTML   = '';
+
+  const params = new URLSearchParams({
+    apikey:   key,
+    limit:    50,
+    exchange: 'NYSE,NASDAQ,AMEX'
+  });
+
+  const sector   = document.getElementById('scr-sector').value;
+  const mktcap   = document.getElementById('scr-mktcap').value;
+  const priceMin = document.getElementById('scr-price-min').value;
+  const priceMax = document.getElementById('scr-price-max').value;
+  const volMin   = document.getElementById('scr-vol-min').value;
+  const divMin   = document.getElementById('scr-div-min').value;
+
+  if (sector)   params.set('sector', sector);
+  if (priceMin) params.set('priceMoreThan', priceMin);
+  if (priceMax) params.set('priceLowerThan', priceMax);
+  if (volMin)   params.set('volumeMoreThan', volMin);
+  if (divMin)   params.set('dividendMoreThan', divMin);
+
+  const capMap = {
+    mega:  [200e9, null],
+    large: [10e9,  200e9],
+    mid:   [2e9,   10e9],
+    small: [300e6, 2e9],
+    micro: [null,  300e6]
+  };
+  if (mktcap && capMap[mktcap]) {
+    const [mn, mx] = capMap[mktcap];
+    if (mn) params.set('marketCapMoreThan',  mn);
+    if (mx) params.set('marketCapLowerThan', mx);
+  }
+
+  try {
+    const data    = await fmpFetch(`/stock-screener?${params.toString()}`);
+    _screenerData = Array.isArray(data) ? data : [];
+    document.getElementById('screener-status').textContent =
+      `${_screenerData.length} result${_screenerData.length !== 1 ? 's' : ''}`;
+    renderScreenerTable(_screenerData);
+  } catch (e) {
+    document.getElementById('screener-status').textContent = 'Error fetching results.';
+  } finally {
+    btn.disabled    = false;
+    btn.textContent = 'Run screener';
+  }
+}
+
+function renderScreenerTable(data) {
+  const wrap = document.getElementById('screener-results');
+  if (!data.length) {
+    wrap.innerHTML = `<p class="news-empty">No results. Try adjusting your filters.</p>`;
+    return;
+  }
+
+  const { col, dir } = _screenerSort;
+  const sorted = [...data].sort((a, b) => {
+    const av = a[col] ?? -Infinity;
+    const bv = b[col] ?? -Infinity;
+    return dir === 'asc' ? av - bv : bv - av;
+  });
+
+  const cols = [
+    { key: 'symbol',            label: 'Ticker',     numeric: false },
+    { key: 'companyName',       label: 'Company',    numeric: false },
+    { key: 'sector',            label: 'Sector',     numeric: false },
+    { key: 'price',             label: 'Price',      numeric: true  },
+    { key: 'changesPercentage', label: 'Change %',   numeric: true  },
+    { key: 'marketCap',         label: 'Mkt cap',    numeric: true  },
+    { key: 'volume',            label: 'Volume',     numeric: true  },
+    { key: 'pe',                label: 'P/E',        numeric: true  },
+    { key: 'dividendYield',     label: 'Div yield',  numeric: true  },
+  ];
+
+  wrap.innerHTML = `
+    <table class="screener-table">
+      <thead><tr>
+        ${cols.map(c => {
+          const isSorted = _screenerSort.col === c.key;
+          const cls      = isSorted ? `sort-${_screenerSort.dir}` : '';
+          return `<th class="${cls}"
+                      onclick="sortScreener('${c.key}')"
+                      style="${c.numeric ? 'text-align:right' : ''}">
+                    ${c.label}
+                  </th>`;
+        }).join('')}
+      </tr></thead>
+      <tbody>
+        ${sorted.map(d => {
+          const chg  = d.changesPercentage ?? 0;
+          const cls  = chg >= 0 ? 'chg-pos' : 'chg-neg';
+          const sign = chg >= 0 ? '+' : '';
+          return `<tr onclick="selectResult('${esc(d.symbol)}')">
+            <td class="sym">${esc(d.symbol)}</td>
+            <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis">
+              ${esc(d.companyName || '')}
+            </td>
+            <td style="color:var(--muted);font-size:11.5px">${esc(d.sector || '')}</td>
+            <td style="text-align:right">$${fmtN(d.price)}</td>
+            <td style="text-align:right" class="${cls}">${sign}${chg.toFixed(2)}%</td>
+            <td style="text-align:right">$${fmtCap(d.marketCap)}</td>
+            <td style="text-align:right">${fmtCap(d.volume)}</td>
+            <td style="text-align:right">${d.pe            ? fmtN(d.pe)                    : '—'}</td>
+            <td style="text-align:right">${d.dividendYield ? d.dividendYield.toFixed(2)+'%' : '—'}</td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>`;
+}
+
+function sortScreener(col) {
+  _screenerSort = {
+    col,
+    dir: _screenerSort.col === col && _screenerSort.dir === 'desc' ? 'asc' : 'desc'
+  };
+  renderScreenerTable(_screenerData);
+}
+
+
+// ─────────────────────────────────────────────────────────────
+//  SHARED UTILITIES
+// ─────────────────────────────────────────────────────────────
+
+function fmtCap(n) {
+  if (!n || isNaN(n)) return '—';
+  if (n >= 1e12) return (n / 1e12).toFixed(2) + 'T';
+  if (n >= 1e9)  return (n / 1e9).toFixed(2)  + 'B';
+  if (n >= 1e6)  return (n / 1e6).toFixed(1)  + 'M';
+  if (n >= 1e3)  return (n / 1e3).toFixed(1)  + 'K';
+  return String(n);
+}
+
+function timeAgo(dateStr) {
+  if (!dateStr) return '';
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const m    = Math.floor(diff / 60000);
+  if (m < 1)  return 'just now';
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h ago`;
+  const d = Math.floor(h / 24);
+  if (d < 30) return `${d}d ago`;
+  return new Date(dateStr).toLocaleDateString();
+}
+
+function esc(str) {
+  return String(str ?? '')
+    .replace(/&/g,  '&amp;')
+    .replace(/</g,  '&lt;')
+    .replace(/>/g,  '&gt;')
+    .replace(/"/g,  '&quot;')
+    .replace(/'/g,  '&#39;');
 }
 
 // ── Init ──
