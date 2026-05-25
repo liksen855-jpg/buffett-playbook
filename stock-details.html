@@ -3511,11 +3511,11 @@ async function loadNewsTab() {
   const key = getFmpKey();
   if (!key) { showNewsError('Add your FMP key to load news.'); return; }
 
-  // Market news — fetch once per session
+  // Market news — fetch once per session (FMP-curated articles)
   if (!_newsFetched) {
     document.getElementById('news-market-list').innerHTML = newsLoadingHTML();
     try {
-      const data = await fmpFetch(`/stock_market/news?limit=40&apikey=${key}`);
+      const data = await fmpFetch(`/fmp-articles?limit=40`);
       _newsFetched = true;
       renderNewsListWithSnippet('news-market-list', Array.isArray(data) ? data : []);
     } catch (e) {
@@ -3532,14 +3532,12 @@ async function loadNewsTab() {
   if (sym && sym !== _newsStockSym) {
     _newsStockSym = sym;
     document.getElementById('news-stock-list').innerHTML = newsLoadingHTML();
-    document.getElementById('news-press-list').innerHTML = newsLoadingHTML();
+    // Press releases require an FMP premium tier — show a notice instead of 402-spamming
+    document.getElementById('news-press-list').innerHTML =
+      `<p class="news-empty">Press releases require an FMP premium subscription.</p>`;
     try {
-      const [stockNews, pressRel] = await Promise.all([
-        fmpFetch(`/stock_news?tickers=${sym}&limit=30&apikey=${key}`),
-        fmpFetch(`/press-releases/${sym}?limit=20&apikey=${key}`)
-      ]);
+      const stockNews = await fmpFetch(`/news/stock?symbols=${sym}&limit=30`);
       renderNewsListWithSnippet('news-stock-list', Array.isArray(stockNews) ? stockNews : []);
-      renderPressListWithSnippet('news-press-list', Array.isArray(pressRel) ? pressRel : []);
     } catch (e) {
       document.getElementById('news-stock-list').innerHTML =
         `<p class="news-empty">Failed to load stock news.</p>`;
@@ -3597,29 +3595,21 @@ async function loadStockNewsTab() {
 
   document.getElementById('stock-news-status').textContent = 'Loading…';
   document.getElementById('stock-news-articles').innerHTML = '';
-  document.getElementById('stock-news-press').innerHTML    = '';
+  document.getElementById('stock-news-press').innerHTML =
+    `<p class="news-empty">Press releases require an FMP premium subscription.</p>`;
 
   try {
-    const [articles, press] = await Promise.all([
-      fmpFetch(`/stock_news?tickers=${sym}&limit=40&apikey=${key}`),
-      fmpFetch(`/press-releases/${sym}?limit=20&apikey=${key}`)
-    ]);
-
+    const articles = await fmpFetch(`/news/stock?symbols=${sym}&limit=40`);
     const articleList = Array.isArray(articles) ? articles : [];
-    const pressList   = Array.isArray(press)    ? press    : [];
 
     document.getElementById('stock-news-status').textContent =
-      `${articleList.length} article${articleList.length !== 1 ? 's' : ''} · ` +
-      `${pressList.length} press release${pressList.length !== 1 ? 's' : ''}`;
+      `${articleList.length} article${articleList.length !== 1 ? 's' : ''}`;
 
     renderNewsListWithSnippet('stock-news-articles', articleList);
-    renderPressListWithSnippet('stock-news-press',   pressList);
 
     // Sync into global News tab so it doesn't re-fetch
     const gStock = document.getElementById('news-stock-list');
-    const gPress = document.getElementById('news-press-list');
     if (gStock) renderNewsListWithSnippet('news-stock-list', articleList);
-    if (gPress) renderPressListWithSnippet('news-press-list', pressList);
     _newsStockSym = sym;
 
   } catch (e) {
@@ -3651,6 +3641,14 @@ function renderNewsListWithSnippet(containerId, items) {
     return;
   }
   el.innerHTML = items.map(n => {
+    // Normalize across two FMP shapes: news/stock (url, text, publishedDate, site)
+    // and fmp-articles (link, content [HTML], date, site)
+    const url   = n.url || n.link || '';
+    const date  = n.publishedDate || n.date || '';
+    const site  = n.site || n.publisher || n.source || '';
+    let text    = n.text || '';
+    if (!text && n.content) text = n.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+
     const sent      = (n.sentiment || '').toLowerCase();
     const sentClass = sent === 'positive' ? 'sent-positive'
                     : sent === 'negative' ? 'sent-negative'
@@ -3658,16 +3656,16 @@ function renderNewsListWithSnippet(containerId, items) {
     const sentLabel = sent === 'positive' ? 'Positive'
                     : sent === 'negative' ? 'Negative'
                     : 'Neutral';
-    const age     = timeAgo(n.publishedDate || n.date);
-    const snippet = n.text ? n.text.slice(0, 180).trim() + '…' : '';
+    const age     = timeAgo(date);
+    const snippet = text ? text.slice(0, 180).trim() + '…' : '';
     return `
-      <div class="news-card" onclick="window.open('${esc(n.url)}','_blank')">
+      <div class="news-card" onclick="window.open('${esc(url)}','_blank')">
         <div class="news-card-header">
           <div class="news-card-title">${esc(n.title)}</div>
           <div class="news-card-sentiment ${sentClass}">${sentLabel}</div>
         </div>
         ${snippet ? `<div class="news-card-snippet">${esc(snippet)}</div>` : ''}
-        <div class="news-card-meta">${esc(n.site || n.source || '')} · ${age}</div>
+        <div class="news-card-meta">${esc(site)} · ${age}</div>
       </div>`;
   }).join('');
 }
@@ -3703,6 +3701,18 @@ let _marketsFetched = false;
 let _cryptoData     = [];
 let _forexData      = [];
 
+// Top symbols — FMP stable API doesn't expose a batch /quotes endpoint
+// so we make individual /quote calls in parallel for these.
+const TOP_CRYPTO = [
+  'BTCUSD','ETHUSD','USDTUSD','BNBUSD','XRPUSD','SOLUSD','USDCUSD','ADAUSD',
+  'DOGEUSD','TRXUSD','AVAXUSD','LINKUSD','DOTUSD','BCHUSD','LTCUSD',
+  'NEARUSD','ATOMUSD','UNIUSD','ICPUSD','FILUSD','APTUSD','XLMUSD','HBARUSD','ARBUSD'
+];
+const TOP_FOREX = [
+  'EURUSD','GBPUSD','USDJPY','AUDUSD','USDCAD','USDCHF','NZDUSD',
+  'USDSGD','USDHKD','EURGBP','EURJPY','GBPJPY','USDCNY','USDINR','USDMXN','USDBRL','USDZAR','USDTRY'
+];
+
 async function loadMarketsTab() {
   const key = getFmpKey();
   if (!key) {
@@ -3717,13 +3727,15 @@ async function loadMarketsTab() {
   document.getElementById('markets-forex-wrap').innerHTML =
     `<p class="news-empty">Loading forex…</p>`;
 
+  const fetchOne = sym => fmpFetch(`/quote?symbol=${sym}`).then(r => r?.[0]).catch(() => null);
+
   try {
     const [crypto, forex] = await Promise.all([
-      fmpFetch(`/quotes/crypto?apikey=${key}`),
-      fmpFetch(`/quotes/forex?apikey=${key}`)
+      Promise.all(TOP_CRYPTO.map(fetchOne)),
+      Promise.all(TOP_FOREX.map(fetchOne)),
     ]);
-    _cryptoData     = Array.isArray(crypto) ? crypto : [];
-    _forexData      = Array.isArray(forex)  ? forex  : [];
+    _cryptoData     = crypto.filter(x => x && x.symbol);
+    _forexData      = forex.filter(x => x && x.symbol);
     _marketsFetched = true;
     renderCryptoTable(_cryptoData);
     renderForexTable(_forexData);
@@ -3737,10 +3749,8 @@ function renderCryptoTable(data) {
   const wrap = document.getElementById('markets-crypto-wrap');
   if (!data.length) { wrap.innerHTML = `<p class="news-empty">No data.</p>`; return; }
 
-  const rows = [...data]
-    .filter(d => d.marketCap > 0)
-    .sort((a, b) => b.marketCap - a.marketCap)
-    .slice(0, 80);
+  // Already in input order; keep that order (top by popularity)
+  const rows = [...data];
 
   wrap.innerHTML = `
     <input class="markets-search" placeholder="Search crypto…"
@@ -3752,22 +3762,24 @@ function renderCryptoTable(data) {
         <th>Name</th>
         <th style="text-align:right">Price</th>
         <th style="text-align:right">24h change</th>
-        <th style="text-align:right">Market cap</th>
+        <th style="text-align:right">Day high</th>
+        <th style="text-align:right">Day low</th>
         <th style="text-align:right">Volume</th>
       </tr></thead>
       <tbody id="crypto-tbody">
         ${rows.map((d, i) => {
-          const chg  = d.changesPercentage ?? 0;
+          const chg  = d.changePercentage ?? d.changesPercentage ?? 0;
           const cls  = chg >= 0 ? 'chg-pos' : 'chg-neg';
           const sign = chg >= 0 ? '+' : '';
           return `<tr>
             <td style="color:var(--muted)">${i + 1}</td>
-            <td class="sym">${esc(d.symbol?.replace('/USD', '') || '')}</td>
+            <td class="sym">${esc((d.symbol || '').replace('USD', ''))}</td>
             <td style="color:var(--muted);font-size:12px">${esc(d.name || '')}</td>
             <td style="text-align:right">$${fmtN(d.price)}</td>
             <td style="text-align:right" class="${cls}">${sign}${chg.toFixed(2)}%</td>
-            <td style="text-align:right">$${fmtCap(d.marketCap)}</td>
-            <td style="text-align:right">$${fmtCap(d.volume)}</td>
+            <td style="text-align:right;color:var(--muted)">$${fmtN(d.dayHigh)}</td>
+            <td style="text-align:right;color:var(--muted)">$${fmtN(d.dayLow)}</td>
+            <td style="text-align:right">${fmtCap(d.volume)}</td>
           </tr>`;
         }).join('')}
       </tbody>
@@ -3778,11 +3790,8 @@ function renderForexTable(data) {
   const wrap = document.getElementById('markets-forex-wrap');
   if (!data.length) { wrap.innerHTML = `<p class="news-empty">No data.</p>`; return; }
 
-  const major = ['USD','EUR','GBP','JPY','AUD','CAD','CHF','NZD','SGD','HKD'];
-  const rows  = data
-    .filter(d => major.some(c => (d.symbol || '').includes(c)))
-    .sort((a, b) => (a.symbol || '').localeCompare(b.symbol || ''))
-    .slice(0, 60);
+  // Keep input order — top by liquidity
+  const rows = [...data];
 
   wrap.innerHTML = `
     <input class="markets-search" placeholder="Search pair…"
@@ -3791,21 +3800,21 @@ function renderForexTable(data) {
       <thead><tr>
         <th>Pair</th>
         <th style="text-align:right">Rate</th>
-        <th style="text-align:right">Bid</th>
-        <th style="text-align:right">Ask</th>
+        <th style="text-align:right">Open</th>
+        <th style="text-align:right">Prev close</th>
         <th style="text-align:right">Change</th>
         <th style="text-align:right">Change %</th>
       </tr></thead>
       <tbody id="forex-tbody">
         ${rows.map(d => {
-          const chg  = d.changesPercentage ?? 0;
+          const chg  = d.changePercentage ?? d.changesPercentage ?? 0;
           const cls  = chg >= 0 ? 'chg-pos' : 'chg-neg';
           const sign = chg >= 0 ? '+' : '';
           return `<tr>
             <td class="sym">${esc(d.symbol || '')}</td>
             <td style="text-align:right">${(d.price  || 0).toFixed(4)}</td>
-            <td style="text-align:right;color:var(--muted)">${(d.bid || 0).toFixed(4)}</td>
-            <td style="text-align:right;color:var(--muted)">${(d.ask || 0).toFixed(4)}</td>
+            <td style="text-align:right;color:var(--muted)">${(d.open || 0).toFixed(4)}</td>
+            <td style="text-align:right;color:var(--muted)">${(d.previousClose || 0).toFixed(4)}</td>
             <td style="text-align:right" class="${cls}">${sign}${(d.change || 0).toFixed(4)}</td>
             <td style="text-align:right" class="${cls}">${sign}${chg.toFixed(2)}%</td>
           </tr>`;
@@ -3852,7 +3861,6 @@ async function runScreener() {
   document.getElementById('screener-results').innerHTML   = '';
 
   const params = new URLSearchParams({
-    apikey:   key,
     limit:    50,
     exchange: 'NYSE,NASDAQ,AMEX'
   });
@@ -3884,7 +3892,7 @@ async function runScreener() {
   }
 
   try {
-    const data    = await fmpFetch(`/stock-screener?${params.toString()}`);
+    const data    = await fmpFetch(`/company-screener?${params.toString()}`);
     _screenerData = Array.isArray(data) ? data : [];
     document.getElementById('screener-status').textContent =
       `${_screenerData.length} result${_screenerData.length !== 1 ? 's' : ''}`;
@@ -3912,15 +3920,15 @@ function renderScreenerTable(data) {
   });
 
   const cols = [
-    { key: 'symbol',            label: 'Ticker',     numeric: false },
-    { key: 'companyName',       label: 'Company',    numeric: false },
-    { key: 'sector',            label: 'Sector',     numeric: false },
-    { key: 'price',             label: 'Price',      numeric: true  },
-    { key: 'changesPercentage', label: 'Change %',   numeric: true  },
-    { key: 'marketCap',         label: 'Mkt cap',    numeric: true  },
-    { key: 'volume',            label: 'Volume',     numeric: true  },
-    { key: 'pe',                label: 'P/E',        numeric: true  },
-    { key: 'dividendYield',     label: 'Div yield',  numeric: true  },
+    { key: 'symbol',             label: 'Ticker',   numeric: false },
+    { key: 'companyName',        label: 'Company',  numeric: false },
+    { key: 'sector',             label: 'Sector',   numeric: false },
+    { key: 'industry',           label: 'Industry', numeric: false },
+    { key: 'price',              label: 'Price',    numeric: true  },
+    { key: 'marketCap',          label: 'Mkt cap',  numeric: true  },
+    { key: 'volume',             label: 'Volume',   numeric: true  },
+    { key: 'beta',               label: 'Beta',     numeric: true  },
+    { key: 'lastAnnualDividend', label: 'Div ($)',  numeric: true  },
   ];
 
   wrap.innerHTML = `
@@ -3938,21 +3946,18 @@ function renderScreenerTable(data) {
       </tr></thead>
       <tbody>
         ${sorted.map(d => {
-          const chg  = d.changesPercentage ?? 0;
-          const cls  = chg >= 0 ? 'chg-pos' : 'chg-neg';
-          const sign = chg >= 0 ? '+' : '';
           return `<tr onclick="selectResult('${esc(d.symbol)}')">
             <td class="sym">${esc(d.symbol)}</td>
             <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis">
               ${esc(d.companyName || '')}
             </td>
             <td style="color:var(--muted);font-size:11.5px">${esc(d.sector || '')}</td>
+            <td style="color:var(--muted);font-size:11.5px">${esc(d.industry || '')}</td>
             <td style="text-align:right">$${fmtN(d.price)}</td>
-            <td style="text-align:right" class="${cls}">${sign}${chg.toFixed(2)}%</td>
             <td style="text-align:right">$${fmtCap(d.marketCap)}</td>
             <td style="text-align:right">${fmtCap(d.volume)}</td>
-            <td style="text-align:right">${d.pe            ? fmtN(d.pe)                    : '—'}</td>
-            <td style="text-align:right">${d.dividendYield ? d.dividendYield.toFixed(2)+'%' : '—'}</td>
+            <td style="text-align:right">${d.beta ? d.beta.toFixed(2) : '—'}</td>
+            <td style="text-align:right">${d.lastAnnualDividend ? '$' + d.lastAnnualDividend.toFixed(2) : '—'}</td>
           </tr>`;
         }).join('')}
       </tbody>
