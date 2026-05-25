@@ -179,12 +179,31 @@ td.strong{color:var(--fg);font-weight:600}
 .fin-section{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px 22px;margin-bottom:14px}
 .fin-title{font-size:15px;font-weight:700;letter-spacing:-.02em;margin-bottom:2px}
 .fin-subtitle{font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.5}
-.fin-ctrl-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
-.fin-sep{color:var(--border2);padding:0 2px;user-select:none}
-.fin-type-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-size:12px;font-weight:500;padding:5px 13px;border-radius:20px;cursor:pointer;transition:all .15s}
-.fin-type-btn.active{background:hsl(222,40%,14%);color:var(--fg);border-color:var(--border2)}
-.fin-period-pill{background:transparent;border:1px solid transparent;color:var(--muted);font-size:12px;font-weight:500;padding:5px 13px;border-radius:20px;cursor:pointer;transition:all .15s}
-.fin-period-pill.active{background:hsl(222,40%,16%);color:var(--fg);border-color:var(--border2);font-weight:600}
+.fin-ctrl-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.fin-sep{color:hsl(220,18%,28%);padding:0 2px;user-select:none;font-weight:200;font-size:18px;line-height:1}
+.fin-pill-group{display:inline-flex;background:hsl(222,35%,12%);border:1px solid hsl(222,28%,16%);border-radius:999px;padding:3px;align-items:center;gap:1px}
+.fin-type-btn,.fin-period-pill{
+  background:transparent;
+  border:none;
+  color:hsl(220,12%,62%);
+  font-size:12.5px;
+  font-weight:500;
+  padding:7px 18px;
+  border-radius:999px;
+  cursor:pointer;
+  transition:background .15s,color .15s;
+  white-space:nowrap;
+  letter-spacing:-.005em;
+  font-family:'Geist','Inter',ui-sans-serif,system-ui,sans-serif;
+}
+.fin-type-btn:hover,.fin-period-pill:hover{color:var(--fg2)}
+.fin-type-btn.active,.fin-period-pill.active{
+  background:hsl(220,28%,90%);
+  color:hsl(222,40%,8%);
+  font-weight:600;
+}
+.fin-lock-icon{display:inline-flex;align-items:center;color:hsl(45,55%,52%);margin-left:4px;padding-right:8px}
+.fin-lock-icon svg{width:14px;height:14px}
 .fin-chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:800px){.fin-chart-grid{grid-template-columns:1fr}}
 .fin-chart-box{border:1px solid var(--border);border-radius:8px;padding:12px 14px 8px;background:var(--bg)}
@@ -779,11 +798,15 @@ td.strong{color:var(--fg);font-weight:600}
       <div class="fin-title">Financials Trend Chart</div>
       <div class="fin-subtitle">All numbers are in USD millions, except per-share data, ratios, and percentages.</div>
       <div class="fin-ctrl-row">
-        <button class="fin-type-btn active" id="fin-line-btn" onclick="switchFinChartType('line')">Line Chart</button>
-        <button class="fin-type-btn"        id="fin-bar-btn"  onclick="switchFinChartType('bar')">Bar Chart</button>
-        <span class="fin-sep" style="margin:0 4px">|</span>
-        <button class="fin-period-pill active" id="fin-ann-btn" onclick="switchFinPeriod('annual')">Annual</button>
-        <button class="fin-period-pill"        id="fin-qtr-btn" onclick="switchFinPeriod('quarterly')">Quarterly</button>
+        <div class="fin-pill-group">
+          <button class="fin-type-btn active" id="fin-line-btn" onclick="switchFinChartType('line')">Line Chart</button>
+          <button class="fin-type-btn"        id="fin-bar-btn"  onclick="switchFinChartType('bar')">Bar Chart</button>
+        </div>
+        <span class="fin-sep">|</span>
+        <div class="fin-pill-group">
+          <button class="fin-period-pill active" id="fin-ann-btn" onclick="switchFinPeriod('annual')">Annual</button>
+          <button class="fin-period-pill"        id="fin-qtr-btn" onclick="switchFinPeriod('quarterly')">Quarterly</button>
+        </div>
       </div>
       <div class="fin-chart-grid">
         <div class="fin-chart-box"><div class="fin-chart-h"><canvas id="fc1"></canvas></div></div>
@@ -820,11 +843,14 @@ td.strong{color:var(--fg);font-weight:600}
       <div class="fin-title">Trend chart</div>
       <div class="fin-subtitle">Margins and capital returns over time. Percentages.</div>
       <div class="fin-ctrl-row">
-        <button class="fin-type-btn active" id="cm-line-btn" onclick="switchCmChartType('line')">Line Chart</button>
-        <button class="fin-type-btn"        id="cm-bar-btn"  onclick="switchCmChartType('bar')">Bar Chart</button>
-        <span class="fin-sep" style="margin:0 4px">|</span>
-        <button class="fin-period-pill active" id="cm-ann-btn" onclick="switchCmPeriod('annual')">Annual</button>
-        <button class="fin-period-pill"        id="cm-qtr-btn" onclick="switchCmPeriod('quarterly')">Quarterly</button>
+        <div class="fin-pill-group">
+          <button class="fin-type-btn active" id="cm-line-btn" onclick="switchCmChartType('line')">Line Chart</button>
+          <button class="fin-type-btn"        id="cm-bar-btn"  onclick="switchCmChartType('bar')">Bar Chart</button>
+        </div>
+        <span class="fin-sep">|</span>
+        <div class="fin-pill-group">
+          <button class="fin-period-pill active" id="cm-ann-btn" onclick="switchCmPeriod('annual')">Annual</button>
+          <button class="fin-period-pill"        id="cm-qtr-btn" onclick="switchCmPeriod('quarterly')">Quarterly</button>
       </div>
       <div class="fin-chart-grid">
         <div class="fin-chart-box"><div class="fin-chart-h"><canvas id="cm1"></canvas></div></div>
@@ -1357,10 +1383,10 @@ async function loadTicker(ticker){
     const results=await Promise.allSettled([
       fmpFetch(`/profile?symbol=${ticker}`),                                     // 0
       fmpFetch(`/quote?symbol=${ticker}`),                                        // 1
-      fmpFetch(`/income-statement?symbol=${ticker}&limit=5`),                     // 2
-      fmpFetch(`/balance-sheet-statement?symbol=${ticker}&limit=5`),              // 3
-      fmpFetch(`/cash-flow-statement?symbol=${ticker}&limit=5`),                  // 4
-      fmpFetch(`/key-metrics?symbol=${ticker}&limit=5`),                          // 5
+      fmpFetch(`/income-statement?symbol=${ticker}&limit=10`),                    // 2
+      fmpFetch(`/balance-sheet-statement?symbol=${ticker}&limit=10`),             // 3
+      fmpFetch(`/cash-flow-statement?symbol=${ticker}&limit=10`),                 // 4
+      fmpFetch(`/key-metrics?symbol=${ticker}&limit=10`),                         // 5
       fmpFetch(`/discounted-cash-flow?symbol=${ticker}`),                         // 6
       fmpFetch(`/historical-price-eod/light?symbol=${ticker}&limit=1095`),        // 7
       fmpFetch(`/income-statement?symbol=${ticker}&period=quarter&limit=5`),      // 8
@@ -1369,12 +1395,30 @@ async function loadTicker(ticker){
       fmpFetch(`/earnings?symbol=${ticker}`),                                      // 11
     ]);
 
+    // Profile is the only truly required endpoint. Everything else is optional —
+    // on FMP free-tier, many tickers (e.g. APP, PDD) return 402 for quote/financials
+    // but 200 for profile. We degrade gracefully instead of throwing.
     if(results[0].status==='rejected')throw results[0].reason;
-    if(results[1].status==='rejected')throw results[1].reason;
     const val=i=>results[i].status==='fulfilled'?results[i].value:null;
 
-    S.profile  = val(0)[0];
-    S.quote    = val(1)?.[0]||{};
+    S.profile  = val(0)?.[0];
+    // Quote may be missing — fall back to profile fields so hero still renders
+    const rawQuote = val(1)?.[0];
+    if(rawQuote){
+      S.quote = rawQuote;
+    } else if(S.profile){
+      const p = S.profile;
+      S.quote = {
+        symbol:p.symbol, name:p.companyName, price:p.price,
+        change:p.change, changePercentage:p.changePercentage,
+        volume:p.volume, marketCap:p.marketCap,
+        // yearHigh/yearLow not in profile — derive from range "low-high" string
+        yearLow:  p.range ? parseFloat(p.range.split('-')[0]) : null,
+        yearHigh: p.range ? parseFloat(p.range.split('-')[1]) : null,
+      };
+    } else {
+      S.quote = {};
+    }
     S.income   = (val(2)||[]).map(normalizeIncome);
     S.balance  = (val(3)||[]).map(normalizeBalance);
     S.cashflow = val(4)||[];
@@ -2566,10 +2610,10 @@ function renderValuationSummary(){
   };
 
   const epv = computeEPV();
-  const hist_pfcf  = computeHistAvg(S.metrics, 'pfcfRatio', 5) || computeHistAvg(S.metrics, 'priceToFreeCashFlowsRatio', 5);
-  const hist_pe    = computeHistAvg(S.metrics, 'peRatio', 5);
-  const hist_evEb  = computeHistAvg(S.metrics, 'evToEBITDA', 5) || computeHistAvg(S.metrics, 'enterpriseValueOverEBITDA', 5);
-  const hist_evRev = computeHistAvg(S.metrics, 'evToSales', 5);
+  const hist_pfcf  = computeHistAvg(S.metrics, 'pfcfRatio', 10) || computeHistAvg(S.metrics, 'priceToFreeCashFlowsRatio', 10);
+  const hist_pe    = computeHistAvg(S.metrics, 'peRatio', 10);
+  const hist_evEb  = computeHistAvg(S.metrics, 'evToEBITDA', 10) || computeHistAvg(S.metrics, 'enterpriseValueOverEBITDA', 10);
+  const hist_evRev = computeHistAvg(S.metrics, 'evToSales', 10);
   const fcfPerShare = shares>0 ? fcf/shares : 0;
 
   const evMultPrice  = (mult, kpi) => (mult && kpi>0 && shares>0) ? (mult*kpi - totalDebt + cash) / shares : null;
@@ -2581,13 +2625,13 @@ function renderValuationSummary(){
     {id:'dcf-base', group:'Discounted cash flow', label:'Forward DCF',  qualifier:'Base',          value: dcfPS(baseG, 0.030)},
     {id:'dcf-bear', group:'Discounted cash flow', label:'Forward DCF',  qualifier:'Bear',          value: dcfPS(bearG, 0.020)},
     {id:'epv',      group:'Discounted cash flow', label:'EPV',          qualifier:'zero-growth',   value: epv.epvPerShare>0 ? epv.epvPerShare : null},
-    {id:'pe-5y',    group:'Earnings multiples',   label:'P / E',        qualifier:'5Y average',    value: peMultPrice(hist_pe)},
+    {id:'pe-5y',    group:'Earnings multiples',   label:'P / E',        qualifier:'10Y average',    value: peMultPrice(hist_pe)},
     {id:'pe-sec',   group:'Earnings multiples',   label:'P / E',        qualifier:'sector median', value: peMultPrice(sectorMed.pe)},
-    {id:'pfcf-5y',  group:'Earnings multiples',   label:'P / FCF',      qualifier:'5Y average',    value: pfcfMultPrice(hist_pfcf)},
+    {id:'pfcf-5y',  group:'Earnings multiples',   label:'P / FCF',      qualifier:'10Y average',    value: pfcfMultPrice(hist_pfcf)},
     {id:'pfcf-sec', group:'Earnings multiples',   label:'P / FCF',      qualifier:'sector median', value: pfcfMultPrice(sectorMed.pfcf)},
-    {id:'eve-5y',   group:'Enterprise multiples', label:'EV / EBITDA',  qualifier:'5Y average',    value: evMultPrice(hist_evEb, ebitda)},
+    {id:'eve-5y',   group:'Enterprise multiples', label:'EV / EBITDA',  qualifier:'10Y average',    value: evMultPrice(hist_evEb, ebitda)},
     {id:'eve-sec',  group:'Enterprise multiples', label:'EV / EBITDA',  qualifier:'sector median', value: evMultPrice(sectorMed.evEbitda, ebitda)},
-    {id:'evr-5y',   group:'Enterprise multiples', label:'EV / Revenue', qualifier:'5Y average',    value: evMultPrice(hist_evRev, revenue)},
+    {id:'evr-5y',   group:'Enterprise multiples', label:'EV / Revenue', qualifier:'10Y average',    value: evMultPrice(hist_evRev, revenue)},
     {id:'evr-sec',  group:'Enterprise multiples', label:'EV / Revenue', qualifier:'sector median', value: evMultPrice(sectorMed.evRev, revenue)},
   ];
 
@@ -2907,7 +2951,7 @@ function renderLayer4(){
 
   // ── Card 1: EV/EBITDA ──
   const cur_evEb  = ebitda>0 ? ev/ebitda : null;
-  const hist_evEb = computeHistAvg(S.metrics, 'evToEBITDA', 5) || computeHistAvg(S.metrics, 'enterpriseValueOverEBITDA', 5);
+  const hist_evEb = computeHistAvg(S.metrics, 'evToEBITDA', 10) || computeHistAvg(S.metrics, 'enterpriseValueOverEBITDA', 10);
   const med_evEb  = sectorMed.evEbitda;
   const evebImplPerShareHist = hist_evEb && ebitda>0 && shares>0 ? (hist_evEb*ebitda - totalDebt + cash) / shares : null;
   const evebImplPerShareMed  = med_evEb  && ebitda>0 && shares>0 ? (med_evEb *ebitda - totalDebt + cash) / shares : null;
@@ -2921,7 +2965,7 @@ function renderLayer4(){
       <thead><tr><th></th><th>Multiple</th><th>Implied Price</th></tr></thead>
       <tbody>
         <tr><td>Current</td><td>${fmtMultiple(cur_evEb)}</td><td>${cur?'$'+cur.toFixed(2):'—'}</td></tr>
-        <tr><td>5Y Avg (own)</td><td>${fmtMultiple(hist_evEb)}</td><td>${fmtPriceImplied(evebImplPerShareHist)}</td></tr>
+        <tr><td>10Y Avg (own)</td><td>${fmtMultiple(hist_evEb)}</td><td>${fmtPriceImplied(evebImplPerShareHist)}</td></tr>
         <tr><td>${p.sector||'Sector'} Median</td><td>${fmtMultiple(med_evEb)}</td><td>${fmtPriceImplied(evebImplPerShareMed)}</td></tr>
       </tbody>
     </table>
@@ -2929,7 +2973,7 @@ function renderLayer4(){
 
   // ── Card 2: P/FCF ──
   const cur_pfcf  = fcf>0 && mktCap>0 ? mktCap/fcf : null;
-  const hist_pfcf = computeHistAvg(S.metrics, 'pfcfRatio', 5) || computeHistAvg(S.metrics, 'priceToFreeCashFlowsRatio', 5);
+  const hist_pfcf = computeHistAvg(S.metrics, 'pfcfRatio', 10) || computeHistAvg(S.metrics, 'priceToFreeCashFlowsRatio', 10);
   const med_pfcf  = sectorMed.pfcf;
   const pfcfPerShare = shares>0 ? fcf/shares : 0;
   const pfcfImplHist = hist_pfcf && pfcfPerShare>0 ? hist_pfcf * pfcfPerShare : null;
@@ -2945,7 +2989,7 @@ function renderLayer4(){
       <thead><tr><th></th><th>Multiple</th><th>Implied Price</th></tr></thead>
       <tbody>
         <tr><td>Current</td><td>${fmtMultiple(cur_pfcf)}</td><td>${cur?'$'+cur.toFixed(2):'—'}</td></tr>
-        <tr><td>5Y Avg (own)</td><td>${fmtMultiple(hist_pfcf)}</td><td>${fmtPriceImplied(pfcfImplHist)}</td></tr>
+        <tr><td>10Y Avg (own)</td><td>${fmtMultiple(hist_pfcf)}</td><td>${fmtPriceImplied(pfcfImplHist)}</td></tr>
         <tr><td>${p.sector||'Sector'} Median</td><td>${fmtMultiple(med_pfcf)}</td><td>${fmtPriceImplied(pfcfImplMed)}</td></tr>
       </tbody>
     </table>
@@ -2954,7 +2998,7 @@ function renderLayer4(){
 
   // ── Card 3: P/E (TTM, ex-NRI proxy = diluted EPS) ──
   const cur_pe   = (cur && eps && eps>0) ? cur/eps : null;
-  const hist_pe  = computeHistAvg(S.metrics, 'peRatio', 5);
+  const hist_pe  = computeHistAvg(S.metrics, 'peRatio', 10);
   const med_pe   = sectorMed.pe;
   const peImplHist = hist_pe && eps && eps>0 ? hist_pe * eps : null;
   const peImplMed  = med_pe  && eps && eps>0 ? med_pe  * eps : null;
@@ -2968,7 +3012,7 @@ function renderLayer4(){
       <thead><tr><th></th><th>Multiple</th><th>Implied Price</th></tr></thead>
       <tbody>
         <tr><td>Current</td><td>${fmtMultiple(cur_pe)}</td><td>${cur?'$'+cur.toFixed(2):'—'}</td></tr>
-        <tr><td>5Y Avg (own)</td><td>${fmtMultiple(hist_pe)}</td><td>${fmtPriceImplied(peImplHist)}</td></tr>
+        <tr><td>10Y Avg (own)</td><td>${fmtMultiple(hist_pe)}</td><td>${fmtPriceImplied(peImplHist)}</td></tr>
         <tr><td>${p.sector||'Sector'} Median</td><td>${fmtMultiple(med_pe)}</td><td>${fmtPriceImplied(peImplMed)}</td></tr>
       </tbody>
     </table>
@@ -2977,7 +3021,7 @@ function renderLayer4(){
 
   // ── Card 4: EV/Revenue ──
   const cur_evRev  = revenue>0 ? ev/revenue : null;
-  const hist_evRev = computeHistAvg(S.metrics, 'evToSales', 5);
+  const hist_evRev = computeHistAvg(S.metrics, 'evToSales', 10);
   const med_evRev  = sectorMed.evRev;
   const evRevImplPerShareHist = hist_evRev && revenue>0 && shares>0 ? (hist_evRev*revenue - totalDebt + cash) / shares : null;
   const evRevImplPerShareMed  = med_evRev  && revenue>0 && shares>0 ? (med_evRev *revenue - totalDebt + cash) / shares : null;
@@ -2992,7 +3036,7 @@ function renderLayer4(){
       <thead><tr><th></th><th>Multiple</th><th>Implied Price</th></tr></thead>
       <tbody>
         <tr><td>Current</td><td>${fmtMultiple(cur_evRev)}</td><td>${cur?'$'+cur.toFixed(2):'—'}</td></tr>
-        <tr><td>5Y Avg (own)</td><td>${fmtMultiple(hist_evRev)}</td><td>${fmtPriceImplied(evRevImplPerShareHist)}</td></tr>
+        <tr><td>10Y Avg (own)</td><td>${fmtMultiple(hist_evRev)}</td><td>${fmtPriceImplied(evRevImplPerShareHist)}</td></tr>
         <tr><td>${p.sector||'Sector'} Median</td><td>${fmtMultiple(med_evRev)}</td><td>${fmtPriceImplied(evRevImplPerShareMed)}</td></tr>
       </tbody>
     </table>
