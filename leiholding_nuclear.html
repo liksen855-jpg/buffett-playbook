@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nuclear & Uranium — Lei Holdings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #0d0d0d;
+  --off-white: #f5f2ec;
+  --warm-gray: #ece9e1;
+  --mid-gray: #9a9590;
+  --light-gray: #c8c4bc;
+  --green: #1a7a52;
+  --green-light: #e8f4ee;
+  --green-mid: #2d9d6a;
+  --blue: #1a4a7a;
+  --blue-light: #e8f0f8;
+  --amber: #7a4a1a;
+  --amber-light: #f8f0e4;
+  --red: #b83228;
+  --red-light: #fdf0ee;
+  --border: rgba(13,13,13,0.1);
+  --border-strong: rgba(13,13,13,0.2);
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans: 'DM Sans', system-ui, sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--off-white); color: var(--black); font-family: var(--sans); font-weight: 400; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+
+/* NAV */
+nav { position: sticky; top: 0; z-index: 100; background: var(--off-white); border-bottom: 1px solid var(--border); padding: 0 2.5rem; display: flex; align-items: center; justify-content: space-between; height: 58px; }
+.nav-brand { font-family: var(--serif); font-size: 20px; letter-spacing: -0.02em; color: var(--black); }
+.nav-brand span { color: var(--green); }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a { font-size: 13px; color: var(--mid-gray); font-weight: 500; letter-spacing: 0.01em; transition: color 0.2s; }
+.nav-links a:hover { color: var(--black); }
+.nav-tag { font-size: 11px; font-weight: 500; background: var(--black); color: var(--off-white); padding: 4px 14px; border-radius: 20px; letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* LAYOUT */
+.container { max-width: 920px; margin: 0 auto; padding: 0 2.5rem; }
+
+/* HERO */
+.hero { padding: 5.5rem 0 4.5rem; border-bottom: 1px solid var(--border); }
+.eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 1.75rem; }
+.eyebrow-line { width: 36px; height: 1px; background: var(--light-gray); }
+.eyebrow-text { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid-gray); }
+.hero h1 { font-family: var(--serif); font-size: clamp(38px, 6vw, 62px); font-weight: 400; line-height: 1.08; letter-spacing: -0.025em; margin-bottom: 1.5rem; }
+.hero h1 em { font-style: italic; color: var(--green); }
+.hero-lead { font-size: 17px; color: var(--mid-gray); line-height: 1.8; max-width: 660px; margin-bottom: 3rem; }
+.ticker-strip { display: flex; flex-wrap: wrap; gap: 10px; }
+.ts-item { display: flex; flex-direction: column; gap: 4px; padding: 0.85rem 1.1rem; border-radius: 8px; border: 1px solid var(--border); min-width: 80px; }
+.ts-item.ts-core { background: var(--green-light); border-color: rgba(26,122,82,0.2); }
+.ts-item.ts-growth { background: var(--blue-light); border-color: rgba(26,74,122,0.2); }
+.ts-item.ts-spec { background: var(--amber-light); border-color: rgba(122,74,26,0.2); }
+.ts-ticker { font-family: var(--serif); font-size: 20px; line-height: 1; color: var(--black); }
+.ts-role { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; }
+.ts-item.ts-core .ts-role { color: var(--green); }
+.ts-item.ts-growth .ts-role { color: var(--blue); }
+.ts-item.ts-spec .ts-role { color: var(--amber); }
+
+/* SECTION */
+.section { padding: 5rem 0; border-bottom: 1px solid var(--border); }
+.section-header { display: flex; align-items: baseline; gap: 1.25rem; margin-bottom: 3rem; }
+.section-num { font-size: 11px; font-weight: 500; color: var(--light-gray); letter-spacing: 0.12em; width: 28px; flex-shrink: 0; font-family: var(--sans); }
+.section-title { font-family: var(--serif); font-size: 28px; font-weight: 400; letter-spacing: -0.015em; line-height: 1.15; }
+
+/* THESIS */
+.thesis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 2.5rem; }
+.thesis-block { background: var(--off-white); padding: 1.75rem; }
+.tb-label { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mid-gray); margin-bottom: 10px; }
+.tb-title { font-family: var(--serif); font-size: 20px; font-weight: 400; line-height: 1.25; margin-bottom: 12px; }
+.tb-body { font-size: 13px; color: var(--mid-gray); line-height: 1.75; }
+
+.pull-quote { border-left: 2px solid var(--black); padding: 0.25rem 0 0.25rem 1.5rem; margin: 2.5rem 0; }
+.pull-quote p { font-family: var(--serif); font-size: 21px; font-weight: 400; font-style: italic; line-height: 1.45; }
+.pull-quote cite { font-size: 12px; color: var(--mid-gray); font-style: normal; letter-spacing: 0.06em; text-transform: uppercase; display: block; margin-top: 10px; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 2.5rem; }
+.info-box { border: 1px solid var(--border); border-radius: 10px; padding: 1.4rem; }
+.info-box.demand { border-color: rgba(26,122,82,0.3); background: var(--green-light); }
+.info-box.supply { border-color: rgba(184,50,40,0.2); background: var(--red-light); }
+.ib-label { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+.ib-label.demand { color: var(--green); }
+.ib-label.supply { color: var(--red); }
+.ib-item { display: flex; gap: 10px; font-size: 13px; line-height: 1.55; margin-bottom: 8px; }
+.ib-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-top: 7px; }
+.ib-dot.demand { background: var(--green-mid); }
+.ib-dot.supply { background: var(--red); }
+
+.compare-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 1.5rem; }
+.compare-table th { text-align: left; font-weight: 500; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mid-gray); padding: 0 1rem 12px 0; border-bottom: 1px solid var(--border-strong); }
+.compare-table th:first-child { padding-left: 0; width: 140px; }
+.compare-table td { padding: 12px 1rem 12px 0; border-bottom: 1px solid var(--border); color: var(--black); font-size: 13px; line-height: 1.5; vertical-align: top; }
+.compare-table td:first-child { color: var(--mid-gray); padding-left: 0; }
+.compare-table td.then { color: var(--mid-gray); }
+.compare-table td.now { font-weight: 500; }
+.compare-table tr:last-child td { border-bottom: none; }
+
+/* FRAMEWORK */
+.tier-intro { font-size: 15px; color: var(--mid-gray); line-height: 1.8; margin-bottom: 2rem; max-width: 640px; }
+.tier-legend { display: flex; gap: 2rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
+.tl-item { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.tl-swatch { width: 24px; height: 3px; border-radius: 2px; flex-shrink: 0; }
+.tl-swatch.core { background: var(--green); }
+.tl-swatch.growth { background: var(--blue); }
+.tl-swatch.spec { background: var(--amber); }
+
+.port-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 2.5rem; }
+.port-card { border: 1px solid var(--border); border-radius: 10px; padding: 1.4rem; }
+.port-card.conservative { border-color: rgba(26,122,82,0.3); background: var(--green-light); }
+.port-card.moderate { border-color: rgba(26,74,122,0.3); background: var(--blue-light); }
+.port-card.aggressive { border-color: rgba(122,74,26,0.3); background: var(--amber-light); }
+.pc-label { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+.pc-label.conservative { color: var(--green); }
+.pc-label.moderate { color: var(--blue); }
+.pc-label.aggressive { color: var(--amber); }
+.pc-title { font-family: var(--serif); font-size: 18px; font-weight: 400; margin-bottom: 1rem; line-height: 1.25; }
+.pc-alloc { display: flex; flex-direction: column; gap: 8px; }
+.pca-row { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.pca-name { min-width: 100px; font-weight: 500; }
+.pca-bar-wrap { flex: 1; height: 3px; background: rgba(13,13,13,0.1); border-radius: 2px; overflow: hidden; }
+.pca-bar { height: 100%; border-radius: 2px; background: var(--black); opacity: 0.35; }
+.pca-pct { min-width: 32px; text-align: right; color: var(--mid-gray); font-size: 12px; }
+.pc-note { font-size: 12px; color: var(--mid-gray); margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(13,13,13,0.08); line-height: 1.65; }
+
+/* STOCK CARDS */
+.stock-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.stock-card { background: var(--off-white); padding: 2rem 2rem 2rem 2.35rem; position: relative; }
+.stock-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+.stock-card.core::before { background: var(--green); }
+.stock-card.growth::before { background: var(--blue); }
+.stock-card.spec::before { background: var(--amber); }
+
+.sc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.4rem; }
+.sc-identity { display: flex; align-items: center; gap: 14px; }
+.sc-avatar { width: 46px; height: 46px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; letter-spacing: 0.03em; flex-shrink: 0; }
+.sc-avatar.core { background: var(--green-light); color: var(--green); }
+.sc-avatar.growth { background: var(--blue-light); color: var(--blue); }
+.sc-avatar.spec { background: var(--amber-light); color: var(--amber); }
+.sc-ticker { font-family: var(--serif); font-size: 24px; line-height: 1; }
+.sc-name { font-size: 12px; color: var(--mid-gray); margin-top: 4px; }
+.sc-price { font-size: 20px; font-weight: 500; text-align: right; }
+.sc-change { font-size: 12px; margin-top: 4px; text-align: right; }
+.sc-change.down { color: var(--red); }
+.sc-change.up { color: var(--green-mid); }
+.tier-pill { display: inline-block; font-size: 10px; font-weight: 500; padding: 3px 11px; border-radius: 20px; letter-spacing: 0.06em; text-transform: uppercase; margin-top: 7px; }
+.tier-pill.core { background: var(--green-light); color: var(--green); }
+.tier-pill.growth { background: var(--blue-light); color: var(--blue); }
+.tier-pill.spec { background: var(--amber-light); color: var(--amber); }
+
+.sc-role { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--light-gray); margin-bottom: 10px; }
+.sc-thesis { font-size: 15px; line-height: 1.7; margin-bottom: 1.5rem; color: var(--black); }
+.sc-divider { height: 1px; background: var(--border); margin: 1.5rem 0; }
+.sc-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+.sc-body-label { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mid-gray); margin-bottom: 8px; }
+.sc-detail { font-size: 13px; color: var(--mid-gray); line-height: 1.75; }
+
+.sc-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 1.5rem; }
+.sc-metric { background: var(--warm-gray); border-radius: 8px; padding: 0.65rem 0.8rem; }
+.scm-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--mid-gray); margin-bottom: 5px; }
+.scm-val { font-size: 15px; font-weight: 500; }
+.scm-val.up { color: var(--green-mid); }
+.scm-val.down { color: var(--red); }
+
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.cat-tag { font-size: 12px; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border-strong); color: var(--black); background: transparent; }
+.risk-tag { font-size: 12px; padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(184,50,40,0.25); color: var(--red); background: var(--red-light); }
+
+/* RISKS */
+.risk-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 2.5rem; }
+.risk-item { display: flex; gap: 1.25rem; padding: 1.25rem 1.4rem; border: 1px solid var(--border); border-radius: 10px; }
+.ri-num { font-size: 11px; font-weight: 500; color: var(--light-gray); width: 24px; flex-shrink: 0; padding-top: 2px; letter-spacing: 0.05em; }
+.ri-title { font-size: 15px; font-weight: 500; margin-bottom: 5px; }
+.ri-body { font-size: 13px; color: var(--mid-gray); line-height: 1.7; }
+
+.scenario-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.scenario-card { border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; }
+.sc-scenario-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+.sc-scenario-label.bear { color: var(--red); }
+.sc-scenario-label.base { color: var(--amber); }
+.sc-scenario-label.bull { color: var(--green); }
+.sc-scenario-title { font-family: var(--serif); font-size: 17px; font-weight: 400; margin-bottom: 10px; line-height: 1.25; }
+.sc-scenario-body { font-size: 12px; color: var(--mid-gray); line-height: 1.65; margin-bottom: 12px; }
+.sc-scenario-out { font-size: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+.sc-scenario-out strong { color: var(--black); }
+.sc-scenario-out span { color: var(--mid-gray); }
+
+/* CALENDAR */
+.cal-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 2rem; }
+.cal-item { display: flex; background: var(--off-white); }
+.ci-date { width: 120px; flex-shrink: 0; padding: 1.25rem; border-right: 1px solid var(--border); }
+.ci-when { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mid-gray); margin-bottom: 5px; }
+.ci-ticker { font-family: var(--serif); font-size: 18px; }
+.ci-body { padding: 1.25rem 1.5rem; }
+.ci-event { font-size: 14px; font-weight: 500; margin-bottom: 5px; }
+.ci-desc { font-size: 13px; color: var(--mid-gray); line-height: 1.7; }
+
+/* VERDICT */
+.verdict { border: 1px solid var(--border-strong); border-radius: 12px; overflow: hidden; }
+.verdict-top { background: var(--black); padding: 2rem 2rem; }
+.vt-label { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 10px; }
+.vt-title { font-family: var(--serif); font-size: 26px; color: var(--off-white); line-height: 1.25; font-weight: 400; }
+.verdict-body { padding: 2rem; }
+.vb-p { font-size: 14px; color: var(--mid-gray); line-height: 1.8; margin-bottom: 1.25rem; }
+.vb-p:last-child { margin-bottom: 0; }
+
+/* FOOTER */
+.footer { padding: 3rem 0; }
+.footer-brand { font-family: var(--serif); font-size: 20px; margin-bottom: 0.75rem; }
+.footer-brand span { color: var(--green); }
+.footer-disc { font-size: 11px; color: var(--light-gray); line-height: 1.75; max-width: 620px; }
+
+/* ANIMATIONS */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+.hero h1 { animation: fadeUp 0.65s ease both; }
+.hero-lead { animation: fadeUp 0.65s 0.1s ease both; }
+.ticker-strip { animation: fadeUp 0.65s 0.2s ease both; }
+
+/* RESPONSIVE */
+@media (max-width: 680px) {
+  nav { padding: 0 1.1rem; }
+  .nav-links { display: none; }
+  .nav-tag { font-size: 10px; padding: 3px 10px; }
+  .container { padding: 0 1.1rem; }
+  .hero { padding: 2.5rem 0 2rem; }
+  .hero h1 { font-size: clamp(26px, 7vw, 34px); }
+  .hero-lead { font-size: 14px; margin-bottom: 2rem; }
+  .ticker-strip { gap: 7px; }
+  .ts-item { min-width: 0; flex: 1 1 calc(33.33% - 6px); padding: 0.65rem 0.75rem; }
+  .ts-ticker { font-size: 16px; }
+  .ts-role { font-size: 9px; }
+  .section { padding: 2.5rem 0; }
+  .section-title { font-size: 22px; }
+  .section-header { margin-bottom: 2rem; }
+  .thesis-grid, .two-col, .sc-two-col, .port-grid, .scenario-grid { grid-template-columns: 1fr; }
+  .sc-metrics { grid-template-columns: 1fr 1fr; }
+  .sc-top { flex-direction: column; gap: 10px; }
+  .sc-price, .sc-change, .tier-pill { text-align: left; }
+  .stock-card { padding: 1.25rem 1.1rem 1.25rem 1.35rem; }
+  .sc-thesis { font-size: 13px; }
+  .sc-detail { font-size: 12px; }
+  .cal-item { flex-direction: column; }
+  .ci-date { width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding: 0.75rem 1rem; display: flex; gap: 1rem; align-items: center; }
+  .ci-body { padding: 0.85rem 1rem; }
+  .ci-event { font-size: 13px; }
+  .ci-desc { font-size: 12px; }
+  .port-card.aggressive .pc-alloc { grid-template-columns: 1fr; }
+  .verdict-top { padding: 1.25rem 1.25rem; }
+  .vt-title { font-size: 18px; }
+  .verdict-body { padding: 1.25rem; }
+  .vb-p { font-size: 13px; }
+  .pull-quote p { font-size: 16px; }
+  .pull-quote { padding-left: 1rem; }
+  .compare-table { font-size: 12px; }
+  .compare-table th, .compare-table td { padding: 9px 0.4rem 9px 0; }
+  .compare-table th:first-child, .compare-table td:first-child { width: 90px; }
+  .risk-item { padding: 0.9rem 1rem; gap: 10px; }
+  .ri-title { font-size: 13px; }
+  .ri-body { font-size: 12px; }
+  .scenario-grid { grid-template-columns: 1fr; }
+  .tier-legend { flex-direction: column; gap: 8px; }
+  .tier-intro { font-size: 13px; }
+  .tb-body { font-size: 12px; }
+  .ib-item { font-size: 12px; }
+  .footer { padding: 2rem 0; }
+  .footer-disc { font-size: 11px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">Lei<span>Holdings</span></div>
+  <ul class="nav-links">
+    <li><a href="#thesis">Thesis</a></li>
+    <li><a href="#framework">Framework</a></li>
+    <li><a href="#stocks">The Six Stocks</a></li>
+    <li><a href="#risks">Risks</a></li>
+    <li><a href="#catalysts">Catalysts</a></li>
+    <li><a href="#verdict">Verdict</a></li>
+  </ul>
+  <div class="nav-tag">May 2026</div>
+</nav>
+
+<!-- HERO -->
+<div class="container">
+  <div class="hero">
+    <div class="eyebrow">
+      <div class="eyebrow-line"></div>
+      <div class="eyebrow-text">Nuclear & Uranium · Investment Thesis</div>
+    </div>
+    <h1>If you missed semiconductors,<br>do not miss <em>this</em>.</h1>
+    <p class="hero-lead">Every decade, one technology becomes the backbone of civilization. Chips in the 2000s. Memory in 2015. AI infrastructure in 2023. The next chapter is being written in uranium enrichment facilities, advanced reactor blueprints, and Navy nuclear contracts. And most investors are still sleeping on it.</p>
+    <div class="ticker-strip">
+      <div class="ts-item ts-core"><span class="ts-ticker">CCJ</span><span class="ts-role">Core</span></div>
+      <div class="ts-item ts-core"><span class="ts-ticker">BWXT</span><span class="ts-role">Core</span></div>
+      <div class="ts-item ts-growth"><span class="ts-ticker">LEU</span><span class="ts-role">Growth</span></div>
+      <div class="ts-item ts-growth"><span class="ts-ticker">UUUU</span><span class="ts-role">Growth</span></div>
+      <div class="ts-item ts-spec"><span class="ts-ticker">OKLO</span><span class="ts-role">Speculative</span></div>
+      <div class="ts-item ts-spec"><span class="ts-ticker">SMR</span><span class="ts-role">Speculative</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- THESIS -->
+<div class="container">
+  <div class="section" id="thesis">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <div class="section-title">The thesis — why now, why nuclear</div>
+    </div>
+
+    <div class="thesis-grid">
+      <div class="thesis-block">
+        <div class="tb-label">The demand shock</div>
+        <div class="tb-title">AI broke the global power grid</div>
+        <div class="tb-body">A single ChatGPT query uses 10× the energy of a Google search. Multiply that by billions of daily AI interactions — autonomous agents, video generation, real-time inference — and you have a power demand problem growing faster than any grid was designed to handle. By 2027, four out of every ten data centers won't have enough power to operate. Solar goes dark at night. Wind stops when it's calm. You cannot run a 24/7 AI supercomputer on maybe. You need always-on baseload power. That means nuclear.</div>
+      </div>
+      <div class="thesis-block">
+        <div class="tb-label">The supply crisis</div>
+        <div class="tb-title">14 years of deferred demand about to unwind</div>
+        <div class="tb-body">Utilities haven't bought uranium at replacement rate since 2012. Russia cut off. Kazakhstan just cut 2026 production guidance. U.S. mine restarts running behind schedule. The supply chain has been hollowed out over a decade of low prices. Now the IEA projects nuclear investment rising from $70B today to $210B annually by 2035. The smart money already knows — Microsoft restarted Three Mile Island. Meta signed a major power agreement with Oklo for a planned 1.2 gigawatt nuclear campus. Amazon, Google, and other hyperscalers are all pursuing nuclear deals because they know the grid cannot keep up.</div>
+      </div>
+    </div>
+
+    <div class="pull-quote">
+      <p>"Uranium is the fuel of the AI era. And right now, supply isn't keeping up with demand."</p>
+      <cite>Lei Holdings Research · May 2026</cite>
+    </div>
+
+    <div class="two-col">
+      <div class="info-box demand">
+        <div class="ib-label demand">Demand accelerating</div>
+        <div class="ib-item"><div class="ib-dot demand"></div>AI data centers requiring always-on baseload power 24/7</div>
+        <div class="ib-item"><div class="ib-dot demand"></div>Microsoft, Amazon, Google, Meta all signing nuclear deals</div>
+        <div class="ib-item"><div class="ib-dot demand"></div>IEA forecasts nuclear capacity to more than double by 2050</div>
+        <div class="ib-item"><div class="ib-dot demand"></div>30+ countries pledging to triple nuclear capacity by 2050</div>
+        <div class="ib-item"><div class="ib-dot demand"></div>Reactor life extensions adding decades of incremental demand</div>
+        <div class="ib-item"><div class="ib-dot demand"></div>U.S. designates uranium as a critical national mineral (USGS 2025)</div>
+      </div>
+      <div class="info-box supply">
+        <div class="ib-label supply">Supply structurally constrained</div>
+        <div class="ib-item"><div class="ib-dot supply"></div>Kazatomprom signals 2026 production cuts — world's largest producer</div>
+        <div class="ib-item"><div class="ib-dot supply"></div>Russia effectively cut off from Western utility buyers</div>
+        <div class="ib-item"><div class="ib-dot supply"></div>U.S. ISR mine restarts slower than projected</div>
+        <div class="ib-item"><div class="ib-dot supply"></div>McArthur River output missed 2025 targets</div>
+        <div class="ib-item"><div class="ib-dot supply"></div>SOMAÏR produced zero in 2025 under junta control</div>
+        <div class="ib-item"><div class="ib-dot supply"></div>New mines need $125–150/lb sustained to attract capital</div>
+      </div>
+    </div>
+
+    <div class="tb-label" style="margin-bottom:4px;">The pattern you've seen before</div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Element</th>
+          <th>Semiconductors (2000s)</th>
+          <th>Nuclear & uranium (now)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Demand driver</td>
+          <td class="then">Internet, smartphones, cloud computing</td>
+          <td class="now">AI data centers, decarbonisation, energy security</td>
+        </tr>
+        <tr>
+          <td>Supply constraint</td>
+          <td class="then">Fab capacity, long lead times, capital intensity</td>
+          <td class="now">14 years of underinvestment, geopolitical supply cuts</td>
+        </tr>
+        <tr>
+          <td>Government stance</td>
+          <td class="then">CHIPS Act, national security designation</td>
+          <td class="now">Critical mineral status, $2.7B DOE enrichment commitment</td>
+        </tr>
+        <tr>
+          <td>Sentiment at entry</td>
+          <td class="then">Expensive, cyclical, "boring infrastructure"</td>
+          <td class="now">Down 40–80% from highs, hype crowd shaken out</td>
+        </tr>
+        <tr>
+          <td>5-year bull case</td>
+          <td class="then">3–10× for quality names</td>
+          <td class="now">Analysts projecting 50–170% on base case alone</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- FRAMEWORK -->
+<div class="container">
+  <div class="section" id="framework">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <div class="section-title">The investment framework — three tiers, one thesis</div>
+    </div>
+
+    <p class="tier-intro">This is not a single bet on one company. It's a layered architecture — the same way you'd build semiconductor exposure by owning a chip designer, a fab, and a memory maker. Each stock plays a different role in the nuclear supply chain, giving exposure across the full risk/reward spectrum.</p>
+
+    <div class="tier-legend">
+      <div class="tl-item"><div class="tl-swatch core"></div>Core — cash-flowing anchors, visible earnings, lower volatility</div>
+      <div class="tl-item"><div class="tl-swatch growth"></div>Growth — high beta to uranium price, structural re-rating upside</div>
+      <div class="tl-item"><div class="tl-swatch spec"></div>Speculative — pre-revenue or early-stage, sized small, asymmetric upside</div>
+    </div>
+
+    <div class="port-grid">
+      <div class="port-card conservative">
+        <div class="pc-label conservative">Conservative</div>
+        <div class="pc-title">Core-heavy, minimal speculation</div>
+        <div class="pc-alloc">
+          <div class="pca-row"><div class="pca-name">BWXT</div><div class="pca-bar-wrap"><div class="pca-bar" style="width:40%"></div></div><div class="pca-pct">40%</div></div>
+          <div class="pca-row"><div class="pca-name">CCJ</div><div class="pca-bar-wrap"><div class="pca-bar" style="width:35%"></div></div><div class="pca-pct">35%</div></div>
+          <div class="pca-row"><div class="pca-name">LEU</div><div class="pca-bar-wrap"><div class="pca-bar" style="width:25%"></div></div><div class="pca-pct">25%</div></div>
+          <div class="pca-row"><div class="pca-name">UUUU / OKLO / SMR</div><div class="pca-bar-wrap"><div class="pca-bar" style="width:0%"></div></div><div class="pca-pct">0%</div></div>
+        </div>
+        <div class="pc-note">For investors who want nuclear exposure with the lowest volatility profile. All three positions are cash-generating with visible earnings catalysts.</div>
+      </div>
+      <div class="port-card moderate">
+        <div class="pc-label moderate">Moderate</div>
+        <div class="pc-title">Balanced across all three tiers</div>
+        <div class="pc-alloc">
+          <div class="pca-row"><div class="pca-name">BWXT</div><div class="pca-bar-wrap"><div class="pca-bar" style="width:25%"></div></div><div class="pca-pct">25%</div></div>
+          <div class="pca-row"><div class="pca-name">CCJ</div><div class="pca-bar-wrap"><div class="pca-bar" style="width:25%"></div></div><div class="pca-pct">25%</div></div>
+          <div class="pca-row"><div class="pca-name">LEU + UUUU</div><div class="pca-bar-wrap"><div class="pca-bar" style="width:30%"></div></div><div class="pca-pct">30%</div></div>
+          <div class="pca-row"><div class="pca-name">OKLO + SMR</div><div class="pca-bar-wrap"><div class="pca-bar" style="width:20%"></div></div><div class="pca-pct">20%</div></div>
+        </div>
+        <div class="pc-note">For investors who believe the thesis strongly and want full-chain exposure. Speculative sleeve capped at 20% to limit downside if timelines slip.</div>
+      </div>
+      <div class="port-card aggressive" style="grid-column: 1 / -1;">
+        <div class="pc-label aggressive">Aggressive</div>
+        <div class="pc-title">Maximum beta — uranium price + frontier technology</div>
+        <div class="pc-alloc" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div class="pca-row"><div class="pca-name">CCJ</div><div class="pca-bar-wrap"><div class="pca-bar" style="width:20%"></div></div><div class="pca-pct">20%</div></div>
+          <div class="pca-row"><div class="pca-name">LEU</div><div class="pca-bar-wrap"><div class="pca-bar" style="width:20%"></div></div><div class="pca-pct">20%</div></div>
+          <div class="pca-row"><div class="pca-name">UUUU</div><div class="pca-bar-wrap"><div class="pca-bar" style="width:20%"></div></div><div class="pca-pct">20%</div></div>
+          <div class="pca-row"><div class="pca-name">OKLO</div><div class="pca-bar-wrap"><div class="pca-bar" style="width:25%"></div></div><div class="pca-pct">25%</div></div>
+          <div class="pca-row"><div class="pca-name">SMR</div><div class="pca-bar-wrap"><div class="pca-bar" style="width:10%"></div></div><div class="pca-pct">10%</div></div>
+          <div class="pca-row"><div class="pca-name">BWXT</div><div class="pca-bar-wrap"><div class="pca-bar" style="width:5%"></div></div><div class="pca-pct">5%</div></div>
+        </div>
+        <div class="pc-note">For investors with a 3–5 year horizon and high risk tolerance. Heavy weighting to uranium price beta and pre-revenue frontier plays. Expect 50%+ drawdowns are possible — size the overall position accordingly.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SIX STOCKS -->
+<div class="container">
+  <div class="section" id="stocks">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <div class="section-title">The six stocks — full breakdown</div>
+    </div>
+
+    <div class="stock-list">
+
+      <!-- CCJ -->
+      <div class="stock-card core">
+        <div class="sc-top">
+          <div class="sc-identity">
+            <div class="sc-avatar core">CCJ</div>
+            <div>
+              <div class="sc-ticker">CCJ</div>
+              <div class="sc-name">Cameco Corporation · NYSE</div>
+            </div>
+          </div>
+          <div>
+            <div class="sc-price">~$105</div>
+            <div class="sc-change up">+105% over 12 months</div>
+            <div class="tier-pill core">Core</div>
+          </div>
+        </div>
+        <div class="sc-role">World-scale uranium miner</div>
+        <div class="sc-thesis">The backbone of the trade. World's second largest uranium miner, supplying roughly 15% of global production with long-term contracts locked in through the decade. The 49% stake in Westinghouse Electric extends the business beyond mining into reactor builds, fuel fabrication, and nuclear services — transforming Cameco from commodity play into nuclear infrastructure platform.</div>
+        <div class="sc-divider"></div>
+        <div class="sc-two-col">
+          <div>
+            <div class="sc-body-label">Business model</div>
+            <div class="sc-detail">Operates tier-1 uranium mines in Canada (Cigar Lake, McArthur River) and Kazakhstan (JV Inkai). Sells primarily through long-term utility contracts — 70% of recent contracts contain market-linked pricing, meaning earnings leverage to uranium price spikes is substantial. Westinghouse adds fuel fabrication and AP1000 reactor services, turning Cameco into a full nuclear fuel-cycle platform.</div>
+          </div>
+          <div>
+            <div class="sc-body-label">What the bull case requires</div>
+            <div class="sc-detail">CCJ is already up 105% over 12 months — the risk now is valuation. The next leg requires uranium spot to break convincingly above $100/lb and trigger a wave of utility re-contracting. Citi analysts project $100–125/lb for 2026. Scotiabank raised their target to $175 in May 2026, implying ~67% further upside from current levels.</div>
+          </div>
+        </div>
+        <div class="sc-metrics">
+          <div class="sc-metric"><div class="scm-label">Market cap</div><div class="scm-val">$46.8B</div></div>
+          <div class="sc-metric"><div class="scm-label">Scotiabank PT</div><div class="scm-val up">$175</div></div>
+          <div class="sc-metric"><div class="scm-label">LT uranium price</div><div class="scm-val">$93/lb</div></div>
+          <div class="sc-metric"><div class="scm-label">Global supply share</div><div class="scm-val">~15%</div></div>
+        </div>
+        <div class="sc-body-label" style="margin-bottom:8px;">Catalysts & risks</div>
+        <div class="tags">
+          <div class="cat-tag">Uranium spot break above $100/lb</div>
+          <div class="cat-tag">22M lb India supply deal (~$1.9B, 2027–2035)</div>
+          <div class="cat-tag">Westinghouse AP1000 reactor orders</div>
+          <div class="cat-tag">Utility re-contracting wave</div>
+          <div class="risk-tag">Valuation — trading at significant premium</div>
+          <div class="risk-tag">Kazatomprom geopolitical exposure</div>
+        </div>
+      </div>
+
+      <!-- BWXT -->
+      <div class="stock-card core">
+        <div class="sc-top">
+          <div class="sc-identity">
+            <div class="sc-avatar core">BWXT</div>
+            <div>
+              <div class="sc-ticker">BWXT</div>
+              <div class="sc-name">BWX Technologies · NYSE</div>
+            </div>
+          </div>
+          <div>
+            <div class="sc-price">~$211</div>
+            <div class="sc-change up">+85% over 12 months</div>
+            <div class="tier-pill core">Core</div>
+          </div>
+        </div>
+        <div class="sc-role">Nuclear manufacturer · Defense & commercial</div>
+        <div class="sc-thesis">The boring one — and that's a compliment. BWXT builds nuclear reactors and fuel for the U.S. Navy under sole-source, locked-in contracts. The government side funds a durable floor. The commercial side is the growth story: SMR components, medical isotopes, and a backlog that jumped 77% in one year. Deutsche Bank upgraded to Buy in May 2026 calling it "firing on all cylinders."</div>
+        <div class="sc-divider"></div>
+        <div class="sc-two-col">
+          <div>
+            <div class="sc-body-label">Business model</div>
+            <div class="sc-detail">Two segments. Government Operations (majority of revenue): naval nuclear reactors and fuel for submarines and aircraft carriers — no competition, multi-decade Navy relationship. Commercial Operations (the growth engine): nuclear power plant services, SMR components, medical isotopes, and a new uranium enrichment facility in Erwin, TN using Oak Ridge centrifuge technology.</div>
+          </div>
+          <div>
+            <div class="sc-body-label">The upside most investors miss</div>
+            <div class="sc-detail">BWXT sits at the intersection of two megatrends: a rising defense budget and an accelerating commercial nuclear build-out. Jim Cramer flagged it specifically for this dual exposure. The $200M PCG acquisition closing in H2 2026 adds $125M in annual revenue and expands manufacturing capacity precisely as commercial nuclear order intake accelerates. Backlog is now $7.3B — up 50% in a single year.</div>
+          </div>
+        </div>
+        <div class="sc-metrics">
+          <div class="sc-metric"><div class="scm-label">Revenue (2025)</div><div class="scm-val">$3.2B</div></div>
+          <div class="sc-metric"><div class="scm-label">Backlog (2025)</div><div class="scm-val">$7.3B</div></div>
+          <div class="sc-metric"><div class="scm-label">Deutsche Bank PT</div><div class="scm-val up">$255</div></div>
+          <div class="sc-metric"><div class="scm-label">Q1 revenue growth</div><div class="scm-val up">+26%</div></div>
+        </div>
+        <div class="sc-body-label" style="margin-bottom:8px;">Catalysts & risks</div>
+        <div class="tags">
+          <div class="cat-tag">$1.4B new Navy contracts (May 2026)</div>
+          <div class="cat-tag">PCG acquisition close H2 2026</div>
+          <div class="cat-tag">Enrichment facility operations begin</div>
+          <div class="cat-tag">Commercial backlog +77% YoY</div>
+          <div class="risk-tag">Trading significantly above some fair value estimates</div>
+          <div class="risk-tag">Defense budget uncertainty</div>
+        </div>
+      </div>
+
+      <!-- LEU -->
+      <div class="stock-card growth">
+        <div class="sc-top">
+          <div class="sc-identity">
+            <div class="sc-avatar growth">LEU</div>
+            <div>
+              <div class="sc-ticker">LEU</div>
+              <div class="sc-name">Centrus Energy Corp. · NYSE</div>
+            </div>
+          </div>
+          <div>
+            <div class="sc-price">~$179</div>
+            <div class="sc-change down">−61% from 52-wk high of $464</div>
+            <div class="tier-pill growth">Growth</div>
+          </div>
+        </div>
+        <div class="sc-role">U.S. uranium enricher · HALEU monopoly</div>
+        <div class="sc-thesis">A national security monopoly hiding in plain sight. Centrus is the only domestic producer of HALEU — the high-assay fuel every next-generation advanced reactor needs. One supplier. Every SMR in America has to come through them. And the business is performing: Q1 2026 EPS beat estimates by 228%. The stock is down 61% from its high because of hype deflation, not fundamental deterioration.</div>
+        <div class="sc-divider"></div>
+        <div class="sc-two-col">
+          <div>
+            <div class="sc-body-label">Business model</div>
+            <div class="sc-detail">Two segments. LEU: supplies enriched uranium fuel to commercial utilities via a global network. Technical Solutions: operates the only U.S. HALEU demonstration cascade at Piketon, Ohio under DOE contracts. The HALEU segment is what every advanced SMR developer needs — from Oklo's Aurora to the next generation of compact reactors — and Centrus is the only domestic production facility that exists.</div>
+          </div>
+          <div>
+            <div class="sc-body-label">Why the dip is an opportunity</div>
+            <div class="sc-detail">Stock ran from ~$20 to $464 between 2020 and late 2024, then gave back 61% as hype deflated. But the fundamentals didn't break — Q1 2026 revenue of $76.7M, EPS of $1.05 vs estimates of $0.32, and raised full-year guidance of $450–500M. The $900M DOE HALEU award is confirmed; task orders are pending. Average analyst target of $279 implies 56% upside from current levels.</div>
+          </div>
+        </div>
+        <div class="sc-metrics">
+          <div class="sc-metric"><div class="scm-label">Revenue (2025)</div><div class="scm-val">$449M</div></div>
+          <div class="sc-metric"><div class="scm-label">Analyst avg target</div><div class="scm-val up">$279</div></div>
+          <div class="sc-metric"><div class="scm-label">DOE HALEU award</div><div class="scm-val">$900M</div></div>
+          <div class="sc-metric"><div class="scm-label">Q1 EPS beat</div><div class="scm-val up">+228%</div></div>
+        </div>
+        <div class="sc-body-label" style="margin-bottom:8px;">Catalysts & risks</div>
+        <div class="tags">
+          <div class="cat-tag">$900M HALEU task orders (imminent)</div>
+          <div class="cat-tag">Commercial centrifuge manufacturing ramp</div>
+          <div class="cat-tag">Advanced reactor fuel demand inflection</div>
+          <div class="cat-tag">FY2026 guidance raised to $450–500M</div>
+          <div class="risk-tag">Insider selling pattern ($1.6M net past 12 months)</div>
+          <div class="risk-tag">Task order timing slippage risk</div>
+        </div>
+      </div>
+
+      <!-- UUUU -->
+      <div class="stock-card growth">
+        <div class="sc-top">
+          <div class="sc-identity">
+            <div class="sc-avatar growth">UUUU</div>
+            <div>
+              <div class="sc-ticker">UUUU</div>
+              <div class="sc-name">Energy Fuels Inc. · NYSE American</div>
+            </div>
+          </div>
+          <div>
+            <div class="sc-price">~$18</div>
+            <div class="sc-change down">−35% from 52-wk high of $27.90</div>
+            <div class="tier-pill growth">Growth</div>
+          </div>
+        </div>
+        <div class="sc-role">Uranium + rare earths · Critical minerals play</div>
+        <div class="sc-thesis">The double thesis. Energy Fuels is a uranium miner and rare earth processor under one roof — the only U.S. facility capable of processing both from the same mill. That makes it a critical minerals play stacked on top of the nuclear trade. The DFARS defense deadline in January 2027 — restricting Chinese-origin rare earths in U.S. defense systems — is a hard, date-specific catalyst that most investors haven't priced.</div>
+        <div class="sc-divider"></div>
+        <div class="sc-two-col">
+          <div>
+            <div class="sc-body-label">Business model</div>
+            <div class="sc-detail">Three segments: Uranium (conventional and ISR recovery from the White Mesa Mill), Rare Earth Elements (separation of heavy REEs including dysprosium and terbium — first-ever 99.9% purity terbium oxide from U.S. monazite feedstock achieved in 2026), and Heavy Mineral Sands (projects in Madagascar, Brazil, and Australia). The acquisition of Australian Strategic Materials adds another critical minerals dimension.</div>
+          </div>
+          <div>
+            <div class="sc-body-label">The rare earth angle most investors miss</div>
+            <div class="sc-detail">The January 2027 DFARS deadline means U.S. defense contractors will be legally prohibited from using Chinese-origin rare earths in defense systems. There are almost no domestic alternatives at scale. Energy Fuels' White Mesa Mill is one of the only facilities positioned to fill that gap — making this a defense-critical asset, not just a mining play. Goldman Sachs highlighted this angle in February 2026.</div>
+          </div>
+        </div>
+        <div class="sc-metrics">
+          <div class="sc-metric"><div class="scm-label">Current price</div><div class="scm-val">~$18</div></div>
+          <div class="sc-metric"><div class="scm-label">Analyst median PT</div><div class="scm-val up">$27.20</div></div>
+          <div class="sc-metric"><div class="scm-label">Working capital</div><div class="scm-val">$956M</div></div>
+          <div class="sc-metric"><div class="scm-label">52-wk low</div><div class="scm-val">$4.82</div></div>
+        </div>
+        <div class="sc-body-label" style="margin-bottom:8px;">Catalysts & risks</div>
+        <div class="tags">
+          <div class="cat-tag">DFARS Jan 2027 defense REE deadline</div>
+          <div class="cat-tag">REE separation capacity ramp-up</div>
+          <div class="cat-tag">ASM (Australian Strategic Materials) acquisition close</div>
+          <div class="cat-tag">White Mesa Mill expansion</div>
+          <div class="risk-tag">Ongoing net losses ($85.6M in 2025)</div>
+          <div class="risk-tag">CEO transition (new CEO April 2026)</div>
+        </div>
+      </div>
+
+      <!-- OKLO -->
+      <div class="stock-card spec">
+        <div class="sc-top">
+          <div class="sc-identity">
+            <div class="sc-avatar spec">OKLO</div>
+            <div>
+              <div class="sc-ticker">OKLO</div>
+              <div class="sc-name">Oklo Inc. · NYSE</div>
+            </div>
+          </div>
+          <div>
+            <div class="sc-price">~$67</div>
+            <div class="sc-change down">−65% from Oct 2025 high of ~$194</div>
+            <div class="tier-pill spec">Speculative</div>
+          </div>
+        </div>
+        <div class="sc-role">Advanced microreactor · Pre-revenue</div>
+        <div class="sc-thesis">The highest-upside, highest-risk name in the basket. Oklo builds liquid-metal-cooled Aurora microreactors for AI data centers and defense. Meta has a major power agreement with Oklo for a planned 1.2 GW nuclear campus. The commercial pipeline sits at ~14–15 GW. They're targeting reactor criticality at Idaho National Laboratory on July 4, 2026 — a binary event. If Aurora delivers on schedule, this re-rates violently.</div>
+        <div class="sc-divider"></div>
+        <div class="sc-two-col">
+          <div>
+            <div class="sc-body-label">Business model</div>
+            <div class="sc-detail">Unique owner-operator model: Oklo builds, owns, and operates its Aurora reactors, selling power directly to customers under long-term PPAs — capturing more margin per unit than a pure design-licensing model. The 75 MWe Aurora design targets data centers and industrial facilities. Also commercialising nuclear fuel recycling (converting used fuel into usable HALEU) and isotope production. $2.54B in liquidity provides a multi-year runway.</div>
+          </div>
+          <div>
+            <div class="sc-body-label">Why the 65% dip is not a thesis break</div>
+            <div class="sc-detail">Three factors drove the drop: (1) pure valuation compression — a $20B+ market cap for a pre-revenue company required perfection; (2) Sam Altman stepped down as chairman in April 2025 to clear potential conflicts of interest with OpenAI power deals; (3) broad risk-off rotation in early 2026. But the fundamentals improved in that window: construction started at Idaho, ~14–15 GW pipeline secured, a major Meta power agreement signed, and $2.54B in liquidity removes financing overhang. July 4 criticality is the near-term binary.</div>
+          </div>
+        </div>
+        <div class="sc-metrics">
+          <div class="sc-metric"><div class="scm-label">Market cap</div><div class="scm-val">~$10.8B</div></div>
+          <div class="sc-metric"><div class="scm-label">Cash & liquidity</div><div class="scm-val">$2.54B</div></div>
+          <div class="sc-metric"><div class="scm-label">Commercial pipeline</div><div class="scm-val">~14–15 GW</div></div>
+          <div class="sc-metric"><div class="scm-label">BofA price target</div><div class="scm-val up">$80</div></div>
+        </div>
+        <div class="sc-body-label" style="margin-bottom:8px;">Catalysts & risks</div>
+        <div class="tags">
+          <div class="cat-tag">July 4, 2026 — reactor criticality at Idaho National Lab</div>
+          <div class="cat-tag">Meta 1.2 GW Ohio campus construction</div>
+          <div class="cat-tag">Eielson Air Force Base deployment</div>
+          <div class="cat-tag">NRC and DOE site approvals</div>
+          <div class="risk-tag">Zero revenue — fully pre-commercial</div>
+          <div class="risk-tag">First-of-a-kind construction execution risk</div>
+          <div class="risk-tag">$39M insider sales in past 12 months</div>
+        </div>
+      </div>
+
+      <!-- SMR -->
+      <div class="stock-card spec">
+        <div class="sc-top">
+          <div class="sc-identity">
+            <div class="sc-avatar spec">SMR</div>
+            <div>
+              <div class="sc-ticker">SMR</div>
+              <div class="sc-name">NuScale Power Corporation · NYSE</div>
+            </div>
+          </div>
+          <div>
+            <div class="sc-price">~$12</div>
+            <div class="sc-change down">−80% from ~$50 in Oct 2025</div>
+            <div class="tier-pill spec">Speculative</div>
+          </div>
+        </div>
+        <div class="sc-role">NRC-certified SMR design · Asset-light model</div>
+        <div class="sc-thesis">The only company in the United States with a Nuclear Regulatory Commission-certified small modular reactor design. That regulatory moat took years to build and no competitor has closed it. The stock is down 80% from its high — the hype crowd left, the technology didn't. The make-or-break question is whether TVA and Romania convert from MOUs to binding contracts before liquidity pressure forces further dilution.</div>
+        <div class="sc-divider"></div>
+        <div class="sc-two-col">
+          <div>
+            <div class="sc-body-label">Business model</div>
+            <div class="sc-detail">Asset-light licensing model: NuScale designs and certifies its SMR modules (NRC approved 50 MWe in 2023, 77 MWe in 2025), then partners with developers like ENTRA1 and Fluor who finance, build, and operate the plants. NuScale earns design licensing fees and services revenue per module deployed. The TVA partnership (up to 6 GW across 7 U.S. states) and Romania RoPower (6 × 77 MWe, mid-2026 go/no-go) are the two near-term commercial pivots.</div>
+          </div>
+          <div>
+            <div class="sc-body-label">The bull case in numbers</div>
+            <div class="sc-detail">Analysts project revenue quadrupling from $76M (2025) to $321M by 2028 as SMR orders materialise. If NuScale reaches $321M revenue and trades at 30× sales — consistent with high-growth infrastructure tech — the stock is worth 8–10× current levels. The caveat is timing: Romania slipped from 2027–28 to 2030, with some analysts projecting 2033–34. For this name more than any other, timeline is the entire thesis.</div>
+          </div>
+        </div>
+        <div class="sc-metrics">
+          <div class="sc-metric"><div class="scm-label">Cash on hand</div><div class="scm-val">~$890M</div></div>
+          <div class="sc-metric"><div class="scm-label">Consensus PT</div><div class="scm-val up">$17</div></div>
+          <div class="sc-metric"><div class="scm-label">Quarterly burn</div><div class="scm-val down">Significant</div></div>
+          <div class="sc-metric"><div class="scm-label">NRC design status</div><div class="scm-val">Certified</div></div>
+        </div>
+        <div class="sc-body-label" style="margin-bottom:8px;">Catalysts & risks</div>
+        <div class="tags">
+          <div class="cat-tag">Romania RoPower FID go/no-go (mid-2026)</div>
+          <div class="cat-tag">TVA binding contract announcement</div>
+          <div class="cat-tag">DOE loan program financing support</div>
+          <div class="cat-tag">ENTRA1 project financing close</div>
+          <div class="risk-tag">Heavy cash burn — limited operational revenue</div>
+          <div class="risk-tag">Dilution — authorized shares doubled</div>
+          <div class="risk-tag">Prior UAMPS cancellation haunts sentiment</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- RISKS -->
+<div class="container">
+  <div class="section" id="risks">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <div class="section-title">Risk factors — what could break the thesis</div>
+    </div>
+
+    <div class="risk-list">
+      <div class="risk-item">
+        <div class="ri-num">01</div>
+        <div>
+          <div class="ri-title">Uranium spot price fails to break $85/lb in H2 2026</div>
+          <div class="ri-body">The entire equity re-rating requires uranium prices to inflect higher and pull utility contracting off the sidelines. If spot stays range-bound between $70–85/lb, earnings upgrades stall and the valuation premium across the basket compresses. This is the single most important macro variable to watch — it sits upstream of every other catalyst in this thesis.</div>
+        </div>
+      </div>
+      <div class="risk-item">
+        <div class="ri-num">02</div>
+        <div>
+          <div class="ri-title">Oklo or NuScale announce construction or timeline delays</div>
+          <div class="ri-body">First-of-a-kind nuclear builds routinely run 2–5 years behind schedule. Any delay announcement for Aurora (Oklo) or the Romania/TVA deployments (NuScale) would trigger significant sentiment damage. The July 4 criticality date for Oklo is the nearest binary event — a miss would likely push the stock back toward $40–45 and weigh on the broader SMR narrative.</div>
+        </div>
+      </div>
+      <div class="risk-item">
+        <div class="ri-num">03</div>
+        <div>
+          <div class="ri-title">DOE HALEU task orders delayed beyond 2026</div>
+          <div class="ri-body">LEU's re-rating thesis is largely predicated on the $900M HALEU contract moving from announcement to executed task orders. Each quarter of delay extends the timeline for earnings recognition and keeps the stock range-bound. Management has described them as "imminent" for over six months — further slippage would damage credibility as well as price.</div>
+        </div>
+      </div>
+      <div class="risk-item">
+        <div class="ri-num">04</div>
+        <div>
+          <div class="ri-title">Equity dilution from speculative names continues</div>
+          <div class="ri-body">Both OKLO and SMR have either raised equity recently or signalled capacity to do so. OKLO insiders sold $39M in the past year. NuScale doubled its authorized share count. For pre-revenue companies burning cash, dilution is an ongoing headwind that can cap upside even when the thesis is directionally correct — the percentage gain required to return to a prior high increases with every new share issued.</div>
+        </div>
+      </div>
+      <div class="risk-item">
+        <div class="ri-num">05</div>
+        <div>
+          <div class="ri-title">Macro risk-off rotation out of energy and materials</div>
+          <div class="ri-body">A broad equity selloff or sector rotation away from energy and materials would hit this basket hard — particularly the speculative tier. These stocks carry high beta to general risk sentiment. Even a thesis-intact macro shock (recession fears, credit tightening, geopolitical escalation outside the nuclear narrative) could produce painful short-term drawdowns of 30–50% before the thesis plays out.</div>
+        </div>
+      </div>
+      <div class="risk-item">
+        <div class="ri-num">06</div>
+        <div>
+          <div class="ri-title">Geopolitical events disrupting uranium supply chains</div>
+          <div class="ri-body">A double-edged dynamic: geopolitical disruption can accelerate Western demand for domestic supply (bullish long-term) but causes short-term market volatility and risk-off pricing. The Q1 2026 uranium spot spike above $101/lb was partly driven by geopolitical shocks before pulling back to ~$78 — illustrating how quickly gains can reverse in a sentiment-driven commodity market.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scenario-grid">
+      <div class="scenario-card">
+        <div class="sc-scenario-label bear">Bear case</div>
+        <div class="sc-scenario-title">Uranium stays range-bound, timelines slip</div>
+        <div class="sc-scenario-body">Spot uranium stagnates at $70/lb. Oklo and NuScale announce delays. DOE task orders push to 2027+. Equity dilution continues. Sector re-rates lower as patience runs out.</div>
+        <div class="sc-scenario-out"><strong>Outcome:</strong> <span>CCJ revisits $70, LEU retests $120, OKLO/SMR retest lows. Basket underperforms S&P 500 by 30–50%.</span></div>
+      </div>
+      <div class="scenario-card">
+        <div class="sc-scenario-label base">Base case</div>
+        <div class="sc-scenario-title">Uranium reaches $100+, first orders materialise</div>
+        <div class="sc-scenario-body">Uranium breaks above $100/lb by Q3 2026. Oklo achieves criticality. TVA or Romania converts to binding order. LEU HALEU task orders execute. Utility contracting accelerates.</div>
+        <div class="sc-scenario-out"><strong>Outcome:</strong> <span>CCJ reaches $150–175, LEU recovers to $250+, OKLO retests $100–120. Basket roughly doubles from current levels.</span></div>
+      </div>
+      <div class="scenario-card">
+        <div class="sc-scenario-label bull">Bull case</div>
+        <div class="sc-scenario-title">Uranium spikes to $125–150, SMR orders flood in</div>
+        <div class="sc-scenario-body">Uranium reaches incentive pricing for new mine development. SMR order book opens at scale. HALEU becomes a bottleneck. Hyperscaler nuclear deals cascade. Government funding accelerates.</div>
+        <div class="sc-scenario-out"><strong>Outcome:</strong> <span>CCJ reaches $200+, LEU revisits $400+, OKLO reaches $150–200. 3–5× returns from current levels over 3–5 years.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CATALYSTS -->
+<div class="container">
+  <div class="section" id="catalysts">
+    <div class="section-header">
+      <div class="section-num">05</div>
+      <div class="section-title">Catalyst calendar — what to watch and when</div>
+    </div>
+
+    <div class="cal-list">
+      <div class="cal-item">
+        <div class="ci-date">
+          <div class="ci-when">Jul 4, 2026</div>
+          <div class="ci-ticker">OKLO</div>
+        </div>
+        <div class="ci-body">
+          <div class="ci-event">Aurora reactor criticality target at Idaho National Laboratory</div>
+          <div class="ci-desc">The most binary near-term event in this entire basket. If Oklo achieves first criticality on schedule it validates the Aurora timeline, generates widespread media coverage of nuclear energy, and likely re-rates the stock 30–50% higher overnight. A miss would push shares back toward $40–45 and weigh on the broader SMR narrative for months.</div>
+        </div>
+      </div>
+      <div class="cal-item">
+        <div class="ci-date">
+          <div class="ci-when">Mid-2026</div>
+          <div class="ci-ticker">SMR</div>
+        </div>
+        <div class="ci-body">
+          <div class="ci-event">Romania RoPower final investment decision (go/no-go)</div>
+          <div class="ci-desc">RoPower is NuScale's most advanced commercial project — 6 × 77 MWe modules for Romania's electricity grid. A positive FID would be the first binding reactor order for any Western SMR developer, a landmark moment for the entire sector. A no-go extends the timeline, adds dilution pressure, and tests investor patience significantly.</div>
+        </div>
+      </div>
+      <div class="cal-item">
+        <div class="ci-date">
+          <div class="ci-when">H2 2026</div>
+          <div class="ci-ticker">LEU</div>
+        </div>
+        <div class="ci-body">
+          <div class="ci-event">DOE HALEU task order execution</div>
+          <div class="ci-desc">Centrus has confirmed the $900M HALEU award and management describes task orders as "imminent." When executed, this converts from announcement to recognized backlog and earnings visibility — the catalyst that closes the gap between $179 current price and $279 average analyst target. Every quarter this slips is a quarter of overhang on the stock.</div>
+        </div>
+      </div>
+      <div class="cal-item">
+        <div class="ci-date">
+          <div class="ci-when">H2 2026</div>
+          <div class="ci-ticker">BWXT</div>
+        </div>
+        <div class="ci-body">
+          <div class="ci-event">PCG (Precision Components Group) acquisition close</div>
+          <div class="ci-desc">The $200M acquisition adds approximately $125M in annual revenue and 500,000+ sq ft of precision nuclear manufacturing capacity. Closing removes deal risk and adds immediate earnings accretion — expected to support further guidance raises and validates the commercial expansion story Deutsche Bank upgraded the stock on.</div>
+        </div>
+      </div>
+      <div class="cal-item">
+        <div class="ci-date">
+          <div class="ci-when">Jan 1, 2027</div>
+          <div class="ci-ticker">UUUU</div>
+        </div>
+        <div class="ci-body">
+          <div class="ci-event">DFARS deadline — Chinese-origin REE restriction in U.S. defense systems</div>
+          <div class="ci-desc">The Defense Federal Acquisition Regulations deadline prohibits Chinese-origin rare earths in U.S. defense procurement. Energy Fuels' White Mesa Mill is one of the only domestic facilities capable of supplying compliant heavy REEs at scale. This is a hard regulatory catalyst — defense contractors will be legally compelled to source domestically, and UUUU is positioned as the primary beneficiary.</div>
+        </div>
+      </div>
+      <div class="cal-item">
+        <div class="ci-date">
+          <div class="ci-when">Ongoing</div>
+          <div class="ci-ticker">CCJ</div>
+        </div>
+        <div class="ci-body">
+          <div class="ci-event">Uranium spot price — watch for sustained break above $90–100/lb</div>
+          <div class="ci-desc">Not a single event but the macro signal that unlocks the full thesis. A sustained break above $90–100/lb triggers utility re-contracting at scale, forces earnings upgrades across the uranium equity complex, and provides the price signal needed to fund new mine development. Long-term contract prices are already at $93/lb — the spot market needs to confirm the move.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VERDICT -->
+<div class="container">
+  <div class="section" id="verdict" style="border-bottom:none;">
+    <div class="section-header">
+      <div class="section-num">06</div>
+      <div class="section-title">The verdict</div>
+    </div>
+
+    <div class="verdict">
+      <div class="verdict-top">
+        <div class="vt-label">Lei Holdings assessment · May 2026</div>
+        <div class="vt-title">Selective buy — contrarian opportunity with caveats.<br>This is a 3–5 year thesis, not a trade.</div>
+      </div>
+      <div class="verdict-body">
+        <p class="vb-p">The structural case for nuclear energy is the strongest it has been in two decades. AI-driven power demand is real and accelerating. Uranium supply is structurally constrained. Government policy is aligned. The hyperscalers are already writing billion-dollar checks. The question is not whether nuclear wins — it's when uranium prices and reactor orders inflect in ways that drive earnings. Right now, the market is mispricing that timing gap as permanent.</p>
+        <p class="vb-p">BWXT and CCJ are the cleanest longs: cash-flowing, visible earnings, and upside catalysts that don't require speculative leaps of faith. LEU and UUUU are for investors who believe the HALEU bottleneck and REE defense deadline are under-appreciated — both are down significantly from highs despite improving fundamentals. OKLO and SMR are call options on the frontier: sized at 2–4% of a portfolio, held for asymmetric upside, with full acceptance that they could go to zero or triple from here depending on execution.</p>
+        <p class="vb-p">Nobody who bought NVIDIA at $150 in 2022 regrets it. They regret not buying more. The window in nuclear and uranium is open right now — not because the narrative is hot, but because it cooled off enough for everyone who chased the headlines to leave. What's left is the thesis, the fundamentals, and the calendar of catalysts. The investors who look back at this moment in 2029 will either have been in it — or be explaining to themselves why they knew and did nothing.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="footer">
+    <div class="footer-brand">Lei<span>Holdings</span></div>
+    <div class="footer-disc">This report is for informational and educational purposes only. It does not constitute financial advice, a solicitation to buy or sell any security, or an investment recommendation. All prices, analyst targets, and market data are approximate as of May 2026 and subject to change without notice. Past performance of comparable sectors does not guarantee future results. Uranium and nuclear energy investments carry significant volatility, regulatory, construction, and execution risk. Always consult a qualified financial advisor before making any investment decisions. © 2026 Lei Holdings.</div>
+  </div>
+</div>
+
+</body>
+</html>
