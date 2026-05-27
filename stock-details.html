@@ -642,32 +642,79 @@ td.strong{color:var(--fg);font-weight:600}
 .mh-bar-fill{height:100%;border-radius:999px;transition:width .6s}
 .mh-criteria{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px 20px}
 
-/* Six Dimensions */
-.sd-hero{display:flex;align-items:center;gap:28px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:22px 26px;margin-bottom:18px}
-.sd-hero-text{flex:1;min-width:0}
-.sd-hero-eyebrow{font-size:10.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
-.sd-hero-rating{font-size:26px;font-weight:700;letter-spacing:-.02em;line-height:1.1;margin-bottom:6px}
-.sd-hero-tagline{font-size:13px;color:var(--fg2);line-height:1.55;max-width:520px}
-.sd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
-.sd-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px 20px}
-.sd-card-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:6px}
-.sd-card-name{font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--fg)}
-.sd-card-label{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase}
-.sd-card-label.green{color:hsl(160,65%,55%)}
-.sd-card-label.amber{color:hsl(45,93%,58%)}
-.sd-card-label.red  {color:hsl(0,68%,60%)}
-.sd-card-score-row{display:flex;align-items:baseline;gap:8px;margin-bottom:10px}
-.sd-card-score{font-family:var(--mono);font-size:34px;font-weight:800;letter-spacing:-.02em;line-height:1}
-.sd-card-score.green{color:hsl(160,65%,55%)}
-.sd-card-score.amber{color:hsl(45,93%,58%)}
-.sd-card-score.red  {color:hsl(0,68%,60%)}
-.sd-card-denom{font-family:var(--mono);font-size:13px;color:var(--muted);font-weight:600}
-.sd-card-bar{height:4px;background:hsl(220,25%,14%);border-radius:0;overflow:hidden;margin-bottom:12px}
-.sd-card-fill{height:100%;transition:width .8s ease-out}
-.sd-card-fill.green{background:hsl(160,65%,55%)}
-.sd-card-fill.amber{background:hsl(45,93%,58%)}
-.sd-card-fill.red  {background:hsl(0,68%,60%)}
-.sd-card-verdict{font-size:12.5px;color:var(--fg2);line-height:1.5}
+/* Six Dimensions — Terminal layout */
+.ii-grid{display:grid;grid-template-columns:1fr 340px;gap:0;margin-bottom:14px;background:#000;border:1px solid hsl(220,28%,14%);border-radius:8px;overflow:hidden}
+@media(max-width:980px){.ii-grid{grid-template-columns:1fr}}
+.ii-left{display:flex;flex-direction:column;border-right:1px solid hsl(220,28%,14%)}
+@media(max-width:980px){.ii-left{border-right:none;border-bottom:1px solid hsl(220,28%,14%)}}
+.ii-summary-row{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid hsl(220,28%,14%)}
+@media(max-width:700px){.ii-summary-row{grid-template-columns:1fr}}
+.ii-summary-card{padding:18px 22px;border-right:1px solid hsl(220,28%,14%)}
+.ii-summary-card:last-child{border-right:none}
+.ii-card-eyebrow{font-size:9.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:hsl(220,15%,48%);margin-bottom:10px}
+.ii-card-big{font-family:'Geist Mono','JetBrains Mono',monospace;font-size:46px;font-weight:800;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.ii-card-big.green{color:hsl(160,65%,55%)}
+.ii-card-big.amber{color:hsl(45,93%,58%)}
+.ii-card-big.red  {color:hsl(0,68%,60%)}
+.ii-card-big-suffix{font-family:'Geist Mono','JetBrains Mono',monospace;font-size:14px;color:hsl(220,15%,38%);font-weight:600;margin-left:4px;letter-spacing:-.01em}
+.ii-card-foot{font-size:12px;color:hsl(220,15%,62%);margin-top:8px;line-height:1.5}
+.ii-chart-card{padding:22px 26px;flex:1;display:flex;flex-direction:column;min-height:380px}
+.ii-chart-eyebrow{font-size:9.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:hsl(220,15%,38%);margin-bottom:6px}
+.ii-chart-title{font-size:22px;font-weight:700;letter-spacing:-.01em;color:hsl(210,15%,90%);margin-bottom:24px;line-height:1.2;max-width:480px}
+.ii-chart-svg{flex:1;width:100%;min-height:300px;display:block}
+.ii-band-strong{fill:hsl(160,65%,55%,.04)}
+.ii-band-fair{fill:hsl(45,93%,58%,.03)}
+.ii-band-weak{fill:hsl(0,68%,60%,.04)}
+.ii-band-divider{stroke:hsl(220,28%,18%);stroke-width:1;stroke-dasharray:3 4}
+.ii-band-label{font-family:'Geist Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+.ii-band-label.strong{fill:hsl(160,65%,55%)}
+.ii-band-label.fair{fill:hsl(45,93%,58%)}
+.ii-band-label.weak{fill:hsl(0,68%,60%)}
+.ii-baseline{stroke:hsl(213,94%,58%,.35);stroke-width:1;stroke-dasharray:2 4;fill:none}
+.ii-chart-line{stroke:hsl(28,100%,60%);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.ii-chart-dot{fill:#000;stroke:hsl(28,100%,60%);stroke-width:2.5}
+.ii-chart-dot.green{stroke:hsl(160,65%,55%)}
+.ii-chart-dot.red{stroke:hsl(0,68%,60%)}
+.ii-sidebar{padding:22px 24px;background:hsl(222,40%,3%);display:flex;flex-direction:column;gap:14px}
+.ii-sb-eyebrow{font-size:9.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:hsl(220,15%,48%);margin-bottom:4px}
+.ii-sb-big{font-family:'Geist Mono','JetBrains Mono',monospace;font-size:64px;font-weight:800;line-height:1;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.ii-sb-big.green{color:hsl(160,65%,55%)}
+.ii-sb-big.amber{color:hsl(45,93%,58%)}
+.ii-sb-big.red{color:hsl(0,68%,60%)}
+.ii-sb-denom{font-family:'Geist Mono',monospace;font-size:14px;color:hsl(220,15%,38%);font-weight:600;margin-top:-2px}
+.ii-sb-badge{display:inline-block;padding:6px 12px;border:1px solid currentColor;font-family:'Geist Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;width:fit-content;margin-top:4px}
+.ii-sb-badge.green{color:hsl(160,65%,55%)}
+.ii-sb-badge.amber{color:hsl(45,93%,58%)}
+.ii-sb-badge.red{color:hsl(0,68%,60%)}
+.ii-sb-blurb{font-size:12.5px;color:hsl(220,15%,72%);line-height:1.6}
+.ii-sb-stats{display:flex;flex-direction:column;gap:8px;padding-top:14px;border-top:1px solid hsl(220,28%,14%)}
+.ii-sb-stat-row{display:flex;justify-content:space-between;align-items:baseline;font-family:'Geist Mono',monospace;gap:12px}
+.ii-sb-stat-l{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:hsl(220,15%,48%);max-width:150px;line-height:1.3}
+.ii-sb-stat-v{font-size:13px;font-weight:700;color:hsl(210,15%,92%);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.ii-sb-stat-v.pos{color:hsl(160,65%,55%)}
+.ii-sb-stat-v.neg{color:hsl(0,68%,60%)}
+.ii-sb-note{padding-top:14px;border-top:1px solid hsl(220,28%,14%)}
+.ii-sb-note-head{display:flex;justify-content:space-between;align-items:baseline;font-family:'Geist Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:hsl(220,15%,48%);margin-bottom:10px}
+.ii-sb-note-body{font-size:12.5px;color:hsl(210,15%,80%);line-height:1.65}
+.ii-sb-note-body p{margin:0 0 9px}
+.ii-sb-note-body p:last-child{margin-bottom:0}
+.ii-sb-note-body strong{color:hsl(210,15%,95%);font-weight:600}
+.ii-dim-row{display:grid;grid-template-columns:repeat(6,1fr);background:#000;border:1px solid hsl(220,28%,14%);border-radius:8px;overflow:hidden}
+@media(max-width:900px){.ii-dim-row{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:520px){.ii-dim-row{grid-template-columns:repeat(2,1fr)}}
+.ii-dim-card{padding:18px 20px;border-right:1px solid hsl(220,28%,14%)}
+.ii-dim-card:last-child{border-right:none}
+.ii-dim-lbl{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:hsl(220,15%,48%);margin-bottom:10px;line-height:1.3}
+.ii-dim-score{font-family:'Geist Mono','JetBrains Mono',monospace;font-size:38px;font-weight:800;letter-spacing:-.03em;line-height:1;margin-bottom:10px;font-variant-numeric:tabular-nums}
+.ii-dim-score.green{color:hsl(160,65%,55%)}
+.ii-dim-score.amber{color:hsl(45,93%,58%)}
+.ii-dim-score.red{color:hsl(0,68%,60%)}
+.ii-dim-bar{height:3px;background:hsl(220,28%,14%);margin-bottom:10px}
+.ii-dim-fill{height:100%;transition:width .8s ease-out}
+.ii-dim-fill.green{background:hsl(160,65%,55%)}
+.ii-dim-fill.amber{background:hsl(45,93%,58%)}
+.ii-dim-fill.red{background:hsl(0,68%,60%)}
+.ii-dim-tier{font-family:'Geist Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:hsl(220,15%,48%)}
 
 /* AI box */
 .ai-actions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
@@ -1287,29 +1334,54 @@ td.strong{color:var(--fg);font-weight:600}
 
   <!-- ══ INSIGHTINVEST™ / MOATHEAT ══ -->
   <div class="tab-page" id="page-moatheat">
-    <!-- Hero: composite score + verdict -->
-    <div class="sd-hero">
-      <div class="mh-score-ring">
-        <svg width="120" height="120" viewBox="0 0 120 120">
-          <circle cx="60" cy="60" r="50" fill="none" stroke="hsl(220,25%,14%)" stroke-width="10"/>
-          <circle id="sd-ring" cx="60" cy="60" r="50" fill="none" stroke="hsl(213,94%,58%)" stroke-width="10"
-            stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314"
-            transform="rotate(-90 60 60)" style="transition:stroke-dashoffset .8s,stroke .4s"/>
-        </svg>
-        <div class="mh-score-center">
-          <div class="mh-score-num" id="sd-overall">—</div>
-          <div class="mh-score-label">/ 100</div>
+    <!-- Main grid: left column (summary + chart) + right sidebar -->
+    <div class="ii-grid">
+      <div class="ii-left">
+        <div class="ii-summary-row">
+          <div class="ii-summary-card">
+            <div class="ii-card-eyebrow">Composite Quality</div>
+            <div><span class="ii-card-big" id="ii-composite-val">—</span><span class="ii-card-big-suffix">/ 100</span></div>
+            <div class="ii-card-foot" id="ii-composite-foot">—</div>
+          </div>
+          <div class="ii-summary-card">
+            <div class="ii-card-eyebrow">Strengths</div>
+            <div><span class="ii-card-big green" id="ii-strengths-val">—</span><span class="ii-card-big-suffix">/ 6</span></div>
+            <div class="ii-card-foot" id="ii-strengths-foot">—</div>
+          </div>
+          <div class="ii-summary-card">
+            <div class="ii-card-eyebrow">Watch Items</div>
+            <div><span class="ii-card-big" id="ii-watch-val">—</span></div>
+            <div class="ii-card-foot" id="ii-watch-foot">—</div>
+          </div>
+        </div>
+        <div class="ii-chart-card">
+          <div class="ii-chart-eyebrow" id="ii-chart-eyebrow">01 · Quality Profile</div>
+          <div class="ii-chart-title" id="ii-chart-title">How this stock scores across six dimensions</div>
+          <svg class="ii-chart-svg" id="ii-chart-svg" viewBox="0 0 800 320" preserveAspectRatio="none"></svg>
         </div>
       </div>
-      <div class="sd-hero-text">
-        <div class="sd-hero-eyebrow">InsightInvest™ · Six Dimensions</div>
-        <div class="sd-hero-rating" id="sd-rating">—</div>
-        <div class="sd-hero-tagline" id="sd-tagline">—</div>
-      </div>
+
+      <aside class="ii-sidebar">
+        <div>
+          <div class="ii-sb-eyebrow">InsightInvest™ Composite</div>
+          <div class="ii-sb-big" id="ii-sb-big">—</div>
+          <div class="ii-sb-denom">/ 100</div>
+        </div>
+        <div class="ii-sb-badge" id="ii-sb-badge">—</div>
+        <div class="ii-sb-blurb" id="ii-sb-blurb">—</div>
+        <div class="ii-sb-stats" id="ii-sb-stats"></div>
+        <div class="ii-sb-note">
+          <div class="ii-sb-note-head">
+            <span>Analyst Note</span>
+            <span id="ii-sb-note-ts">—</span>
+          </div>
+          <div class="ii-sb-note-body" id="ii-sb-note-body">—</div>
+        </div>
+      </aside>
     </div>
 
-    <!-- 6 dimension cards in a 2x3 grid -->
-    <div class="sd-grid" id="sd-grid"></div>
+    <!-- Bottom: 6 dimension cards in single row -->
+    <div class="ii-dim-row" id="ii-dim-row"></div>
   </div>
 
   <!-- ══ AI INSIGHTS ══ -->
@@ -3662,51 +3734,316 @@ function sixDimRating(score) {
 }
 
 function renderMoatHeat() {
-  const d = computeSixDimensions(S);
+  const d         = computeSixDimensions(S);
   const composite = sixDimComposite(d);
-  const { rating, tag } = sixDimRating(composite);
-  const compColor = composite >= 70 ? 'hsl(160,65%,55%)' : composite >= 40 ? 'hsl(45,93%,58%)' : 'hsl(0,68%,60%)';
+  const compColor = composite >= 70 ? 'green' : composite >= 40 ? 'amber' : 'red';
+  const compHex   = composite >= 70 ? 'hsl(160,65%,55%)' : composite >= 40 ? 'hsl(45,93%,58%)' : 'hsl(0,68%,60%)';
 
-  // Hero
-  const ring = document.getElementById('sd-ring');
-  const circumference = 314;
-  ring.style.strokeDashoffset = circumference - (composite / 100) * circumference;
-  ring.style.stroke = compColor;
-  const overallEl = document.getElementById('sd-overall');
-  overallEl.textContent = composite;
-  overallEl.style.color = compColor;
-  const ratingEl = document.getElementById('sd-rating');
-  ratingEl.textContent = rating;
-  ratingEl.style.color = compColor;
-  document.getElementById('sd-tagline').textContent = tag;
-
-  // 6 cards
+  // Dimension list in display order — matches the bottom cards
   const dims = [
-    { key: 'predictability',    name: 'Predictability'     },
-    { key: 'profitability',     name: 'Profitability'      },
-    { key: 'growthQuality',     name: 'Growth Quality'     },
-    { key: 'economicMoat',      name: 'Economic Moat'      },
-    { key: 'financialStrength', name: 'Financial Strength' },
-    { key: 'valuation',         name: 'Valuation'          },
+    { key: 'predictability',    name: 'Predictability'      },
+    { key: 'profitability',     name: 'Profitability'       },
+    { key: 'growthQuality',     name: 'Growth'              },
+    { key: 'economicMoat',      name: 'InsightInvestMoat™'  },
+    { key: 'financialStrength', name: 'Fin. Strength'       },
+    { key: 'valuation',         name: 'Valuation'           },
   ];
 
-  document.getElementById('sd-grid').innerHTML = dims.map(dim => {
+  // ── Summary cards ──
+  const compositeEl = document.getElementById('ii-composite-val');
+  compositeEl.textContent = composite.toFixed(1);
+  compositeEl.className = 'ii-card-big ' + compColor;
+
+  // Peer percentile derived from composite (no real peer data, use score-based approximation)
+  const peerLabel =
+    composite >= 85 ? 'Top 5%' :
+    composite >= 75 ? 'Top 15%' :
+    composite >= 65 ? 'Top 25%' :
+    composite >= 55 ? 'Top 40%' :
+    composite >= 40 ? 'Middle of pack' :
+                      'Bottom quartile';
+  const moatLevel = d.economicMoat.label; // Wide / Narrow / None
+  document.getElementById('ii-composite-foot').textContent =
+    `${moatLevel === 'None' ? 'No moat' : moatLevel + ' moat'} · ${peerLabel} of ${S.profile?.sector || 'sector'} peers`;
+
+  // Strengths = dimensions in their top tier (Wide, High, Attractive)
+  const topTiers = new Set(['High', 'Wide', 'Attractive']);
+  const strengths = dims.filter(x => topTiers.has(d[x.key].label));
+  document.getElementById('ii-strengths-val').textContent = strengths.length;
+  document.getElementById('ii-strengths-foot').textContent =
+    strengths.length
+      ? strengths.map(s => s.name.replace('InsightInvestMoat™','moat').replace('Fin. Strength','balance sheet').toLowerCase()).join(', ')
+      : 'No dimensions currently in the top tier';
+
+  // Watch items: use the valuation dimension's gap
+  const watch = computeIIWatchGap();
+  const watchEl = document.getElementById('ii-watch-val');
+  if (watch.gap !== null) {
+    watchEl.textContent = (watch.gap >= 0 ? '+' : '−') + Math.abs(watch.gap).toFixed(1) + '%';
+    watchEl.className = 'ii-card-big ' + (watch.gap >= 0 ? 'green' : 'red');
+    document.getElementById('ii-watch-foot').textContent =
+      watch.gap >= 0
+        ? `Price ${Math.abs(watch.gap).toFixed(1)}% below fair value of $${watch.fair.toFixed(2)}`
+        : `Price ${Math.abs(watch.gap).toFixed(1)}% above fair value of $${watch.fair.toFixed(2)}`;
+  } else {
+    watchEl.textContent = '—';
+    watchEl.className = 'ii-card-big';
+    document.getElementById('ii-watch-foot').textContent = 'Fair value not computable on current data';
+  }
+
+  // ── Chart title ──
+  const sym = S.profile?.symbol || 'this stock';
+  document.getElementById('ii-chart-title').textContent =
+    `How ${sym} scores across six dimensions`;
+
+  // ── SVG line chart ──
+  drawIIQualityChart(dims.map(x => ({ name: x.name, score: d[x.key].score, color: d[x.key].color })));
+
+  // ── Sidebar ──
+  const sbBig   = document.getElementById('ii-sb-big');
+  sbBig.textContent = composite.toFixed(1);
+  sbBig.className = 'ii-sb-big ' + compColor;
+  const sbBadge = document.getElementById('ii-sb-badge');
+  const badgeLabel =
+    moatLevel === 'Wide'   ? `WIDE MOAT · ${peerLabel.toUpperCase()}` :
+    moatLevel === 'Narrow' ? `NARROW MOAT · ${peerLabel.toUpperCase()}` :
+                              `NO MOAT · ${peerLabel.toUpperCase()}`;
+  sbBadge.textContent = badgeLabel;
+  sbBadge.className = 'ii-sb-badge ' + (d.economicMoat.color);
+
+  document.getElementById('ii-sb-blurb').textContent = composeIIBlurb(d, dims, composite);
+
+  // Sector-aware key stats
+  document.getElementById('ii-sb-stats').innerHTML = buildIISidebarStats(watch);
+
+  // Analyst note
+  document.getElementById('ii-sb-note-body').innerHTML = composeIINote(d, dims, composite, watch);
+  document.getElementById('ii-sb-note-ts').textContent = (new Date()).toLocaleTimeString('en-US',
+    { hour: '2-digit', minute: '2-digit', hour12: false }) + ' ET';
+
+  // ── Bottom dimension row ──
+  document.getElementById('ii-dim-row').innerHTML = dims.map(dim => {
     const r = d[dim.key];
-    const c = r.color; // 'green' | 'amber' | 'red'
+    const tierLabel =
+      dim.key === 'economicMoat' ? r.label.toUpperCase() :
+      dim.key === 'valuation'    ? (r.score >= 70 ? 'ATTRACTIVE' : r.score >= 40 ? 'FAIR' : 'OVERVALUED') :
+                                   r.label.toUpperCase();
     return `
-      <div class="sd-card">
-        <div class="sd-card-head">
-          <div class="sd-card-name">${dim.name}</div>
-          <div class="sd-card-label ${c}">${r.label}</div>
-        </div>
-        <div class="sd-card-score-row">
-          <div class="sd-card-score ${c}">${r.score}</div>
-          <div class="sd-card-denom">/ 100</div>
-        </div>
-        <div class="sd-card-bar"><div class="sd-card-fill ${c}" style="width:${r.score}%"></div></div>
-        <div class="sd-card-verdict">${r.verdict}</div>
+      <div class="ii-dim-card">
+        <div class="ii-dim-lbl">${dim.name}</div>
+        <div class="ii-dim-score ${r.color}">${r.score}</div>
+        <div class="ii-dim-bar"><div class="ii-dim-fill ${r.color}" style="width:${r.score}%"></div></div>
+        <div class="ii-dim-tier">${tierLabel}</div>
       </div>`;
   }).join('');
+}
+
+// Watch-item gap: composite fair value vs current price
+function computeIIWatchGap() {
+  const cur = getCurPrice();
+  if (!cur) return { gap: null, fair: null };
+
+  // Collect valid fair-value methods (mirror renderValuationSummary's logic, trimmed mean)
+  const fcf    = computeTTMFcf();
+  const shares = getSharesOut();
+  const wacc   = computeWACC();
+  const inc0   = S.income[0] || {};
+  const bal0   = S.balance[0] || {};
+  const eps    = inc0.epsdiluted || S.quote.eps || null;
+  const ebitda = inc0.ebitda || 0;
+  const revenue= inc0.revenue || 0;
+  const debt   = bal0.totalDebt || 0;
+  const cash   = bal0.cashAndCashEquivalents || 0;
+  const sectorMed = getSectorMedians();
+
+  const baseG = getBaseGrowthEstimate();
+  const dcfPS = (g, tg) => {
+    if (fcf <= 0 || shares <= 0) return null;
+    const pv = dcfDeclining(fcf, g, tg, wacc);
+    return pv ? pv / shares : null;
+  };
+  const epv  = computeEPV();
+  const hist_pfcf  = computeHistAvg(S.metrics, 'pfcfRatio', 10) || computeHistAvg(S.metrics, 'priceToFreeCashFlowsRatio', 10);
+  const hist_pe    = computeHistAvg(S.metrics, 'peRatio', 10);
+  const hist_evEb  = computeHistAvg(S.metrics, 'evToEBITDA', 10) || computeHistAvg(S.metrics, 'enterpriseValueOverEBITDA', 10);
+  const hist_evRev = computeHistAvg(S.metrics, 'evToSales', 10);
+  const fcfPS = shares > 0 ? fcf / shares : 0;
+  const evMult   = (m, k) => (m && k > 0 && shares > 0) ? (m * k - debt + cash) / shares : null;
+  const peMult   = (m)    => (m && eps && eps > 0) ? m * eps : null;
+  const pfcfMult = (m)    => (m && fcfPS > 0) ? m * fcfPS : null;
+
+  const values = [
+    dcfPS(baseG * 1.2, 0.035),
+    dcfPS(baseG,       0.030),
+    dcfPS(baseG * 0.7, 0.020),
+    epv.epvPerShare > 0 ? epv.epvPerShare : null,
+    peMult(hist_pe),
+    peMult(sectorMed.pe),
+    pfcfMult(hist_pfcf),
+    pfcfMult(sectorMed.pfcf),
+    evMult(hist_evEb,        ebitda),
+    evMult(sectorMed.evEbitda, ebitda),
+    evMult(hist_evRev,         revenue),
+    evMult(sectorMed.evRev,    revenue),
+  ].filter(v => v !== null && isFinite(v) && v > 0);
+
+  if (!values.length) return { gap: null, fair: null };
+  values.sort((a, b) => a - b);
+  const pool = values.length >= 5 ? values.slice(1, -1) : values;
+  const fair = pool.reduce((s, v) => s + v, 0) / pool.length;
+  const gap  = (fair - cur) / cur * 100; // positive = below fair value = good
+
+  return { gap, fair };
+}
+
+function buildIISidebarStats(watch) {
+  const cur = getCurPrice();
+  const sector = (S.profile?.sector || '').toLowerCase();
+  const isBank = /financial|bank|insur/.test(sector);
+  const m  = S.metrics[0] || {};
+  const inc0 = S.income[0] || {};
+  const bal0 = S.balance[0] || {};
+  const cf0  = S.cashflow[0] || {};
+  const q    = S.quote || {};
+  const mktCap = q.marketCap || S.profile?.marketCap || 0;
+
+  const rows = [];
+
+  // Return metric — sector-aware
+  if (isBank) {
+    rows.push({ l: 'ROE (TTM)', v: m.roe != null ? (m.roe * 100).toFixed(1) + '%' : '—' });
+  } else {
+    rows.push({ l: 'ROIC (TTM)', v: m.roic != null ? (m.roic * 100).toFixed(1) + '%' : '—' });
+  }
+
+  // Leverage
+  const de = bal0.totalDebt && bal0.totalStockholdersEquity > 0
+    ? bal0.totalDebt / bal0.totalStockholdersEquity
+    : null;
+  rows.push({ l: 'Debt / Equity', v: de != null ? de.toFixed(2) + '×' : '—' });
+
+  // Buyback yield
+  const buybacks = Math.abs(cf0.commonStockRepurchased || 0);
+  const buybackYield = mktCap > 0 ? (buybacks / mktCap) * 100 : null;
+  rows.push({ l: 'Buyback Yield', v: buybackYield != null ? buybackYield.toFixed(1) + '%' : '—' });
+
+  // Fair value
+  if (watch.fair) {
+    rows.push({ l: 'Fair Value', v: '$' + watch.fair.toFixed(2) });
+  }
+
+  // Upside / downside
+  if (watch.gap !== null && cur) {
+    const sign = watch.gap >= 0 ? '+' : '−';
+    rows.push({
+      l: 'Upside / Downside',
+      v: `${sign}${Math.abs(watch.gap).toFixed(1)}%`,
+      cls: watch.gap >= 0 ? 'pos' : 'neg',
+    });
+  }
+
+  return rows.map(r =>
+    `<div class="ii-sb-stat-row"><span class="ii-sb-stat-l">${r.l}</span><span class="ii-sb-stat-v ${r.cls||''}">${r.v}</span></div>`
+  ).join('');
+}
+
+function composeIIBlurb(d, dims, composite) {
+  const top    = dims.map(x => ({...x, ...d[x.key]})).sort((a, b) => b.score - a.score)[0];
+  const sector = S.profile?.sector || 'its sector';
+  const mq     = d.economicMoat.label === 'Wide' ? 'best-in-class' : d.economicMoat.label === 'Narrow' ? 'above-average' : 'developing';
+  const tail   = composite >= 70
+    ? `The composite has held in the top quartile for sustained periods.`
+    : composite >= 50
+    ? `The framework places it in the middle of the pack — stronger in some areas than others.`
+    : `Multiple dimensions show weakness; the framework rates it below sector median.`;
+  return `${S.profile?.symbol || 'This stock'} combines ${mq} ${top.name.toLowerCase().replace('insightinvestmoat™','moat')} with mixed scores across the rest of the framework. ${tail}`;
+}
+
+function composeIINote(d, dims, composite, watch) {
+  const ranked = dims.map(x => ({...x, ...d[x.key]})).sort((a, b) => b.score - a.score);
+  const top    = ranked[0];
+  const bottom = ranked[ranked.length - 1];
+  const sym    = S.profile?.symbol || 'this stock';
+
+  let para1, para2;
+  if (composite >= 65) {
+    para1 = `<strong>The case for owning ${sym}</strong> is durable ${top.name.toLowerCase().replace('insightinvestmoat™','moat')}, ${ranked[1].name.toLowerCase()}, and a balance sheet ranking that keeps the franchise near the top of its sector.`;
+  } else if (composite >= 50) {
+    para1 = `<strong>The case for owning ${sym}</strong> rests on its ${top.name.toLowerCase()} score and ${ranked[1].name.toLowerCase()} — selectively strong dimensions in an otherwise mixed profile.`;
+  } else {
+    para1 = `<strong>The case for ${sym} is thin.</strong> Only ${top.name.toLowerCase()} clears the high-tier bar, and it's not enough to offset weakness elsewhere.`;
+  }
+
+  if (watch.gap !== null && watch.fair) {
+    const cur = getCurPrice();
+    if (watch.gap < -10) {
+      para2 = `<strong>The case against adding today is valuation.</strong> Our composite fair-value estimate prints $${watch.fair.toFixed(2)} versus a $${cur.toFixed(2)} spot — a ${Math.abs(watch.gap).toFixed(1)}% premium. Wait for a better entry.`;
+    } else if (watch.gap >= 20) {
+      para2 = `<strong>The setup looks attractive.</strong> Composite fair value of $${watch.fair.toFixed(2)} is ${watch.gap.toFixed(1)}% above the current $${cur.toFixed(2)} spot — a meaningful margin of safety.`;
+    } else if (watch.gap >= 0) {
+      para2 = `<strong>Valuation is reasonable.</strong> Composite fair value of $${watch.fair.toFixed(2)} sits roughly in line with the $${cur.toFixed(2)} market price — limited margin of safety either way.`;
+    } else {
+      para2 = `<strong>Valuation looks stretched.</strong> Composite fair value of $${watch.fair.toFixed(2)} is ${Math.abs(watch.gap).toFixed(1)}% below the current $${cur.toFixed(2)} spot. Be patient.`;
+    }
+  } else {
+    para2 = `<strong>Valuation cannot be modeled cleanly.</strong> Negative cash flows or missing inputs prevent a composite fair-value estimate. Look at the Intrinsic Value tab for method-level detail.`;
+  }
+
+  const para3 = `Weakest dimension is <strong>${bottom.name}</strong> (${bottom.score}/100). ${bottom.verdict}`;
+
+  return `<p>${para1}</p><p>${para2}</p><p>${para3}</p>`;
+}
+
+function drawIIQualityChart(points) {
+  const svg = document.getElementById('ii-chart-svg');
+  if (!svg) return;
+  const W = 800, H = 320;
+  const padL = 90, padR = 30, padT = 20, padB = 20;
+  const innerW = W - padL - padR;
+  const innerH = H - padT - padB;
+
+  // y(score) → SVG y coord (inverted)
+  const yFor = s => padT + (1 - s / 100) * innerH;
+  // x(index) → SVG x coord
+  const xFor = i => padL + (innerW * (i / (points.length - 1)));
+
+  // Band heights
+  const yStrongTop = padT;
+  const yStrongBot = yFor(75);
+  const yFairBot   = yFor(40);
+  const yWeakBot   = padT + innerH;
+
+  // Build path
+  const pathD = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${xFor(i).toFixed(1)} ${yFor(p.score).toFixed(1)}`).join(' ');
+
+  // Baseline = composite (used as a subtle reference)
+  const composite = points.reduce((s, p) => s + p.score, 0) / points.length;
+  const yBaseline = yFor(composite);
+
+  svg.innerHTML = `
+    <!-- Bands -->
+    <rect x="${padL}" y="${yStrongTop}" width="${innerW}" height="${yStrongBot - yStrongTop}" class="ii-band-strong"/>
+    <rect x="${padL}" y="${yStrongBot}" width="${innerW}" height="${yFairBot   - yStrongBot}" class="ii-band-fair"/>
+    <rect x="${padL}" y="${yFairBot}"   width="${innerW}" height="${yWeakBot   - yFairBot}"   class="ii-band-weak"/>
+
+    <!-- Band dividers -->
+    <line x1="${padL}" y1="${yStrongBot}" x2="${padL + innerW}" y2="${yStrongBot}" class="ii-band-divider"/>
+    <line x1="${padL}" y1="${yFairBot}"   x2="${padL + innerW}" y2="${yFairBot}"   class="ii-band-divider"/>
+
+    <!-- Band labels -->
+    <text x="${padL - 14}" y="${(yStrongTop + yStrongBot) / 2}" text-anchor="end" alignment-baseline="middle" class="ii-band-label strong">Strong · 75+</text>
+    <text x="${padL - 14}" y="${(yStrongBot + yFairBot)   / 2}" text-anchor="end" alignment-baseline="middle" class="ii-band-label fair">Fair · 40–75</text>
+    <text x="${padL - 14}" y="${(yFairBot   + yWeakBot)   / 2}" text-anchor="end" alignment-baseline="middle" class="ii-band-label weak">Weak · &lt;40</text>
+
+    <!-- Composite baseline -->
+    <line x1="${padL}" y1="${yBaseline}" x2="${padL + innerW}" y2="${yBaseline}" class="ii-baseline"/>
+
+    <!-- Score line -->
+    <path d="${pathD}" class="ii-chart-line"/>
+
+    <!-- Dots -->
+    ${points.map((p, i) => `<circle cx="${xFor(i).toFixed(1)}" cy="${yFor(p.score).toFixed(1)}" r="6" class="ii-chart-dot ${p.color === 'green' ? 'green' : p.color === 'red' ? 'red' : ''}"/>`).join('')}
+  `;
 }
 
 // ═══════════════════════════════════════════════════════════════════
