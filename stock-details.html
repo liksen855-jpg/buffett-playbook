@@ -642,6 +642,33 @@ td.strong{color:var(--fg);font-weight:600}
 .mh-bar-fill{height:100%;border-radius:999px;transition:width .6s}
 .mh-criteria{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px 20px}
 
+/* Six Dimensions */
+.sd-hero{display:flex;align-items:center;gap:28px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:22px 26px;margin-bottom:18px}
+.sd-hero-text{flex:1;min-width:0}
+.sd-hero-eyebrow{font-size:10.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.sd-hero-rating{font-size:26px;font-weight:700;letter-spacing:-.02em;line-height:1.1;margin-bottom:6px}
+.sd-hero-tagline{font-size:13px;color:var(--fg2);line-height:1.55;max-width:520px}
+.sd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.sd-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px 20px}
+.sd-card-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:6px}
+.sd-card-name{font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--fg)}
+.sd-card-label{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase}
+.sd-card-label.green{color:hsl(160,65%,55%)}
+.sd-card-label.amber{color:hsl(45,93%,58%)}
+.sd-card-label.red  {color:hsl(0,68%,60%)}
+.sd-card-score-row{display:flex;align-items:baseline;gap:8px;margin-bottom:10px}
+.sd-card-score{font-family:var(--mono);font-size:34px;font-weight:800;letter-spacing:-.02em;line-height:1}
+.sd-card-score.green{color:hsl(160,65%,55%)}
+.sd-card-score.amber{color:hsl(45,93%,58%)}
+.sd-card-score.red  {color:hsl(0,68%,60%)}
+.sd-card-denom{font-family:var(--mono);font-size:13px;color:var(--muted);font-weight:600}
+.sd-card-bar{height:4px;background:hsl(220,25%,14%);border-radius:0;overflow:hidden;margin-bottom:12px}
+.sd-card-fill{height:100%;transition:width .8s ease-out}
+.sd-card-fill.green{background:hsl(160,65%,55%)}
+.sd-card-fill.amber{background:hsl(45,93%,58%)}
+.sd-card-fill.red  {background:hsl(0,68%,60%)}
+.sd-card-verdict{font-size:12.5px;color:var(--fg2);line-height:1.5}
+
 /* AI box */
 .ai-actions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid transparent;transition:opacity .15s}
@@ -1260,29 +1287,29 @@ td.strong{color:var(--fg);font-weight:600}
 
   <!-- ══ INSIGHTINVEST™ / MOATHEAT ══ -->
   <div class="tab-page" id="page-moatheat">
-    <div class="mh-hero">
+    <!-- Hero: composite score + verdict -->
+    <div class="sd-hero">
       <div class="mh-score-ring">
         <svg width="120" height="120" viewBox="0 0 120 120">
           <circle cx="60" cy="60" r="50" fill="none" stroke="hsl(220,25%,14%)" stroke-width="10"/>
-          <circle id="mh-ring" cx="60" cy="60" r="50" fill="none" stroke="hsl(213,94%,58%)" stroke-width="10"
+          <circle id="sd-ring" cx="60" cy="60" r="50" fill="none" stroke="hsl(213,94%,58%)" stroke-width="10"
             stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314"
             transform="rotate(-90 60 60)" style="transition:stroke-dashoffset .8s,stroke .4s"/>
         </svg>
         <div class="mh-score-center">
-          <div class="mh-score-num" id="mh-overall">—</div>
+          <div class="mh-score-num" id="sd-overall">—</div>
           <div class="mh-score-label">/ 100</div>
         </div>
       </div>
-      <div>
-        <div class="mh-rating" id="mh-rating">—</div>
-        <div class="mh-tagline" id="mh-tagline">—</div>
+      <div class="sd-hero-text">
+        <div class="sd-hero-eyebrow">InsightInvest™ · Six Dimensions</div>
+        <div class="sd-hero-rating" id="sd-rating">—</div>
+        <div class="sd-hero-tagline" id="sd-tagline">—</div>
       </div>
     </div>
-    <div class="mh-breakdown" id="mh-breakdown"></div>
-    <div class="mh-criteria card">
-      <div class="card-title">Score Breakdown</div>
-      <div id="mh-detail"></div>
-    </div>
+
+    <!-- 6 dimension cards in a 2x3 grid -->
+    <div class="sd-grid" id="sd-grid"></div>
   </div>
 
   <!-- ══ AI INSIGHTS ══ -->
@@ -3224,130 +3251,462 @@ function renderLayer4(){
 }
 
 // ═══════════════════════════════════════════════════════════════════
-// INSIGHTINVEST™ MOATHEAT
+// INSIGHTINVEST™ · SIX DIMENSIONS
 // ═══════════════════════════════════════════════════════════════════
-function computeScores(){
-  const inc=S.income,cf=S.cashflow,bal=S.balance,m=S.metrics[0]||{},q=S.quote,p=S.profile;
-  const i0=inc[0]||{},i1=inc[1]||{},b0=bal[0]||{},c0=cf[0]||{};
-  const rev=i0.revenue||0;
-  const price=q.price||p.price||0;
-
-  // MOAT — wide moat indicators
-  let moat=0;
-  moat+=Math.min(35,(i0.grossProfitRatio||0)*100);       // Gross margin (max 35 at 35%)
-  moat+=Math.min(25,(i0.operatingIncomeRatio||0)*150);   // Op margin
-  moat+=Math.min(20,(m.returnOnEquity||0)*80);           // ROE
-  moat+=Math.min(20,(m.returnOnInvestedCapital||0)*100); // ROIC
-  moat=Math.min(100,Math.max(0,Math.round(moat)));
-
-  // FINANCIAL HEALTH
-  let health=0;
-  health+=Math.min(25,(m.currentRatio||0)*12.5);         // Current ratio
-  const fcfM=rev?(c0.freeCashFlow||0)/rev:0;
-  health+=Math.min(25,fcfM*125);                          // FCF margin
-  const de=b0.totalDebt&&b0.totalStockholdersEquity&&b0.totalStockholdersEquity>0?b0.totalDebt/b0.totalStockholdersEquity:5;
-  health+=Math.max(0,25-de*5);                            // Low debt
-  health+=Math.min(25,(m.freeCashFlowYield||0)*250);     // FCF yield
-  health=Math.min(100,Math.max(0,Math.round(health)));
-
-  // GROWTH QUALITY
-  let growth=0;
-  const revG=i1.revenue&&i1.revenue>0?(i0.revenue-i1.revenue)/i1.revenue:0;
-  const niG=i1.netIncome&&i1.netIncome>0?(i0.netIncome-i1.netIncome)/Math.abs(i1.netIncome):0;
-  growth+=Math.min(40,Math.max(0,revG*200));
-  growth+=Math.min(40,Math.max(0,niG*200));
-  growth+=Math.min(20,(m.returnOnInvestedCapital||0)*100);
-  growth=Math.min(100,Math.max(0,Math.round(growth)));
-
-  // VALUATION — higher score = more attractive
-  let val=0;
-  const pe=q.pe||0;
-  if(pe>0&&pe<12)val+=35; else if(pe<18)val+=28; else if(pe<25)val+=18; else if(pe<40)val+=8;
-  const evEb=m.enterpriseValueOverEBITDA||0;
-  if(evEb>0&&evEb<8)val+=35; else if(evEb<12)val+=28; else if(evEb<18)val+=18; else if(evEb<25)val+=8;
-  val+=Math.min(30,(m.freeCashFlowYield||0)*300);
-  val=Math.min(100,Math.max(0,Math.round(val)));
-
-  // MANAGEMENT EFFICIENCY
-  let mgmt=0;
-  mgmt+=Math.min(40,(m.returnOnInvestedCapital||0)*200);
-  mgmt+=Math.min(35,(m.returnOnEquity||0)*150);
-  mgmt+=Math.min(25,fcfM*125);
-  mgmt=Math.min(100,Math.max(0,Math.round(mgmt)));
-
-  const overall=Math.round(moat*.25+health*.20+growth*.20+val*.20+mgmt*.15);
-
-  return{overall,moat,health,growth,valuation:val,management:mgmt};
+function computeSixDimensions(S) {
+  const sector = (S.profile?.sector || '').toLowerCase();
+  const isBank = sector.includes('financial') || sector.includes('bank') || sector.includes('insur') || sector.includes('reit');
+  return {
+    predictability:    scorePredictability(S),
+    profitability:     scoreProfitability(S),
+    growthQuality:     scoreGrowthQuality(S),
+    economicMoat:      scoreEconomicMoat(S, isBank),
+    financialStrength: scoreFinancialStrength(S, isBank),
+    valuation:         scoreValuation(S),
+  };
 }
 
-function mhColor(score){
-  if(score>=80)return'var(--green)';
-  if(score>=60)return'hsl(160,60%,50%)';
-  if(score>=45)return'var(--yellow)';
-  if(score>=30)return'var(--orange)';
-  return'var(--red)';
+// 1. PREDICTABILITY
+function scorePredictability(S) {
+  let score = 0;
+  const inc = S.income || [];
+  const ear = S.earnings || [];
+  const last5inc = inc.slice(0, 5);
+
+  // Signal 1: positive net income in 5Y
+  if (last5inc.length >= 3) {
+    const allPos = last5inc.every(y => (y.netIncome || 0) > 0);
+    if (allPos) score += 25;
+    else if (last5inc.filter(y => (y.netIncome || 0) > 0).length >= Math.ceil(last5inc.length * 0.8)) score += 12;
+  }
+  // Signal 2: revenue growth in 4 of 5
+  if (last5inc.length >= 2) {
+    let g = 0;
+    for (let i = 0; i < last5inc.length - 1; i++) {
+      if ((last5inc[i].revenue || 0) > (last5inc[i+1].revenue || 0)) g++;
+    }
+    const p = last5inc.length - 1;
+    if (g >= p) score += 25;
+    else if (g >= p * 0.75) score += 18;
+    else if (g >= p * 0.5) score += 10;
+  }
+  // Signal 3: EPS beats (FMP uses epsActual + epsEstimated)
+  const last5ear = ear.slice(0, 5);
+  if (last5ear.length >= 3) {
+    const beats = last5ear.filter(q => {
+      const a = q.epsActual ?? q.eps ?? null;
+      const e = q.epsEstimated ?? null;
+      return a !== null && e !== null && a >= e;
+    }).length;
+    if (beats >= 4) score += 25;
+    else if (beats >= 3) score += 18;
+    else if (beats >= 2) score += 10;
+  } else { score += 12; }
+  // Signal 4: operating margin stability
+  const opM = last5inc.map(y => y.revenue > 0 ? (y.operatingIncome / y.revenue) * 100 : null).filter(v => v !== null);
+  if (opM.length >= 3) {
+    const v = Math.max(...opM) - Math.min(...opM);
+    if (v < 3) score += 25;
+    else if (v < 5) score += 18;
+    else if (v < 10) score += 10;
+  } else { score += 12; }
+
+  return buildSixDimResult(score, [
+    { threshold: 70, label: 'High',   verdict: 'Consistent, reliable earnings history' },
+    { threshold: 40, label: 'Medium', verdict: 'Some earnings inconsistency' },
+    { threshold: 0,  label: 'Low',    verdict: 'Erratic earnings — hard to model' },
+  ]);
 }
 
-function mhRating(score){
-  if(score>=85)return{label:'Exceptional',tag:'Wide moat, strong financials, attractive valuation'};
-  if(score>=70)return{label:'Strong',tag:'Solid fundamentals with meaningful competitive advantages'};
-  if(score>=55)return{label:'Good',tag:'Above-average quality with some strengths to watch'};
-  if(score>=40)return{label:'Fair',tag:'Mixed signals — requires deeper due diligence'};
-  if(score>=25)return{label:'Weak',tag:'Below-average quality; elevated risk profile'};
-  return{label:'Poor',tag:'Multiple red flags detected across criteria'};
+// 2. PROFITABILITY
+function scoreProfitability(S) {
+  let score = 0;
+  const inc = S.income || [];
+  const met = S.metrics || [];
+  const q = S.quote || {};
+  const latest = inc[0] || {};
+  const latestMet = met[0] || {};
+  const rev = latest.revenue || 0;
+  const gp = latest.grossProfit || 0;
+  const ebit = latest.operatingIncome || 0;
+  const ni = latest.netIncome || 0;
+  const mktCap = q.marketCap || latestMet.marketCap || 0;
+
+  const gm = rev > 0 ? (gp / rev) * 100 : 0;
+  if (gm >= 60) score += 20;
+  else if (gm >= 40) score += 20;
+  else if (gm >= 25) score += 12;
+  else if (gm >= 10) score += 6;
+
+  const om = rev > 0 ? (ebit / rev) * 100 : 0;
+  if (om >= 25) score += 20;
+  else if (om >= 15) score += 20;
+  else if (om >= 8) score += 12;
+  else if (om >= 0) score += 5;
+
+  const nm = rev > 0 ? (ni / rev) * 100 : 0;
+  if (nm >= 20) score += 20;
+  else if (nm >= 10) score += 20;
+  else if (nm >= 5) score += 12;
+  else if (nm >= 0) score += 5;
+
+  const roe = latestMet.roe ?? latestMet.returnOnEquity ?? null;
+  if (roe !== null) {
+    const roePct = Math.abs(roe) < 2 ? roe * 100 : roe;
+    if (roePct >= 20) score += 20;
+    else if (roePct >= 15) score += 20;
+    else if (roePct >= 10) score += 12;
+    else if (roePct >= 5) score += 6;
+  } else { score += 10; }
+
+  const fcfAbs = latestMet.freeCashFlow || (S.cashflow?.[0]?.freeCashFlow) || 0;
+  const fcfYield = mktCap > 0 ? (fcfAbs / mktCap) * 100 : 0;
+  if (fcfYield >= 8) score += 20;
+  else if (fcfYield >= 4) score += 20;
+  else if (fcfYield >= 2) score += 10;
+
+  return buildSixDimResult(score, [
+    { threshold: 70, label: 'High',   verdict: 'Strong margins and returns across the board' },
+    { threshold: 40, label: 'Medium', verdict: 'Adequate profitability with some gaps' },
+    { threshold: 0,  label: 'Low',    verdict: 'Weak margins — profitability under pressure' },
+  ]);
 }
 
-function renderMoatHeat(){
-  const sc=computeScores();
-  const {label,tag}=mhRating(sc.overall);
-  const color=mhColor(sc.overall);
-  const circumference=314;
-  const offset=circumference-(sc.overall/100)*circumference;
+// 3. GROWTH QUALITY
+function scoreGrowthQuality(S) {
+  let score = 0;
+  const inc = S.income || [];
+  const cf = S.cashflow || [];
 
-  document.getElementById('mh-overall').textContent=sc.overall;
-  document.getElementById('mh-overall').style.color=color;
-  document.getElementById('mh-ring').style.strokeDashoffset=offset;
-  document.getElementById('mh-ring').style.stroke=color;
-  document.getElementById('mh-rating').textContent=label;
-  document.getElementById('mh-rating').style.color=color;
-  document.getElementById('mh-tagline').textContent=tag;
+  if (inc.length >= 4) {
+    const rN = inc[0].revenue || 0, rO = inc[3].revenue || 0;
+    if (rO > 0) {
+      const cagr = (Math.pow(rN / rO, 1/3) - 1) * 100;
+      if (cagr >= 10) score += 25;
+      else if (cagr >= 5) score += 25;
+      else if (cagr >= 2) score += 15;
+      else if (cagr >= 0) score += 8;
+    }
+  }
+  if (inc.length >= 4) {
+    const eN = inc[0].eps || inc[0].epsdiluted || 0;
+    const eO = inc[3].eps || inc[3].epsdiluted || 0;
+    if (eO > 0 && eN > 0) {
+      const cagr = (Math.pow(eN / eO, 1/3) - 1) * 100;
+      if (cagr >= 12) score += 25;
+      else if (cagr >= 7) score += 25;
+      else if (cagr >= 3) score += 15;
+      else if (cagr >= 0) score += 8;
+    }
+  }
+  const fcfSeries = cf.slice(0, 4).map(y => y.freeCashFlow ?? (y.operatingCashFlow - Math.abs(y.capitalExpenditure || 0)));
+  if (fcfSeries.length >= 3) {
+    let g = 0;
+    for (let i = 0; i < fcfSeries.length - 1; i++) if (fcfSeries[i] > fcfSeries[i+1]) g++;
+    if (g >= 3) score += 25;
+    else if (g >= 2) score += 16;
+    else if (g >= 1) score += 8;
+  } else { score += 12; }
+  const gmS = inc.slice(0, 4).map(y => y.revenue > 0 ? (y.grossProfit / y.revenue) * 100 : null).filter(v => v !== null);
+  if (gmS.length >= 3) {
+    const trend = gmS[0] - gmS[gmS.length - 1];
+    if (trend >= 2) score += 25;
+    else if (trend >= 0) score += 20;
+    else if (trend >= -2) score += 12;
+    else if (trend >= -5) score += 6;
+  } else { score += 12; }
 
-  const subs=[
-    {key:'moat',      label:'Economic Moat',         desc:'Gross margin, operating leverage, ROE, ROIC'},
-    {key:'health',    label:'Financial Health',      desc:'Current ratio, FCF margin, debt levels, FCF yield'},
-    {key:'growth',    label:'Growth Quality',        desc:'Revenue growth, net income growth, reinvestment returns'},
-    {key:'valuation', label:'Valuation',             desc:'P/E attractiveness, EV/EBITDA, FCF yield vs price'},
-    {key:'management',label:'Management Efficiency', desc:'ROIC, ROE, FCF conversion — capital allocation quality'},
+  return buildSixDimResult(score, [
+    { threshold: 70, label: 'High',   verdict: 'Strong, consistent growth across revenue and cash flow' },
+    { threshold: 40, label: 'Medium', verdict: 'Moderate growth with some inconsistency' },
+    { threshold: 0,  label: 'Low',    verdict: 'Weak or declining growth trajectory' },
+  ]);
+}
+
+// 4. ECONOMIC MOAT
+function scoreEconomicMoat(S, isBank) {
+  let score = 0;
+  const inc = S.income || [];
+  const met = S.metrics || [];
+  const latest = inc[0] || {};
+  const latestMet = met[0] || {};
+  const rev = latest.revenue || 0;
+  const gp = latest.grossProfit || 0;
+
+  const gm = rev > 0 ? (gp / rev) * 100 : 0;
+  if (gm >= 50) score += 20;
+  else if (gm >= 40) score += 20;
+  else if (gm >= 25) score += 12;
+  else if (gm >= 10) score += 6;
+
+  if (isBank) {
+    const roe = latestMet.roe ?? latestMet.returnOnEquity ?? null;
+    if (roe !== null) {
+      const roePct = Math.abs(roe) < 2 ? roe * 100 : roe;
+      if (roePct >= 15) score += 20;
+      else if (roePct >= 12) score += 16;
+      else if (roePct >= 8) score += 10;
+    } else { score += 10; }
+  } else {
+    const roic = latestMet.roic ?? latestMet.returnOnInvestedCapital ?? null;
+    if (roic !== null) {
+      const roicPct = Math.abs(roic) < 2 ? roic * 100 : roic;
+      if (roicPct >= 20) score += 20;
+      else if (roicPct >= 12) score += 20;
+      else if (roicPct >= 7) score += 12;
+      else if (roicPct >= 3) score += 6;
+    } else { score += 10; }
+  }
+
+  const nmS = inc.slice(0, 4).map(y => y.revenue > 0 ? (y.netIncome / y.revenue) * 100 : null).filter(v => v !== null);
+  if (nmS.length >= 2) {
+    const all10 = nmS.every(nm => nm >= 10);
+    const avg = nmS.reduce((a, b) => a + b, 0) / nmS.length;
+    if (all10) score += 20;
+    else if (avg >= 8) score += 14;
+    else if (avg >= 5) score += 8;
+  } else { score += 10; }
+
+  if (inc.length >= 3) {
+    const r0 = inc[0].revenue || 0, r1 = inc[1].revenue || 0, r2 = inc[2].revenue || 0;
+    const g2 = r0 > r1, g3 = r1 > r2;
+    if (g2 && g3) score += 20;
+    else if (g2 || g3) score += 12;
+  } else { score += 10; }
+
+  try {
+    const qg = typeof computeBusinessQuality === 'function' ? computeBusinessQuality() : null;
+    const qgScore = qg ? (qg.total ?? qg.score ?? null) : null;
+    if (qgScore != null) {
+      if (qgScore >= 75) score += 20;
+      else if (qgScore >= 60) score += 20;
+      else if (qgScore >= 45) score += 12;
+      else if (qgScore >= 30) score += 6;
+    } else { score += 10; }
+  } catch (_) { score += 10; }
+
+  return buildSixDimResult(score, [
+    { threshold: 70, label: 'Wide',   verdict: 'Durable competitive advantages — hard to replicate' },
+    { threshold: 40, label: 'Narrow', verdict: 'Some competitive edge but not dominant' },
+    { threshold: 0,  label: 'None',   verdict: 'No clear moat — vulnerable to competition' },
+  ]);
+}
+
+// 5. FINANCIAL STRENGTH
+function scoreFinancialStrength(S, isBank) {
+  let score = 0;
+  const bal = S.balance || [];
+  const inc = S.income || [];
+  const cf = S.cashflow || [];
+  const met = S.metrics || [];
+  const latestBal = bal[0] || {};
+  const latestInc = inc[0] || {};
+  const latestMet = met[0] || {};
+
+  if (isBank) {
+    const de = latestMet.debtToEquity ?? latestMet.debtEquityRatio ?? null;
+    if (de !== null) {
+      if (de <= 8) score += 20;
+      else if (de <= 12) score += 14;
+      else if (de <= 15) score += 8;
+    } else { score += 10; }
+  } else {
+    const ca = latestBal.totalCurrentAssets || 0;
+    const cl = latestBal.totalCurrentLiabilities || 0;
+    const cr = cl > 0 ? ca / cl : null;
+    if (cr !== null) {
+      if (cr >= 2.0) score += 20;
+      else if (cr >= 1.5) score += 20;
+      else if (cr >= 1.0) score += 12;
+      else if (cr >= 0.7) score += 6;
+    } else { score += 10; }
+  }
+
+  if (!isBank) {
+    const de = latestMet.debtToEquity ?? latestMet.debtEquityRatio ?? null;
+    if (de !== null) {
+      if (de <= 0.5) score += 20;
+      else if (de <= 1.0) score += 20;
+      else if (de <= 2.0) score += 12;
+      else if (de <= 3.0) score += 6;
+    } else { score += 10; }
+  } else {
+    const roeS = met.slice(0, 3).map(m => {
+      const r = m.roe ?? m.returnOnEquity ?? null;
+      return r !== null ? (Math.abs(r) < 2 ? r * 100 : r) : null;
+    }).filter(v => v !== null);
+    if (roeS.length >= 2 && roeS.every(r => r >= 8)) score += 20;
+    else if (roeS.length >= 2 && roeS.every(r => r >= 5)) score += 12;
+    else score += 6;
+  }
+
+  const ebit = latestInc.operatingIncome || 0;
+  const interest = Math.abs(latestInc.interestExpense || 0);
+  if (interest > 0) {
+    const cov = ebit / interest;
+    if (cov >= 10) score += 20;
+    else if (cov >= 5) score += 20;
+    else if (cov >= 3) score += 12;
+    else if (cov >= 1) score += 6;
+  } else { score += 16; }
+
+  const ocfS = cf.slice(0, 3).map(y => y.operatingCashFlow || 0);
+  if (ocfS.length >= 2) {
+    const allP = ocfS.every(v => v > 0);
+    const mostP = ocfS.filter(v => v > 0).length >= 2;
+    if (allP) score += 20;
+    else if (mostP) score += 12;
+  } else { score += 10; }
+
+  const piotroski = S.financialScores?.[0]?.piotroskiScore ?? latestMet.piotroskiScore ?? null;
+  if (piotroski !== null) {
+    if (piotroski >= 7) score += 20;
+    else if (piotroski >= 6) score += 20;
+    else if (piotroski >= 4) score += 12;
+    else if (piotroski >= 2) score += 6;
+  } else { score += 10; }
+
+  return buildSixDimResult(score, [
+    { threshold: 70, label: 'High',   verdict: 'Strong balance sheet — well positioned for downturns' },
+    { threshold: 40, label: 'Medium', verdict: 'Adequate financial health with some leverage risk' },
+    { threshold: 0,  label: 'Low',    verdict: 'Balance sheet risk — watch debt and liquidity closely' },
+  ]);
+}
+
+// 6. VALUATION
+function scoreValuation(S) {
+  let score = 0;
+  const q = S.quote || {};
+  const price = q.price || 0;
+
+  try {
+    const epv = typeof computeEPV === 'function' ? computeEPV() : null;
+    if (epv && epv.epvPerShare > 0 && price > 0) {
+      const ratio = price / epv.epvPerShare;
+      if (ratio <= 1.0) score += 25;
+      else if (ratio <= 1.2) score += 25;
+      else if (ratio <= 1.5) score += 15;
+      else if (ratio <= 2.0) score += 8;
+    } else { score += 12; }
+  } catch (_) { score += 12; }
+
+  try {
+    if (typeof dcfDeclining === 'function' && typeof computeWACC === 'function') {
+      const wacc = computeWACC();
+      const baseG = typeof getBaseGrowthEstimate === 'function' ? getBaseGrowthEstimate() : 0.05;
+      const fcf = computeTTMFcf();
+      const shares = getSharesOut();
+      const pv = dcfDeclining(fcf, baseG, 0.03, wacc);
+      const dcfVal = (pv && shares > 0) ? pv / shares : 0;
+      if (price > 0 && dcfVal > 0) {
+        const gap = (dcfVal - price) / price * 100;
+        if (gap >= 20) score += 25;
+        else if (gap >= 0) score += 20;
+        else if (gap >= -15) score += 12;
+        else if (gap >= -30) score += 6;
+      } else { score += 12; }
+    } else { score += 12; }
+  } catch (_) { score += 12; }
+
+  try {
+    const oe = typeof computeOwnerEarnings === 'function' ? computeOwnerEarnings() : null;
+    if (oe && oe.mktCap > 0) {
+      const treasury = parseFloat(document.getElementById('oey-rfr')?.value || '4.5');
+      const oYield = oe.yld * 100;
+      const spread = oYield - treasury;
+      if (spread >= 4) score += 25;
+      else if (spread >= 2) score += 25;
+      else if (spread >= 0) score += 15;
+      else if (spread >= -2) score += 6;
+    } else { score += 12; }
+  } catch (_) { score += 12; }
+
+  const l4 = S._l4Score ?? null;
+  if (l4 !== null) {
+    if (l4 >= 70) score += 25;
+    else if (l4 >= 50) score += 25;
+    else if (l4 >= 35) score += 15;
+    else if (l4 >= 20) score += 8;
+  } else { score += 12; }
+
+  return buildSixDimResult(score, [
+    { threshold: 70, label: 'Attractive', verdict: 'Trading below or near fair value across multiple methods' },
+    { threshold: 40, label: 'Fair',       verdict: 'Fairly priced — limited margin of safety' },
+    { threshold: 0,  label: 'Expensive',  verdict: 'Above fair value — paying a premium' },
+  ]);
+}
+
+function buildSixDimResult(score, thresholds) {
+  score = Math.min(100, Math.max(0, Math.round(score)));
+  const match = thresholds.find(t => score >= t.threshold);
+  return {
+    score,
+    label: match?.label || '—',
+    verdict: match?.verdict || '—',
+    color: score >= 70 ? 'green' : score >= 40 ? 'amber' : 'red',
+  };
+}
+
+function sixDimComposite(d) {
+  const all = [d.predictability, d.profitability, d.growthQuality, d.economicMoat, d.financialStrength, d.valuation];
+  const sum = all.reduce((s, x) => s + x.score, 0);
+  return Math.round(sum / all.length);
+}
+
+function sixDimRating(score) {
+  if (score >= 80) return { rating: 'Exceptional', tag: 'Outstanding across all six dimensions — a rare high-quality compounder at a reasonable price.' };
+  if (score >= 65) return { rating: 'Strong',      tag: 'Above-average quality on most dimensions. Suitable for long-term holding.' };
+  if (score >= 50) return { rating: 'Good',        tag: 'Solid in some areas but mixed in others. Worth a closer look before committing capital.' };
+  if (score >= 35) return { rating: 'Fair',        tag: 'Multiple weaknesses across the framework. Requires deeper diligence and a clear thesis.' };
+  return            { rating: 'Weak',        tag: 'Significant red flags across most dimensions. Skip unless contrarian conviction is strong.' };
+}
+
+function renderMoatHeat() {
+  const d = computeSixDimensions(S);
+  const composite = sixDimComposite(d);
+  const { rating, tag } = sixDimRating(composite);
+  const compColor = composite >= 70 ? 'hsl(160,65%,55%)' : composite >= 40 ? 'hsl(45,93%,58%)' : 'hsl(0,68%,60%)';
+
+  // Hero
+  const ring = document.getElementById('sd-ring');
+  const circumference = 314;
+  ring.style.strokeDashoffset = circumference - (composite / 100) * circumference;
+  ring.style.stroke = compColor;
+  const overallEl = document.getElementById('sd-overall');
+  overallEl.textContent = composite;
+  overallEl.style.color = compColor;
+  const ratingEl = document.getElementById('sd-rating');
+  ratingEl.textContent = rating;
+  ratingEl.style.color = compColor;
+  document.getElementById('sd-tagline').textContent = tag;
+
+  // 6 cards
+  const dims = [
+    { key: 'predictability',    name: 'Predictability'     },
+    { key: 'profitability',     name: 'Profitability'      },
+    { key: 'growthQuality',     name: 'Growth Quality'     },
+    { key: 'economicMoat',      name: 'Economic Moat'      },
+    { key: 'financialStrength', name: 'Financial Strength' },
+    { key: 'valuation',         name: 'Valuation'          },
   ];
 
-  document.getElementById('mh-breakdown').innerHTML=subs.map(s=>{
-    const v=sc[s.key];const c=mhColor(v);
-    return`<div class="mh-sub">
-      <div class="mh-sub-label">${s.label}</div>
-      <div class="mh-sub-score" style="color:${c}">${v}<span style="font-size:12px;color:var(--muted)">/100</span></div>
-      <div class="mh-bar-track"><div class="mh-bar-fill" style="width:${v}%;background:${c}"></div></div>
-    </div>`;
+  document.getElementById('sd-grid').innerHTML = dims.map(dim => {
+    const r = d[dim.key];
+    const c = r.color; // 'green' | 'amber' | 'red'
+    return `
+      <div class="sd-card">
+        <div class="sd-card-head">
+          <div class="sd-card-name">${dim.name}</div>
+          <div class="sd-card-label ${c}">${r.label}</div>
+        </div>
+        <div class="sd-card-score-row">
+          <div class="sd-card-score ${c}">${r.score}</div>
+          <div class="sd-card-denom">/ 100</div>
+        </div>
+        <div class="sd-card-bar"><div class="sd-card-fill ${c}" style="width:${r.score}%"></div></div>
+        <div class="sd-card-verdict">${r.verdict}</div>
+      </div>`;
   }).join('');
-
-  // Detail rows
-  const inc0=S.income[0]||{},m=S.metrics[0]||{},q=S.quote,b0=S.balance[0]||{};
-  document.getElementById('mh-detail').innerHTML=[
-    {label:'Gross Margin',val:fmtP(inc0.grossProfitRatio),bench:'≥ 40% = wide moat',good:(inc0.grossProfitRatio||0)>=.4},
-    {label:'Operating Margin',val:fmtP(inc0.operatingIncomeRatio),bench:'≥ 15% = efficient',good:(inc0.operatingIncomeRatio||0)>=.15},
-    {label:'Net Margin',val:fmtP(inc0.netIncomeRatio),bench:'≥ 10% = strong',good:(inc0.netIncomeRatio||0)>=.1},
-    {label:'ROE',val:m.roe?fmtP(m.roe):'—',bench:'≥ 15% = excellent',good:(m.roe||0)>=.15},
-    {label:'ROIC',val:m.roic?fmtP(m.roic):'—',bench:'≥ 12% = value-creating',good:(m.roic||0)>=.12},
-    {label:'Current Ratio',val:m.currentRatio?fmtX(m.currentRatio):'—',bench:'≥ 1.5 = healthy',good:(m.currentRatio||0)>=1.5},
-    {label:'Debt/Equity',val:(()=>{const de=b0.totalDebt&&b0.totalStockholdersEquity&&b0.totalStockholdersEquity>0?b0.totalDebt/b0.totalStockholdersEquity:null;return de?fmtX(de):'—';})(),bench:'≤ 1.0 = conservative',good:(b0.totalDebt&&b0.totalStockholdersEquity&&b0.totalStockholdersEquity>0?b0.totalDebt/b0.totalStockholdersEquity:99)<=1},
-    {label:'P/E Ratio',val:q.pe?fmtX(q.pe):'—',bench:'< 20 = value territory',good:(q.pe||99)<20},
-    {label:'FCF Yield',val:m.freeCashFlowYield?fmtP(m.freeCashFlowYield):'—',bench:'≥ 4% = attractive',good:(m.freeCashFlowYield||0)>=.04},
-  ].map(r=>`<div class="mrow">
-    <span class="mrow-label" style="display:flex;align-items:center;gap:10px"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${r.good?'var(--green)':'var(--yellow)'}"></span>${r.label}</span>
-    <span style="display:flex;align-items:center;gap:14px">
-      <span style="font-size:11px;color:var(--muted)">${r.bench}</span>
-      <span class="mrow-val" style="color:${r.good?'var(--green)':'var(--yellow)'}">${r.val}</span>
-    </span>
-  </div>`).join('');
 }
 
 // ═══════════════════════════════════════════════════════════════════
