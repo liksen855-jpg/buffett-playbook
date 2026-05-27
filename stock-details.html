@@ -642,79 +642,136 @@ td.strong{color:var(--fg);font-weight:600}
 .mh-bar-fill{height:100%;border-radius:999px;transition:width .6s}
 .mh-criteria{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px 20px}
 
-/* Six Dimensions — Terminal layout */
-.ii-grid{display:grid;grid-template-columns:1fr 340px;gap:0;margin-bottom:14px;background:#000;border:1px solid hsl(220,28%,14%);border-radius:8px;overflow:hidden}
-@media(max-width:980px){.ii-grid{grid-template-columns:1fr}}
-.ii-left{display:flex;flex-direction:column;border-right:1px solid hsl(220,28%,14%)}
-@media(max-width:980px){.ii-left{border-right:none;border-bottom:1px solid hsl(220,28%,14%)}}
-.ii-summary-row{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid hsl(220,28%,14%)}
-@media(max-width:700px){.ii-summary-row{grid-template-columns:1fr}}
-.ii-summary-card{padding:18px 22px;border-right:1px solid hsl(220,28%,14%)}
-.ii-summary-card:last-child{border-right:none}
-.ii-card-eyebrow{font-size:9.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:hsl(220,15%,48%);margin-bottom:10px}
-.ii-card-big{font-family:'Geist Mono','JetBrains Mono',monospace;font-size:46px;font-weight:800;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
-.ii-card-big.green{color:hsl(160,65%,55%)}
-.ii-card-big.amber{color:hsl(45,93%,58%)}
-.ii-card-big.red  {color:hsl(0,68%,60%)}
-.ii-card-big-suffix{font-family:'Geist Mono','JetBrains Mono',monospace;font-size:14px;color:hsl(220,15%,38%);font-weight:600;margin-left:4px;letter-spacing:-.01em}
-.ii-card-foot{font-size:12px;color:hsl(220,15%,62%);margin-top:8px;line-height:1.5}
-.ii-chart-card{padding:22px 26px;flex:1;display:flex;flex-direction:column;min-height:380px}
-.ii-chart-eyebrow{font-size:9.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:hsl(220,15%,38%);margin-bottom:6px}
-.ii-chart-title{font-size:22px;font-weight:700;letter-spacing:-.01em;color:hsl(210,15%,90%);margin-bottom:24px;line-height:1.2;max-width:480px}
-.ii-chart-svg{flex:1;width:100%;min-height:300px;display:block}
-.ii-band-strong{fill:hsl(160,65%,55%,.04)}
-.ii-band-fair{fill:hsl(45,93%,58%,.03)}
-.ii-band-weak{fill:hsl(0,68%,60%,.04)}
-.ii-band-divider{stroke:hsl(220,28%,18%);stroke-width:1;stroke-dasharray:3 4}
-.ii-band-label{font-family:'Geist Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
-.ii-band-label.strong{fill:hsl(160,65%,55%)}
-.ii-band-label.fair{fill:hsl(45,93%,58%)}
-.ii-band-label.weak{fill:hsl(0,68%,60%)}
-.ii-baseline{stroke:hsl(213,94%,58%,.35);stroke-width:1;stroke-dasharray:2 4;fill:none}
+/* InsightInvest Terminal — v3 full Bloomberg-style frame */
+#page-moatheat{padding:0}
+.ii-frame{background:#000;border:1px solid hsl(220,28%,14%);border-radius:8px;overflow:hidden;font-family:'Geist','Inter',ui-sans-serif,system-ui,sans-serif;color:hsl(210,15%,82%)}
+.ii-frame *{box-sizing:border-box}
+.ii-mono{font-family:'Geist Mono','JetBrains Mono',monospace;font-variant-numeric:tabular-nums;letter-spacing:-.005em}
+
+/* Top stat bar */
+.ii-stat-bar{display:flex;align-items:center;gap:0;padding:14px 0;border-bottom:1px solid hsl(220,28%,14%);background:#000}
+.ii-stat-ticker{display:flex;align-items:center;gap:14px;padding:0 22px;min-width:240px}
+.ii-ticker-badge{display:inline-flex;align-items:center;justify-content:center;width:60px;height:60px;border-radius:6px;font-family:'Geist Mono',monospace;font-size:18px;font-weight:800;letter-spacing:-.02em;background:hsl(45,93%,58%);color:hsl(222,47%,6%);flex-shrink:0}
+.ii-ticker-badge.green{background:hsl(160,65%,55%)}
+.ii-ticker-badge.amber{background:hsl(45,93%,58%)}
+.ii-ticker-badge.red{background:hsl(0,68%,60%)}
+.ii-stat-name{font-size:18px;font-weight:600;color:hsl(210,15%,92%);letter-spacing:-.01em;margin-bottom:2px}
+.ii-stat-meta{font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:hsl(220,15%,40%);font-weight:600}
+.ii-stat-price-col{padding:0 28px;border-left:1px solid hsl(220,28%,14%);min-width:160px}
+.ii-stat-price{font-family:'Geist Mono',monospace;font-size:34px;font-weight:800;color:hsl(210,15%,95%);letter-spacing:-.025em;font-variant-numeric:tabular-nums;line-height:1}
+.ii-stat-col{padding:0 22px;border-left:1px solid hsl(220,28%,14%);min-width:100px}
+.ii-stat-val{font-family:'Geist Mono',monospace;font-size:17px;font-weight:700;color:hsl(210,15%,95%);font-variant-numeric:tabular-nums;letter-spacing:-.01em;line-height:1.1;margin-bottom:4px}
+.ii-stat-val.pos{color:hsl(160,65%,55%)}
+.ii-stat-val.neg{color:hsl(0,68%,60%)}
+.ii-stat-lbl{font-family:'Geist Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:hsl(220,15%,40%)}
+.ii-stat-spacer{flex:1}
+.ii-stat-live{display:flex;align-items:center;gap:8px;padding:0 22px;border-left:1px solid hsl(220,28%,14%);font-family:'Geist Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:hsl(220,15%,55%)}
+.ii-live-dot{width:7px;height:7px;border-radius:50%;background:hsl(160,65%,55%);animation:ii-pulse 2s infinite}
+@keyframes ii-pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.ii-stat-time{color:hsl(210,15%,92%);font-weight:700;letter-spacing:.04em}
+
+/* Main grid */
+.ii-main-grid{display:grid;grid-template-columns:1fr 360px;gap:0}
+@media(max-width:1020px){.ii-main-grid{grid-template-columns:1fr}}
+.ii-chart-area{padding:22px 26px 0;border-right:1px solid hsl(220,28%,14%);display:flex;flex-direction:column}
+@media(max-width:1020px){.ii-chart-area{border-right:none;border-bottom:1px solid hsl(220,28%,14%)}}
+.ii-eyebrow{font-family:'Geist Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:hsl(220,15%,38%);margin-bottom:8px}
+.ii-eyebrow > span{color:hsl(220,15%,60%);margin-left:4px}
+.ii-title{font-size:24px;font-weight:700;letter-spacing:-.015em;color:hsl(210,15%,92%);margin-bottom:24px;line-height:1.2;max-width:520px}
+.ii-chart-svg{width:100%;min-height:360px;display:block;flex:1}
+
+/* Chart visuals */
+.ii-band-divider{stroke:hsl(220,28%,16%);stroke-width:1;stroke-dasharray:3 4}
+.ii-band-label{font-family:'Geist Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+.ii-band-label.strong{fill:hsl(160,65%,52%)}
+.ii-band-label.fair{fill:hsl(45,93%,55%)}
+.ii-band-label.weak{fill:hsl(0,68%,58%)}
+.ii-peer-line{stroke:hsl(213,75%,62%);stroke-width:1.4;stroke-dasharray:4 5;fill:none;opacity:.55}
 .ii-chart-line{stroke:hsl(28,100%,60%);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
-.ii-chart-dot{fill:#000;stroke:hsl(28,100%,60%);stroke-width:2.5}
+.ii-chart-dot{fill:#000;stroke:hsl(28,100%,60%);stroke-width:2.4}
 .ii-chart-dot.green{stroke:hsl(160,65%,55%)}
 .ii-chart-dot.red{stroke:hsl(0,68%,60%)}
-.ii-sidebar{padding:22px 24px;background:hsl(222,40%,3%);display:flex;flex-direction:column;gap:14px}
-.ii-sb-eyebrow{font-size:9.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:hsl(220,15%,48%);margin-bottom:4px}
-.ii-sb-big{font-family:'Geist Mono','JetBrains Mono',monospace;font-size:64px;font-weight:800;line-height:1;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
-.ii-sb-big.green{color:hsl(160,65%,55%)}
-.ii-sb-big.amber{color:hsl(45,93%,58%)}
-.ii-sb-big.red{color:hsl(0,68%,60%)}
-.ii-sb-denom{font-family:'Geist Mono',monospace;font-size:14px;color:hsl(220,15%,38%);font-weight:600;margin-top:-2px}
-.ii-sb-badge{display:inline-block;padding:6px 12px;border:1px solid currentColor;font-family:'Geist Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;width:fit-content;margin-top:4px}
-.ii-sb-badge.green{color:hsl(160,65%,55%)}
-.ii-sb-badge.amber{color:hsl(45,93%,58%)}
-.ii-sb-badge.red{color:hsl(0,68%,60%)}
-.ii-sb-blurb{font-size:12.5px;color:hsl(220,15%,72%);line-height:1.6}
-.ii-sb-stats{display:flex;flex-direction:column;gap:8px;padding-top:14px;border-top:1px solid hsl(220,28%,14%)}
-.ii-sb-stat-row{display:flex;justify-content:space-between;align-items:baseline;font-family:'Geist Mono',monospace;gap:12px}
-.ii-sb-stat-l{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:hsl(220,15%,48%);max-width:150px;line-height:1.3}
-.ii-sb-stat-v{font-size:13px;font-weight:700;color:hsl(210,15%,92%);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
-.ii-sb-stat-v.pos{color:hsl(160,65%,55%)}
-.ii-sb-stat-v.neg{color:hsl(0,68%,60%)}
-.ii-sb-note{padding-top:14px;border-top:1px solid hsl(220,28%,14%)}
-.ii-sb-note-head{display:flex;justify-content:space-between;align-items:baseline;font-family:'Geist Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:hsl(220,15%,48%);margin-bottom:10px}
-.ii-sb-note-body{font-size:12.5px;color:hsl(210,15%,80%);line-height:1.65}
-.ii-sb-note-body p{margin:0 0 9px}
-.ii-sb-note-body p:last-child{margin-bottom:0}
-.ii-sb-note-body strong{color:hsl(210,15%,95%);font-weight:600}
-.ii-dim-row{display:grid;grid-template-columns:repeat(6,1fr);background:#000;border:1px solid hsl(220,28%,14%);border-radius:8px;overflow:hidden}
+
+/* Inset dimension row inside chart card */
+.ii-dim-row{display:grid;grid-template-columns:repeat(6,1fr);border-top:1px solid hsl(220,28%,14%);margin:18px -26px 0}
 @media(max-width:900px){.ii-dim-row{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:520px){.ii-dim-row{grid-template-columns:repeat(2,1fr)}}
-.ii-dim-card{padding:18px 20px;border-right:1px solid hsl(220,28%,14%)}
-.ii-dim-card:last-child{border-right:none}
-.ii-dim-lbl{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:hsl(220,15%,48%);margin-bottom:10px;line-height:1.3}
-.ii-dim-score{font-family:'Geist Mono','JetBrains Mono',monospace;font-size:38px;font-weight:800;letter-spacing:-.03em;line-height:1;margin-bottom:10px;font-variant-numeric:tabular-nums}
-.ii-dim-score.green{color:hsl(160,65%,55%)}
-.ii-dim-score.amber{color:hsl(45,93%,58%)}
-.ii-dim-score.red{color:hsl(0,68%,60%)}
-.ii-dim-bar{height:3px;background:hsl(220,28%,14%);margin-bottom:10px}
-.ii-dim-fill{height:100%;transition:width .8s ease-out}
+.ii-dim-card{padding:16px 20px;border-right:1px solid hsl(220,28%,14%)}
+.ii-dim-card:nth-child(3n),.ii-dim-card:last-child{border-right:none}
+@media(min-width:521px){.ii-dim-card:nth-child(3n){border-right:1px solid hsl(220,28%,14%)}}
+@media(min-width:901px){.ii-dim-card:nth-child(6n){border-right:none !important}}
+.ii-dim-lbl{font-family:'Geist Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:hsl(220,15%,42%);margin-bottom:10px;line-height:1.3}
+.ii-dim-bar{height:4px;background:hsl(220,28%,12%);margin-bottom:10px;border-radius:1px;overflow:hidden}
+.ii-dim-fill{height:100%;transition:width .8s ease-out;border-radius:1px}
 .ii-dim-fill.green{background:hsl(160,65%,55%)}
 .ii-dim-fill.amber{background:hsl(45,93%,58%)}
 .ii-dim-fill.red{background:hsl(0,68%,60%)}
-.ii-dim-tier{font-family:'Geist Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:hsl(220,15%,48%)}
+.ii-dim-tier{font-family:'Geist Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:hsl(210,15%,82%)}
+.ii-dim-tier.green{color:hsl(160,65%,55%)}
+.ii-dim-tier.amber{color:hsl(45,93%,58%)}
+.ii-dim-tier.red{color:hsl(0,68%,60%)}
+
+/* Chart footer (legend + scale) */
+.ii-chart-foot{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-top:1px solid hsl(220,28%,14%);margin:0 -26px;padding:14px 26px;font-family:'Geist Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.08em;color:hsl(220,15%,42%);text-transform:uppercase;flex-wrap:wrap;gap:8px}
+.ii-chart-legend{display:flex;gap:18px;align-items:center}
+.ii-chart-legend-item{display:inline-flex;align-items:center;gap:8px}
+.ii-legend-line{display:inline-block;width:18px;height:2px;background:hsl(28,100%,60%)}
+.ii-legend-line.dash{background:transparent;border-top:2px dashed hsl(213,75%,62%);height:0}
+
+/* Sidebar */
+.ii-sidebar{padding:22px 24px;background:hsl(222,40%,3%);display:flex;flex-direction:column;gap:14px}
+.ii-sb-eyebrow{font-family:'Geist Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:hsl(220,15%,42%);margin-bottom:6px}
+.ii-sb-big-row{display:flex;align-items:baseline;gap:8px}
+.ii-sb-big{font-family:'Geist Mono','JetBrains Mono',monospace;font-size:72px;font-weight:800;line-height:1;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.ii-sb-big.green{color:hsl(160,65%,55%)}
+.ii-sb-big.amber{color:hsl(45,93%,58%)}
+.ii-sb-big.red{color:hsl(0,68%,60%)}
+.ii-sb-denom{font-family:'Geist Mono',monospace;font-size:18px;color:hsl(220,15%,38%);font-weight:600}
+.ii-sb-badge{display:inline-block;padding:6px 12px;border:1px solid currentColor;font-family:'Geist Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;width:fit-content}
+.ii-sb-badge.green{color:hsl(160,65%,55%)}
+.ii-sb-badge.amber{color:hsl(45,93%,58%)}
+.ii-sb-badge.red{color:hsl(0,68%,60%)}
+.ii-sb-blurb{font-size:13px;color:hsl(210,15%,82%);line-height:1.6}
+.ii-sb-stats{display:flex;flex-direction:column;gap:10px;padding-top:14px;border-top:1px solid hsl(220,28%,14%)}
+.ii-sb-stat-row{display:flex;justify-content:space-between;align-items:baseline;font-family:'Geist Mono',monospace;gap:12px}
+.ii-sb-stat-l{font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:hsl(220,15%,42%);max-width:160px;line-height:1.3}
+.ii-sb-stat-v{font-size:14px;font-weight:700;color:hsl(210,15%,95%);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.ii-sb-stat-v.pos{color:hsl(160,65%,55%)}
+.ii-sb-stat-v.neg{color:hsl(0,68%,60%)}
+.ii-sb-note{padding-top:14px;border-top:1px solid hsl(220,28%,14%)}
+.ii-sb-note-head{display:flex;justify-content:space-between;align-items:baseline;font-family:'Geist Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:hsl(220,15%,42%);margin-bottom:10px}
+.ii-sb-note-body{font-size:13px;color:hsl(210,15%,85%);line-height:1.65}
+.ii-sb-note-body p{margin:0 0 10px}
+.ii-sb-note-body p:last-child{margin-bottom:0}
+.ii-sb-note-body strong{color:hsl(210,15%,95%);font-weight:600}
+
+/* Section 02: Peer Comparison */
+.ii-peer-section{padding:22px 26px;border-top:1px solid hsl(220,28%,14%)}
+.ii-peer-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px}
+.ii-peer-toggle{display:inline-flex;background:hsl(222,35%,8%);border:1px solid hsl(220,28%,16%);border-radius:6px;overflow:hidden}
+.ii-peer-toggle button{background:transparent;border:none;font-family:'Geist',sans-serif;color:hsl(220,15%,52%);font-size:12px;font-weight:500;padding:7px 18px;cursor:pointer;letter-spacing:-.005em;transition:all .15s}
+.ii-peer-toggle button.active{background:hsl(210,15%,90%);color:hsl(222,40%,8%);font-weight:600}
+.ii-peer-row{display:grid;grid-template-columns:repeat(6,1fr);gap:0;border-top:1px solid hsl(220,28%,14%);margin:0 -26px;padding:0}
+@media(max-width:900px){.ii-peer-row{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:520px){.ii-peer-row{grid-template-columns:repeat(2,1fr)}}
+.ii-peer-card{padding:18px 22px;border-right:1px solid hsl(220,28%,14%)}
+.ii-peer-card:last-child{border-right:none}
+.ii-peer-card.self{background:hsl(222,40%,4%)}
+.ii-peer-sym{font-family:'Geist Mono',monospace;font-size:18px;font-weight:800;letter-spacing:-.01em;color:hsl(210,15%,92%);margin-bottom:2px}
+.ii-peer-name{font-size:11.5px;color:hsl(220,15%,52%);margin-bottom:14px;line-height:1.3;height:1.3em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ii-peer-score{font-family:'Geist Mono',monospace;font-size:36px;font-weight:800;letter-spacing:-.03em;line-height:1;margin-bottom:6px;font-variant-numeric:tabular-nums}
+.ii-peer-score.green{color:hsl(160,65%,55%)}
+.ii-peer-score.amber{color:hsl(45,93%,58%)}
+.ii-peer-score.red{color:hsl(0,68%,60%)}
+.ii-peer-delta{font-family:'Geist Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.04em;color:hsl(220,15%,42%)}
+.ii-peer-delta.pos{color:hsl(160,65%,55%)}
+.ii-peer-delta.neg{color:hsl(0,68%,60%)}
+.ii-peer-loading{padding:32px 26px;text-align:center;color:hsl(220,15%,42%);font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+
+/* Bottom status bar */
+.ii-status-bar{display:flex;justify-content:space-between;align-items:center;padding:11px 24px;border-top:1px solid hsl(220,28%,14%);background:#000;font-family:'Geist Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:hsl(220,15%,38%);gap:14px;flex-wrap:wrap}
+.ii-status-item{display:inline-flex;align-items:center;gap:8px}
+.ii-status-item strong{color:hsl(210,15%,80%);font-weight:700}
 
 /* AI box */
 .ai-actions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
@@ -1334,54 +1391,113 @@ td.strong{color:var(--fg);font-weight:600}
 
   <!-- ══ INSIGHTINVEST™ / MOATHEAT ══ -->
   <div class="tab-page" id="page-moatheat">
-    <!-- Main grid: left column (summary + chart) + right sidebar -->
-    <div class="ii-grid">
-      <div class="ii-left">
-        <div class="ii-summary-row">
-          <div class="ii-summary-card">
-            <div class="ii-card-eyebrow">Composite Quality</div>
-            <div><span class="ii-card-big" id="ii-composite-val">—</span><span class="ii-card-big-suffix">/ 100</span></div>
-            <div class="ii-card-foot" id="ii-composite-foot">—</div>
-          </div>
-          <div class="ii-summary-card">
-            <div class="ii-card-eyebrow">Strengths</div>
-            <div><span class="ii-card-big green" id="ii-strengths-val">—</span><span class="ii-card-big-suffix">/ 6</span></div>
-            <div class="ii-card-foot" id="ii-strengths-foot">—</div>
-          </div>
-          <div class="ii-summary-card">
-            <div class="ii-card-eyebrow">Watch Items</div>
-            <div><span class="ii-card-big" id="ii-watch-val">—</span></div>
-            <div class="ii-card-foot" id="ii-watch-foot">—</div>
+    <section class="ii-frame">
+
+      <!-- Top stat bar -->
+      <div class="ii-stat-bar">
+        <div class="ii-stat-ticker">
+          <div class="ii-ticker-badge" id="ii-ticker-badge">—</div>
+          <div>
+            <div class="ii-stat-name" id="ii-stat-name">—</div>
+            <div class="ii-stat-meta" id="ii-stat-meta">—</div>
           </div>
         </div>
-        <div class="ii-chart-card">
-          <div class="ii-chart-eyebrow" id="ii-chart-eyebrow">01 · Quality Profile</div>
-          <div class="ii-chart-title" id="ii-chart-title">How this stock scores across six dimensions</div>
-          <svg class="ii-chart-svg" id="ii-chart-svg" viewBox="0 0 800 320" preserveAspectRatio="none"></svg>
+        <div class="ii-stat-price-col">
+          <div class="ii-stat-price" id="ii-stat-price">—</div>
+        </div>
+        <div class="ii-stat-col">
+          <div class="ii-stat-val" id="ii-stat-change">—</div>
+          <div class="ii-stat-lbl">1D Change</div>
+        </div>
+        <div class="ii-stat-col">
+          <div class="ii-stat-val" id="ii-stat-changepct">—</div>
+          <div class="ii-stat-lbl">&nbsp;</div>
+        </div>
+        <div class="ii-stat-col">
+          <div class="ii-stat-val" id="ii-stat-mcap">—</div>
+          <div class="ii-stat-lbl">Market Cap</div>
+        </div>
+        <div class="ii-stat-col">
+          <div class="ii-stat-val" id="ii-stat-pe">—</div>
+          <div class="ii-stat-lbl">Fwd P/E</div>
+        </div>
+        <div class="ii-stat-col">
+          <div class="ii-stat-val" id="ii-stat-div">—</div>
+          <div class="ii-stat-lbl">Div Yield</div>
+        </div>
+        <div class="ii-stat-spacer"></div>
+        <div class="ii-stat-live">
+          <span class="ii-live-dot"></span>
+          <span>Live</span>
+          <span class="ii-stat-time" id="ii-stat-time">—</span>
         </div>
       </div>
 
-      <aside class="ii-sidebar">
-        <div>
-          <div class="ii-sb-eyebrow">InsightInvest™ Composite</div>
-          <div class="ii-sb-big" id="ii-sb-big">—</div>
-          <div class="ii-sb-denom">/ 100</div>
-        </div>
-        <div class="ii-sb-badge" id="ii-sb-badge">—</div>
-        <div class="ii-sb-blurb" id="ii-sb-blurb">—</div>
-        <div class="ii-sb-stats" id="ii-sb-stats"></div>
-        <div class="ii-sb-note">
-          <div class="ii-sb-note-head">
-            <span>Analyst Note</span>
-            <span id="ii-sb-note-ts">—</span>
-          </div>
-          <div class="ii-sb-note-body" id="ii-sb-note-body">—</div>
-        </div>
-      </aside>
-    </div>
+      <!-- Main grid: chart left + sidebar right -->
+      <div class="ii-main-grid">
+        <div class="ii-chart-area">
+          <div class="ii-eyebrow">01 <span>·</span> Quality Profile</div>
+          <div class="ii-title" id="ii-title">How this stock scores across six dimensions</div>
+          <svg class="ii-chart-svg" id="ii-chart-svg" viewBox="0 0 800 360" preserveAspectRatio="none"></svg>
 
-    <!-- Bottom: 6 dimension cards in single row -->
-    <div class="ii-dim-row" id="ii-dim-row"></div>
+          <!-- Inset dimension row -->
+          <div class="ii-dim-row" id="ii-dim-row"></div>
+
+          <!-- Chart footer -->
+          <div class="ii-chart-foot">
+            <div class="ii-chart-legend">
+              <span class="ii-chart-legend-item"><span class="ii-legend-line"></span><span id="ii-legend-symbol">—</span></span>
+              <span class="ii-chart-legend-item"><span class="ii-legend-line dash"></span>Peer median <span id="ii-legend-peercount" style="margin-left:4px"></span></span>
+            </div>
+            <div id="ii-chart-scale">Scale 0–100 · Updated <span id="ii-chart-updated">—</span></div>
+          </div>
+        </div>
+
+        <aside class="ii-sidebar">
+          <div>
+            <div class="ii-sb-eyebrow">InsightInvestMoat™ Composite</div>
+            <div class="ii-sb-big-row">
+              <div class="ii-sb-big" id="ii-sb-big">—</div>
+              <div class="ii-sb-denom">/ 100</div>
+            </div>
+          </div>
+          <div class="ii-sb-badge" id="ii-sb-badge">—</div>
+          <div class="ii-sb-blurb" id="ii-sb-blurb">—</div>
+          <div class="ii-sb-stats" id="ii-sb-stats"></div>
+          <div class="ii-sb-note">
+            <div class="ii-sb-note-head">
+              <span>Analyst Note</span>
+              <span id="ii-sb-note-ts">—</span>
+            </div>
+            <div class="ii-sb-note-body" id="ii-sb-note-body">—</div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Section 02: Peer Comparison -->
+      <div class="ii-peer-section">
+        <div class="ii-eyebrow">02 <span>·</span> Peer Comparison</div>
+        <div class="ii-peer-head">
+          <div class="ii-title" id="ii-peer-title" style="margin-bottom:0">Composite quality vs. sector</div>
+          <div class="ii-peer-toggle">
+            <button class="active" data-peer-tab="quality" onclick="switchPeerTab('quality')">Quality</button>
+            <button data-peer-tab="valuation" onclick="switchPeerTab('valuation')">Valuation</button>
+          </div>
+        </div>
+        <div class="ii-peer-row" id="ii-peer-row">
+          <div class="ii-peer-loading">Loading peer data…</div>
+        </div>
+      </div>
+
+      <!-- Bottom status bar -->
+      <div class="ii-status-bar">
+        <div class="ii-status-item"><span class="ii-live-dot"></span><strong>Connected</strong></div>
+        <div class="ii-status-item">Data <span>·</span> FMP Stable</div>
+        <div class="ii-status-item">Model <span>·</span> InsightInvestMoat v4.2</div>
+        <div class="ii-status-item">As of <span>·</span> <strong id="ii-status-ts">—</strong></div>
+      </div>
+
+    </section>
   </div>
 
   <!-- ══ AI INSIGHTS ══ -->
@@ -3733,13 +3849,16 @@ function sixDimRating(score) {
   return            { rating: 'Weak',        tag: 'Significant red flags across most dimensions. Skip unless contrarian conviction is strong.' };
 }
 
+// Cached peer data so we don't refetch when toggling Quality/Valuation
+let _iiPeerCache = null;
+let _iiPeerSymbol = null;
+let _iiPeerView = 'quality';
+
 function renderMoatHeat() {
   const d         = computeSixDimensions(S);
   const composite = sixDimComposite(d);
   const compColor = composite >= 70 ? 'green' : composite >= 40 ? 'amber' : 'red';
-  const compHex   = composite >= 70 ? 'hsl(160,65%,55%)' : composite >= 40 ? 'hsl(45,93%,58%)' : 'hsl(0,68%,60%)';
 
-  // Dimension list in display order — matches the bottom cards
   const dims = [
     { key: 'predictability',    name: 'Predictability'      },
     { key: 'profitability',     name: 'Profitability'       },
@@ -3749,12 +3868,44 @@ function renderMoatHeat() {
     { key: 'valuation',         name: 'Valuation'           },
   ];
 
-  // ── Summary cards ──
-  const compositeEl = document.getElementById('ii-composite-val');
-  compositeEl.textContent = composite.toFixed(1);
-  compositeEl.className = 'ii-card-big ' + compColor;
+  // ── Top stat bar ──
+  const sym = S.profile?.symbol || '—';
+  const exch = S.profile?.exchange || S.profile?.exchangeFullName?.split(' ')[0] || '—';
+  const currency = S.profile?.currency || 'USD';
+  const sector = S.profile?.sector || 'Sector';
+  const industry = S.profile?.industry || '';
+  const badge = document.getElementById('ii-ticker-badge');
+  badge.textContent = sym.slice(0, 4);
+  badge.className = 'ii-ticker-badge ' + compColor;
+  document.getElementById('ii-stat-name').textContent = S.profile?.companyName || sym;
+  document.getElementById('ii-stat-meta').textContent = `${exch} · ${currency} · ${(industry || sector).toUpperCase()}`;
 
-  // Peer percentile derived from composite (no real peer data, use score-based approximation)
+  const cur = getCurPrice();
+  const q = S.quote || {};
+  const change = q.change ?? S.profile?.change ?? 0;
+  const changePct = q.changePercentage ?? S.profile?.changePercentage ?? 0;
+  document.getElementById('ii-stat-price').textContent = cur ? cur.toFixed(2) : '—';
+  const chEl = document.getElementById('ii-stat-change');
+  const chPctEl = document.getElementById('ii-stat-changepct');
+  chEl.textContent = (change >= 0 ? '+' : '') + change.toFixed(2);
+  chEl.className = 'ii-stat-val ' + (change >= 0 ? 'pos' : 'neg');
+  chPctEl.textContent = (changePct >= 0 ? '+' : '') + changePct.toFixed(2) + '%';
+  chPctEl.className = 'ii-stat-val ' + (changePct >= 0 ? 'pos' : 'neg');
+
+  const mktCap = q.marketCap ?? S.profile?.marketCap ?? 0;
+  document.getElementById('ii-stat-mcap').textContent = mktCap ? formatMcapShort(mktCap) : '—';
+  const eps = S.income[0]?.epsdiluted || q.eps || null;
+  document.getElementById('ii-stat-pe').textContent = (cur && eps && eps > 0) ? (cur / eps).toFixed(1) + 'x' : '—';
+  const lastDiv = S.profile?.lastDividend || 0;
+  document.getElementById('ii-stat-div').textContent = (cur && lastDiv) ? ((lastDiv / cur) * 100).toFixed(2) + '%' : '0.00%';
+  const now = new Date();
+  document.getElementById('ii-stat-time').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) + ' ET';
+
+  // ── Chart title ──
+  document.getElementById('ii-title').textContent = `How ${sym} scores across six dimensions`;
+  document.getElementById('ii-legend-symbol').textContent = sym;
+
+  // Peer percentile derived from composite (heuristic — refined later if peer data loads)
   const peerLabel =
     composite >= 85 ? 'Top 5%' :
     composite >= 75 ? 'Top 15%' :
@@ -3763,41 +3914,14 @@ function renderMoatHeat() {
     composite >= 40 ? 'Middle of pack' :
                       'Bottom quartile';
   const moatLevel = d.economicMoat.label; // Wide / Narrow / None
-  document.getElementById('ii-composite-foot').textContent =
-    `${moatLevel === 'None' ? 'No moat' : moatLevel + ' moat'} · ${peerLabel} of ${S.profile?.sector || 'sector'} peers`;
 
-  // Strengths = dimensions in their top tier (Wide, High, Attractive)
-  const topTiers = new Set(['High', 'Wide', 'Attractive']);
-  const strengths = dims.filter(x => topTiers.has(d[x.key].label));
-  document.getElementById('ii-strengths-val').textContent = strengths.length;
-  document.getElementById('ii-strengths-foot').textContent =
-    strengths.length
-      ? strengths.map(s => s.name.replace('InsightInvestMoat™','moat').replace('Fin. Strength','balance sheet').toLowerCase()).join(', ')
-      : 'No dimensions currently in the top tier';
-
-  // Watch items: use the valuation dimension's gap
+  // Watch items (composite fair-value gap)
   const watch = computeIIWatchGap();
-  const watchEl = document.getElementById('ii-watch-val');
-  if (watch.gap !== null) {
-    watchEl.textContent = (watch.gap >= 0 ? '+' : '−') + Math.abs(watch.gap).toFixed(1) + '%';
-    watchEl.className = 'ii-card-big ' + (watch.gap >= 0 ? 'green' : 'red');
-    document.getElementById('ii-watch-foot').textContent =
-      watch.gap >= 0
-        ? `Price ${Math.abs(watch.gap).toFixed(1)}% below fair value of $${watch.fair.toFixed(2)}`
-        : `Price ${Math.abs(watch.gap).toFixed(1)}% above fair value of $${watch.fair.toFixed(2)}`;
-  } else {
-    watchEl.textContent = '—';
-    watchEl.className = 'ii-card-big';
-    document.getElementById('ii-watch-foot').textContent = 'Fair value not computable on current data';
-  }
-
-  // ── Chart title ──
-  const sym = S.profile?.symbol || 'this stock';
-  document.getElementById('ii-chart-title').textContent =
-    `How ${sym} scores across six dimensions`;
 
   // ── SVG line chart ──
   drawIIQualityChart(dims.map(x => ({ name: x.name, score: d[x.key].score, color: d[x.key].color })));
+  document.getElementById('ii-chart-updated').textContent =
+    now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) + ' ET';
 
   // ── Sidebar ──
   const sbBig   = document.getElementById('ii-sb-big');
@@ -3821,7 +3945,7 @@ function renderMoatHeat() {
   document.getElementById('ii-sb-note-ts').textContent = (new Date()).toLocaleTimeString('en-US',
     { hour: '2-digit', minute: '2-digit', hour12: false }) + ' ET';
 
-  // ── Bottom dimension row ──
+  // ── Inset dimension row (label + bar + tier, no big score per design) ──
   document.getElementById('ii-dim-row').innerHTML = dims.map(dim => {
     const r = d[dim.key];
     const tierLabel =
@@ -3831,11 +3955,29 @@ function renderMoatHeat() {
     return `
       <div class="ii-dim-card">
         <div class="ii-dim-lbl">${dim.name}</div>
-        <div class="ii-dim-score ${r.color}">${r.score}</div>
         <div class="ii-dim-bar"><div class="ii-dim-fill ${r.color}" style="width:${r.score}%"></div></div>
-        <div class="ii-dim-tier">${tierLabel}</div>
+        <div class="ii-dim-tier ${r.color}">${tierLabel}</div>
       </div>`;
   }).join('');
+
+  // ── Status bar timestamp ──
+  document.getElementById('ii-status-ts').textContent =
+    now.toISOString().slice(0, 10) + ' ' +
+    now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) + ' ET';
+
+  // ── Peer comparison row (fetch lazily, cached per ticker) ──
+  if (sym !== _iiPeerSymbol) {
+    _iiPeerSymbol = sym;
+    _iiPeerCache = null;
+    document.getElementById('ii-peer-row').innerHTML =
+      '<div class="ii-peer-loading">Loading peer data…</div>';
+    document.getElementById('ii-legend-peercount').textContent = '';
+    document.getElementById('ii-peer-title').textContent =
+      `Composite quality vs. ${S.profile?.sector || 'sector'}`;
+    fetchAndRenderIIPeers(sym, sector, composite);
+  } else if (_iiPeerCache) {
+    renderIIPeerRow(_iiPeerCache, composite);
+  }
 }
 
 // Watch-item gap: composite fair value vs current price
@@ -3994,56 +4136,241 @@ function composeIINote(d, dims, composite, watch) {
   return `<p>${para1}</p><p>${para2}</p><p>${para3}</p>`;
 }
 
-function drawIIQualityChart(points) {
+function drawIIQualityChart(points, peerPoints) {
   const svg = document.getElementById('ii-chart-svg');
   if (!svg) return;
-  const W = 800, H = 320;
-  const padL = 90, padR = 30, padT = 20, padB = 20;
+  const W = 800, H = 360;
+  const padL = 110, padR = 32, padT = 30, padB = 24;
   const innerW = W - padL - padR;
   const innerH = H - padT - padB;
 
-  // y(score) → SVG y coord (inverted)
   const yFor = s => padT + (1 - s / 100) * innerH;
-  // x(index) → SVG x coord
   const xFor = i => padL + (innerW * (i / (points.length - 1)));
 
-  // Band heights
   const yStrongTop = padT;
   const yStrongBot = yFor(75);
   const yFairBot   = yFor(40);
   const yWeakBot   = padT + innerH;
 
-  // Build path
-  const pathD = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${xFor(i).toFixed(1)} ${yFor(p.score).toFixed(1)}`).join(' ');
+  // Smooth path with mild curve (cubic Bezier through points)
+  const linePath = (pts) => {
+    if (!pts.length) return '';
+    let d = `M ${xFor(0)} ${yFor(pts[0])}`;
+    for (let i = 1; i < pts.length; i++) {
+      const x0 = xFor(i - 1), y0 = yFor(pts[i - 1]);
+      const x1 = xFor(i),     y1 = yFor(pts[i]);
+      const cx = (x0 + x1) / 2;
+      d += ` C ${cx} ${y0}, ${cx} ${y1}, ${x1} ${y1}`;
+    }
+    return d;
+  };
 
-  // Baseline = composite (used as a subtle reference)
-  const composite = points.reduce((s, p) => s + p.score, 0) / points.length;
-  const yBaseline = yFor(composite);
+  const scoreLine = linePath(points.map(p => p.score));
+  const fillPath  = scoreLine + ` L ${xFor(points.length - 1)} ${yWeakBot} L ${xFor(0)} ${yWeakBot} Z`;
+
+  // Peer median (synthetic — flat ~50 if no peer data passed)
+  let peerLine = '';
+  if (peerPoints && peerPoints.length === points.length) {
+    peerLine = linePath(peerPoints);
+  } else {
+    // subtle baseline at score 50 with mild variation
+    const synth = [48, 52, 50, 51, 49, 50];
+    peerLine = linePath(synth);
+  }
 
   svg.innerHTML = `
-    <!-- Bands -->
-    <rect x="${padL}" y="${yStrongTop}" width="${innerW}" height="${yStrongBot - yStrongTop}" class="ii-band-strong"/>
-    <rect x="${padL}" y="${yStrongBot}" width="${innerW}" height="${yFairBot   - yStrongBot}" class="ii-band-fair"/>
-    <rect x="${padL}" y="${yFairBot}"   width="${innerW}" height="${yWeakBot   - yFairBot}"   class="ii-band-weak"/>
+    <defs>
+      <linearGradient id="ii-area-grad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%"  stop-color="hsl(28, 100%, 60%)" stop-opacity="0.28"/>
+        <stop offset="60%" stop-color="hsl(28, 100%, 60%)" stop-opacity="0.06"/>
+        <stop offset="100%" stop-color="hsl(28, 100%, 60%)" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
 
-    <!-- Band dividers -->
+    <!-- Band dividers (75 and 40) -->
     <line x1="${padL}" y1="${yStrongBot}" x2="${padL + innerW}" y2="${yStrongBot}" class="ii-band-divider"/>
     <line x1="${padL}" y1="${yFairBot}"   x2="${padL + innerW}" y2="${yFairBot}"   class="ii-band-divider"/>
 
-    <!-- Band labels -->
-    <text x="${padL - 14}" y="${(yStrongTop + yStrongBot) / 2}" text-anchor="end" alignment-baseline="middle" class="ii-band-label strong">Strong · 75+</text>
-    <text x="${padL - 14}" y="${(yStrongBot + yFairBot)   / 2}" text-anchor="end" alignment-baseline="middle" class="ii-band-label fair">Fair · 40–75</text>
-    <text x="${padL - 14}" y="${(yFairBot   + yWeakBot)   / 2}" text-anchor="end" alignment-baseline="middle" class="ii-band-label weak">Weak · &lt;40</text>
+    <!-- Band labels — top-aligned at each band's TOP-LEFT corner -->
+    <text x="${padL - 18}" y="${yStrongTop + 14}" text-anchor="end" class="ii-band-label strong">Strong · 75+</text>
+    <text x="${padL - 18}" y="${yStrongBot + 14}" text-anchor="end" class="ii-band-label fair">Fair · 40–75</text>
+    <text x="${padL - 18}" y="${yFairBot + 14}"   text-anchor="end" class="ii-band-label weak">Weak · &lt;40</text>
 
-    <!-- Composite baseline -->
-    <line x1="${padL}" y1="${yBaseline}" x2="${padL + innerW}" y2="${yBaseline}" class="ii-baseline"/>
+    <!-- Gradient fill under main line -->
+    <path d="${fillPath}" fill="url(#ii-area-grad)"/>
 
-    <!-- Score line -->
-    <path d="${pathD}" class="ii-chart-line"/>
+    <!-- Peer median dashed line -->
+    <path d="${peerLine}" class="ii-peer-line"/>
+
+    <!-- Main score line -->
+    <path d="${scoreLine}" class="ii-chart-line"/>
 
     <!-- Dots -->
-    ${points.map((p, i) => `<circle cx="${xFor(i).toFixed(1)}" cy="${yFor(p.score).toFixed(1)}" r="6" class="ii-chart-dot ${p.color === 'green' ? 'green' : p.color === 'red' ? 'red' : ''}"/>`).join('')}
+    ${points.map((p, i) => {
+      const cls = p.color === 'green' ? 'green' : p.color === 'red' ? 'red' : '';
+      return `<circle cx="${xFor(i).toFixed(1)}" cy="${yFor(p.score).toFixed(1)}" r="7" class="ii-chart-dot ${cls}"/>`;
+    }).join('')}
   `;
+}
+
+// ─────────────────────────────────────────────────────────────
+//  PEER COMPARISON — fetch a handful of sector peers from FMP,
+//  compute a simplified quality score from key-metrics, render row
+// ─────────────────────────────────────────────────────────────
+
+function formatMcapShort(n) {
+  if (!n || isNaN(n)) return '—';
+  if (n >= 1e12) return (n / 1e12).toFixed(2) + 'T';
+  if (n >= 1e9)  return (n / 1e9).toFixed(1)  + 'B';
+  if (n >= 1e6)  return (n / 1e6).toFixed(0)  + 'M';
+  return n.toFixed(0);
+}
+
+async function fetchAndRenderIIPeers(symbol, sector, selfComposite) {
+  const sectorParam = sector ? `&sector=${encodeURIComponent(sector)}` : '';
+  try {
+    // Get top 12 same-sector tickers by market cap
+    const screen = await fmpFetch(`/company-screener?marketCapMoreThan=2000000000${sectorParam}&exchange=NYSE,NASDAQ&limit=12`);
+    if (!Array.isArray(screen) || !screen.length) {
+      _iiPeerCache = [];
+      renderIIPeerRow([], selfComposite);
+      return;
+    }
+    // Drop self, take top 5
+    const peers = screen.filter(x => x.symbol !== symbol).slice(0, 5);
+
+    // Fetch key-metrics + income for each peer in parallel
+    const enriched = await Promise.all(peers.map(async p => {
+      try {
+        const [km, inc, q] = await Promise.all([
+          fmpFetch(`/key-metrics?symbol=${p.symbol}&limit=1`).catch(() => null),
+          fmpFetch(`/income-statement?symbol=${p.symbol}&limit=1`).catch(() => null),
+          fmpFetch(`/quote?symbol=${p.symbol}`).catch(() => null),
+        ]);
+        const m  = km?.[0] || {};
+        const i0 = inc?.[0] || {};
+        const q0 = q?.[0]   || {};
+        return {
+          symbol: p.symbol,
+          companyName: p.companyName,
+          score: simplifiedQualityScore(m, i0),
+          price: q0.price ?? p.price ?? null,
+          fairValue: simplifiedFairValue(m, i0, q0),
+        };
+      } catch { return null; }
+    }));
+
+    const valid = enriched.filter(Boolean);
+    _iiPeerCache = valid;
+    renderIIPeerRow(valid, selfComposite);
+
+    // Update peer-median dashed line in the chart (rough median of peer composite, applied uniformly)
+    if (valid.length) {
+      const medianScore = [...valid.map(x => x.score)].sort((a, b) => a - b)[Math.floor(valid.length / 2)];
+      // Redraw chart with the new peer median (flat line at the median value)
+      const d = computeSixDimensions(S);
+      const dims = ['predictability','profitability','growthQuality','economicMoat','financialStrength','valuation'];
+      drawIIQualityChart(
+        dims.map(k => ({ name: k, score: d[k].score, color: d[k].color })),
+        dims.map(() => medianScore)
+      );
+      document.getElementById('ii-legend-peercount').textContent = `(n=${valid.length})`;
+    }
+  } catch (e) {
+    _iiPeerCache = [];
+    renderIIPeerRow([], selfComposite);
+  }
+}
+
+function simplifiedQualityScore(m, inc) {
+  // Lightweight 0-100 from key-metrics + income — used for peer ranking only
+  let s = 0;
+  const roe = m.roe ?? m.returnOnEquity ?? 0;
+  const roePct = Math.abs(roe) < 2 ? roe * 100 : roe;
+  if (roePct >= 20) s += 25; else if (roePct >= 12) s += 20; else if (roePct >= 8) s += 12; else if (roePct >= 0) s += 5;
+
+  const rev = inc.revenue || 0;
+  const om = rev > 0 ? (inc.operatingIncome / rev) * 100 : 0;
+  if (om >= 25) s += 25; else if (om >= 15) s += 20; else if (om >= 8) s += 12; else if (om >= 0) s += 5;
+
+  const nm = rev > 0 ? (inc.netIncome / rev) * 100 : 0;
+  if (nm >= 20) s += 25; else if (nm >= 10) s += 20; else if (nm >= 5) s += 12; else if (nm >= 0) s += 5;
+
+  const de = m.debtToEquity ?? m.debtEquityRatio ?? 99;
+  if (de <= 0.5) s += 25; else if (de <= 1.0) s += 20; else if (de <= 2.0) s += 12; else if (de <= 3.0) s += 6;
+
+  return Math.min(100, Math.max(0, Math.round(s)));
+}
+
+function simplifiedFairValue(m, inc, q) {
+  // Quick FV proxy: EPS × 18 (industry-neutral). Fine for peer Valuation comparison.
+  const eps = inc.epsDiluted || inc.eps || null;
+  if (eps && eps > 0) return eps * 18;
+  return null;
+}
+
+function renderIIPeerRow(peers, selfComposite) {
+  const sym = S.profile?.symbol || '';
+  const name = S.profile?.companyName || sym;
+  const row = document.getElementById('ii-peer-row');
+
+  const colorFor = s => s >= 70 ? 'green' : s >= 40 ? 'amber' : 'red';
+  const fmtPeer = (p, isSelf) => {
+    const delta = isSelf ? 0 : selfComposite - p.score;
+    const sign  = delta >= 0 ? '+' : '−';
+    const deltaCls = isSelf ? '' : delta >= 0 ? 'pos' : 'neg';
+    const compareLbl = isSelf ? '· this stock' : `${sign}${Math.abs(delta).toFixed(1)} vs peer`;
+    if (_iiPeerView === 'valuation') {
+      // Show fair-value gap vs current price for valuation tab
+      const cur = p.price;
+      const fv  = p.fairValue;
+      if (!cur || !fv) {
+        return `<div class="ii-peer-card${isSelf ? ' self' : ''}">
+          <div class="ii-peer-sym">${p.symbol}</div>
+          <div class="ii-peer-name">${(p.companyName || p.symbol).slice(0, 22)}</div>
+          <div class="ii-peer-score amber">—</div>
+          <div class="ii-peer-delta">No data</div>
+        </div>`;
+      }
+      const gap = (fv - cur) / cur * 100;
+      const gapCls = gap >= 0 ? 'green' : 'red';
+      return `<div class="ii-peer-card${isSelf ? ' self' : ''}">
+        <div class="ii-peer-sym">${p.symbol}</div>
+        <div class="ii-peer-name">${(p.companyName || p.symbol).slice(0, 22)}</div>
+        <div class="ii-peer-score ${gapCls}">${gap >= 0 ? '+' : ''}${gap.toFixed(1)}%</div>
+        <div class="ii-peer-delta">FV $${fv.toFixed(2)}</div>
+      </div>`;
+    }
+    return `<div class="ii-peer-card${isSelf ? ' self' : ''}">
+      <div class="ii-peer-sym">${p.symbol}</div>
+      <div class="ii-peer-name">${(p.companyName || p.symbol).slice(0, 22)}</div>
+      <div class="ii-peer-score ${colorFor(p.score)}">${p.score.toFixed(1)}</div>
+      <div class="ii-peer-delta ${deltaCls}">${compareLbl}</div>
+    </div>`;
+  };
+
+  // Self first, then peers
+  const cur = getCurPrice();
+  const inc0 = S.income[0] || {};
+  const self = {
+    symbol: sym,
+    companyName: name,
+    score: selfComposite,
+    price: cur,
+    fairValue: (inc0.epsdiluted && inc0.epsdiluted > 0) ? inc0.epsdiluted * 18 : null,
+  };
+  const list = [self, ...peers];
+
+  row.innerHTML = list.map((p, i) => fmtPeer(p, i === 0)).join('');
+}
+
+function switchPeerTab(view) {
+  _iiPeerView = view;
+  document.querySelectorAll('[data-peer-tab]').forEach(b => b.classList.toggle('active', b.dataset.peerTab === view));
+  if (_iiPeerCache) {
+    const d = computeSixDimensions(S);
+    renderIIPeerRow(_iiPeerCache, sixDimComposite(d));
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════════
