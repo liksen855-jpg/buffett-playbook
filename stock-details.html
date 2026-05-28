@@ -3157,7 +3157,6 @@ function renderValuationSummary(){
     return pv ? pv/shares : null;
   };
 
-  const epv = computeEPV();
   const hist_pfcf  = computeHistAvg(S.metrics, 'pfcfRatio', 10) || computeHistAvg(S.metrics, 'priceToFreeCashFlowsRatio', 10);
   const hist_pe    = computeHistAvg(S.metrics, 'peRatio', 10);
   const hist_evEb  = computeHistAvg(S.metrics, 'evToEBITDA', 10) || computeHistAvg(S.metrics, 'enterpriseValueOverEBITDA', 10);
@@ -3172,7 +3171,6 @@ function renderValuationSummary(){
     {id:'dcf-bull', group:'Discounted cash flow', label:'Forward DCF',  qualifier:'Bull',          value: dcfPS(bullG, 0.035)},
     {id:'dcf-base', group:'Discounted cash flow', label:'Forward DCF',  qualifier:'Base',          value: dcfPS(baseG, 0.030)},
     {id:'dcf-bear', group:'Discounted cash flow', label:'Forward DCF',  qualifier:'Bear',          value: dcfPS(bearG, 0.020)},
-    {id:'epv',      group:'Discounted cash flow', label:'EPV',          qualifier:'zero-growth',   value: epv.epvPerShare>0 ? epv.epvPerShare : null},
     {id:'pe-5y',    group:'Earnings multiples',   label:'P / E',        qualifier:'10Y average',    value: peMultPrice(hist_pe)},
     {id:'pe-sec',   group:'Earnings multiples',   label:'P / E',        qualifier:'sector median', value: peMultPrice(sectorMed.pe)},
     {id:'pfcf-5y',  group:'Earnings multiples',   label:'P / FCF',      qualifier:'10Y average',    value: pfcfMultPrice(hist_pfcf)},
@@ -4180,7 +4178,6 @@ function computeIIWatchGap() {
     const pv = dcfDeclining(fcf, g, tg, wacc);
     return pv ? pv / shares : null;
   };
-  const epv  = computeEPV();
   const hist_pfcf  = computeHistAvg(S.metrics, 'pfcfRatio', 10) || computeHistAvg(S.metrics, 'priceToFreeCashFlowsRatio', 10);
   const hist_pe    = computeHistAvg(S.metrics, 'peRatio', 10);
   const hist_evEb  = computeHistAvg(S.metrics, 'evToEBITDA', 10) || computeHistAvg(S.metrics, 'enterpriseValueOverEBITDA', 10);
@@ -4194,7 +4191,6 @@ function computeIIWatchGap() {
     dcfPS(baseG * 1.2, 0.035),
     dcfPS(baseG,       0.030),
     dcfPS(baseG * 0.7, 0.020),
-    epv.epvPerShare > 0 ? epv.epvPerShare : null,
     peMult(hist_pe),
     peMult(sectorMed.pe),
     pfcfMult(hist_pfcf),
