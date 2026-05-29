@@ -1495,6 +1495,7 @@ table.iv-sdcf-inputs td:first-child{padding-right:14px;line-height:1.4}
               <select class="iv-sdcf-select" id="sdcf-mode" onchange="setSDCFCashflow(this.value)">
                 <option value="ocf">DCF-20 · Operating Cash Flow · 20Y, 3-stage</option>
                 <option value="fcf">DFCF-20 · Free Cash Flow · 20Y, 3-stage</option>
+                <option value="ni">DNI-20 · Net Income · 20Y, 3-stage</option>
                 <option value="hmodel">H-Model · FCF · linear fade</option>
               </select>
             </div>
@@ -3068,6 +3069,12 @@ function computeTTMOcf(){
   const a = S.cashflow[0] || {};
   return a.operatingCashFlow || a.netCashProvidedByOperatingActivities || 0;
 }
+function computeTTMNetIncome(){
+  if(S.incomeQ && S.incomeQ.length>=4){
+    return S.incomeQ.slice(0,4).reduce((s,d)=>s+(d.netIncome||0),0);
+  }
+  return S.income[0]?.netIncome || 0;
+}
 
 function getRevenueCAGR(years=5){
   // Compare income[0] (most recent FY) vs income[years] (n years back)
@@ -3090,11 +3097,22 @@ function deriveStageGrowthRates(){
 
 let SDCF_CF_MODE = 'ocf'; // 'ocf' | 'fcf' | 'hmodel'
 
+function cashflowLabelFor(mode){
+  if(mode === 'ocf') return 'Operating Cash Flow (TTM)';
+  if(mode === 'fcf') return 'Free Cash Flow (TTM)';
+  if(mode === 'ni')  return 'Net Income (TTM)';
+  if(mode === 'hmodel') return 'Free Cash Flow (TTM)';
+  return 'Cash Flow (TTM)';
+}
+
+function baseCfForMode(mode){
+  if(mode === 'ni')                       return computeTTMNetIncome();
+  if(mode === 'fcf' || mode === 'hmodel') return computeTTMFcf();
+  return computeTTMOcf();
+}
+
 function applyModeUI(mode){
-  // Cash-flow label
-  document.getElementById('sdcf-cf-label').textContent =
-    mode==='ocf' ? 'Operating Cash Flow (TTM)' : 'Free Cash Flow (TTM)';
-  // H-Model uses FCF base; 3-stage rows hidden; half-life row visible; labels relabel
+  document.getElementById('sdcf-cf-label').textContent = cashflowLabelFor(mode);
   const isH = mode === 'hmodel';
   document.getElementById('sdcf-row-g610').style.display = isH ? 'none' : '';
   document.getElementById('sdcf-row-half').style.display = isH ? '' : 'none';
@@ -3105,21 +3123,14 @@ function applyModeUI(mode){
 }
 
 function setSDCFCashflow(mode){
-  if(mode !== 'ocf' && mode !== 'fcf' && mode !== 'hmodel') return;
+  if(!['ocf','fcf','ni','hmodel'].includes(mode)) return;
   SDCF_CF_MODE = mode;
   const sel = document.getElementById('sdcf-mode');
   if(sel && sel.value !== mode) sel.value = mode;
   applyModeUI(mode);
-  // H-Model always uses FCF base; DCF-20 uses OCF; DFCF-20 uses FCF
-  const useFcfBase = (mode === 'fcf' || mode === 'hmodel');
-  const baseCf = (useFcfBase ? computeTTMFcf() : computeTTMOcf()) / 1e6;
+  const baseCf = baseCfForMode(mode) / 1e6;
   document.getElementById('sdcf-cf').value = baseCf>0 ? baseCf.toFixed(0) : '';
-  // H-Model default: terminal = 3% (matches H-Model convention vs 4% for stage DCFs)
-  if(mode === 'hmodel'){
-    document.getElementById('sdcf-g1120').value = '3.0';
-  } else {
-    document.getElementById('sdcf-g1120').value = '4.0';
-  }
+  document.getElementById('sdcf-g1120').value = (mode === 'hmodel') ? '3.0' : '4.0';
   recomputeStageDCF();
 }
 
@@ -3138,8 +3149,10 @@ function renderStageDCF(){
   // Discount rate: capped WACC for sanity (12% max for hyper-growth tech)
   const wacc = Math.min(0.12, computeWACC());
 
+  // Pick the base for the current mode (defaults to OCF on first paint)
+  const modeCf = baseCfForMode(SDCF_CF_MODE);
   // Fill inputs (in millions for cf/debt/cash/shares, percent for rates)
-  document.getElementById('sdcf-cf').value    = baseCf>0 ? (baseCf/1e6).toFixed(0) : '';
+  document.getElementById('sdcf-cf').value    = modeCf>0 ? (modeCf/1e6).toFixed(0) : '';
   document.getElementById('sdcf-debt').value  = (totalDebt/1e6).toFixed(0);
   document.getElementById('sdcf-cash').value  = (cash/1e6).toFixed(0);
   document.getElementById('sdcf-disc').value  = (wacc*100).toFixed(2);
@@ -3160,10 +3173,8 @@ function renderStageDCF(){
   const sel = document.getElementById('sdcf-mode');
   if(sel) sel.value = SDCF_CF_MODE;
   applyModeUI(SDCF_CF_MODE);
-  // For H-Model, override the cash-flow base (always FCF) and terminal default (3%)
+  // H-Model uses 3% terminal by convention (vs 4% for the 3-stage DCFs)
   if(SDCF_CF_MODE === 'hmodel'){
-    const fcf = computeTTMFcf();
-    document.getElementById('sdcf-cf').value = fcf>0 ? (fcf/1e6).toFixed(0) : '';
     document.getElementById('sdcf-g1120').value = '3.0';
   }
 
@@ -3279,7 +3290,8 @@ function recomputeStageDCF(){
       ownAvg = (g15*5 + g610*5 + g1120*10) / 20 * 100;
     }
     const gapPP  = (impliedG*100 - ownAvg).toFixed(1);
-    const cfName = SDCF_CF_MODE==='ocf' ? 'OCF' : 'FCF';
+    const cfName = SDCF_CF_MODE==='ocf' ? 'OCF' :
+                   SDCF_CF_MODE==='ni'  ? 'net-income' : 'FCF';
     if(Math.abs(impliedG*100 - ownAvg) < 0.5){
       rev.innerHTML = `<strong>Reverse · In line.</strong>Market is pricing in <b>${impPct}%</b> 20Y avg ${cfName} growth — matches your model's 20Y avg of ${ownAvg.toFixed(1)}%.`;
     } else if(impliedG*100 < ownAvg){
@@ -3316,9 +3328,13 @@ function cfInputVal(id, fallback) {
 }
 
 // Composite version of the 3-stage 20Y DCF (own 5Y rev CAGR for Y1-5,
-// fade for Y6-10, 4% terminal for Y11-20, WACC capped at 12%, OCF or FCF base)
-function computeCfStage20(useFCF){
-  const baseCf = useFCF ? computeTTMFcf() : computeTTMOcf();
+// fade for Y6-10, 4% terminal for Y11-20, WACC capped at 12%,
+// base: 'ocf' | 'fcf' | 'ni')
+function computeCfStage20(base){
+  let baseCf;
+  if      (base === 'fcf') baseCf = computeTTMFcf();
+  else if (base === 'ni')  baseCf = computeTTMNetIncome();
+  else                     baseCf = computeTTMOcf();
   if(baseCf <= 0) return null;
   const sh = getSharesOut();
   if(!sh) return null;
@@ -3336,8 +3352,9 @@ function computeCfStage20(useFCF){
   const equity = pv - debt + cash;
   return equity / sh;
 }
-function computeCfStageDCF()  { return computeCfStage20(false); }  // OCF base
-function computeCfStageDFCF() { return computeCfStage20(true);  }  // FCF base
+function computeCfStageDCF()  { return computeCfStage20('ocf'); }
+function computeCfStageDFCF() { return computeCfStage20('fcf'); }
+function computeCfStageDNI()  { return computeCfStage20('ni');  }
 
 function computeCfFcff(wacc, termGr, marginExpPct) {
   const cfSeries = S.cashflow.slice(0,6);
@@ -3454,6 +3471,7 @@ function renderValuationSummary(){
   const methods=[
     {name:'DCF-20',         type:'20Y · Operating CF',  compute:computeCfStageDCF},
     {name:'DFCF-20',        type:'20Y · Free CF',       compute:computeCfStageDFCF},
+    {name:'DNI-20',         type:'20Y · Net Income',    compute:computeCfStageDNI},
     {name:'H-Model DCF',    type:'Intrinsic',  compute:()=>computeCfHModel(wacc,termGr)},
     {name:'EV / EBITDA',    type:'Multiples',  compute:computeCfEvEbitda},
     {name:'EV / Revenue',   type:'Multiples',  compute:computeCfEvRev},
