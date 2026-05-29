@@ -1054,12 +1054,30 @@ table.iv-mini td .pos{color:var(--pos)}
 .iv-mx .iv-mx-prem .iv-mx-prem-v.pos{color:var(--pos)}
 .iv-mx .iv-mx-prem .iv-mx-prem-v.flat{color:var(--mute)}
 
+/* Long-Horizon (3-stage) DCF */
+.iv-sdcf-kpi{grid-template-columns:repeat(3,1fr)}
+.iv-sdcf-kpi .iv-kpi-v.accent{color:var(--accent)}
+.iv-sdcf-body{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
+.iv-sdcf-col{padding:22px 24px;border-right:1px solid var(--line)}
+.iv-sdcf-col:last-child{border-right:none}
+.iv-sdcf-col-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:12px;flex-wrap:wrap}
+.iv-sdcf-cf-toggle{display:inline-flex;background:var(--raised);border:1px solid var(--line);border-radius:6px;padding:2px}
+.iv-sdcf-toggle-btn{background:transparent;border:none;color:var(--mute);font-size:11px;font-weight:600;padding:4px 10px;border-radius:4px;cursor:pointer;font-family:var(--sans);letter-spacing:0.01em}
+.iv-sdcf-toggle-btn.active{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(20,20,18,.06)}
+table.iv-sdcf-inputs td{vertical-align:middle;padding:10px 0}
+table.iv-sdcf-inputs td:first-child{padding-right:14px;line-height:1.4}
+.iv-sdcf-input{background:var(--surface);border:1px solid var(--line);border-radius:6px;color:var(--ink);font-family:var(--mono);font-size:13px;font-weight:600;padding:6px 10px;outline:none;font-variant-numeric:tabular-nums;width:100%;max-width:140px;text-align:right}
+.iv-sdcf-input:focus{border-color:var(--accent)}
+.iv-sdcf-reset{margin-top:12px;background:transparent;border:1px solid var(--line);border-radius:6px;color:var(--mute);font-size:11px;font-weight:500;padding:6px 12px;cursor:pointer;font-family:var(--sans);letter-spacing:0.01em}
+.iv-sdcf-reset:hover{border-color:var(--accent);color:var(--accent)}
+
 @media(max-width:900px){
   .iv-kpi-row,.iv-mx-grid{grid-template-columns:repeat(2,1fr)}
   .iv-kpi-row .iv-kpi:nth-child(2),.iv-mx:nth-child(2){border-right:none}
-  .iv-qg-head,.iv-dcf-rev,.iv-epv,.iv-dcf-scen{grid-template-columns:1fr}
-  .iv-qg-head > div,.iv-dcf-rev > div,.iv-epv-col,.iv-dcf-s{border-right:none;border-bottom:1px solid var(--line)}
-  .iv-qg-head > div:last-child,.iv-dcf-rev > div:last-child,.iv-epv-col:last-child,.iv-dcf-s:last-child{border-bottom:none}
+  .iv-qg-head,.iv-dcf-rev,.iv-epv,.iv-dcf-scen,.iv-sdcf-body{grid-template-columns:1fr}
+  .iv-qg-head > div,.iv-dcf-rev > div,.iv-epv-col,.iv-dcf-s,.iv-sdcf-col{border-right:none;border-bottom:1px solid var(--line)}
+  .iv-qg-head > div:last-child,.iv-dcf-rev > div:last-child,.iv-epv-col:last-child,.iv-dcf-s:last-child,.iv-sdcf-col:last-child{border-bottom:none}
+  .iv-sdcf-kpi{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -1436,85 +1454,100 @@ table.iv-mini td .pos{color:var(--pos)}
       </div>
     </section>
 
-    <!-- ════ 02 · DISCOUNTED CASH FLOW ════ -->
+    <!-- ════ 02 · LONG-HORIZON DCF (3-stage, 20-year) ════ -->
     <section class="iv-section">
       <div class="iv-section-head">
         <div class="iv-section-head-l">
           <span class="iv-ix">02</span>
-          <h2>Discounted Cash Flow</h2>
-          <span class="iv-sub">reverse solver + forward scenarios · 10-year</span>
+          <h2>Long-Horizon DCF</h2>
+          <span class="iv-sub">20-year · 3-stage · per-stock growth</span>
         </div>
         <div class="iv-section-head-r">
-          <span>WACC <b id="dcf-wacc-disp">—</b></span>
-          <span>Terminal <b>3.0%</b></span>
-          <span>Shares <b id="dcf-shares-disp">—</b></span>
+          <span id="sdcf-verdict-tag"></span>
         </div>
       </div>
 
       <div class="iv-card">
-        <div class="iv-dcf-rev">
-          <div class="iv-dcf-rev-l">
-            <div class="iv-lbl">Reverse DCF · implied 10Y FCF growth</div>
-            <div class="iv-dcf-imp tnum" id="rdcf-rate">—</div>
-            <p class="iv-dcf-cap" id="rdcf-context">—</p>
+        <!-- Hero KPI strip -->
+        <div class="iv-kpi-row iv-sdcf-kpi">
+          <div class="iv-kpi">
+            <div class="iv-kpi-l">Stock price</div>
+            <div class="iv-kpi-v tnum" id="sdcf-price">—</div>
+            <div class="iv-kpi-s">per share · market</div>
           </div>
-          <div class="iv-dcf-rev-r">
-            <div class="iv-lbl">Solver inputs</div>
-            <table class="iv-mini">
-              <tr><td>Market capitalization</td><td id="rdcf-mcap">—</td></tr>
-              <tr><td>Trailing 12M FCF</td><td id="rdcf-fcf">—</td></tr>
-              <tr><td>Discount rate (WACC)</td><td id="rdcf-wacc">—</td></tr>
-              <tr><td>Terminal growth</td><td>3.0%</td></tr>
+          <div class="iv-kpi">
+            <div class="iv-kpi-l">Intrinsic value</div>
+            <div class="iv-kpi-v tnum accent" id="sdcf-iv">—</div>
+            <div class="iv-kpi-s">per share · 3-stage DCF</div>
+          </div>
+          <div class="iv-kpi">
+            <div class="iv-kpi-l">Discount (−) / Premium (+)</div>
+            <div class="iv-kpi-v tnum" id="sdcf-gap">—</div>
+            <div class="iv-kpi-s" id="sdcf-gap-note">—</div>
+          </div>
+        </div>
+
+        <!-- Inputs + Growth split -->
+        <div class="iv-sdcf-body">
+          <!-- LEFT: Inputs -->
+          <div class="iv-sdcf-col">
+            <div class="iv-sdcf-col-h">
+              <div class="iv-lbl" style="margin-bottom:0">Inputs</div>
+              <div class="iv-sdcf-cf-toggle">
+                <button type="button" class="iv-sdcf-toggle-btn active" data-cf="ocf" onclick="setSDCFCashflow('ocf')">Operating CF</button>
+                <button type="button" class="iv-sdcf-toggle-btn" data-cf="fcf" onclick="setSDCFCashflow('fcf')">Free CF</button>
+              </div>
+            </div>
+            <table class="iv-mini iv-sdcf-inputs">
+              <tr>
+                <td><span id="sdcf-cf-label">Operating Cash Flow (TTM)</span><br/><span class="iv-fix">In millions</span></td>
+                <td><input type="number" class="iv-sdcf-input tnum" id="sdcf-cf" oninput="recomputeStageDCF()"/></td>
+              </tr>
+              <tr>
+                <td>Total Debt<br/><span class="iv-fix">In millions</span></td>
+                <td><input type="number" class="iv-sdcf-input tnum" id="sdcf-debt" oninput="recomputeStageDCF()"/></td>
+              </tr>
+              <tr>
+                <td>Cash &amp; ST investments<br/><span class="iv-fix">In millions</span></td>
+                <td><input type="number" class="iv-sdcf-input tnum" id="sdcf-cash" oninput="recomputeStageDCF()"/></td>
+              </tr>
+              <tr>
+                <td>Discount rate (%)</td>
+                <td><input type="number" step="0.1" class="iv-sdcf-input tnum" id="sdcf-disc" oninput="recomputeStageDCF()"/></td>
+              </tr>
+              <tr>
+                <td>Shares outstanding<br/><span class="iv-fix">In millions</span></td>
+                <td><input type="number" class="iv-sdcf-input tnum" id="sdcf-shares" oninput="recomputeStageDCF()"/></td>
+              </tr>
             </table>
           </div>
-        </div>
 
-        <div class="iv-dcf-scen">
-          <div class="iv-dcf-s">
-            <div class="iv-dcf-s-head"><span>Bear</span><span class="iv-tag iv-tag-neg tnum" id="dcf-bear-up">—</span></div>
-            <div class="iv-dcf-s-inp">
-              <div>
-                <label>Y1–3 growth (%)</label>
-                <input type="number" step="0.5" id="dcf-bear" oninput="recomputeDcf()"/>
-              </div>
-              <span class="iv-dcf-s-term">Terminal 2.0%</span>
+          <!-- RIGHT: Growth rates -->
+          <div class="iv-sdcf-col">
+            <div class="iv-sdcf-col-h">
+              <div class="iv-lbl" style="margin-bottom:0">Growth rate</div>
+              <span class="iv-fix" id="sdcf-cagr-note">5Y revenue CAGR —</span>
             </div>
-            <div class="iv-dcf-s-iv">
-              <div class="iv-lbl">Intrinsic value / share</div>
-              <div class="iv-dcf-s-iv-v tnum" id="dcf-bear-iv">—</div>
-            </div>
-          </div>
-          <div class="iv-dcf-s base">
-            <div class="iv-dcf-s-head"><span>Base</span><span class="iv-tag iv-tag-accent tnum" id="dcf-base-up">—</span></div>
-            <div class="iv-dcf-s-inp">
-              <div>
-                <label>Y1–3 growth (%)</label>
-                <input type="number" step="0.5" id="dcf-base" oninput="recomputeDcf()"/>
-              </div>
-              <span class="iv-dcf-s-term">Terminal 3.0%</span>
-            </div>
-            <div class="iv-dcf-s-iv">
-              <div class="iv-lbl">Intrinsic value / share</div>
-              <div class="iv-dcf-s-iv-v tnum" id="dcf-base-iv">—</div>
-            </div>
-          </div>
-          <div class="iv-dcf-s">
-            <div class="iv-dcf-s-head"><span>Bull</span><span class="iv-tag iv-tag-pos tnum" id="dcf-bull-up">—</span></div>
-            <div class="iv-dcf-s-inp">
-              <div>
-                <label>Y1–3 growth (%)</label>
-                <input type="number" step="0.5" id="dcf-bull" oninput="recomputeDcf()"/>
-              </div>
-              <span class="iv-dcf-s-term">Terminal 3.5%</span>
-            </div>
-            <div class="iv-dcf-s-iv">
-              <div class="iv-lbl">Intrinsic value / share</div>
-              <div class="iv-dcf-s-iv-v tnum" id="dcf-bull-iv">—</div>
-            </div>
+            <table class="iv-mini iv-sdcf-inputs">
+              <tr>
+                <td>Growth (Year 1–5)<br/><span class="iv-fix">Capped at 30% · from own 5Y revenue CAGR</span></td>
+                <td><input type="number" step="0.1" class="iv-sdcf-input tnum" id="sdcf-g15" oninput="recomputeStageDCF()"/><span class="iv-fix" style="margin-left:4px">%</span></td>
+              </tr>
+              <tr>
+                <td>Growth (Year 6–10)<br/><span class="iv-fix">Default: Y1-5 × 0.70 (fade)</span></td>
+                <td><input type="number" step="0.1" class="iv-sdcf-input tnum" id="sdcf-g610" oninput="recomputeStageDCF()"/><span class="iv-fix" style="margin-left:4px">%</span></td>
+              </tr>
+              <tr>
+                <td>Growth (Year 11–20)<br/><span class="iv-fix">Terminal-like · default 4%</span></td>
+                <td><input type="number" step="0.1" class="iv-sdcf-input tnum" id="sdcf-g1120" oninput="recomputeStageDCF()"/><span class="iv-fix" style="margin-left:4px">%</span></td>
+              </tr>
+            </table>
+            <button type="button" class="iv-sdcf-reset" onclick="resetStageDCF()">Reset to auto values</button>
           </div>
         </div>
 
-        <div class="iv-variant" id="variant-perception">—</div>
+        <!-- Reverse-DCF context (kept as a sanity check) -->
+        <div class="iv-variant" id="sdcf-reverse">—</div>
       </div>
     </section>
 
@@ -3023,115 +3056,202 @@ function describeImpliedGrowth(rate){
   return `Market is pricing in <strong>${pct.toFixed(1)}%+</strong> annual FCF growth. Either you've found something special or this is highly speculative.`;
 }
 
-function renderLayer2(){
-  const wacc   = computeWACC();
-  const fcf    = computeTTMFcf();
-  const mktCap = S.quote.marketCap || S.profile.marketCap || 0;
-  const baseG  = getBaseGrowthEstimate();
-  const shares = getSharesOut();
+// ── Long-Horizon (3-stage) DCF helpers ──
+function computeTTMOcf(){
+  if(S.cashflowQ && S.cashflowQ.length>=4){
+    return S.cashflowQ.slice(0,4).reduce((s,d)=>s+(d.operatingCashFlow||d.netCashProvidedByOperatingActivities||0),0);
+  }
+  const a = S.cashflow[0] || {};
+  return a.operatingCashFlow || a.netCashProvidedByOperatingActivities || 0;
+}
 
-  // Reset growth defaults each load (don't preserve user edits across tickers)
-  document.getElementById('dcf-bear').value = (baseG*0.7*100).toFixed(1);
-  document.getElementById('dcf-base').value = (baseG*100).toFixed(1);
-  document.getElementById('dcf-bull').value = (baseG*1.2*100).toFixed(1);
+function getRevenueCAGR(years=5){
+  // Compare income[0] (most recent FY) vs income[years] (n years back)
+  if(!S.income || S.income.length < years+1) return null;
+  const latest = S.income[0]?.revenue;
+  const past   = S.income[years]?.revenue;
+  if(!latest || !past || past<=0) return null;
+  return Math.pow(latest/past, 1/years) - 1;
+}
 
-  // Header chips
-  document.getElementById('rdcf-mcap').textContent = mktCap?fmt(mktCap):'—';
-  document.getElementById('rdcf-fcf').textContent  = fcf?fmt(fcf):'—';
-  document.getElementById('rdcf-wacc').textContent = fmtP(wacc);
-  document.getElementById('dcf-wacc-disp').textContent = fmtP(wacc);
-  const sharesEl = document.getElementById('dcf-shares-disp');
-  if(sharesEl) sharesEl.textContent = shares ? fmtN(shares,1) : '—';
+function deriveStageGrowthRates(){
+  // Y1-5: own 5Y revenue CAGR, floored at 2%, capped at 30%
+  let cagr = getRevenueCAGR(5);
+  if(cagr===null || !isFinite(cagr)) cagr = 0.06;     // fallback
+  const g15  = Math.max(0.02, Math.min(0.30, cagr));
+  const g610 = g15 * 0.70;                            // fade
+  const g1120= 0.04;                                  // terminal-like
+  return {g15, g610, g1120, rawCagr: cagr};
+}
 
-  const rdcfRate = document.getElementById('rdcf-rate');
-  const rdcfCtx  = document.getElementById('rdcf-context');
-  rdcfRate.className = 'iv-dcf-imp tnum';
-  if(mktCap>0 && fcf>0){
-    const impliedG = reverseDCF(mktCap, fcf, wacc, 0.03);
-    if(impliedG===null){
-      rdcfRate.textContent='—';
-      rdcfCtx.textContent='Cannot compute — WACC must exceed terminal growth.';
-    } else {
-      const pct = (impliedG*100).toFixed(1);
-      rdcfRate.innerHTML = `${pct}<span class="iv-u">%</span>`;
-      if(impliedG>0.20)       rdcfRate.classList.add('neg');
-      else if(impliedG>0.12)  rdcfRate.classList.add('warn');
-      else if(impliedG>=0)    rdcfRate.classList.add('pos');
-      else                    rdcfRate.classList.add('neg');
-      rdcfCtx.innerHTML = describeImpliedGrowth(impliedG);
-    }
+let SDCF_CF_MODE = 'ocf'; // 'ocf' or 'fcf'
+
+function setSDCFCashflow(mode){
+  if(mode !== 'ocf' && mode !== 'fcf') return;
+  SDCF_CF_MODE = mode;
+  document.querySelectorAll('.iv-sdcf-toggle-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.cf===mode);
+  });
+  document.getElementById('sdcf-cf-label').textContent =
+    mode==='ocf' ? 'Operating Cash Flow (TTM)' : 'Free Cash Flow (TTM)';
+  const baseCf = (mode==='ocf' ? computeTTMOcf() : computeTTMFcf()) / 1e6;
+  document.getElementById('sdcf-cf').value = baseCf>0 ? baseCf.toFixed(0) : '';
+  recomputeStageDCF();
+}
+
+function resetStageDCF(){
+  renderStageDCF();
+}
+
+function renderStageDCF(){
+  const bal0   = S.balance[0] || {};
+  const totalDebt = bal0.totalDebt || 0;
+  const cash      = (bal0.cashAndShortTermInvestments || bal0.cashAndCashEquivalents || 0);
+  const shares    = getSharesOut();
+  const baseCf    = (SDCF_CF_MODE==='ocf' ? computeTTMOcf() : computeTTMFcf());
+  const {g15, g610, g1120, rawCagr} = deriveStageGrowthRates();
+
+  // Discount rate: capped WACC for sanity (12% max for hyper-growth tech)
+  const wacc = Math.min(0.12, computeWACC());
+
+  // Fill inputs (in millions for cf/debt/cash/shares, percent for rates)
+  document.getElementById('sdcf-cf').value    = baseCf>0 ? (baseCf/1e6).toFixed(0) : '';
+  document.getElementById('sdcf-debt').value  = (totalDebt/1e6).toFixed(0);
+  document.getElementById('sdcf-cash').value  = (cash/1e6).toFixed(0);
+  document.getElementById('sdcf-disc').value  = (wacc*100).toFixed(2);
+  document.getElementById('sdcf-shares').value= shares>0 ? (shares/1e6).toFixed(0) : '';
+  document.getElementById('sdcf-g15').value   = (g15*100).toFixed(2);
+  document.getElementById('sdcf-g610').value  = (g610*100).toFixed(2);
+  document.getElementById('sdcf-g1120').value = (g1120*100).toFixed(1);
+
+  const cagrNote = document.getElementById('sdcf-cagr-note');
+  if(rawCagr !== null && isFinite(rawCagr)){
+    const cap = rawCagr > 0.30 ? ' (capped at 30%)' : rawCagr < 0.02 ? ' (floored at 2%)' : '';
+    cagrNote.textContent = `5Y revenue CAGR ${(rawCagr*100).toFixed(1)}%${cap}`;
   } else {
-    rdcfRate.textContent = '—';
-    rdcfCtx.textContent  = fcf<=0 ? 'Cannot reverse — TTM FCF is negative or zero. Current price not justified by cash flows alone.' : 'Cannot compute — missing market cap or FCF data.';
+    cagrNote.textContent = '5Y revenue CAGR unavailable · using 6% default';
   }
 
-  recomputeDcf();
+  // Sync toggle button state for the current cash-flow mode
+  document.querySelectorAll('.iv-sdcf-toggle-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.cf===SDCF_CF_MODE);
+  });
+  document.getElementById('sdcf-cf-label').textContent =
+    SDCF_CF_MODE==='ocf' ? 'Operating Cash Flow (TTM)' : 'Free Cash Flow (TTM)';
+
+  recomputeStageDCF();
+}
+
+function recomputeStageDCF(){
+  const cur = getCurPrice();
+  const cf      = (parseFloat(document.getElementById('sdcf-cf').value)||0) * 1e6;
+  const debt    = (parseFloat(document.getElementById('sdcf-debt').value)||0) * 1e6;
+  const cash    = (parseFloat(document.getElementById('sdcf-cash').value)||0) * 1e6;
+  const disc    = (parseFloat(document.getElementById('sdcf-disc').value)||0) / 100;
+  const shares  = (parseFloat(document.getElementById('sdcf-shares').value)||0) * 1e6;
+  const g15     = (parseFloat(document.getElementById('sdcf-g15').value)||0)  / 100;
+  const g610    = (parseFloat(document.getElementById('sdcf-g610').value)||0) / 100;
+  const g1120   = (parseFloat(document.getElementById('sdcf-g1120').value)||0)/ 100;
+
+  // Header price + reset
+  document.getElementById('sdcf-price').textContent = cur ? '$'+cur.toFixed(2) : '—';
+  const ivEl  = document.getElementById('sdcf-iv');
+  const gapEl = document.getElementById('sdcf-gap');
+  const gapNote = document.getElementById('sdcf-gap-note');
+  const tagEl = document.getElementById('sdcf-verdict-tag');
+
+  // Validate inputs
+  if(cf<=0 || disc<=0 || shares<=0 || disc <= g1120){
+    ivEl.textContent = '—';
+    gapEl.textContent = '—';
+    gapEl.className = 'iv-kpi-v tnum';
+    gapNote.textContent = (disc <= g1120 ? 'Discount rate must exceed terminal growth.' : 'Need positive cash flow, discount rate, and shares.');
+    tagEl.innerHTML = '';
+    document.getElementById('sdcf-reverse').textContent = 'Reverse-DCF requires valid inputs.';
+    return;
+  }
+
+  // 3-stage 20-year PV
+  let pv = 0;
+  let curCf = cf;
+  for(let y=1; y<=5; y++){
+    curCf *= (1+g15);
+    pv += curCf / Math.pow(1+disc, y);
+  }
+  for(let y=6; y<=10; y++){
+    curCf *= (1+g610);
+    pv += curCf / Math.pow(1+disc, y);
+  }
+  for(let y=11; y<=20; y++){
+    curCf *= (1+g1120);
+    pv += curCf / Math.pow(1+disc, y);
+  }
+
+  // EV → Equity → per-share
+  const equity = pv - debt + cash;
+  const iv = equity / shares;
+  ivEl.textContent = iv>0 ? '$'+iv.toFixed(2) : '—';
+
+  if(cur>0 && iv>0){
+    const gap = (iv - cur) / cur * 100;
+    gapEl.textContent = (gap>=0?'+':'')+gap.toFixed(2)+'%';
+    gapEl.className = 'iv-kpi-v tnum ' + (gap>=10?'pos':gap<=-10?'neg':'warn');
+    gapNote.textContent = gap>=10?'price below intrinsic value · undervalued':
+                          gap<=-10?'price above intrinsic value · overvalued':
+                          'price near intrinsic value';
+    gapNote.className = 'iv-kpi-s ' + (gap>=10?'pos':gap<=-10?'neg':'');
+    const cls = gap>=10?'iv-tag-pos':gap<=-10?'iv-tag-neg':'iv-tag-warn';
+    const label = gap>=10?'Undervalued':gap<=-10?'Overvalued':'Near fair value';
+    tagEl.innerHTML = `<span class="iv-tag ${cls}"><span class="iv-dot"></span>${label}</span>`;
+  } else {
+    gapEl.textContent = '—';
+    gapEl.className = 'iv-kpi-v tnum';
+    gapNote.textContent = '—';
+    gapNote.className = 'iv-kpi-s';
+    tagEl.innerHTML = '';
+  }
+
+  // Reverse-DCF sanity check: what single growth rate justifies current price?
+  // Solve: cur = PV(constant growth g for 20Y) / shares, then express g
+  const rev = document.getElementById('sdcf-reverse');
+  const mktCap = (cur>0 && shares>0) ? cur*shares + debt - cash : 0;
+  if(mktCap>0 && cf>0){
+    // Find single constant g that makes 20Y PV(cf,g,disc)=mktCap
+    function pvConst(g){
+      if(g >= disc) return Infinity;
+      let p = 0, c = cf;
+      for(let y=1; y<=20; y++){ c *= (1+g); p += c/Math.pow(1+disc,y); }
+      return p;
+    }
+    let lo=-0.10, hi=Math.min(disc-0.001, 0.50), impliedG=null;
+    for(let i=0; i<60; i++){
+      const mid=(lo+hi)/2, v=pvConst(mid);
+      if(!isFinite(v)){ hi=mid; continue; }
+      if(v>mktCap) hi=mid; else lo=mid;
+      if(Math.abs(v-mktCap)/mktCap < 1e-4){ impliedG=mid; break; }
+    }
+    if(impliedG===null) impliedG=(lo+hi)/2;
+    const impPct = (impliedG*100).toFixed(1);
+    const ownAvg = (g15*5 + g610*5 + g1120*10) / 20 * 100;
+    const gapPP  = (impliedG*100 - ownAvg).toFixed(1);
+    if(Math.abs(impliedG*100 - ownAvg) < 0.5){
+      rev.innerHTML = `<strong>Reverse · In line.</strong>Market is pricing in <b>${impPct}%</b> 20Y avg ${SDCF_CF_MODE==='ocf'?'OCF':'FCF'} growth — matches your model's 20Y avg of ${ownAvg.toFixed(1)}%.`;
+    } else if(impliedG*100 < ownAvg){
+      rev.innerHTML = `<strong>Reverse · Bullish setup.</strong>Market prices in <b>${impPct}%</b> 20Y avg growth — <b class="pos">${gapPP}pp below</b> your model's ${ownAvg.toFixed(1)}%. If your assumptions hold, the stock is undervalued.`;
+    } else {
+      rev.innerHTML = `<strong>Reverse · Demanding.</strong>Market prices in <b>${impPct}%</b> 20Y avg growth — <b class="neg">+${gapPP}pp above</b> your model's ${ownAvg.toFixed(1)}%. Justifying the price requires faster growth than your inputs assume.`;
+    }
+  } else {
+    rev.textContent = 'Reverse-DCF requires market cap and positive cash flow.';
+  }
+}
+
+function renderLayer2(){
+  // Initialize the 3-stage DCF section
+  renderStageDCF();
 }
 
 function recomputeDcf(){
-  const wacc   = computeWACC();
-  const fcf    = computeTTMFcf();
-  const shares = getSharesOut();
-  const cur    = getCurPrice();
-  const mktCap = S.quote.marketCap || S.profile.marketCap || 0;
-
-  const bearG = parseFloat(document.getElementById('dcf-bear').value)/100;
-  const baseG = parseFloat(document.getElementById('dcf-base').value)/100;
-  const bullG = parseFloat(document.getElementById('dcf-bull').value)/100;
-
-  function ivPerShare(g, tg){
-    if(fcf<=0 || shares<=0 || isNaN(g)) return null;
-    const pv = dcfDeclining(fcf, g, tg, wacc);
-    if(pv===null || pv<=0) return null;
-    return pv/shares;
-  }
-
-  function display(id, iv, isBase){
-    const elIv = document.getElementById(id+'-iv');
-    const elUp = document.getElementById(id+'-up');
-    if(!iv){
-      elIv.textContent='—';
-      elUp.textContent='—';
-      elUp.className = 'iv-tag iv-tag-flat tnum';
-      return;
-    }
-    const upside = cur>0 ? (iv-cur)/cur*100 : 0;
-    elIv.textContent = '$'+iv.toFixed(2);
-    elUp.textContent = `${upside>=0?'+':''}${upside.toFixed(1)}%`;
-    if(isBase){
-      elUp.className = 'iv-tag iv-tag-accent tnum';
-    } else {
-      elUp.className = 'iv-tag tnum ' + (upside>=0 ? 'iv-tag-pos' : 'iv-tag-neg');
-    }
-  }
-
-  display('dcf-bear', ivPerShare(bearG, 0.020), false);
-  display('dcf-base', ivPerShare(baseG, 0.030), true);
-  display('dcf-bull', ivPerShare(bullG, 0.035), false);
-
-  // Variant perception: gap between user's base and implied
-  const vp = document.getElementById('variant-perception');
-  if(mktCap>0 && fcf>0 && !isNaN(baseG)){
-    const impliedG = reverseDCF(mktCap, fcf, wacc, 0.03);
-    if(impliedG===null){
-      vp.textContent='Cannot compute variant perception — DCF inputs incomplete.';
-    } else {
-      const gap = baseG - impliedG;
-      const gapPP = (gap*100).toFixed(1);
-      const baseStr = (baseG*100).toFixed(1)+'%';
-      const impStr  = (impliedG*100).toFixed(1)+'%';
-      if(Math.abs(gap)<0.005){
-        vp.innerHTML = `<strong>VARIANT  ·  IN LINE</strong>Base case (${baseStr}) matches implied (${impStr}). No directional edge — fair value tracks the market.`;
-      } else if(gap>0){
-        vp.innerHTML = `<strong>VARIANT  ·  BULLISH</strong>Base case ${baseStr} runs +${gapPP}pp above implied ${impStr}. You see more growth than priced in — base-case IV should exceed market.`;
-      } else {
-        vp.innerHTML = `<strong>VARIANT  ·  BEARISH</strong>Base case ${baseStr} sits ${gapPP}pp below implied ${impStr}. Market is more optimistic — caution warranted.`;
-      }
-    }
-  } else {
-    vp.textContent = 'Variant perception requires positive TTM FCF and market cap.';
-  }
-
   // Layer 3 & 4 depend on Layer 2 inputs being settled — kick them after
   renderLayer3();
   renderLayer4();
