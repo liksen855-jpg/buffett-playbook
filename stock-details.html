@@ -6,7 +6,7 @@
 <title>Stock Research — InsightInvest</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%233b82f6'/><path d='M6 22L12 14L18 18L26 8' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/><circle cx='26' cy='8' r='2.5' fill='white'/></svg>"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=JetBrains+Mono:wght@400;500;600&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,500&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=JetBrains+Mono:wght@400;500;600&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,500&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 :root{
@@ -514,393 +514,219 @@ td.strong{color:var(--fg);font-weight:600}
 .l4-verdict::before{content:'STATUS  ·  ';color:var(--muted);font-weight:600}
 .l4-flag{margin-top:8px;padding:8px 12px;font-size:10.5px;color:var(--muted);background:transparent;border-left:2px solid hsl(45,93%,58%,.4);border-radius:0;letter-spacing:.02em}
 
-/* Valuation Framework — editorial v2 (Geist + Source Serif 4) */
-.vf-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:8px;
-  padding:32px 36px;
-  margin-bottom:18px;
-  display:flex;
-  flex-direction:column;
-  gap:32px;
-  font-family:'Geist','Inter',ui-sans-serif,system-ui,sans-serif;
-  font-feature-settings:"ss01","cv11";
-  --vf-c-deep-up:oklch(0.74 0.08 160);
-  --vf-c-up:     oklch(0.72 0.06 160);
-  --vf-c-fair:   oklch(0.78 0.06 85);
-  --vf-c-rich:   oklch(0.70 0.08 50);
-  --vf-c-down:   oklch(0.66 0.09 25);
-  --vf-c-comp:   oklch(0.80 0.06 235);
-  --vf-line:     hsl(220,25%,17%);
-  --vf-line-soft:hsl(220,25%,14%);
-  --vf-t1:hsl(210,20%,96%);
-  --vf-t2:hsl(210,15%,70%);
-  --vf-t3:hsl(210,12%,52%);
-  --vf-t4:hsl(210,10%,42%);
+/* ── Composite Fair Value — 8-method stack ── */
+.cf-card{
+  background:var(--card);border:1px solid var(--border);border-radius:8px;
+  margin-bottom:18px;overflow:hidden;
+  --cf-up:hsl(160,65%,45%);--cf-fair:hsl(45,93%,58%);--cf-down:hsl(0,68%,55%);
+  --cf-comp:hsl(213,94%,58%);--cf-line:hsl(220,25%,14%);--cf-t3:hsl(210,12%,48%);
 }
-.vf-mono{font-family:'Geist Mono','JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;letter-spacing:-.005em}
-.vf-serif{font-family:'Source Serif 4',ui-serif,Georgia,serif}
-.vf-eyebrow{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--vf-t3);font-weight:500}
+/* header bar */
+.cf-head{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid var(--border);gap:16px;flex-wrap:wrap}
+.cf-head-l{display:flex;flex-direction:column;gap:3px}
+.cf-head-title{font-size:15px;font-weight:700;letter-spacing:-.01em}
+.cf-head-sub{font-size:11.5px;color:var(--muted)}
+.cf-head-r{display:flex;align-items:center;gap:20px}
+.cf-hero-num{font-family:var(--mono);font-size:42px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.cf-hero-num.up{color:var(--cf-up)}
+.cf-hero-num.fair{color:var(--cf-fair)}
+.cf-hero-num.down{color:var(--cf-down)}
+.cf-hero-meta{display:flex;flex-direction:column;gap:3px;align-items:flex-end}
+.cf-hero-label{font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;font-weight:600}
+.cf-hero-gap{font-family:var(--mono);font-size:18px;font-weight:700}
+.cf-hero-gap.pos{color:var(--cf-up)}
+.cf-hero-gap.neg{color:var(--cf-down)}
+/* method grid — 4×2 */
+.cf-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+@media(max-width:900px){.cf-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:540px){.cf-grid{grid-template-columns:1fr}}
+.cf-method{padding:18px 20px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:10px}
+.cf-method:nth-child(4n){border-right:0}
+@media(max-width:900px){.cf-method:nth-child(2n){border-right:0}}
+@media(max-width:540px){.cf-method{border-right:0}}
+.cf-method-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.cf-method-num{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.14em;font-weight:600}
+.cf-method-badge{font-size:10px;font-weight:600;padding:1px 6px;border-radius:3px;white-space:nowrap}
+.cf-method-badge.intrinsic{background:hsl(213,94%,58%,.12);color:var(--primary);border:1px solid hsl(213,94%,58%,.25)}
+.cf-method-badge.multiples{background:hsl(265,70%,65%,.1);color:hsl(265,70%,72%);border:1px solid hsl(265,70%,65%,.2)}
+.cf-method-badge.growth{background:hsl(160,65%,45%,.1);color:var(--green);border:1px solid hsl(160,65%,45%,.2)}
+.cf-method-badge.floor{background:hsl(45,93%,58%,.08);color:var(--yellow);border:1px solid hsl(45,93%,58%,.2)}
+.cf-method-name{font-size:12px;font-weight:700;color:var(--fg);letter-spacing:-.01em;margin-top:2px}
+.cf-method-desc{font-size:11px;color:var(--muted);line-height:1.45;flex:1}
+.cf-iv{font-family:var(--mono);font-size:26px;font-weight:800;letter-spacing:-.02em;line-height:1}
+.cf-iv.up{color:var(--cf-up)}
+.cf-iv.fair{color:var(--cf-fair)}
+.cf-iv.down{color:var(--cf-down)}
+.cf-iv.muted{color:var(--muted)}
+.cf-method-footer{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--border);font-family:var(--mono);font-size:10.5px}
+.cf-method-upside{font-weight:700}
+.cf-method-upside.pos{color:var(--cf-up)}
+.cf-method-upside.neg{color:var(--cf-down)}
+.cf-method-upside.muted{color:var(--muted)}
+.cf-method-weight{color:var(--muted);font-size:10px}
+/* inputs bar */
+.cf-inputs{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border);border-top:1px solid var(--border)}
+@media(max-width:700px){.cf-inputs{grid-template-columns:repeat(2,1fr)}}
+.cf-input-cell{background:var(--card);padding:10px 16px;display:flex;flex-direction:column;gap:4px}
+.cf-input-label{font-size:9.5px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;font-weight:600}
+.cf-input-field{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--fg);background:transparent;border:none;outline:none;width:100%;padding:0}
+.cf-input-field:focus{color:var(--primary)}
+/* composite footer */
+.cf-footer{display:flex;align-items:center;justify-content:space-between;padding:12px 22px;border-top:1px solid var(--border);background:hsl(220,28%,10%);flex-wrap:wrap;gap:10px}
+.cf-footer-label{font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;font-weight:600}
+.cf-composite-val{font-family:var(--mono);font-size:22px;font-weight:800;letter-spacing:-.02em}
+.cf-composite-val.up{color:var(--cf-up)}
+.cf-composite-val.fair{color:var(--cf-fair)}
+.cf-composite-val.down{color:var(--cf-down)}
+.cf-footer-note{font-size:11px;color:var(--muted)}
 
-/* Header */
-.vf-header{display:flex;justify-content:space-between;align-items:flex-start;gap:32px;flex-wrap:wrap}
-.vf-h1{font-family:'Source Serif 4',ui-serif,Georgia,serif;font-weight:400;font-size:28px;line-height:1.15;margin:8px 0 6px;letter-spacing:-.01em;color:var(--vf-t1)}
-.vf-sub{font-size:12.5px;color:var(--vf-t3);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.vf-dot{color:var(--vf-t4)}
-.vf-header-meta{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
-.vf-coverage{display:flex;align-items:baseline;gap:8px}
-.vf-coverage-num{font-size:14px;color:var(--vf-t1);font-weight:500}
-.vf-coverage-lbl{font-size:12px;color:var(--vf-t3)}
+/* MoatHeat */
+.mh-hero{display:flex;align-items:center;gap:24px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px 22px;margin-bottom:16px}
+.mh-score-ring{position:relative;flex-shrink:0}
+.mh-score-ring svg{display:block}
+.mh-score-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.mh-score-num{font-family:var(--mono);font-size:28px;font-weight:800;line-height:1}
+.mh-score-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.mh-rating{font-size:22px;font-weight:700;letter-spacing:-.02em}
+.mh-tagline{font-size:13px;color:var(--fg2);margin-top:4px;max-width:340px;line-height:1.6}
+.mh-breakdown{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:16px}
+.mh-sub{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px 16px}
+.mh-sub-label{font-size:11px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
+.mh-sub-score{font-family:var(--mono);font-size:20px;font-weight:700;margin-bottom:6px}
+.mh-bar-track{height:5px;background:var(--border);border-radius:999px;overflow:hidden}
+.mh-bar-fill{height:100%;border-radius:999px;transition:width .6s}
+.mh-criteria{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px 20px}
 
-/* Hero */
-.vf-hero{
-  display:grid;
-  grid-template-columns:1.2fr 1px 1fr 1px 1fr;
-  column-gap:36px;
-  padding:22px 0;
-  border-top:1px solid var(--vf-line-soft);
-  border-bottom:1px solid var(--vf-line-soft);
-}
-@media(max-width:760px){.vf-hero{grid-template-columns:1fr;gap:18px}.vf-hero-divider{display:none}}
-.vf-hero-col{display:flex;flex-direction:column;gap:12px}
-.vf-hero-divider{width:1px;background:var(--vf-line-soft)}
-.vf-hero-num{font-size:56px;line-height:1;font-weight:400;letter-spacing:-.02em;color:var(--vf-t1)}
-.vf-hero-num2{font-size:32px;line-height:1;font-weight:400;letter-spacing:-.01em;color:var(--vf-t1)}
-.vf-hero-foot{font-size:12px;color:var(--vf-t3)}
-.vf-hero-pos{color:var(--vf-c-deep-up)}
-.vf-hero-neg{color:var(--vf-c-down)}
-
-/* Chart */
-.vf-chart{display:flex;flex-direction:column;gap:14px}
-.vf-chart-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:6px}
-.vf-legend-inline{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--vf-t3)}
-.vf-legend-dash{display:inline-block;width:22px;height:0;border-top:1px dashed var(--vf-t3);opacity:.8}
-
-.vf-chart-body{position:relative}
-.vf-axis-row{display:grid;grid-template-columns:220px 1fr 180px;column-gap:18px;margin-bottom:4px;position:relative}
-.vf-axis-ticks{position:relative;height:22px}
-.vf-axis-tick{position:absolute;transform:translateX(-50%)}
-.vf-axis-label{font-size:10.5px;color:var(--vf-t4);letter-spacing:.02em}
-
-.vf-row{display:grid;grid-template-columns:220px 1fr 180px;column-gap:18px;align-items:center;height:38px;border-top:1px solid var(--vf-line-soft)}
-.vf-label-col-inner{display:flex;flex-direction:column;gap:1px;text-align:right;padding-right:6px}
-.vf-method-label{font-size:13px;color:var(--vf-t2);letter-spacing:-.005em}
-.vf-method-label.composite{color:var(--vf-t1);font-weight:500}
-.vf-method-qual{font-size:11px;color:var(--vf-t4);letter-spacing:.005em}
-.vf-bar-col{position:relative;height:38px;display:flex;align-items:center}
-.vf-track{position:absolute;left:0;right:0;height:10px;background:var(--vf-line-soft);border-radius:2px;opacity:.55}
-.vf-bar{position:absolute;left:0;height:10px;border-radius:2px;transition:width .4s cubic-bezier(.2,.7,.2,1);opacity:.85}
-.vf-bar.composite{opacity:.95}
-.vf-value-col-inner{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding-left:6px}
-.vf-value-num{font-size:13.5px;color:var(--vf-t1)}
-.vf-value-num.composite{font-weight:500}
-.vf-gap-num{font-size:12.5px;font-weight:500}
-.vf-gap-num.pos{color:var(--vf-c-deep-up)}
-.vf-gap-num.neg{color:var(--vf-c-down)}
-
-/* Bar tone classes */
-.vf-bar.deep-up  {background:var(--vf-c-deep-up)}
-.vf-bar.up       {background:var(--vf-c-up)}
-.vf-bar.fair     {background:var(--vf-c-fair)}
-.vf-bar.rich     {background:var(--vf-c-rich)}
-.vf-bar.down     {background:var(--vf-c-down)}
-.vf-bar.composite{background:var(--vf-c-comp)}
-
-.vf-group-div{height:18px}
-
-/* Vertical price line overlay */
-.vf-price-overlay{position:absolute;pointer-events:none;z-index:2;width:0;top:0}
-.vf-price-line{width:1px;height:100%;border-left:1px dashed var(--vf-t3);opacity:.5}
-.vf-price-cap{position:absolute;top:-26px;left:-1px;transform:translateX(-50%);display:flex;flex-direction:row;align-items:baseline;gap:6px;padding:4px 9px;background:var(--card);border:1px solid var(--vf-line);border-radius:999px;white-space:nowrap}
-.vf-price-cap-lbl{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--vf-t3)}
-.vf-price-cap-num{font-size:11px;color:var(--vf-t1);font-weight:500;font-family:'Geist Mono',monospace;font-variant-numeric:tabular-nums}
-
-/* Legend */
-.vf-legend-row{border-top:1px solid var(--vf-line-soft);padding-top:18px;display:flex;justify-content:space-between;gap:24px;align-items:flex-start;flex-wrap:wrap}
-.vf-legend-cats{display:flex;flex-wrap:wrap;gap:18px}
-.vf-legend-item{display:inline-flex;align-items:center;gap:7px}
-.vf-legend-dot{width:8px;height:8px;border-radius:2px;display:inline-block}
-.vf-legend-lbl{font-size:11.5px;color:var(--vf-t2)}
-.vf-legend-note{font-size:11px;color:var(--vf-t4)}
-.vf-legend-foot{font-size:11.5px;color:var(--vf-t3);max-width:360px;text-align:right}
-
-/* ── MoatHeat v2 — IBM Plex terminal design ── */
-/* Font import — only loads when moatheat tab is active via the .ii-frame scope */
+/* InsightInvest Terminal — v3 full Bloomberg-style frame */
 #page-moatheat{padding:0}
-
-/* All v2 tokens are scoped inside .ii-frame so nothing else in the app is touched */
-.ii-frame{
-  --v2-bg:     #07090c;
-  --v2-panel:  #0b0f14;
-  --v2-rule:   #1a2230;
-  --v2-rule2:  #243047;
-  --v2-ink:    #e7ecf2;
-  --v2-ink2:   #aab4c2;
-  --v2-ink3:   #6b7686;
-  --v2-amber:  #f5a524;
-  --v2-up:     #16c784;
-  --v2-down:   #ea3943;
-  --v2-warn:   #f0b429;
-  --v2-neg:    #d9531e;
-  --v2-info:   #4ea1ff;
-  font-family:"IBM Plex Sans",system-ui,sans-serif;
-  font-size:13px;line-height:1.4;
-  -webkit-font-smoothing:antialiased;
-  background:var(--v2-panel);
-  color:var(--v2-ink);
-  border:1px solid var(--v2-rule);
-  border-radius:8px;
-  overflow:hidden;
-}
+.ii-frame{background:#000;border:1px solid hsl(220,28%,14%);border-radius:8px;overflow:hidden;font-family:'Geist','Inter',ui-sans-serif,system-ui,sans-serif;color:hsl(210,15%,82%)}
 .ii-frame *{box-sizing:border-box}
+.ii-mono{font-family:'Geist Mono','JetBrains Mono',monospace;font-variant-numeric:tabular-nums;letter-spacing:-.005em}
 
-/* ── Header bar: brand | quote | session ── */
-.ii-header{
-  display:grid;grid-template-columns:auto 1fr auto;align-items:stretch;
-  border-bottom:1px solid var(--v2-rule);background:#05070a;
-}
-.ii-brand{
-  display:flex;align-items:center;gap:14px;
-  padding:18px 22px;border-right:1px solid var(--v2-rule);
-}
-.ii-ticker-badge{
-  background:var(--v2-amber);color:#0a0a0a;
-  font-family:"IBM Plex Sans Condensed",sans-serif;font-weight:700;
-  font-size:24px;letter-spacing:.04em;
-  padding:8px 12px;line-height:1;white-space:nowrap;flex-shrink:0;
-}
-.ii-ticker-badge.green{background:var(--v2-up);color:#031a0c}
-.ii-ticker-badge.amber{background:var(--v2-amber);color:#0a0a0a}
-.ii-ticker-badge.red   {background:var(--v2-down);color:#fff}
-.ii-brand-name{font-size:14px;font-weight:500;color:var(--v2-ink)}
-.ii-brand-ex{
-  font-family:"IBM Plex Mono",monospace;font-size:10.5px;
-  color:var(--v2-ink3);letter-spacing:.06em;text-transform:uppercase;margin-top:3px;
-}
-.ii-quote{
-  display:flex;align-items:center;gap:32px;padding:0 28px;
-  font-family:"IBM Plex Mono",monospace;
-}
-.ii-quote-px{font-size:34px;font-weight:500;letter-spacing:.01em;line-height:1;color:var(--v2-ink)}
-.ii-quote-kv{display:flex;flex-direction:column;gap:2px}
-.ii-quote-kv-v{font-size:14px;font-weight:500;color:var(--v2-ink)}
-.ii-quote-kv-v.pos{color:var(--v2-up)}
-.ii-quote-kv-v.neg{color:var(--v2-down)}
-.ii-quote-kv-l{font-size:9.5px;color:var(--v2-ink3);letter-spacing:.12em;text-transform:uppercase}
-.ii-session{
-  display:flex;align-items:center;gap:18px;padding:0 22px;
-  border-left:1px solid var(--v2-rule);
-  font-family:"IBM Plex Mono",monospace;font-size:11px;
-}
-.ii-live{display:inline-flex;align-items:center;gap:8px;color:var(--v2-up)}
-.ii-live-dot{
-  width:6px;height:6px;border-radius:50%;
-  background:currentColor;box-shadow:0 0 8px currentColor;
-  animation:v2pulse 2s infinite;
-}
-@keyframes v2pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.ii-session-time{color:var(--v2-ink2);letter-spacing:.04em}
+/* Top stat bar */
+.ii-stat-bar{display:flex;align-items:center;gap:0;padding:14px 0;border-bottom:1px solid hsl(220,28%,14%);background:#000}
+.ii-stat-ticker{display:flex;align-items:center;gap:14px;padding:0 22px;min-width:240px}
+.ii-ticker-badge{display:inline-flex;align-items:center;justify-content:center;width:60px;height:60px;border-radius:6px;font-family:'Geist Mono',monospace;font-size:18px;font-weight:800;letter-spacing:-.02em;background:hsl(45,93%,58%);color:hsl(222,47%,6%);flex-shrink:0}
+.ii-ticker-badge.green{background:hsl(160,65%,55%)}
+.ii-ticker-badge.amber{background:hsl(45,93%,58%)}
+.ii-ticker-badge.red{background:hsl(0,68%,60%)}
+.ii-stat-name{font-size:18px;font-weight:600;color:hsl(210,15%,92%);letter-spacing:-.01em;margin-bottom:2px}
+.ii-stat-meta{font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:hsl(220,15%,40%);font-weight:600}
+.ii-stat-price-col{padding:0 28px;border-left:1px solid hsl(220,28%,14%);min-width:160px}
+.ii-stat-price{font-family:'Geist Mono',monospace;font-size:34px;font-weight:800;color:hsl(210,15%,95%);letter-spacing:-.025em;font-variant-numeric:tabular-nums;line-height:1}
+.ii-stat-col{padding:0 22px;border-left:1px solid hsl(220,28%,14%);min-width:100px}
+.ii-stat-val{font-family:'Geist Mono',monospace;font-size:17px;font-weight:700;color:hsl(210,15%,95%);font-variant-numeric:tabular-nums;letter-spacing:-.01em;line-height:1.1;margin-bottom:4px}
+.ii-stat-val.pos{color:hsl(160,65%,55%)}
+.ii-stat-val.neg{color:hsl(0,68%,60%)}
+.ii-stat-lbl{font-family:'Geist Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:hsl(220,15%,40%)}
+.ii-stat-spacer{flex:1}
+.ii-stat-live{display:flex;align-items:center;gap:8px;padding:0 22px;border-left:1px solid hsl(220,28%,14%);font-family:'Geist Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:hsl(220,15%,55%)}
+.ii-live-dot{width:7px;height:7px;border-radius:50%;background:hsl(160,65%,55%);animation:ii-pulse 2s infinite}
+@keyframes ii-pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.ii-stat-time{color:hsl(210,15%,92%);font-weight:700;letter-spacing:.04em}
 
-/* ── Verdict strip (3-col summary below header) ── */
-.ii-verdict{
-  display:grid;grid-template-columns:1.4fr 1fr 1fr;
-  border-bottom:1px solid var(--v2-rule);
-  background:linear-gradient(180deg,#0d1218,#0b0f14);
-}
-.ii-verdict-cell{padding:22px 28px;border-right:1px solid var(--v2-rule)}
-.ii-verdict-cell:last-child{border-right:0}
-.ii-verdict-eyebrow{
-  font-family:"IBM Plex Mono",monospace;font-size:10px;
-  color:var(--v2-ink3);letter-spacing:.16em;text-transform:uppercase;margin-bottom:10px;
-}
-.ii-verdict-big{
-  font-family:"IBM Plex Sans Condensed",sans-serif;font-weight:600;
-  font-size:42px;letter-spacing:.01em;line-height:1;
-}
-.ii-verdict-big.green{color:var(--v2-up)}
-.ii-verdict-big.amber{color:var(--v2-amber)}
-.ii-verdict-big.red  {color:var(--v2-down)}
-.ii-verdict-of{font-family:"IBM Plex Mono",monospace;color:var(--v2-ink3);font-size:16px;margin-left:10px}
-.ii-verdict-sub{margin-top:8px;font-size:12px;color:var(--v2-ink2);line-height:1.5}
-.ii-verdict-badge{
-  display:inline-block;margin-top:12px;
-  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
-  padding:5px 11px;border:1px solid;
-}
-.ii-verdict-badge.green{color:var(--v2-up);border-color:rgba(22,199,132,.4);background:rgba(22,199,132,.08)}
-.ii-verdict-badge.amber{color:var(--v2-amber);border-color:rgba(245,165,36,.4);background:rgba(245,165,36,.08)}
-.ii-verdict-badge.red  {color:var(--v2-down);border-color:rgba(234,57,67,.4);background:rgba(234,57,67,.08)}
-
-/* ── Main two-col grid ── */
-.ii-main-grid{display:grid;grid-template-columns:1fr 380px}
+/* Main grid */
+.ii-main-grid{display:grid;grid-template-columns:1fr 360px;gap:0}
 @media(max-width:1020px){.ii-main-grid{grid-template-columns:1fr}}
-.ii-chart-col{border-right:1px solid var(--v2-rule)}
-@media(max-width:1020px){.ii-chart-col{border-right:none;border-bottom:1px solid var(--v2-rule)}}
+.ii-chart-area{padding:22px 26px 0;border-right:1px solid hsl(220,28%,14%);display:flex;flex-direction:column}
+@media(max-width:1020px){.ii-chart-area{border-right:none;border-bottom:1px solid hsl(220,28%,14%)}}
+.ii-eyebrow{font-family:'Geist Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:hsl(220,15%,38%);margin-bottom:8px}
+.ii-eyebrow > span{color:hsl(220,15%,60%);margin-left:4px}
+.ii-title{font-size:24px;font-weight:700;letter-spacing:-.015em;color:hsl(210,15%,92%);margin-bottom:24px;line-height:1.2;max-width:520px}
+.ii-chart-svg{width:100%;min-height:360px;display:block;flex:1}
 
-/* Panel header (shared by chart + peers sections) */
-.ii-panel-h{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:18px 28px;border-bottom:1px solid var(--v2-rule);
-}
-.ii-eyebrow{
-  font-family:"IBM Plex Mono",monospace;font-size:10px;
-  color:var(--v2-ink3);letter-spacing:.16em;text-transform:uppercase;
-}
-.ii-panel-title{
-  font-family:"IBM Plex Sans Condensed",sans-serif;font-weight:600;
-  font-size:18px;letter-spacing:.02em;color:var(--v2-ink);margin-top:4px;
-}
+/* Chart visuals */
+.ii-band-divider{stroke:hsl(220,28%,16%);stroke-width:1;stroke-dasharray:3 4}
+.ii-band-label{font-family:'Geist Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+.ii-band-label.strong{fill:hsl(160,65%,52%)}
+.ii-band-label.fair{fill:hsl(45,93%,55%)}
+.ii-band-label.weak{fill:hsl(0,68%,58%)}
+.ii-peer-line{stroke:hsl(213,75%,62%);stroke-width:1.4;stroke-dasharray:4 5;fill:none;opacity:.55}
+.ii-chart-line{stroke:hsl(28,100%,60%);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.ii-chart-dot{fill:#000;stroke:hsl(28,100%,60%);stroke-width:2.4}
+.ii-chart-dot.green{stroke:hsl(160,65%,55%)}
+.ii-chart-dot.red{stroke:hsl(0,68%,60%)}
 
-/* Pill toggle */
-.ii-pills{display:flex;align-items:center}
-.ii-pill{
-  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;
-  padding:6px 14px;border:1px solid var(--v2-rule2);color:var(--v2-ink2);
-  background:transparent;cursor:pointer;transition:background .12s,color .12s;
-}
-.ii-pill+.ii-pill{border-left:0}
-.ii-pill.active{background:var(--v2-ink);color:#0a0a0a;border-color:var(--v2-ink)}
+/* Inset dimension row inside chart card */
+.ii-dim-row{display:grid;grid-template-columns:repeat(6,1fr);border-top:1px solid hsl(220,28%,14%);margin:18px -26px 0}
+@media(max-width:900px){.ii-dim-row{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:520px){.ii-dim-row{grid-template-columns:repeat(2,1fr)}}
+.ii-dim-card{padding:16px 20px;border-right:1px solid hsl(220,28%,14%)}
+.ii-dim-card:nth-child(3n),.ii-dim-card:last-child{border-right:none}
+@media(min-width:521px){.ii-dim-card:nth-child(3n){border-right:1px solid hsl(220,28%,14%)}}
+@media(min-width:901px){.ii-dim-card:nth-child(6n){border-right:none !important}}
+.ii-dim-lbl{font-family:'Geist Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:hsl(220,15%,42%);margin-bottom:10px;line-height:1.3}
+.ii-dim-bar{height:4px;background:hsl(220,28%,12%);margin-bottom:10px;border-radius:1px;overflow:hidden}
+.ii-dim-fill{height:100%;transition:width .8s ease-out;border-radius:1px}
+.ii-dim-fill.green{background:hsl(160,65%,55%)}
+.ii-dim-fill.amber{background:hsl(45,93%,58%)}
+.ii-dim-fill.red{background:hsl(0,68%,60%)}
+.ii-dim-tier{font-family:'Geist Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:hsl(210,15%,82%)}
+.ii-dim-tier.green{color:hsl(160,65%,55%)}
+.ii-dim-tier.amber{color:hsl(45,93%,58%)}
+.ii-dim-tier.red{color:hsl(0,68%,60%)}
 
-/* SVG chart container */
-.ii-chart{height:340px}
-.ii-chart svg{display:block;width:100%;height:100%}
-
-/* SVG visual classes */
-.ii-chart-line{stroke:#f5a524;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
-.ii-peer-line{stroke:#4ea1ff;stroke-width:1.5;stroke-dasharray:4 4;fill:none;opacity:.7}
-.ii-chart-dot{stroke-width:2.5}
-.ii-chart-dot.green{fill:#0b0f14;stroke:#16c784}
-.ii-chart-dot.amber{fill:#0b0f14;stroke:#f0b429}
-.ii-chart-dot.red  {fill:#0b0f14;stroke:#d9531e}
-
-/* X-axis dimension cards */
-.ii-xaxis{display:grid;grid-template-columns:repeat(6,1fr);border-top:1px solid var(--v2-rule)}
-@media(max-width:900px){.ii-xaxis{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:520px){.ii-xaxis{grid-template-columns:repeat(2,1fr)}}
-.ii-dim-card{
-  padding:18px 18px 20px;border-right:1px solid var(--v2-rule);
-  display:flex;flex-direction:column;gap:8px;
-}
-.ii-dim-card:last-child{border-right:0}
-.ii-dim-lbl{
-  font-family:"IBM Plex Mono",monospace;font-size:10px;
-  color:var(--v2-ink3);letter-spacing:.14em;text-transform:uppercase;
-}
-.ii-dim-score{
-  font-family:"IBM Plex Sans Condensed",sans-serif;font-weight:600;
-  font-size:32px;line-height:1;letter-spacing:.01em;
-}
-.ii-dim-score.green{color:var(--v2-up)}
-.ii-dim-score.amber{color:var(--v2-warn)}
-.ii-dim-score.red  {color:var(--v2-neg)}
-.ii-dim-bar{height:3px;background:#121821;position:relative;margin-top:2px}
-.ii-dim-bar i{position:absolute;top:0;bottom:0;left:0}
-.ii-dim-bar i.green{background:var(--v2-up)}
-.ii-dim-bar i.amber{background:var(--v2-warn)}
-.ii-dim-bar i.red  {background:var(--v2-neg)}
-.ii-dim-rank{
-  font-family:"IBM Plex Mono",monospace;font-size:11px;
-  letter-spacing:.08em;text-transform:uppercase;
-}
-.ii-dim-rank.green{color:var(--v2-up)}
-.ii-dim-rank.amber{color:var(--v2-warn)}
-.ii-dim-rank.red  {color:var(--v2-neg)}
-
-/* Chart footer */
-.ii-chart-foot{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:12px 28px;border-top:1px solid var(--v2-rule);
-  font-family:"IBM Plex Mono",monospace;font-size:11px;
-  color:var(--v2-ink3);letter-spacing:.04em;
-}
-.ii-chart-legend{display:flex;gap:22px}
+/* Chart footer (legend + scale) */
+.ii-chart-foot{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-top:1px solid hsl(220,28%,14%);margin:0 -26px;padding:14px 26px;font-family:'Geist Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.08em;color:hsl(220,15%,42%);text-transform:uppercase;flex-wrap:wrap;gap:8px}
+.ii-chart-legend{display:flex;gap:18px;align-items:center}
 .ii-chart-legend-item{display:inline-flex;align-items:center;gap:8px}
-.ii-legend-line{display:inline-block;width:14px;height:2px;background:#f5a524}
-.ii-legend-line.dash{background:transparent;border-top:1px dashed #4ea1ff;height:0}
+.ii-legend-line{display:inline-block;width:18px;height:2px;background:hsl(28,100%,60%)}
+.ii-legend-line.dash{background:transparent;border-top:2px dashed hsl(213,75%,62%);height:0}
 
-/* Right rail */
-.ii-rail{display:flex;flex-direction:column}
-.ii-summary{padding:28px;border-bottom:1px solid var(--v2-rule)}
-.ii-summary-label{
-  font-family:"IBM Plex Mono",monospace;font-size:10px;
-  color:var(--v2-ink3);letter-spacing:.16em;text-transform:uppercase;margin-bottom:14px;
-}
-.ii-score-row{display:flex;align-items:baseline;gap:14px}
-.ii-big-score{
-  font-family:"IBM Plex Sans Condensed",sans-serif;font-weight:600;
-  font-size:80px;line-height:.9;letter-spacing:0;
-}
-.ii-big-score.green{color:var(--v2-up)}
-.ii-big-score.amber{color:var(--v2-amber)}
-.ii-big-score.red  {color:var(--v2-down)}
-.ii-big-of{font-family:"IBM Plex Mono",monospace;color:var(--v2-ink3);font-size:16px}
-.ii-sb-badge{
-  display:inline-block;margin-top:18px;
-  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
-  padding:6px 12px;border:1px solid;
-}
-.ii-sb-badge.green{color:var(--v2-up);border-color:rgba(22,199,132,.4);background:rgba(22,199,132,.1)}
-.ii-sb-badge.amber{color:var(--v2-amber);border-color:rgba(245,165,36,.4);background:rgba(245,165,36,.1)}
-.ii-sb-badge.red  {color:var(--v2-down);border-color:rgba(234,57,67,.4);background:rgba(234,57,67,.1)}
-.ii-descr{margin-top:18px;color:var(--v2-ink2);font-size:13px;line-height:1.55}
+/* Sidebar */
+.ii-sidebar{padding:22px 24px;background:hsl(222,40%,3%);display:flex;flex-direction:column;gap:14px}
+.ii-sb-eyebrow{font-family:'Geist Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:hsl(220,15%,42%);margin-bottom:6px}
+.ii-sb-big-row{display:flex;align-items:baseline;gap:8px}
+.ii-sb-big{font-family:'Geist Mono','JetBrains Mono',monospace;font-size:72px;font-weight:800;line-height:1;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.ii-sb-big.green{color:hsl(160,65%,55%)}
+.ii-sb-big.amber{color:hsl(45,93%,58%)}
+.ii-sb-big.red{color:hsl(0,68%,60%)}
+.ii-sb-denom{font-family:'Geist Mono',monospace;font-size:18px;color:hsl(220,15%,38%);font-weight:600}
+.ii-sb-badge{display:inline-block;padding:6px 12px;border:1px solid currentColor;font-family:'Geist Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;width:fit-content}
+.ii-sb-badge.green{color:hsl(160,65%,55%)}
+.ii-sb-badge.amber{color:hsl(45,93%,58%)}
+.ii-sb-badge.red{color:hsl(0,68%,60%)}
+.ii-sb-blurb{font-size:13px;color:hsl(210,15%,82%);line-height:1.6}
+.ii-sb-stats{display:flex;flex-direction:column;gap:10px;padding-top:14px;border-top:1px solid hsl(220,28%,14%)}
+.ii-sb-stat-row{display:flex;justify-content:space-between;align-items:baseline;font-family:'Geist Mono',monospace;gap:12px}
+.ii-sb-stat-l{font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:hsl(220,15%,42%);max-width:160px;line-height:1.3}
+.ii-sb-stat-v{font-size:14px;font-weight:700;color:hsl(210,15%,95%);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.ii-sb-stat-v.pos{color:hsl(160,65%,55%)}
+.ii-sb-stat-v.neg{color:hsl(0,68%,60%)}
+.ii-sb-note{padding-top:14px;border-top:1px solid hsl(220,28%,14%)}
+.ii-sb-note-head{display:flex;justify-content:space-between;align-items:baseline;font-family:'Geist Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:hsl(220,15%,42%);margin-bottom:10px}
+.ii-sb-note-body{font-size:13px;color:hsl(210,15%,85%);line-height:1.65}
+.ii-sb-note-body p{margin:0 0 10px}
+.ii-sb-note-body p:last-child{margin-bottom:0}
+.ii-sb-note-body strong{color:hsl(210,15%,95%);font-weight:600}
 
-/* KV rows */
-.ii-kvs{border-bottom:1px solid var(--v2-rule)}
-.ii-kv-row{
-  display:flex;justify-content:space-between;align-items:baseline;
-  padding:13px 28px;border-bottom:1px solid var(--v2-rule);
-}
-.ii-kv-row:last-child{border-bottom:0}
-.ii-kv-k{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--v2-ink3);letter-spacing:.06em;text-transform:uppercase}
-.ii-kv-v{font-family:"IBM Plex Mono",monospace;font-size:14px;color:var(--v2-ink);font-weight:500}
-.ii-kv-v.pos{color:var(--v2-up)}
-.ii-kv-v.neg{color:var(--v2-down)}
-.ii-kv-v.warn{color:var(--v2-warn)}
-
-/* Analyst note */
-.ii-note{padding:24px 28px;background:linear-gradient(180deg,#0d1218,#0b0f14)}
-.ii-note-head{
-  display:flex;justify-content:space-between;
-  font-family:"IBM Plex Mono",monospace;font-size:10px;
-  color:var(--v2-amber);letter-spacing:.16em;text-transform:uppercase;margin-bottom:12px;
-}
-.ii-note p{margin:0 0 10px;font-size:13px;line-height:1.6;color:var(--v2-ink2)}
-.ii-note p:last-child{margin:0}
-.ii-note strong{color:var(--v2-ink);font-weight:500}
-
-/* Peer section */
-.ii-peer-section{border-top:1px solid var(--v2-rule)}
-.ii-peer-grid{display:grid;grid-template-columns:repeat(6,1fr)}
-@media(max-width:900px){.ii-peer-grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:520px){.ii-peer-grid{grid-template-columns:repeat(2,1fr)}}
-.ii-peer-card{padding:18px 22px;border-right:1px solid var(--v2-rule);display:flex;flex-direction:column;gap:8px}
-.ii-peer-card:last-child{border-right:0}
-.ii-peer-card.self{background:rgba(245,165,36,.05)}
-.ii-peer-card.self .ii-peer-sym{color:var(--v2-amber)}
-.ii-peer-sym{font-family:"IBM Plex Sans Condensed",sans-serif;font-weight:600;font-size:16px;letter-spacing:.04em;color:var(--v2-ink)}
-.ii-peer-nm{font-size:11px;color:var(--v2-ink3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ii-peer-score{font-family:"IBM Plex Sans Condensed",sans-serif;font-weight:600;font-size:30px;line-height:1;margin-top:4px}
-.ii-peer-score.green{color:var(--v2-up)}
-.ii-peer-score.amber{color:var(--v2-warn)}
-.ii-peer-score.red  {color:var(--v2-neg)}
-.ii-peer-delta{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.04em;color:var(--v2-ink3)}
-.ii-peer-delta.pos{color:var(--v2-up)}
-.ii-peer-delta.neg{color:var(--v2-down)}
-.ii-peer-loading{padding:32px 26px;text-align:center;color:var(--v2-ink3);font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+/* Section 02: Peer Comparison */
+.ii-peer-section{padding:22px 26px;border-top:1px solid hsl(220,28%,14%)}
+.ii-peer-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px}
+.ii-peer-toggle{display:inline-flex;background:hsl(222,35%,8%);border:1px solid hsl(220,28%,16%);border-radius:6px;overflow:hidden}
+.ii-peer-toggle button{background:transparent;border:none;font-family:'Geist',sans-serif;color:hsl(220,15%,52%);font-size:12px;font-weight:500;padding:7px 18px;cursor:pointer;letter-spacing:-.005em;transition:all .15s}
+.ii-peer-toggle button.active{background:hsl(210,15%,90%);color:hsl(222,40%,8%);font-weight:600}
+.ii-peer-row{display:grid;grid-template-columns:repeat(6,1fr);gap:0;border-top:1px solid hsl(220,28%,14%);margin:0 -26px;padding:0}
+@media(max-width:900px){.ii-peer-row{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:520px){.ii-peer-row{grid-template-columns:repeat(2,1fr)}}
+.ii-peer-card{padding:18px 22px;border-right:1px solid hsl(220,28%,14%)}
+.ii-peer-card:last-child{border-right:none}
+.ii-peer-card.self{background:hsl(222,40%,4%)}
+.ii-peer-sym{font-family:'Geist Mono',monospace;font-size:18px;font-weight:800;letter-spacing:-.01em;color:hsl(210,15%,92%);margin-bottom:2px}
+.ii-peer-name{font-size:11.5px;color:hsl(220,15%,52%);margin-bottom:14px;line-height:1.3;height:1.3em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ii-peer-score{font-family:'Geist Mono',monospace;font-size:36px;font-weight:800;letter-spacing:-.03em;line-height:1;margin-bottom:6px;font-variant-numeric:tabular-nums}
+.ii-peer-score.green{color:hsl(160,65%,55%)}
+.ii-peer-score.amber{color:hsl(45,93%,58%)}
+.ii-peer-score.red{color:hsl(0,68%,60%)}
+.ii-peer-delta{font-family:'Geist Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.04em;color:hsl(220,15%,42%)}
+.ii-peer-delta.pos{color:hsl(160,65%,55%)}
+.ii-peer-delta.neg{color:hsl(0,68%,60%)}
+.ii-peer-loading{padding:32px 26px;text-align:center;color:hsl(220,15%,42%);font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
 
 /* Bottom status bar */
-.ii-botbar{
-  display:flex;align-items:center;
-  background:#05070a;border-top:1px solid var(--v2-rule);
-  font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--v2-ink3);
-  height:32px;letter-spacing:.06em;
-}
-.ii-seg{padding:0 16px;height:100%;display:flex;align-items:center;gap:8px;border-right:1px solid var(--v2-rule);white-space:nowrap}
-.ii-seg.grow{flex:1}
-.ii-seg:last-child{border-right:0}
-.ii-seg strong{color:var(--v2-ink2);font-weight:700}
-.ii-seg-dot{width:6px;height:6px;border-radius:50%;background:var(--v2-up);box-shadow:0 0 6px var(--v2-up)}
+.ii-status-bar{display:flex;justify-content:space-between;align-items:center;padding:11px 24px;border-top:1px solid hsl(220,28%,14%);background:#000;font-family:'Geist Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:hsl(220,15%,38%);gap:14px;flex-wrap:wrap}
+.ii-status-item{display:inline-flex;align-items:center;gap:8px}
+.ii-status-item strong{color:hsl(210,15%,80%);font-weight:700}
 
 /* AI box */
 .ai-actions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
@@ -1216,71 +1042,68 @@ td.strong{color:var(--fg);font-weight:600}
   <!-- ══ INTRINSIC VALUE — LAYER 1 BUSINESS QUALITY ══ -->
   <div class="tab-page" id="page-intrinsic">
 
-    <!-- Valuation Framework — editorial composite -->
-    <section class="vf-card">
-      <header class="vf-header">
+    <!-- ══ COMPOSITE FAIR VALUE — 8 methods ══ -->
+    <div class="cf-card" id="cf-card">
+
+      <!-- Header: composite big number + gap -->
+      <div class="cf-head">
+        <div class="cf-head-l">
+          <div class="cf-head-title">Composite fair value</div>
+          <div class="cf-head-sub" id="cf-sub">— · trimmed-mean composite · <span id="cf-date">—</span></div>
+        </div>
+        <div class="cf-head-r">
+          <div class="cf-hero-meta">
+            <div class="cf-hero-label">Composite IV</div>
+            <div class="cf-composite-val" id="cf-composite-val">—</div>
+          </div>
+          <div class="cf-hero-meta">
+            <div class="cf-hero-label">Market price</div>
+            <div class="cf-composite-val" id="cf-market-val" style="color:var(--fg2)">—</div>
+          </div>
+          <div class="cf-hero-meta">
+            <div class="cf-hero-label">Implied gap</div>
+            <div class="cf-hero-gap" id="cf-gap-val">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4×2 method grid — populated by JS -->
+      <div class="cf-grid" id="cf-method-grid"></div>
+
+      <!-- User-adjustable inputs -->
+      <div class="cf-inputs">
+        <div class="cf-input-cell">
+          <div class="cf-input-label">Normal growth (%)</div>
+          <input class="cf-input-field" type="number" step="0.5" id="cf-growth" placeholder="auto"/>
+        </div>
+        <div class="cf-input-cell">
+          <div class="cf-input-label">Terminal growth (%)</div>
+          <input class="cf-input-field" type="number" step="0.1" id="cf-terminal" value="3.0"/>
+        </div>
+        <div class="cf-input-cell">
+          <div class="cf-input-label">Margin expansion</div>
+          <input class="cf-input-field" type="number" step="0.5" id="cf-margin-exp" value="0"/>
+        </div>
+        <div class="cf-input-cell">
+          <div class="cf-input-label">WACC (user, %)</div>
+          <input class="cf-input-field" type="number" step="0.1" id="cf-wacc-user" placeholder="auto"/>
+        </div>
+        <div class="cf-input-cell">
+          <div class="cf-input-label">H-half-life (yrs)</div>
+          <input class="cf-input-field" type="number" step="0.5" id="cf-half-life" value="4"/>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="cf-footer">
         <div>
-          <div class="vf-eyebrow">Valuation framework</div>
-          <h1 class="vf-h1">Composite fair value</h1>
-          <div class="vf-sub">
-            <span id="vf-ticker">—</span>
-            <span class="vf-dot">·</span>
-            <span id="vf-method-count">— methods, trimmed-mean composite</span>
-            <span class="vf-dot">·</span>
-            <span class="vf-mono" id="vf-date">—</span>
-          </div>
+          <div class="cf-footer-label">InsightValue composite</div>
+          <div class="cf-composite-val" id="cf-footer-val">—</div>
         </div>
-        <div class="vf-header-meta">
-          <div class="vf-eyebrow" style="text-align:right">Coverage</div>
-          <div class="vf-coverage">
-            <span class="vf-mono vf-coverage-num" id="vf-coverage">— / —</span>
-            <span class="vf-coverage-lbl">methods reporting</span>
-          </div>
-        </div>
-      </header>
+        <div class="cf-footer-note" id="cf-footer-note">—</div>
+      </div>
 
-      <section class="vf-hero">
-        <div class="vf-hero-col">
-          <div class="vf-eyebrow">Composite fair value</div>
-          <div class="vf-hero-num vf-serif vf-mono" id="vf-composite-val">—</div>
-          <div class="vf-hero-foot">per share</div>
-        </div>
-        <div class="vf-hero-divider"></div>
-        <div class="vf-hero-col">
-          <div class="vf-eyebrow">Market price</div>
-          <div class="vf-hero-num2 vf-mono" id="vf-market-val">—</div>
-          <div class="vf-hero-foot" id="vf-market-change">—</div>
-        </div>
-        <div class="vf-hero-divider"></div>
-        <div class="vf-hero-col">
-          <div class="vf-eyebrow">Implied gap</div>
-          <div class="vf-hero-num2 vf-mono" id="vf-gap-val">—</div>
-          <div class="vf-hero-foot" id="vf-gap-note">—</div>
-        </div>
-      </section>
-
-      <section class="vf-chart">
-        <div class="vf-chart-head">
-          <div class="vf-eyebrow">Method-by-method</div>
-          <div class="vf-legend-inline">
-            <span class="vf-legend-dash"></span>
-            <span>Market price</span>
-          </div>
-        </div>
-        <div class="vf-chart-body" id="vf-chart-body"></div>
-      </section>
-
-      <section class="vf-legend-row">
-        <div class="vf-legend-cats">
-          <span class="vf-legend-item"><span class="vf-legend-dot" style="background:var(--vf-c-deep-up)"></span><span class="vf-legend-lbl">Undervalued</span><span class="vf-legend-note">&gt;30% upside</span></span>
-          <span class="vf-legend-item"><span class="vf-legend-dot" style="background:var(--vf-c-up)"></span><span class="vf-legend-lbl">Below fair value</span><span class="vf-legend-note">0–30% upside</span></span>
-          <span class="vf-legend-item"><span class="vf-legend-dot" style="background:var(--vf-c-fair)"></span><span class="vf-legend-lbl">Fair</span><span class="vf-legend-note">within ±15%</span></span>
-          <span class="vf-legend-item"><span class="vf-legend-dot" style="background:var(--vf-c-rich)"></span><span class="vf-legend-lbl">Above fair value</span><span class="vf-legend-note">15–30% downside</span></span>
-          <span class="vf-legend-item"><span class="vf-legend-dot" style="background:var(--vf-c-down)"></span><span class="vf-legend-lbl">Overvalued</span><span class="vf-legend-note">&gt;30% downside</span></span>
-        </div>
-        <div class="vf-legend-foot">Bands relative to market price. Composite excludes the highest and lowest method.</div>
-      </section>
-    </section>
+    </div>
 
     <!-- Quality Gate Terminal -->
     <section class="ql-terminal">
@@ -1518,140 +1341,115 @@ td.strong{color:var(--fg);font-weight:600}
     </div>
   </div>
 
-  <!-- ══ INSIGHTINVEST™ / MOATHEAT — v2 Terminal ══ -->
+  <!-- ══ INSIGHTINVEST™ / MOATHEAT ══ -->
   <div class="tab-page" id="page-moatheat">
-    <div class="ii-frame">
+    <section class="ii-frame">
 
-      <!-- HEADER: brand | quote | session -->
-      <div class="ii-header">
-        <div class="ii-brand">
-          <div class="ii-ticker-badge amber" id="ii-ticker-badge">—</div>
+      <!-- Top stat bar -->
+      <div class="ii-stat-bar">
+        <div class="ii-stat-ticker">
+          <div class="ii-ticker-badge" id="ii-ticker-badge">—</div>
           <div>
-            <div class="ii-brand-name" id="ii-stat-name">—</div>
-            <div class="ii-brand-ex" id="ii-stat-meta">—</div>
+            <div class="ii-stat-name" id="ii-stat-name">—</div>
+            <div class="ii-stat-meta" id="ii-stat-meta">—</div>
           </div>
         </div>
-        <div class="ii-quote">
-          <div class="ii-quote-px" id="ii-stat-price">—</div>
-          <div class="ii-quote-kv">
-            <div class="ii-quote-kv-v" id="ii-stat-change">—</div>
-            <div class="ii-quote-kv-l">1D change</div>
-          </div>
-          <div class="ii-quote-kv">
-            <div class="ii-quote-kv-v" id="ii-stat-mcap">—</div>
-            <div class="ii-quote-kv-l">Market cap</div>
-          </div>
-          <div class="ii-quote-kv">
-            <div class="ii-quote-kv-v" id="ii-stat-pe">—</div>
-            <div class="ii-quote-kv-l">Fwd P/E</div>
-          </div>
-          <div class="ii-quote-kv">
-            <div class="ii-quote-kv-v" id="ii-stat-div">—</div>
-            <div class="ii-quote-kv-l">Div yield</div>
-          </div>
+        <div class="ii-stat-price-col">
+          <div class="ii-stat-price" id="ii-stat-price">—</div>
         </div>
-        <div class="ii-session">
-          <span class="ii-live"><span class="ii-live-dot"></span>LIVE</span>
-          <span class="ii-session-time" id="ii-stat-time">—</span>
+        <div class="ii-stat-col">
+          <div class="ii-stat-val" id="ii-stat-change">—</div>
+          <div class="ii-stat-lbl">1D Change</div>
         </div>
-      </div>
-
-      <!-- VERDICT STRIP: composite | moat + badge | valuation signal -->
-      <div class="ii-verdict">
-        <div class="ii-verdict-cell">
-          <div class="ii-verdict-eyebrow">InsightInvestMoat™ Composite</div>
-          <div style="display:flex;align-items:baseline;gap:0">
-            <div class="ii-verdict-big amber" id="ii-verdict-score">—</div>
-            <span class="ii-verdict-of">/ 100</span>
-          </div>
-          <div class="ii-verdict-sub" id="ii-sb-blurb">—</div>
+        <div class="ii-stat-col">
+          <div class="ii-stat-val" id="ii-stat-changepct">—</div>
+          <div class="ii-stat-lbl">&nbsp;</div>
         </div>
-        <div class="ii-verdict-cell">
-          <div class="ii-verdict-eyebrow">Moat &amp; Percentile</div>
-          <div class="ii-verdict-big" id="ii-verdict-moat" style="margin-top:6px;font-size:28px">—</div>
-          <div><span class="ii-verdict-badge green" id="ii-sb-badge">—</span></div>
+        <div class="ii-stat-col">
+          <div class="ii-stat-val" id="ii-stat-mcap">—</div>
+          <div class="ii-stat-lbl">Market Cap</div>
         </div>
-        <div class="ii-verdict-cell">
-          <div class="ii-verdict-eyebrow">Valuation signal</div>
-          <div class="ii-verdict-big" id="ii-verdict-val" style="margin-top:6px;font-size:28px">—</div>
-          <div class="ii-verdict-sub" id="ii-verdict-val-sub">—</div>
+        <div class="ii-stat-col">
+          <div class="ii-stat-val" id="ii-stat-pe">—</div>
+          <div class="ii-stat-lbl">Fwd P/E</div>
+        </div>
+        <div class="ii-stat-col">
+          <div class="ii-stat-val" id="ii-stat-div">—</div>
+          <div class="ii-stat-lbl">Div Yield</div>
+        </div>
+        <div class="ii-stat-spacer"></div>
+        <div class="ii-stat-live">
+          <span class="ii-live-dot"></span>
+          <span>Live</span>
+          <span class="ii-stat-time" id="ii-stat-time">—</span>
         </div>
       </div>
 
-      <!-- MAIN GRID: left (chart) | right (rail) -->
+      <!-- Main grid: chart left + sidebar right -->
       <div class="ii-main-grid">
+        <div class="ii-chart-area">
+          <div class="ii-eyebrow">01 <span>·</span> Quality Profile</div>
+          <div class="ii-title" id="ii-title">How this stock scores across six dimensions</div>
+          <svg class="ii-chart-svg" id="ii-chart-svg" viewBox="0 0 800 360" preserveAspectRatio="none"></svg>
 
-        <!-- LEFT -->
-        <div class="ii-chart-col">
-          <div class="ii-panel-h">
-            <div>
-              <div class="ii-eyebrow">01 · Quality profile</div>
-              <div class="ii-panel-title" id="ii-title">How this stock scores across six dimensions</div>
-            </div>
-          </div>
-          <div class="ii-chart">
-            <svg id="ii-chart-svg" viewBox="0 0 1080 340" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"></svg>
-          </div>
-          <div class="ii-xaxis" id="ii-dim-row"></div>
+          <!-- Inset dimension row -->
+          <div class="ii-dim-row" id="ii-dim-row"></div>
+
+          <!-- Chart footer -->
           <div class="ii-chart-foot">
             <div class="ii-chart-legend">
               <span class="ii-chart-legend-item"><span class="ii-legend-line"></span><span id="ii-legend-symbol">—</span></span>
-              <span class="ii-chart-legend-item"><span class="ii-legend-line dash"></span>Peer median <span id="ii-legend-peercount"></span></span>
+              <span class="ii-chart-legend-item"><span class="ii-legend-line dash"></span>Peer median <span id="ii-legend-peercount" style="margin-left:4px"></span></span>
             </div>
-            <div>Scale 0–100 · Updated <span id="ii-chart-updated">—</span></div>
+            <div id="ii-chart-scale">Scale 0–100 · Updated <span id="ii-chart-updated">—</span></div>
           </div>
         </div>
 
-        <!-- RIGHT RAIL -->
-        <div class="ii-rail">
-          <div class="ii-summary">
-            <div class="ii-summary-label">InsightInvestMoat™ Composite</div>
-            <div class="ii-score-row">
-              <div class="ii-big-score amber" id="ii-sb-big">—</div>
-              <div class="ii-big-of">/ 100</div>
+        <aside class="ii-sidebar">
+          <div>
+            <div class="ii-sb-eyebrow">InsightInvestMoat™ Composite</div>
+            <div class="ii-sb-big-row">
+              <div class="ii-sb-big" id="ii-sb-big">—</div>
+              <div class="ii-sb-denom">/ 100</div>
             </div>
-            <div class="ii-sb-badge green" id="ii-sb-badge-rail">—</div>
-            <div class="ii-descr" id="ii-sb-blurb-rail">—</div>
           </div>
-          <div class="ii-kvs" id="ii-sb-stats"></div>
-          <div class="ii-note">
-            <div class="ii-note-head">
-              <span>Analyst note</span>
+          <div class="ii-sb-badge" id="ii-sb-badge">—</div>
+          <div class="ii-sb-blurb" id="ii-sb-blurb">—</div>
+          <div class="ii-sb-stats" id="ii-sb-stats"></div>
+          <div class="ii-sb-note">
+            <div class="ii-sb-note-head">
+              <span>Analyst Note</span>
               <span id="ii-sb-note-ts">—</span>
             </div>
-            <div id="ii-sb-note-body">—</div>
+            <div class="ii-sb-note-body" id="ii-sb-note-body">—</div>
           </div>
-        </div>
+        </aside>
+      </div>
 
-      </div><!-- /ii-main-grid -->
-
-      <!-- PEER COMPARISON -->
+      <!-- Section 02: Peer Comparison -->
       <div class="ii-peer-section">
-        <div class="ii-panel-h">
-          <div>
-            <div class="ii-eyebrow">02 · Peer comparison</div>
-            <div class="ii-panel-title" id="ii-peer-title">Composite quality vs. sector</div>
-          </div>
-          <div class="ii-pills">
-            <button class="ii-pill active" data-peer-tab="quality" onclick="switchPeerTab('quality')">Quality</button>
-            <button class="ii-pill" data-peer-tab="valuation" onclick="switchPeerTab('valuation')">Valuation</button>
+        <div class="ii-eyebrow">02 <span>·</span> Peer Comparison</div>
+        <div class="ii-peer-head">
+          <div class="ii-title" id="ii-peer-title" style="margin-bottom:0">Composite quality vs. sector</div>
+          <div class="ii-peer-toggle">
+            <button class="active" data-peer-tab="quality" onclick="switchPeerTab('quality')">Quality</button>
+            <button data-peer-tab="valuation" onclick="switchPeerTab('valuation')">Valuation</button>
           </div>
         </div>
-        <div class="ii-peer-grid" id="ii-peer-row">
+        <div class="ii-peer-row" id="ii-peer-row">
           <div class="ii-peer-loading">Loading peer data…</div>
         </div>
       </div>
 
-      <!-- BOTTOM STATUS BAR -->
-      <div class="ii-botbar">
-        <div class="ii-seg"><span class="ii-seg-dot"></span><strong>Connected</strong></div>
-        <div class="ii-seg">Data · FMP Stable</div>
-        <div class="ii-seg">Model · InsightInvestMoat v4.2</div>
-        <div class="ii-seg grow"></div>
-        <div class="ii-seg">As of · <strong id="ii-status-ts">—</strong></div>
+      <!-- Bottom status bar -->
+      <div class="ii-status-bar">
+        <div class="ii-status-item"><span class="ii-live-dot"></span><strong>Connected</strong></div>
+        <div class="ii-status-item">Data <span>·</span> FMP Stable</div>
+        <div class="ii-status-item">Model <span>·</span> InsightInvestMoat v4.2</div>
+        <div class="ii-status-item">As of <span>·</span> <strong id="ii-status-ts">—</strong></div>
       </div>
 
-    </div><!-- /ii-frame -->
+    </section>
   </div>
 
   <!-- ══ AI INSIGHTS ══ -->
@@ -3129,176 +2927,319 @@ function recomputeDcf(){
 }
 
 // ═══════════════════════════════════════════════════════════════════
-// VALUATION SUMMARY CHART
+// COMPOSITE FAIR VALUE — 8 METHODS
 // ═══════════════════════════════════════════════════════════════════
-function renderValuationSummary(){
-  const cur = getCurPrice();
-  const wacc = computeWACC();
-  const fcf = computeTTMFcf();
-  const shares = getSharesOut();
+function cfInputVal(id, fallback) {
+  const v = parseFloat(document.getElementById(id)?.value);
+  return isNaN(v) ? fallback : v;
+}
+
+// 1. FCFF DCF — 6-quarter normalised FCF, margin expansion, user WACC
+function computeCfFcff(cur, wacc, termGr, marginExpPct) {
+  const cfSeries = S.cashflow.slice(0, 6);
+  if (cfSeries.length < 2) return null;
+  const fcfs = cfSeries.map(d => d.freeCashFlow || 0);
+  // drop single outlier > 2× std dev
+  const mean = fcfs.reduce((s,v)=>s+v,0)/fcfs.length;
+  const std  = Math.sqrt(fcfs.reduce((s,v)=>s+(v-mean)**2,0)/fcfs.length);
+  const clean = fcfs.filter(v => Math.abs(v-mean) <= 2*std);
+  if (!clean.length) return null;
+  const baseFcf = clean.reduce((s,v)=>s+v,0)/clean.length;
+  // apply margin expansion to base FCF
+  const rev = S.income[0]?.revenue || 0;
+  const marginBoost = rev > 0 ? (marginExpPct/100) * rev : 0;
+  const adjFcf = baseFcf + marginBoost;
+  if (adjFcf <= 0) return null;
+  const gr = cfInputVal('cf-growth', getBaseGrowthEstimate());
+  return dcfDeclining(adjFcf, gr, termGr, wacc);
+}
+
+// 2. H-Model DCF — two-phase with half-life fade
+function computeCfHModel(wacc, termGr) {
+  const baseFcf = computeTTMFcf();
+  if (baseFcf <= 0) return null;
+  const gr0  = cfInputVal('cf-growth', getBaseGrowthEstimate());
+  const grL  = termGr;
+  const H    = cfInputVal('cf-half-life', 4);
+  const wacc_ = wacc;
+  if (wacc_ <= grL) return null;
+  // H-model formula: P = FCF(1+gL)/(r-gL) + FCF*H*(gS-gL)/(r-gL)
+  const pv1 = baseFcf * (1 + grL) / (wacc_ - grL);
+  const pv2 = baseFcf * H * (gr0 - grL) / (wacc_ - grL);
+  return pv1 + pv2;
+}
+
+// 3. EV / EBITDA — forward analyst estimate proxy
+function computeCfEvEbitda() {
   const inc0 = S.income[0] || {};
   const bal0 = S.balance[0] || {};
-  const eps = inc0.epsdiluted || S.quote.eps || null;
   const ebitda = inc0.ebitda || 0;
-  const revenue = inc0.revenue || 0;
-  const totalDebt = bal0.totalDebt || 0;
-  const cash = bal0.cashAndCashEquivalents || 0;
-  const sectorMed = getSectorMedians();
-  const p = S.profile || {};
-  const q = S.quote || {};
+  if (ebitda <= 0) return null;
+  const mktCap = S.quote.marketCap || S.profile?.marketCap || 0;
+  const debt   = bal0.totalDebt || 0;
+  const cash   = bal0.cashAndCashEquivalents || 0;
+  const shares = getSharesOut();
+  const sector = S.profile?.sector || '';
+  const med    = getSectorMedians();
+  // forward EBITDA = TTM * (1 + growth)
+  const g = getBaseGrowthEstimate();
+  const fwdEbitda = ebitda * (1 + g);
+  // use blend: sector median and own 10Y avg
+  const histMult = computeHistAvg(S.metrics, 'evToEBITDA', 10) || computeHistAvg(S.metrics, 'enterpriseValueOverEBITDA', 10);
+  const blendMult = histMult ? (histMult * 0.6 + med.evEbitda * 0.4) : med.evEbitda;
+  const iv = blendMult * fwdEbitda - debt + cash;
+  return shares > 0 ? iv / shares : null;
+}
 
-  const bearG = parseFloat(document.getElementById('dcf-bear')?.value)/100;
-  const baseG = parseFloat(document.getElementById('dcf-base')?.value)/100;
-  const bullG = parseFloat(document.getElementById('dcf-bull')?.value)/100;
+// 4. EV / Revenue
+function computeCfEvRev() {
+  const rev = S.income[0]?.revenue || 0;
+  if (rev <= 0) return null;
+  const bal0   = S.balance[0] || {};
+  const debt   = bal0.totalDebt || 0;
+  const cash   = bal0.cashAndCashEquivalents || 0;
+  const shares = getSharesOut();
+  const med    = getSectorMedians();
+  const histMult = computeHistAvg(S.metrics, 'evToSales', 10);
+  const blendMult = histMult ? (histMult * 0.6 + med.evRev * 0.4) : med.evRev;
+  // use FY+1 revenue estimate (TTM * growth)
+  const g = getBaseGrowthEstimate();
+  const fwdRev = rev * Math.max(1, 1 + g);
+  const mult = Math.min(blendMult, 5.5); // cap per image spec
+  const iv = mult * fwdRev - debt + cash;
+  return shares > 0 ? iv / shares : null;
+}
 
-  const dcfPS = (g, tg) => {
-    if(fcf<=0 || shares<=0 || isNaN(g)) return null;
-    const pv = dcfDeclining(fcf, g, tg, wacc);
-    return pv ? pv/shares : null;
-  };
+// 5. P / FCF (normalised)
+function computeCfPFcf() {
+  const fcf = computeTTMFcf();
+  if (fcf <= 0) return null;
+  const shares = getSharesOut();
+  if (!shares) return null;
+  // remove outlier distortion (flag if > $307 anomaly — use median-based norm)
+  const hist = computeHistAvg(S.metrics, 'pfcfRatio', 10) || computeHistAvg(S.metrics, 'priceToFreeCashFlowsRatio', 10);
+  const med  = getSectorMedians().pfcf;
+  const mult = hist ? Math.min(hist, 50) : Math.min(med, 35);
+  const normFcf = fcf / shares;
+  return mult * normFcf;
+}
 
-  const hist_pfcf  = computeHistAvg(S.metrics, 'pfcfRatio', 10) || computeHistAvg(S.metrics, 'priceToFreeCashFlowsRatio', 10);
-  const hist_pe    = computeHistAvg(S.metrics, 'peRatio', 10);
-  const hist_evEb  = computeHistAvg(S.metrics, 'evToEBITDA', 10) || computeHistAvg(S.metrics, 'enterpriseValueOverEBITDA', 10);
-  const hist_evRev = computeHistAvg(S.metrics, 'evToSales', 10);
-  const fcfPerShare = shares>0 ? fcf/shares : 0;
+// 6. Revenue-based DCF — for growth stories, capped terminal multiple
+function computeCfRevDcf(wacc, termGr) {
+  const rev = S.income[0]?.revenue || 0;
+  if (rev <= 0) return null;
+  const shares = getSharesOut();
+  if (!shares) return null;
+  const bal0 = S.balance[0] || {};
+  const debt  = bal0.totalDebt || 0;
+  const cash  = bal0.cashAndCashEquivalents || 0;
+  const g     = cfInputVal('cf-growth', getBaseGrowthEstimate());
+  const tg    = termGr;
+  const yrs   = 10;
+  if (wacc <= tg) return null;
+  // project revenue then apply sector EV/Rev terminal multiple
+  let pv = 0, r = rev;
+  for (let y = 1; y <= yrs; y++) {
+    const fade = y <= 3 ? g : g + (tg - g) * ((y-3)/(yrs-3));
+    r = r * (1 + fade);
+    // convert to FCF proxy via operating margin assumption
+    const opM = Math.max(0.05, (S.income[0]?.operatingIncomeRatio || 0.10));
+    const fcfProxy = r * opM * 0.7;
+    pv += fcfProxy / Math.pow(1+wacc, y);
+  }
+  const termMult = Math.min(getSectorMedians().evRev * 1.5, 8);
+  const tv = (r * termMult - debt + cash) / Math.pow(1+wacc, yrs);
+  return (pv + tv) / shares;
+}
 
-  const evMultPrice  = (mult, kpi) => (mult && kpi>0 && shares>0) ? (mult*kpi - totalDebt + cash) / shares : null;
-  const peMultPrice  = (mult)      => (mult && eps && eps>0)      ? mult*eps                              : null;
-  const pfcfMultPrice= (mult)      => (mult && fcfPerShare>0)     ? mult*fcfPerShare                      : null;
+// 7. PEG-implied value — Fair P/E × 3Y forward EPS CAGR
+function computeCfPeg() {
+  const eps   = S.income[0]?.epsdiluted || S.quote?.eps || null;
+  if (!eps || eps <= 0) return null;
+  const fwdEpsGr = Math.max(0.03, getBaseGrowthEstimate());
+  const pegRatio = cfInputVal('cf-growth', null) !== null
+    ? Math.min(cfInputVal('cf-growth', 1.5) / (fwdEpsGr*100), 2)
+    : 1.5; // configurable; default 1.5×
+  const fairPe   = pegRatio * (fwdEpsGr * 100);
+  const fwdEps   = eps * Math.pow(1 + fwdEpsGr, 3);
+  if (fwdEps <= 0) return null;
+  return fairPe * fwdEps;
+}
+
+// 8. Graham Number — floor, not target
+function computeCfGraham() {
+  const eps = S.income[0]?.epsdiluted || S.quote?.eps || null;
+  const bvps = S.balance[0]?.bookValuePerShare ||
+    (S.balance[0]?.totalStockholdersEquity && getSharesOut()
+      ? S.balance[0].totalStockholdersEquity / getSharesOut() : null);
+  if (!eps || eps <= 0 || !bvps || bvps <= 0) return null;
+  const multiple = cfInputVal('cf-half-life', null) !== null
+    ? Math.min(cfInputVal('cf-half-life', 22.5), 22.5)
+    : 22.5;
+  return Math.sqrt(multiple * eps * Math.max(bvps, 1));
+}
+
+function renderValuationSummary() {
+  const cur    = getCurPrice();
+  const wacc   = cfInputVal('cf-wacc-user', null) !== null
+    ? cfInputVal('cf-wacc-user', computeWACC()) / 100
+    : computeWACC();
+  const termGr = cfInputVal('cf-terminal', 3.0) / 100;
+  const marginExp = cfInputVal('cf-margin-exp', 0);
+  const shares = getSharesOut();
+  const p = S.profile || {}, q = S.quote || {};
+
+  // ── Date ──
+  const now = new Date();
+  document.getElementById('cf-date').textContent =
+    now.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+  document.getElementById('cf-sub').innerHTML =
+    `${p.symbol || '—'} &nbsp;·&nbsp; 8 methods, trimmed-mean composite &nbsp;·&nbsp; <span id="cf-date">${
+      now.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' })
+    }</span>`;
+
+  // ── Market val ──
+  document.getElementById('cf-market-val').textContent = cur ? '$'+cur.toFixed(2) : '—';
 
   const methods = [
-    {id:'dcf-bull', group:'Discounted cash flow', label:'Forward DCF',  qualifier:'Bull',          value: dcfPS(bullG, 0.035)},
-    {id:'dcf-base', group:'Discounted cash flow', label:'Forward DCF',  qualifier:'Base',          value: dcfPS(baseG, 0.030)},
-    {id:'dcf-bear', group:'Discounted cash flow', label:'Forward DCF',  qualifier:'Bear',          value: dcfPS(bearG, 0.020)},
-    {id:'pe-5y',    group:'Earnings multiples',   label:'P / E',        qualifier:'10Y average',    value: peMultPrice(hist_pe)},
-    {id:'pe-sec',   group:'Earnings multiples',   label:'P / E',        qualifier:'sector median', value: peMultPrice(sectorMed.pe)},
-    {id:'pfcf-5y',  group:'Earnings multiples',   label:'P / FCF',      qualifier:'10Y average',    value: pfcfMultPrice(hist_pfcf)},
-    {id:'pfcf-sec', group:'Earnings multiples',   label:'P / FCF',      qualifier:'sector median', value: pfcfMultPrice(sectorMed.pfcf)},
-    {id:'eve-5y',   group:'Enterprise multiples', label:'EV / EBITDA',  qualifier:'10Y average',    value: evMultPrice(hist_evEb, ebitda)},
-    {id:'eve-sec',  group:'Enterprise multiples', label:'EV / EBITDA',  qualifier:'sector median', value: evMultPrice(sectorMed.evEbitda, ebitda)},
-    {id:'evr-5y',   group:'Enterprise multiples', label:'EV / Revenue', qualifier:'10Y average',    value: evMultPrice(hist_evRev, revenue)},
-    {id:'evr-sec',  group:'Enterprise multiples', label:'EV / Revenue', qualifier:'sector median', value: evMultPrice(sectorMed.evRev, revenue)},
+    {
+      id:'fcff', num:'01', name:'FCFF DCF', badge:'intrinsic', badgeText:'intrinsic',
+      desc:'6Q normalised FCF, margin expansion, user WACC',
+      compute: () => {
+        const pv = computeCfFcff(cur, wacc, termGr, marginExp);
+        return pv && shares > 0 ? pv / shares : null;
+      },
+      inputs: ['Normal growth', 'Terminal growth', 'Margin expansion', 'WACC'],
+    },
+    {
+      id:'hmodel', num:'02', name:'H-Model DCF', badge:'intrinsic', badgeText:'intrinsic',
+      desc:'Two-phase: high growth fades over half-life H to terminal',
+      compute: () => {
+        const pv = computeCfHModel(wacc, termGr);
+        return pv && shares > 0 ? pv / shares : null;
+      },
+      inputs: ['Normal growth', 'Terminal growth', 'H half-life'],
+    },
+    {
+      id:'evebitda', num:'03', name:'EV / EBITDA', badge:'multiples', badgeText:'multiples',
+      desc:'Forward EBITDA × blended sector + own-history multiple',
+      compute: computeCfEvEbitda,
+      inputs: ['Forward EBITDA (FY+1)', 'Sector median', 'Net cash / debt', 'Shares'],
+    },
+    {
+      id:'evrev', num:'04', name:'EV / Revenue', badge:'multiples', badgeText:'multiples',
+      desc:'FY+1 revenue × sector median capped at 5.5×',
+      compute: computeCfEvRev,
+      inputs: ['Forward revenue (FY+1)', 'Sector median', 'Net cash / debt', 'Shares'],
+    },
+    {
+      id:'pfcf', num:'05', name:'P / FCF', badge:'multiples', badgeText:'multiples',
+      desc:'Normalised FCF/share × sector median P/FCF (30–35×)',
+      compute: computeCfPFcf,
+      inputs: ['Normalised FCF/share', 'Sector median P/FCF', 'Shares'],
+    },
+    {
+      id:'revdcf', num:'06', name:'Revenue-based DCF', badge:'growth', badgeText:'growth',
+      desc:'Project revenue 10Y then apply terminal EV/Sales multiple',
+      compute: () => computeCfRevDcf(wacc, termGr),
+      inputs: ['Consensus base growth', 'Fade rate 4% terminal', 'Terminal EV/Sales multiple', 'WACC'],
+    },
+    {
+      id:'peg', num:'07', name:'PEG-implied value', badge:'growth', badgeText:'growth',
+      desc:'Fair P/E = 1.5× configurable · Fair P/E × 3Y fwd EPS CAGR',
+      compute: computeCfPeg,
+      inputs: ['3Y forward EPS CAGR (FY+1)', 'Forward EPS', 'Fair P/E ratio assumption'],
+    },
+    {
+      id:'graham', num:'08', name:'Graham number', badge:'floor', badgeText:'floor',
+      desc:'√(22.5 × EPS × BVPS) — conservative floor, not a target',
+      compute: computeCfGraham,
+      inputs: ['Trailing EPS', 'Book value per share'],
+    },
   ];
 
-  const valid = methods.filter(m => m.value !== null && isFinite(m.value) && m.value>0);
-  const totalMethods = methods.length;
-  const bodyEl = document.getElementById('vf-chart-body');
-
-  // Header info
-  document.getElementById('vf-ticker').textContent = `${p.symbol||''}${p.companyName?' · '+p.companyName:''}`;
-  document.getElementById('vf-method-count').textContent = `${valid.length} methods, trimmed-mean composite`;
-  document.getElementById('vf-coverage').textContent = `${valid.length} / ${totalMethods}`;
-  const dStr = new Date().toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
-  document.getElementById('vf-date').textContent = `${dStr} close`;
-
-  if(!valid.length){
-    bodyEl.innerHTML = '<div style="padding:32px 0;text-align:center;color:var(--vf-t3);font-size:13px">Insufficient data to compute composite.</div>';
-    document.getElementById('vf-composite-val').textContent = '—';
-    document.getElementById('vf-market-val').textContent = cur ? '$'+cur.toFixed(2) : '—';
-    document.getElementById('vf-gap-val').textContent = '—';
-    document.getElementById('vf-gap-note').textContent = '—';
-    return;
-  }
-
-  // Trimmed-mean composite
-  let pool = valid.map(m => m.value).sort((a,b)=>a-b);
-  if(pool.length >= 5) pool = pool.slice(1, -1);
-  const composite = pool.reduce((s,v)=>s+v, 0) / pool.length;
-
-  // Append composite row
-  const all = [...valid, {id:'composite', group:'Composite', label:'InsightValue', qualifier:'trimmed mean', value: composite, isComposite:true}];
-
-  // Hero values
-  document.getElementById('vf-composite-val').textContent = '$' + composite.toFixed(2);
-  document.getElementById('vf-market-val').textContent = cur ? '$' + cur.toFixed(2) : '—';
-  const dayChange = q.change || p.change || 0;
-  const dayChangePct = q.changePercentage || p.changePercentage || 0;
-  const sign = (n) => (n >= 0 ? '+' : '');
-  document.getElementById('vf-market-change').textContent =
-    cur ? `${sign(dayChange)}${dayChange.toFixed(2)} (${sign(dayChangePct)}${dayChangePct.toFixed(2)}%) today` : '—';
-
-  const gap = cur>0 ? (composite - cur)/cur : 0;
-  const gapEl = document.getElementById('vf-gap-val');
-  gapEl.textContent = `${sign(gap*100)}${(gap*100).toFixed(1)}%`;
-  gapEl.className = 'vf-hero-num2 vf-mono ' + (gap>=0 ? 'vf-hero-pos' : 'vf-hero-neg');
-  document.getElementById('vf-gap-note').textContent =
-    `price is ${gap>=0 ? 'below' : 'above'} composite fair value`;
-
-  // Chart scale (max value or market price, rounded up to 50)
-  const rawMax = Math.max(...all.map(m=>m.value), cur || 0);
-  const chartMax = Math.ceil(rawMax / 50) * 50;
-  const pricePct = cur>0 && chartMax>0 ? (cur/chartMax)*100 : 50;
-
-  // Axis ticks
-  const step = chartMax > 600 ? 200 : chartMax > 300 ? 100 : 50;
-  const ticks = [];
-  for(let v = 0; v <= chartMax; v += step) ticks.push(v);
-
-  // Categorize by gap
-  const categorize = (v) => {
-    if(!cur || cur<=0) return 'fair';
-    const g = (v - cur) / cur;
-    if(g >=  0.30) return 'deep-up';
-    if(g >=  0)    return 'up';
-    if(g >= -0.15) return 'fair';
-    if(g >= -0.30) return 'rich';
-    return 'down';
-  };
-
-  // Build rows with group dividers
-  let rowsHtml = '';
-  // Axis row
-  rowsHtml += `<div class="vf-axis-row"><div></div><div class="vf-axis-ticks">${
-    ticks.map(v => `<div class="vf-axis-tick" style="left:${(v/chartMax)*100}%"><span class="vf-axis-label vf-mono">$${v}</span></div>`).join('')
-  }</div><div></div></div>`;
-
-  let prevGroup = null;
-  all.forEach(m => {
-    if(prevGroup !== null && m.group !== prevGroup){
-      rowsHtml += `<div class="vf-group-div"></div>`;
-    }
-    prevGroup = m.group;
-    const tone = m.isComposite ? 'composite' : categorize(m.value);
-    const widthPct = (m.value / chartMax) * 100;
-    const g = cur>0 ? (m.value - cur)/cur : 0;
-    const gapCls = g>=0 ? 'pos' : 'neg';
-    const labelCls = m.isComposite ? 'vf-method-label composite' : 'vf-method-label';
-    const valCls   = m.isComposite ? 'vf-value-num vf-mono composite' : 'vf-value-num vf-mono';
-    const barCls   = m.isComposite ? 'vf-bar composite' : `vf-bar ${tone}`;
-    rowsHtml += `<div class="vf-row">
-      <div class="vf-label-col-inner">
-        <span class="${labelCls}">${m.label}</span>
-        <span class="vf-method-qual">${m.qualifier}</span>
-      </div>
-      <div class="vf-bar-col">
-        <div class="vf-track"></div>
-        <div class="${barCls}" style="width:${widthPct}%"></div>
-      </div>
-      <div class="vf-value-col-inner">
-        <span class="${valCls}">$${m.value.toFixed(2)}</span>
-        <span class="vf-gap-num vf-mono ${gapCls}">${sign(g*100)}${(g*100).toFixed(1)}%</span>
-      </div>
-    </div>`;
+  // Compute all values
+  const results = methods.map(m => {
+    let val = null;
+    try { val = m.compute(); } catch(_) {}
+    if (val !== null && (!isFinite(val) || val <= 0)) val = null;
+    return { ...m, val };
   });
 
-  bodyEl.innerHTML = rowsHtml;
+  // Trimmed-mean composite
+  const valid = results.filter(r => r.val !== null).map(r => r.val).sort((a,b)=>a-b);
+  let composite = null;
+  if (valid.length >= 4) {
+    const trimmed = valid.slice(1, -1);
+    composite = trimmed.reduce((s,v)=>s+v,0) / trimmed.length;
+  } else if (valid.length > 0) {
+    composite = valid.reduce((s,v)=>s+v,0) / valid.length;
+  }
 
-  // Overlay the price line — single element spanning the chart body, positioned over the bar column
-  // Grid: 220px (label) + 18px gap + 1fr (bar) + 18px gap + 180px (value)
-  // Bar column starts at 220+18=238px, width = 100% - 220 - 180 - 36 = 100% - 436px
-  const overlay = document.createElement('div');
-  overlay.className = 'vf-price-overlay';
-  overlay.style.left = `calc(238px + (100% - 436px) * ${pricePct/100})`;
-  overlay.style.height = bodyEl.offsetHeight + 'px';
-  overlay.innerHTML = `
-    <div class="vf-price-cap">
-      <span class="vf-price-cap-lbl">Market</span>
-      <span class="vf-price-cap-num">$${cur.toFixed(2)}</span>
-    </div>
-    <div class="vf-price-line"></div>
-  `;
-  bodyEl.appendChild(overlay);
+  // Gap colour
+  const gapPct = (composite && cur) ? (composite - cur)/cur*100 : null;
+  const gapCls = gapPct === null ? '' : gapPct >= 5 ? 'pos' : gapPct <= -5 ? 'neg' : '';
+  const compCls = gapPct === null ? '' : gapPct >= 10 ? 'up' : gapPct <= -10 ? 'down' : 'fair';
+
+  // Hero values
+  const compEl = document.getElementById('cf-composite-val');
+  compEl.textContent = composite ? '$'+composite.toFixed(2) : '—';
+  compEl.className   = 'cf-composite-val ' + compCls;
+
+  const gapEl = document.getElementById('cf-gap-val');
+  gapEl.textContent = gapPct !== null ? (gapPct>=0?'+':'')+gapPct.toFixed(1)+'%' : '—';
+  gapEl.className   = 'cf-hero-gap ' + gapCls;
+
+  // Footer
+  const footEl = document.getElementById('cf-footer-val');
+  footEl.textContent = composite ? '$'+composite.toFixed(2) : '—';
+  footEl.className   = 'cf-composite-val ' + compCls;
+  document.getElementById('cf-footer-note').textContent =
+    valid.length > 0
+      ? `${valid.length} / ${methods.length} methods computed · trimmed mean excludes highest and lowest`
+      : 'Insufficient data for composite — check financials tab';
+
+  // Method grid
+  const grid = document.getElementById('cf-method-grid');
+  grid.innerHTML = results.map(r => {
+    const upside = (r.val && cur) ? (r.val - cur)/cur*100 : null;
+    const ivCls  = upside === null ? 'muted' : upside >= 10 ? 'up' : upside <= -10 ? 'down' : 'fair';
+    const upCls  = upside === null ? 'muted' : upside >= 0 ? 'pos' : 'neg';
+    const upStr  = upside !== null ? (upside>=0?'+':'')+upside.toFixed(1)+'% vs mkt' : 'n/a';
+    return `
+      <div class="cf-method">
+        <div class="cf-method-head">
+          <span class="cf-method-num">${r.num}</span>
+          <span class="cf-method-badge ${r.badge}">${r.badgeText}</span>
+        </div>
+        <div class="cf-method-name">${r.name}</div>
+        <div class="cf-method-desc">${r.desc}</div>
+        <div class="cf-iv ${ivCls}">${r.val ? '$'+r.val.toFixed(2) : '—'}</div>
+        <div class="cf-method-footer">
+          <span class="cf-method-upside ${upCls}">${upStr}</span>
+          <span class="cf-method-weight">${r.val ? 'included' : 'excluded'}</span>
+        </div>
+      </div>`;
+  }).join('');
+
+  // Wire input changes
+  ['cf-growth','cf-terminal','cf-margin-exp','cf-wacc-user','cf-half-life'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && !el.dataset.wired) {
+      el.dataset.wired = '1';
+      el.addEventListener('input', () => renderValuationSummary());
+    }
+  });
+
+  // Seed growth default from auto
+  const growthEl = document.getElementById('cf-growth');
+  if (growthEl && !growthEl.value) {
+    growthEl.placeholder = (getBaseGrowthEstimate()*100).toFixed(1)+'% (auto)';
+  }
+  const waccEl = document.getElementById('cf-wacc-user');
+  if (waccEl && !waccEl.value) {
+    waccEl.placeholder = (computeWACC()*100).toFixed(1)+'% (auto)';
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -4020,193 +3961,154 @@ function renderMoatHeat() {
     { key: 'valuation',         name: 'Valuation'           },
   ];
 
-  // ── HEADER ──
-  const sym      = S.profile?.symbol || '—';
-  const exch     = S.profile?.exchange || '—';
+  // ── Top stat bar ──
+  const sym = S.profile?.symbol || '—';
+  const exch = S.profile?.exchange || S.profile?.exchangeFullName?.split(' ')[0] || '—';
   const currency = S.profile?.currency || 'USD';
-  const sector   = S.profile?.sector || 'Sector';
+  const sector = S.profile?.sector || 'Sector';
   const industry = S.profile?.industry || '';
-
   const badge = document.getElementById('ii-ticker-badge');
   badge.textContent = sym.slice(0, 4);
-  badge.className   = 'ii-ticker-badge ' + compColor;
-
+  badge.className = 'ii-ticker-badge ' + compColor;
   document.getElementById('ii-stat-name').textContent = S.profile?.companyName || sym;
-  document.getElementById('ii-stat-meta').textContent = `${exch} · ${currency} · ${industry || sector}`;
+  document.getElementById('ii-stat-meta').textContent = `${exch} · ${currency} · ${(industry || sector).toUpperCase()}`;
 
-  const cur      = getCurPrice();
-  const q        = S.quote || {};
-  const change   = q.change ?? S.profile?.change ?? 0;
-  const changePct= q.changePercentage ?? S.profile?.changePercentage ?? 0;
-  const chgSign  = change >= 0 ? '+' : '';
-  const pctSign  = changePct >= 0 ? '+' : '';
-
+  const cur = getCurPrice();
+  const q = S.quote || {};
+  const change = q.change ?? S.profile?.change ?? 0;
+  const changePct = q.changePercentage ?? S.profile?.changePercentage ?? 0;
   document.getElementById('ii-stat-price').textContent = cur ? cur.toFixed(2) : '—';
-
   const chEl = document.getElementById('ii-stat-change');
-  chEl.textContent = `${chgSign}${change.toFixed(2)}  ${pctSign}${changePct.toFixed(2)}%`;
-  chEl.className   = 'ii-quote-kv-v ' + (change >= 0 ? 'pos' : 'neg');
+  const chPctEl = document.getElementById('ii-stat-changepct');
+  chEl.textContent = (change >= 0 ? '+' : '') + change.toFixed(2);
+  chEl.className = 'ii-stat-val ' + (change >= 0 ? 'pos' : 'neg');
+  chPctEl.textContent = (changePct >= 0 ? '+' : '') + changePct.toFixed(2) + '%';
+  chPctEl.className = 'ii-stat-val ' + (changePct >= 0 ? 'pos' : 'neg');
 
   const mktCap = q.marketCap ?? S.profile?.marketCap ?? 0;
   document.getElementById('ii-stat-mcap').textContent = mktCap ? formatMcapShort(mktCap) : '—';
-
   const eps = S.income[0]?.epsdiluted || q.eps || null;
-  document.getElementById('ii-stat-pe').textContent  = (cur && eps && eps > 0) ? (cur / eps).toFixed(1) + 'x' : '—';
+  document.getElementById('ii-stat-pe').textContent = (cur && eps && eps > 0) ? (cur / eps).toFixed(1) + 'x' : '—';
   const lastDiv = S.profile?.lastDividend || 0;
   document.getElementById('ii-stat-div').textContent = (cur && lastDiv) ? ((lastDiv / cur) * 100).toFixed(2) + '%' : '0.00%';
-
   const now = new Date();
-  document.getElementById('ii-stat-time').textContent =
-    now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', hour12:false }) + ' ET';
+  document.getElementById('ii-stat-time').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) + ' ET';
 
-  // ── VERDICT STRIP ──
+  // ── Chart title ──
+  document.getElementById('ii-title').textContent = `How ${sym} scores across six dimensions`;
+  document.getElementById('ii-legend-symbol').textContent = sym;
+
+  // Peer percentile derived from composite (heuristic — refined later if peer data loads)
   const peerLabel =
-    composite >= 85 ? 'Top 5%'  :
+    composite >= 85 ? 'Top 5%' :
     composite >= 75 ? 'Top 15%' :
     composite >= 65 ? 'Top 25%' :
     composite >= 55 ? 'Top 40%' :
-    composite >= 40 ? 'Mid-pack' : 'Bottom quartile';
+    composite >= 40 ? 'Middle of pack' :
+                      'Bottom quartile';
+  const moatLevel = d.economicMoat.label; // Wide / Narrow / None
 
-  const moatLevel = d.economicMoat.label;
-  const moatColor = moatLevel === 'Wide' ? 'green' : moatLevel === 'Narrow' ? 'amber' : 'red';
-  const badgeText =
-    moatLevel === 'Wide'   ? `WIDE MOAT · ${peerLabel.toUpperCase()}`   :
-    moatLevel === 'Narrow' ? `NARROW MOAT · ${peerLabel.toUpperCase()}` :
-                              `NO MOAT · ${peerLabel.toUpperCase()}`;
-
+  // Watch items (composite fair-value gap)
   const watch = computeIIWatchGap();
 
-  const vScore = document.getElementById('ii-verdict-score');
-  vScore.textContent = composite.toFixed(1);
-  vScore.className   = 'ii-verdict-big ' + compColor;
-  document.getElementById('ii-sb-blurb').textContent = composeIIBlurb(d, dims, composite);
-
-  const vMoat = document.getElementById('ii-verdict-moat');
-  vMoat.textContent  = moatLevel;
-  vMoat.style.color  = moatLevel === 'Wide' ? 'var(--v2-up)' : moatLevel === 'Narrow' ? 'var(--v2-warn)' : 'var(--v2-down)';
-
-  const vBadge = document.getElementById('ii-sb-badge');
-  vBadge.textContent = badgeText;
-  vBadge.className   = 'ii-verdict-badge ' + moatColor;
-
-  const valLabel = d.valuation.score >= 70 ? 'Attractive' : d.valuation.score >= 40 ? 'Fair value' : 'Overvalued';
-  const vVal = document.getElementById('ii-verdict-val');
-  vVal.textContent  = valLabel;
-  vVal.style.color  = d.valuation.color === 'green' ? 'var(--v2-up)' : d.valuation.color === 'amber' ? 'var(--v2-warn)' : 'var(--v2-down)';
-  document.getElementById('ii-verdict-val-sub').textContent =
-    watch.fair ? `Fair value est. $${watch.fair.toFixed(2)}` : 'Insufficient data';
-
-  // ── RIGHT RAIL ──
-  const railBig = document.getElementById('ii-sb-big');
-  railBig.textContent = composite.toFixed(1);
-  railBig.className   = 'ii-big-score ' + compColor;
-
-  const railBadge = document.getElementById('ii-sb-badge-rail');
-  railBadge.textContent = badgeText;
-  railBadge.className   = 'ii-sb-badge ' + moatColor;
-
-  document.getElementById('ii-sb-blurb-rail').textContent = composeIIBlurb(d, dims, composite);
-  document.getElementById('ii-sb-stats').innerHTML        = buildIISidebarStats(watch);
-  document.getElementById('ii-sb-note-body').innerHTML    = composeIINote(d, dims, composite, watch);
-  document.getElementById('ii-sb-note-ts').textContent    =
-    now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', hour12:false }) + ' ET';
-
-  // ── CHART ──
-  document.getElementById('ii-title').textContent         = `How ${sym} scores across six dimensions`;
-  document.getElementById('ii-legend-symbol').textContent = sym;
+  // ── SVG line chart ──
   drawIIQualityChart(dims.map(x => ({ name: x.name, score: d[x.key].score, color: d[x.key].color })));
   document.getElementById('ii-chart-updated').textContent =
-    now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', hour12:false }) + ' ET';
+    now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) + ' ET';
 
-  // ── X-AXIS DIMENSION CARDS ──
+  // ── Sidebar ──
+  const sbBig   = document.getElementById('ii-sb-big');
+  sbBig.textContent = composite.toFixed(1);
+  sbBig.className = 'ii-sb-big ' + compColor;
+  const sbBadge = document.getElementById('ii-sb-badge');
+  const badgeLabel =
+    moatLevel === 'Wide'   ? `WIDE MOAT · ${peerLabel.toUpperCase()}` :
+    moatLevel === 'Narrow' ? `NARROW MOAT · ${peerLabel.toUpperCase()}` :
+                              `NO MOAT · ${peerLabel.toUpperCase()}`;
+  sbBadge.textContent = badgeLabel;
+  sbBadge.className = 'ii-sb-badge ' + (d.economicMoat.color);
+
+  document.getElementById('ii-sb-blurb').textContent = composeIIBlurb(d, dims, composite);
+
+  // Sector-aware key stats
+  document.getElementById('ii-sb-stats').innerHTML = buildIISidebarStats(watch);
+
+  // Analyst note
+  document.getElementById('ii-sb-note-body').innerHTML = composeIINote(d, dims, composite, watch);
+  document.getElementById('ii-sb-note-ts').textContent = (new Date()).toLocaleTimeString('en-US',
+    { hour: '2-digit', minute: '2-digit', hour12: false }) + ' ET';
+
+  // ── Inset dimension row (label + bar + tier, no big score per design) ──
   document.getElementById('ii-dim-row').innerHTML = dims.map(dim => {
     const r = d[dim.key];
-    const colClass = r.color; // green | amber | red
-    const rankLabel =
+    const tierLabel =
       dim.key === 'economicMoat' ? r.label.toUpperCase() :
       dim.key === 'valuation'    ? (r.score >= 70 ? 'ATTRACTIVE' : r.score >= 40 ? 'FAIR' : 'OVERVALUED') :
-                                    r.label.toUpperCase();
-    return `<div class="ii-dim-card">
-      <div class="ii-dim-lbl">${dim.name}</div>
-      <div class="ii-dim-bar"><i class="${colClass}" style="width:${r.score}%"></i></div>
-      <div class="ii-dim-score ${colClass}">${r.score}</div>
-      <div class="ii-dim-rank ${colClass}">${rankLabel}</div>
-    </div>`;
+                                   r.label.toUpperCase();
+    return `
+      <div class="ii-dim-card">
+        <div class="ii-dim-lbl">${dim.name}</div>
+        <div class="ii-dim-bar"><div class="ii-dim-fill ${r.color}" style="width:${r.score}%"></div></div>
+        <div class="ii-dim-tier ${r.color}">${tierLabel}</div>
+      </div>`;
   }).join('');
 
-  // ── STATUS BAR ──
+  // ── Status bar timestamp ──
   document.getElementById('ii-status-ts').textContent =
-    now.toISOString().slice(0,10) + ' ' +
-    now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', hour12:false }) + ' ET';
+    now.toISOString().slice(0, 10) + ' ' +
+    now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) + ' ET';
 
-  // ── PEER ROW ──
-  document.getElementById('ii-peer-title').textContent =
-    `Composite quality vs. ${S.profile?.sector || 'sector'}`;
-
+  // ── Peer comparison row (fetch lazily, cached per ticker) ──
   if (sym !== _iiPeerSymbol) {
     _iiPeerSymbol = sym;
-    _iiPeerCache  = null;
-    document.getElementById('ii-peer-row').innerHTML = '<div class="ii-peer-loading">Loading peer data…</div>';
+    _iiPeerCache = null;
+    document.getElementById('ii-peer-row').innerHTML =
+      '<div class="ii-peer-loading">Loading peer data…</div>';
     document.getElementById('ii-legend-peercount').textContent = '';
+    document.getElementById('ii-peer-title').textContent =
+      `Composite quality vs. ${S.profile?.sector || 'sector'}`;
     fetchAndRenderIIPeers(sym, sector, composite);
   } else if (_iiPeerCache) {
     renderIIPeerRow(_iiPeerCache, composite);
   }
 }
 
-// Watch-item gap: composite fair value vs current price
+// Watch-item gap: composite fair value vs current price (feeds MoatHeat sidebar)
 function computeIIWatchGap() {
   const cur = getCurPrice();
   if (!cur) return { gap: null, fair: null };
+  // Re-use the 8-method results if already computed, else compute quickly
+  const vals = [];
+  try {
+    const wacc    = computeWACC();
+    const termGr  = 0.03;
+    const shares  = getSharesOut();
+    const inc0    = S.income[0] || {};
+    const bal0    = S.balance[0] || {};
+    const eps     = inc0.epsdiluted || S.quote?.eps || null;
+    const ebitda  = inc0.ebitda || 0;
+    const revenue = inc0.revenue || 0;
+    const debt    = bal0.totalDebt || 0;
+    const cash    = bal0.cashAndCashEquivalents || 0;
+    const med     = getSectorMedians();
+    const fcf     = computeTTMFcf();
+    const g       = getBaseGrowthEstimate();
+    // Quick proxies for the 8 methods
+    if (fcf>0 && shares>0){ const pv=dcfDeclining(fcf,g,termGr,wacc); if(pv>0) vals.push(pv/shares); }
+    const epv2=computeEPV(); if(epv2.epvPerShare>0) vals.push(epv2.epvPerShare);
+    if(ebitda>0 && shares>0){ const hE=computeHistAvg(S.metrics,'evToEBITDA',10)||med.evEbitda; vals.push((hE*ebitda*(1+g)-debt+cash)/shares); }
+    if(revenue>0 && shares>0){ const hR=computeHistAvg(S.metrics,'evToSales',10)||med.evRev; vals.push((Math.min(hR,5.5)*revenue*(1+g)-debt+cash)/shares); }
+    if(fcf>0 && shares>0){ const hP=computeHistAvg(S.metrics,'pfcfRatio',10)||med.pfcf; vals.push(Math.min(hP,50)*fcf/shares); }
+    if(eps&&eps>0){ const fairPe=1.5*(g*100); vals.push(fairPe*eps*Math.pow(1+g,3)); }
+    const bvps=bal0.bookValuePerShare||(bal0.totalStockholdersEquity&&shares?bal0.totalStockholdersEquity/shares:null);
+    if(eps&&eps>0&&bvps&&bvps>0) vals.push(Math.sqrt(22.5*eps*Math.max(bvps,1)));
+  } catch(_) {}
 
-  // Collect valid fair-value methods (mirror renderValuationSummary's logic, trimmed mean)
-  const fcf    = computeTTMFcf();
-  const shares = getSharesOut();
-  const wacc   = computeWACC();
-  const inc0   = S.income[0] || {};
-  const bal0   = S.balance[0] || {};
-  const eps    = inc0.epsdiluted || S.quote.eps || null;
-  const ebitda = inc0.ebitda || 0;
-  const revenue= inc0.revenue || 0;
-  const debt   = bal0.totalDebt || 0;
-  const cash   = bal0.cashAndCashEquivalents || 0;
-  const sectorMed = getSectorMedians();
-
-  const baseG = getBaseGrowthEstimate();
-  const dcfPS = (g, tg) => {
-    if (fcf <= 0 || shares <= 0) return null;
-    const pv = dcfDeclining(fcf, g, tg, wacc);
-    return pv ? pv / shares : null;
-  };
-  const hist_pfcf  = computeHistAvg(S.metrics, 'pfcfRatio', 10) || computeHistAvg(S.metrics, 'priceToFreeCashFlowsRatio', 10);
-  const hist_pe    = computeHistAvg(S.metrics, 'peRatio', 10);
-  const hist_evEb  = computeHistAvg(S.metrics, 'evToEBITDA', 10) || computeHistAvg(S.metrics, 'enterpriseValueOverEBITDA', 10);
-  const hist_evRev = computeHistAvg(S.metrics, 'evToSales', 10);
-  const fcfPS = shares > 0 ? fcf / shares : 0;
-  const evMult   = (m, k) => (m && k > 0 && shares > 0) ? (m * k - debt + cash) / shares : null;
-  const peMult   = (m)    => (m && eps && eps > 0) ? m * eps : null;
-  const pfcfMult = (m)    => (m && fcfPS > 0) ? m * fcfPS : null;
-
-  const values = [
-    dcfPS(baseG * 1.2, 0.035),
-    dcfPS(baseG,       0.030),
-    dcfPS(baseG * 0.7, 0.020),
-    peMult(hist_pe),
-    peMult(sectorMed.pe),
-    pfcfMult(hist_pfcf),
-    pfcfMult(sectorMed.pfcf),
-    evMult(hist_evEb,        ebitda),
-    evMult(sectorMed.evEbitda, ebitda),
-    evMult(hist_evRev,         revenue),
-    evMult(sectorMed.evRev,    revenue),
-  ].filter(v => v !== null && isFinite(v) && v > 0);
-
-  if (!values.length) return { gap: null, fair: null };
-  values.sort((a, b) => a - b);
-  const pool = values.length >= 5 ? values.slice(1, -1) : values;
-  const fair = pool.reduce((s, v) => s + v, 0) / pool.length;
-  const gap  = (fair - cur) / cur * 100; // positive = below fair value = good
-
+  const valid = vals.filter(v=>v&&isFinite(v)&&v>0).sort((a,b)=>a-b);
+  if (!valid.length) return { gap: null, fair: null };
+  const pool = valid.length >= 4 ? valid.slice(1,-1) : valid;
+  const fair = pool.reduce((s,v)=>s+v,0)/pool.length;
+  const gap  = (fair - cur)/cur*100;
   return { gap, fair };
 }
 
@@ -4256,10 +4158,9 @@ function buildIISidebarStats(watch) {
     });
   }
 
-  return rows.map(r => {
-    const valCls = r.cls === 'pos' ? 'pos' : r.cls === 'neg' ? 'neg' : r.cls === 'warn' ? 'warn' : '';
-    return `<div class="ii-kv-row"><div class="ii-kv-k">${r.l}</div><div class="ii-kv-v ${valCls}">${r.v}</div></div>`;
-  }).join('');
+  return rows.map(r =>
+    `<div class="ii-sb-stat-row"><span class="ii-sb-stat-l">${r.l}</span><span class="ii-sb-stat-v ${r.cls||''}">${r.v}</span></div>`
+  ).join('');
 }
 
 function composeIIBlurb(d, dims, composite) {
@@ -4312,79 +4213,75 @@ function composeIINote(d, dims, composite, watch) {
 function drawIIQualityChart(points, peerPoints) {
   const svg = document.getElementById('ii-chart-svg');
   if (!svg) return;
-  const W = 1080, H = 340;
-  const colW = W / 6; // each of 6 columns
-  // x = centre of each column (matches the dim cards below)
-  const xFor = i => colW * i + colW / 2;
-  const yFor = s => 20 + (1 - s / 100) * 300; // 20px top pad, 300px inner
+  const W = 800, H = 360;
+  const padL = 110, padR = 32, padT = 30, padB = 24;
+  const innerW = W - padL - padR;
+  const innerH = H - padT - padB;
 
-  // Zone y positions (scores 75 and 40)
-  const y75 = yFor(75); // ~110
-  const y40 = yFor(40); // ~230
+  const yFor = s => padT + (1 - s / 100) * innerH;
+  const xFor = i => padL + (innerW * (i / (points.length - 1)));
 
-  // Smooth cubic bezier path
-  const linePath = pts => {
+  const yStrongTop = padT;
+  const yStrongBot = yFor(75);
+  const yFairBot   = yFor(40);
+  const yWeakBot   = padT + innerH;
+
+  // Smooth path with mild curve (cubic Bezier through points)
+  const linePath = (pts) => {
     if (!pts.length) return '';
-    let d = `M ${xFor(0).toFixed(1)} ${yFor(pts[0]).toFixed(1)}`;
+    let d = `M ${xFor(0)} ${yFor(pts[0])}`;
     for (let i = 1; i < pts.length; i++) {
-      const x0 = xFor(i-1), y0 = yFor(pts[i-1]);
-      const x1 = xFor(i),   y1 = yFor(pts[i]);
+      const x0 = xFor(i - 1), y0 = yFor(pts[i - 1]);
+      const x1 = xFor(i),     y1 = yFor(pts[i]);
       const cx = (x0 + x1) / 2;
-      d += ` C ${cx.toFixed(1)} ${y0.toFixed(1)}, ${cx.toFixed(1)} ${y1.toFixed(1)}, ${x1.toFixed(1)} ${y1.toFixed(1)}`;
+      d += ` C ${cx} ${y0}, ${cx} ${y1}, ${x1} ${y1}`;
     }
     return d;
   };
 
-  const scores    = points.map(p => p.score);
-  const scoreLine = linePath(scores);
-  const fillLine  = scoreLine + ` L ${xFor(5).toFixed(1)} 320 L ${xFor(0).toFixed(1)} 320 Z`;
+  const scoreLine = linePath(points.map(p => p.score));
+  const fillPath  = scoreLine + ` L ${xFor(points.length - 1)} ${yWeakBot} L ${xFor(0)} ${yWeakBot} Z`;
 
-  // Peer median
-  const peerScores = (peerPoints && peerPoints.length === 6) ? peerPoints : [48,52,50,51,49,50];
-  const peerLine   = linePath(peerScores);
-
-  // Column separators (at column boundaries)
-  const seps = [1,2,3,4,5].map(i =>
-    `<line x1="${colW*i}" y1="0" x2="${colW*i}" y2="320" stroke="#1a2230" stroke-width="1" stroke-dasharray="2 4"/>`
-  ).join('');
+  // Peer median (synthetic — flat ~50 if no peer data passed)
+  let peerLine = '';
+  if (peerPoints && peerPoints.length === points.length) {
+    peerLine = linePath(peerPoints);
+  } else {
+    // subtle baseline at score 50 with mild variation
+    const synth = [48, 52, 50, 51, 49, 50];
+    peerLine = linePath(synth);
+  }
 
   svg.innerHTML = `
     <defs>
-      <linearGradient id="v2fade" x1="0" x2="0" y1="0" y2="1">
-        <stop offset="0%"   stop-color="#f5a524" stop-opacity=".20"/>
-        <stop offset="100%" stop-color="#f5a524" stop-opacity="0"/>
+      <linearGradient id="ii-area-grad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%"  stop-color="hsl(28, 100%, 60%)" stop-opacity="0.28"/>
+        <stop offset="60%" stop-color="hsl(28, 100%, 60%)" stop-opacity="0.06"/>
+        <stop offset="100%" stop-color="hsl(28, 100%, 60%)" stop-opacity="0"/>
       </linearGradient>
     </defs>
 
-    <!-- Zone bands -->
-    <rect x="0" y="20"    width="1080" height="${y75-20}"    fill="#16c784" opacity=".04"/>
-    <rect x="0" y="${y75}" width="1080" height="${y40-y75}"  fill="#f0b429" opacity=".04"/>
-    <rect x="0" y="${y40}" width="1080" height="${320-y40}"  fill="#d9531e" opacity=".05"/>
+    <!-- Band dividers (75 and 40) -->
+    <line x1="${padL}" y1="${yStrongBot}" x2="${padL + innerW}" y2="${yStrongBot}" class="ii-band-divider"/>
+    <line x1="${padL}" y1="${yFairBot}"   x2="${padL + innerW}" y2="${yFairBot}"   class="ii-band-divider"/>
 
-    <!-- Threshold lines -->
-    <line x1="0" y1="${y75.toFixed(1)}" x2="1080" y2="${y75.toFixed(1)}" stroke="#16c784" stroke-width="1" stroke-dasharray="2 4" opacity=".4"/>
-    <line x1="0" y1="${y40.toFixed(1)}" x2="1080" y2="${y40.toFixed(1)}" stroke="#f0b429" stroke-width="1" stroke-dasharray="2 4" opacity=".4"/>
+    <!-- Band labels — top-aligned at each band's TOP-LEFT corner -->
+    <text x="${padL - 18}" y="${yStrongTop + 14}" text-anchor="end" class="ii-band-label strong">Strong · 75+</text>
+    <text x="${padL - 18}" y="${yStrongBot + 14}" text-anchor="end" class="ii-band-label fair">Fair · 40–75</text>
+    <text x="${padL - 18}" y="${yFairBot + 14}"   text-anchor="end" class="ii-band-label weak">Weak · &lt;40</text>
 
-    <!-- Zone labels -->
-    <text x="16" y="44"                        font-family="IBM Plex Mono" font-size="10" letter-spacing="1.5" fill="#16c784" opacity=".85">STRONG · 75+</text>
-    <text x="16" y="${((y75+y40)/2+5).toFixed(0)}" font-family="IBM Plex Mono" font-size="10" letter-spacing="1.5" fill="#f0b429" opacity=".85">FAIR · 40–75</text>
-    <text x="16" y="${(y40+22).toFixed(0)}"    font-family="IBM Plex Mono" font-size="10" letter-spacing="1.5" fill="#d9531e" opacity=".85">WEAK · &lt;40</text>
+    <!-- Gradient fill under main line -->
+    <path d="${fillPath}" fill="url(#ii-area-grad)"/>
 
-    <!-- Column separators -->
-    ${seps}
-
-    <!-- Area fill -->
-    <path d="${fillLine}" fill="url(#v2fade)"/>
-
-    <!-- Peer median -->
+    <!-- Peer median dashed line -->
     <path d="${peerLine}" class="ii-peer-line"/>
 
-    <!-- Score line -->
+    <!-- Main score line -->
     <path d="${scoreLine}" class="ii-chart-line"/>
 
     <!-- Dots -->
-    ${points.map((p,i) => {
-      const cls = p.color === 'green' ? 'green' : p.color === 'red' ? 'red' : 'amber';
+    ${points.map((p, i) => {
+      const cls = p.color === 'green' ? 'green' : p.color === 'red' ? 'red' : '';
       return `<circle cx="${xFor(i).toFixed(1)}" cy="${yFor(p.score).toFixed(1)}" r="7" class="ii-chart-dot ${cls}"/>`;
     }).join('')}
   `;
@@ -4444,11 +4341,12 @@ async function fetchAndRenderIIPeers(symbol, sector, selfComposite) {
     // Update peer-median dashed line in the chart (rough median of peer composite, applied uniformly)
     if (valid.length) {
       const medianScore = [...valid.map(x => x.score)].sort((a, b) => a - b)[Math.floor(valid.length / 2)];
-      const d2 = computeSixDimensions(S);
-      const dimKeys = ['predictability','profitability','growthQuality','economicMoat','financialStrength','valuation'];
+      // Redraw chart with the new peer median (flat line at the median value)
+      const d = computeSixDimensions(S);
+      const dims = ['predictability','profitability','growthQuality','economicMoat','financialStrength','valuation'];
       drawIIQualityChart(
-        dimKeys.map(k => ({ name: k, score: d2[k].score, color: d2[k].color })),
-        dimKeys.map(() => medianScore)
+        dims.map(k => ({ name: k, score: d[k].score, color: d[k].color })),
+        dims.map(() => medianScore)
       );
       document.getElementById('ii-legend-peercount').textContent = `(n=${valid.length})`;
     }
@@ -4493,29 +4391,33 @@ function renderIIPeerRow(peers, selfComposite) {
   const colorFor = s => s >= 70 ? 'green' : s >= 40 ? 'amber' : 'red';
   const fmtPeer = (p, isSelf) => {
     const delta = isSelf ? 0 : selfComposite - p.score;
-    const dSign = delta >= 0 ? '+' : '−';
+    const sign  = delta >= 0 ? '+' : '−';
     const deltaCls = isSelf ? '' : delta >= 0 ? 'pos' : 'neg';
-    const compareLbl = isSelf ? '· this stock' : `${dSign}${Math.abs(delta).toFixed(1)} vs peer`;
-
+    const compareLbl = isSelf ? '· this stock' : `${sign}${Math.abs(delta).toFixed(1)} vs peer`;
     if (_iiPeerView === 'valuation') {
-      const cur = p.price, fv = p.fairValue;
-      if (!cur || !fv) return `<div class="ii-peer-card${isSelf?' self':''}">
-        <div class="ii-peer-sym">${p.symbol}</div>
-        <div class="ii-peer-nm">${(p.companyName||p.symbol).slice(0,22)}</div>
-        <div class="ii-peer-score amber">—</div>
-        <div class="ii-peer-delta">No data</div>
-      </div>`;
+      // Show fair-value gap vs current price for valuation tab
+      const cur = p.price;
+      const fv  = p.fairValue;
+      if (!cur || !fv) {
+        return `<div class="ii-peer-card${isSelf ? ' self' : ''}">
+          <div class="ii-peer-sym">${p.symbol}</div>
+          <div class="ii-peer-name">${(p.companyName || p.symbol).slice(0, 22)}</div>
+          <div class="ii-peer-score amber">—</div>
+          <div class="ii-peer-delta">No data</div>
+        </div>`;
+      }
       const gap = (fv - cur) / cur * 100;
-      return `<div class="ii-peer-card${isSelf?' self':''}">
+      const gapCls = gap >= 0 ? 'green' : 'red';
+      return `<div class="ii-peer-card${isSelf ? ' self' : ''}">
         <div class="ii-peer-sym">${p.symbol}</div>
-        <div class="ii-peer-nm">${(p.companyName||p.symbol).slice(0,22)}</div>
-        <div class="ii-peer-score ${gap>=0?'green':'red'}">${gap>=0?'+':''}${gap.toFixed(1)}%</div>
+        <div class="ii-peer-name">${(p.companyName || p.symbol).slice(0, 22)}</div>
+        <div class="ii-peer-score ${gapCls}">${gap >= 0 ? '+' : ''}${gap.toFixed(1)}%</div>
         <div class="ii-peer-delta">FV $${fv.toFixed(2)}</div>
       </div>`;
     }
-    return `<div class="ii-peer-card${isSelf?' self':''}">
+    return `<div class="ii-peer-card${isSelf ? ' self' : ''}">
       <div class="ii-peer-sym">${p.symbol}</div>
-      <div class="ii-peer-nm">${(p.companyName||p.symbol).slice(0,22)}</div>
+      <div class="ii-peer-name">${(p.companyName || p.symbol).slice(0, 22)}</div>
       <div class="ii-peer-score ${colorFor(p.score)}">${p.score.toFixed(1)}</div>
       <div class="ii-peer-delta ${deltaCls}">${compareLbl}</div>
     </div>`;
@@ -4538,9 +4440,7 @@ function renderIIPeerRow(peers, selfComposite) {
 
 function switchPeerTab(view) {
   _iiPeerView = view;
-  document.querySelectorAll('[data-peer-tab]').forEach(b =>
-    b.classList.toggle('active', b.dataset.peerTab === view)
-  );
+  document.querySelectorAll('[data-peer-tab]').forEach(b => b.classList.toggle('active', b.dataset.peerTab === view));
   if (_iiPeerCache) {
     const d = computeSixDimensions(S);
     renderIIPeerRow(_iiPeerCache, sixDimComposite(d));
