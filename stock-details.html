@@ -3247,8 +3247,11 @@ function recomputeStageDCF(){
 }
 
 function renderLayer2(){
-  // Initialize the 3-stage DCF section
+  // Initialize the 3-stage DCF section, then chain downstream renders
   renderStageDCF();
+  renderLayer3();
+  renderLayer4();
+  renderValuationSummary();
 }
 
 function recomputeDcf(){
