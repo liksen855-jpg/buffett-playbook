@@ -1497,26 +1497,27 @@ table.iv-sdcf-inputs td:first-child{padding-right:14px;line-height:1.4}
                 <option value="fcf">DFCF-20 · Free Cash Flow · 20Y, 3-stage</option>
                 <option value="ni">DNI-20 · Net Income · 20Y, 3-stage</option>
                 <option value="hmodel">H-Model · FCF · linear fade</option>
+                <option value="graham">Graham Revised · EPS × growth</option>
               </select>
             </div>
             <table class="iv-mini iv-sdcf-inputs">
-              <tr>
-                <td><span id="sdcf-cf-label">Operating Cash Flow (TTM)</span><br/><span class="iv-fix">In millions</span></td>
-                <td><input type="number" class="iv-sdcf-input tnum" id="sdcf-cf" oninput="recomputeStageDCF()"/></td>
+              <tr id="sdcf-row-cf">
+                <td><span id="sdcf-cf-label">Operating Cash Flow (TTM)</span><br/><span class="iv-fix" id="sdcf-cf-sub">In millions</span></td>
+                <td><input type="number" step="any" class="iv-sdcf-input tnum" id="sdcf-cf" oninput="recomputeStageDCF()"/></td>
               </tr>
-              <tr>
+              <tr id="sdcf-row-debt">
                 <td>Total Debt<br/><span class="iv-fix">In millions</span></td>
                 <td><input type="number" class="iv-sdcf-input tnum" id="sdcf-debt" oninput="recomputeStageDCF()"/></td>
               </tr>
-              <tr>
+              <tr id="sdcf-row-cash">
                 <td>Cash &amp; ST investments<br/><span class="iv-fix">In millions</span></td>
                 <td><input type="number" class="iv-sdcf-input tnum" id="sdcf-cash" oninput="recomputeStageDCF()"/></td>
               </tr>
-              <tr>
-                <td>Discount rate (%)</td>
+              <tr id="sdcf-row-disc">
+                <td><span id="sdcf-disc-label">Discount rate (%)</span><br/><span class="iv-fix" id="sdcf-disc-sub" style="display:none">AAA corporate bond yield Y</span></td>
                 <td><input type="number" step="0.1" class="iv-sdcf-input tnum" id="sdcf-disc" oninput="recomputeStageDCF()"/></td>
               </tr>
-              <tr>
+              <tr id="sdcf-row-shares">
                 <td>Shares outstanding<br/><span class="iv-fix">In millions</span></td>
                 <td><input type="number" class="iv-sdcf-input tnum" id="sdcf-shares" oninput="recomputeStageDCF()"/></td>
               </tr>
@@ -3098,10 +3099,11 @@ function deriveStageGrowthRates(){
 let SDCF_CF_MODE = 'ocf'; // 'ocf' | 'fcf' | 'hmodel'
 
 function cashflowLabelFor(mode){
-  if(mode === 'ocf') return 'Operating Cash Flow (TTM)';
-  if(mode === 'fcf') return 'Free Cash Flow (TTM)';
-  if(mode === 'ni')  return 'Net Income (TTM)';
+  if(mode === 'ocf')    return 'Operating Cash Flow (TTM)';
+  if(mode === 'fcf')    return 'Free Cash Flow (TTM)';
+  if(mode === 'ni')     return 'Net Income (TTM)';
   if(mode === 'hmodel') return 'Free Cash Flow (TTM)';
+  if(mode === 'graham') return 'EPS (TTM, diluted)';
   return 'Cash Flow (TTM)';
 }
 
@@ -3114,23 +3116,61 @@ function baseCfForMode(mode){
 function applyModeUI(mode){
   document.getElementById('sdcf-cf-label').textContent = cashflowLabelFor(mode);
   const isH = mode === 'hmodel';
-  document.getElementById('sdcf-row-g610').style.display = isH ? 'none' : '';
-  document.getElementById('sdcf-row-half').style.display = isH ? '' : 'none';
-  document.getElementById('sdcf-lbl-g15').textContent     = isH ? 'Initial growth (gr0)'   : 'Growth (Year 1–5)';
-  document.getElementById('sdcf-sub-g15').textContent     = isH ? 'High-growth phase · fades linearly to terminal' : 'Capped at 30% · from own 5Y revenue CAGR';
-  document.getElementById('sdcf-lbl-g1120').textContent   = isH ? 'Terminal growth'         : 'Growth (Year 11–20)';
-  document.getElementById('sdcf-sub-g1120').textContent   = isH ? 'Perpetuity rate · default 3%' : 'Terminal-like · default 4%';
+  const isG = mode === 'graham';
+
+  // Left-column rows: Graham hides debt/cash/shares (no DCF math), keeps cf+disc only
+  document.getElementById('sdcf-row-debt').style.display   = isG ? 'none' : '';
+  document.getElementById('sdcf-row-cash').style.display   = isG ? 'none' : '';
+  document.getElementById('sdcf-row-shares').style.display = isG ? 'none' : '';
+
+  // Cf row sub-label switches between "In millions" (DCFs) and "$/share" (Graham)
+  document.getElementById('sdcf-cf-sub').textContent = isG ? '$ per share' : 'In millions';
+
+  // Disc row swaps label: "Discount rate" → "AAA bond yield Y" for Graham
+  document.getElementById('sdcf-disc-label').textContent = isG ? 'AAA bond yield Y (%)' : 'Discount rate (%)';
+  document.getElementById('sdcf-disc-sub').style.display = isG ? '' : 'none';
+
+  // Right-column growth rows
+  document.getElementById('sdcf-row-g610').style.display  = (isH || isG) ? 'none' : '';
+  document.getElementById('sdcf-row-g1120').style.display = isG          ? 'none' : '';
+  document.getElementById('sdcf-row-half').style.display  = isH          ? '' : 'none';
+
+  document.getElementById('sdcf-lbl-g15').textContent =
+    isH ? 'Initial growth (gr0)' : isG ? 'Growth rate (g, %)' : 'Growth (Year 1–5)';
+  document.getElementById('sdcf-sub-g15').textContent =
+    isH ? 'High-growth phase · fades linearly to terminal' :
+    isG ? 'Graham\'s g · default own 5Y revenue CAGR (capped 30%)' :
+          'Capped at 30% · from own 5Y revenue CAGR';
+  document.getElementById('sdcf-lbl-g1120').textContent =
+    isH ? 'Terminal growth' : 'Growth (Year 11–20)';
+  document.getElementById('sdcf-sub-g1120').textContent =
+    isH ? 'Perpetuity rate · default 3%' : 'Terminal-like · default 4%';
 }
 
 function setSDCFCashflow(mode){
-  if(!['ocf','fcf','ni','hmodel'].includes(mode)) return;
+  if(!['ocf','fcf','ni','hmodel','graham'].includes(mode)) return;
   SDCF_CF_MODE = mode;
   const sel = document.getElementById('sdcf-mode');
   if(sel && sel.value !== mode) sel.value = mode;
   applyModeUI(mode);
-  const baseCf = baseCfForMode(mode) / 1e6;
-  document.getElementById('sdcf-cf').value = baseCf>0 ? baseCf.toFixed(0) : '';
-  document.getElementById('sdcf-g1120').value = (mode === 'hmodel') ? '3.0' : '4.0';
+
+  if(mode === 'graham'){
+    // EPS as $/share (no millions conversion)
+    const eps = S.income[0]?.epsdiluted || S.quote?.eps || null;
+    document.getElementById('sdcf-cf').value = (eps && eps>0) ? eps.toFixed(2) : '';
+    // Bond yield default = 5.0% (current AAA corporate yield neighborhood)
+    document.getElementById('sdcf-disc').value = '5.0';
+    // Growth default = own 5Y rev CAGR (capped 30%)
+    const {g15} = deriveStageGrowthRates();
+    document.getElementById('sdcf-g15').value = (g15*100).toFixed(2);
+  } else {
+    const baseCf = baseCfForMode(mode) / 1e6;
+    document.getElementById('sdcf-cf').value = baseCf>0 ? baseCf.toFixed(0) : '';
+    document.getElementById('sdcf-g1120').value = (mode === 'hmodel') ? '3.0' : '4.0';
+    // Restore discount rate to live WACC when leaving Graham
+    document.getElementById('sdcf-disc').value = (Math.min(0.12, computeWACC())*100).toFixed(2);
+  }
+
   recomputeStageDCF();
 }
 
@@ -3139,6 +3179,12 @@ function resetStageDCF(){
 }
 
 function renderStageDCF(){
+  // Graham mode has a fundamentally different input set — route through
+  // setSDCFCashflow which handles all the EPS/Y/g defaults correctly.
+  if(SDCF_CF_MODE === 'graham'){
+    setSDCFCashflow('graham');
+    return;
+  }
   const bal0   = S.balance[0] || {};
   const totalDebt = bal0.totalDebt || 0;
   const cash      = (bal0.cashAndShortTermInvestments || bal0.cashAndCashEquivalents || 0);
@@ -3183,7 +3229,10 @@ function renderStageDCF(){
 
 function recomputeStageDCF(){
   const cur = getCurPrice();
-  const cf      = (parseFloat(document.getElementById('sdcf-cf').value)||0) * 1e6;
+  const isGraham = SDCF_CF_MODE === 'graham';
+  // Graham: cf is EPS in $/share (not millions); shares/debt/cash unused
+  const cfRaw   = parseFloat(document.getElementById('sdcf-cf').value)||0;
+  const cf      = isGraham ? cfRaw : cfRaw * 1e6;
   const debt    = (parseFloat(document.getElementById('sdcf-debt').value)||0) * 1e6;
   const cash    = (parseFloat(document.getElementById('sdcf-cash').value)||0) * 1e6;
   const disc    = (parseFloat(document.getElementById('sdcf-disc').value)||0) / 100;
@@ -3199,7 +3248,60 @@ function recomputeStageDCF(){
   const gapNote = document.getElementById('sdcf-gap-note');
   const tagEl = document.getElementById('sdcf-verdict-tag');
 
-  // Validate inputs
+  // Graham Revised has its own simpler validation + math
+  if(isGraham){
+    if(cf<=0 || disc<=0){
+      ivEl.textContent = '—';
+      gapEl.textContent = '—'; gapEl.className = 'iv-kpi-v tnum';
+      gapNote.textContent = cf<=0 ? 'Need positive diluted EPS.' : 'Need positive bond yield.';
+      tagEl.innerHTML = '';
+      document.getElementById('sdcf-reverse').textContent = 'Graham Revised needs valid EPS and bond yield.';
+      return;
+    }
+    // IV = EPS × (8.5 + 2g) × 4.4 / Y    [g and Y in % points; 4.4 = 1962 anchor yield]
+    const gPct = g15 * 100;
+    const Y    = disc * 100;
+    const iv   = cf * (8.5 + 2*gPct) * 4.4 / Y;
+    ivEl.textContent = iv>0 ? '$'+iv.toFixed(2) : '—';
+
+    if(cur>0 && iv>0){
+      const gap = (iv - cur) / cur * 100;
+      gapEl.textContent = (gap>=0?'+':'')+gap.toFixed(2)+'%';
+      gapEl.className = 'iv-kpi-v tnum ' + (gap>=10?'pos':gap<=-10?'neg':'warn');
+      gapNote.textContent = gap>=10?'price below intrinsic value · undervalued':
+                            gap<=-10?'price above intrinsic value · overvalued':
+                            'price near intrinsic value';
+      gapNote.className = 'iv-kpi-s ' + (gap>=10?'pos':gap<=-10?'neg':'');
+      const cls = gap>=10?'iv-tag-pos':gap<=-10?'iv-tag-neg':'iv-tag-warn';
+      const lbl = gap>=10?'Undervalued':gap<=-10?'Overvalued':'Near fair value';
+      tagEl.innerHTML = `<span class="iv-tag ${cls}"><span class="iv-dot"></span>${lbl}</span>`;
+    } else {
+      gapEl.textContent = '—'; gapEl.className = 'iv-kpi-v tnum';
+      gapNote.textContent = '—'; gapNote.className = 'iv-kpi-s';
+      tagEl.innerHTML = '';
+    }
+
+    // Reverse: solve for the g that justifies current price at this Y
+    //   cur = EPS × (8.5 + 2g) × 4.4 / Y   →   g = (cur·Y/(EPS·4.4) − 8.5) / 2
+    const rev = document.getElementById('sdcf-reverse');
+    if(cur>0){
+      const impliedG = (cur*Y/(cf*4.4) - 8.5) / 2;
+      const ownG = gPct;
+      const gap = (impliedG - ownG).toFixed(1);
+      if(Math.abs(impliedG - ownG) < 0.5){
+        rev.innerHTML = `<strong>Reverse · In line.</strong>Market is pricing in <b>${impliedG.toFixed(1)}%</b> growth — matches your input of ${ownG.toFixed(1)}%.`;
+      } else if(impliedG < ownG){
+        rev.innerHTML = `<strong>Reverse · Bullish setup.</strong>Market prices in <b>${impliedG.toFixed(1)}%</b> growth — <b class="pos">${gap}pp below</b> your ${ownG.toFixed(1)}%. If your growth assumption holds, stock is undervalued.`;
+      } else {
+        rev.innerHTML = `<strong>Reverse · Demanding.</strong>Market prices in <b>${impliedG.toFixed(1)}%</b> growth — <b class="neg">+${gap}pp above</b> your ${ownG.toFixed(1)}%. Price requires more growth than Graham's formula assumes.`;
+      }
+    } else {
+      rev.textContent = 'Reverse needs a current price.';
+    }
+    return;
+  }
+
+  // Validate inputs (DCF/H-Model modes)
   if(cf<=0 || disc<=0 || shares<=0 || disc <= g1120){
     ivEl.textContent = '—';
     gapEl.textContent = '—';
@@ -3443,12 +3545,19 @@ function computeCfPeg() {
   const fwdEps=eps*Math.pow(1+g,3);
   return fwdEps>0?fairPe*fwdEps:null;
 }
+// Graham Revised (1962): IV = EPS × (8.5 + 2g) × 4.4 / Y
+//   8.5  = base P/E for a no-growth company
+//   2    = growth multiplier (1% growth → +2 P/E points)
+//   4.4  = AAA corporate bond yield circa 1962 (Graham's anchor)
+//   Y    = current AAA corporate bond yield (assumed 5.0%)
+// Uses own 5Y revenue CAGR for g (consistent with DCF-20 family).
 function computeCfGraham() {
-  const eps=S.income[0]?.epsdiluted||S.quote?.eps||null;
-  const sh=getSharesOut();
-  const bvps=S.balance[0]?.bookValuePerShare||(S.balance[0]?.totalStockholdersEquity&&sh?S.balance[0].totalStockholdersEquity/sh:null);
-  if(!eps||eps<=0||!bvps||bvps<=0) return null;
-  return Math.sqrt(22.5*eps*Math.max(bvps,1));
+  const eps = S.income[0]?.epsdiluted || S.quote?.eps || null;
+  if(!eps || eps <= 0) return null;
+  const {g15} = deriveStageGrowthRates();
+  const gPct = g15 * 100;  // Graham's g is in percentage points
+  const Y = 5.0;
+  return eps * (8.5 + 2*gPct) * 4.4 / Y;
 }
 
 function renderValuationSummary(){
@@ -3480,7 +3589,7 @@ function renderValuationSummary(){
     {name:'P / FCF',        type:'Multiples',  compute:computeCfPFcf},
     {name:'Revenue DCF',    type:'Growth',     compute:()=>computeCfRevDcf(wacc,termGr)},
     {name:'PEG-implied',    type:'Growth',     compute:computeCfPeg},
-    {name:'Graham number',  type:'Floor',      compute:computeCfGraham},
+    {name:'Graham Revised', type:'EPS × growth',compute:computeCfGraham},
   ];
 
   document.getElementById('cf-sub').textContent =
