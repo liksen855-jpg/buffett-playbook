@@ -1186,6 +1186,22 @@ table.iv-sdcf-inputs td:first-child{padding-right:14px;line-height:1.4}
   .iv-qg-head > div:last-child,.iv-dcf-rev > div:last-child,.iv-epv-col:last-child,.iv-dcf-s:last-child,.iv-sdcf-col:last-child{border-bottom:none}
   .iv-sdcf-kpi{grid-template-columns:1fr}
 }
+/* ── Mobile: let wide intrinsic-value tables scroll instead of clip ── */
+@media(max-width:640px){
+  .iv-v3{padding:4px 0 48px}
+  .iv-section-head h2{font-size:15px}
+  /* scope overflow to the cards that hold wide tables (keeps other cards intact) */
+  .iv-card:has(table.iv-dt),
+  .iv-card:has(table.iv-qg-table){overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table.iv-dt th,table.iv-dt td{padding-left:12px;padding-right:12px;font-size:12px}
+  table.iv-qg-table th,table.iv-qg-table td{padding-left:14px;padding-right:14px}
+  .iv-bar-td{min-width:120px}
+  /* composite input strip: comfortable two-up on phones */
+  .iv-inp-cell{min-width:50%}
+  /* multiples + KPI strips to single column on small phones */
+  .iv-mx-grid,.iv-kpi-row{grid-template-columns:1fr}
+  .iv-mx,.iv-kpi{border-right:none;border-bottom:1px solid var(--line)}
+}
 </style>
 
 <!-- ════ Patreon auth gate ════ -->
