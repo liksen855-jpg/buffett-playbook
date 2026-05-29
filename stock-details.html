@@ -1061,9 +1061,8 @@ table.iv-mini td .pos{color:var(--pos)}
 .iv-sdcf-col{padding:22px 24px;border-right:1px solid var(--line)}
 .iv-sdcf-col:last-child{border-right:none}
 .iv-sdcf-col-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:12px;flex-wrap:wrap}
-.iv-sdcf-cf-toggle{display:inline-flex;background:var(--raised);border:1px solid var(--line);border-radius:6px;padding:2px}
-.iv-sdcf-toggle-btn{background:transparent;border:none;color:var(--mute);font-size:11px;font-weight:600;padding:4px 10px;border-radius:4px;cursor:pointer;font-family:var(--sans);letter-spacing:0.01em}
-.iv-sdcf-toggle-btn.active{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(20,20,18,.06)}
+.iv-sdcf-select{background:var(--surface);border:1px solid var(--line);border-radius:6px;color:var(--ink);font-family:var(--sans);font-size:12px;font-weight:600;padding:6px 28px 6px 12px;outline:none;cursor:pointer;letter-spacing:0.01em;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M2 4l3 3 3-3' stroke='%238A887F' stroke-width='1.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");background-repeat:no-repeat;background-position:right 10px center}
+.iv-sdcf-select:focus{border-color:var(--accent)}
 table.iv-sdcf-inputs td{vertical-align:middle;padding:10px 0}
 table.iv-sdcf-inputs td:first-child{padding-right:14px;line-height:1.4}
 .iv-sdcf-input{background:var(--surface);border:1px solid var(--line);border-radius:6px;color:var(--ink);font-family:var(--mono);font-size:13px;font-weight:600;padding:6px 10px;outline:none;font-variant-numeric:tabular-nums;width:100%;max-width:140px;text-align:right}
@@ -1493,10 +1492,10 @@ table.iv-sdcf-inputs td:first-child{padding-right:14px;line-height:1.4}
           <div class="iv-sdcf-col">
             <div class="iv-sdcf-col-h">
               <div class="iv-lbl" style="margin-bottom:0">Inputs</div>
-              <div class="iv-sdcf-cf-toggle">
-                <button type="button" class="iv-sdcf-toggle-btn active" data-cf="ocf" onclick="setSDCFCashflow('ocf')">Operating CF</button>
-                <button type="button" class="iv-sdcf-toggle-btn" data-cf="fcf" onclick="setSDCFCashflow('fcf')">Free CF</button>
-              </div>
+              <select class="iv-sdcf-select" id="sdcf-mode" onchange="setSDCFCashflow(this.value)">
+                <option value="ocf">DCF-20 · Operating Cash Flow</option>
+                <option value="fcf">DFCF-20 · Free Cash Flow</option>
+              </select>
             </div>
             <table class="iv-mini iv-sdcf-inputs">
               <tr>
@@ -3089,9 +3088,8 @@ let SDCF_CF_MODE = 'ocf'; // 'ocf' or 'fcf'
 function setSDCFCashflow(mode){
   if(mode !== 'ocf' && mode !== 'fcf') return;
   SDCF_CF_MODE = mode;
-  document.querySelectorAll('.iv-sdcf-toggle-btn').forEach(b=>{
-    b.classList.toggle('active', b.dataset.cf===mode);
-  });
+  const sel = document.getElementById('sdcf-mode');
+  if(sel && sel.value !== mode) sel.value = mode;
   document.getElementById('sdcf-cf-label').textContent =
     mode==='ocf' ? 'Operating Cash Flow (TTM)' : 'Free Cash Flow (TTM)';
   const baseCf = (mode==='ocf' ? computeTTMOcf() : computeTTMFcf()) / 1e6;
@@ -3132,10 +3130,9 @@ function renderStageDCF(){
     cagrNote.textContent = '5Y revenue CAGR unavailable · using 6% default';
   }
 
-  // Sync toggle button state for the current cash-flow mode
-  document.querySelectorAll('.iv-sdcf-toggle-btn').forEach(b=>{
-    b.classList.toggle('active', b.dataset.cf===SDCF_CF_MODE);
-  });
+  // Sync dropdown state and label
+  const sel = document.getElementById('sdcf-mode');
+  if(sel) sel.value = SDCF_CF_MODE;
   document.getElementById('sdcf-cf-label').textContent =
     SDCF_CF_MODE==='ocf' ? 'Operating Cash Flow (TTM)' : 'Free Cash Flow (TTM)';
 
@@ -3269,10 +3266,10 @@ function cfInputVal(id, fallback) {
   return isNaN(v) ? fallback : v;
 }
 
-// Composite version of the Long-Horizon DCF: uses auto-derived defaults
-// (own 5Y rev CAGR, OCF base, WACC capped at 12%, 20-year 3-stage)
-function computeCfStageDCF() {
-  const baseCf = computeTTMOcf();
+// Composite version of the 3-stage 20Y DCF (own 5Y rev CAGR for Y1-5,
+// fade for Y6-10, 4% terminal for Y11-20, WACC capped at 12%, OCF or FCF base)
+function computeCfStage20(useFCF){
+  const baseCf = useFCF ? computeTTMFcf() : computeTTMOcf();
   if(baseCf <= 0) return null;
   const sh = getSharesOut();
   if(!sh) return null;
@@ -3290,6 +3287,8 @@ function computeCfStageDCF() {
   const equity = pv - debt + cash;
   return equity / sh;
 }
+function computeCfStageDCF()  { return computeCfStage20(false); }  // OCF base
+function computeCfStageDFCF() { return computeCfStage20(true);  }  // FCF base
 
 function computeCfFcff(wacc, termGr, marginExpPct) {
   const cfSeries = S.cashflow.slice(0,6);
@@ -3397,7 +3396,8 @@ function renderValuationSummary(){
   chgEl.className='iv-kpi-s '+(chg>=0?'pos':'neg');
 
   const methods=[
-    {name:'Long-Horizon DCF', type:'3-stage · 20Y', compute:computeCfStageDCF},
+    {name:'DCF-20',         type:'20Y · Operating CF',  compute:computeCfStageDCF},
+    {name:'DFCF-20',        type:'20Y · Free CF',       compute:computeCfStageDFCF},
     {name:'H-Model DCF',    type:'Intrinsic',  compute:()=>computeCfHModel(wacc,termGr)},
     {name:'EV / EBITDA',    type:'Multiples',  compute:computeCfEvEbitda},
     {name:'EV / Revenue',   type:'Multiples',  compute:computeCfEvRev},
