@@ -1079,6 +1079,95 @@ table.iv-sdcf-inputs td:first-child{padding-right:14px;line-height:1.4}
   .iv-sdcf-kpi{grid-template-columns:1fr}
 }
 </style>
+
+<!-- ════ Patreon auth gate ════ -->
+<style>
+  /* Hide all main content until auth check passes */
+  body.iv-auth-pending > *:not(#iv-auth-overlay),
+  body.iv-auth-needed  > *:not(#iv-auth-overlay){display:none !important}
+  #iv-auth-overlay{position:fixed;inset:0;background:#FBFBFA;z-index:99999;display:none;align-items:center;justify-content:center;flex-direction:column;font-family:'Inter',sans-serif;color:#1A1A18}
+  body.iv-auth-pending #iv-auth-overlay,
+  body.iv-auth-needed  #iv-auth-overlay{display:flex}
+  .iv-auth-box{max-width:440px;padding:48px 40px;text-align:center}
+  .iv-auth-brand{font-size:14px;font-weight:700;letter-spacing:0.04em;color:#2C5E8A;margin-bottom:24px;text-transform:uppercase}
+  .iv-auth-title{font-size:26px;font-weight:600;letter-spacing:-0.02em;margin-bottom:14px;color:#1A1A18}
+  .iv-auth-sub{font-size:14px;line-height:1.7;color:#8A887F;margin-bottom:28px}
+  .iv-auth-btn{display:inline-flex;align-items:center;gap:8px;background:#FF424D;color:#FFFFFF;padding:13px 26px;border-radius:8px;font-weight:600;text-decoration:none;font-size:14px;transition:background .15s}
+  .iv-auth-btn:hover{background:#E33B45}
+  .iv-auth-secondary{display:block;margin-top:22px;font-size:13px;color:#8A887F}
+  .iv-auth-secondary a{color:#2C5E8A;font-weight:500}
+  .iv-auth-loading{display:inline-block;width:18px;height:18px;border:2px solid #ECEAE6;border-top-color:#2C5E8A;border-radius:50%;animation:iv-auth-spin .7s linear infinite}
+  @keyframes iv-auth-spin{to{transform:rotate(360deg)}}
+  .iv-auth-state-loading .iv-auth-content{display:none}
+  .iv-auth-state-loading .iv-auth-loading-box{display:flex;flex-direction:column;align-items:center;gap:14px;color:#8A887F;font-size:13px}
+  .iv-auth-loading-box{display:none}
+  /* Signed-in user pill (inserted into header by JS) */
+  .iv-user-pill{display:inline-flex;align-items:center;gap:8px;background:#EEF3F8;color:#2C5E8A;padding:5px 10px 5px 12px;border-radius:999px;font-size:11.5px;font-weight:600;margin-left:8px}
+  .iv-user-pill button{background:transparent;border:none;color:#8A887F;font-size:11px;font-weight:500;cursor:pointer;padding:0;text-decoration:underline}
+  .iv-user-pill button:hover{color:#B23B3B}
+</style>
+
+<!-- Overlay: shown until /api/auth/check resolves; if unauthenticated, gate persists -->
+<div id="iv-auth-overlay" class="iv-auth-state-loading">
+  <div class="iv-auth-box iv-auth-loading-box">
+    <div class="iv-auth-loading"></div>
+    <div>Verifying patron access…</div>
+  </div>
+  <div class="iv-auth-box iv-auth-content">
+    <div class="iv-auth-brand">Lei Holding · Research</div>
+    <div class="iv-auth-title">Patron access only</div>
+    <div class="iv-auth-sub">leiholding.com research tools are reserved for active InsightInvest patrons. Sign in with Patreon to continue.</div>
+    <a class="iv-auth-btn" href="/api/auth/login?next=/stock-details">Sign in with Patreon</a>
+    <span class="iv-auth-secondary">Not a patron yet? <a href="https://patreon.com/leiholding" target="_blank" rel="noopener">Become one →</a></span>
+  </div>
+</div>
+
+<script>
+// Gate the page until auth resolves. The overlay starts in loading state;
+// success → remove gate classes; failure → swap loading→login UI.
+(function(){
+  document.documentElement.classList.add('iv-auth-pending-html');
+  document.body && document.body.classList.add('iv-auth-pending');
+  // Defensive: in case body isn't ready yet, set on DOMContentLoaded too
+  document.addEventListener('DOMContentLoaded', ()=>document.body.classList.add('iv-auth-pending'));
+
+  fetch('/api/auth/check', {credentials:'same-origin'})
+    .then(r=>r.json())
+    .then(data=>{
+      const body = document.body;
+      const overlay = document.getElementById('iv-auth-overlay');
+      if(data && data.authenticated){
+        body.classList.remove('iv-auth-pending');
+        // Inject signed-in pill into the chrome (header) when it exists
+        const tryInjectPill = ()=>{
+          // Look for the .icon-btn group in the header (existing API key button etc.)
+          const hdrRight = document.querySelector('.header > *:last-child') || document.querySelector('.header');
+          if(!hdrRight) return false;
+          if(document.querySelector('.iv-user-pill')) return true;
+          const pill = document.createElement('span');
+          pill.className = 'iv-user-pill';
+          pill.innerHTML = `<span>${(data.name||'Patron').split(' ')[0]}</span><button onclick="window.location.href='/api/auth/logout'">Sign out</button>`;
+          hdrRight.appendChild(pill);
+          return true;
+        };
+        if(!tryInjectPill()){
+          document.addEventListener('DOMContentLoaded', tryInjectPill);
+        }
+      } else {
+        body.classList.remove('iv-auth-pending');
+        body.classList.add('iv-auth-needed');
+        overlay.classList.remove('iv-auth-state-loading');
+      }
+    })
+    .catch(()=>{
+      // Network error — assume unauthenticated and show login
+      document.body.classList.remove('iv-auth-pending');
+      document.body.classList.add('iv-auth-needed');
+      document.getElementById('iv-auth-overlay').classList.remove('iv-auth-state-loading');
+    });
+})();
+</script>
+
 </head>
 <body>
 
