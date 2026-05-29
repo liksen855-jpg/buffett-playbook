@@ -3328,8 +3328,10 @@ function cfInputVal(id, fallback) {
 }
 
 // Composite version of the 3-stage 20Y DCF (own 5Y rev CAGR for Y1-5,
-// fade for Y6-10, 4% terminal for Y11-20, WACC capped at 12%,
-// base: 'ocf' | 'fcf' | 'ni')
+// fade for Y6-10, 4% terminal for Y11-20, base: 'ocf' | 'fcf' | 'ni').
+// Discount rate is hardcoded to 8% — bull-leaning baseline so the composite
+// isn't crushed by β-driven WACC for high-volatility growth stocks. The
+// interactive Section 02 panel still uses the live WACC for exploration.
 function computeCfStage20(base){
   let baseCf;
   if      (base === 'fcf') baseCf = computeTTMFcf();
@@ -3342,7 +3344,7 @@ function computeCfStage20(base){
   const debt = bal0.totalDebt || 0;
   const cash = bal0.cashAndShortTermInvestments || bal0.cashAndCashEquivalents || 0;
   const {g15, g610, g1120} = deriveStageGrowthRates();
-  const disc = Math.min(0.12, computeWACC());
+  const disc = 0.08;  // bull-leaning fixed WACC for composite baseline
   if(disc <= g1120) return null;
   let pv = 0;
   let curCf = baseCf;
