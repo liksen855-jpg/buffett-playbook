@@ -3269,6 +3269,28 @@ function cfInputVal(id, fallback) {
   return isNaN(v) ? fallback : v;
 }
 
+// Composite version of the Long-Horizon DCF: uses auto-derived defaults
+// (own 5Y rev CAGR, OCF base, WACC capped at 12%, 20-year 3-stage)
+function computeCfStageDCF() {
+  const baseCf = computeTTMOcf();
+  if(baseCf <= 0) return null;
+  const sh = getSharesOut();
+  if(!sh) return null;
+  const bal0 = S.balance[0] || {};
+  const debt = bal0.totalDebt || 0;
+  const cash = bal0.cashAndShortTermInvestments || bal0.cashAndCashEquivalents || 0;
+  const {g15, g610, g1120} = deriveStageGrowthRates();
+  const disc = Math.min(0.12, computeWACC());
+  if(disc <= g1120) return null;
+  let pv = 0;
+  let curCf = baseCf;
+  for(let y=1;  y<=5;  y++){ curCf *= (1+g15);   pv += curCf/Math.pow(1+disc,y); }
+  for(let y=6;  y<=10; y++){ curCf *= (1+g610);  pv += curCf/Math.pow(1+disc,y); }
+  for(let y=11; y<=20; y++){ curCf *= (1+g1120); pv += curCf/Math.pow(1+disc,y); }
+  const equity = pv - debt + cash;
+  return equity / sh;
+}
+
 function computeCfFcff(wacc, termGr, marginExpPct) {
   const cfSeries = S.cashflow.slice(0,6);
   if(cfSeries.length < 2) return null;
@@ -3375,7 +3397,7 @@ function renderValuationSummary(){
   chgEl.className='iv-kpi-s '+(chg>=0?'pos':'neg');
 
   const methods=[
-    {name:'FCFF DCF',       type:'Intrinsic',  compute:()=>computeCfFcff(wacc,termGr,mExp)},
+    {name:'Long-Horizon DCF', type:'3-stage · 20Y', compute:computeCfStageDCF},
     {name:'H-Model DCF',    type:'Intrinsic',  compute:()=>computeCfHModel(wacc,termGr)},
     {name:'EV / EBITDA',    type:'Multiples',  compute:computeCfEvEbitda},
     {name:'EV / Revenue',   type:'Multiples',  compute:computeCfEvRev},
