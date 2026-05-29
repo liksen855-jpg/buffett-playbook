@@ -1054,11 +1054,10 @@ table.iv-mini td .pos{color:var(--pos)}
 .iv-mx .iv-mx-prem .iv-mx-prem-v.pos{color:var(--pos)}
 .iv-mx .iv-mx-prem .iv-mx-prem-v.flat{color:var(--mute)}
 
-/* ════════════════════════════════════════════════════════════
-   Homepage (empty state) — atmospheric, glassy, premium
-   ════════════════════════════════════════════════════════════ */
-.hp{position:relative;min-height:80vh;padding:0 0 96px;overflow:hidden}
-.hp-atmos{position:absolute;inset:0;z-index:0;pointer-events:none;background:
+/* Homepage tokens moved to /dashboard (dashboard.html owns market pulse + top movers).
+   Block below is intentionally kept inert so any legacy references don't error. */
+.hp{display:none}
+.hp-orphan-noop{position:absolute;inset:0;z-index:0;pointer-events:none;background:
   radial-gradient(ellipse 900px 480px at 18% -8%, rgba(44,94,138,0.10), transparent 65%),
   radial-gradient(ellipse 700px 420px at 92% 4%, rgba(167,122,30,0.07), transparent 60%),
   radial-gradient(ellipse 600px 360px at 50% 120%, rgba(46,125,85,0.06), transparent 65%)}
@@ -1262,13 +1261,14 @@ table.iv-sdcf-inputs td:first-child{padding-right:14px;line-height:1.4}
         if(!tryInjectPill()){
           document.addEventListener('DOMContentLoaded', tryInjectPill);
         }
-        // Kick off the homepage market-pulse + movers as soon as the page is ready
-        const fireHomepage = ()=>{ if(typeof loadHomepage==='function') loadHomepage(); };
-        if(document.readyState === 'complete' || document.readyState === 'interactive'){
-          setTimeout(fireHomepage, 0);
-        } else {
-          document.addEventListener('DOMContentLoaded', fireHomepage);
-        }
+        // If URL has ?t=TICKER, auto-load it. Otherwise stay on the empty state.
+        const autoLoadTicker = ()=>{
+          const p = new URLSearchParams(window.location.search);
+          const t = (p.get('t') || p.get('ticker') || '').trim().toUpperCase();
+          if(t && typeof loadTicker === 'function'){ loadTicker(t); }
+        };
+        if(document.readyState === 'complete' || document.readyState === 'interactive') setTimeout(autoLoadTicker,0);
+        else document.addEventListener('DOMContentLoaded', autoLoadTicker);
       } else {
         body.classList.remove('iv-auth-pending');
         body.classList.add('iv-auth-needed');
@@ -1288,7 +1288,7 @@ table.iv-sdcf-inputs td:first-child{padding-right:14px;line-height:1.4}
 <body>
 
 <header class="header">
-  <a class="logo" href="/stock-details">
+  <a class="logo" href="/dashboard">
     <svg width="22" height="22" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="6" fill="#3b82f6"/><path d="M6 22L12 14L18 18L26 8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="26" cy="8" r="2.5" fill="white"/></svg>
     InsightInvest
   </a>
@@ -1313,91 +1313,18 @@ table.iv-sdcf-inputs td:first-child{padding-right:14px;line-height:1.4}
   <span style="color:var(--muted);font-size:11px">Keys stored locally — never leave your browser.</span>
 </div>
 
-<div class="hp" id="empty-state">
-  <div class="hp-atmos"></div>
-  <div class="hp-inner">
-
-    <!-- Hero -->
-    <section class="hp-hero" data-reveal="1">
-      <div class="hp-eyebrow" id="hp-market-status">Markets · live</div>
-      <h1 class="hp-hello">Good <span id="hp-greeting-word">morning</span>, <span class="hp-name" id="hp-greeting-name">there</span></h1>
-      <p class="hp-tagline">Search any US ticker for valuation, quality, and intrinsic-value layers — or jump into one of these.</p>
-      <div class="hp-quicktickers">
-        <span class="hp-chip" onclick="loadTicker('AAPL')">AAPL</span>
-        <span class="hp-chip" onclick="loadTicker('NVDA')">NVDA</span>
-        <span class="hp-chip" onclick="loadTicker('MSFT')">MSFT</span>
-        <span class="hp-chip" onclick="loadTicker('GOOGL')">GOOGL</span>
-        <span class="hp-chip" onclick="loadTicker('META')">META</span>
-        <span class="hp-chip" onclick="loadTicker('AMZN')">AMZN</span>
-        <span class="hp-chip" onclick="loadTicker('TSLA')">TSLA</span>
-        <span class="hp-chip" onclick="loadTicker('JPM')">JPM</span>
-        <span class="hp-chip" onclick="loadTicker('BRK.B')">BRK.B</span>
-      </div>
-    </section>
-
-    <!-- Market pulse -->
-    <section class="hp-section" data-reveal="2">
-      <div class="hp-section-head">
-        <div class="hp-section-head-l">
-          <span class="hp-ix">01</span>
-          <h2>Market pulse</h2>
-          <span class="hp-sub" id="hp-pulse-ts">— · live ticks</span>
-        </div>
-        <div class="hp-section-head-r" id="hp-pulse-state">streaming</div>
-      </div>
-      <div class="hp-pulse-grid" id="hp-pulse">
-        <div class="hp-pulse-card"><div class="hp-mover-skel"></div></div>
-        <div class="hp-pulse-card"><div class="hp-mover-skel"></div></div>
-        <div class="hp-pulse-card"><div class="hp-mover-skel"></div></div>
-        <div class="hp-pulse-card"><div class="hp-mover-skel"></div></div>
-        <div class="hp-pulse-card"><div class="hp-mover-skel"></div></div>
-      </div>
-    </section>
-
-    <!-- Top movers -->
-    <section class="hp-section" data-reveal="3">
-      <div class="hp-section-head">
-        <div class="hp-section-head-l">
-          <span class="hp-ix">02</span>
-          <h2>Top movers</h2>
-          <span class="hp-sub">today's biggest gainers, losers, and most-actives</span>
-        </div>
-        <div class="hp-section-head-r" id="hp-movers-ts">—</div>
-      </div>
-      <div class="hp-movers-grid">
-        <div class="hp-movers-col gainers">
-          <div class="hp-movers-h">Gainers</div>
-          <div id="hp-gainers">
-            <div class="hp-mover-skel"></div>
-            <div class="hp-mover-skel"></div>
-            <div class="hp-mover-skel"></div>
-            <div class="hp-mover-skel"></div>
-            <div class="hp-mover-skel"></div>
-          </div>
-        </div>
-        <div class="hp-movers-col losers">
-          <div class="hp-movers-h">Losers</div>
-          <div id="hp-losers">
-            <div class="hp-mover-skel"></div>
-            <div class="hp-mover-skel"></div>
-            <div class="hp-mover-skel"></div>
-            <div class="hp-mover-skel"></div>
-            <div class="hp-mover-skel"></div>
-          </div>
-        </div>
-        <div class="hp-movers-col actives">
-          <div class="hp-movers-h">Most active</div>
-          <div id="hp-actives">
-            <div class="hp-mover-skel"></div>
-            <div class="hp-mover-skel"></div>
-            <div class="hp-mover-skel"></div>
-            <div class="hp-mover-skel"></div>
-            <div class="hp-mover-skel"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
+<div class="empty-state" id="empty-state">
+  <div class="empty-title">Stock Research</div>
+  <div class="empty-sub">Search any US ticker above to load live financials, valuation, and intrinsic-value layers. Or head back to your <a href="/dashboard" style="color:var(--accent);font-weight:500">dashboard</a> for market pulse and top movers.</div>
+  <div class="empty-examples">
+    <span class="example-chip" onclick="loadTicker('AAPL')">AAPL</span>
+    <span class="example-chip" onclick="loadTicker('NVDA')">NVDA</span>
+    <span class="example-chip" onclick="loadTicker('MSFT')">MSFT</span>
+    <span class="example-chip" onclick="loadTicker('GOOGL')">GOOGL</span>
+    <span class="example-chip" onclick="loadTicker('META')">META</span>
+    <span class="example-chip" onclick="loadTicker('AMZN')">AMZN</span>
+    <span class="example-chip" onclick="loadTicker('TSLA')">TSLA</span>
+    <span class="example-chip" onclick="loadTicker('JPM')">JPM</span>
   </div>
 </div>
 

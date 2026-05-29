@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Dashboard — InsightInvest</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%233b82f6'/><path d='M6 22L12 14L18 18L26 8' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/><circle cx='26' cy='8' r='2.5' fill='white'/></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#FBFBFA;--bg2:#F6F6F5;--card:#FFFFFF;
+  --surface:#FFFFFF;--raised:#F6F6F5;
+  --border:#ECEAE6;--border2:#E0DDD7;
+  --fg:#1A1A18;--fg2:#44443F;--muted:#8A887F;--mute-2:#B4B2AA;
+  --ink:#1A1A18;--ink-2:#44443F;--mute:#8A887F;
+  --primary:#2C5E8A;--accent:#2C5E8A;
+  --green:#2E7D55;--pos:#2E7D55;--pos-soft:#EFF6F1;
+  --red:#B23B3B;--neg:#B23B3B;--neg-soft:#FBF1F0;
+  --yellow:#A77A1E;--warn:#A77A1E;--warn-soft:#FBF5E9;
+  --accent-soft:#EEF3F8;
+  --mono:"JetBrains Mono",ui-monospace,monospace;--sans:"Inter",sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:inherit;text-decoration:none}
+
+/* ─── Header (matches stock-details.html) ─── */
+.header{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;padding:0 24px;height:56px}
+.logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;letter-spacing:-.01em}
+.search-wrap{position:relative;flex:1;max-width:520px;margin-left:8px}
+.search-wrap input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--fg);font-size:13px;padding:8px 14px 8px 36px;outline:none;transition:border-color .15s}
+.search-wrap input:focus{border-color:var(--primary)}
+.search-wrap input::placeholder{color:var(--muted)}
+.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+
+/* ─── Patreon auth gate (mirrors stock-details.html) ─── */
+body.iv-auth-pending > *:not(#iv-auth-overlay),
+body.iv-auth-needed  > *:not(#iv-auth-overlay){display:none !important}
+#iv-auth-overlay{position:fixed;inset:0;background:#FBFBFA;z-index:99999;display:none;align-items:center;justify-content:center;flex-direction:column;font-family:'Inter',sans-serif;color:#1A1A18}
+body.iv-auth-pending #iv-auth-overlay,
+body.iv-auth-needed  #iv-auth-overlay{display:flex}
+.iv-auth-box{max-width:440px;padding:48px 40px;text-align:center}
+.iv-auth-brand{font-size:14px;font-weight:700;letter-spacing:0.04em;color:#2C5E8A;margin-bottom:24px;text-transform:uppercase}
+.iv-auth-title{font-size:26px;font-weight:600;letter-spacing:-0.02em;margin-bottom:14px;color:#1A1A18}
+.iv-auth-sub{font-size:14px;line-height:1.7;color:#8A887F;margin-bottom:28px}
+.iv-auth-btn{display:inline-flex;align-items:center;gap:8px;background:#FF424D;color:#FFFFFF;padding:13px 26px;border-radius:8px;font-weight:600;text-decoration:none;font-size:14px;transition:background .15s}
+.iv-auth-btn:hover{background:#E33B45}
+.iv-auth-secondary{display:block;margin-top:22px;font-size:13px;color:#8A887F}
+.iv-auth-secondary a{color:#2C5E8A;font-weight:500}
+.iv-auth-loading{display:inline-block;width:18px;height:18px;border:2px solid #ECEAE6;border-top-color:#2C5E8A;border-radius:50%;animation:iv-auth-spin .7s linear infinite}
+@keyframes iv-auth-spin{to{transform:rotate(360deg)}}
+.iv-auth-state-loading .iv-auth-content{display:none}
+.iv-auth-state-loading .iv-auth-loading-box{display:flex;flex-direction:column;align-items:center;gap:14px;color:#8A887F;font-size:13px}
+.iv-auth-loading-box{display:none}
+.iv-user-pill{display:inline-flex;align-items:center;gap:8px;background:#EEF3F8;color:#2C5E8A;padding:5px 10px 5px 12px;border-radius:999px;font-size:11.5px;font-weight:600;margin-left:8px}
+.iv-user-pill button{background:transparent;border:none;color:#8A887F;font-size:11px;font-weight:500;cursor:pointer;padding:0;text-decoration:underline}
+.iv-user-pill button:hover{color:#B23B3B}
+
+/* ─── Homepage (mirrors stock-details .hp-* tokens) ─── */
+.hp{position:relative;min-height:80vh;padding:0 0 96px;overflow:hidden}
+.hp-atmos{position:absolute;inset:0;z-index:0;pointer-events:none;background:
+  radial-gradient(ellipse 900px 480px at 18% -8%, rgba(44,94,138,0.10), transparent 65%),
+  radial-gradient(ellipse 700px 420px at 92% 4%, rgba(167,122,30,0.07), transparent 60%),
+  radial-gradient(ellipse 600px 360px at 50% 120%, rgba(46,125,85,0.06), transparent 65%)}
+.hp-atmos::before{content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(20,20,18,1) 1px, transparent 1px),linear-gradient(90deg, rgba(20,20,18,1) 1px, transparent 1px);
+  background-size:38px 38px,38px 38px;mask-image:linear-gradient(180deg, rgba(0,0,0,0.025) 0%, rgba(0,0,0,0.05) 50%, transparent 100%);
+  -webkit-mask-image:linear-gradient(180deg, rgba(0,0,0,0.025) 0%, rgba(0,0,0,0.05) 50%, transparent 100%);
+  opacity:0.55;pointer-events:none}
+.hp-inner{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:40px 28px 0}
+
+.hp-hero{padding:36px 4px 28px;text-align:left}
+.hp-eyebrow{font-size:11px;font-weight:600;color:var(--mute);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:12px;display:inline-flex;align-items:center;gap:8px}
+.hp-eyebrow::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--pos);box-shadow:0 0 0 3px rgba(46,125,85,0.18);animation:hp-pulse-dot 2.4s ease-in-out infinite}
+@keyframes hp-pulse-dot{0%,100%{opacity:1}50%{opacity:0.45}}
+.hp-hello{font-size:38px;font-weight:600;letter-spacing:-0.025em;color:var(--ink);margin:0 0 10px;line-height:1.1;font-family:var(--sans)}
+.hp-hello .hp-name{background:linear-gradient(125deg, var(--accent) 10%, #4781ad 50%, var(--accent) 90%);background-size:200% 200%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;animation:hp-name-shimmer 6s ease-in-out infinite}
+@keyframes hp-name-shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.hp-tagline{font-size:14.5px;color:var(--mute);line-height:1.65;margin:0 0 20px;max-width:560px}
+.hp-quicktickers{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.hp-chip{display:inline-flex;align-items:center;padding:6px 12px;border-radius:999px;background:linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(246,246,245,0.7) 100%);
+  border:1px solid rgba(20,20,18,0.08);font-family:var(--mono);font-size:11.5px;font-weight:600;color:var(--ink-2);cursor:pointer;
+  box-shadow:0 1px 2px rgba(20,20,18,0.04),inset 0 1px 0 rgba(255,255,255,0.8);transition:all .15s ease;letter-spacing:0.01em}
+.hp-chip:hover{transform:translateY(-1px);border-color:rgba(44,94,138,0.35);color:var(--accent);
+  box-shadow:0 2px 6px rgba(44,94,138,0.12),0 0 0 1px rgba(44,94,138,0.05),inset 0 1px 0 rgba(255,255,255,0.9)}
+
+.hp-section{margin-top:48px}
+.hp-section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;padding:0 4px}
+.hp-section-head-l{display:flex;align-items:baseline;gap:12px}
+.hp-ix{font-size:11px;font-weight:600;color:var(--mute-2);letter-spacing:0.06em;font-family:var(--mono)}
+.hp-section-head h2{font-size:15px;font-weight:600;letter-spacing:-0.005em;color:var(--ink);margin:0}
+.hp-sub{font-size:12px;color:var(--mute);font-weight:500}
+.hp-section-head-r{font-size:11.5px;color:var(--mute);font-weight:500}
+
+.hp-pulse-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.hp-pulse-card{position:relative;padding:16px 18px 14px;border-radius:14px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(252,252,250,0.78) 100%);
+  border:1px solid rgba(20,20,18,0.08);
+  box-shadow:0 1px 1px rgba(20,20,18,0.025),0 6px 18px -8px rgba(20,20,18,0.10),inset 0 1px 0 rgba(255,255,255,0.8);
+  overflow:hidden;transition:all .25s cubic-bezier(.2,.7,.2,1)}
+.hp-pulse-card::before{content:'';position:absolute;inset:0;border-radius:14px;pointer-events:none;
+  background:linear-gradient(180deg, rgba(255,255,255,0.18) 0%, transparent 35%);mix-blend-mode:overlay}
+.hp-pulse-card:hover{transform:translateY(-2px);
+  box-shadow:0 1px 1px rgba(20,20,18,0.03),0 12px 28px -10px rgba(20,20,18,0.16),0 0 0 1px rgba(44,94,138,0.10),inset 0 1px 0 rgba(255,255,255,0.9)}
+.hp-pulse-card.tick-up{animation:hp-tick-pos 1.0s ease-out}
+.hp-pulse-card.tick-down{animation:hp-tick-neg 1.0s ease-out}
+@keyframes hp-tick-pos{0%{box-shadow:0 1px 1px rgba(20,20,18,0.025),0 6px 18px -8px rgba(20,20,18,0.10),0 0 0 2px rgba(46,125,85,0.45),inset 0 0 28px rgba(46,125,85,0.08)}100%{box-shadow:0 1px 1px rgba(20,20,18,0.025),0 6px 18px -8px rgba(20,20,18,0.10),inset 0 1px 0 rgba(255,255,255,0.8)}}
+@keyframes hp-tick-neg{0%{box-shadow:0 1px 1px rgba(20,20,18,0.025),0 6px 18px -8px rgba(20,20,18,0.10),0 0 0 2px rgba(178,59,59,0.45),inset 0 0 28px rgba(178,59,59,0.08)}100%{box-shadow:0 1px 1px rgba(20,20,18,0.025),0 6px 18px -8px rgba(20,20,18,0.10),inset 0 1px 0 rgba(255,255,255,0.8)}}
+.hp-pulse-sym{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--mute);letter-spacing:0.08em}
+.hp-pulse-name{font-size:11px;color:var(--mute-2);margin-top:1px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hp-pulse-price{font-family:var(--mono);font-size:22px;font-weight:600;letter-spacing:-0.02em;color:var(--ink);margin-top:10px;font-variant-numeric:tabular-nums}
+.hp-pulse-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-top:8px}
+.hp-pulse-chg{font-family:var(--mono);font-size:11.5px;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-0.01em}
+.hp-pulse-chg.pos{color:var(--pos)}
+.hp-pulse-chg.neg{color:var(--neg)}
+.hp-pulse-spark{width:68px;height:24px;flex-shrink:0}
+
+.hp-movers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.hp-movers-col{padding:14px 0 6px;border-radius:14px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(252,252,250,0.78) 100%);
+  border:1px solid rgba(20,20,18,0.08);
+  box-shadow:0 1px 1px rgba(20,20,18,0.025),0 6px 18px -8px rgba(20,20,18,0.10),inset 0 1px 0 rgba(255,255,255,0.8);
+  overflow:hidden}
+.hp-movers-h{font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--mute);padding:0 16px 10px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(20,20,18,0.05)}
+.hp-movers-h::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--mute-2)}
+.hp-movers-col.gainers .hp-movers-h::before{background:var(--pos)}
+.hp-movers-col.losers .hp-movers-h::before{background:var(--neg)}
+.hp-movers-col.actives .hp-movers-h::before{background:var(--accent)}
+.hp-mover-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 16px;border-bottom:1px solid rgba(20,20,18,0.04);cursor:pointer;transition:background .12s ease}
+.hp-mover-row:last-child{border-bottom:none}
+.hp-mover-row:hover{background:rgba(44,94,138,0.04)}
+.hp-mover-l{display:flex;flex-direction:column;gap:1px;min-width:0;flex:1}
+.hp-mover-sym{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ink);letter-spacing:0.02em}
+.hp-mover-name{font-size:11px;color:var(--mute);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hp-mover-r{text-align:right;display:flex;flex-direction:column;gap:1px;flex-shrink:0}
+.hp-mover-price{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.hp-mover-chg{font-family:var(--mono);font-size:11px;font-weight:600;font-variant-numeric:tabular-nums}
+.hp-mover-chg.pos{color:var(--pos)}
+.hp-mover-chg.neg{color:var(--neg)}
+.hp-mover-skel{height:42px;background:linear-gradient(90deg, rgba(20,20,18,0.03), rgba(20,20,18,0.06) 40%, rgba(20,20,18,0.03) 80%);background-size:400px 100%;animation:hp-skel 1.4s linear infinite;margin:6px 12px;border-radius:6px}
+@keyframes hp-skel{0%{background-position:-200px 0}100%{background-position:200px 0}}
+
+.hp [data-reveal]{opacity:0;transform:translateY(12px);transition:opacity .55s cubic-bezier(.2,.7,.2,1), transform .55s cubic-bezier(.2,.7,.2,1)}
+.hp.is-revealed [data-reveal]{opacity:1;transform:translateY(0)}
+.hp.is-revealed [data-reveal="1"]{transition-delay:0.04s}
+.hp.is-revealed [data-reveal="2"]{transition-delay:0.10s}
+.hp.is-revealed [data-reveal="3"]{transition-delay:0.18s}
+
+@media(max-width:900px){
+  .hp-pulse-grid{grid-template-columns:repeat(2,1fr)}
+  .hp-movers-grid{grid-template-columns:1fr}
+  .hp-hello{font-size:30px}
+  .hp-inner{padding:20px 16px 0}
+}
+</style>
+
+<!-- Patreon auth check (gates the page before any content paints) -->
+<div id="iv-auth-overlay" class="iv-auth-state-loading">
+  <div class="iv-auth-box iv-auth-loading-box">
+    <div class="iv-auth-loading"></div>
+    <div>Verifying patron access…</div>
+  </div>
+  <div class="iv-auth-box iv-auth-content">
+    <div class="iv-auth-brand">Lei Holding · Research</div>
+    <div class="iv-auth-title">Patron access only</div>
+    <div class="iv-auth-sub">leiholding.com research tools are reserved for active InsightInvest patrons. Sign in with Patreon to continue.</div>
+    <a class="iv-auth-btn" href="/api/auth/login?next=/dashboard">Sign in with Patreon</a>
+    <span class="iv-auth-secondary">Not a patron yet? <a href="https://patreon.com/InsightInvest" target="_blank" rel="noopener">Become one →</a></span>
+  </div>
+</div>
+
+<script>
+(function(){
+  document.body && document.body.classList.add('iv-auth-pending');
+  document.addEventListener('DOMContentLoaded', ()=>document.body.classList.add('iv-auth-pending'));
+  fetch('/api/auth/check', {credentials:'same-origin'})
+    .then(r=>r.json())
+    .then(data=>{
+      const body = document.body;
+      const overlay = document.getElementById('iv-auth-overlay');
+      if(data && data.authenticated){
+        body.classList.remove('iv-auth-pending');
+        // Inject signed-in pill into the header
+        const tryInjectPill = ()=>{
+          const hdrRight = document.querySelector('.header-right') || document.querySelector('.header');
+          if(!hdrRight) return false;
+          if(document.querySelector('.iv-user-pill')) return true;
+          const pill = document.createElement('span');
+          pill.className = 'iv-user-pill';
+          pill.innerHTML = `<span>${(data.name||'Patron').split(' ')[0]}</span><button onclick="window.location.href='/api/auth/logout'">Sign out</button>`;
+          hdrRight.appendChild(pill);
+          return true;
+        };
+        if(!tryInjectPill()) document.addEventListener('DOMContentLoaded', tryInjectPill);
+        // Populate greeting name + kick off data load
+        if(data.name){
+          const set = ()=>{
+            const el = document.getElementById('hp-greeting-name');
+            if(el) el.textContent = String(data.name).trim().split(/\s+/)[0] || 'there';
+          };
+          if(document.readyState !== 'loading') set();
+          else document.addEventListener('DOMContentLoaded', set);
+        }
+        const fire = ()=>{ if(typeof loadDashboard==='function') loadDashboard(); };
+        if(document.readyState === 'complete' || document.readyState === 'interactive') setTimeout(fire,0);
+        else document.addEventListener('DOMContentLoaded', fire);
+      } else {
+        body.classList.remove('iv-auth-pending');
+        body.classList.add('iv-auth-needed');
+        overlay.classList.remove('iv-auth-state-loading');
+      }
+    })
+    .catch(()=>{
+      document.body.classList.remove('iv-auth-pending');
+      document.body.classList.add('iv-auth-needed');
+      document.getElementById('iv-auth-overlay').classList.remove('iv-auth-state-loading');
+    });
+})();
+</script>
+
+</head>
+<body>
+
+<header class="header">
+  <a class="logo" href="/dashboard">
+    <svg width="22" height="22" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="6" fill="#3b82f6"/><path d="M6 22L12 14L18 18L26 8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="26" cy="8" r="2.5" fill="white"/></svg>
+    InsightInvest
+  </a>
+  <div class="search-wrap">
+    <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="search-input" placeholder="Search ticker or jump to research…" autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter'){const v=this.value.trim().toUpperCase();if(v)window.location.href='/stock-details?t='+encodeURIComponent(v);}"/>
+  </div>
+  <div class="header-right"></div>
+</header>
+
+<main class="hp" id="hp">
+  <div class="hp-atmos"></div>
+  <div class="hp-inner">
+
+    <section class="hp-hero" data-reveal="1">
+      <div class="hp-eyebrow">Markets · live</div>
+      <h1 class="hp-hello">Good <span id="hp-greeting-word">morning</span>, <span class="hp-name" id="hp-greeting-name">there</span></h1>
+      <p class="hp-tagline">Pick a ticker to open valuation, quality, and intrinsic-value layers — or just watch the tape.</p>
+      <div class="hp-quicktickers">
+        <a class="hp-chip" href="/stock-details?t=AAPL">AAPL</a>
+        <a class="hp-chip" href="/stock-details?t=NVDA">NVDA</a>
+        <a class="hp-chip" href="/stock-details?t=MSFT">MSFT</a>
+        <a class="hp-chip" href="/stock-details?t=GOOGL">GOOGL</a>
+        <a class="hp-chip" href="/stock-details?t=META">META</a>
+        <a class="hp-chip" href="/stock-details?t=AMZN">AMZN</a>
+        <a class="hp-chip" href="/stock-details?t=TSLA">TSLA</a>
+        <a class="hp-chip" href="/stock-details?t=JPM">JPM</a>
+        <a class="hp-chip" href="/stock-details?t=BRK.B">BRK.B</a>
+      </div>
+    </section>
+
+    <section class="hp-section" data-reveal="2">
+      <div class="hp-section-head">
+        <div class="hp-section-head-l">
+          <span class="hp-ix">01</span>
+          <h2>Market pulse</h2>
+          <span class="hp-sub" id="hp-pulse-ts">— · live ticks</span>
+        </div>
+        <div class="hp-section-head-r" id="hp-pulse-state">streaming</div>
+      </div>
+      <div class="hp-pulse-grid" id="hp-pulse">
+        <div class="hp-pulse-card"><div class="hp-mover-skel"></div></div>
+        <div class="hp-pulse-card"><div class="hp-mover-skel"></div></div>
+        <div class="hp-pulse-card"><div class="hp-mover-skel"></div></div>
+        <div class="hp-pulse-card"><div class="hp-mover-skel"></div></div>
+        <div class="hp-pulse-card"><div class="hp-mover-skel"></div></div>
+      </div>
+    </section>
+
+    <section class="hp-section" data-reveal="3">
+      <div class="hp-section-head">
+        <div class="hp-section-head-l">
+          <span class="hp-ix">02</span>
+          <h2>Top movers</h2>
+          <span class="hp-sub">today's biggest gainers, losers, and most-actives</span>
+        </div>
+        <div class="hp-section-head-r" id="hp-movers-ts">—</div>
+      </div>
+      <div class="hp-movers-grid">
+        <div class="hp-movers-col gainers">
+          <div class="hp-movers-h">Gainers</div>
+          <div id="hp-gainers">
+            <div class="hp-mover-skel"></div><div class="hp-mover-skel"></div><div class="hp-mover-skel"></div><div class="hp-mover-skel"></div><div class="hp-mover-skel"></div>
+          </div>
+        </div>
+        <div class="hp-movers-col losers">
+          <div class="hp-movers-h">Losers</div>
+          <div id="hp-losers">
+            <div class="hp-mover-skel"></div><div class="hp-mover-skel"></div><div class="hp-mover-skel"></div><div class="hp-mover-skel"></div><div class="hp-mover-skel"></div>
+          </div>
+        </div>
+        <div class="hp-movers-col actives">
+          <div class="hp-movers-h">Most active</div>
+          <div id="hp-actives">
+            <div class="hp-mover-skel"></div><div class="hp-mover-skel"></div><div class="hp-mover-skel"></div><div class="hp-mover-skel"></div><div class="hp-mover-skel"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<script>
+const FMP_BASE = 'https://financialmodelingprep.com/stable';
+function getFmpKey(){ return localStorage.getItem('ii_fmp_key') || 'n2TIc6JypdMUhyFVtxrdqDBv0dIsK2Zg'; }
+async function fmpFetch(url){
+  const sep = url.includes('?') ? '&' : '?';
+  const r = await fetch(`${FMP_BASE}${url}${sep}apikey=${getFmpKey()}`);
+  if(!r.ok) throw new Error(`FMP ${r.status}`);
+  return r.json();
+}
+
+const HP_INDICES = [
+  {sym:'SPY',  name:'S&P 500'},
+  {sym:'QQQ',  name:'Nasdaq 100'},
+  {sym:'DIA',  name:'Dow Jones'},
+  {sym:'IWM',  name:'Russell 2000'},
+  {sym:'GLD',  name:'Gold'},
+];
+let HP_TICK_TIMER = null;
+
+async function loadDashboard(){
+  const h = new Date().getHours();
+  const greet = h < 5 ? 'evening' : h < 12 ? 'morning' : h < 18 ? 'afternoon' : 'evening';
+  const gw = document.getElementById('hp-greeting-word');
+  if(gw) gw.textContent = greet;
+
+  setTimeout(()=>{
+    const root = document.getElementById('hp');
+    if(root) root.classList.add('is-revealed');
+  }, 50);
+
+  loadHomepagePulse().catch(()=>{});
+  loadHomepageMovers().catch(()=>{});
+}
+
+async function loadHomepagePulse(){
+  const symbols = HP_INDICES.map(i=>i.sym).join(',');
+  try {
+    const [quotes, histories] = await Promise.all([
+      fmpFetch(`/quote?symbol=${symbols}`),
+      Promise.all(HP_INDICES.map(i => fmpFetch(`/historical-price-eod/light?symbol=${i.sym}&limit=30`).catch(()=>null))),
+    ]);
+    const bySym = {};
+    (Array.isArray(quotes) ? quotes : []).forEach(q => { if(q && q.symbol) bySym[q.symbol] = q; });
+
+    const container = document.getElementById('hp-pulse');
+    if(!container) return;
+    container.innerHTML = HP_INDICES.map((idx, i) => {
+      const q = bySym[idx.sym] || {};
+      const histRaw = histories[i];
+      const hist = (Array.isArray(histRaw) && histRaw.length)
+        ? histRaw.slice(0,30).reverse().map(d=>d.price||d.close||0).filter(v=>v>0)
+        : [];
+      const chg = q.change || 0;
+      const chgPct = q.changePercentage || q.changesPercentage || 0;
+      const cls = chg >= 0 ? 'pos' : 'neg';
+      return `<a class="hp-pulse-card" data-sym="${idx.sym}" href="/stock-details?t=${idx.sym}" style="text-decoration:none">
+        <div class="hp-pulse-sym">${idx.sym}</div>
+        <div class="hp-pulse-name">${idx.name}</div>
+        <div class="hp-pulse-price" data-target="${q.price || 0}">$${(q.price || 0).toFixed(2)}</div>
+        <div class="hp-pulse-foot">
+          <span class="hp-pulse-chg ${cls}">${chg>=0?'+':''}${chg.toFixed(2)} · ${chgPct>=0?'+':''}${chgPct.toFixed(2)}%</span>
+          ${buildHomepageSpark(hist, cls)}
+        </div>
+      </a>`;
+    }).join('');
+
+    container.querySelectorAll('.hp-pulse-price').forEach(el => {
+      const target = parseFloat(el.dataset.target);
+      if(target > 0) animateCountUp(el, target, 800, v => '$' + v.toFixed(2));
+    });
+
+    const ts = document.getElementById('hp-pulse-ts');
+    if(ts) ts.textContent = new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) + ' · 5 indices';
+
+    startHomepageTicks();
+  } catch(e) {
+    console.warn('Dashboard pulse failed', e);
+    const ts = document.getElementById('hp-pulse-ts');
+    if(ts) ts.textContent = 'pulse offline · check API key';
+  }
+}
+
+function buildHomepageSpark(values, cls){
+  if(!values || values.length < 2) return '<svg class="hp-pulse-spark"></svg>';
+  const w = 68, h = 24, pad = 1.5;
+  const min = Math.min(...values), max = Math.max(...values);
+  const range = max - min || 1;
+  const stride = (w - pad*2) / (values.length - 1);
+  const pts = values.map((v,i) => `${(pad + i*stride).toFixed(2)},${(pad + (h-pad*2)*(1 - (v-min)/range)).toFixed(2)}`).join(' ');
+  const color = cls === 'pos' ? '#2E7D55' : '#B23B3B';
+  const colorSoft = cls === 'pos' ? 'rgba(46,125,85,0.20)' : 'rgba(178,59,59,0.20)';
+  const lastPt = pts.split(' ').pop().split(',');
+  const id = 'sg' + Math.random().toString(36).slice(2,7);
+  return `<svg class="hp-pulse-spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${colorSoft}"/>
+        <stop offset="100%" stop-color="${colorSoft}" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <polygon points="${pts} ${w-pad},${h-pad} ${pad},${h-pad}" fill="url(#${id})"/>
+    <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${lastPt[0]}" cy="${lastPt[1]}" r="1.8" fill="${color}"/>
+    <circle cx="${lastPt[0]}" cy="${lastPt[1]}" r="3.4" fill="${color}" opacity="0.22"/>
+  </svg>`;
+}
+
+function animateCountUp(el, target, duration, formatter){
+  const start = parseFloat(el.dataset.from || '0') || 0;
+  const startTime = performance.now();
+  const fmt = formatter || (v => v.toFixed(2));
+  function tick(now){
+    const t = Math.min(1, (now - startTime) / duration);
+    const eased = 1 - Math.pow(1 - t, 3);
+    const v = start + (target - start) * eased;
+    el.textContent = fmt(v);
+    if(t < 1) requestAnimationFrame(tick);
+    else el.dataset.from = String(target);
+  }
+  requestAnimationFrame(tick);
+}
+
+function startHomepageTicks(){
+  if(HP_TICK_TIMER) return;
+  HP_TICK_TIMER = setInterval(() => {
+    const cards = document.querySelectorAll('.hp-pulse-card[data-sym]');
+    if(!cards.length) return;
+    const card = cards[Math.floor(Math.random() * cards.length)];
+    const priceEl = card.querySelector('.hp-pulse-price');
+    if(!priceEl) return;
+    const cur = parseFloat(priceEl.dataset.target) || parseFloat(priceEl.textContent.replace(/[^0-9.]/g,'')) || 0;
+    if(cur <= 0) return;
+    const delta = (Math.random() - 0.5) * cur * 0.0014;
+    const next = cur + delta;
+    priceEl.dataset.target = String(next);
+    animateCountUp(priceEl, next, 450, v => '$' + v.toFixed(2));
+    card.classList.remove('tick-up','tick-down');
+    void card.offsetWidth;
+    card.classList.add(delta >= 0 ? 'tick-up' : 'tick-down');
+  }, 3500);
+}
+
+async function loadHomepageMovers(){
+  try {
+    const [gainers, losers, actives] = await Promise.all([
+      fmpFetch('/biggest-gainers?limit=5').catch(()=>[]),
+      fmpFetch('/biggest-losers?limit=5').catch(()=>[]),
+      fmpFetch('/most-actives?limit=5').catch(()=>[]),
+    ]);
+    renderMoverList('hp-gainers', gainers, 'pos');
+    renderMoverList('hp-losers',  losers,  'neg');
+    renderMoverList('hp-actives', actives, '');
+    const ts = document.getElementById('hp-movers-ts');
+    if(ts) ts.textContent = new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) + ' · top 5 each';
+  } catch(e) {
+    console.warn('Dashboard movers failed', e);
+  }
+}
+
+function renderMoverList(id, items, defaultCls){
+  const el = document.getElementById(id);
+  if(!el) return;
+  if(!Array.isArray(items) || !items.length){
+    el.innerHTML = '<div style="padding:20px 16px;color:#8A887F;font-size:11.5px;text-align:center">No data available</div>';
+    return;
+  }
+  el.innerHTML = items.slice(0,5).map(item => {
+    const sym = item.symbol || '';
+    const name = String(item.name || item.companyName || '').slice(0,28);
+    const price = +(item.price || 0);
+    const chgPct = +(item.changesPercentage ?? item.changePercentage ?? 0);
+    const cls = defaultCls || (chgPct >= 0 ? 'pos' : 'neg');
+    return `<a class="hp-mover-row" href="/stock-details?t=${encodeURIComponent(sym)}" style="text-decoration:none;color:inherit">
+      <div class="hp-mover-l">
+        <div class="hp-mover-sym">${sym}</div>
+        <div class="hp-mover-name">${name}</div>
+      </div>
+      <div class="hp-mover-r">
+        <div class="hp-mover-price">$${price.toFixed(2)}</div>
+        <div class="hp-mover-chg ${cls}">${chgPct>=0?'+':''}${chgPct.toFixed(2)}%</div>
+      </div>
+    </a>`;
+  }).join('');
+}
+</script>
+
+</body>
+</html>
