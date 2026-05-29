@@ -1493,8 +1493,9 @@ table.iv-sdcf-inputs td:first-child{padding-right:14px;line-height:1.4}
             <div class="iv-sdcf-col-h">
               <div class="iv-lbl" style="margin-bottom:0">Inputs</div>
               <select class="iv-sdcf-select" id="sdcf-mode" onchange="setSDCFCashflow(this.value)">
-                <option value="ocf">DCF-20 · Operating Cash Flow</option>
-                <option value="fcf">DFCF-20 · Free Cash Flow</option>
+                <option value="ocf">DCF-20 · Operating Cash Flow · 20Y, 3-stage</option>
+                <option value="fcf">DFCF-20 · Free Cash Flow · 20Y, 3-stage</option>
+                <option value="hmodel">H-Model · FCF · linear fade</option>
               </select>
             </div>
             <table class="iv-mini iv-sdcf-inputs">
@@ -1528,17 +1529,21 @@ table.iv-sdcf-inputs td:first-child{padding-right:14px;line-height:1.4}
               <span class="iv-fix" id="sdcf-cagr-note">5Y revenue CAGR —</span>
             </div>
             <table class="iv-mini iv-sdcf-inputs">
-              <tr>
-                <td>Growth (Year 1–5)<br/><span class="iv-fix">Capped at 30% · from own 5Y revenue CAGR</span></td>
+              <tr id="sdcf-row-g15">
+                <td><span id="sdcf-lbl-g15">Growth (Year 1–5)</span><br/><span class="iv-fix" id="sdcf-sub-g15">Capped at 30% · from own 5Y revenue CAGR</span></td>
                 <td><input type="number" step="0.1" class="iv-sdcf-input tnum" id="sdcf-g15" oninput="recomputeStageDCF()"/><span class="iv-fix" style="margin-left:4px">%</span></td>
               </tr>
-              <tr>
+              <tr id="sdcf-row-g610">
                 <td>Growth (Year 6–10)<br/><span class="iv-fix">Default: Y1-5 × 0.70 (fade)</span></td>
                 <td><input type="number" step="0.1" class="iv-sdcf-input tnum" id="sdcf-g610" oninput="recomputeStageDCF()"/><span class="iv-fix" style="margin-left:4px">%</span></td>
               </tr>
-              <tr>
-                <td>Growth (Year 11–20)<br/><span class="iv-fix">Terminal-like · default 4%</span></td>
+              <tr id="sdcf-row-g1120">
+                <td><span id="sdcf-lbl-g1120">Growth (Year 11–20)</span><br/><span class="iv-fix" id="sdcf-sub-g1120">Terminal-like · default 4%</span></td>
                 <td><input type="number" step="0.1" class="iv-sdcf-input tnum" id="sdcf-g1120" oninput="recomputeStageDCF()"/><span class="iv-fix" style="margin-left:4px">%</span></td>
+              </tr>
+              <tr id="sdcf-row-half" style="display:none">
+                <td>Half-life H (years)<br/><span class="iv-fix">Growth decays linearly over 2H years to terminal</span></td>
+                <td><input type="number" step="0.5" class="iv-sdcf-input tnum" id="sdcf-half" value="4" oninput="recomputeStageDCF()"/><span class="iv-fix" style="margin-left:4px">yrs</span></td>
               </tr>
             </table>
             <button type="button" class="iv-sdcf-reset" onclick="resetStageDCF()">Reset to auto values</button>
@@ -3083,17 +3088,38 @@ function deriveStageGrowthRates(){
   return {g15, g610, g1120, rawCagr: cagr};
 }
 
-let SDCF_CF_MODE = 'ocf'; // 'ocf' or 'fcf'
+let SDCF_CF_MODE = 'ocf'; // 'ocf' | 'fcf' | 'hmodel'
+
+function applyModeUI(mode){
+  // Cash-flow label
+  document.getElementById('sdcf-cf-label').textContent =
+    mode==='ocf' ? 'Operating Cash Flow (TTM)' : 'Free Cash Flow (TTM)';
+  // H-Model uses FCF base; 3-stage rows hidden; half-life row visible; labels relabel
+  const isH = mode === 'hmodel';
+  document.getElementById('sdcf-row-g610').style.display = isH ? 'none' : '';
+  document.getElementById('sdcf-row-half').style.display = isH ? '' : 'none';
+  document.getElementById('sdcf-lbl-g15').textContent     = isH ? 'Initial growth (gr0)'   : 'Growth (Year 1–5)';
+  document.getElementById('sdcf-sub-g15').textContent     = isH ? 'High-growth phase · fades linearly to terminal' : 'Capped at 30% · from own 5Y revenue CAGR';
+  document.getElementById('sdcf-lbl-g1120').textContent   = isH ? 'Terminal growth'         : 'Growth (Year 11–20)';
+  document.getElementById('sdcf-sub-g1120').textContent   = isH ? 'Perpetuity rate · default 3%' : 'Terminal-like · default 4%';
+}
 
 function setSDCFCashflow(mode){
-  if(mode !== 'ocf' && mode !== 'fcf') return;
+  if(mode !== 'ocf' && mode !== 'fcf' && mode !== 'hmodel') return;
   SDCF_CF_MODE = mode;
   const sel = document.getElementById('sdcf-mode');
   if(sel && sel.value !== mode) sel.value = mode;
-  document.getElementById('sdcf-cf-label').textContent =
-    mode==='ocf' ? 'Operating Cash Flow (TTM)' : 'Free Cash Flow (TTM)';
-  const baseCf = (mode==='ocf' ? computeTTMOcf() : computeTTMFcf()) / 1e6;
+  applyModeUI(mode);
+  // H-Model always uses FCF base; DCF-20 uses OCF; DFCF-20 uses FCF
+  const useFcfBase = (mode === 'fcf' || mode === 'hmodel');
+  const baseCf = (useFcfBase ? computeTTMFcf() : computeTTMOcf()) / 1e6;
   document.getElementById('sdcf-cf').value = baseCf>0 ? baseCf.toFixed(0) : '';
+  // H-Model default: terminal = 3% (matches H-Model convention vs 4% for stage DCFs)
+  if(mode === 'hmodel'){
+    document.getElementById('sdcf-g1120').value = '3.0';
+  } else {
+    document.getElementById('sdcf-g1120').value = '4.0';
+  }
   recomputeStageDCF();
 }
 
@@ -3130,11 +3156,16 @@ function renderStageDCF(){
     cagrNote.textContent = '5Y revenue CAGR unavailable · using 6% default';
   }
 
-  // Sync dropdown state and label
+  // Sync dropdown + apply UI for current mode
   const sel = document.getElementById('sdcf-mode');
   if(sel) sel.value = SDCF_CF_MODE;
-  document.getElementById('sdcf-cf-label').textContent =
-    SDCF_CF_MODE==='ocf' ? 'Operating Cash Flow (TTM)' : 'Free Cash Flow (TTM)';
+  applyModeUI(SDCF_CF_MODE);
+  // For H-Model, override the cash-flow base (always FCF) and terminal default (3%)
+  if(SDCF_CF_MODE === 'hmodel'){
+    const fcf = computeTTMFcf();
+    document.getElementById('sdcf-cf').value = fcf>0 ? (fcf/1e6).toFixed(0) : '';
+    document.getElementById('sdcf-g1120').value = '3.0';
+  }
 
   recomputeStageDCF();
 }
@@ -3168,20 +3199,28 @@ function recomputeStageDCF(){
     return;
   }
 
-  // 3-stage 20-year PV
   let pv = 0;
-  let curCf = cf;
-  for(let y=1; y<=5; y++){
-    curCf *= (1+g15);
-    pv += curCf / Math.pow(1+disc, y);
-  }
-  for(let y=6; y<=10; y++){
-    curCf *= (1+g610);
-    pv += curCf / Math.pow(1+disc, y);
-  }
-  for(let y=11; y<=20; y++){
-    curCf *= (1+g1120);
-    pv += curCf / Math.pow(1+disc, y);
+  if(SDCF_CF_MODE === 'hmodel'){
+    // H-Model: PV = baseCf*(1+g_t)/(r-g_t) + baseCf*H*(gr0-g_t)/(r-g_t)
+    const H = parseFloat(document.getElementById('sdcf-half').value) || 4;
+    const gr0 = g15;          // initial growth
+    const gt  = g1120;        // terminal growth
+    pv = cf*(1+gt)/(disc-gt) + cf*H*(gr0-gt)/(disc-gt);
+  } else {
+    // 3-stage 20-year PV
+    let curCf = cf;
+    for(let y=1; y<=5; y++){
+      curCf *= (1+g15);
+      pv += curCf / Math.pow(1+disc, y);
+    }
+    for(let y=6; y<=10; y++){
+      curCf *= (1+g610);
+      pv += curCf / Math.pow(1+disc, y);
+    }
+    for(let y=11; y<=20; y++){
+      curCf *= (1+g1120);
+      pv += curCf / Math.pow(1+disc, y);
+    }
   }
 
   // EV → Equity → per-share
@@ -3229,10 +3268,20 @@ function recomputeStageDCF(){
     }
     if(impliedG===null) impliedG=(lo+hi)/2;
     const impPct = (impliedG*100).toFixed(1);
-    const ownAvg = (g15*5 + g610*5 + g1120*10) / 20 * 100;
+    // Blended-average growth for comparison: 3-stage uses full 20Y avg; H-Model uses gr0 averaged with terminal over 2H
+    let ownAvg;
+    if(SDCF_CF_MODE === 'hmodel'){
+      const H = parseFloat(document.getElementById('sdcf-half').value) || 4;
+      // H-Model implied avg over 2H years: linear fade from gr0 to gt = (gr0+gt)/2; then gt forever
+      const yrs = Math.min(20, 2*H);
+      ownAvg = ((g15+g1120)/2 * yrs + g1120 * (20-yrs)) / 20 * 100;
+    } else {
+      ownAvg = (g15*5 + g610*5 + g1120*10) / 20 * 100;
+    }
     const gapPP  = (impliedG*100 - ownAvg).toFixed(1);
+    const cfName = SDCF_CF_MODE==='ocf' ? 'OCF' : 'FCF';
     if(Math.abs(impliedG*100 - ownAvg) < 0.5){
-      rev.innerHTML = `<strong>Reverse · In line.</strong>Market is pricing in <b>${impPct}%</b> 20Y avg ${SDCF_CF_MODE==='ocf'?'OCF':'FCF'} growth — matches your model's 20Y avg of ${ownAvg.toFixed(1)}%.`;
+      rev.innerHTML = `<strong>Reverse · In line.</strong>Market is pricing in <b>${impPct}%</b> 20Y avg ${cfName} growth — matches your model's 20Y avg of ${ownAvg.toFixed(1)}%.`;
     } else if(impliedG*100 < ownAvg){
       rev.innerHTML = `<strong>Reverse · Bullish setup.</strong>Market prices in <b>${impPct}%</b> 20Y avg growth — <b class="pos">${gapPP}pp below</b> your model's ${ownAvg.toFixed(1)}%. If your assumptions hold, the stock is undervalued.`;
     } else {
@@ -3312,10 +3361,17 @@ function computeCfHModel(wacc, termGr) {
   if(baseFcf<=0) return null;
   const gr0 = cfInputVal('cf-growth', getBaseGrowthEstimate());
   const H   = cfInputVal('cf-half-life', 4);
-  if(wacc<=termGr) return null;
-  const pv = baseFcf*(1+termGr)/(wacc-termGr) + baseFcf*H*(gr0-termGr)/(wacc-termGr);
+  // Cap WACC at 12% to keep terminal multiple sane for high-β growth stocks
+  const wCap = Math.min(0.12, wacc);
+  if(wCap<=termGr) return null;
+  const pv = baseFcf*(1+termGr)/(wCap-termGr) + baseFcf*H*(gr0-termGr)/(wCap-termGr);
+  // Net cash adjustment (consistent with DCF-20 / DFCF-20)
+  const bal0 = S.balance[0] || {};
+  const debt = bal0.totalDebt || 0;
+  const cash = bal0.cashAndShortTermInvestments || bal0.cashAndCashEquivalents || 0;
+  const equity = pv - debt + cash;
   const sh = getSharesOut();
-  return sh>0 ? pv/sh : null;
+  return sh>0 ? equity/sh : null;
 }
 function computeCfEvEbitda() {
   const inc0=S.income[0]||{}, bal0=S.balance[0]||{};
