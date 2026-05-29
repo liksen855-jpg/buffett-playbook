@@ -104,7 +104,14 @@ export default async function handler(req, res) {
     return;
   }
 
-  // 3) Check for a paid, active membership of OUR campaign
+  // 3) Owner bypass: if PATREON_OWNER_EMAILS contains this user's email,
+  //    skip the patron check (lets the creator access without self-pledging).
+  const ownerEmails = (process.env.PATREON_OWNER_EMAILS || '')
+    .split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+  const userEmail = (ident.data?.attributes?.email || '').toLowerCase();
+  const isOwner = userEmail && ownerEmails.includes(userEmail);
+
+  // 4) Check for a paid, active membership of OUR campaign
   const members = (ident.included || []).filter(it => it.type === 'member');
   const validMember = members.find(m => {
     const status = m.attributes?.patron_status;
@@ -113,7 +120,7 @@ export default async function handler(req, res) {
     return status === 'active_patron' && cents > 0 && String(campaignId) === String(PATREON_CAMPAIGN_ID);
   });
 
-  if (!validMember) {
+  if (!validMember && !isOwner) {
     // Authenticated with Patreon but not a paid patron of this campaign
     res.writeHead(302, { Location: '/not-a-patron' });
     res.end();
