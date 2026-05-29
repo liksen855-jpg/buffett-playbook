@@ -2152,6 +2152,72 @@ function normalizeMetrics(d){
   };
 }
 
+// ── Currency normalization (ADR / foreign-listed reconciliation) ──
+// FMP reports financial STATEMENTS in the company's reporting currency
+// (e.g. TWD for TSM) while price / market cap / shares are already in the
+// listing currency on an ADR-equivalent basis. Without this, every per-share
+// intrinsic value mixes a TWD numerator against a USD price → grossly inflated.
+// We convert statement money fields into the price currency. Ratios, share
+// counts, dates and identifiers are left untouched.
+const NON_MONEY_KEYS = new Set([
+  'calendarYear','fiscalYear','period','reportedCurrency','symbol','cik','date',
+  'fillingDate','filingDate','acceptedDate','link','finalLink',
+  'weightedAverageShsOut','weightedAverageShsOutDil',
+  'grossProfitRatio','netIncomeRatio','operatingIncomeRatio','ebitdaratio',
+]);
+// key-metrics is mostly unitless ratios; convert ONLY these money fields.
+const METRIC_MONEY_KEYS = [
+  'marketCap','enterpriseValue','workingCapital','investedCapital',
+  'tangibleAssetValue','netCurrentAssetValue','averageReceivables',
+  'averagePayables','averageInventory','revenuePerShare','netIncomePerShare',
+  'operatingCashFlowPerShare','freeCashFlowPerShare','cashPerShare',
+  'bookValuePerShare','tangibleBookValuePerShare','shareholdersEquityPerShare',
+  'interestDebtPerShare','capexPerShare','grahamNumber','grahamNetNet',
+];
+function convertMoneyDeny(obj,rate){
+  if(!obj)return;
+  for(const k in obj){
+    if(NON_MONEY_KEYS.has(k))continue;
+    const v=obj[k];
+    if(typeof v==='number'&&isFinite(v)) obj[k]=v*rate;
+  }
+}
+function convertMoneyAllow(obj,rate){
+  if(!obj)return;
+  METRIC_MONEY_KEYS.forEach(k=>{const v=obj[k];if(typeof v==='number'&&isFinite(v))obj[k]=v*rate;});
+}
+async function getFxRate(from,to){
+  if(!from||!to||from===to) return 1;
+  try{ const r=await fmpFetch(`/quote?symbol=${from}${to}`); const p=Array.isArray(r)?r[0]?.price:null; if(p>0) return p; }catch{}
+  try{ const r=await fmpFetch(`/quote?symbol=${to}${from}`); const p=Array.isArray(r)?r[0]?.price:null; if(p>0) return 1/p; }catch{}
+  return null;
+}
+async function normalizeCurrency(){
+  S.fx={applied:false,rate:1,from:null,to:'USD'};
+  const priceCcy=(S.profile?.currency||'USD').toUpperCase();
+  const repCcy=(S.income?.[0]?.reportedCurrency
+             || S.cashflow?.[0]?.reportedCurrency
+             || S.balance?.[0]?.reportedCurrency
+             || priceCcy).toUpperCase();
+  S.priceCurrency=priceCcy; S.reportedCurrency=repCcy;
+  if(!repCcy||repCcy===priceCcy) return;
+  const rate=await getFxRate(repCcy,priceCcy);
+  if(!rate||!isFinite(rate)||rate<=0){ S.fx.note=`FX ${repCcy}->${priceCcy} unavailable`; return; }
+  S.fx={applied:true,rate,from:repCcy,to:priceCcy};
+  [S.income,S.incomeQ,S.balance,S.balanceQ,S.cashflow,S.cashflowQ]
+    .forEach(arr=>(arr||[]).forEach(d=>convertMoneyDeny(d,rate)));
+  (S.metrics||[]).forEach(m=>convertMoneyAllow(m,rate));
+}
+function updateCurrencyLabels(){
+  const ccy=S.priceCurrency||'USD';
+  let txt=`All numbers are in ${ccy} millions, except per-share data, ratios, and percentages.`;
+  if(S.fx?.applied) txt+=` Converted from ${S.fx.from} at ${S.fx.from}${S.fx.to} ${Number(S.fx.rate).toPrecision(4)}.`;
+  else if(S.fx?.note) txt+=` (${S.fx.note} — figures remain in ${S.reportedCurrency})`;
+  document.querySelectorAll('.fin-subtitle').forEach(el=>{
+    if(el.textContent.includes('All numbers are in')) el.textContent=txt;
+  });
+}
+
 // ── Search ──
 const searchInput=document.getElementById('search-input');
 const searchResults=document.getElementById('search-results');
@@ -2266,6 +2332,9 @@ async function loadTicker(ticker){
     S.earnings = val(11)||[];
 
     if(!S.profile)throw new Error(`Ticker "${ticker}" not found.`);
+
+    // Reconcile statement currency to the listing/price currency (ADRs etc.)
+    await normalizeCurrency();
 
     // Derive missing quote fields
     const eps=S.income[0]?.epsdiluted;
@@ -2513,6 +2582,7 @@ function switchTab(id){
 
 // ── Render all ──
 function renderAll(){
+  updateCurrencyLabels();
   renderHero();
   renderOverview();
   renderFinancials();
