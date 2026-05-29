@@ -147,8 +147,38 @@ body.iv-auth-needed  #iv-auth-overlay{display:flex}
 .hp.is-revealed [data-reveal="1"]{transition-delay:0.04s}
 .hp.is-revealed [data-reveal="2"]{transition-delay:0.10s}
 .hp.is-revealed [data-reveal="3"]{transition-delay:0.18s}
+.hp.is-revealed [data-reveal="4"]{transition-delay:0.26s}
+
+/* ─── Market-overview groups + commodities ─── */
+.hp-group-label{font-size:10.5px;font-weight:700;color:var(--mute);text-transform:uppercase;letter-spacing:0.12em;margin:0 4px 12px;display:flex;align-items:center;gap:10px}
+.hp-group-label::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(20,20,18,0.08),transparent)}
+.hp-commodities-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+
+/* ─── News with image thumbnails ─── */
+.hp-news-toggle{display:inline-flex;background:rgba(255,255,255,0.7);border:1px solid rgba(20,20,18,0.1);border-radius:999px;padding:3px;gap:1px}
+.hp-news-toggle button{background:transparent;border:none;color:var(--mute);font-size:12px;font-weight:500;padding:5px 14px;border-radius:999px;cursor:pointer;font-family:var(--sans);transition:all .15s}
+.hp-news-toggle button.active{background:var(--accent);color:#fff;font-weight:600}
+.hp-news-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.hp-news-card{display:flex;flex-direction:column;border-radius:14px;overflow:hidden;cursor:pointer;
+  background:linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(252,252,250,0.78) 100%);
+  border:1px solid rgba(20,20,18,0.08);
+  box-shadow:0 1px 1px rgba(20,20,18,0.025),0 6px 18px -8px rgba(20,20,18,0.10),inset 0 1px 0 rgba(255,255,255,0.8);
+  transition:all .25s cubic-bezier(.2,.7,.2,1)}
+.hp-news-card:hover{transform:translateY(-2px);box-shadow:0 1px 1px rgba(20,20,18,0.03),0 12px 28px -10px rgba(20,20,18,0.16),0 0 0 1px rgba(44,94,138,0.10),inset 0 1px 0 rgba(255,255,255,0.9)}
+.hp-news-thumb{position:relative;width:100%;aspect-ratio:16/9;background:var(--bg2);overflow:hidden}
+.hp-news-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+.hp-news-card:hover .hp-news-thumb img{transform:scale(1.04)}
+.hp-news-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--mute-2);font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase}
+.hp-news-badge{position:absolute;left:10px;bottom:10px;background:rgba(26,26,24,0.82);color:#FBFBFA;font-size:10px;font-weight:600;letter-spacing:0.03em;padding:3px 9px;border-radius:999px;backdrop-filter:blur(4px)}
+.hp-news-body{padding:13px 15px 15px;display:flex;flex-direction:column;gap:7px;flex:1}
+.hp-news-title{font-size:13px;font-weight:600;line-height:1.4;color:var(--ink)}
+.hp-news-snippet{font-size:12px;color:var(--mute);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.hp-news-meta{font-size:11px;color:var(--mute-2);font-family:var(--mono);margin-top:auto;padding-top:4px}
+.hp-news-empty{grid-column:1/-1;text-align:center;color:var(--mute);font-size:12.5px;padding:24px 0}
 
 @media(max-width:900px){
+  .hp-news-grid{grid-template-columns:1fr}
+  .hp-commodities-grid{grid-template-columns:repeat(2,1fr)}
   .hp-pulse-grid{grid-template-columns:repeat(2,1fr)}
   .hp-movers-grid{grid-template-columns:1fr}
   .hp-hello{font-size:30px}
@@ -260,14 +290,21 @@ body.iv-auth-needed  #iv-auth-overlay{display:flex}
       <div class="hp-section-head">
         <div class="hp-section-head-l">
           <span class="hp-ix">01</span>
-          <h2>Market pulse</h2>
-          <span class="hp-sub" id="hp-pulse-ts">— · live ticks</span>
+          <h2>Market overview</h2>
+          <span class="hp-sub" id="hp-pulse-ts">— · live</span>
         </div>
         <div class="hp-section-head-r" id="hp-pulse-state">streaming</div>
       </div>
+      <div class="hp-group-label">Index futures</div>
       <div class="hp-pulse-grid" id="hp-pulse">
         <div class="hp-pulse-card"><div class="hp-mover-skel"></div></div>
         <div class="hp-pulse-card"><div class="hp-mover-skel"></div></div>
+        <div class="hp-pulse-card"><div class="hp-mover-skel"></div></div>
+        <div class="hp-pulse-card"><div class="hp-mover-skel"></div></div>
+        <div class="hp-pulse-card"><div class="hp-mover-skel"></div></div>
+      </div>
+      <div class="hp-group-label" style="margin-top:22px">Commodities</div>
+      <div class="hp-commodities-grid" id="hp-commodities">
         <div class="hp-pulse-card"><div class="hp-mover-skel"></div></div>
         <div class="hp-pulse-card"><div class="hp-mover-skel"></div></div>
         <div class="hp-pulse-card"><div class="hp-mover-skel"></div></div>
@@ -305,6 +342,24 @@ body.iv-auth-needed  #iv-auth-overlay{display:flex}
       </div>
     </section>
 
+    <section class="hp-section" data-reveal="4">
+      <div class="hp-section-head">
+        <div class="hp-section-head-l">
+          <span class="hp-ix">03</span>
+          <h2>Latest news</h2>
+          <span class="hp-sub">headlines with visuals</span>
+        </div>
+        <div class="hp-news-toggle">
+          <button class="active" data-news="general" onclick="switchHpNews('general',this)">Market</button>
+          <button data-news="stock" onclick="switchHpNews('stock',this)">Stocks</button>
+          <button data-news="crypto" onclick="switchHpNews('crypto',this)">Crypto</button>
+        </div>
+      </div>
+      <div class="hp-news-grid" id="hp-news">
+        <div class="hp-news-empty">Loading news…</div>
+      </div>
+    </section>
+
   </div>
 </main>
 
@@ -318,14 +373,60 @@ async function fmpFetch(url){
   return r.json();
 }
 
-const HP_INDICES = [
-  {sym:'SPY',  name:'S&P 500'},
-  {sym:'QQQ',  name:'Nasdaq 100'},
-  {sym:'DIA',  name:'Dow Jones'},
-  {sym:'IWM',  name:'Russell 2000'},
-  {sym:'GLD',  name:'Gold'},
+// Each instrument tries its symbols in order — real futures first, then cash
+// index / ETF proxy — so a card always resolves on the current FMP tier.
+const HP_FUTURES = [
+  {label:'S&P 500',      sub:'E-mini · ES',  chain:['ESUSD','SPY'],          dec:2},
+  {label:'Nasdaq',       sub:'Composite',    chain:['NQUSD','^IXIC','QQQ'],  dec:2},
+  {label:'Dow Jones',    sub:'Industrials',  chain:['YMUSD','^DJI','DIA'],   dec:2},
+  {label:'Russell 2000', sub:'Small-cap',    chain:['RTYUSD','^RUT','IWM'],  dec:2},
+  {label:'VIX',          sub:'Volatility',   chain:['^VIX'],                 dec:2},
+  {label:'FTSE 100',     sub:'UK',           chain:['^FTSE'],                dec:2},
+  {label:'Euro Stoxx 50',sub:'Europe',       chain:['^STOXX50E'],            dec:2},
+  {label:'Nikkei 225',   sub:'Japan',        chain:['^N225'],                dec:2},
+  {label:'Hang Seng',    sub:'Hong Kong',    chain:['^HSI'],                 dec:2},
+];
+const HP_COMMODITIES = [
+  {label:'Gold',      sub:'COMEX · GC', chain:['GCUSD'],          dec:2},
+  {label:'Silver',    sub:'COMEX · SI', chain:['SIUSD'],          dec:2},
+  {label:'Crude Oil', sub:'Brent · BZ', chain:['BZUSD','CLUSD'],  dec:2},
 ];
 let HP_TICK_TIMER = null;
+
+async function fetchQuoteChain(chain){
+  for(const s of chain){
+    try{
+      const r = await fmpFetch(`/quote?symbol=${encodeURIComponent(s)}`);
+      const q = Array.isArray(r) ? r[0] : r;
+      if(q && q.price != null){ q._used = s; return q; }
+    }catch(_){}
+  }
+  return null;
+}
+function fmtPx(v,dec){ return '$' + Number(v).toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
+function hpCardHTML(cfg, q, hist){
+  if(!q){
+    return `<div class="hp-pulse-card">
+      <div class="hp-pulse-sym">${cfg.label}</div>
+      <div class="hp-pulse-name">${cfg.sub}</div>
+      <div class="hp-pulse-price">—</div>
+      <div class="hp-pulse-foot"><span class="hp-pulse-chg">no data</span></div>
+    </div>`;
+  }
+  const price = q.price || 0;
+  const chg = q.change || 0;
+  const chgPct = q.changePercentage || q.changesPercentage || 0;
+  const cls = chg >= 0 ? 'pos' : 'neg';
+  return `<div class="hp-pulse-card" data-sym="${q._used}">
+    <div class="hp-pulse-sym">${cfg.label}</div>
+    <div class="hp-pulse-name">${cfg.sub}</div>
+    <div class="hp-pulse-price" data-target="${price}">${fmtPx(price,cfg.dec)}</div>
+    <div class="hp-pulse-foot">
+      <span class="hp-pulse-chg ${cls}">${chg>=0?'+':''}${chg.toFixed(cfg.dec)} · ${chgPct>=0?'+':''}${chgPct.toFixed(2)}%</span>
+      ${buildHomepageSpark(hist, cls)}
+    </div>
+  </div>`;
+}
 
 async function loadDashboard(){
   const h = new Date().getHours();
@@ -340,53 +441,42 @@ async function loadDashboard(){
 
   loadHomepagePulse().catch(()=>{});
   loadHomepageMovers().catch(()=>{});
+  loadHomepageNews(_hpNewsView).catch(()=>{});
 }
 
 async function loadHomepagePulse(){
-  const symbols = HP_INDICES.map(i=>i.sym).join(',');
   try {
-    const [quotes, histories] = await Promise.all([
-      fmpFetch(`/quote?symbol=${symbols}`),
-      Promise.all(HP_INDICES.map(i => fmpFetch(`/historical-price-eod/light?symbol=${i.sym}&limit=30`).catch(()=>null))),
-    ]);
-    const bySym = {};
-    (Array.isArray(quotes) ? quotes : []).forEach(q => { if(q && q.symbol) bySym[q.symbol] = q; });
+    const all = [...HP_FUTURES, ...HP_COMMODITIES];
+    const quotes = await Promise.all(all.map(c => fetchQuoteChain(c.chain)));
+    // Best-effort sparklines for whichever symbol resolved (degrade silently)
+    const hists = await Promise.all(all.map((c, i) => {
+      const q = quotes[i];
+      if(!q) return null;
+      return fmpFetch(`/historical-price-eod/light?symbol=${encodeURIComponent(q._used)}&limit=30`)
+        .then(h => (Array.isArray(h) && h.length) ? h.slice(0,30).reverse().map(d=>d.price||d.close||0).filter(v=>v>0) : null)
+        .catch(()=>null);
+    }));
 
-    const container = document.getElementById('hp-pulse');
-    if(!container) return;
-    container.innerHTML = HP_INDICES.map((idx, i) => {
-      const q = bySym[idx.sym] || {};
-      const histRaw = histories[i];
-      const hist = (Array.isArray(histRaw) && histRaw.length)
-        ? histRaw.slice(0,30).reverse().map(d=>d.price||d.close||0).filter(v=>v>0)
-        : [];
-      const chg = q.change || 0;
-      const chgPct = q.changePercentage || q.changesPercentage || 0;
-      const cls = chg >= 0 ? 'pos' : 'neg';
-      return `<a class="hp-pulse-card" data-sym="${idx.sym}" href="/stock-details?t=${idx.sym}" style="text-decoration:none">
-        <div class="hp-pulse-sym">${idx.sym}</div>
-        <div class="hp-pulse-name">${idx.name}</div>
-        <div class="hp-pulse-price" data-target="${q.price || 0}">$${(q.price || 0).toFixed(2)}</div>
-        <div class="hp-pulse-foot">
-          <span class="hp-pulse-chg ${cls}">${chg>=0?'+':''}${chg.toFixed(2)} · ${chgPct>=0?'+':''}${chgPct.toFixed(2)}%</span>
-          ${buildHomepageSpark(hist, cls)}
-        </div>
-      </a>`;
-    }).join('');
+    const nF = HP_FUTURES.length;
+    const pulseEl = document.getElementById('hp-pulse');
+    if(pulseEl) pulseEl.innerHTML = HP_FUTURES.map((c,i)=>hpCardHTML(c, quotes[i], hists[i])).join('');
+    const comEl = document.getElementById('hp-commodities');
+    if(comEl) comEl.innerHTML = HP_COMMODITIES.map((c,i)=>hpCardHTML(c, quotes[nF+i], hists[nF+i])).join('');
 
-    container.querySelectorAll('.hp-pulse-price').forEach(el => {
+    document.querySelectorAll('.hp-pulse-price[data-target]').forEach(el => {
       const target = parseFloat(el.dataset.target);
-      if(target > 0) animateCountUp(el, target, 800, v => '$' + v.toFixed(2));
+      if(target > 0) animateCountUp(el, target, 800, v => '$' + v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}));
     });
 
+    const resolved = quotes.filter(Boolean).length;
     const ts = document.getElementById('hp-pulse-ts');
-    if(ts) ts.textContent = new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) + ' · 5 indices';
+    if(ts) ts.textContent = new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) + ' · ' + resolved + ' instruments';
 
     startHomepageTicks();
   } catch(e) {
-    console.warn('Dashboard pulse failed', e);
+    console.warn('Market overview failed', e);
     const ts = document.getElementById('hp-pulse-ts');
-    if(ts) ts.textContent = 'pulse offline · check API key';
+    if(ts) ts.textContent = 'offline · check API key';
   }
 }
 
@@ -491,6 +581,68 @@ function renderMoverList(id, items, defaultCls){
       </div>
     </a>`;
   }).join('');
+}
+
+/* ─── Latest news (with image thumbnails) ─── */
+let _hpNewsView = 'general';
+const HP_NEWS_EP = {
+  general: '/news/general-latest?limit=18',
+  stock:   '/news/stock-latest?limit=18',
+  crypto:  '/news/crypto-latest?limit=18',
+};
+const _hpNewsCache = {};
+function hpEsc(s){ return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function hpTimeAgo(ds){
+  if(!ds) return '';
+  const diff = Date.now() - new Date(String(ds).replace(' ','T')).getTime();
+  const m = Math.floor(diff/60000);
+  if(isNaN(m)) return '';
+  if(m < 1) return 'just now';
+  if(m < 60) return m + 'm ago';
+  const h = Math.floor(m/60);
+  if(h < 24) return h + 'h ago';
+  const d = Math.floor(h/24);
+  if(d < 30) return d + 'd ago';
+  return new Date(ds).toLocaleDateString();
+}
+function hpNewsCard(n){
+  const url  = n.url || n.link || '#';
+  const date = n.publishedDate || n.date || '';
+  const site = n.site || n.publisher || '';
+  let text = n.text || '';
+  if(!text && n.content) text = n.content.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+  const snip = text ? hpEsc(text.slice(0,140).trim()) + '…' : '';
+  const img = n.image
+    ? `<img src="${hpEsc(n.image)}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="hp-news-fallback" style="display:none">${hpEsc(site || 'InsightInvest')}</div>`
+    : `<div class="hp-news-fallback" style="display:flex">${hpEsc(site || 'InsightInvest')}</div>`;
+  return `<div class="hp-news-card" onclick="window.open('${hpEsc(url)}','_blank','noopener')">
+    <div class="hp-news-thumb">${img}${site ? `<span class="hp-news-badge">${hpEsc(site)}</span>` : ''}</div>
+    <div class="hp-news-body">
+      <div class="hp-news-title">${hpEsc(n.title || 'Untitled')}</div>
+      ${snip ? `<div class="hp-news-snippet">${snip}</div>` : ''}
+      <div class="hp-news-meta">${n.symbol ? hpEsc(n.symbol) + ' · ' : ''}${hpTimeAgo(date)}</div>
+    </div>
+  </div>`;
+}
+async function loadHomepageNews(view){
+  const el = document.getElementById('hp-news');
+  if(!el) return;
+  if(_hpNewsCache[view]){ el.innerHTML = _hpNewsCache[view].slice(0,9).map(hpNewsCard).join(''); return; }
+  el.innerHTML = '<div class="hp-news-empty">Loading news…</div>';
+  try {
+    const data = await fmpFetch(HP_NEWS_EP[view]);
+    const list = Array.isArray(data) ? data : [];
+    _hpNewsCache[view] = list;
+    el.innerHTML = list.length ? list.slice(0,9).map(hpNewsCard).join('') : '<div class="hp-news-empty">No articles found.</div>';
+  } catch(e) {
+    console.warn('Dashboard news failed', e);
+    el.innerHTML = '<div class="hp-news-empty">News unavailable — check API key.</div>';
+  }
+}
+function switchHpNews(view, btn){
+  _hpNewsView = view;
+  document.querySelectorAll('[data-news]').forEach(b => b.classList.toggle('active', b.dataset.news === view));
+  loadHomepageNews(view);
 }
 </script>
 
