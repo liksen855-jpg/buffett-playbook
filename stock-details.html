@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
@@ -10,12 +10,20 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 :root{
-  --bg:hsl(222,47%,6%);--bg2:hsl(222,42%,8%);--card:hsl(222,40%,9%);
-  --border:hsl(220,25%,14%);--border2:hsl(220,28%,18%);
-  --fg:hsl(210,20%,92%);--fg2:hsl(210,15%,70%);--muted:hsl(210,12%,48%);
-  --primary:hsl(213,94%,58%);--green:hsl(160,65%,45%);--red:hsl(0,68%,55%);
-  --yellow:hsl(45,93%,58%);--purple:hsl(265,70%,65%);--orange:hsl(25,90%,55%);
-  --mono:"JetBrains Mono",monospace;--sans:"Inter",sans-serif;
+  /* Light theme (v3 — InsightValue) */
+  --bg:#FBFBFA;--bg2:#F6F6F5;--card:#FFFFFF;
+  --surface:#FFFFFF;--raised:#F6F6F5;
+  --border:#ECEAE6;--border2:#E0DDD7;
+  --line:#ECEAE6;--line-2:#E0DDD7;
+  --fg:#1A1A18;--fg2:#44443F;--muted:#8A887F;--mute-2:#B4B2AA;
+  --ink:#1A1A18;--ink-2:#44443F;--mute:#8A887F;
+  --primary:#2C5E8A;--accent:#2C5E8A;
+  --green:#2E7D55;--pos:#2E7D55;--pos-soft:#EFF6F1;
+  --red:#B23B3B;--neg:#B23B3B;--neg-soft:#FBF1F0;
+  --yellow:#A77A1E;--warn:#A77A1E;--warn-soft:#FBF5E9;
+  --purple:#5A4AA8;--orange:#A87422;
+  --accent-soft:#EEF3F8;
+  --mono:"Inter",ui-monospace,monospace;--sans:"Inter",sans-serif;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh}
@@ -31,7 +39,7 @@ input{font-family:var(--sans)}
 .search-wrap input:focus{border-color:var(--primary)}
 .search-wrap input::placeholder{color:var(--muted)}
 .search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
-.search-results{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--card);border:1px solid var(--border2);border-radius:8px;overflow:hidden;box-shadow:0 8px 24px hsl(222,47%,3%,.6);z-index:200;display:none}
+.search-results{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--card);border:1px solid var(--border2);border-radius:8px;overflow:hidden;box-shadow:0 8px 24px rgba(20,20,18,.10);z-index:200;display:none}
 .search-results.open{display:block}
 .search-result-item{display:flex;align-items:center;gap:12px;padding:10px 14px;cursor:pointer;transition:background .1s}
 .search-result-item:hover{background:var(--border)}
@@ -43,13 +51,13 @@ input{font-family:var(--sans)}
 .icon-btn:hover{color:var(--fg);border-color:var(--fg2)}
 
 /* Key bar */
-.key-bar{display:flex;align-items:center;gap:10px;padding:10px 24px;background:hsl(45,93%,58%,.06);border-bottom:1px solid hsl(45,93%,58%,.15);font-size:13px}
+.key-bar{display:flex;align-items:center;gap:10px;padding:10px 24px;background:hsl(38,68%,38%,.06);border-bottom:1px solid hsl(38,68%,38%,.15);font-size:13px}
 .key-bar.hidden{display:none}
 .key-bar label{color:var(--yellow);font-weight:500;white-space:nowrap;font-size:12px}
 .key-bar input{flex:1;max-width:320px;background:var(--card);border:1px solid var(--border);border-radius:6px;color:var(--fg);font-family:var(--mono);font-size:12px;padding:6px 10px;outline:none}
 .key-bar input:focus{border-color:var(--primary)}
 .btn-sm{padding:6px 14px;border-radius:6px;font-size:12px;font-weight:500;border:none;cursor:pointer}
-.btn-primary{background:var(--primary);color:hsl(222,47%,6%)}
+.btn-primary{background:var(--primary);color:#FBFBFA}
 .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)!important}
 
 /* Empty / Loading */
@@ -79,7 +87,7 @@ input{font-family:var(--sans)}
 .company-info{flex:1}
 .company-name{font-size:20px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
 .company-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px}
-.ticker-badge{font-family:var(--mono);font-size:12px;font-weight:700;background:hsl(213,94%,58%,.12);color:var(--primary);border:1px solid hsl(213,94%,58%,.25);padding:2px 8px;border-radius:999px}
+.ticker-badge{font-family:var(--mono);font-size:12px;font-weight:700;background:hsl(208,52%,36%,.12);color:var(--primary);border:1px solid hsl(208,52%,36%,.25);padding:2px 8px;border-radius:999px}
 .badge{font-size:11px;color:var(--muted);background:var(--card);border:1px solid var(--border);padding:2px 7px;border-radius:999px}
 .price-block{text-align:right}
 .price-main{font-family:var(--mono);font-size:32px;font-weight:700;letter-spacing:-.02em;line-height:1}
@@ -101,8 +109,8 @@ input{font-family:var(--sans)}
 .tab-nav{display:flex;gap:6px;padding:14px 22px 12px;max-width:1360px;margin:0 auto;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--border)}
 .tab-nav::-webkit-scrollbar{display:none}
 .tab-btn{display:inline-flex;align-items:center;padding:7px 16px;font-size:13px;font-weight:500;color:var(--muted);border:1px solid transparent;background:transparent;cursor:pointer;border-radius:999px;white-space:nowrap;transition:background .15s,color .15s,border-color .15s;letter-spacing:-.005em}
-.tab-btn:hover{color:var(--fg2);background:hsl(222,40%,11%)}
-.tab-btn.active{color:var(--fg);background:hsl(222,40%,15%);border-color:hsl(220,28%,22%);font-weight:600}
+.tab-btn:hover{color:var(--fg2);background:hsl(38,16%,96%)}
+.tab-btn.active{color:var(--fg);background:hsl(208,52%,93%);border-color:hsl(208,42%,70%);font-weight:600}
 
 /* Page */
 .tab-page{display:none;padding:24px;max-width:1360px;margin:0 auto}
@@ -143,7 +151,7 @@ input{font-family:var(--sans)}
 .chart-wrap.tall{height:300px}
 .period-btns{display:flex;gap:4px;margin-bottom:10px}
 .period-btn{background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--muted);font-size:11px;font-family:var(--mono);font-weight:600;padding:3px 9px;cursor:pointer;transition:all .15s}
-.period-btn.active,.period-btn:hover{background:hsl(213,94%,58%,.12);border-color:hsl(213,94%,58%,.4);color:var(--primary)}
+.period-btn.active,.period-btn:hover{background:hsl(208,52%,36%,.12);border-color:hsl(208,52%,36%,.4);color:var(--primary)}
 
 /* Description */
 .description{font-size:13px;color:var(--fg2);line-height:1.8;margin-bottom:8px}
@@ -156,10 +164,10 @@ input{font-family:var(--sans)}
 /* Table */
 .table-wrap{overflow-x:auto;border-radius:8px;border:1px solid var(--border);margin-bottom:16px}
 table{width:100%;border-collapse:collapse;font-size:12.5px}
-thead{background:hsl(220,28%,10%)}
+thead{background:#FBFBFA}
 th{padding:10px 16px;text-align:right;font-weight:500;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;border-bottom:1px solid var(--border)}
-th:first-child{text-align:left;position:sticky;left:0;background:hsl(220,28%,10%)}
-td{padding:10px 16px;border-bottom:1px solid hsl(220,25%,14%,.5);text-align:right;font-family:var(--mono);font-size:12px;white-space:nowrap}
+th:first-child{text-align:left;position:sticky;left:0;background:#FBFBFA}
+td{padding:10px 16px;border-bottom:1px solid rgba(20,20,18,.5);text-align:right;font-family:var(--mono);font-size:12px;white-space:nowrap}
 td:first-child{text-align:left;font-family:var(--sans);font-size:12.5px;color:var(--fg2);position:sticky;left:0;background:var(--card)}
 tr:last-child td{border-bottom:none}
 tr.row-total td{font-weight:600;color:var(--fg)}
@@ -173,19 +181,19 @@ td.strong{color:var(--fg);font-weight:600}
 .toggle-label{font-size:12px;color:var(--muted)}
 .toggle-group{display:flex;background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden}
 .toggle-opt{padding:5px 14px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;border:none;background:transparent;transition:all .15s}
-.toggle-opt.active{background:hsl(213,94%,58%,.15);color:var(--primary)}
+.toggle-opt.active{background:hsl(208,52%,36%,.15);color:var(--primary)}
 
 /* Financials redesign */
 .fin-section{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px 22px;margin-bottom:14px}
 .fin-title{font-size:15px;font-weight:700;letter-spacing:-.02em;margin-bottom:2px}
 .fin-subtitle{font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.5}
 .fin-ctrl-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
-.fin-sep{color:hsl(220,18%,28%);padding:0 2px;user-select:none;font-weight:200;font-size:18px;line-height:1}
-.fin-pill-group{display:inline-flex;background:hsl(222,35%,12%);border:1px solid hsl(222,28%,16%);border-radius:999px;padding:3px;align-items:center;gap:1px}
+.fin-sep{color:#B4B2AA;padding:0 2px;user-select:none;font-weight:200;font-size:18px;line-height:1}
+.fin-pill-group{display:inline-flex;background:#F6F6F5;border:1px solid #E0DDD7;border-radius:999px;padding:3px;align-items:center;gap:1px}
 .fin-type-btn,.fin-period-pill{
   background:transparent;
   border:none;
-  color:hsl(220,12%,62%);
+  color:#8A887F;
   font-size:12.5px;
   font-weight:500;
   padding:7px 18px;
@@ -199,7 +207,7 @@ td.strong{color:var(--fg);font-weight:600}
 .fin-type-btn:hover,.fin-period-pill:hover{color:var(--fg2)}
 .fin-type-btn.active,.fin-period-pill.active{
   background:hsl(220,28%,90%);
-  color:hsl(222,40%,8%);
+  color:#F6F6F5;
   font-weight:600;
 }
 .fin-lock-icon{display:inline-flex;align-items:center;color:hsl(45,55%,52%);margin-left:4px;padding-right:8px}
@@ -221,24 +229,24 @@ td.strong{color:var(--fg);font-weight:600}
 .fin-detail th{padding:12px 14px 14px;text-align:right;font-weight:500;color:var(--fg2);font-size:11.5px;text-transform:none;letter-spacing:0;border-bottom:1px solid var(--border2);white-space:nowrap;vertical-align:bottom;font-family:var(--mono)}
 .fin-detail th:first-child{text-align:left;font-weight:500;color:var(--fg2);padding-left:4px;background:transparent;font-family:var(--sans)}
 .fin-detail th .ttm-line{display:block;color:var(--muted);font-weight:400;font-size:10.5px;margin-bottom:2px;font-family:var(--mono)}
-.fin-detail td{padding:9px 14px;border-bottom:1px solid hsl(220,25%,14%,.4);text-align:right;font-family:var(--mono);font-size:12.5px;color:var(--fg);white-space:nowrap;font-weight:400;background:transparent}
+.fin-detail td{padding:9px 14px;border-bottom:1px solid rgba(20,20,18,.4);text-align:right;font-family:var(--mono);font-size:12.5px;color:var(--fg);white-space:nowrap;font-weight:400;background:transparent}
 .fin-detail td:first-child{text-align:left;font-family:var(--sans);font-size:12.5px;color:var(--fg2);padding-left:4px;background:transparent;line-height:1.4;max-width:280px;white-space:normal}
-.fin-detail tr.subtotal td{background:hsl(220,28%,12%);font-weight:600;color:var(--fg)}
+.fin-detail tr.subtotal td{background:#F6F6F5;font-weight:600;color:var(--fg)}
 .fin-detail tr.subtotal td:first-child{font-weight:600;color:var(--fg)}
-.fin-detail tr:hover td:not(.no-hover){background:hsl(220,28%,13%)}
-.fin-detail tr.subtotal:hover td{background:hsl(220,28%,15%)}
+.fin-detail tr:hover td:not(.no-hover){background:#F6F6F5}
+.fin-detail tr.subtotal:hover td{background:#ECEAE6}
 .fin-detail tr:last-child td{border-bottom:none}
-.fin-detail td.neg{color:hsl(0,55%,68%)}
+.fin-detail td.neg{color:hsl(0,40%,60%)}
 
 /* Bloomberg-style metric tables */
 .bmetric-card{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:14px}
-.bmetric-head{padding:9px 16px;background:hsl(220,30%,11%);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.bmetric-head{padding:9px 16px;background:#F6F6F5;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .bmetric-head-title{font-size:10.5px;font-weight:700;color:var(--fg);text-transform:uppercase;letter-spacing:.13em}
 .bmetric-head-meta{font-size:10px;color:var(--muted);font-family:var(--mono);letter-spacing:.06em}
 .bmetric-table{width:100%;border-collapse:collapse;font-size:12.5px}
 .bmetric-table tr{transition:background .12s}
-.bmetric-table tr:nth-child(even) td{background:hsl(220,28%,10%,.7)}
-.bmetric-table tr:hover td{background:hsl(220,28%,14%,.85)}
+.bmetric-table tr:nth-child(even) td{background:#FBFBFA}
+.bmetric-table tr:hover td{background:#ECEAE6}
 .bmetric-table td{padding:8px 16px;border-bottom:none;vertical-align:middle}
 .bmetric-table td.label{color:var(--fg2);font-size:12.5px;line-height:1.3;width:62%}
 .bmetric-table td.val{font-family:var(--mono);font-weight:600;text-align:right;font-size:12.5px;color:var(--fg);white-space:nowrap;letter-spacing:-.01em}
@@ -248,7 +256,7 @@ td.strong{color:var(--fg);font-weight:600}
 .bmetric-table td.val.muted{color:var(--muted);font-weight:500}
 
 /* Metric row (label + val inline) */
-.mrow{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid hsl(220,25%,14%,.5)}
+.mrow{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(20,20,18,.5)}
 .mrow:last-child{border-bottom:none}
 .mrow-label{font-size:12.5px;color:var(--fg2)}
 .mrow-val{font-family:var(--mono);font-size:13px;font-weight:600;text-align:right}
@@ -284,9 +292,9 @@ td.strong{color:var(--fg);font-weight:600}
 .iv-val.down{color:var(--red)}
 .iv-sub{font-size:11px;color:var(--muted);margin-top:4px}
 .iv-badge{position:absolute;top:10px;right:10px;font-size:10px;font-weight:600;padding:2px 7px;border-radius:999px}
-.iv-badge.buy{background:hsl(160,65%,45%,.15);color:var(--green);border:1px solid hsl(160,65%,45%,.3)}
-.iv-badge.hold{background:hsl(45,93%,58%,.12);color:var(--yellow);border:1px solid hsl(45,93%,58%,.25)}
-.iv-badge.sell{background:hsl(0,68%,55%,.12);color:var(--red);border:1px solid hsl(0,68%,55%,.25)}
+.iv-badge.buy{background:hsl(146,46%,33%,.15);color:var(--green);border:1px solid hsl(146,46%,33%,.3)}
+.iv-badge.hold{background:hsl(38,68%,38%,.12);color:var(--yellow);border:1px solid hsl(38,68%,38%,.25)}
+.iv-badge.sell{background:hsl(0,49%,46%,.12);color:var(--red);border:1px solid hsl(0,49%,46%,.25)}
 
 /* Layer hero — editorial section divider */
 .layer-hero{background:transparent;border:none;border-radius:0;padding:0;margin:32px 0 14px}
@@ -303,8 +311,8 @@ td.strong{color:var(--fg);font-weight:600}
 .layer-score{font-family:var(--mono);font-size:18px;font-weight:700;letter-spacing:-.01em;color:var(--muted)}
 .layer-score-num{color:var(--fg);font-size:22px}
 .layer-gate{margin-top:10px;padding:8px 14px;border-radius:4px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;display:inline-block}
-.layer-gate.pass{background:hsl(160,65%,45%,.08);border:1px solid hsl(160,65%,45%,.22);color:var(--green)}
-.layer-gate.fail{background:hsl(45,93%,58%,.06);border:1px solid hsl(45,93%,58%,.2);color:var(--yellow)}
+.layer-gate.pass{background:hsl(146,46%,33%,.08);border:1px solid hsl(146,46%,33%,.22);color:var(--green)}
+.layer-gate.fail{background:hsl(38,68%,38%,.06);border:1px solid hsl(38,68%,38%,.2);color:var(--yellow)}
 .ql-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:760px){.ql-grid{grid-template-columns:1fr}}
 .ql-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px 18px}
@@ -314,115 +322,115 @@ td.strong{color:var(--fg);font-weight:600}
 .ql-card-score{font-family:var(--mono);font-size:18px;font-weight:700;line-height:1;flex-shrink:0;letter-spacing:-.01em}
 .ql-card-bar{height:3px;background:var(--border);border-radius:0;overflow:hidden;margin-bottom:12px}
 .ql-card-fill{height:100%;transition:width .6s}
-.ql-stat{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid hsl(220,25%,14%,.35);font-size:12.5px}
+.ql-stat{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(20,20,18,.35);font-size:12.5px}
 .ql-stat:last-of-type{border-bottom:none}
 .ql-stat-l{color:var(--fg2);font-size:12px}
 .ql-stat-v{font-family:var(--mono);font-weight:600;font-size:12.5px;letter-spacing:-.01em}
 .ql-card-verdict{margin-top:12px;padding:8px 0 0;border-top:1px solid var(--border);font-size:10.5px;font-weight:700;text-align:left;letter-spacing:.15em;text-transform:uppercase;background:transparent;border-radius:0}
 .ql-card-verdict.exc{color:var(--green)}
-.ql-card-verdict.gd{color:hsl(160,55%,60%)}
+.ql-card-verdict.gd{color:hsl(146,40%,45%)}
 .ql-card-verdict.mid{color:var(--yellow)}
 .ql-card-verdict.bad{color:var(--red)}
 .ql-card-verdict::before{content:'STATUS  ·  ';color:var(--muted);font-weight:600}
 
 /* ── Quality Gate · Terminal Style (Layer 1) ── */
-.ql-terminal{background:#000;color:#e8e0d0;font-family:var(--mono);border:1px solid #1a1a1a;border-radius:6px;overflow:hidden;margin-bottom:18px;font-size:11.5px;letter-spacing:.04em}
+.ql-terminal{background:#FFFFFF;color:#1A1A18;font-family:var(--mono);border:1px solid #ECEAE6;border-radius:6px;overflow:hidden;margin-bottom:18px;font-size:11.5px;letter-spacing:.04em}
 .ql-terminal *{box-sizing:border-box}
-.qt-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;border-bottom:1px solid #1a1a1a;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#7a705f;font-weight:600;gap:14px;flex-wrap:wrap}
-.qt-bar-bottom{border-top:1px solid #1a1a1a;border-bottom:none;font-size:9.5px}
+.qt-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;border-bottom:1px solid #ECEAE6;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#7a705f;font-weight:600;gap:14px;flex-wrap:wrap}
+.qt-bar-bottom{border-top:1px solid #ECEAE6;border-bottom:none;font-size:9.5px}
 .qt-bar-l,.qt-bar-r,.qt-bar-c{display:flex;align-items:center;gap:10px}
 .qt-bar-c{flex:1;justify-content:center}
-.qt-bracket{display:inline-flex;align-items:center;justify-content:center;border:1px solid #5a5040;color:#9a9080;padding:2px 7px;font-weight:700;font-size:10px;letter-spacing:0;min-width:18px}
-.qt-divider{color:#3a3a3a}
-.qt-slash{color:#3a3a3a;margin:0 6px}
-.qt-section-title{color:#e8e0d0;font-weight:700}
+.qt-bracket{display:inline-flex;align-items:center;justify-content:center;border:1px solid #8A887F;color:#44443F;padding:2px 7px;font-weight:700;font-size:10px;letter-spacing:0;min-width:18px}
+.qt-divider{color:#B4B2AA}
+.qt-slash{color:#B4B2AA;margin:0 6px}
+.qt-section-title{color:#1A1A18;font-weight:700}
 /* Hero */
-.qt-hero{display:grid;grid-template-columns:170px 1fr 300px;gap:28px;padding:22px 26px 26px;border-bottom:1px solid #1a1a1a;align-items:start}
+.qt-hero{display:grid;grid-template-columns:170px 1fr 300px;gap:28px;padding:22px 26px 26px;border-bottom:1px solid #ECEAE6;align-items:start}
 @media(max-width:1100px){.qt-hero{grid-template-columns:1fr;gap:20px}}
 .qt-letter{font-family:var(--mono);font-size:120px;font-weight:800;line-height:.86;letter-spacing:-.04em;margin-bottom:12px}
-.qt-letter.fail-color{color:#ff4444}
-.qt-letter.warn-color{color:#ffb84d}
-.qt-letter.gd-color{color:#9adb55}
-.qt-letter.ok-color{color:#5dd060}
+.qt-letter.fail-color{color:#B23B3B}
+.qt-letter.warn-color{color:#A77A1E}
+.qt-letter.gd-color{color:#2E7D55}
+.qt-letter.ok-color{color:#2E7D55}
 .qt-grade-strip{display:flex;gap:4px}
-.qt-g{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border:1px solid #2a2a2a;color:#4a4030;font-size:10.5px;font-weight:700;font-family:var(--mono)}
-.qt-g.active.fail-color{border-color:#ff4444;color:#ff4444}
-.qt-g.active.warn-color{border-color:#ffb84d;color:#ffb84d}
-.qt-g.active.gd-color{border-color:#9adb55;color:#9adb55}
-.qt-g.active.ok-color{border-color:#5dd060;color:#5dd060}
-.qt-score-meta{display:flex;align-items:center;gap:10px;color:#9a9080;font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
-.qt-meta-text{color:#5a5040;letter-spacing:.08em;font-weight:500}
+.qt-g{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border:1px solid #E0DDD7;color:#4a4030;font-size:10.5px;font-weight:700;font-family:var(--mono)}
+.qt-g.active.fail-color{border-color:#B23B3B;color:#B23B3B}
+.qt-g.active.warn-color{border-color:#A77A1E;color:#A77A1E}
+.qt-g.active.gd-color{border-color:#2E7D55;color:#2E7D55}
+.qt-g.active.ok-color{border-color:#2E7D55;color:#2E7D55}
+.qt-score-meta{display:flex;align-items:center;gap:10px;color:#44443F;font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+.qt-meta-text{color:#8A887F;letter-spacing:.08em;font-weight:500}
 .qt-score-line{display:flex;align-items:baseline;gap:14px;margin-bottom:14px;font-family:var(--mono)}
 .qt-score-num{font-size:48px;font-weight:800;letter-spacing:-.02em;line-height:.9}
-.qt-score-denom{font-size:18px;color:#5a5040;font-weight:600}
-.qt-pctl{margin-left:auto;border:1px solid #3a3a3a;padding:4px 12px;font-size:9.5px;color:#9a9080;letter-spacing:.18em;font-weight:700;text-transform:uppercase}
+.qt-score-denom{font-size:18px;color:#8A887F;font-weight:600}
+.qt-pctl{margin-left:auto;border:1px solid #B4B2AA;padding:4px 12px;font-size:9.5px;color:#44443F;letter-spacing:.18em;font-weight:700;text-transform:uppercase}
 .qt-bar-blocks{display:flex;gap:1.5px;margin-bottom:6px;height:14px}
-.qt-bar-blocks > div{flex:1;background:#1a1a1a}
-.qt-bar-blocks > div.fill-fail{background:#ff4444}
-.qt-bar-blocks > div.fill-warn{background:#ffb84d}
-.qt-bar-blocks > div.fill-gd{background:#9adb55}
-.qt-bar-blocks > div.fill-ok{background:#5dd060}
-.qt-bar-markers{display:flex;justify-content:space-between;color:#5a5040;font-size:9px;letter-spacing:.14em;font-weight:600;margin-bottom:16px;font-family:var(--mono)}
-.qt-tagline{color:#9a9080;font-size:10px;letter-spacing:.16em;text-transform:uppercase;line-height:1.7;font-weight:600;padding-top:10px;border-top:1px dashed #2a2a2a}
+.qt-bar-blocks > div{flex:1;background:#ECEAE6}
+.qt-bar-blocks > div.fill-fail{background:#B23B3B}
+.qt-bar-blocks > div.fill-warn{background:#A77A1E}
+.qt-bar-blocks > div.fill-gd{background:#2E7D55}
+.qt-bar-blocks > div.fill-ok{background:#2E7D55}
+.qt-bar-markers{display:flex;justify-content:space-between;color:#8A887F;font-size:9px;letter-spacing:.14em;font-weight:600;margin-bottom:16px;font-family:var(--mono)}
+.qt-tagline{color:#44443F;font-size:10px;letter-spacing:.16em;text-transform:uppercase;line-height:1.7;font-weight:600;padding-top:10px;border-top:1px dashed #E0DDD7}
 /* Gate column */
-.qt-gate-row{display:flex;align-items:stretch;border:1px solid #ff4444;height:48px}
-.qt-gate-row.pass{border-color:#5dd060}
-.qt-gate-row.warn{border-color:#ffb84d}
-.qt-gate-label{display:flex;align-items:center;justify-content:center;width:60px;background:rgba(255,68,68,.14);color:#ff4444;font-size:10px;font-weight:700;letter-spacing:.22em;flex-shrink:0;border-right:1px solid #ff4444}
-.qt-gate-row.pass .qt-gate-label{background:rgba(93,208,96,.12);color:#5dd060;border-right-color:#5dd060}
-.qt-gate-row.warn .qt-gate-label{background:rgba(255,184,77,.12);color:#ffb84d;border-right-color:#ffb84d}
-.qt-gate-status{display:flex;align-items:center;flex:1;padding:0 18px;font-size:22px;font-weight:800;letter-spacing:.08em;color:#ff4444;font-family:var(--mono)}
-.qt-gate-row.pass .qt-gate-status{color:#5dd060}
-.qt-gate-row.warn .qt-gate-status{color:#ffb84d}
-.qt-gate-sub{margin-top:8px;color:#ff4444;font-size:10px;letter-spacing:.22em;font-weight:700;text-transform:uppercase;margin-bottom:14px}
-.qt-gate-sub.pass{color:#5dd060}
-.qt-gate-sub.warn{color:#ffb84d}
-.qt-gate-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px 22px;border-top:1px dashed #2a2a2a;padding-top:10px;font-size:10px}
+.qt-gate-row{display:flex;align-items:stretch;border:1px solid #B23B3B;height:48px}
+.qt-gate-row.pass{border-color:#2E7D55}
+.qt-gate-row.warn{border-color:#A77A1E}
+.qt-gate-label{display:flex;align-items:center;justify-content:center;width:60px;background:rgba(255,68,68,.14);color:#B23B3B;font-size:10px;font-weight:700;letter-spacing:.22em;flex-shrink:0;border-right:1px solid #B23B3B}
+.qt-gate-row.pass .qt-gate-label{background:rgba(93,208,96,.12);color:#2E7D55;border-right-color:#2E7D55}
+.qt-gate-row.warn .qt-gate-label{background:rgba(255,184,77,.12);color:#A77A1E;border-right-color:#A77A1E}
+.qt-gate-status{display:flex;align-items:center;flex:1;padding:0 18px;font-size:22px;font-weight:800;letter-spacing:.08em;color:#B23B3B;font-family:var(--mono)}
+.qt-gate-row.pass .qt-gate-status{color:#2E7D55}
+.qt-gate-row.warn .qt-gate-status{color:#A77A1E}
+.qt-gate-sub{margin-top:8px;color:#B23B3B;font-size:10px;letter-spacing:.22em;font-weight:700;text-transform:uppercase;margin-bottom:14px}
+.qt-gate-sub.pass{color:#2E7D55}
+.qt-gate-sub.warn{color:#A77A1E}
+.qt-gate-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px 22px;border-top:1px dashed #E0DDD7;padding-top:10px;font-size:10px}
 .qt-gate-stats > div{display:flex;justify-content:space-between;gap:8px}
-.qt-stat-l{color:#5a5040;letter-spacing:.16em;font-weight:600;text-transform:uppercase}
-.qt-stat-v{color:#e8e0d0;font-weight:700;letter-spacing:.04em}
+.qt-stat-l{color:#8A887F;letter-spacing:.16em;font-weight:600;text-transform:uppercase}
+.qt-stat-v{color:#1A1A18;font-weight:700;letter-spacing:.04em}
 /* Cards */
 .qt-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
 @media(max-width:1000px){.qt-grid{grid-template-columns:1fr}}
-.qt-card{padding:18px 22px;border-top:1px solid #1a1a1a;border-right:1px solid #1a1a1a}
+.qt-card{padding:18px 22px;border-top:1px solid #ECEAE6;border-right:1px solid #ECEAE6}
 .qt-card:nth-child(2),.qt-card:nth-child(4){border-right:none}
 @media(max-width:1000px){.qt-card{border-right:none}}
 .qt-card-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px;gap:14px;font-family:var(--mono)}
-.qt-card-head-l{display:flex;align-items:baseline;gap:10px;color:#e8e0d0;letter-spacing:.14em;text-transform:uppercase}
-.qt-card-code{color:#5a5040;font-weight:700;font-size:9.5px;letter-spacing:.18em}
+.qt-card-head-l{display:flex;align-items:baseline;gap:10px;color:#1A1A18;letter-spacing:.14em;text-transform:uppercase}
+.qt-card-code{color:#8A887F;font-weight:700;font-size:9.5px;letter-spacing:.18em}
 .qt-card-name{font-size:11px;font-weight:700}
 .qt-card-head-r{display:flex;align-items:baseline;gap:10px}
 .qt-card-spark svg{vertical-align:middle}
 .qt-card-score{font-size:26px;font-weight:800;letter-spacing:-.02em;line-height:1}
-.qt-card-score.fail{color:#ff4444}
-.qt-card-score.warn{color:#ffb84d}
-.qt-card-score.gd{color:#9adb55}
-.qt-card-score.ok{color:#5dd060}
-.qt-card-score-max{color:#5a5040;font-size:13px;font-weight:600;margin-left:1px}
+.qt-card-score.fail{color:#B23B3B}
+.qt-card-score.warn{color:#A77A1E}
+.qt-card-score.gd{color:#2E7D55}
+.qt-card-score.ok{color:#2E7D55}
+.qt-card-score-max{color:#8A887F;font-size:13px;font-weight:600;margin-left:1px}
 .qt-card-bar{display:flex;gap:1.5px;height:8px;margin-bottom:3px}
-.qt-card-bar > div{flex:1;background:#1a1a1a}
-.qt-card-bar > div.fail{background:#ff4444}
-.qt-card-bar > div.warn{background:#ffb84d}
-.qt-card-bar > div.gd{background:#9adb55}
-.qt-card-bar > div.ok{background:#5dd060}
-.qt-peer-marker{font-size:9px;color:#5a5040;letter-spacing:.16em;margin-bottom:14px;font-weight:700;text-transform:uppercase;font-family:var(--mono);position:relative;height:14px}
+.qt-card-bar > div{flex:1;background:#ECEAE6}
+.qt-card-bar > div.fail{background:#B23B3B}
+.qt-card-bar > div.warn{background:#A77A1E}
+.qt-card-bar > div.gd{background:#2E7D55}
+.qt-card-bar > div.ok{background:#2E7D55}
+.qt-peer-marker{font-size:9px;color:#8A887F;letter-spacing:.16em;margin-bottom:14px;font-weight:700;text-transform:uppercase;font-family:var(--mono);position:relative;height:14px}
 .qt-peer-marker > span{position:absolute;white-space:nowrap}
 .qt-card-stats{display:grid;grid-template-columns:1fr;gap:5px;margin-bottom:14px;font-family:var(--mono);font-size:11px}
 .qt-card-stats > div{display:flex;justify-content:space-between;align-items:baseline;gap:14px}
-.qt-card-stat-l{color:#5a5040;letter-spacing:.16em;font-weight:600;text-transform:uppercase}
-.qt-card-stat-v{color:#e8e0d0;font-weight:700;text-align:right;letter-spacing:.02em}
-.qt-card-stat-v.pos{color:#5dd060}
-.qt-card-stat-v.neg{color:#ff4444}
-.qt-card-stat-v.warn{color:#ffb84d}
-.qt-card-foot{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px dashed #2a2a2a;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:700}
-.qt-card-status-l{color:#5a5040;font-weight:600}
-.qt-card-status-v.fail{color:#ff4444}
-.qt-card-status-v.warn{color:#ffb84d}
-.qt-card-status-v.gd{color:#9adb55}
-.qt-card-status-v.ok{color:#5dd060}
-.qt-card-dec{color:#5a5040;font-size:9px}
-.qt-fn{color:#5a5040;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
-.qt-live-dot{display:inline-block;width:7px;height:7px;background:#5dd060;margin-right:6px;animation:qt-pulse 2s infinite}
+.qt-card-stat-l{color:#8A887F;letter-spacing:.16em;font-weight:600;text-transform:uppercase}
+.qt-card-stat-v{color:#1A1A18;font-weight:700;text-align:right;letter-spacing:.02em}
+.qt-card-stat-v.pos{color:#2E7D55}
+.qt-card-stat-v.neg{color:#B23B3B}
+.qt-card-stat-v.warn{color:#A77A1E}
+.qt-card-foot{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px dashed #E0DDD7;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:700}
+.qt-card-status-l{color:#8A887F;font-weight:600}
+.qt-card-status-v.fail{color:#B23B3B}
+.qt-card-status-v.warn{color:#A77A1E}
+.qt-card-status-v.gd{color:#2E7D55}
+.qt-card-status-v.ok{color:#2E7D55}
+.qt-card-dec{color:#8A887F;font-size:9px}
+.qt-fn{color:#8A887F;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+.qt-live-dot{display:inline-block;width:7px;height:7px;background:#2E7D55;margin-right:6px;animation:qt-pulse 2s infinite}
 @keyframes qt-pulse{0%,100%{opacity:1}50%{opacity:.35}}
 
 /* Layer 2 — DCF */
@@ -445,15 +453,15 @@ td.strong{color:var(--fg);font-weight:600}
 .dcf-input-block label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px;font-weight:600}
 .dcf-input-block input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--fg);font-family:var(--mono);font-size:14px;font-weight:600;padding:8px 12px;outline:none;transition:border-color .15s}
 .dcf-input-block input:focus{border-color:var(--primary)}
-.dcf-input-block.bear input{border-color:hsl(0,68%,55%,.35)}
-.dcf-input-block.base input{border-color:hsl(213,94%,58%,.4)}
-.dcf-input-block.bull input{border-color:hsl(160,65%,45%,.35)}
+.dcf-input-block.bear input{border-color:hsl(0,49%,46%,.35)}
+.dcf-input-block.base input{border-color:hsl(208,52%,36%,.4)}
+.dcf-input-block.bull input{border-color:hsl(146,46%,33%,.35)}
 .dcf-scenarios{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
 @media(max-width:600px){.dcf-scenarios{grid-template-columns:1fr}}
 .dcf-scenario{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px 16px;text-align:center;position:relative}
-.dcf-scenario.bear{border-color:hsl(0,68%,55%,.35)}
-.dcf-scenario.base{border-color:hsl(213,94%,58%,.45);box-shadow:0 0 0 1px hsl(213,94%,58%,.2)}
-.dcf-scenario.bull{border-color:hsl(160,65%,45%,.35)}
+.dcf-scenario.bear{border-color:hsl(0,49%,46%,.35)}
+.dcf-scenario.base{border-color:hsl(208,52%,36%,.45);box-shadow:0 0 0 1px hsl(208,52%,36%,.2)}
+.dcf-scenario.bull{border-color:hsl(146,46%,33%,.35)}
 .dcf-scenario-label{font-size:10px;font-weight:700;letter-spacing:.08em;margin-bottom:6px}
 .dcf-scenario.bear .dcf-scenario-label{color:var(--red)}
 .dcf-scenario.base .dcf-scenario-label{color:var(--primary)}
@@ -473,7 +481,7 @@ td.strong{color:var(--fg);font-weight:600}
 .l3-headline-num{font-family:var(--mono);font-size:32px;font-weight:800;letter-spacing:-.02em;line-height:1;color:var(--fg)}
 .l3-headline-sub{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.16em;font-weight:600;flex-basis:100%;margin-top:4px}
 .l3-headline-extra{font-family:var(--mono);font-size:11.5px;font-weight:600;color:var(--fg2);letter-spacing:.05em;text-transform:uppercase;flex-basis:100%;margin-top:6px}
-.l3-detail-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid hsl(220,25%,14%,.35);font-size:12px}
+.l3-detail-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(20,20,18,.35);font-size:12px}
 .l3-detail-row:last-of-type{border-bottom:none}
 .l3-detail-l{color:var(--fg2);font-size:12px}
 .l3-detail-v{font-family:var(--mono);font-weight:600;letter-spacing:-.01em}
@@ -486,9 +494,9 @@ td.strong{color:var(--fg);font-weight:600}
 .l3-treasury label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-weight:600}
 .l3-treasury input{flex:1;max-width:80px;background:var(--bg);border:1px solid var(--border);border-radius:3px;color:var(--fg);font-family:var(--mono);font-size:12px;padding:5px 8px;outline:none;font-weight:600}
 .l3-treasury input:focus{border-color:var(--primary)}
-.combined-signal{padding:14px 18px;font-size:12.5px;color:var(--fg2);line-height:1.55;margin-bottom:14px;border-radius:0;border-left:3px solid var(--primary);background:hsl(213,94%,58%,.05);border-top:1px solid hsl(213,94%,58%,.18);border-right:1px solid hsl(213,94%,58%,.18);border-bottom:1px solid hsl(213,94%,58%,.18)}
-.combined-signal.buy{background:hsl(160,65%,45%,.06);border-left-color:var(--green);border-top-color:hsl(160,65%,45%,.22);border-right-color:hsl(160,65%,45%,.22);border-bottom-color:hsl(160,65%,45%,.22)}
-.combined-signal.avoid{background:hsl(0,68%,55%,.06);border-left-color:var(--red);border-top-color:hsl(0,68%,55%,.22);border-right-color:hsl(0,68%,55%,.22);border-bottom-color:hsl(0,68%,55%,.22)}
+.combined-signal{padding:14px 18px;font-size:12.5px;color:var(--fg2);line-height:1.55;margin-bottom:14px;border-radius:0;border-left:3px solid var(--primary);background:hsl(208,52%,36%,.05);border-top:1px solid hsl(208,52%,36%,.18);border-right:1px solid hsl(208,52%,36%,.18);border-bottom:1px solid hsl(208,52%,36%,.18)}
+.combined-signal.buy{background:hsl(146,46%,33%,.06);border-left-color:var(--green);border-top-color:hsl(146,46%,33%,.22);border-right-color:hsl(146,46%,33%,.22);border-bottom-color:hsl(146,46%,33%,.22)}
+.combined-signal.avoid{background:hsl(0,49%,46%,.06);border-left-color:var(--red);border-top-color:hsl(0,49%,46%,.22);border-right-color:hsl(0,49%,46%,.22);border-bottom-color:hsl(0,49%,46%,.22)}
 .combined-signal strong{font-weight:700;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;display:inline-block;margin-right:8px}
 .combined-signal.buy strong{color:var(--green)}
 .combined-signal.avoid strong{color:var(--red)}
@@ -504,7 +512,7 @@ td.strong{color:var(--fg);font-weight:600}
 .l4-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:10px}
 .l4-table th{text-align:right;font-size:9.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;padding:8px 8px 8px;border-bottom:1px solid var(--border)}
 .l4-table th:first-child{text-align:left}
-.l4-table td{padding:7px 8px;border-bottom:1px solid hsl(220,25%,14%,.35);font-family:var(--mono);text-align:right;font-size:12px;letter-spacing:-.01em}
+.l4-table td{padding:7px 8px;border-bottom:1px solid rgba(20,20,18,.35);font-family:var(--mono);text-align:right;font-size:12px;letter-spacing:-.01em}
 .l4-table td:first-child{text-align:left;font-family:var(--sans);color:var(--fg2);font-size:11.5px}
 .l4-table tr:last-child td{border-bottom:none}
 .l4-verdict{margin-top:10px;padding:8px 0 0;border-top:1px solid var(--border);font-size:10.5px;font-weight:700;text-align:left;letter-spacing:.14em;text-transform:uppercase;background:transparent;border-radius:0}
@@ -512,73 +520,90 @@ td.strong{color:var(--fg);font-weight:600}
 .l4-verdict.fair{color:var(--yellow)}
 .l4-verdict.rich{color:var(--red)}
 .l4-verdict::before{content:'STATUS  ·  ';color:var(--muted);font-weight:600}
-.l4-flag{margin-top:8px;padding:8px 12px;font-size:10.5px;color:var(--muted);background:transparent;border-left:2px solid hsl(45,93%,58%,.4);border-radius:0;letter-spacing:.02em}
+.l4-flag{margin-top:8px;padding:8px 12px;font-size:10.5px;color:var(--muted);background:transparent;border-left:2px solid hsl(38,68%,38%,.4);border-radius:0;letter-spacing:.02em}
 
-/* ── Composite Fair Value — 8-method stack ── */
-.cf-card{
-  background:var(--card);border:1px solid var(--border);border-radius:8px;
-  margin-bottom:18px;overflow:hidden;
-  --cf-up:hsl(160,65%,45%);--cf-fair:hsl(45,93%,58%);--cf-down:hsl(0,68%,55%);
-  --cf-comp:hsl(213,94%,58%);--cf-line:hsl(220,25%,14%);--cf-t3:hsl(210,12%,48%);
+/* ── Composite Fair Value — v3 light design, scoped under .cf-v3 ── */
+.cf-v3{
+  --cv-bg:#FBFBFA;--cv-surface:#FFFFFF;--cv-raised:#F6F6F5;
+  --cv-line:#ECEAE6;--cv-line2:#E0DDD7;
+  --cv-ink:#1A1A18;--cv-ink2:#44443F;
+  --cv-mute:#8A887F;--cv-mute2:#B4B2AA;
+  --cv-neg:#B23B3B;--cv-neg-s:#FBF1F0;
+  --cv-pos:#2E7D55;--cv-pos-s:#EFF6F1;
+  --cv-warn:#A77A1E;--cv-warn-s:#FBF5E9;
+  --cv-acc:#2C5E8A;--cv-acc-s:#EEF3F8;
+  background:var(--cv-surface);border:1px solid var(--cv-line);border-radius:10px;
+  overflow:hidden;font-family:'Inter',-apple-system,system-ui,sans-serif;
+  font-size:13px;color:var(--cv-ink);-webkit-font-smoothing:antialiased;margin-bottom:18px;
 }
-/* header bar */
-.cf-head{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid var(--border);gap:16px;flex-wrap:wrap}
-.cf-head-l{display:flex;flex-direction:column;gap:3px}
-.cf-head-title{font-size:15px;font-weight:700;letter-spacing:-.01em}
-.cf-head-sub{font-size:11.5px;color:var(--muted)}
-.cf-head-r{display:flex;align-items:center;gap:20px}
-.cf-hero-num{font-family:var(--mono);font-size:42px;font-weight:800;letter-spacing:-.03em;line-height:1}
-.cf-hero-num.up{color:var(--cf-up)}
-.cf-hero-num.fair{color:var(--cf-fair)}
-.cf-hero-num.down{color:var(--cf-down)}
-.cf-hero-meta{display:flex;flex-direction:column;gap:3px;align-items:flex-end}
-.cf-hero-label{font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;font-weight:600}
-.cf-hero-gap{font-family:var(--mono);font-size:18px;font-weight:700}
-.cf-hero-gap.pos{color:var(--cf-up)}
-.cf-hero-gap.neg{color:var(--cf-down)}
-/* method grid — 4×2 */
-.cf-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
-@media(max-width:900px){.cf-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:540px){.cf-grid{grid-template-columns:1fr}}
-.cf-method{padding:18px 20px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:10px}
-.cf-method:nth-child(4n){border-right:0}
-@media(max-width:900px){.cf-method:nth-child(2n){border-right:0}}
-@media(max-width:540px){.cf-method{border-right:0}}
-.cf-method-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
-.cf-method-num{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.14em;font-weight:600}
-.cf-method-badge{font-size:10px;font-weight:600;padding:1px 6px;border-radius:3px;white-space:nowrap}
-.cf-method-badge.intrinsic{background:hsl(213,94%,58%,.12);color:var(--primary);border:1px solid hsl(213,94%,58%,.25)}
-.cf-method-badge.multiples{background:hsl(265,70%,65%,.1);color:hsl(265,70%,72%);border:1px solid hsl(265,70%,65%,.2)}
-.cf-method-badge.growth{background:hsl(160,65%,45%,.1);color:var(--green);border:1px solid hsl(160,65%,45%,.2)}
-.cf-method-badge.floor{background:hsl(45,93%,58%,.08);color:var(--yellow);border:1px solid hsl(45,93%,58%,.2)}
-.cf-method-name{font-size:12px;font-weight:700;color:var(--fg);letter-spacing:-.01em;margin-top:2px}
-.cf-method-desc{font-size:11px;color:var(--muted);line-height:1.45;flex:1}
-.cf-iv{font-family:var(--mono);font-size:26px;font-weight:800;letter-spacing:-.02em;line-height:1}
-.cf-iv.up{color:var(--cf-up)}
-.cf-iv.fair{color:var(--cf-fair)}
-.cf-iv.down{color:var(--cf-down)}
-.cf-iv.muted{color:var(--muted)}
-.cf-method-footer{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--border);font-family:var(--mono);font-size:10.5px}
-.cf-method-upside{font-weight:700}
-.cf-method-upside.pos{color:var(--cf-up)}
-.cf-method-upside.neg{color:var(--cf-down)}
-.cf-method-upside.muted{color:var(--muted)}
-.cf-method-weight{color:var(--muted);font-size:10px}
-/* inputs bar */
-.cf-inputs{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border);border-top:1px solid var(--border)}
-@media(max-width:700px){.cf-inputs{grid-template-columns:repeat(2,1fr)}}
-.cf-input-cell{background:var(--card);padding:10px 16px;display:flex;flex-direction:column;gap:4px}
-.cf-input-label{font-size:9.5px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;font-weight:600}
-.cf-input-field{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--fg);background:transparent;border:none;outline:none;width:100%;padding:0}
-.cf-input-field:focus{color:var(--primary)}
-/* composite footer */
-.cf-footer{display:flex;align-items:center;justify-content:space-between;padding:12px 22px;border-top:1px solid var(--border);background:hsl(220,28%,10%);flex-wrap:wrap;gap:10px}
-.cf-footer-label{font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;font-weight:600}
-.cf-composite-val{font-family:var(--mono);font-size:22px;font-weight:800;letter-spacing:-.02em}
-.cf-composite-val.up{color:var(--cf-up)}
-.cf-composite-val.fair{color:var(--cf-fair)}
-.cf-composite-val.down{color:var(--cf-down)}
-.cf-footer-note{font-size:11px;color:var(--muted)}
+.cf-v3 *{box-sizing:border-box}
+.cf-v3 .tnum{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+/* section header */
+.cf-v3 .cv-hd{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--cv-line);flex-wrap:wrap;gap:10px}
+.cf-v3 .cv-hd-l{display:flex;align-items:baseline;gap:10px}
+.cf-v3 .cv-hd-l h3{margin:0;font-size:15px;font-weight:600;letter-spacing:-0.01em;color:var(--cv-ink)}
+.cf-v3 .cv-hd-l .sub{font-size:12px;color:var(--cv-mute);font-weight:500}
+.cf-v3 .cv-hd-r{display:flex;align-items:center;gap:14px;font-size:12px;color:var(--cv-mute);font-weight:500;flex-wrap:wrap}
+.cf-v3 .cv-hd-r b{color:var(--cv-ink2)}
+/* tags */
+.cf-v3 .tag{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600}
+.cf-v3 .tag.neg{background:var(--cv-neg-s);color:var(--cv-neg)}
+.cf-v3 .tag.pos{background:var(--cv-pos-s);color:var(--cv-pos)}
+.cf-v3 .tag.warn{background:var(--cv-warn-s);color:var(--cv-warn)}
+.cf-v3 .tag.acc{background:var(--cv-acc-s);color:var(--cv-acc)}
+.cf-v3 .tag.flat{background:var(--cv-raised);color:var(--cv-mute)}
+.cf-v3 .dot{width:6px;height:6px;border-radius:50%;display:inline-block;flex-shrink:0}
+.cf-v3 .dot.neg{background:var(--cv-neg)}.cf-v3 .dot.pos{background:var(--cv-pos)}
+.cf-v3 .dot.warn{background:var(--cv-warn)}.cf-v3 .dot.acc{background:var(--cv-acc)}
+/* KPI strip */
+.cf-v3 .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--cv-line)}
+@media(max-width:700px){.cf-v3 .kpi-row{grid-template-columns:repeat(2,1fr)}}
+.cf-v3 .kpi-row .k{padding:20px 24px;border-right:1px solid var(--cv-line)}
+.cf-v3 .kpi-row .k:last-child{border-right:none}
+.cf-v3 .kl{font-size:12px;color:var(--cv-mute);font-weight:500;margin-bottom:10px}
+.cf-v3 .kv{font-size:28px;font-weight:600;letter-spacing:-0.02em}
+.cf-v3 .kv.neg{color:var(--cv-neg)}.cf-v3 .kv.pos{color:var(--cv-pos)}.cf-v3 .kv.acc{color:var(--cv-acc)}
+.cf-v3 .ks{font-size:12px;color:var(--cv-mute);margin-top:6px;font-weight:500}
+.cf-v3 .ks.neg{color:var(--cv-neg)}
+/* table caption */
+.cf-v3 .tbl-cap{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;border-bottom:1px solid var(--cv-line);background:var(--cv-raised);flex-wrap:wrap;gap:8px}
+.cf-v3 .tbl-cap .t{font-size:12px;font-weight:600;color:var(--cv-ink2)}
+.cf-v3 .tbl-cap .leg{display:flex;gap:14px;font-size:11px;color:var(--cv-mute);font-weight:500;flex-wrap:wrap}
+.cf-v3 .tbl-cap .leg span{display:inline-flex;align-items:center;gap:5px}
+.cf-v3 .tbl-cap .leg i{width:9px;height:9px;border-radius:2px;display:inline-block;flex-shrink:0}
+/* method table */
+.cf-v3 table.dt{width:100%;border-collapse:collapse}
+.cf-v3 table.dt th{font-size:11px;font-weight:600;color:var(--cv-mute);text-align:left;padding:10px 24px;border-bottom:1px solid var(--cv-line);letter-spacing:.02em;background:var(--cv-surface)}
+.cf-v3 table.dt th.r{text-align:right}
+.cf-v3 table.dt td{padding:11px 24px;border-bottom:1px solid var(--cv-line);font-size:13px;color:var(--cv-ink2);vertical-align:middle}
+.cf-v3 table.dt tr:last-child td{border-bottom:none}
+.cf-v3 table.dt td.r{text-align:right;font-weight:500;color:var(--cv-ink)}
+.cf-v3 table.dt td.meth{font-weight:600;color:var(--cv-ink)}
+.cf-v3 table.dt td.var{color:var(--cv-mute);font-weight:500}
+.cf-v3 table.dt tr.own{background:var(--cv-acc-s)}
+.cf-v3 table.dt tr.own td.meth{color:var(--cv-acc)}
+.cf-v3 table.dt tr:hover:not(.own){background:var(--cv-raised)}
+/* bar */
+.cf-v3 .bar-td{width:32%}
+.cf-v3 .barx{position:relative;height:22px;display:flex;align-items:center}
+.cf-v3 .barx .track{position:absolute;left:0;right:0;height:6px;background:var(--cv-line);border-radius:3px;top:50%;transform:translateY(-50%)}
+.cf-v3 .barx .mkt-line{position:absolute;top:2px;bottom:2px;width:2px;background:var(--cv-mute2);z-index:3;border-radius:1px}
+.cf-v3 .barx .f{position:relative;height:6px;border-radius:3px;z-index:2;min-width:2px;transition:width .4s ease}
+.cf-v3 .barx .f.neg-b{background:var(--cv-neg);opacity:.8}
+.cf-v3 .barx .f.warn-b{background:var(--cv-warn);opacity:.9}
+.cf-v3 .barx .f.pos-b{background:var(--cv-pos);opacity:.85}
+.cf-v3 .barx .f.acc-b{background:var(--cv-acc);opacity:1}
+/* delta */
+.cf-v3 .delta{font-weight:600}
+.cf-v3 .delta.neg{color:var(--cv-neg)}.cf-v3 .delta.pos{color:var(--cv-pos)}.cf-v3 .delta.warn{color:var(--cv-warn)}
+/* inputs strip */
+.cf-v3 .inp-strip{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--cv-line);background:var(--cv-raised)}
+@media(max-width:700px){.cf-v3 .inp-strip{grid-template-columns:repeat(2,1fr)}}
+.cf-v3 .inp-cell{padding:11px 18px;border-right:1px solid var(--cv-line);display:flex;flex-direction:column;gap:4px}
+.cf-v3 .inp-cell:last-child{border-right:none}
+.cf-v3 .inp-lbl{font-size:10px;font-weight:600;color:var(--cv-mute);letter-spacing:.06em;text-transform:uppercase}
+.cf-v3 .inp-field{font-size:13px;font-weight:600;color:var(--cv-ink);background:transparent;border:none;outline:none;width:100%;padding:0;font-family:inherit;font-variant-numeric:tabular-nums}
+.cf-v3 .inp-field:focus{color:var(--cv-acc)}
 
 /* MoatHeat */
 .mh-hero{display:flex;align-items:center;gap:24px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px 22px;margin-bottom:16px}
@@ -599,161 +624,161 @@ td.strong{color:var(--fg);font-weight:600}
 
 /* InsightInvest Terminal — v3 full Bloomberg-style frame */
 #page-moatheat{padding:0}
-.ii-frame{background:#000;border:1px solid hsl(220,28%,14%);border-radius:8px;overflow:hidden;font-family:'Geist','Inter',ui-sans-serif,system-ui,sans-serif;color:hsl(210,15%,82%)}
+.ii-frame{background:#FFFFFF;border:1px solid #ECEAE6;border-radius:8px;overflow:hidden;font-family:'Geist','Inter',ui-sans-serif,system-ui,sans-serif;color:#44443F}
 .ii-frame *{box-sizing:border-box}
 .ii-mono{font-family:'Geist Mono','JetBrains Mono',monospace;font-variant-numeric:tabular-nums;letter-spacing:-.005em}
 
 /* Top stat bar */
-.ii-stat-bar{display:flex;align-items:center;gap:0;padding:14px 0;border-bottom:1px solid hsl(220,28%,14%);background:#000}
+.ii-stat-bar{display:flex;align-items:center;gap:0;padding:14px 0;border-bottom:1px solid #ECEAE6;background:#FFFFFF}
 .ii-stat-ticker{display:flex;align-items:center;gap:14px;padding:0 22px;min-width:240px}
-.ii-ticker-badge{display:inline-flex;align-items:center;justify-content:center;width:60px;height:60px;border-radius:6px;font-family:'Geist Mono',monospace;font-size:18px;font-weight:800;letter-spacing:-.02em;background:hsl(45,93%,58%);color:hsl(222,47%,6%);flex-shrink:0}
-.ii-ticker-badge.green{background:hsl(160,65%,55%)}
-.ii-ticker-badge.amber{background:hsl(45,93%,58%)}
-.ii-ticker-badge.red{background:hsl(0,68%,60%)}
-.ii-stat-name{font-size:18px;font-weight:600;color:hsl(210,15%,92%);letter-spacing:-.01em;margin-bottom:2px}
-.ii-stat-meta{font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:hsl(220,15%,40%);font-weight:600}
-.ii-stat-price-col{padding:0 28px;border-left:1px solid hsl(220,28%,14%);min-width:160px}
-.ii-stat-price{font-family:'Geist Mono',monospace;font-size:34px;font-weight:800;color:hsl(210,15%,95%);letter-spacing:-.025em;font-variant-numeric:tabular-nums;line-height:1}
-.ii-stat-col{padding:0 22px;border-left:1px solid hsl(220,28%,14%);min-width:100px}
-.ii-stat-val{font-family:'Geist Mono',monospace;font-size:17px;font-weight:700;color:hsl(210,15%,95%);font-variant-numeric:tabular-nums;letter-spacing:-.01em;line-height:1.1;margin-bottom:4px}
-.ii-stat-val.pos{color:hsl(160,65%,55%)}
-.ii-stat-val.neg{color:hsl(0,68%,60%)}
-.ii-stat-lbl{font-family:'Geist Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:hsl(220,15%,40%)}
+.ii-ticker-badge{display:inline-flex;align-items:center;justify-content:center;width:60px;height:60px;border-radius:6px;font-family:'Geist Mono',monospace;font-size:18px;font-weight:800;letter-spacing:-.02em;background:hsl(38,68%,38%);color:#FBFBFA;flex-shrink:0}
+.ii-ticker-badge.green{background:hsl(146,46%,44%)}
+.ii-ticker-badge.amber{background:hsl(38,68%,38%)}
+.ii-ticker-badge.red{background:hsl(0,49%,54%)}
+.ii-stat-name{font-size:18px;font-weight:600;color:#1A1A18;letter-spacing:-.01em;margin-bottom:2px}
+.ii-stat-meta{font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#8A887F;font-weight:600}
+.ii-stat-price-col{padding:0 28px;border-left:1px solid #ECEAE6;min-width:160px}
+.ii-stat-price{font-family:'Geist Mono',monospace;font-size:34px;font-weight:800;color:#1A1A18;letter-spacing:-.025em;font-variant-numeric:tabular-nums;line-height:1}
+.ii-stat-col{padding:0 22px;border-left:1px solid #ECEAE6;min-width:100px}
+.ii-stat-val{font-family:'Geist Mono',monospace;font-size:17px;font-weight:700;color:#1A1A18;font-variant-numeric:tabular-nums;letter-spacing:-.01em;line-height:1.1;margin-bottom:4px}
+.ii-stat-val.pos{color:hsl(146,46%,44%)}
+.ii-stat-val.neg{color:hsl(0,49%,54%)}
+.ii-stat-lbl{font-family:'Geist Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#8A887F}
 .ii-stat-spacer{flex:1}
-.ii-stat-live{display:flex;align-items:center;gap:8px;padding:0 22px;border-left:1px solid hsl(220,28%,14%);font-family:'Geist Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:hsl(220,15%,55%)}
-.ii-live-dot{width:7px;height:7px;border-radius:50%;background:hsl(160,65%,55%);animation:ii-pulse 2s infinite}
+.ii-stat-live{display:flex;align-items:center;gap:8px;padding:0 22px;border-left:1px solid #ECEAE6;font-family:'Geist Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:hsl(220,15%,55%)}
+.ii-live-dot{width:7px;height:7px;border-radius:50%;background:hsl(146,46%,44%);animation:ii-pulse 2s infinite}
 @keyframes ii-pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.ii-stat-time{color:hsl(210,15%,92%);font-weight:700;letter-spacing:.04em}
+.ii-stat-time{color:#1A1A18;font-weight:700;letter-spacing:.04em}
 
 /* Main grid */
 .ii-main-grid{display:grid;grid-template-columns:1fr 360px;gap:0}
 @media(max-width:1020px){.ii-main-grid{grid-template-columns:1fr}}
-.ii-chart-area{padding:22px 26px 0;border-right:1px solid hsl(220,28%,14%);display:flex;flex-direction:column}
-@media(max-width:1020px){.ii-chart-area{border-right:none;border-bottom:1px solid hsl(220,28%,14%)}}
-.ii-eyebrow{font-family:'Geist Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:hsl(220,15%,38%);margin-bottom:8px}
+.ii-chart-area{padding:22px 26px 0;border-right:1px solid #ECEAE6;display:flex;flex-direction:column}
+@media(max-width:1020px){.ii-chart-area{border-right:none;border-bottom:1px solid #ECEAE6}}
+.ii-eyebrow{font-family:'Geist Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#8A887F;margin-bottom:8px}
 .ii-eyebrow > span{color:hsl(220,15%,60%);margin-left:4px}
-.ii-title{font-size:24px;font-weight:700;letter-spacing:-.015em;color:hsl(210,15%,92%);margin-bottom:24px;line-height:1.2;max-width:520px}
+.ii-title{font-size:24px;font-weight:700;letter-spacing:-.015em;color:#1A1A18;margin-bottom:24px;line-height:1.2;max-width:520px}
 .ii-chart-svg{width:100%;min-height:360px;display:block;flex:1}
 
 /* Chart visuals */
-.ii-band-divider{stroke:hsl(220,28%,16%);stroke-width:1;stroke-dasharray:3 4}
+.ii-band-divider{stroke:#E0DDD7;stroke-width:1;stroke-dasharray:3 4}
 .ii-band-label{font-family:'Geist Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
-.ii-band-label.strong{fill:hsl(160,65%,52%)}
+.ii-band-label.strong{fill:hsl(146,46%,40%)}
 .ii-band-label.fair{fill:hsl(45,93%,55%)}
-.ii-band-label.weak{fill:hsl(0,68%,58%)}
-.ii-peer-line{stroke:hsl(213,75%,62%);stroke-width:1.4;stroke-dasharray:4 5;fill:none;opacity:.55}
+.ii-band-label.weak{fill:hsl(0,49%,50%)}
+.ii-peer-line{stroke:hsl(208,42%,46%);stroke-width:1.4;stroke-dasharray:4 5;fill:none;opacity:.55}
 .ii-chart-line{stroke:hsl(28,100%,60%);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .ii-chart-dot{fill:#000;stroke:hsl(28,100%,60%);stroke-width:2.4}
-.ii-chart-dot.green{stroke:hsl(160,65%,55%)}
-.ii-chart-dot.red{stroke:hsl(0,68%,60%)}
+.ii-chart-dot.green{stroke:hsl(146,46%,44%)}
+.ii-chart-dot.red{stroke:hsl(0,49%,54%)}
 
 /* Inset dimension row inside chart card */
-.ii-dim-row{display:grid;grid-template-columns:repeat(6,1fr);border-top:1px solid hsl(220,28%,14%);margin:18px -26px 0}
+.ii-dim-row{display:grid;grid-template-columns:repeat(6,1fr);border-top:1px solid #ECEAE6;margin:18px -26px 0}
 @media(max-width:900px){.ii-dim-row{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:520px){.ii-dim-row{grid-template-columns:repeat(2,1fr)}}
-.ii-dim-card{padding:16px 20px;border-right:1px solid hsl(220,28%,14%)}
+.ii-dim-card{padding:16px 20px;border-right:1px solid #ECEAE6}
 .ii-dim-card:nth-child(3n),.ii-dim-card:last-child{border-right:none}
-@media(min-width:521px){.ii-dim-card:nth-child(3n){border-right:1px solid hsl(220,28%,14%)}}
+@media(min-width:521px){.ii-dim-card:nth-child(3n){border-right:1px solid #ECEAE6}}
 @media(min-width:901px){.ii-dim-card:nth-child(6n){border-right:none !important}}
-.ii-dim-lbl{font-family:'Geist Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:hsl(220,15%,42%);margin-bottom:10px;line-height:1.3}
-.ii-dim-bar{height:4px;background:hsl(220,28%,12%);margin-bottom:10px;border-radius:1px;overflow:hidden}
+.ii-dim-lbl{font-family:'Geist Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#8A887F;margin-bottom:10px;line-height:1.3}
+.ii-dim-bar{height:4px;background:#F6F6F5;margin-bottom:10px;border-radius:1px;overflow:hidden}
 .ii-dim-fill{height:100%;transition:width .8s ease-out;border-radius:1px}
-.ii-dim-fill.green{background:hsl(160,65%,55%)}
-.ii-dim-fill.amber{background:hsl(45,93%,58%)}
-.ii-dim-fill.red{background:hsl(0,68%,60%)}
-.ii-dim-tier{font-family:'Geist Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:hsl(210,15%,82%)}
-.ii-dim-tier.green{color:hsl(160,65%,55%)}
-.ii-dim-tier.amber{color:hsl(45,93%,58%)}
-.ii-dim-tier.red{color:hsl(0,68%,60%)}
+.ii-dim-fill.green{background:hsl(146,46%,44%)}
+.ii-dim-fill.amber{background:hsl(38,68%,38%)}
+.ii-dim-fill.red{background:hsl(0,49%,54%)}
+.ii-dim-tier{font-family:'Geist Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#44443F}
+.ii-dim-tier.green{color:hsl(146,46%,44%)}
+.ii-dim-tier.amber{color:hsl(38,68%,38%)}
+.ii-dim-tier.red{color:hsl(0,49%,54%)}
 
 /* Chart footer (legend + scale) */
-.ii-chart-foot{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-top:1px solid hsl(220,28%,14%);margin:0 -26px;padding:14px 26px;font-family:'Geist Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.08em;color:hsl(220,15%,42%);text-transform:uppercase;flex-wrap:wrap;gap:8px}
+.ii-chart-foot{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-top:1px solid #ECEAE6;margin:0 -26px;padding:14px 26px;font-family:'Geist Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.08em;color:#8A887F;text-transform:uppercase;flex-wrap:wrap;gap:8px}
 .ii-chart-legend{display:flex;gap:18px;align-items:center}
 .ii-chart-legend-item{display:inline-flex;align-items:center;gap:8px}
 .ii-legend-line{display:inline-block;width:18px;height:2px;background:hsl(28,100%,60%)}
-.ii-legend-line.dash{background:transparent;border-top:2px dashed hsl(213,75%,62%);height:0}
+.ii-legend-line.dash{background:transparent;border-top:2px dashed hsl(208,42%,46%);height:0}
 
 /* Sidebar */
-.ii-sidebar{padding:22px 24px;background:hsl(222,40%,3%);display:flex;flex-direction:column;gap:14px}
-.ii-sb-eyebrow{font-family:'Geist Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:hsl(220,15%,42%);margin-bottom:6px}
+.ii-sidebar{padding:22px 24px;background:#FBFBFA;display:flex;flex-direction:column;gap:14px}
+.ii-sb-eyebrow{font-family:'Geist Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#8A887F;margin-bottom:6px}
 .ii-sb-big-row{display:flex;align-items:baseline;gap:8px}
 .ii-sb-big{font-family:'Geist Mono','JetBrains Mono',monospace;font-size:72px;font-weight:800;line-height:1;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
-.ii-sb-big.green{color:hsl(160,65%,55%)}
-.ii-sb-big.amber{color:hsl(45,93%,58%)}
-.ii-sb-big.red{color:hsl(0,68%,60%)}
-.ii-sb-denom{font-family:'Geist Mono',monospace;font-size:18px;color:hsl(220,15%,38%);font-weight:600}
+.ii-sb-big.green{color:hsl(146,46%,44%)}
+.ii-sb-big.amber{color:hsl(38,68%,38%)}
+.ii-sb-big.red{color:hsl(0,49%,54%)}
+.ii-sb-denom{font-family:'Geist Mono',monospace;font-size:18px;color:#8A887F;font-weight:600}
 .ii-sb-badge{display:inline-block;padding:6px 12px;border:1px solid currentColor;font-family:'Geist Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;width:fit-content}
-.ii-sb-badge.green{color:hsl(160,65%,55%)}
-.ii-sb-badge.amber{color:hsl(45,93%,58%)}
-.ii-sb-badge.red{color:hsl(0,68%,60%)}
-.ii-sb-blurb{font-size:13px;color:hsl(210,15%,82%);line-height:1.6}
-.ii-sb-stats{display:flex;flex-direction:column;gap:10px;padding-top:14px;border-top:1px solid hsl(220,28%,14%)}
+.ii-sb-badge.green{color:hsl(146,46%,44%)}
+.ii-sb-badge.amber{color:hsl(38,68%,38%)}
+.ii-sb-badge.red{color:hsl(0,49%,54%)}
+.ii-sb-blurb{font-size:13px;color:#44443F;line-height:1.6}
+.ii-sb-stats{display:flex;flex-direction:column;gap:10px;padding-top:14px;border-top:1px solid #ECEAE6}
 .ii-sb-stat-row{display:flex;justify-content:space-between;align-items:baseline;font-family:'Geist Mono',monospace;gap:12px}
-.ii-sb-stat-l{font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:hsl(220,15%,42%);max-width:160px;line-height:1.3}
-.ii-sb-stat-v{font-size:14px;font-weight:700;color:hsl(210,15%,95%);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
-.ii-sb-stat-v.pos{color:hsl(160,65%,55%)}
-.ii-sb-stat-v.neg{color:hsl(0,68%,60%)}
-.ii-sb-note{padding-top:14px;border-top:1px solid hsl(220,28%,14%)}
-.ii-sb-note-head{display:flex;justify-content:space-between;align-items:baseline;font-family:'Geist Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:hsl(220,15%,42%);margin-bottom:10px}
-.ii-sb-note-body{font-size:13px;color:hsl(210,15%,85%);line-height:1.65}
+.ii-sb-stat-l{font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#8A887F;max-width:160px;line-height:1.3}
+.ii-sb-stat-v{font-size:14px;font-weight:700;color:#1A1A18;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.ii-sb-stat-v.pos{color:hsl(146,46%,44%)}
+.ii-sb-stat-v.neg{color:hsl(0,49%,54%)}
+.ii-sb-note{padding-top:14px;border-top:1px solid #ECEAE6}
+.ii-sb-note-head{display:flex;justify-content:space-between;align-items:baseline;font-family:'Geist Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#8A887F;margin-bottom:10px}
+.ii-sb-note-body{font-size:13px;color:#44443F;line-height:1.65}
 .ii-sb-note-body p{margin:0 0 10px}
 .ii-sb-note-body p:last-child{margin-bottom:0}
-.ii-sb-note-body strong{color:hsl(210,15%,95%);font-weight:600}
+.ii-sb-note-body strong{color:#1A1A18;font-weight:600}
 
 /* Section 02: Peer Comparison */
-.ii-peer-section{padding:22px 26px;border-top:1px solid hsl(220,28%,14%)}
+.ii-peer-section{padding:22px 26px;border-top:1px solid #ECEAE6}
 .ii-peer-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px}
-.ii-peer-toggle{display:inline-flex;background:hsl(222,35%,8%);border:1px solid hsl(220,28%,16%);border-radius:6px;overflow:hidden}
-.ii-peer-toggle button{background:transparent;border:none;font-family:'Geist',sans-serif;color:hsl(220,15%,52%);font-size:12px;font-weight:500;padding:7px 18px;cursor:pointer;letter-spacing:-.005em;transition:all .15s}
-.ii-peer-toggle button.active{background:hsl(210,15%,90%);color:hsl(222,40%,8%);font-weight:600}
-.ii-peer-row{display:grid;grid-template-columns:repeat(6,1fr);gap:0;border-top:1px solid hsl(220,28%,14%);margin:0 -26px;padding:0}
+.ii-peer-toggle{display:inline-flex;background:#FBFBFA;border:1px solid #E0DDD7;border-radius:6px;overflow:hidden}
+.ii-peer-toggle button{background:transparent;border:none;font-family:'Geist',sans-serif;color:#8A887F;font-size:12px;font-weight:500;padding:7px 18px;cursor:pointer;letter-spacing:-.005em;transition:all .15s}
+.ii-peer-toggle button.active{background:#1F1F1B;color:#F6F6F5;font-weight:600}
+.ii-peer-row{display:grid;grid-template-columns:repeat(6,1fr);gap:0;border-top:1px solid #ECEAE6;margin:0 -26px;padding:0}
 @media(max-width:900px){.ii-peer-row{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:520px){.ii-peer-row{grid-template-columns:repeat(2,1fr)}}
-.ii-peer-card{padding:18px 22px;border-right:1px solid hsl(220,28%,14%)}
+.ii-peer-card{padding:18px 22px;border-right:1px solid #ECEAE6}
 .ii-peer-card:last-child{border-right:none}
-.ii-peer-card.self{background:hsl(222,40%,4%)}
-.ii-peer-sym{font-family:'Geist Mono',monospace;font-size:18px;font-weight:800;letter-spacing:-.01em;color:hsl(210,15%,92%);margin-bottom:2px}
-.ii-peer-name{font-size:11.5px;color:hsl(220,15%,52%);margin-bottom:14px;line-height:1.3;height:1.3em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ii-peer-card.self{background:#FBFBFA}
+.ii-peer-sym{font-family:'Geist Mono',monospace;font-size:18px;font-weight:800;letter-spacing:-.01em;color:#1A1A18;margin-bottom:2px}
+.ii-peer-name{font-size:11.5px;color:#8A887F;margin-bottom:14px;line-height:1.3;height:1.3em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ii-peer-score{font-family:'Geist Mono',monospace;font-size:36px;font-weight:800;letter-spacing:-.03em;line-height:1;margin-bottom:6px;font-variant-numeric:tabular-nums}
-.ii-peer-score.green{color:hsl(160,65%,55%)}
-.ii-peer-score.amber{color:hsl(45,93%,58%)}
-.ii-peer-score.red{color:hsl(0,68%,60%)}
-.ii-peer-delta{font-family:'Geist Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.04em;color:hsl(220,15%,42%)}
-.ii-peer-delta.pos{color:hsl(160,65%,55%)}
-.ii-peer-delta.neg{color:hsl(0,68%,60%)}
-.ii-peer-loading{padding:32px 26px;text-align:center;color:hsl(220,15%,42%);font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.ii-peer-score.green{color:hsl(146,46%,44%)}
+.ii-peer-score.amber{color:hsl(38,68%,38%)}
+.ii-peer-score.red{color:hsl(0,49%,54%)}
+.ii-peer-delta{font-family:'Geist Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.04em;color:#8A887F}
+.ii-peer-delta.pos{color:hsl(146,46%,44%)}
+.ii-peer-delta.neg{color:hsl(0,49%,54%)}
+.ii-peer-loading{padding:32px 26px;text-align:center;color:#8A887F;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
 
 /* Bottom status bar */
-.ii-status-bar{display:flex;justify-content:space-between;align-items:center;padding:11px 24px;border-top:1px solid hsl(220,28%,14%);background:#000;font-family:'Geist Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:hsl(220,15%,38%);gap:14px;flex-wrap:wrap}
+.ii-status-bar{display:flex;justify-content:space-between;align-items:center;padding:11px 24px;border-top:1px solid #ECEAE6;background:#FFFFFF;font-family:'Geist Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#8A887F;gap:14px;flex-wrap:wrap}
 .ii-status-item{display:inline-flex;align-items:center;gap:8px}
-.ii-status-item strong{color:hsl(210,15%,80%);font-weight:700}
+.ii-status-item strong{color:#44443F;font-weight:700}
 
 /* AI box */
 .ai-actions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid transparent;transition:opacity .15s}
 .btn:disabled{opacity:.4;cursor:not-allowed}
-.btn-blue{background:var(--primary);color:hsl(222,47%,6%);border-color:var(--primary)}
+.btn-blue{background:var(--primary);color:#FBFBFA;border-color:var(--primary)}
 .btn-blue:hover:not(:disabled){opacity:.88}
 .btn-outline{background:transparent;color:var(--fg2);border-color:var(--border)}
 .btn-outline:hover:not(:disabled){color:var(--fg);border-color:var(--fg2)}
-.ai-box{background:hsl(220,28%,10%);border:1px solid var(--border);border-radius:8px;padding:18px 20px;font-size:13.5px;line-height:1.8;color:var(--fg);white-space:pre-wrap;min-height:80px;transition:border-color .2s}
-.ai-box.streaming{border-color:hsl(213,94%,58%,.5)}
+.ai-box{background:#FBFBFA;border:1px solid var(--border);border-radius:8px;padding:18px 20px;font-size:13.5px;line-height:1.8;color:var(--fg);white-space:pre-wrap;min-height:80px;transition:border-color .2s}
+.ai-box.streaming{border-color:hsl(208,52%,36%,.5)}
 .ai-placeholder{color:var(--muted);font-style:italic}
 .spinner{display:inline-block;width:12px;height:12px;border:2px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle}
 
 /* Earnings */
 .earn-header{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
-.earn-next{background:hsl(213,94%,58%,.06);border:1px solid hsl(213,94%,58%,.2);border-radius:8px;padding:16px 20px}
+.earn-next{background:hsl(208,52%,36%,.06);border:1px solid hsl(208,52%,36%,.2);border-radius:8px;padding:16px 20px}
 .earn-next-label{font-size:11px;color:var(--primary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
 .earn-next-date{font-family:var(--mono);font-size:22px;font-weight:700}
 .earn-next-sub{font-size:12px;color:var(--muted);margin-top:4px}
 .earn-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600}
-.earn-badge.beat{background:hsl(160,65%,45%,.15);color:var(--green)}
-.earn-badge.miss{background:hsl(0,68%,55%,.12);color:var(--red)}
-.earn-badge.inline{background:hsl(220,25%,14%);color:var(--muted)}
+.earn-badge.beat{background:hsl(146,46%,33%,.15);color:var(--green)}
+.earn-badge.miss{background:hsl(0,49%,46%,.12);color:var(--red)}
+.earn-badge.inline{background:#ECEAE6;color:var(--muted)}
 
 /* Error */
-.error-banner{background:hsl(0,68%,55%,.08);border:1px solid hsl(0,68%,55%,.25);border-radius:8px;padding:12px 16px;color:hsl(0,68%,70%);font-size:13px;margin-bottom:16px;display:none}
+.error-banner{background:hsl(0,49%,46%,.08);border:1px solid hsl(0,49%,46%,.25);border-radius:8px;padding:12px 16px;color:hsl(0,49%,64%);font-size:13px;margin-bottom:16px;display:none}
 .error-banner.active{display:block}
 
 @media(max-width:640px){.hero{padding:14px 16px 0}.tab-page{padding:16px}.header{padding:0 14px}.price-main{font-size:26px}.mh-hero{flex-direction:column}}
@@ -769,15 +794,15 @@ td.strong{color:var(--fg);font-weight:600}
 .news-card-snippet{font-size:12px;color:var(--muted);line-height:1.55}
 .news-card-meta{font-size:11px;color:var(--muted)}
 .news-card-sentiment{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0;align-self:flex-start}
-.sent-positive{background:rgba(34,197,94,.15);color:#22c55e}
-.sent-negative{background:rgba(239,68,68,.15);color:#ef4444}
+.sent-positive{background:rgba(34,197,94,.15);color:#2E7D55}
+.sent-negative{background:rgba(239,68,68,.15);color:#B23B3B}
 .sent-neutral{background:rgba(148,163,184,.12);color:var(--muted)}
 .news-empty{font-size:13px;color:var(--muted);padding:2rem 0;text-align:center}
 
 /* pill-toggle — sub-tab buttons inside News/Markets/Stock-News pages */
 .pill-toggle{background:transparent;border:1px solid var(--border);color:var(--muted);font-size:12.5px;font-weight:500;padding:7px 14px;border-radius:999px;cursor:pointer;transition:all .15s;font-family:'Geist','Inter',ui-sans-serif,sans-serif}
 .pill-toggle:hover{color:var(--fg2);border-color:var(--border2)}
-.pill-toggle.active{background:hsl(220,28%,90%);color:hsl(222,40%,8%);border-color:hsl(220,28%,90%);font-weight:600}
+.pill-toggle.active{background:hsl(220,28%,90%);color:#F6F6F5;border-color:hsl(220,28%,90%);font-weight:600}
 
 /* Markets */
 .markets-search{width:100%;max-width:260px;padding:7px 10px;border-radius:7px;border:1px solid var(--border);background:var(--card);color:var(--fg);font-size:12px;margin-bottom:12px;outline:none}
@@ -786,17 +811,17 @@ td.strong{color:var(--fg);font-weight:600}
 .markets-table th{text-align:left;padding:8px 10px;font-size:11px;font-weight:500;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap}
 .markets-table td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--fg);white-space:nowrap}
 .markets-table tr:last-child td{border-bottom:none}
-.markets-table tr:hover td{background:hsl(220,28%,13%)}
+.markets-table tr:hover td{background:#F6F6F5}
 .markets-table .sym{font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px}
-.markets-table .chg-pos{color:#22c55e;font-weight:500}
-.markets-table .chg-neg{color:#ef4444;font-weight:500}
+.markets-table .chg-pos{color:#2E7D55;font-weight:500}
+.markets-table .chg-neg{color:#B23B3B;font-weight:500}
 
 /* Screener */
 .scr-filter-group{display:flex;flex-direction:column}
 .scr-label{display:block;font-size:11px;font-weight:500;color:var(--muted);margin-bottom:5px}
 .scr-select,.scr-input{width:100%;padding:7px 10px;border-radius:7px;border:1px solid var(--border);background:var(--card);color:var(--fg);font-size:12px;outline:none;box-sizing:border-box}
 .scr-select:focus,.scr-input:focus{border-color:var(--primary)}
-.scr-run-btn{width:100%;padding:8px 0;border-radius:7px;border:none;background:var(--primary);color:hsl(222,47%,6%);font-size:13px;font-weight:600;cursor:pointer;transition:opacity .15s}
+.scr-run-btn{width:100%;padding:8px 0;border-radius:7px;border:none;background:var(--primary);color:#FBFBFA;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .15s}
 .scr-run-btn:hover{opacity:.85}
 .scr-run-btn:disabled{opacity:.45;cursor:default}
 .screener-table{width:100%;border-collapse:collapse;font-size:12.5px}
@@ -806,10 +831,236 @@ td.strong{color:var(--fg);font-weight:600}
 .screener-table th.sort-desc::after{content:' ↓'}
 .screener-table td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--fg);white-space:nowrap}
 .screener-table tr:last-child td{border-bottom:none}
-.screener-table tr:hover td{background:hsl(220,28%,13%);cursor:pointer}
+.screener-table tr:hover td{background:#F6F6F5;cursor:pointer}
 .screener-table .sym{font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px}
-.screener-table .chg-pos{color:#22c55e}
-.screener-table .chg-neg{color:#ef4444}
+.screener-table .chg-pos{color:#2E7D55}
+.screener-table .chg-neg{color:#B23B3B}
+
+/* ════════════════════════════════════════════════════════════
+   Intrinsic Value v3 — light/clean redesign
+   ════════════════════════════════════════════════════════════ */
+.iv-v3{font-family:var(--sans);font-size:13px;color:var(--ink);max-width:1280px;margin:0 auto;padding:8px 0 64px}
+.iv-v3 .tnum{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+.iv-section{margin-bottom:40px}
+.iv-section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
+.iv-section-head .iv-section-head-l{display:flex;align-items:baseline;gap:12px}
+.iv-section-head .iv-ix{font-size:12px;font-weight:600;color:var(--mute-2);letter-spacing:0.04em;font-family:var(--mono)}
+.iv-section-head h2{margin:0;font-size:16px;font-weight:600;letter-spacing:-0.01em;color:var(--ink)}
+.iv-section-head .iv-sub{font-size:12px;color:var(--mute);font-weight:500}
+.iv-section-head .iv-section-head-r{font-size:12px;color:var(--mute);font-weight:500;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.iv-section-head .iv-section-head-r b{color:var(--ink-2);font-weight:600}
+
+.iv-card{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.iv-lbl{font-size:12px;color:var(--mute);font-weight:500;margin-bottom:10px}
+
+/* Tags */
+.iv-tag{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;letter-spacing:0.01em;font-family:var(--sans)}
+.iv-tag-neg{background:var(--neg-soft);color:var(--neg)}
+.iv-tag-pos{background:var(--pos-soft);color:var(--pos)}
+.iv-tag-warn{background:var(--warn-soft);color:var(--warn)}
+.iv-tag-accent{background:var(--accent-soft);color:var(--accent)}
+.iv-tag-flat{background:var(--raised);color:var(--mute)}
+.iv-tag .iv-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+
+/* KPI strip (composite) */
+.iv-kpi-row{display:grid;grid-template-columns:repeat(4,1fr)}
+.iv-kpi-row .iv-kpi{padding:20px 24px;border-right:1px solid var(--line)}
+.iv-kpi-row .iv-kpi:last-child{border-right:none}
+.iv-kpi .iv-kpi-l{font-size:12px;color:var(--mute);font-weight:500;margin-bottom:10px}
+.iv-kpi .iv-kpi-v{font-size:28px;font-weight:600;letter-spacing:-0.02em;color:var(--ink)}
+.iv-kpi .iv-kpi-v.neg{color:var(--neg)}
+.iv-kpi .iv-kpi-v.pos{color:var(--pos)}
+.iv-kpi .iv-kpi-v.accent{color:var(--accent)}
+.iv-kpi .iv-kpi-s{font-size:12px;color:var(--mute);margin-top:6px;font-weight:500}
+.iv-kpi .iv-kpi-s.neg{color:var(--neg)}
+.iv-kpi .iv-kpi-s.pos{color:var(--pos)}
+
+/* Method table caption */
+.iv-tbl-cap{display:flex;justify-content:space-between;align-items:center;padding:14px 24px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);flex-wrap:wrap;gap:12px}
+.iv-tbl-cap .iv-tbl-cap-t{font-size:12px;font-weight:600;color:var(--ink-2)}
+.iv-legend{display:flex;gap:16px;font-size:11px;color:var(--mute);font-weight:500;flex-wrap:wrap}
+.iv-legend span{display:flex;align-items:center;gap:6px}
+.iv-legend i{width:9px;height:9px;border-radius:2px;display:inline-block}
+
+/* Data tables */
+table.iv-dt{width:100%;border-collapse:collapse}
+table.iv-dt th{font-size:11px;font-weight:600;color:var(--mute);text-align:left;padding:11px 24px;border-bottom:1px solid var(--line);letter-spacing:0.02em;background:transparent;text-transform:none}
+table.iv-dt th.r{text-align:right}
+table.iv-dt td{padding:11px 24px;border-bottom:1px solid var(--line);font-size:13px;color:var(--ink-2);background:transparent;white-space:nowrap}
+table.iv-dt td:first-child{position:static;background:transparent}
+table.iv-dt tr:last-child td{border-bottom:none}
+table.iv-dt td.r{text-align:right;font-weight:500;color:var(--ink)}
+table.iv-dt td.iv-meth{font-weight:600;color:var(--ink)}
+table.iv-dt td.iv-var{color:var(--mute);font-weight:500}
+table.iv-dt tr.iv-own td{background:var(--accent-soft)}
+table.iv-dt tr.iv-own td.iv-meth{color:var(--accent)}
+table.iv-dt .iv-bar-td{width:34%}
+.iv-barx{position:relative;height:22px;display:flex;align-items:center}
+.iv-barx .iv-track{position:absolute;left:0;right:0;height:6px;background:var(--raised);border-radius:3px;top:50%;transform:translateY(-50%)}
+.iv-barx .iv-mkt{position:absolute;top:1px;bottom:1px;width:2px;background:var(--mute-2);z-index:3}
+.iv-barx .iv-f{position:relative;height:6px;border-radius:3px;z-index:2;background:var(--neg);opacity:0.85}
+.iv-barx .iv-f.warn{background:var(--warn)}
+.iv-barx .iv-f.pos{background:var(--pos)}
+.iv-barx .iv-f.accent{background:var(--accent);opacity:1}
+.iv-delta{font-weight:600}
+.iv-delta.neg{color:var(--neg)}
+.iv-delta.pos{color:var(--pos)}
+.iv-delta.flat{color:var(--mute)}
+
+/* Composite input strip */
+.iv-inp-strip{display:flex;flex-wrap:wrap;gap:0;border-top:1px solid var(--line);background:var(--raised)}
+.iv-inp-cell{flex:1;min-width:160px;padding:14px 20px;border-right:1px solid var(--line)}
+.iv-inp-cell:last-child{border-right:none}
+.iv-inp-lbl{font-size:10.5px;color:var(--mute);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:6px}
+.iv-inp-field{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:6px;color:var(--ink);font-family:var(--mono);font-size:13px;font-weight:600;padding:7px 10px;outline:none;font-variant-numeric:tabular-nums}
+.iv-inp-field:focus{border-color:var(--accent)}
+
+/* Quality Gate */
+.iv-qg-head{display:grid;grid-template-columns:0.85fr 1.7fr 1.05fr;border-bottom:1px solid var(--line)}
+.iv-qg-head > div{padding:24px;border-right:1px solid var(--line)}
+.iv-qg-head > div:last-child{border-right:none}
+.iv-qg-grade .iv-qg-letter{font-size:54px;font-weight:600;letter-spacing:-0.03em;line-height:1;color:var(--ink);font-family:var(--sans)}
+.iv-qg-grade .iv-qg-letter.pos{color:var(--pos)}
+.iv-qg-grade .iv-qg-letter.warn{color:var(--warn)}
+.iv-qg-grade .iv-qg-letter.neg{color:var(--neg)}
+.iv-qg-grade .iv-qg-desc{margin-top:10px;font-size:13px;color:var(--ink-2);font-weight:500;line-height:1.5}
+.iv-qg-grade .iv-qg-desc .neg{color:var(--neg);font-weight:600}
+.iv-qg-grade .iv-qg-desc .pos{color:var(--pos);font-weight:600}
+.iv-qg-score .iv-qg-score-line{display:baseline}
+.iv-qg-score .iv-qg-num{font-size:34px;font-weight:600;letter-spacing:-0.02em;color:var(--ink)}
+.iv-qg-score .iv-qg-denom{font-size:18px;color:var(--mute-2);font-weight:500}
+.iv-qg-numline{position:relative;margin-top:30px;height:30px}
+.iv-qg-numline .iv-qg-track{position:absolute;left:0;right:0;top:6px;height:2px;background:var(--line-2)}
+.iv-qg-numline .iv-qg-thr{position:absolute;top:-12px;height:30px;border-left:1px dashed var(--mute);left:60%}
+.iv-qg-numline .iv-qg-thr span{position:absolute;top:-15px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:10.5px;color:var(--mute);font-weight:600}
+.iv-qg-numline .iv-qg-cur{position:absolute;top:7px;left:55%;transform:translate(-50%,-50%);width:12px;height:12px;border-radius:50%;background:var(--warn);border:2.5px solid var(--surface);box-shadow:0 0 0 1.5px var(--warn)}
+.iv-qg-numline .iv-qg-cur.pos{background:var(--pos);box-shadow:0 0 0 1.5px var(--pos)}
+.iv-qg-numline .iv-qg-cur.neg{background:var(--neg);box-shadow:0 0 0 1.5px var(--neg)}
+.iv-qg-numline .iv-qg-axis{position:absolute;left:0;right:0;top:18px;display:flex;justify-content:space-between;font-size:10.5px;color:var(--mute-2);font-weight:500}
+.iv-qg-gate .iv-qg-grow{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line);font-size:12.5px}
+.iv-qg-gate .iv-qg-grow:last-child{border-bottom:none}
+.iv-qg-gate .iv-qg-grow-k{color:var(--mute);font-weight:500}
+.iv-qg-gate .iv-qg-grow-v{color:var(--ink);font-weight:600}
+.iv-qg-gate .iv-qg-grow-v.neg{color:var(--neg)}
+.iv-qg-gate .iv-qg-grow-v.pos{color:var(--pos)}
+.iv-qg-gate .iv-qg-grow-v.warn{color:var(--warn)}
+
+table.iv-qg-table{width:100%;border-collapse:collapse}
+table.iv-qg-table th{font-size:11px;color:var(--mute);font-weight:600;text-align:left;padding:13px 24px;border-bottom:1px solid var(--line);text-transform:none;letter-spacing:0.02em;background:transparent}
+table.iv-qg-table th.r{text-align:right}
+table.iv-qg-table td{padding:16px 24px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:baseline;background:transparent;white-space:normal;color:var(--ink-2);position:static}
+table.iv-qg-table tr:last-child td{border-bottom:none}
+table.iv-qg-table .iv-fname{font-weight:600;color:var(--ink)}
+table.iv-qg-table .iv-fix{font-size:11px;color:var(--mute-2);font-weight:600;margin-top:3px;font-family:var(--mono);letter-spacing:0.04em}
+table.iv-qg-table .iv-detail{color:var(--ink-2);line-height:1.5}
+table.iv-qg-table .iv-detail .iv-sep{color:var(--mute-2);margin:0 7px}
+table.iv-qg-table .iv-detail .neg{color:var(--neg);font-weight:600}
+table.iv-qg-table .iv-detail .pos{color:var(--pos);font-weight:600}
+table.iv-qg-table .iv-detail .warn{color:var(--warn);font-weight:600}
+table.iv-qg-table td.iv-sc{text-align:right;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.iv-qg-table td.iv-sc .iv-sc-max{color:var(--mute-2);font-weight:500;font-size:11px}
+table.iv-qg-table td.iv-sc.neg{color:var(--neg)}
+table.iv-qg-table td.iv-sc.pos{color:var(--pos)}
+table.iv-qg-table td.iv-sc.warn{color:var(--warn)}
+table.iv-qg-table td.iv-stat{text-align:right;font-weight:600;white-space:nowrap}
+table.iv-qg-table td.iv-stat.neg{color:var(--neg)}
+table.iv-qg-table td.iv-stat.pos{color:var(--pos)}
+table.iv-qg-table td.iv-stat.warn{color:var(--warn)}
+table.iv-qg-table td.iv-stat .iv-dot{display:inline-block;vertical-align:middle;margin-right:7px;width:6px;height:6px;border-radius:50%;background:currentColor}
+
+/* DCF */
+.iv-dcf-rev{display:grid;grid-template-columns:1.1fr 1.9fr}
+.iv-dcf-rev > div{padding:24px}
+.iv-dcf-rev-l{border-right:1px solid var(--line)}
+.iv-dcf-imp{font-size:48px;font-weight:600;letter-spacing:-0.03em;color:var(--neg);line-height:1;font-family:var(--sans)}
+.iv-dcf-imp.pos{color:var(--pos)}
+.iv-dcf-imp.warn{color:var(--warn)}
+.iv-dcf-imp .iv-u{font-size:28px;color:var(--mute-2)}
+.iv-dcf-cap{margin-top:12px;font-size:13px;color:var(--ink-2);line-height:1.6;max-width:380px}
+.iv-dcf-cap b{color:var(--ink);font-weight:600}
+.iv-dcf-cap b.neg{color:var(--neg)}
+.iv-dcf-cap b.pos{color:var(--pos)}
+
+table.iv-mini{width:100%;border-collapse:collapse}
+table.iv-mini td{padding:9px 0;border-bottom:1px solid var(--line);font-size:12.5px;background:transparent;white-space:nowrap;color:var(--ink)}
+table.iv-mini tr:last-child td{border-bottom:none}
+table.iv-mini td:first-child{color:var(--mute);font-weight:500;text-align:left;position:static}
+table.iv-mini td:last-child{text-align:right;color:var(--ink);font-weight:600}
+table.iv-mini td .neg{color:var(--neg)}
+table.iv-mini td .pos{color:var(--pos)}
+
+.iv-dcf-scen{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}
+.iv-dcf-s{padding:22px 24px;border-right:1px solid var(--line)}
+.iv-dcf-s:last-child{border-right:none}
+.iv-dcf-s-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.iv-dcf-s-head > span:first-child{font-size:13px;font-weight:600;color:var(--ink)}
+.iv-dcf-s-inp{display:flex;align-items:flex-end;gap:12px;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.iv-dcf-s-inp label{font-size:11px;color:var(--mute);font-weight:500;display:block;margin-bottom:4px}
+.iv-dcf-s-inp input{width:90px;background:var(--surface);border:1px solid var(--line);border-radius:6px;color:var(--ink);font-family:var(--mono);font-size:14px;font-weight:600;padding:6px 10px;outline:none;font-variant-numeric:tabular-nums}
+.iv-dcf-s-inp input:focus{border-color:var(--accent)}
+.iv-dcf-s-inp .iv-dcf-s-term{font-size:11px;color:var(--mute);font-weight:500;margin-left:auto;align-self:flex-end;padding-bottom:6px}
+.iv-dcf-s-iv{margin-top:16px}
+.iv-dcf-s-iv-v{font-size:30px;font-weight:600;letter-spacing:-0.02em;color:var(--ink);font-family:var(--sans)}
+.iv-dcf-s.base .iv-dcf-s-iv-v{color:var(--accent)}
+.iv-variant{padding:18px 24px;border-top:1px solid var(--line);background:var(--raised);font-size:13px;color:var(--ink-2);line-height:1.6}
+.iv-variant b{color:var(--ink);font-weight:600}
+
+/* EPV + Owner Yield */
+.iv-epv{display:grid;grid-template-columns:1fr 1fr}
+.iv-epv-col{padding:24px}
+.iv-epv-col:first-child{border-right:1px solid var(--line)}
+.iv-epv-v{font-size:38px;font-weight:600;letter-spacing:-0.02em;line-height:1;font-family:var(--sans);color:var(--ink)}
+.iv-epv-v.neg{color:var(--neg)}
+.iv-epv-v.pos{color:var(--pos)}
+.iv-epv-v .iv-epv-u{font-size:16px;color:var(--mute-2);font-weight:500;margin-left:6px}
+.iv-epv-note{margin:12px 0 18px;font-size:12.5px;color:var(--ink-2);line-height:1.55}
+.iv-epv-note b{font-weight:600}
+.iv-epv-note b.neg{color:var(--neg)}
+.iv-epv-note b.pos{color:var(--pos)}
+.iv-treasury{display:flex;align-items:center;gap:10px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.iv-treasury label{font-size:11px;color:var(--mute);font-weight:500}
+.iv-treasury input{width:80px;background:var(--surface);border:1px solid var(--line);border-radius:6px;color:var(--ink);font-family:var(--mono);font-size:13px;font-weight:600;padding:5px 9px;outline:none;font-variant-numeric:tabular-nums}
+.iv-treasury input:focus{border-color:var(--accent)}
+.iv-verdict{margin-top:14px;padding:10px 14px;border-radius:6px;font-size:12px;font-weight:600;background:var(--raised);color:var(--ink-2);line-height:1.5}
+.iv-verdict.pos{background:var(--pos-soft);color:var(--pos)}
+.iv-verdict.neg{background:var(--neg-soft);color:var(--neg)}
+.iv-verdict.warn{background:var(--warn-soft);color:var(--warn)}
+.iv-combined-signal{padding:16px 24px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-2);line-height:1.55;background:var(--raised)}
+.iv-combined-signal strong{color:var(--ink);font-weight:600;display:inline-block;margin-right:6px}
+.iv-combined-signal.pos{background:var(--pos-soft);color:var(--pos)}
+.iv-combined-signal.neg{background:var(--neg-soft);color:var(--neg)}
+.iv-combined-signal.warn{background:var(--warn-soft);color:var(--warn)}
+.iv-combined-signal.pos strong,.iv-combined-signal.neg strong,.iv-combined-signal.warn strong{color:inherit}
+
+/* Multiples grid */
+.iv-mx-grid{display:grid;grid-template-columns:repeat(4,1fr)}
+.iv-mx{padding:20px;border-right:1px solid var(--line)}
+.iv-mx:last-child{border-right:none}
+.iv-mx .iv-mx-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
+.iv-mx .iv-mx-top .iv-mx-nm{font-size:13px;font-weight:600;color:var(--ink)}
+.iv-mx .iv-mx-top .iv-mx-v{font-size:24px;font-weight:600;letter-spacing:-0.02em;color:var(--ink);font-family:var(--sans)}
+.iv-mx .iv-mx-top .iv-mx-v .iv-mx-x{font-size:14px;color:var(--mute-2)}
+.iv-mx table{width:100%;border-collapse:collapse}
+.iv-mx table th{font-size:10.5px;color:var(--mute);font-weight:600;text-align:right;padding:0 0 8px;text-transform:none;letter-spacing:0;background:transparent;border:none}
+.iv-mx table th:first-child{text-align:left}
+.iv-mx table td{padding:7px 0;border-bottom:1px solid var(--line);font-size:12px;text-align:right;color:var(--ink);font-weight:600;background:transparent;white-space:nowrap;position:static}
+.iv-mx table td:first-child{text-align:left;color:var(--ink-2);font-weight:500}
+.iv-mx table tr:last-child td{border-bottom:none}
+.iv-mx table tr.iv-mx-cur td:not(:first-child){color:var(--neg)}
+.iv-mx table tr.iv-mx-cur.pos td:not(:first-child){color:var(--pos)}
+.iv-mx .iv-mx-prem{display:flex;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:12px}
+.iv-mx .iv-mx-prem .iv-mx-prem-k{color:var(--mute);font-weight:500}
+.iv-mx .iv-mx-prem .iv-mx-prem-v{color:var(--neg);font-weight:700}
+.iv-mx .iv-mx-prem .iv-mx-prem-v.pos{color:var(--pos)}
+.iv-mx .iv-mx-prem .iv-mx-prem-v.flat{color:var(--mute)}
+
+@media(max-width:900px){
+  .iv-kpi-row,.iv-mx-grid{grid-template-columns:repeat(2,1fr)}
+  .iv-kpi-row .iv-kpi:nth-child(2),.iv-mx:nth-child(2){border-right:none}
+  .iv-qg-head,.iv-dcf-rev,.iv-epv,.iv-dcf-scen{grid-template-columns:1fr}
+  .iv-qg-head > div,.iv-dcf-rev > div,.iv-epv-col,.iv-dcf-s{border-right:none;border-bottom:1px solid var(--line)}
+  .iv-qg-head > div:last-child,.iv-dcf-rev > div:last-child,.iv-epv-col:last-child,.iv-dcf-s:last-child{border-bottom:none}
+}
 </style>
 </head>
 <body>
@@ -1039,307 +1290,307 @@ td.strong{color:var(--fg);font-weight:600}
     </div>
   </div>
 
-  <!-- ══ INTRINSIC VALUE — LAYER 1 BUSINESS QUALITY ══ -->
-  <div class="tab-page" id="page-intrinsic">
+  <!-- ══ INTRINSIC VALUE — full v3 redesign ══ -->
+  <div class="tab-page iv-v3" id="page-intrinsic">
 
-    <!-- ══ COMPOSITE FAIR VALUE — 8 methods ══ -->
-    <div class="cf-card" id="cf-card">
-
-      <!-- Header: composite big number + gap -->
-      <div class="cf-head">
-        <div class="cf-head-l">
-          <div class="cf-head-title">Composite fair value</div>
-          <div class="cf-head-sub" id="cf-sub">— · trimmed-mean composite · <span id="cf-date">—</span></div>
+    <!-- ════ 00 · COMPOSITE FAIR VALUE ════ -->
+    <section class="iv-section">
+      <div class="iv-section-head">
+        <div class="iv-section-head-l">
+          <span class="iv-ix">00</span>
+          <h2>Composite Fair Value</h2>
+          <span class="iv-sub" id="cf-sub">— · trimmed-mean composite</span>
         </div>
-        <div class="cf-head-r">
-          <div class="cf-hero-meta">
-            <div class="cf-hero-label">Composite IV</div>
-            <div class="cf-composite-val" id="cf-composite-val">—</div>
-          </div>
-          <div class="cf-hero-meta">
-            <div class="cf-hero-label">Market price</div>
-            <div class="cf-composite-val" id="cf-market-val" style="color:var(--fg2)">—</div>
-          </div>
-          <div class="cf-hero-meta">
-            <div class="cf-hero-label">Implied gap</div>
-            <div class="cf-hero-gap" id="cf-gap-val">—</div>
-          </div>
+        <div class="iv-section-head-r">
+          <span>Updated <b id="cf-date">—</b></span>
+          <span id="cf-verdict-tag"></span>
         </div>
       </div>
 
-      <!-- 4×2 method grid — populated by JS -->
-      <div class="cf-grid" id="cf-method-grid"></div>
-
-      <!-- User-adjustable inputs -->
-      <div class="cf-inputs">
-        <div class="cf-input-cell">
-          <div class="cf-input-label">Normal growth (%)</div>
-          <input class="cf-input-field" type="number" step="0.5" id="cf-growth" placeholder="auto"/>
-        </div>
-        <div class="cf-input-cell">
-          <div class="cf-input-label">Terminal growth (%)</div>
-          <input class="cf-input-field" type="number" step="0.1" id="cf-terminal" value="3.0"/>
-        </div>
-        <div class="cf-input-cell">
-          <div class="cf-input-label">Margin expansion</div>
-          <input class="cf-input-field" type="number" step="0.5" id="cf-margin-exp" value="0"/>
-        </div>
-        <div class="cf-input-cell">
-          <div class="cf-input-label">WACC (user, %)</div>
-          <input class="cf-input-field" type="number" step="0.1" id="cf-wacc-user" placeholder="auto"/>
-        </div>
-        <div class="cf-input-cell">
-          <div class="cf-input-label">H-half-life (yrs)</div>
-          <input class="cf-input-field" type="number" step="0.5" id="cf-half-life" value="4"/>
-        </div>
-      </div>
-
-      <!-- Footer -->
-      <div class="cf-footer">
-        <div>
-          <div class="cf-footer-label">InsightValue composite</div>
-          <div class="cf-composite-val" id="cf-footer-val">—</div>
-        </div>
-        <div class="cf-footer-note" id="cf-footer-note">—</div>
-      </div>
-
-    </div>
-
-    <!-- Quality Gate Terminal -->
-    <section class="ql-terminal">
-
-      <!-- Top status bar -->
-      <div class="qt-bar">
-        <div class="qt-bar-l">
-          <span class="qt-bracket">I</span>
-          <span class="qt-divider">·</span>
-          <span>Quality Gate</span>
-          <span class="qt-slash">/</span>
-          <span class="qt-section-title">Business Quality</span>
-        </div>
-        <div class="qt-bar-r">
-          <span>4 Sub-Factors</span>
-          <span class="qt-divider">·</span>
-          <span>25 Pts Each</span>
-          <span class="qt-divider">·</span>
-          <span>Max 100</span>
-        </div>
-      </div>
-
-      <!-- Hero -->
-      <div class="qt-hero">
-        <!-- Grade -->
-        <div>
-          <div class="qt-letter" id="qt-letter">—</div>
-          <div class="qt-grade-strip" id="qt-grade-strip"></div>
-        </div>
-
-        <!-- Score -->
-        <div>
-          <div class="qt-score-meta">
-            <span>Overall Quality Score</span>
-            <span class="qt-divider">·</span>
-            <span class="qt-meta-text" id="qt-asof">As of —</span>
+      <div class="iv-card">
+        <!-- KPI strip -->
+        <div class="iv-kpi-row">
+          <div class="iv-kpi">
+            <div class="iv-kpi-l">Composite Fair Value</div>
+            <div class="iv-kpi-v tnum" id="cf-composite-val">—</div>
+            <div class="iv-kpi-s">per share · trimmed mean</div>
           </div>
-          <div class="qt-score-line">
-            <span class="qt-score-num" id="qt-score-num">—</span>
-            <span class="qt-score-denom">/ 100</span>
-            <span class="qt-pctl" id="qt-pctl">Pctl —</span>
+          <div class="iv-kpi">
+            <div class="iv-kpi-l">Market Price</div>
+            <div class="iv-kpi-v tnum" id="cf-market-val">—</div>
+            <div class="iv-kpi-s" id="cf-market-chg">—</div>
           </div>
-          <div class="qt-bar-blocks" id="qt-bar-blocks"></div>
-          <div class="qt-bar-markers">
-            <span>0</span>
-            <span>25 · Fail</span>
-            <span>50 · Pass</span>
-            <span>75 · Strong</span>
-            <span>100</span>
+          <div class="iv-kpi">
+            <div class="iv-kpi-l">Implied Upside / Downside</div>
+            <div class="iv-kpi-v tnum" id="cf-gap-val">—</div>
+            <div class="iv-kpi-s" id="cf-gap-note">—</div>
           </div>
-          <div class="qt-tagline" id="qt-tagline">—</div>
+          <div class="iv-kpi">
+            <div class="iv-kpi-l">Method Range</div>
+            <div class="iv-kpi-v tnum" style="font-size:18px" id="cf-range-val">—</div>
+            <div class="iv-kpi-s" id="cf-range-note">—</div>
+          </div>
         </div>
 
-        <!-- Gate -->
-        <div>
-          <div class="qt-gate-row" id="qt-gate-row">
-            <div class="qt-gate-label">Gate</div>
-            <div class="qt-gate-status" id="qt-gate-status">—</div>
+        <div class="iv-tbl-cap">
+          <div class="iv-tbl-cap-t">Method-by-method · implied price per share</div>
+          <div class="iv-legend">
+            <span><i style="background:var(--pos)"></i>Upside</span>
+            <span><i style="background:var(--warn)"></i>Near fair</span>
+            <span><i style="background:var(--neg)"></i>Downside</span>
+            <span><i style="background:var(--mute-2)"></i>Market price</span>
           </div>
-          <div class="qt-gate-sub" id="qt-gate-sub">—</div>
-          <div class="qt-gate-stats">
-            <div><span class="qt-stat-l">Rank</span><span class="qt-stat-v" id="qt-rank">—</span></div>
-            <div><span class="qt-stat-l">Sector Pctl</span><span class="qt-stat-v" id="qt-sector-pctl">—</span></div>
-            <div><span class="qt-stat-l">Tier</span><span class="qt-stat-v" id="qt-tier">—</span></div>
-            <div><span class="qt-stat-l">Next Review</span><span class="qt-stat-v" id="qt-next-review">—</span></div>
+        </div>
+
+        <table class="iv-dt">
+          <thead>
+            <tr>
+              <th style="width:20%">Method</th>
+              <th style="width:13%">Variant</th>
+              <th class="iv-bar-td">Implied price</th>
+              <th class="r" style="width:11%">Value</th>
+              <th class="r" style="width:11%">vs Market</th>
+            </tr>
+          </thead>
+          <tbody id="cf-tbody"></tbody>
+        </table>
+
+        <div class="iv-inp-strip">
+          <div class="iv-inp-cell">
+            <div class="iv-inp-lbl">Normal growth (%)</div>
+            <input class="iv-inp-field tnum" type="number" step="0.5" id="cf-growth" placeholder="auto"/>
+          </div>
+          <div class="iv-inp-cell">
+            <div class="iv-inp-lbl">Terminal growth (%)</div>
+            <input class="iv-inp-field tnum" type="number" step="0.1" id="cf-terminal" value="3.0"/>
+          </div>
+          <div class="iv-inp-cell">
+            <div class="iv-inp-lbl">Margin expansion (%)</div>
+            <input class="iv-inp-field tnum" type="number" step="0.5" id="cf-margin-exp" value="0"/>
+          </div>
+          <div class="iv-inp-cell">
+            <div class="iv-inp-lbl">WACC (%, blank=auto)</div>
+            <input class="iv-inp-field tnum" type="number" step="0.1" id="cf-wacc-user" placeholder="auto"/>
+          </div>
+          <div class="iv-inp-cell">
+            <div class="iv-inp-lbl">H half-life (yrs)</div>
+            <input class="iv-inp-field tnum" type="number" step="0.5" id="cf-half-life" value="4"/>
           </div>
         </div>
       </div>
-
-      <!-- 4 sub-factor cards -->
-      <div class="qt-grid">
-        <div class="qt-card" id="qt-q01"></div>
-        <div class="qt-card" id="qt-q02"></div>
-        <div class="qt-card" id="qt-q03"></div>
-        <div class="qt-card" id="qt-q04"></div>
-      </div>
-
-      <!-- Bottom bar -->
-      <div class="qt-bar qt-bar-bottom">
-        <div class="qt-bar-l">
-          <span class="qt-fn">F1 Help</span>
-          <span class="qt-fn">F2 Drill</span>
-          <span class="qt-fn">F3 Peers</span>
-          <span class="qt-fn">F4 Export</span>
-          <span class="qt-fn">F5 Notes</span>
-        </div>
-        <div class="qt-bar-c">
-          <span>Model QG.4.7</span>
-          <span class="qt-divider">·</span>
-          <span>Last Calibrated <span id="qt-calibrated">—</span></span>
-          <span class="qt-divider">·</span>
-          <span>412 Companies in Universe</span>
-        </div>
-        <div class="qt-bar-r">
-          <span class="qt-live-dot"></span>
-          <span>Stream OK · Latency <span id="qt-latency">—</span> ms</span>
-        </div>
-      </div>
-
     </section>
 
-    <!-- ── LAYER 2 ── -->
-    <div class="layer-hero">
-      <span class="layer-num">II  ·  Valuation</span>
-      <span class="layer-title">Reverse + Forward DCF</span>
-    </div>
-
-    <!-- Part A: Reverse DCF -->
-    <div class="l2-card">
-      <div class="l2-card-h">
-        <div class="l2-card-name">Part A  ·  Reverse DCF</div>
-        <div class="l2-card-meta">Implied Growth Solver</div>
-      </div>
-      <div class="rdcf-result">
-        <div class="rdcf-rate" id="rdcf-rate">—</div>
-        <div class="rdcf-rate-label">Implied 10-Year<br/>FCF Growth Rate</div>
-      </div>
-      <div class="rdcf-context" id="rdcf-context">—</div>
-      <div class="rdcf-inputs">
-        <div>Market Cap <span id="rdcf-mcap">—</span></div>
-        <div>TTM FCF <span id="rdcf-fcf">—</span></div>
-        <div>WACC <span id="rdcf-wacc">—</span></div>
-        <div>Terminal <span>3.0%</span></div>
-      </div>
-    </div>
-
-    <!-- Part B: Forward DCF -->
-    <div class="l2-card">
-      <div class="l2-card-h">
-        <div class="l2-card-name">Part B  ·  Forward DCF</div>
-        <div class="l2-card-meta">3 Scenarios  ·  10-Year Projection</div>
-      </div>
-
-      <div class="dcf-inputs">
-        <div class="dcf-input-block bear">
-          <label>Bear · Y1-3 Growth (%)</label>
-          <input type="number" step="0.5" id="dcf-bear" oninput="recomputeDcf()"/>
+    <!-- ════ 01 · QUALITY GATE ════ -->
+    <section class="iv-section">
+      <div class="iv-section-head">
+        <div class="iv-section-head-l">
+          <span class="iv-ix">01</span>
+          <h2>Quality Gate</h2>
+          <span class="iv-sub">4 sub-factors · 25 pts each</span>
         </div>
-        <div class="dcf-input-block base">
-          <label>Base · Y1-3 Growth (%)</label>
-          <input type="number" step="0.5" id="dcf-base" oninput="recomputeDcf()"/>
-        </div>
-        <div class="dcf-input-block bull">
-          <label>Bull · Y1-3 Growth (%)</label>
-          <input type="number" step="0.5" id="dcf-bull" oninput="recomputeDcf()"/>
+        <div class="iv-section-head-r">
+          <span id="qt-verdict-pill"></span>
         </div>
       </div>
 
-      <div class="dcf-scenarios">
-        <div class="dcf-scenario bear">
-          <div class="dcf-scenario-label">BEAR · TERM 2.0%</div>
-          <div class="dcf-scenario-iv" id="dcf-bear-iv">—</div>
-          <div class="dcf-scenario-upside" id="dcf-bear-up">—</div>
+      <div class="iv-card">
+        <div class="iv-qg-head">
+          <div class="iv-qg-grade">
+            <div class="iv-lbl">Quality grade</div>
+            <div class="iv-qg-letter" id="qt-letter">—</div>
+            <div class="iv-qg-desc" id="qt-tagline">—</div>
+          </div>
+          <div class="iv-qg-score">
+            <div class="iv-lbl">Overall quality score</div>
+            <div class="iv-qg-score-line">
+              <span class="iv-qg-num" id="qt-score-num">—</span>
+              <span class="iv-qg-denom"> / 100</span>
+            </div>
+            <div class="iv-qg-numline">
+              <div class="iv-qg-track"></div>
+              <div class="iv-qg-thr"><span>Pass ≥ 60</span></div>
+              <div class="iv-qg-cur" id="qt-cur-dot"></div>
+              <div class="iv-qg-axis"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div>
+            </div>
+          </div>
+          <div class="iv-qg-gate">
+            <div class="iv-lbl">Gate detail</div>
+            <div class="iv-qg-grow"><span class="iv-qg-grow-k">Pass threshold</span><span class="iv-qg-grow-v">≥ 60</span></div>
+            <div class="iv-qg-grow"><span class="iv-qg-grow-k">Current score</span><span class="iv-qg-grow-v" id="qt-cur-score">—</span></div>
+            <div class="iv-qg-grow"><span class="iv-qg-grow-k">Status</span><span class="iv-qg-grow-v" id="qt-gate-status">—</span></div>
+            <div class="iv-qg-grow"><span class="iv-qg-grow-k">Universe</span><span class="iv-qg-grow-v">412 companies</span></div>
+          </div>
         </div>
-        <div class="dcf-scenario base">
-          <div class="dcf-scenario-label">BASE · TERM 3.0%</div>
-          <div class="dcf-scenario-iv" id="dcf-base-iv">—</div>
-          <div class="dcf-scenario-upside" id="dcf-base-up">—</div>
+
+        <table class="iv-qg-table">
+          <thead>
+            <tr>
+              <th style="width:24%">Sub-factor</th>
+              <th>Key readings</th>
+              <th class="r" style="width:11%">Score</th>
+              <th class="r" style="width:14%">Status</th>
+            </tr>
+          </thead>
+          <tbody id="qt-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ════ 02 · DISCOUNTED CASH FLOW ════ -->
+    <section class="iv-section">
+      <div class="iv-section-head">
+        <div class="iv-section-head-l">
+          <span class="iv-ix">02</span>
+          <h2>Discounted Cash Flow</h2>
+          <span class="iv-sub">reverse solver + forward scenarios · 10-year</span>
         </div>
-        <div class="dcf-scenario bull">
-          <div class="dcf-scenario-label">BULL · TERM 3.5%</div>
-          <div class="dcf-scenario-iv" id="dcf-bull-iv">—</div>
-          <div class="dcf-scenario-upside" id="dcf-bull-up">—</div>
+        <div class="iv-section-head-r">
+          <span>WACC <b id="dcf-wacc-disp">—</b></span>
+          <span>Terminal <b>3.0%</b></span>
+          <span>Shares <b id="dcf-shares-disp">—</b></span>
         </div>
       </div>
 
-      <div class="dcf-meta">Y1-3 use input growth · Y4-10 fade linearly to terminal · WACC <span id="dcf-wacc-disp">—</span> · Current Price <span id="dcf-curprice">—</span></div>
-
-      <div class="variant-perception" id="variant-perception">—</div>
-    </div>
-
-    <!-- ── LAYER 3 ── -->
-    <div class="layer-hero">
-      <span class="layer-num">III  ·  Intrinsic Value</span>
-      <span class="layer-title">Earnings Power &amp; Owner Yield</span>
-    </div>
-
-    <div class="l3-grid">
-      <!-- EPV -->
-      <div class="l3-card">
-        <div class="l2-card-h">
-          <div class="l2-card-name">Earnings Power Value</div>
-          <div class="l2-card-meta">EPV  ·  Zero Growth</div>
+      <div class="iv-card">
+        <div class="iv-dcf-rev">
+          <div class="iv-dcf-rev-l">
+            <div class="iv-lbl">Reverse DCF · implied 10Y FCF growth</div>
+            <div class="iv-dcf-imp tnum" id="rdcf-rate">—</div>
+            <p class="iv-dcf-cap" id="rdcf-context">—</p>
+          </div>
+          <div class="iv-dcf-rev-r">
+            <div class="iv-lbl">Solver inputs</div>
+            <table class="iv-mini">
+              <tr><td>Market capitalization</td><td id="rdcf-mcap">—</td></tr>
+              <tr><td>Trailing 12M FCF</td><td id="rdcf-fcf">—</td></tr>
+              <tr><td>Discount rate (WACC)</td><td id="rdcf-wacc">—</td></tr>
+              <tr><td>Terminal growth</td><td>3.0%</td></tr>
+            </table>
+          </div>
         </div>
-        <div class="l3-headline">
-          <div class="l3-headline-num" id="epv-per-share">—</div>
-          <div class="l3-headline-sub">EPV per Share (zero growth)</div>
-          <div class="l3-headline-extra" id="epv-vs-price">—</div>
+
+        <div class="iv-dcf-scen">
+          <div class="iv-dcf-s">
+            <div class="iv-dcf-s-head"><span>Bear</span><span class="iv-tag iv-tag-neg tnum" id="dcf-bear-up">—</span></div>
+            <div class="iv-dcf-s-inp">
+              <div>
+                <label>Y1–3 growth (%)</label>
+                <input type="number" step="0.5" id="dcf-bear" oninput="recomputeDcf()"/>
+              </div>
+              <span class="iv-dcf-s-term">Terminal 2.0%</span>
+            </div>
+            <div class="iv-dcf-s-iv">
+              <div class="iv-lbl">Intrinsic value / share</div>
+              <div class="iv-dcf-s-iv-v tnum" id="dcf-bear-iv">—</div>
+            </div>
+          </div>
+          <div class="iv-dcf-s base">
+            <div class="iv-dcf-s-head"><span>Base</span><span class="iv-tag iv-tag-accent tnum" id="dcf-base-up">—</span></div>
+            <div class="iv-dcf-s-inp">
+              <div>
+                <label>Y1–3 growth (%)</label>
+                <input type="number" step="0.5" id="dcf-base" oninput="recomputeDcf()"/>
+              </div>
+              <span class="iv-dcf-s-term">Terminal 3.0%</span>
+            </div>
+            <div class="iv-dcf-s-iv">
+              <div class="iv-lbl">Intrinsic value / share</div>
+              <div class="iv-dcf-s-iv-v tnum" id="dcf-base-iv">—</div>
+            </div>
+          </div>
+          <div class="iv-dcf-s">
+            <div class="iv-dcf-s-head"><span>Bull</span><span class="iv-tag iv-tag-pos tnum" id="dcf-bull-up">—</span></div>
+            <div class="iv-dcf-s-inp">
+              <div>
+                <label>Y1–3 growth (%)</label>
+                <input type="number" step="0.5" id="dcf-bull" oninput="recomputeDcf()"/>
+              </div>
+              <span class="iv-dcf-s-term">Terminal 3.5%</span>
+            </div>
+            <div class="iv-dcf-s-iv">
+              <div class="iv-lbl">Intrinsic value / share</div>
+              <div class="iv-dcf-s-iv-v tnum" id="dcf-bull-iv">—</div>
+            </div>
+          </div>
         </div>
-        <div class="l3-detail-row"><span class="l3-detail-l">Avg EBIT (3Y)</span><span class="l3-detail-v" id="epv-ebit">—</span></div>
-        <div class="l3-detail-row"><span class="l3-detail-l">Tax Rate (3Y avg)</span><span class="l3-detail-v" id="epv-tax">—</span></div>
-        <div class="l3-detail-row"><span class="l3-detail-l">NOPAT</span><span class="l3-detail-v" id="epv-nopat">—</span></div>
-        <div class="l3-detail-row"><span class="l3-detail-l">WACC</span><span class="l3-detail-v" id="epv-wacc">—</span></div>
-        <div class="l3-detail-row"><span class="l3-detail-l">Total EPV</span><span class="l3-detail-v" id="epv-total">—</span></div>
-        <div class="l3-verdict" id="epv-verdict">—</div>
+
+        <div class="iv-variant" id="variant-perception">—</div>
+      </div>
+    </section>
+
+    <!-- ════ 03 · EARNINGS POWER & OWNER YIELD ════ -->
+    <section class="iv-section">
+      <div class="iv-section-head">
+        <div class="iv-section-head-l">
+          <span class="iv-ix">03</span>
+          <h2>Earnings Power &amp; Owner Yield</h2>
+          <span class="iv-sub">no-growth EPV and owner yield vs risk-free</span>
+        </div>
+        <div class="iv-section-head-r">
+          <span id="l3-signal-tag"></span>
+        </div>
       </div>
 
-      <!-- Owner Earnings Yield -->
-      <div class="l3-card">
-        <div class="l2-card-h">
-          <div class="l2-card-name">Owner Earnings Yield</div>
-          <div class="l2-card-meta">Buffett-Style  ·  vs Risk-Free</div>
+      <div class="iv-card">
+        <div class="iv-epv">
+          <div class="iv-epv-col">
+            <div class="iv-lbl">Earnings Power Value · zero growth</div>
+            <div class="iv-epv-v tnum"><span id="epv-per-share">—</span><span class="iv-epv-u">/ sh</span></div>
+            <p class="iv-epv-note" id="epv-vs-price">—</p>
+            <table class="iv-mini">
+              <tr><td>Avg EBIT (3Y normalized)</td><td id="epv-ebit">—</td></tr>
+              <tr><td>Effective tax rate (3Y)</td><td id="epv-tax">—</td></tr>
+              <tr><td>NOPAT</td><td id="epv-nopat">—</td></tr>
+              <tr><td>WACC</td><td id="epv-wacc">—</td></tr>
+              <tr><td>Operating EPV</td><td id="epv-total">—</td></tr>
+            </table>
+            <div class="iv-verdict" id="epv-verdict">—</div>
+          </div>
+          <div class="iv-epv-col">
+            <div class="iv-lbl">Owner Earnings Yield · vs 10Y Treasury</div>
+            <div class="iv-epv-v tnum"><span id="oey-yield">—</span><span class="iv-epv-u">yield</span></div>
+            <p class="iv-epv-note" id="oey-spread">—</p>
+            <table class="iv-mini">
+              <tr><td>Net income (TTM)</td><td id="oey-ni">—</td></tr>
+              <tr><td>+ D&amp;A</td><td id="oey-da">—</td></tr>
+              <tr><td>− Maint capex (60% of total)</td><td id="oey-mcapex">—</td></tr>
+              <tr><td>Owner earnings</td><td id="oey-oe">—</td></tr>
+              <tr><td>÷ Market cap</td><td id="oey-mcap">—</td></tr>
+            </table>
+            <div class="iv-treasury">
+              <label>10Y Treasury %</label>
+              <input type="number" step="0.1" id="oey-rfr" value="4.5" oninput="renderLayer3()"/>
+            </div>
+            <div class="iv-verdict" id="oey-verdict">—</div>
+          </div>
         </div>
-        <div class="l3-headline">
-          <div class="l3-headline-num" id="oey-yield">—</div>
-          <div class="l3-headline-sub">Owner Earnings Yield</div>
-          <div class="l3-headline-extra" id="oey-spread">—</div>
-        </div>
-        <div class="l3-detail-row"><span class="l3-detail-l">Net Income (TTM)</span><span class="l3-detail-v" id="oey-ni">—</span></div>
-        <div class="l3-detail-row"><span class="l3-detail-l">D&amp;A (TTM)</span><span class="l3-detail-v" id="oey-da">—</span></div>
-        <div class="l3-detail-row"><span class="l3-detail-l">Maint. CapEx (60% of total)</span><span class="l3-detail-v" id="oey-mcapex">—</span></div>
-        <div class="l3-detail-row"><span class="l3-detail-l">Owner Earnings</span><span class="l3-detail-v" id="oey-oe">—</span></div>
-        <div class="l3-detail-row"><span class="l3-detail-l">Market Cap</span><span class="l3-detail-v" id="oey-mcap">—</span></div>
-        <div class="l3-treasury">
-          <label>10Y Treasury %</label>
-          <input type="number" step="0.1" id="oey-rfr" value="4.5" oninput="renderLayer3()"/>
-        </div>
-        <div class="l3-verdict" id="oey-verdict" style="margin-top:10px">—</div>
+        <div class="iv-combined-signal" id="l3-signal">—</div>
       </div>
-    </div>
+    </section>
 
-    <div class="combined-signal" id="l3-signal">—</div>
+    <!-- ════ 04 · MULTIPLES vs PEERS & HISTORY ════ -->
+    <section class="iv-section">
+      <div class="iv-section-head">
+        <div class="iv-section-head-l">
+          <span class="iv-ix">04</span>
+          <h2>Multiples vs Peers &amp; History</h2>
+          <span class="iv-sub">4 multiples · 10Y own history vs sector median</span>
+        </div>
+        <div class="iv-section-head-r" id="l4-verdict-row"></div>
+      </div>
 
-    <!-- ── LAYER 4 ── -->
-    <div class="layer-hero">
-      <span class="layer-num">IV  ·  Relative Value</span>
-      <span class="layer-title">Multiples vs Peers &amp; History</span>
-    </div>
+      <div class="iv-card">
+        <div class="iv-mx-grid">
+          <div class="iv-mx" id="l4-evebitda"></div>
+          <div class="iv-mx" id="l4-pfcf"></div>
+          <div class="iv-mx" id="l4-pe"></div>
+          <div class="iv-mx" id="l4-evrev"></div>
+        </div>
+      </div>
+    </section>
 
-    <div class="l4-grid">
-      <div class="l4-card" id="l4-evebitda"></div>
-      <div class="l4-card" id="l4-pfcf"></div>
-      <div class="l4-card" id="l4-pe"></div>
-      <div class="l4-card" id="l4-evrev"></div>
-    </div>
   </div>
+
 
   <!-- ══ INSIGHTINVEST™ / MOATHEAT ══ -->
   <div class="tab-page" id="page-moatheat">
@@ -1454,7 +1705,7 @@ td.strong{color:var(--fg);font-weight:600}
 
   <!-- ══ AI INSIGHTS ══ -->
   <div class="tab-page" id="page-ai">
-    <div style="margin-bottom:16px;padding:14px 18px;background:hsl(213,94%,58%,.06);border:1px solid hsl(213,94%,58%,.15);border-radius:8px;font-size:13px;color:var(--fg2)">
+    <div style="margin-bottom:16px;padding:14px 18px;background:hsl(208,52%,36%,.06);border:1px solid hsl(208,52%,36%,.15);border-radius:8px;font-size:13px;color:var(--fg2)">
       Powered by Claude — uses all loaded financial data. Add your Claude API key via API Keys.
     </div>
     <div class="ai-actions">
@@ -1922,14 +2173,14 @@ function loadPriceChart(days){
   const labels=hist.map(d=>d.date);
   const prices=hist.map(d=>d.price??d.close);
   const first=prices[0],last=prices[prices.length-1];
-  const color=last>=first?'#27c67a':'#e05555';
+  const color=last>=first?'#2E7D55':'#B23B3B';
   if(priceChartInst)priceChartInst.destroy();
   priceChartInst=new Chart(document.getElementById('price-chart'),{
     type:'line',
     data:{labels,datasets:[{data:prices,borderColor:color,backgroundColor:color+'1a',borderWidth:1.5,fill:true,tension:.1,pointRadius:0,pointHoverRadius:4}]},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,backgroundColor:'hsl(222,40%,9%)',borderColor:'hsl(220,25%,20%)',borderWidth:1,titleColor:'#7c8ea0',bodyColor:'#dde4eb',callbacks:{label:ctx=>`$${ctx.parsed.y.toFixed(2)}`}}},
-      scales:{x:{grid:{color:'hsl(220,25%,14%,.4)'},ticks:{color:'#5a6a7a',maxTicksLimit:6,font:{family:"'JetBrains Mono'"}}},y:{grid:{color:'hsl(220,25%,14%,.4)'},ticks:{color:'#5a6a7a',font:{family:"'JetBrains Mono'"},callback:v=>'$'+v.toFixed(0)}}},
+      plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,backgroundColor:'#FFFFFF',borderColor:'#ECEAE6',borderWidth:1,titleColor:'#8A887F',bodyColor:"#1A1A18",callbacks:{label:ctx=>`$${ctx.parsed.y.toFixed(2)}`}}},
+      scales:{x:{grid:{color:'rgba(20,20,18,.4)'},ticks:{color:'#44443F',maxTicksLimit:6,font:{family:"'JetBrains Mono'"}}},y:{grid:{color:'rgba(20,20,18,.4)'},ticks:{color:'#44443F',font:{family:"'JetBrains Mono'"},callback:v=>'$'+v.toFixed(0)}}},
     }
   });
 }
@@ -2036,18 +2287,18 @@ function switchFinTab(t){
 }
 
 // ── Trend charts ──
-const FIN_CHART_COLORS=['#3b8ef5','#f5813b','#27c67a','#e05555','#b59ef5','#f5c23b','#3bbfd4','#b5d48a'];
+const FIN_CHART_COLORS=['#3b8ef5','#A87422','#2E7D55','#B23B3B','#5A4AA8','#A77A1E','#2C5E8A','#2E7D55'];
 function finChartOpts(){
   return{
     responsive:true,maintainAspectRatio:false,
     plugins:{
-      legend:{display:true,position:'bottom',labels:{color:'#7c8ea0',font:{family:"'Inter'",size:11},boxWidth:11,padding:8}},
-      tooltip:{backgroundColor:'hsl(222,40%,9%)',borderColor:'hsl(220,25%,20%)',borderWidth:1,titleColor:'#7c8ea0',bodyColor:'#dde4eb',
+      legend:{display:true,position:'bottom',labels:{color:'#8A887F',font:{family:"'Inter'",size:11},boxWidth:11,padding:8}},
+      tooltip:{backgroundColor:'#FFFFFF',borderColor:'#ECEAE6',borderWidth:1,titleColor:'#8A887F',bodyColor:"#1A1A18",
         callbacks:{label:ctx=>`${ctx.dataset.label}: ${yAxisTickM(ctx.parsed.y)}M`}},
     },
     scales:{
-      x:{grid:{color:'hsl(220,25%,14%,.3)',borderDash:[3,3]},ticks:{color:'#5a6a7a',font:{family:"'JetBrains Mono'",size:10},maxRotation:45}},
-      y:{grid:{color:'hsl(220,25%,14%,.3)',borderDash:[3,3]},ticks:{color:'#5a6a7a',font:{family:"'JetBrains Mono'",size:10},callback:yAxisTickM}},
+      x:{grid:{color:'rgba(20,20,18,.3)',borderDash:[3,3]},ticks:{color:'#44443F',font:{family:"'JetBrains Mono'",size:10},maxRotation:45}},
+      y:{grid:{color:'rgba(20,20,18,.3)',borderDash:[3,3]},ticks:{color:'#44443F',font:{family:"'JetBrains Mono'",size:10},callback:yAxisTickM}},
     },
   };
 }
@@ -2085,7 +2336,7 @@ function buildFinTrendCharts(period){
   make('fc2',[
     makeFinDataset('Net Operating Cash Flow',cf.map(d=>d.operatingCashFlow||0),    FIN_CHART_COLORS[1]),
     makeFinDataset('Free Cash Flow',         cf.map(d=>d.freeCashFlow||0),          FIN_CHART_COLORS[2]),
-    makeFinDataset('Net Income',             inc.map(d=>d.netIncome||0),            '#b5d48a'),
+    makeFinDataset('Net Income',             inc.map(d=>d.netIncome||0),            '#2E7D55'),
     makeFinDataset('Stock-Based Comp',       cf.map(d=>d.stockBasedCompensation||0),FIN_CHART_COLORS[3]),
   ]);
   // Chart 3: Cash · Total Debt
@@ -2095,8 +2346,8 @@ function buildFinTrendCharts(period){
   ]);
   // Chart 4: Shares Outstanding · Diluted
   make('fc4',[
-    makeFinDataset('Shares Outstanding',inc.map(d=>d.weightedAverageShsOut||0),   '#b5d48a'),
-    makeFinDataset('Shares Diluted',    inc.map(d=>d.weightedAverageShsOutDil||0),'#3bbfd4'),
+    makeFinDataset('Shares Outstanding',inc.map(d=>d.weightedAverageShsOut||0),   '#2E7D55'),
+    makeFinDataset('Shares Diluted',    inc.map(d=>d.weightedAverageShsOutDil||0),'#2C5E8A'),
   ]);
 }
 
@@ -2364,13 +2615,13 @@ function cmChartOpts(){
   return{
     responsive:true,maintainAspectRatio:false,
     plugins:{
-      legend:{display:true,position:'bottom',labels:{color:'#7c8ea0',font:{family:"'Inter'",size:11},boxWidth:11,padding:8}},
-      tooltip:{backgroundColor:'hsl(222,40%,9%)',borderColor:'hsl(220,25%,20%)',borderWidth:1,titleColor:'#7c8ea0',bodyColor:'#dde4eb',
+      legend:{display:true,position:'bottom',labels:{color:'#8A887F',font:{family:"'Inter'",size:11},boxWidth:11,padding:8}},
+      tooltip:{backgroundColor:'#FFFFFF',borderColor:'#ECEAE6',borderWidth:1,titleColor:'#8A887F',bodyColor:"#1A1A18",
         callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.parsed.y?.toFixed(1)}%`}},
     },
     scales:{
-      x:{grid:{color:'hsl(220,25%,14%,.3)',borderDash:[3,3]},ticks:{color:'#5a6a7a',font:{family:"'JetBrains Mono'",size:10},maxRotation:45}},
-      y:{grid:{color:'hsl(220,25%,14%,.3)',borderDash:[3,3]},ticks:{color:'#5a6a7a',font:{family:"'JetBrains Mono'",size:10},callback:v=>v+'%'}},
+      x:{grid:{color:'rgba(20,20,18,.3)',borderDash:[3,3]},ticks:{color:'#44443F',font:{family:"'JetBrains Mono'",size:10},maxRotation:45}},
+      y:{grid:{color:'rgba(20,20,18,.3)',borderDash:[3,3]},ticks:{color:'#44443F',font:{family:"'JetBrains Mono'",size:10},callback:v=>v+'%'}},
     },
   };
 }
@@ -2575,99 +2826,70 @@ function computeBusinessQuality(){
                           : 'GATE: FAILED  ·  QUALITY CONCERNS'};
 }
 
-function gradeColor(g){return g==='A'?'var(--green)':g==='B'?'hsl(160,55%,52%)':g==='C'?'var(--yellow)':'var(--red)';}
+function gradeColor(g){return g==='A'?'var(--green)':g==='B'?'hsl(146,40%,38%)':g==='C'?'var(--yellow)':'var(--red)';}
 function scoreColor(s,max){
   const pct = s/max;
-  return pct>=0.80?'var(--green)':pct>=0.60?'hsl(160,55%,52%)':pct>=0.40?'var(--yellow)':'var(--red)';
+  return pct>=0.80?'var(--green)':pct>=0.60?'hsl(146,40%,38%)':pct>=0.40?'var(--yellow)':'var(--red)';
 }
 
 function renderIntrinsicValue(){
   const r = computeBusinessQuality();
 
-  // ── tier color: fail / warn / gd / ok ──
+  // Tier: pos / warn / neg (mapped to .iv-verdict / .iv-tag colors)
   const tierFor = (score, max=100) => {
     const pct = score/max;
-    if(pct >= 0.80) return 'ok';
-    if(pct >= 0.60) return 'gd';
+    if(pct >= 0.60) return 'pos';
     if(pct >= 0.40) return 'warn';
-    return 'fail';
+    return 'neg';
   };
   const tier = tierFor(r.total);
-  const tierColorMap = {ok:'#5dd060', gd:'#9adb55', warn:'#ffb84d', fail:'#ff4444'};
 
-  // ── HERO ──
   // Big grade letter
   const letterEl = document.getElementById('qt-letter');
   letterEl.textContent = r.grade;
-  letterEl.className = 'qt-letter ' + tier + '-color';
+  letterEl.className = 'iv-qg-letter ' + tier;
 
-  // Grade strip F D C B A S — highlight active
-  const grades = ['F','D','C','B','A','S'];
-  document.getElementById('qt-grade-strip').innerHTML = grades.map(g => {
-    const active = g === r.grade ? `active ${tier}-color` : '';
-    return `<span class="qt-g ${active}">${g}</span>`;
-  }).join('');
-
-  // Timestamp
-  const now = new Date();
-  const pad = n => String(n).padStart(2,'0');
-  const ts = `${now.getUTCFullYear()}-${pad(now.getUTCMonth()+1)}-${pad(now.getUTCDate())} ${pad(now.getUTCHours())}:${pad(now.getUTCMinutes())}`;
-  document.getElementById('qt-asof').textContent = `As of ${ts} UTC`;
+  // Tagline
+  const taglineEl = document.getElementById('qt-tagline');
+  const taglineMap = {
+    A: 'Exceptional business — wide moat, durable returns, disciplined capital allocation.',
+    B: 'Solid business with meaningful competitive advantages.',
+    C: 'Mixed quality — requires deeper due diligence before investing.',
+    D: 'Below-average quality. Skip unless a strong thesis on inflection.',
+  };
+  taglineEl.innerHTML = `<span class="${tier}">${{pos:'Above median',warn:'Near median',neg:'Below median'}[tier]}</span> · ${taglineMap[r.grade] || r.tagline}`;
 
   // Score
   const scoreNum = document.getElementById('qt-score-num');
   scoreNum.textContent = r.total;
-  scoreNum.style.color = tierColorMap[tier];
-  document.getElementById('qt-pctl').textContent = `Pctl ${r.total}`;
+  scoreNum.className = 'iv-qg-num ' + tier;
 
-  // Block bar (50 blocks)
-  const blocks = 50;
-  const filled = Math.round((r.total/100) * blocks);
-  document.getElementById('qt-bar-blocks').innerHTML = Array.from({length: blocks}, (_, i) =>
-    `<div class="${i < filled ? 'fill-' + tier : ''}"></div>`
-  ).join('');
+  // Numberline dot
+  const dotEl = document.getElementById('qt-cur-dot');
+  dotEl.style.left = Math.max(0, Math.min(100, r.total)) + '%';
+  dotEl.className = 'iv-qg-cur ' + tier;
 
-  // Tagline (uppercase, terse)
-  const taglineMap = {
-    A: 'Exceptional quality. Proceed to deeper valuation work.',
-    B: 'Solid business with meaningful competitive advantages.',
-    C: 'Mixed quality — requires deeper due diligence.',
-    D: 'Below-average quality. Skip unless you have a strong thesis on inflection or a special situation.',
-  };
-  document.getElementById('qt-tagline').textContent = taglineMap[r.grade] || r.tagline;
+  // Gate detail
+  const curScoreEl = document.getElementById('qt-cur-score');
+  curScoreEl.textContent = r.total;
+  curScoreEl.className = 'iv-qg-grow-v ' + tier;
 
-  // Gate
   const gatePass = r.total >= 60;
-  const gateRow = document.getElementById('qt-gate-row');
   const gateStatus = document.getElementById('qt-gate-status');
-  const gateSub = document.getElementById('qt-gate-sub');
-  if(gatePass){
-    gateRow.className = 'qt-gate-row pass';
-    gateStatus.textContent = 'Passed';
-    gateSub.textContent = 'Proceed to Valuation';
-    gateSub.className = 'qt-gate-sub pass';
-  } else {
-    gateRow.className = 'qt-gate-row';
-    gateStatus.textContent = 'Failed';
-    gateSub.textContent = 'Quality Concerns';
-    gateSub.className = 'qt-gate-sub';
-  }
+  gateStatus.textContent = gatePass ? 'Passed' : 'Failed';
+  gateStatus.className = 'iv-qg-grow-v ' + (gatePass ? 'pos' : 'neg');
 
-  // Synthetic gate stats
-  document.getElementById('qt-rank').textContent = `${Math.max(1, Math.round((1 - r.total/100) * 380 + 15))} / 412`;
-  document.getElementById('qt-sector-pctl').textContent = r.total;
-  document.getElementById('qt-tier').textContent = r.total >= 80 ? 'Top' : r.total >= 60 ? 'Mid' : r.total >= 40 ? 'Below' : 'Low';
-  const curQ = Math.ceil((now.getMonth() + 1) / 3);
-  const nextQ = curQ === 4 ? 1 : curQ + 1;
-  const nextY = curQ === 4 ? now.getFullYear() + 1 : now.getFullYear();
-  document.getElementById('qt-next-review').textContent = `Q${nextQ} ${nextY}`;
+  // Top-right verdict pill
+  const pillEl = document.getElementById('qt-verdict-pill');
+  pillEl.className = 'iv-tag ' + (gatePass ? 'iv-tag-pos' : 'iv-tag-neg');
+  pillEl.innerHTML = `<span class="iv-dot"></span>${gatePass ? 'Gate passed' : 'Gate failed'}`;
 
-  // ── SUB-FACTOR CARDS ──
-  const cards = [
-    {id: 'qt-q01', code: 'Q-01', name: 'ROIC vs WACC',         key: 'roic'},
-    {id: 'qt-q02', code: 'Q-02', name: 'Gross Margin Trend',   key: 'margin'},
-    {id: 'qt-q03', code: 'Q-03', name: 'Revenue Quality',      key: 'revenue'},
-    {id: 'qt-q04', code: 'Q-04', name: 'Capital Allocation',   key: 'capital'},
+  // ── SUB-FACTOR TABLE ──
+  const subs = [
+    {code:'Q-01', name:'ROIC vs WACC',         key:'roic'},
+    {code:'Q-02', name:'Gross Margin Trend',   key:'margin'},
+    {code:'Q-03', name:'Revenue Quality',      key:'revenue'},
+    {code:'Q-04', name:'Capital Allocation',   key:'capital'},
   ];
 
   const valColor = (v) => {
@@ -2678,52 +2900,31 @@ function renderIntrinsicValue(){
     return '';
   };
 
-  const buildSpark = (color) => {
-    // tiny inline svg sparkline — 4 points trending randomly but flatish
-    const pts = [3, 5, 4, 7, 6].map((y, i) => `${i*9},${10-y}`).join(' ');
-    return `<svg width="40" height="11" viewBox="0 0 40 11"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.2"/></svg>`;
+  const statusLabel = (cTier, verdict) => {
+    return verdict || ({pos:'Strong', warn:'Mixed', neg:'Weak'}[cTier]);
   };
 
-  cards.forEach((cfg, idx) => {
+  const tbody = document.getElementById('qt-tbody');
+  tbody.innerHTML = subs.map(cfg => {
     const b = r.breakdowns[cfg.key];
     const cTier = tierFor(b.score, b.max);
-    const cTierColor = tierColorMap[cTier];
-    const cardBlocks = 30;
-    const cardFilled = Math.round((b.score / b.max) * cardBlocks);
-    const dec = Math.max(0, Math.min(10, 10 - Math.round(b.score / 2.5)));
-    const peerPos = 25 + (idx * 17) % 55;
-    const peerNum = 8 + (idx * 3) % 15;
-
-    document.getElementById(cfg.id).innerHTML = `
-      <div class="qt-card-head">
-        <div class="qt-card-head-l">
-          <span class="qt-card-code">${cfg.code}</span>
-          <span class="qt-card-name">${cfg.name}</span>
-        </div>
-        <div class="qt-card-head-r">
-          <span class="qt-card-spark">${buildSpark(cTierColor)}</span>
-          <span class="qt-card-score ${cTier}">${String(b.score).padStart(2,'0')}<span class="qt-card-score-max"> / ${b.max}</span></span>
-        </div>
-      </div>
-      <div class="qt-card-bar">
-        ${Array.from({length: cardBlocks}, (_, i) => `<div class="${i < cardFilled ? cTier : ''}"></div>`).join('')}
-      </div>
-      <div class="qt-peer-marker">
-        <span style="left:${peerPos}%">▼ Peer ${peerNum}</span>
-      </div>
-      <div class="qt-card-stats">
-        ${b.rows.map(row => `<div><span class="qt-card-stat-l">${row.l}</span><span class="qt-card-stat-v ${valColor(row.v)}">${row.v}</span></div>`).join('')}
-      </div>
-      <div class="qt-card-foot">
-        <span><span class="qt-card-status-l">Status · </span><span class="qt-card-status-v ${cTier}">${b.verdict}</span></span>
-        <span class="qt-card-dec">Dec ${dec}</span>
-      </div>
+    const readings = b.rows.map((row, i) => {
+      const c = valColor(row.v);
+      const sep = i === 0 ? '' : '<span class="iv-sep">·</span>';
+      return `${sep}<span class="${c}">${row.l} ${row.v}</span>`;
+    }).join(' ');
+    return `
+      <tr>
+        <td>
+          <div class="iv-fname">${cfg.name}</div>
+          <div class="iv-fix">${cfg.code}</div>
+        </td>
+        <td class="iv-detail">${readings}</td>
+        <td class="iv-sc ${cTier}">${b.score}<span class="iv-sc-max"> / ${b.max}</span></td>
+        <td class="iv-stat ${cTier}"><span class="iv-dot"></span>${statusLabel(cTier, b.verdict)}</td>
+      </tr>
     `;
-  });
-
-  // Footer
-  document.getElementById('qt-calibrated').textContent = `${now.getUTCFullYear()}-${pad(now.getUTCMonth()+1)}-${pad(now.getUTCDate()-13)}`;
-  document.getElementById('qt-latency').textContent = 30 + Math.floor(Math.random() * 18);
+  }).join('');
 
   renderLayer2();
 }
@@ -2827,35 +3028,40 @@ function renderLayer2(){
   const fcf    = computeTTMFcf();
   const mktCap = S.quote.marketCap || S.profile.marketCap || 0;
   const baseG  = getBaseGrowthEstimate();
-  const cur    = getCurPrice();
+  const shares = getSharesOut();
 
   // Reset growth defaults each load (don't preserve user edits across tickers)
   document.getElementById('dcf-bear').value = (baseG*0.7*100).toFixed(1);
   document.getElementById('dcf-base').value = (baseG*100).toFixed(1);
   document.getElementById('dcf-bull').value = (baseG*1.2*100).toFixed(1);
 
-  // Part A — Reverse DCF
+  // Header chips
   document.getElementById('rdcf-mcap').textContent = mktCap?fmt(mktCap):'—';
   document.getElementById('rdcf-fcf').textContent  = fcf?fmt(fcf):'—';
   document.getElementById('rdcf-wacc').textContent = fmtP(wacc);
   document.getElementById('dcf-wacc-disp').textContent = fmtP(wacc);
-  document.getElementById('dcf-curprice').textContent = cur?`$${cur.toFixed(2)}`:'—';
+  const sharesEl = document.getElementById('dcf-shares-disp');
+  if(sharesEl) sharesEl.textContent = shares ? fmtN(shares,1) : '—';
 
   const rdcfRate = document.getElementById('rdcf-rate');
   const rdcfCtx  = document.getElementById('rdcf-context');
+  rdcfRate.className = 'iv-dcf-imp tnum';
   if(mktCap>0 && fcf>0){
     const impliedG = reverseDCF(mktCap, fcf, wacc, 0.03);
     if(impliedG===null){
       rdcfRate.textContent='—';
       rdcfCtx.textContent='Cannot compute — WACC must exceed terminal growth.';
     } else {
-      rdcfRate.textContent = (impliedG*100).toFixed(1)+'%';
-      rdcfRate.style.color = impliedG>0.20?'var(--orange)':impliedG>0.12?'var(--yellow)':impliedG>=0?'var(--green)':'var(--red)';
-      rdcfCtx.innerHTML    = describeImpliedGrowth(impliedG);
+      const pct = (impliedG*100).toFixed(1);
+      rdcfRate.innerHTML = `${pct}<span class="iv-u">%</span>`;
+      if(impliedG>0.20)       rdcfRate.classList.add('neg');
+      else if(impliedG>0.12)  rdcfRate.classList.add('warn');
+      else if(impliedG>=0)    rdcfRate.classList.add('pos');
+      else                    rdcfRate.classList.add('neg');
+      rdcfCtx.innerHTML = describeImpliedGrowth(impliedG);
     }
   } else {
     rdcfRate.textContent = '—';
-    rdcfRate.style.color = 'var(--muted)';
     rdcfCtx.textContent  = fcf<=0 ? 'Cannot reverse — TTM FCF is negative or zero. Current price not justified by cash flows alone.' : 'Cannot compute — missing market cap or FCF data.';
   }
 
@@ -2880,22 +3086,28 @@ function recomputeDcf(){
     return pv/shares;
   }
 
-  function display(id, iv){
+  function display(id, iv, isBase){
     const elIv = document.getElementById(id+'-iv');
     const elUp = document.getElementById(id+'-up');
     if(!iv){
-      elIv.textContent='—';elUp.textContent='—';elUp.style.color='';
+      elIv.textContent='—';
+      elUp.textContent='—';
+      elUp.className = 'iv-tag iv-tag-flat tnum';
       return;
     }
     const upside = cur>0 ? (iv-cur)/cur*100 : 0;
     elIv.textContent = '$'+iv.toFixed(2);
-    elUp.textContent = `${upside>=0?'+':''}${upside.toFixed(1)}% vs current`;
-    elUp.style.color = upside>=0 ? 'var(--green)' : 'var(--red)';
+    elUp.textContent = `${upside>=0?'+':''}${upside.toFixed(1)}%`;
+    if(isBase){
+      elUp.className = 'iv-tag iv-tag-accent tnum';
+    } else {
+      elUp.className = 'iv-tag tnum ' + (upside>=0 ? 'iv-tag-pos' : 'iv-tag-neg');
+    }
   }
 
-  display('dcf-bear', ivPerShare(bearG, 0.020));
-  display('dcf-base', ivPerShare(baseG, 0.030));
-  display('dcf-bull', ivPerShare(bullG, 0.035));
+  display('dcf-bear', ivPerShare(bearG, 0.020), false);
+  display('dcf-base', ivPerShare(baseG, 0.030), true);
+  display('dcf-bull', ivPerShare(bullG, 0.035), false);
 
   // Variant perception: gap between user's base and implied
   const vp = document.getElementById('variant-perception');
@@ -2927,319 +3139,225 @@ function recomputeDcf(){
 }
 
 // ═══════════════════════════════════════════════════════════════════
-// COMPOSITE FAIR VALUE — 8 METHODS
+// COMPOSITE FAIR VALUE — 8 METHODS (v3 design)
 // ═══════════════════════════════════════════════════════════════════
 function cfInputVal(id, fallback) {
   const v = parseFloat(document.getElementById(id)?.value);
   return isNaN(v) ? fallback : v;
 }
 
-// 1. FCFF DCF — 6-quarter normalised FCF, margin expansion, user WACC
-function computeCfFcff(cur, wacc, termGr, marginExpPct) {
-  const cfSeries = S.cashflow.slice(0, 6);
-  if (cfSeries.length < 2) return null;
-  const fcfs = cfSeries.map(d => d.freeCashFlow || 0);
-  // drop single outlier > 2× std dev
+function computeCfFcff(wacc, termGr, marginExpPct) {
+  const cfSeries = S.cashflow.slice(0,6);
+  if(cfSeries.length < 2) return null;
+  const fcfs = cfSeries.map(d=>d.freeCashFlow||0);
   const mean = fcfs.reduce((s,v)=>s+v,0)/fcfs.length;
   const std  = Math.sqrt(fcfs.reduce((s,v)=>s+(v-mean)**2,0)/fcfs.length);
-  const clean = fcfs.filter(v => Math.abs(v-mean) <= 2*std);
-  if (!clean.length) return null;
+  const clean = fcfs.filter(v=>Math.abs(v-mean)<=2*std);
+  if(!clean.length) return null;
   const baseFcf = clean.reduce((s,v)=>s+v,0)/clean.length;
-  // apply margin expansion to base FCF
-  const rev = S.income[0]?.revenue || 0;
-  const marginBoost = rev > 0 ? (marginExpPct/100) * rev : 0;
-  const adjFcf = baseFcf + marginBoost;
-  if (adjFcf <= 0) return null;
+  const rev = S.income[0]?.revenue||0;
+  const adjFcf = baseFcf + (rev>0?(marginExpPct/100)*rev:0);
+  if(adjFcf<=0) return null;
   const gr = cfInputVal('cf-growth', getBaseGrowthEstimate());
-  return dcfDeclining(adjFcf, gr, termGr, wacc);
+  const pv = dcfDeclining(adjFcf, gr, termGr, wacc);
+  const sh = getSharesOut();
+  return (pv && sh>0) ? pv/sh : null;
 }
-
-// 2. H-Model DCF — two-phase with half-life fade
 function computeCfHModel(wacc, termGr) {
   const baseFcf = computeTTMFcf();
-  if (baseFcf <= 0) return null;
-  const gr0  = cfInputVal('cf-growth', getBaseGrowthEstimate());
-  const grL  = termGr;
-  const H    = cfInputVal('cf-half-life', 4);
-  const wacc_ = wacc;
-  if (wacc_ <= grL) return null;
-  // H-model formula: P = FCF(1+gL)/(r-gL) + FCF*H*(gS-gL)/(r-gL)
-  const pv1 = baseFcf * (1 + grL) / (wacc_ - grL);
-  const pv2 = baseFcf * H * (gr0 - grL) / (wacc_ - grL);
-  return pv1 + pv2;
+  if(baseFcf<=0) return null;
+  const gr0 = cfInputVal('cf-growth', getBaseGrowthEstimate());
+  const H   = cfInputVal('cf-half-life', 4);
+  if(wacc<=termGr) return null;
+  const pv = baseFcf*(1+termGr)/(wacc-termGr) + baseFcf*H*(gr0-termGr)/(wacc-termGr);
+  const sh = getSharesOut();
+  return sh>0 ? pv/sh : null;
 }
-
-// 3. EV / EBITDA — forward analyst estimate proxy
 function computeCfEvEbitda() {
-  const inc0 = S.income[0] || {};
-  const bal0 = S.balance[0] || {};
-  const ebitda = inc0.ebitda || 0;
-  if (ebitda <= 0) return null;
-  const mktCap = S.quote.marketCap || S.profile?.marketCap || 0;
-  const debt   = bal0.totalDebt || 0;
-  const cash   = bal0.cashAndCashEquivalents || 0;
-  const shares = getSharesOut();
-  const sector = S.profile?.sector || '';
-  const med    = getSectorMedians();
-  // forward EBITDA = TTM * (1 + growth)
-  const g = getBaseGrowthEstimate();
-  const fwdEbitda = ebitda * (1 + g);
-  // use blend: sector median and own 10Y avg
-  const histMult = computeHistAvg(S.metrics, 'evToEBITDA', 10) || computeHistAvg(S.metrics, 'enterpriseValueOverEBITDA', 10);
-  const blendMult = histMult ? (histMult * 0.6 + med.evEbitda * 0.4) : med.evEbitda;
-  const iv = blendMult * fwdEbitda - debt + cash;
-  return shares > 0 ? iv / shares : null;
+  const inc0=S.income[0]||{}, bal0=S.balance[0]||{};
+  const ebitda=inc0.ebitda||0; if(ebitda<=0) return null;
+  const debt=bal0.totalDebt||0, cash=bal0.cashAndCashEquivalents||0, sh=getSharesOut();
+  if(!sh) return null;
+  const g=getBaseGrowthEstimate(), med=getSectorMedians();
+  const fwd=ebitda*(1+g);
+  const hist=computeHistAvg(S.metrics,'evToEBITDA',10)||computeHistAvg(S.metrics,'enterpriseValueOverEBITDA',10);
+  const mult=hist?(hist*0.6+med.evEbitda*0.4):med.evEbitda;
+  return (mult*fwd-debt+cash)/sh;
 }
-
-// 4. EV / Revenue
 function computeCfEvRev() {
-  const rev = S.income[0]?.revenue || 0;
-  if (rev <= 0) return null;
-  const bal0   = S.balance[0] || {};
-  const debt   = bal0.totalDebt || 0;
-  const cash   = bal0.cashAndCashEquivalents || 0;
-  const shares = getSharesOut();
-  const med    = getSectorMedians();
-  const histMult = computeHistAvg(S.metrics, 'evToSales', 10);
-  const blendMult = histMult ? (histMult * 0.6 + med.evRev * 0.4) : med.evRev;
-  // use FY+1 revenue estimate (TTM * growth)
-  const g = getBaseGrowthEstimate();
-  const fwdRev = rev * Math.max(1, 1 + g);
-  const mult = Math.min(blendMult, 5.5); // cap per image spec
-  const iv = mult * fwdRev - debt + cash;
-  return shares > 0 ? iv / shares : null;
+  const rev=S.income[0]?.revenue||0; if(rev<=0) return null;
+  const bal0=S.balance[0]||{}, debt=bal0.totalDebt||0, cash=bal0.cashAndCashEquivalents||0, sh=getSharesOut();
+  if(!sh) return null;
+  const g=getBaseGrowthEstimate(), med=getSectorMedians();
+  const hist=computeHistAvg(S.metrics,'evToSales',10);
+  const mult=Math.min(hist?(hist*0.6+med.evRev*0.4):med.evRev, 5.5);
+  return (mult*rev*(1+g)-debt+cash)/sh;
 }
-
-// 5. P / FCF (normalised)
 function computeCfPFcf() {
-  const fcf = computeTTMFcf();
-  if (fcf <= 0) return null;
-  const shares = getSharesOut();
-  if (!shares) return null;
-  // remove outlier distortion (flag if > $307 anomaly — use median-based norm)
-  const hist = computeHistAvg(S.metrics, 'pfcfRatio', 10) || computeHistAvg(S.metrics, 'priceToFreeCashFlowsRatio', 10);
-  const med  = getSectorMedians().pfcf;
-  const mult = hist ? Math.min(hist, 50) : Math.min(med, 35);
-  const normFcf = fcf / shares;
-  return mult * normFcf;
+  const fcf=computeTTMFcf(); if(fcf<=0) return null;
+  const sh=getSharesOut(); if(!sh) return null;
+  const hist=computeHistAvg(S.metrics,'pfcfRatio',10)||computeHistAvg(S.metrics,'priceToFreeCashFlowsRatio',10);
+  const mult=Math.min(hist||getSectorMedians().pfcf, 50);
+  return mult*fcf/sh;
 }
-
-// 6. Revenue-based DCF — for growth stories, capped terminal multiple
 function computeCfRevDcf(wacc, termGr) {
-  const rev = S.income[0]?.revenue || 0;
-  if (rev <= 0) return null;
-  const shares = getSharesOut();
-  if (!shares) return null;
-  const bal0 = S.balance[0] || {};
-  const debt  = bal0.totalDebt || 0;
-  const cash  = bal0.cashAndCashEquivalents || 0;
-  const g     = cfInputVal('cf-growth', getBaseGrowthEstimate());
-  const tg    = termGr;
-  const yrs   = 10;
-  if (wacc <= tg) return null;
-  // project revenue then apply sector EV/Rev terminal multiple
-  let pv = 0, r = rev;
-  for (let y = 1; y <= yrs; y++) {
-    const fade = y <= 3 ? g : g + (tg - g) * ((y-3)/(yrs-3));
-    r = r * (1 + fade);
-    // convert to FCF proxy via operating margin assumption
-    const opM = Math.max(0.05, (S.income[0]?.operatingIncomeRatio || 0.10));
-    const fcfProxy = r * opM * 0.7;
-    pv += fcfProxy / Math.pow(1+wacc, y);
+  const rev=S.income[0]?.revenue||0; if(rev<=0) return null;
+  const sh=getSharesOut(); if(!sh) return null;
+  const bal0=S.balance[0]||{}, debt=bal0.totalDebt||0, cash=bal0.cashAndCashEquivalents||0;
+  const g=cfInputVal('cf-growth',getBaseGrowthEstimate()), yrs=10;
+  if(wacc<=termGr) return null;
+  let pv=0, r=rev;
+  for(let y=1;y<=yrs;y++){
+    const fade=y<=3?g:g+(termGr-g)*((y-3)/(yrs-3));
+    r=r*(1+fade);
+    const opM=Math.max(0.05,S.income[0]?.operatingIncomeRatio||0.10);
+    pv+=r*opM*0.7/Math.pow(1+wacc,y);
   }
-  const termMult = Math.min(getSectorMedians().evRev * 1.5, 8);
-  const tv = (r * termMult - debt + cash) / Math.pow(1+wacc, yrs);
-  return (pv + tv) / shares;
+  const tv=(r*Math.min(getSectorMedians().evRev*1.5,8)-debt+cash)/Math.pow(1+wacc,yrs);
+  return (pv+tv)/sh;
 }
-
-// 7. PEG-implied value — Fair P/E × 3Y forward EPS CAGR
 function computeCfPeg() {
-  const eps   = S.income[0]?.epsdiluted || S.quote?.eps || null;
-  if (!eps || eps <= 0) return null;
-  const fwdEpsGr = Math.max(0.03, getBaseGrowthEstimate());
-  const pegRatio = cfInputVal('cf-growth', null) !== null
-    ? Math.min(cfInputVal('cf-growth', 1.5) / (fwdEpsGr*100), 2)
-    : 1.5; // configurable; default 1.5×
-  const fairPe   = pegRatio * (fwdEpsGr * 100);
-  const fwdEps   = eps * Math.pow(1 + fwdEpsGr, 3);
-  if (fwdEps <= 0) return null;
-  return fairPe * fwdEps;
+  const eps=S.income[0]?.epsdiluted||S.quote?.eps||null;
+  if(!eps||eps<=0) return null;
+  const g=Math.max(0.03,getBaseGrowthEstimate());
+  const fairPe=1.5*(g*100);
+  const fwdEps=eps*Math.pow(1+g,3);
+  return fwdEps>0?fairPe*fwdEps:null;
 }
-
-// 8. Graham Number — floor, not target
 function computeCfGraham() {
-  const eps = S.income[0]?.epsdiluted || S.quote?.eps || null;
-  const bvps = S.balance[0]?.bookValuePerShare ||
-    (S.balance[0]?.totalStockholdersEquity && getSharesOut()
-      ? S.balance[0].totalStockholdersEquity / getSharesOut() : null);
-  if (!eps || eps <= 0 || !bvps || bvps <= 0) return null;
-  const multiple = cfInputVal('cf-half-life', null) !== null
-    ? Math.min(cfInputVal('cf-half-life', 22.5), 22.5)
-    : 22.5;
-  return Math.sqrt(multiple * eps * Math.max(bvps, 1));
+  const eps=S.income[0]?.epsdiluted||S.quote?.eps||null;
+  const sh=getSharesOut();
+  const bvps=S.balance[0]?.bookValuePerShare||(S.balance[0]?.totalStockholdersEquity&&sh?S.balance[0].totalStockholdersEquity/sh:null);
+  if(!eps||eps<=0||!bvps||bvps<=0) return null;
+  return Math.sqrt(22.5*eps*Math.max(bvps,1));
 }
 
-function renderValuationSummary() {
-  const cur    = getCurPrice();
-  const wacc   = cfInputVal('cf-wacc-user', null) !== null
-    ? cfInputVal('cf-wacc-user', computeWACC()) / 100
-    : computeWACC();
-  const termGr = cfInputVal('cf-terminal', 3.0) / 100;
-  const marginExp = cfInputVal('cf-margin-exp', 0);
-  const shares = getSharesOut();
-  const p = S.profile || {}, q = S.quote || {};
+function renderValuationSummary(){
+  const cur   = getCurPrice();
+  const wacc  = cfInputVal('cf-wacc-user',null)!==null ? cfInputVal('cf-wacc-user',computeWACC()*100)/100 : computeWACC();
+  const termGr= cfInputVal('cf-terminal',3.0)/100;
+  const mExp  = cfInputVal('cf-margin-exp',0);
+  const p=S.profile||{}, q=S.quote||{};
 
-  // ── Date ──
-  const now = new Date();
-  document.getElementById('cf-date').textContent =
-    now.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
-  document.getElementById('cf-sub').innerHTML =
-    `${p.symbol || '—'} &nbsp;·&nbsp; 8 methods, trimmed-mean composite &nbsp;·&nbsp; <span id="cf-date">${
-      now.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' })
-    }</span>`;
+  // date
+  const now=new Date();
+  const dStr=now.toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'});
+  document.getElementById('cf-date').textContent = dStr;
 
-  // ── Market val ──
+  // market price
   document.getElementById('cf-market-val').textContent = cur ? '$'+cur.toFixed(2) : '—';
+  const chg=q.change||p.change||0, chgPct=q.changePercentage||p.changePercentage||0;
+  const chgEl=document.getElementById('cf-market-chg');
+  chgEl.textContent=(chg>=0?'+':'')+chg.toFixed(2)+' ('+(chgPct>=0?'+':'')+chgPct.toFixed(2)+'%) today';
+  chgEl.className='iv-kpi-s '+(chg>=0?'pos':'neg');
 
-  const methods = [
-    {
-      id:'fcff', num:'01', name:'FCFF DCF', badge:'intrinsic', badgeText:'intrinsic',
-      desc:'6Q normalised FCF, margin expansion, user WACC',
-      compute: () => {
-        const pv = computeCfFcff(cur, wacc, termGr, marginExp);
-        return pv && shares > 0 ? pv / shares : null;
-      },
-      inputs: ['Normal growth', 'Terminal growth', 'Margin expansion', 'WACC'],
-    },
-    {
-      id:'hmodel', num:'02', name:'H-Model DCF', badge:'intrinsic', badgeText:'intrinsic',
-      desc:'Two-phase: high growth fades over half-life H to terminal',
-      compute: () => {
-        const pv = computeCfHModel(wacc, termGr);
-        return pv && shares > 0 ? pv / shares : null;
-      },
-      inputs: ['Normal growth', 'Terminal growth', 'H half-life'],
-    },
-    {
-      id:'evebitda', num:'03', name:'EV / EBITDA', badge:'multiples', badgeText:'multiples',
-      desc:'Forward EBITDA × blended sector + own-history multiple',
-      compute: computeCfEvEbitda,
-      inputs: ['Forward EBITDA (FY+1)', 'Sector median', 'Net cash / debt', 'Shares'],
-    },
-    {
-      id:'evrev', num:'04', name:'EV / Revenue', badge:'multiples', badgeText:'multiples',
-      desc:'FY+1 revenue × sector median capped at 5.5×',
-      compute: computeCfEvRev,
-      inputs: ['Forward revenue (FY+1)', 'Sector median', 'Net cash / debt', 'Shares'],
-    },
-    {
-      id:'pfcf', num:'05', name:'P / FCF', badge:'multiples', badgeText:'multiples',
-      desc:'Normalised FCF/share × sector median P/FCF (30–35×)',
-      compute: computeCfPFcf,
-      inputs: ['Normalised FCF/share', 'Sector median P/FCF', 'Shares'],
-    },
-    {
-      id:'revdcf', num:'06', name:'Revenue-based DCF', badge:'growth', badgeText:'growth',
-      desc:'Project revenue 10Y then apply terminal EV/Sales multiple',
-      compute: () => computeCfRevDcf(wacc, termGr),
-      inputs: ['Consensus base growth', 'Fade rate 4% terminal', 'Terminal EV/Sales multiple', 'WACC'],
-    },
-    {
-      id:'peg', num:'07', name:'PEG-implied value', badge:'growth', badgeText:'growth',
-      desc:'Fair P/E = 1.5× configurable · Fair P/E × 3Y fwd EPS CAGR',
-      compute: computeCfPeg,
-      inputs: ['3Y forward EPS CAGR (FY+1)', 'Forward EPS', 'Fair P/E ratio assumption'],
-    },
-    {
-      id:'graham', num:'08', name:'Graham number', badge:'floor', badgeText:'floor',
-      desc:'√(22.5 × EPS × BVPS) — conservative floor, not a target',
-      compute: computeCfGraham,
-      inputs: ['Trailing EPS', 'Book value per share'],
-    },
+  const methods=[
+    {name:'FCFF DCF',       type:'Intrinsic',  compute:()=>computeCfFcff(wacc,termGr,mExp)},
+    {name:'H-Model DCF',    type:'Intrinsic',  compute:()=>computeCfHModel(wacc,termGr)},
+    {name:'EV / EBITDA',    type:'Multiples',  compute:computeCfEvEbitda},
+    {name:'EV / Revenue',   type:'Multiples',  compute:computeCfEvRev},
+    {name:'P / FCF',        type:'Multiples',  compute:computeCfPFcf},
+    {name:'Revenue DCF',    type:'Growth',     compute:()=>computeCfRevDcf(wacc,termGr)},
+    {name:'PEG-implied',    type:'Growth',     compute:computeCfPeg},
+    {name:'Graham number',  type:'Floor',      compute:computeCfGraham},
   ];
 
-  // Compute all values
-  const results = methods.map(m => {
-    let val = null;
-    try { val = m.compute(); } catch(_) {}
-    if (val !== null && (!isFinite(val) || val <= 0)) val = null;
-    return { ...m, val };
+  document.getElementById('cf-sub').textContent =
+    `${p.symbol||'—'} · ${methods.length} methods, trimmed-mean composite`;
+
+  const results=methods.map(m=>{
+    let val=null; try{val=m.compute();}catch(_){}
+    if(val!==null&&(!isFinite(val)||val<=0)) val=null;
+    return{...m,val};
   });
 
-  // Trimmed-mean composite
-  const valid = results.filter(r => r.val !== null).map(r => r.val).sort((a,b)=>a-b);
-  let composite = null;
-  if (valid.length >= 4) {
-    const trimmed = valid.slice(1, -1);
-    composite = trimmed.reduce((s,v)=>s+v,0) / trimmed.length;
-  } else if (valid.length > 0) {
-    composite = valid.reduce((s,v)=>s+v,0) / valid.length;
-  }
+  // trimmed mean
+  const valid=results.filter(r=>r.val!==null).map(r=>r.val).sort((a,b)=>a-b);
+  let composite=null;
+  if(valid.length>=4){const t=valid.slice(1,-1);composite=t.reduce((s,v)=>s+v,0)/t.length;}
+  else if(valid.length>0){composite=valid.reduce((s,v)=>s+v,0)/valid.length;}
 
-  // Gap colour
-  const gapPct = (composite && cur) ? (composite - cur)/cur*100 : null;
-  const gapCls = gapPct === null ? '' : gapPct >= 5 ? 'pos' : gapPct <= -5 ? 'neg' : '';
-  const compCls = gapPct === null ? '' : gapPct >= 10 ? 'up' : gapPct <= -10 ? 'down' : 'fair';
+  const gapPct=(composite&&cur)?(composite-cur)/cur*100:null;
 
-  // Hero values
-  const compEl = document.getElementById('cf-composite-val');
-  compEl.textContent = composite ? '$'+composite.toFixed(2) : '—';
-  compEl.className   = 'cf-composite-val ' + compCls;
+  // KPI strip
+  const compEl=document.getElementById('cf-composite-val');
+  compEl.textContent=composite?'$'+composite.toFixed(2):'—';
+  compEl.className='iv-kpi-v tnum'+(gapPct===null?'':(gapPct>=5?' pos':gapPct<=-5?' neg':''));
 
-  const gapEl = document.getElementById('cf-gap-val');
-  gapEl.textContent = gapPct !== null ? (gapPct>=0?'+':'')+gapPct.toFixed(1)+'%' : '—';
-  gapEl.className   = 'cf-hero-gap ' + gapCls;
+  const gapEl=document.getElementById('cf-gap-val');
+  gapEl.textContent=gapPct!==null?(gapPct>=0?'+':'')+gapPct.toFixed(1)+'%':'—';
+  gapEl.className='iv-kpi-v tnum'+(gapPct===null?'':(gapPct>=0?' pos':' neg'));
+  const gapNote=document.getElementById('cf-gap-note');
+  gapNote.textContent=gapPct!==null?(gapPct>=0?'price below fair value':'price above fair value'):'—';
+  gapNote.className='iv-kpi-s '+(gapPct!==null&&gapPct<0?'neg':gapPct!==null?'pos':'');
 
-  // Footer
-  const footEl = document.getElementById('cf-footer-val');
-  footEl.textContent = composite ? '$'+composite.toFixed(2) : '—';
-  footEl.className   = 'cf-composite-val ' + compCls;
-  document.getElementById('cf-footer-note').textContent =
-    valid.length > 0
-      ? `${valid.length} / ${methods.length} methods computed · trimmed mean excludes highest and lowest`
-      : 'Insufficient data for composite — check financials tab';
+  const computedVals=results.filter(r=>r.val!==null).map(r=>r.val);
+  const minV=computedVals.length?Math.min(...computedVals):0;
+  const maxV=computedVals.length?Math.max(...computedVals):0;
+  document.getElementById('cf-range-val').textContent=
+    computedVals.length>=2?'$'+minV.toFixed(2)+' – $'+maxV.toFixed(2):'—';
+  document.getElementById('cf-range-note').textContent=
+    `across ${valid.length} of ${methods.length} methods`;
 
-  // Method grid
-  const grid = document.getElementById('cf-method-grid');
-  grid.innerHTML = results.map(r => {
-    const upside = (r.val && cur) ? (r.val - cur)/cur*100 : null;
-    const ivCls  = upside === null ? 'muted' : upside >= 10 ? 'up' : upside <= -10 ? 'down' : 'fair';
-    const upCls  = upside === null ? 'muted' : upside >= 0 ? 'pos' : 'neg';
-    const upStr  = upside !== null ? (upside>=0?'+':'')+upside.toFixed(1)+'% vs mkt' : 'n/a';
-    return `
-      <div class="cf-method">
-        <div class="cf-method-head">
-          <span class="cf-method-num">${r.num}</span>
-          <span class="cf-method-badge ${r.badge}">${r.badgeText}</span>
+  // verdict tag (header right)
+  const tagEl=document.getElementById('cf-verdict-tag');
+  if(gapPct!==null){
+    const cls=gapPct>=10?'iv-tag-pos':gapPct<=-10?'iv-tag-neg':'iv-tag-warn';
+    const label=gapPct>=10?'Undervalued':gapPct<=-10?'Overvalued':'Near fair value';
+    tagEl.innerHTML=`<span class="iv-tag ${cls}"><span class="iv-dot"></span>${label}</span>`;
+  } else { tagEl.innerHTML=''; }
+
+  // chart scale — use max of all computed values and market price
+  const chartMax=Math.max(...computedVals, cur||0, 0.01);
+  const mktPct=cur?Math.min((cur/chartMax)*100,100):50;
+
+  // method table rows
+  const allRows=[
+    ...results,
+    composite?{name:'InsightValue Composite',type:'Trimmed mean',val:composite,isComp:true}:null
+  ].filter(Boolean);
+
+  const tbody=document.getElementById('cf-tbody');
+  tbody.innerHTML=allRows.map(r=>{
+    const upside=(r.val&&cur)?(r.val-cur)/cur*100:null;
+    const barPct=r.val?Math.min((r.val/chartMax)*100,100):0;
+    // bar colour
+    let barCls='';
+    if(r.isComp) barCls='accent';
+    else if(upside!==null&&upside>=10) barCls='pos';
+    else if(upside!==null&&upside>=-10&&upside<10) barCls='warn';
+    // delta cls
+    const dCls=upside===null?'flat':upside>=0?'pos':'neg';
+    const dStr=upside!==null?(upside>=0?'+':'')+upside.toFixed(1)+'%':'n/a';
+    const variantLabel=r.isComp?'Trimmed mean':r.type;
+    return `<tr${r.isComp?' class="iv-own"':''}>
+      <td class="iv-meth">${r.name}</td>
+      <td class="iv-var">${variantLabel}</td>
+      <td class="iv-bar-td">
+        <div class="iv-barx">
+          <div class="iv-track"></div>
+          <div class="iv-mkt" style="left:${mktPct.toFixed(1)}%"></div>
+          <div class="iv-f ${barCls}" style="width:${barPct.toFixed(1)}%"></div>
         </div>
-        <div class="cf-method-name">${r.name}</div>
-        <div class="cf-method-desc">${r.desc}</div>
-        <div class="cf-iv ${ivCls}">${r.val ? '$'+r.val.toFixed(2) : '—'}</div>
-        <div class="cf-method-footer">
-          <span class="cf-method-upside ${upCls}">${upStr}</span>
-          <span class="cf-method-weight">${r.val ? 'included' : 'excluded'}</span>
-        </div>
-      </div>`;
+      </td>
+      <td class="r tnum">${r.val?'$'+r.val.toFixed(2):'—'}</td>
+      <td class="r"><span class="iv-delta ${dCls} tnum">${dStr}</span></td>
+    </tr>`;
   }).join('');
 
-  // Wire input changes
-  ['cf-growth','cf-terminal','cf-margin-exp','cf-wacc-user','cf-half-life'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el && !el.dataset.wired) {
-      el.dataset.wired = '1';
-      el.addEventListener('input', () => renderValuationSummary());
+  // wire inputs (once)
+  ['cf-growth','cf-terminal','cf-margin-exp','cf-wacc-user','cf-half-life'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el&&!el.dataset.wired){
+      el.dataset.wired='1';
+      el.addEventListener('input',()=>renderValuationSummary());
     }
   });
-
-  // Seed growth default from auto
-  const growthEl = document.getElementById('cf-growth');
-  if (growthEl && !growthEl.value) {
-    growthEl.placeholder = (getBaseGrowthEstimate()*100).toFixed(1)+'% (auto)';
-  }
-  const waccEl = document.getElementById('cf-wacc-user');
-  if (waccEl && !waccEl.value) {
-    waccEl.placeholder = (computeWACC()*100).toFixed(1)+'% (auto)';
-  }
+  // auto placeholders
+  const gEl=document.getElementById('cf-growth');
+  if(gEl&&!gEl.value) gEl.placeholder=(getBaseGrowthEstimate()*100).toFixed(1)+'% (auto)';
+  const wEl=document.getElementById('cf-wacc-user');
+  if(wEl&&!wEl.value) wEl.placeholder=(computeWACC()*100).toFixed(1)+'% (auto)';
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -3298,7 +3416,7 @@ function renderLayer3(){
   const cur = getCurPrice();
   const rfr = (parseFloat(document.getElementById('oey-rfr')?.value) || 4.5) / 100;
 
-  // ── EPV card ──
+  // ── EPV column ──
   document.getElementById('epv-ebit').textContent  = epv.avgEbit ? fmt(epv.avgEbit) : '—';
   document.getElementById('epv-tax').textContent   = fmtP(epv.taxRate);
   document.getElementById('epv-nopat').textContent = epv.nopat ? fmt(epv.nopat) : '—';
@@ -3307,27 +3425,31 @@ function renderLayer3(){
   const epvPS = document.getElementById('epv-per-share');
   const epvVS = document.getElementById('epv-vs-price');
   const epvVerdict = document.getElementById('epv-verdict');
+  const epvParentV = epvPS.closest('.iv-epv-v');
 
   if(epv.epvPerShare > 0 && cur > 0){
     epvPS.textContent = '$' + epv.epvPerShare.toFixed(2);
     const premium = (cur - epv.epvPerShare) / epv.epvPerShare * 100;
-    if(premium > 0){
-      epvVS.textContent = `Current price embeds ${premium.toFixed(0)}% growth premium`;
-      epvVS.style.color = premium > 100 ? 'var(--orange)' : premium > 50 ? 'var(--yellow)' : 'var(--fg2)';
-    } else {
-      epvVS.textContent = `Trading ${Math.abs(premium).toFixed(0)}% below zero-growth value`;
-      epvVS.style.color = 'var(--green)';
+    if(epvParentV){
+      epvParentV.className = 'iv-epv-v tnum ' + (premium > 100 ? 'neg' : premium > 0 ? '' : 'pos');
     }
-    if(premium <= 0){       epvVerdict.textContent = 'Below EPV — buying with no growth assumption';   epvVerdict.className='l3-verdict attr'; }
-    else if(premium <= 50){ epvVerdict.textContent = 'Modest growth premium baked in';                 epvVerdict.className='l3-verdict fair'; }
-    else {                  epvVerdict.textContent = 'Substantial growth required to justify price';   epvVerdict.className='l3-verdict exp'; }
+    if(premium > 0){
+      epvVS.innerHTML = `Current price embeds a <b class="${premium>100?'neg':''}">${premium.toFixed(0)}%</b> growth premium over the no-growth earnings power value.`;
+    } else {
+      epvVS.innerHTML = `Trading <b class="pos">${Math.abs(premium).toFixed(0)}%</b> below zero-growth value — buying without paying for growth.`;
+    }
+    if(premium <= 0){       epvVerdict.textContent = 'Below EPV — buying with no growth assumption';   epvVerdict.className='iv-verdict pos'; }
+    else if(premium <= 50){ epvVerdict.textContent = 'Modest growth premium baked in';                 epvVerdict.className='iv-verdict warn'; }
+    else {                  epvVerdict.textContent = 'Substantial growth required to justify price';   epvVerdict.className='iv-verdict neg'; }
   } else {
     epvPS.textContent = '—';
-    epvVS.textContent = epv.avgEbit<=0 ? 'EBIT negative — EPV not meaningful' : 'Insufficient data';
-    epvVerdict.textContent = '—'; epvVerdict.className='l3-verdict';
+    if(epvParentV) epvParentV.className = 'iv-epv-v tnum';
+    epvVS.textContent = epv.avgEbit<=0 ? 'EBIT negative — EPV not meaningful' : 'Insufficient data.';
+    epvVerdict.textContent = '—';
+    epvVerdict.className = 'iv-verdict';
   }
 
-  // ── Owner Earnings card ──
+  // ── Owner Earnings column ──
   document.getElementById('oey-ni').textContent    = fmt(oe.ni);
   document.getElementById('oey-da').textContent    = fmt(oe.da);
   document.getElementById('oey-mcapex').textContent= fmt(oe.maintCapex);
@@ -3337,41 +3459,53 @@ function renderLayer3(){
   const yldEl = document.getElementById('oey-yield');
   const sprEl = document.getElementById('oey-spread');
   const oeVerdict = document.getElementById('oey-verdict');
+  const oeParentV = yldEl.closest('.iv-epv-v');
 
   if(oe.yld !== 0 && oe.mktCap > 0){
     yldEl.textContent = (oe.yld*100).toFixed(2) + '%';
     const spread = oe.yld - rfr;
-    sprEl.textContent = `Spread vs 10Y Treasury: ${spread>=0?'+':''}${(spread*100).toFixed(2)}pp`;
-    if(spread >= 0.03){      yldEl.style.color='var(--green)';  oeVerdict.textContent='Attractive — meaningful equity premium'; oeVerdict.className='l3-verdict attr'; }
-    else if(spread >= 0){    yldEl.style.color='var(--yellow)'; oeVerdict.textContent='Fair — thin equity premium';            oeVerdict.className='l3-verdict fair'; }
-    else {                   yldEl.style.color='var(--red)';    oeVerdict.textContent='Expensive — no risk premium · avoid';   oeVerdict.className='l3-verdict exp'; }
-    sprEl.style.color = spread>=0.03 ? 'var(--green)' : spread>=0 ? 'var(--yellow)' : 'var(--red)';
+    const cls = spread >= 0.03 ? 'pos' : spread >= 0 ? 'warn' : 'neg';
+    if(oeParentV) oeParentV.className = 'iv-epv-v tnum ' + cls;
+    sprEl.innerHTML = `Spread versus the 10Y Treasury (${(rfr*100).toFixed(2)}%) is <b class="${cls}">${spread>=0?'+':''}${(spread*100).toFixed(2)}pp</b> — ${spread>=0.03?'meaningful equity premium.':spread>=0?'thin equity premium.':'the equity offers no premium over the risk-free rate.'}`;
+    if(spread >= 0.03){      oeVerdict.textContent='Attractive — meaningful equity premium'; oeVerdict.className='iv-verdict pos'; }
+    else if(spread >= 0){    oeVerdict.textContent='Fair — thin equity premium';            oeVerdict.className='iv-verdict warn'; }
+    else {                   oeVerdict.textContent='Expensive — no risk premium · avoid';   oeVerdict.className='iv-verdict neg'; }
   } else {
     yldEl.textContent='—';
+    if(oeParentV) oeParentV.className = 'iv-epv-v tnum';
     sprEl.textContent='—';
     oeVerdict.textContent = oe.oe<=0 ? 'Owner earnings negative — capital-intensive or distressed' : '—';
-    oeVerdict.className = oe.oe<=0 ? 'l3-verdict exp' : 'l3-verdict';
+    oeVerdict.className = oe.oe<=0 ? 'iv-verdict neg' : 'iv-verdict';
   }
 
   // ── Combined signal ──
   const signal = document.getElementById('l3-signal');
-  const epvCheap = epv.epvPerShare>0 && cur>0 && cur <= epv.epvPerShare * 1.2;   // within 20% of EPV
+  const epvCheap = epv.epvPerShare>0 && cur>0 && cur <= epv.epvPerShare * 1.2;
   const oeCheap  = oe.yld > 0 && (oe.yld - rfr) >= 0.02;
-  const epvRich  = epv.epvPerShare>0 && cur>0 && cur > epv.epvPerShare * 2.0;    // 100%+ premium
+  const epvRich  = epv.epvPerShare>0 && cur>0 && cur > epv.epvPerShare * 2.0;
   const oeRich   = oe.yld < rfr;
 
   if(epvCheap && oeCheap){
-    signal.className='combined-signal buy';
-    signal.innerHTML = `<strong>Signal · Constructive</strong>Both EPV and owner-earnings yield indicate undervaluation. Combined cash-flow lens supports buying.`;
+    signal.className='iv-combined-signal pos';
+    signal.innerHTML = `<strong>Signal · Constructive.</strong>Both EPV and owner-earnings yield indicate undervaluation. Combined cash-flow lens supports buying.`;
   } else if(epvRich && oeRich){
-    signal.className='combined-signal avoid';
-    signal.innerHTML = `<strong>Signal · Avoid</strong>Both lenses say overvalued — large growth premium baked in and equity offers no premium over Treasury.`;
+    signal.className='iv-combined-signal neg';
+    signal.innerHTML = `<strong>Signal · Avoid.</strong>Both lenses say overvalued — large growth premium baked in and equity offers no premium over Treasury.`;
   } else if(epvCheap || oeCheap){
-    signal.className='combined-signal';
-    signal.innerHTML = `<strong>Signal · Mixed</strong>One lens reads cheap, the other does not. Investigate the divergence — usually points to an earnings-quality or capital-intensity issue.`;
+    signal.className='iv-combined-signal warn';
+    signal.innerHTML = `<strong>Signal · Mixed.</strong>One lens reads cheap, the other does not. Investigate the divergence — usually points to an earnings-quality or capital-intensity issue.`;
   } else {
-    signal.className='combined-signal';
-    signal.innerHTML = `<strong>Signal · Neutral</strong>Neither lens flags strong opportunity. Price is reasonable or the framework's assumptions don't fit this business.`;
+    signal.className='iv-combined-signal';
+    signal.innerHTML = `<strong>Signal · Neutral.</strong>Neither lens flags strong opportunity. Price is reasonable or the framework's assumptions don't fit this business.`;
+  }
+
+  // Top-right pill
+  const tag = document.getElementById('l3-signal-tag');
+  if(tag){
+    if(epvCheap && oeCheap){ tag.className='iv-tag iv-tag-pos'; tag.innerHTML='<span class="iv-dot"></span>Both lenses cheap'; }
+    else if(epvRich && oeRich){ tag.className='iv-tag iv-tag-neg'; tag.innerHTML='<span class="iv-dot"></span>Both lenses overvalued'; }
+    else if(epvCheap || oeCheap){ tag.className='iv-tag iv-tag-warn'; tag.innerHTML='<span class="iv-dot"></span>Mixed signal'; }
+    else { tag.className='iv-tag iv-tag-flat'; tag.innerHTML='<span class="iv-dot"></span>Neutral'; }
   }
 }
 
@@ -3422,7 +3556,6 @@ function fmtPriceImplied(v){return v && isFinite(v) && v>0 ? '$'+v.toFixed(2) : 
 function renderLayer4(){
   const p = S.profile, q = S.quote;
   const inc0 = S.income[0] || {}, bal0 = S.balance[0] || {};
-  const m0 = S.metrics[0] || {};
   const sectorMed = getSectorMedians();
   const shares = getSharesOut();
   const fcf = computeTTMFcf();
@@ -3435,100 +3568,92 @@ function renderLayer4(){
   const revenue = inc0.revenue || 0;
   const eps = inc0.epsdiluted || q.eps || null;
   const ebitdaMargin = revenue>0 ? ebitda/revenue : 0;
+  const sectorName = (p.sector || 'Sector') + ' median';
 
-  // ── Card 1: EV/EBITDA ──
+  // Build a single .iv-mx card
+  function renderMx(targetId, name, curMult, histMult, medMult, implHist, implMed, flagHTML){
+    const curPriceStr = cur ? '$'+cur.toFixed(2) : '—';
+    // Premium to sector
+    let premStr = '—', premCls = 'flat';
+    if(curMult && medMult){
+      const prem = (curMult - medMult) / medMult * 100;
+      premStr = `${prem>=0?'+':''}${prem.toFixed(0)}%`;
+      premCls = prem > 15 ? '' : prem < -15 ? 'pos' : 'flat';
+    }
+    // Current row class — red if current > both reference points, green if < both
+    let curCls = '';
+    if(curMult && medMult){
+      curCls = curMult > medMult ? '' : 'pos';
+    }
+    document.getElementById(targetId).innerHTML = `
+      <div class="iv-mx-top">
+        <span class="iv-mx-nm">${name}</span>
+        <span class="iv-mx-v tnum">${curMult?curMult.toFixed(1):'—'}<span class="iv-mx-x">${curMult?'×':''}</span></span>
+      </div>
+      <table>
+        <thead><tr><th>Basis</th><th>Mult.</th><th>Implied</th></tr></thead>
+        <tbody>
+          <tr class="iv-mx-cur ${curCls}"><td>Current</td><td class="tnum">${fmtMultiple(curMult)}</td><td class="tnum">${curPriceStr}</td></tr>
+          <tr><td>10Y avg (own)</td><td class="tnum">${fmtMultiple(histMult)}</td><td class="tnum">${fmtPriceImplied(implHist)}</td></tr>
+          <tr><td>${sectorName}</td><td class="tnum">${fmtMultiple(medMult)}</td><td class="tnum">${fmtPriceImplied(implMed)}</td></tr>
+        </tbody>
+      </table>
+      <div class="iv-mx-prem">
+        <span class="iv-mx-prem-k">Premium to sector</span>
+        <span class="iv-mx-prem-v ${premCls} tnum">${premStr}</span>
+      </div>
+      ${flagHTML || ''}
+    `;
+  }
+
+  // EV/EBITDA
   const cur_evEb  = ebitda>0 ? ev/ebitda : null;
   const hist_evEb = computeHistAvg(S.metrics, 'evToEBITDA', 10) || computeHistAvg(S.metrics, 'enterpriseValueOverEBITDA', 10);
   const med_evEb  = sectorMed.evEbitda;
-  const evebImplPerShareHist = hist_evEb && ebitda>0 && shares>0 ? (hist_evEb*ebitda - totalDebt + cash) / shares : null;
-  const evebImplPerShareMed  = med_evEb  && ebitda>0 && shares>0 ? (med_evEb *ebitda - totalDebt + cash) / shares : null;
-  const evebV = l4Verdict(cur_evEb||0, hist_evEb||0, med_evEb);
-  document.getElementById('l4-evebitda').innerHTML = `
-    <div class="l4-card-head">
-      <div><div class="l4-name">EV / EBITDA</div><div class="l4-name-sub">Capital-structure-neutral · institutional standard</div></div>
-      <div class="l4-current">${fmtMultiple(cur_evEb)}</div>
-    </div>
-    <table class="l4-table">
-      <thead><tr><th></th><th>Multiple</th><th>Implied Price</th></tr></thead>
-      <tbody>
-        <tr><td>Current</td><td>${fmtMultiple(cur_evEb)}</td><td>${cur?'$'+cur.toFixed(2):'—'}</td></tr>
-        <tr><td>10Y Avg (own)</td><td>${fmtMultiple(hist_evEb)}</td><td>${fmtPriceImplied(evebImplPerShareHist)}</td></tr>
-        <tr><td>${p.sector||'Sector'} Median</td><td>${fmtMultiple(med_evEb)}</td><td>${fmtPriceImplied(evebImplPerShareMed)}</td></tr>
-      </tbody>
-    </table>
-    <div class="l4-verdict ${evebV.cls}">${evebV.label}</div>`;
+  const evebImplHist = hist_evEb && ebitda>0 && shares>0 ? (hist_evEb*ebitda - totalDebt + cash) / shares : null;
+  const evebImplMed  = med_evEb  && ebitda>0 && shares>0 ? (med_evEb *ebitda - totalDebt + cash) / shares : null;
+  renderMx('l4-evebitda', 'EV / EBITDA', cur_evEb, hist_evEb, med_evEb, evebImplHist, evebImplMed);
 
-  // ── Card 2: P/FCF ──
+  // P/FCF
   const cur_pfcf  = fcf>0 && mktCap>0 ? mktCap/fcf : null;
   const hist_pfcf = computeHistAvg(S.metrics, 'pfcfRatio', 10) || computeHistAvg(S.metrics, 'priceToFreeCashFlowsRatio', 10);
   const med_pfcf  = sectorMed.pfcf;
   const pfcfPerShare = shares>0 ? fcf/shares : 0;
   const pfcfImplHist = hist_pfcf && pfcfPerShare>0 ? hist_pfcf * pfcfPerShare : null;
   const pfcfImplMed  = med_pfcf  && pfcfPerShare>0 ? med_pfcf  * pfcfPerShare : null;
-  const stretched = cur_pfcf && hist_pfcf && cur_pfcf > 2*hist_pfcf;
-  const pfcfV = l4Verdict(cur_pfcf||0, hist_pfcf||0, med_pfcf);
-  document.getElementById('l4-pfcf').innerHTML = `
-    <div class="l4-card-head">
-      <div><div class="l4-name">P / FCF</div><div class="l4-name-sub">Hard to manipulate · best for capital-light businesses</div></div>
-      <div class="l4-current">${fmtMultiple(cur_pfcf)}</div>
-    </div>
-    <table class="l4-table">
-      <thead><tr><th></th><th>Multiple</th><th>Implied Price</th></tr></thead>
-      <tbody>
-        <tr><td>Current</td><td>${fmtMultiple(cur_pfcf)}</td><td>${cur?'$'+cur.toFixed(2):'—'}</td></tr>
-        <tr><td>10Y Avg (own)</td><td>${fmtMultiple(hist_pfcf)}</td><td>${fmtPriceImplied(pfcfImplHist)}</td></tr>
-        <tr><td>${p.sector||'Sector'} Median</td><td>${fmtMultiple(med_pfcf)}</td><td>${fmtPriceImplied(pfcfImplMed)}</td></tr>
-      </tbody>
-    </table>
-    <div class="l4-verdict ${pfcfV.cls}">${pfcfV.label}</div>
-    ${stretched?'<div class="l4-flag">Trading at more than 2× its own 5-year P/FCF — historically stretched.</div>':''}`;
+  renderMx('l4-pfcf', 'P / FCF', cur_pfcf, hist_pfcf, med_pfcf, pfcfImplHist, pfcfImplMed);
 
-  // ── Card 3: P/E (TTM, ex-NRI proxy = diluted EPS) ──
+  // P/E
   const cur_pe   = (cur && eps && eps>0) ? cur/eps : null;
   const hist_pe  = computeHistAvg(S.metrics, 'peRatio', 10);
   const med_pe   = sectorMed.pe;
   const peImplHist = hist_pe && eps && eps>0 ? hist_pe * eps : null;
   const peImplMed  = med_pe  && eps && eps>0 ? med_pe  * eps : null;
-  const peV = l4Verdict(cur_pe||0, hist_pe||0, med_pe);
-  document.getElementById('l4-pe').innerHTML = `
-    <div class="l4-card-head">
-      <div><div class="l4-name">P / E (ex-NRI proxy)</div><div class="l4-name-sub">Using diluted EPS as ex-non-recurring proxy</div></div>
-      <div class="l4-current">${fmtMultiple(cur_pe)}</div>
-    </div>
-    <table class="l4-table">
-      <thead><tr><th></th><th>Multiple</th><th>Implied Price</th></tr></thead>
-      <tbody>
-        <tr><td>Current</td><td>${fmtMultiple(cur_pe)}</td><td>${cur?'$'+cur.toFixed(2):'—'}</td></tr>
-        <tr><td>10Y Avg (own)</td><td>${fmtMultiple(hist_pe)}</td><td>${fmtPriceImplied(peImplHist)}</td></tr>
-        <tr><td>${p.sector||'Sector'} Median</td><td>${fmtMultiple(med_pe)}</td><td>${fmtPriceImplied(peImplMed)}</td></tr>
-      </tbody>
-    </table>
-    <div class="l4-verdict ${peV.cls}">${peV.label}</div>
-    ${(eps && eps<0)?'<div class="l4-flag">Negative earnings — P/E not meaningful.</div>':''}`;
+  const peFlag = (eps && eps<0) ? '<div class="iv-mx-prem" style="border-top:none;padding-top:4px"><span class="iv-mx-prem-k" style="color:var(--neg)">Negative earnings — P/E not meaningful</span></div>' : '';
+  renderMx('l4-pe', 'P / E', cur_pe, hist_pe, med_pe, peImplHist, peImplMed, peFlag);
 
-  // ── Card 4: EV/Revenue ──
+  // EV/Revenue
   const cur_evRev  = revenue>0 ? ev/revenue : null;
   const hist_evRev = computeHistAvg(S.metrics, 'evToSales', 10);
   const med_evRev  = sectorMed.evRev;
-  const evRevImplPerShareHist = hist_evRev && revenue>0 && shares>0 ? (hist_evRev*revenue - totalDebt + cash) / shares : null;
-  const evRevImplPerShareMed  = med_evRev  && revenue>0 && shares>0 ? (med_evRev *revenue - totalDebt + cash) / shares : null;
-  const evRevV = l4Verdict(cur_evRev||0, hist_evRev||0, med_evRev);
-  const lowEbitdaFlag = ebitda > 0 && ebitdaMargin >= 0.05;  // EBITDA solid → EV/Rev redundant
-  document.getElementById('l4-evrev').innerHTML = `
-    <div class="l4-card-head">
-      <div><div class="l4-name">EV / Revenue</div><div class="l4-name-sub">For high-growth or pre-profit names</div></div>
-      <div class="l4-current">${fmtMultiple(cur_evRev)}</div>
-    </div>
-    <table class="l4-table">
-      <thead><tr><th></th><th>Multiple</th><th>Implied Price</th></tr></thead>
-      <tbody>
-        <tr><td>Current</td><td>${fmtMultiple(cur_evRev)}</td><td>${cur?'$'+cur.toFixed(2):'—'}</td></tr>
-        <tr><td>10Y Avg (own)</td><td>${fmtMultiple(hist_evRev)}</td><td>${fmtPriceImplied(evRevImplPerShareHist)}</td></tr>
-        <tr><td>${p.sector||'Sector'} Median</td><td>${fmtMultiple(med_evRev)}</td><td>${fmtPriceImplied(evRevImplPerShareMed)}</td></tr>
-      </tbody>
-    </table>
-    <div class="l4-verdict ${evRevV.cls}">${evRevV.label}</div>
-    ${lowEbitdaFlag?`<div class="l4-flag">EBITDA margin is ${(ebitdaMargin*100).toFixed(1)}% — EV/EBITDA is more meaningful than EV/Revenue here.</div>`:''}`;
+  const evRevImplHist = hist_evRev && revenue>0 && shares>0 ? (hist_evRev*revenue - totalDebt + cash) / shares : null;
+  const evRevImplMed  = med_evRev  && revenue>0 && shares>0 ? (med_evRev *revenue - totalDebt + cash) / shares : null;
+  renderMx('l4-evrev', 'EV / Revenue', cur_evRev, hist_evRev, med_evRev, evRevImplHist, evRevImplMed);
+
+  // Section-header verdict
+  const verdictRow = document.getElementById('l4-verdict-row');
+  if(verdictRow){
+    const stretched = [
+      [cur_evEb, med_evEb], [cur_pfcf, med_pfcf], [cur_pe, med_pe], [cur_evRev, med_evRev]
+    ].filter(([c,m]) => c && m && c > m*1.15).length;
+    if(stretched >= 3){
+      verdictRow.innerHTML = `<span class="iv-tag iv-tag-neg"><span class="iv-dot"></span>Stretched on ${stretched} of 4</span>`;
+    } else if(stretched >= 2){
+      verdictRow.innerHTML = `<span class="iv-tag iv-tag-warn"><span class="iv-dot"></span>Stretched on ${stretched} of 4</span>`;
+    } else {
+      verdictRow.innerHTML = `<span class="iv-tag iv-tag-pos"><span class="iv-dot"></span>Reasonably priced</span>`;
+    }
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -4077,39 +4202,23 @@ function renderMoatHeat() {
 function computeIIWatchGap() {
   const cur = getCurPrice();
   if (!cur) return { gap: null, fair: null };
-  // Re-use the 8-method results if already computed, else compute quickly
+  const wacc = computeWACC(), termGr = 0.03;
   const vals = [];
   try {
-    const wacc    = computeWACC();
-    const termGr  = 0.03;
-    const shares  = getSharesOut();
-    const inc0    = S.income[0] || {};
-    const bal0    = S.balance[0] || {};
-    const eps     = inc0.epsdiluted || S.quote?.eps || null;
-    const ebitda  = inc0.ebitda || 0;
-    const revenue = inc0.revenue || 0;
-    const debt    = bal0.totalDebt || 0;
-    const cash    = bal0.cashAndCashEquivalents || 0;
-    const med     = getSectorMedians();
-    const fcf     = computeTTMFcf();
-    const g       = getBaseGrowthEstimate();
-    // Quick proxies for the 8 methods
-    if (fcf>0 && shares>0){ const pv=dcfDeclining(fcf,g,termGr,wacc); if(pv>0) vals.push(pv/shares); }
-    const epv2=computeEPV(); if(epv2.epvPerShare>0) vals.push(epv2.epvPerShare);
-    if(ebitda>0 && shares>0){ const hE=computeHistAvg(S.metrics,'evToEBITDA',10)||med.evEbitda; vals.push((hE*ebitda*(1+g)-debt+cash)/shares); }
-    if(revenue>0 && shares>0){ const hR=computeHistAvg(S.metrics,'evToSales',10)||med.evRev; vals.push((Math.min(hR,5.5)*revenue*(1+g)-debt+cash)/shares); }
-    if(fcf>0 && shares>0){ const hP=computeHistAvg(S.metrics,'pfcfRatio',10)||med.pfcf; vals.push(Math.min(hP,50)*fcf/shares); }
-    if(eps&&eps>0){ const fairPe=1.5*(g*100); vals.push(fairPe*eps*Math.pow(1+g,3)); }
-    const bvps=bal0.bookValuePerShare||(bal0.totalStockholdersEquity&&shares?bal0.totalStockholdersEquity/shares:null);
-    if(eps&&eps>0&&bvps&&bvps>0) vals.push(Math.sqrt(22.5*eps*Math.max(bvps,1)));
+    const v1=computeCfFcff(wacc,termGr,0);       if(v1&&isFinite(v1)&&v1>0) vals.push(v1);
+    const v2=computeCfHModel(wacc,termGr);        if(v2&&isFinite(v2)&&v2>0) vals.push(v2);
+    const v3=computeCfEvEbitda();                 if(v3&&isFinite(v3)&&v3>0) vals.push(v3);
+    const v4=computeCfEvRev();                    if(v4&&isFinite(v4)&&v4>0) vals.push(v4);
+    const v5=computeCfPFcf();                     if(v5&&isFinite(v5)&&v5>0) vals.push(v5);
+    const v6=computeCfRevDcf(wacc,termGr);        if(v6&&isFinite(v6)&&v6>0) vals.push(v6);
+    const v7=computeCfPeg();                      if(v7&&isFinite(v7)&&v7>0) vals.push(v7);
+    const v8=computeCfGraham();                   if(v8&&isFinite(v8)&&v8>0) vals.push(v8);
   } catch(_) {}
-
-  const valid = vals.filter(v=>v&&isFinite(v)&&v>0).sort((a,b)=>a-b);
-  if (!valid.length) return { gap: null, fair: null };
-  const pool = valid.length >= 4 ? valid.slice(1,-1) : valid;
+  if (!vals.length) return { gap: null, fair: null };
+  vals.sort((a,b)=>a-b);
+  const pool = vals.length >= 4 ? vals.slice(1,-1) : vals;
   const fair = pool.reduce((s,v)=>s+v,0)/pool.length;
-  const gap  = (fair - cur)/cur*100;
-  return { gap, fair };
+  return { gap: (fair-cur)/cur*100, fair };
 }
 
 function buildIISidebarStats(watch) {
@@ -4519,13 +4628,13 @@ function renderEarnings(){
     data:{
       labels:chartData.map(d=>d.date),
       datasets:[
-        {label:'EPS Estimate',data:chartData.map(d=>d.epsEstimated),backgroundColor:'hsl(220,25%,22%)',borderColor:'hsl(220,25%,35%)',borderWidth:1,borderRadius:3},
-        {label:'EPS Actual',data:chartData.map(d=>d.epsActual),backgroundColor:chartData.map(d=>d.epsActual>=d.epsEstimated?'hsl(160,65%,45%,.6)':'hsl(0,68%,55%,.6)'),borderColor:chartData.map(d=>d.epsActual>=d.epsEstimated?'hsl(160,65%,45%)':'hsl(0,68%,55%)'),borderWidth:1,borderRadius:3},
+        {label:'EPS Estimate',data:chartData.map(d=>d.epsEstimated),backgroundColor:'#E0DDD7',borderColor:'#B4B2AA',borderWidth:1,borderRadius:3},
+        {label:'EPS Actual',data:chartData.map(d=>d.epsActual),backgroundColor:chartData.map(d=>d.epsActual>=d.epsEstimated?'hsl(146,46%,33%,.6)':'hsl(0,49%,46%,.6)'),borderColor:chartData.map(d=>d.epsActual>=d.epsEstimated?'hsl(146,46%,33%)':'hsl(0,49%,46%)'),borderWidth:1,borderRadius:3},
       ]
     },
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{labels:{color:'#7c8ea0',font:{family:"'Inter'"}}},tooltip:{backgroundColor:'hsl(222,40%,9%)',borderColor:'hsl(220,25%,20%)',borderWidth:1,titleColor:'#7c8ea0',bodyColor:'#dde4eb',callbacks:{label:ctx=>`${ctx.dataset.label}: $${ctx.parsed.y?.toFixed(2)}`}}},
-      scales:{x:{grid:{display:false},ticks:{color:'#5a6a7a',font:{family:"'JetBrains Mono'",size:10}}},y:{grid:{color:'hsl(220,25%,14%,.4)'},ticks:{color:'#5a6a7a',font:{family:"'JetBrains Mono'"},callback:v=>'$'+v.toFixed(2)}}},
+      plugins:{legend:{labels:{color:'#8A887F',font:{family:"'Inter'"}}},tooltip:{backgroundColor:'#FFFFFF',borderColor:'#ECEAE6',borderWidth:1,titleColor:'#8A887F',bodyColor:"#1A1A18",callbacks:{label:ctx=>`${ctx.dataset.label}: $${ctx.parsed.y?.toFixed(2)}`}}},
+      scales:{x:{grid:{display:false},ticks:{color:'#44443F',font:{family:"'JetBrains Mono'",size:10}}},y:{grid:{color:'rgba(20,20,18,.4)'},ticks:{color:'#44443F',font:{family:"'JetBrains Mono'"},callback:v=>'$'+v.toFixed(2)}}},
     }
   });
 }
