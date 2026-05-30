@@ -3,1426 +3,573 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>InsightInvest — Stock Research for Serious Investors</title>
+<title>InsightInvest — Stop guessing. Start researching like a professional.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* ── Reset & tokens ─────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-:root {
-  --cream:   #F5F0E8;
-  --cream-d: #EDE8DF;
-  --ink:     #1A1814;
-  --ink-mid: #4A4540;
-  --ink-muted: #8A8480;
-  --red:     #C8392B;
-  --red-d:   #A82E22;
-  --border:  rgba(26,24,20,0.12);
-  --serif:   'Playfair Display', Georgia, serif;
-  --sans:    'DM Sans', system-ui, sans-serif;
-  --mono:    'DM Mono', 'Courier New', monospace;
+:root{
+  --cream:#F7F3EC;
+  --cream-d:#EDE8DF;
+  --ink:#18160F;
+  --ink-mid:#4A4540;
+  --ink-muted:#8A8480;
+  --red:#C8392B;
+  --border:rgba(24,22,15,0.1);
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --mono:'DM Mono','Courier New',monospace;
 }
 
-html { scroll-behavior: smooth; }
+html{scroll-behavior:smooth}
+body{background:var(--cream);color:var(--ink);font-family:var(--sans);font-weight:300;line-height:1.6;overflow-x:hidden}
 
-body {
-  background: var(--cream);
-  color: var(--ink);
-  font-family: var(--sans);
-  font-weight: 300;
-  line-height: 1.6;
-  overflow-x: hidden;
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 2.5rem;height:60px;
+  background:var(--cream);border-bottom:1px solid var(--border);
 }
+.nav-logo{font-family:var(--sans);font-weight:500;font-size:14px;color:var(--ink);text-decoration:none;letter-spacing:-0.01em}
+.nav-logo span{color:var(--red)}
+.nav-cta{
+  font-family:var(--sans);font-size:12px;font-weight:500;
+  color:var(--cream);background:var(--ink);
+  border:none;padding:8px 18px;cursor:pointer;
+  text-decoration:none;transition:background .2s;letter-spacing:0.01em;
+}
+.nav-cta:hover{background:var(--red)}
 
-/* ── Nav ──────────────────────────────────────────────── */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 3rem;
-  height: 64px;
-  background: var(--cream);
-  border-bottom: 1px solid var(--border);
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;
+  padding:100px 1.5rem 60px;
+  position:relative;
 }
-
-.nav-logo {
-  font-family: var(--sans);
-  font-weight: 500;
-  font-size: 15px;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-  text-decoration: none;
+.hero-eyebrow{
+  font-family:var(--mono);font-size:11px;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--ink-muted);
+  margin-bottom:1.75rem;
+  display:flex;align-items:center;gap:10px;
 }
-.nav-logo span { color: var(--red); }
-
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  list-style: none;
+.hero-eyebrow::before,.hero-eyebrow::after{
+  content:'';display:block;width:20px;height:1px;background:var(--ink-muted);
 }
-.nav-links a {
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--ink-mid);
-  text-decoration: none;
-  letter-spacing: 0.01em;
-  transition: color .2s;
+.hero-title{
+  font-family:var(--serif);
+  font-size:clamp(2.8rem,6vw,5.5rem);
+  font-weight:400;line-height:1.05;
+  letter-spacing:-0.025em;
+  max-width:820px;
+  margin-bottom:1.5rem;
 }
-.nav-links a:hover { color: var(--ink); }
-.nav-links a.active {
-  color: var(--ink);
-  border-bottom: 1.5px solid var(--ink);
-  padding-bottom: 1px;
+.hero-title em{font-style:italic;color:var(--red)}
+.hero-sub{
+  font-size:clamp(15px,2vw,17px);
+  color:var(--ink-mid);line-height:1.75;
+  max-width:520px;margin:0 auto 2.5rem;
 }
-
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+.hero-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--sans);font-size:14px;font-weight:500;
+  color:var(--cream);background:var(--ink);
+  padding:14px 32px;text-decoration:none;
+  transition:background .2s;margin-bottom:12px;
 }
-.btn-ghost {
-  font-family: var(--sans);
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--ink);
-  background: none;
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-}
-.btn-primary {
-  font-family: var(--sans);
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--cream);
-  background: var(--ink);
-  border: 1.5px solid var(--ink);
-  padding: 8px 20px;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background .2s, color .2s;
-  letter-spacing: 0.01em;
-}
-.btn-primary:hover { background: var(--red); border-color: var(--red); }
-
-/* ── Hero ─────────────────────────────────────────────── */
-.hero {
-  min-height: 100vh;
-  padding: 120px 3rem 80px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
+.hero-btn:hover{background:var(--red)}
+.hero-btn-note{
+  font-size:12px;color:var(--ink-muted);letter-spacing:0.02em;
 }
 
-.hero::before {
-  content: '';
-  position: absolute;
-  top: -100px; right: -200px;
-  width: 600px; height: 600px;
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  pointer-events: none;
+/* ── VIDEO ── */
+.video-section{padding:0 1.5rem 5rem;max-width:900px;margin:0 auto;width:100%}
+.video-wrap{
+  position:relative;width:100%;aspect-ratio:16/9;
+  background:var(--ink);overflow:hidden;
+  box-shadow:0 32px 80px rgba(24,22,15,0.18);
 }
-.hero::after {
-  content: '';
-  position: absolute;
-  top: -50px; right: -100px;
-  width: 400px; height: 400px;
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  pointer-events: none;
+.video-wrap video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+/* ── DIVIDER ── */
+hr{border:none;border-top:1px solid var(--border)}
+
+/* ── SECTION SHARED ── */
+.section{padding:5rem 1.5rem;max-width:760px;margin:0 auto;width:100%}
+.section-wide{padding:5rem 1.5rem;max-width:960px;margin:0 auto;width:100%}
+.eyebrow{
+  font-family:var(--mono);font-size:10px;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--ink-muted);margin-bottom:1rem;
+}
+.section-title{
+  font-family:var(--serif);font-size:clamp(2rem,4vw,3rem);
+  font-weight:400;line-height:1.1;letter-spacing:-0.02em;margin-bottom:1rem;
+}
+.section-title em{font-style:italic;color:var(--red)}
+.section-body{font-size:15px;color:var(--ink-mid);line-height:1.8}
+
+/* ── PROBLEM ── */
+.problem-section{background:var(--cream-d);padding:5rem 1.5rem}
+.problem-inner{max-width:720px;margin:0 auto;text-align:center}
+.problem-list{
+  display:flex;flex-direction:column;gap:0;
+  margin-top:2.5rem;text-align:left;
+}
+.problem-item{
+  display:grid;grid-template-columns:28px 1fr;
+  gap:1rem;padding:1.25rem 0;
+  border-bottom:1px solid var(--border);
+}
+.problem-item:first-child{border-top:1px solid var(--border)}
+.problem-x{
+  font-family:var(--mono);font-size:13px;color:var(--red);
+  padding-top:2px;
+}
+.problem-text{font-size:14px;color:var(--ink-mid);line-height:1.65}
+.problem-text strong{color:var(--ink);font-weight:500}
+
+/* ── WHAT YOU GET ── */
+.get-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1px;background:var(--border);
+  border:1px solid var(--border);
+  margin-top:2.5rem;
+}
+.get-item{
+  background:var(--cream);padding:1.75rem 1.5rem;
+  transition:background .2s;
+}
+.get-item:hover{background:var(--cream-d)}
+.get-num{
+  font-family:var(--mono);font-size:10px;color:var(--red);
+  letter-spacing:0.1em;margin-bottom:0.75rem;
+}
+.get-title{
+  font-family:var(--serif);font-size:17px;font-weight:500;
+  margin-bottom:0.5rem;line-height:1.2;
+}
+.get-desc{font-size:13px;color:var(--ink-mid);line-height:1.65}
+
+/* ── HOW IT WORKS ── */
+.steps{display:flex;flex-direction:column;gap:0;margin-top:2.5rem}
+.step{
+  display:grid;grid-template-columns:56px 1fr;
+  gap:1.25rem;padding:1.75rem 0;
+  border-bottom:1px solid var(--border);
+  align-items:start;
+}
+.step:first-child{border-top:1px solid var(--border)}
+.step-num{
+  font-family:var(--serif);font-size:2.5rem;font-weight:400;
+  color:var(--cream-d);line-height:1;padding-top:4px;
+  -webkit-text-stroke:1px var(--border);
+  color:transparent;
+}
+.step-body{}
+.step-title{
+  font-family:var(--serif);font-size:18px;font-weight:500;
+  margin-bottom:6px;line-height:1.2;
+}
+.step-desc{font-size:13px;color:var(--ink-mid);line-height:1.65}
+
+/* ── DARK SECTION ── */
+.dark-section{background:var(--ink);padding:5rem 1.5rem}
+.dark-inner{max-width:720px;margin:0 auto;text-align:center}
+.dark-section .eyebrow{color:rgba(247,243,236,0.3)}
+.dark-section .section-title{color:#F7F3EC}
+.dark-section .section-title em{color:var(--red)}
+.dark-section .section-body{color:rgba(247,243,236,0.55)}
+
+.what-list{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1px;background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.06);
+  margin-top:2.5rem;text-align:left;
+}
+.what-item{
+  background:var(--ink);padding:1.5rem;
+}
+.what-check{
+  font-family:var(--mono);font-size:11px;color:var(--red);
+  margin-bottom:6px;letter-spacing:0.06em;
+}
+.what-title{font-size:13px;font-weight:500;color:#F7F3EC;line-height:1.5}
+
+/* ── PRICING ── */
+.pricing-section{padding:5rem 1.5rem;max-width:560px;margin:0 auto;width:100%}
+.pricing-card{
+  border:1px solid var(--border);padding:2.5rem;
+  position:relative;
+}
+.pricing-badge{
+  position:absolute;top:-1px;left:2rem;
+  background:var(--red);color:white;
+  font-family:var(--mono);font-size:9px;letter-spacing:0.1em;
+  text-transform:uppercase;padding:5px 10px;
+}
+.pricing-label{
+  font-family:var(--mono);font-size:10px;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--ink-muted);margin-bottom:1.25rem;
+}
+.pricing-price{
+  font-family:var(--serif);font-size:3.5rem;font-weight:400;
+  line-height:1;margin-bottom:4px;
+}
+.pricing-price sub{font-size:1.25rem;font-weight:300;vertical-align:baseline}
+.pricing-note{font-size:12px;color:var(--ink-muted);margin-bottom:2rem}
+.pricing-divider{border:none;border-top:1px solid var(--border);margin:1.5rem 0}
+.pricing-items{display:flex;flex-direction:column;gap:10px;margin-bottom:2rem}
+.pricing-item{
+  display:flex;align-items:flex-start;gap:8px;
+  font-size:13px;color:var(--ink-mid);
+}
+.pricing-item::before{content:'✓';color:var(--red);font-size:11px;flex-shrink:0;margin-top:2px}
+.pricing-update{
+  background:var(--cream-d);border-left:2px solid var(--red);
+  padding:12px 14px;margin-bottom:1.5rem;
+  font-size:12px;color:var(--ink-mid);line-height:1.6;
+}
+.pricing-update strong{color:var(--ink);font-weight:500}
+.btn-full{
+  display:flex;align-items:center;justify-content:center;
+  width:100%;font-family:var(--sans);font-size:14px;font-weight:500;
+  color:var(--cream);background:var(--ink);
+  padding:14px;text-decoration:none;
+  transition:background .2s;border:none;cursor:pointer;
+}
+.btn-full:hover{background:var(--red)}
+.btn-note{
+  text-align:center;font-size:11px;color:var(--ink-muted);
+  margin-top:10px;letter-spacing:0.02em;
 }
 
-.hero-eyebrow {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  color: var(--ink-muted);
-  text-transform: uppercase;
-  margin-bottom: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+/* ── HOW TO ACCESS ── */
+.access-section{background:var(--ink);padding:5rem 1.5rem}
+.access-inner{max-width:600px;margin:0 auto}
+.access-section .eyebrow{color:rgba(247,243,236,0.3)}
+.access-section .section-title{color:#F7F3EC;margin-bottom:0.75rem}
+.access-section .section-body{color:rgba(247,243,236,0.5);margin-bottom:2.5rem}
+.access-steps{display:flex;flex-direction:column;gap:0}
+.access-step{
+  display:grid;grid-template-columns:44px 1fr;
+  gap:1rem;padding:1.5rem 0;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+  align-items:start;
 }
-.hero-eyebrow::before {
-  content: '';
-  display: block;
-  width: 24px;
-  height: 1px;
-  background: var(--ink-muted);
+.access-step:first-child{border-top:1px solid rgba(255,255,255,0.07)}
+.access-step-num{
+  width:32px;height:32px;
+  border:1px solid var(--red);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:11px;color:var(--red);
+  flex-shrink:0;
 }
+.access-step-num.done{border-color:#1D9E75;color:#1D9E75}
+.access-step-title{
+  font-size:14px;font-weight:500;color:#F7F3EC;margin-bottom:4px;
+}
+.access-step-body{font-size:12px;color:rgba(247,243,236,0.45);line-height:1.65}
+.access-step-body a{color:var(--red);text-decoration:underline;text-underline-offset:3px}
+.access-note{
+  margin-top:1.5rem;padding:12px 14px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.07);
+  font-size:12px;color:rgba(247,243,236,0.35);line-height:1.65;
+}
+.access-note strong{color:rgba(247,243,236,0.55);font-weight:500}
 
-.hero-title {
-  font-family: var(--serif);
-  font-size: clamp(3rem, 5vw, 4.5rem);
-  font-weight: 400;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  margin-bottom: 1.5rem;
+/* ── FOOTER ── */
+footer{
+  padding:2.5rem;
+  display:flex;align-items:center;justify-content:space-between;
+  border-top:1px solid var(--border);
+  flex-wrap:wrap;gap:1rem;
 }
-.hero-title em {
-  font-style: italic;
-  color: var(--red);
-}
+.footer-logo{font-family:var(--sans);font-weight:500;font-size:13px;color:var(--ink)}
+.footer-logo span{color:var(--red)}
+.footer-links{display:flex;gap:1.5rem}
+.footer-links a{font-size:12px;color:var(--ink-muted);text-decoration:none}
+.footer-links a:hover{color:var(--ink)}
+.footer-legal{width:100%;font-size:11px;color:var(--ink-muted);border-top:1px solid var(--border);padding-top:1rem;line-height:1.6}
 
-.hero-body {
-  font-size: 16px;
-  color: var(--ink-mid);
-  line-height: 1.75;
-  max-width: 420px;
-  margin-bottom: 2.5rem;
-}
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.fade{opacity:0;animation:fadeUp .65s ease forwards}
+.fade-1{animation-delay:.05s}.fade-2{animation-delay:.15s}
+.fade-3{animation-delay:.25s}.fade-4{animation-delay:.35s}
+.fade-5{animation-delay:.45s}
 
-.hero-cta {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.btn-large {
-  font-family: var(--sans);
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--cream);
-  background: var(--ink);
-  border: 1.5px solid var(--ink);
-  padding: 13px 28px;
-  cursor: pointer;
-  text-decoration: none;
-  transition: all .2s;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-.btn-large:hover { background: var(--red); border-color: var(--red); }
-
-.btn-large-ghost {
-  font-family: var(--sans);
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--ink);
-  background: none;
-  border: 1.5px solid var(--border);
-  padding: 13px 28px;
-  cursor: pointer;
-  text-decoration: none;
-  transition: all .2s;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-.btn-large-ghost:hover { border-color: var(--ink); }
-
-.hero-stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 2.5rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--border);
-}
-.stat-chip {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  background: var(--cream-d);
-  border: 1px solid var(--border);
-  padding: 7px 14px;
-  border-radius: 2px;
-  font-size: 12px;
-  font-weight: 400;
-  color: var(--ink-mid);
-  white-space: nowrap;
-}
-.stat-chip-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--red);
-  flex-shrink: 0;
-}
-
-/* Hero video placeholder */
-.hero-video {
-  position: relative;
-}
-.video-frame {
-  width: 100%;
-  aspect-ratio: 16/10;
-  background: var(--ink);
-  position: relative;
-  overflow: hidden;
-  box-shadow: 24px 24px 0 0 var(--cream-d), 24px 24px 0 1px var(--border);
-}
-.video-inner {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #1A1814 0%, #2A2420 50%, #1A1814 100%);
-}
-.video-label {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.3);
-  margin-bottom: 1rem;
-}
-.play-btn {
-  width: 64px;
-  height: 64px;
-  border: 1.5px solid rgba(255,255,255,0.25);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all .3s;
-  margin-bottom: 1rem;
-}
-.play-btn:hover {
-  border-color: var(--red);
-  background: rgba(200,57,43,0.1);
-}
-.play-btn svg {
-  width: 20px;
-  height: 20px;
-  fill: white;
-  margin-left: 3px;
-}
-.video-caption {
-  position: absolute;
-  bottom: 16px;
-  left: 16px;
-  right: 16px;
-  font-family: var(--mono);
-  font-size: 10px;
-  color: rgba(255,255,255,0.3);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-.video-tag {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--red);
-  border: 1px solid var(--red);
-  padding: 4px 8px;
-}
-/* Fake UI preview inside video */
-.fake-ui {
-  width: 85%;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 4px;
-  padding: 12px;
-  margin-top: 12px;
-}
-.fake-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 5px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-.fake-row:last-child { border-bottom: none; }
-.fake-label { font-size: 9px; color: rgba(255,255,255,0.35); font-family: var(--mono); }
-.fake-val { font-size: 10px; color: rgba(255,255,255,0.7); font-family: var(--mono); }
-.fake-val.g { color: #1D9E75; }
-.fake-val.r { color: #E24B4A; }
-.fake-val.a { color: #F5A623; }
-
-/* ── Divider ──────────────────────────────────────────── */
-.divider {
-  border: none;
-  border-top: 1px solid var(--border);
-  margin: 0;
-}
-
-/* ── Section shared ───────────────────────────────────── */
-section { padding: 6rem 3rem; }
-
-.section-eyebrow {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  color: var(--ink-muted);
-  text-transform: uppercase;
-  margin-bottom: 1rem;
-}
-
-.section-title {
-  font-family: var(--serif);
-  font-size: clamp(2rem, 3.5vw, 3rem);
-  font-weight: 400;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  margin-bottom: 1.25rem;
-}
-.section-title em { font-style: italic; color: var(--red); }
-
-.section-body {
-  font-size: 15px;
-  color: var(--ink-mid);
-  line-height: 1.75;
-  max-width: 520px;
-}
-
-/* ── What's included ──────────────────────────────────── */
-.included {
-  background: var(--ink);
-  color: var(--cream);
-  padding: 6rem 3rem;
-}
-.included .section-eyebrow { color: rgba(245,240,232,0.35); }
-.included .section-title { color: var(--cream); }
-.included .section-title em { color: var(--red); }
-.included .section-body { color: rgba(245,240,232,0.6); }
-
-.tools-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.08);
-  margin-top: 3.5rem;
-}
-
-.tool-card {
-  background: var(--ink);
-  padding: 2rem 1.75rem;
-  position: relative;
-  transition: background .2s;
-}
-.tool-card:hover { background: #252018; }
-
-.tool-num {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--red);
-  letter-spacing: 0.08em;
-  margin-bottom: 1rem;
-}
-.tool-icon {
-  font-size: 22px;
-  margin-bottom: 1rem;
-  display: block;
-}
-.tool-name {
-  font-family: var(--serif);
-  font-size: 18px;
-  font-weight: 500;
-  color: var(--cream);
-  margin-bottom: 0.5rem;
-  line-height: 1.2;
-}
-.tool-desc {
-  font-size: 13px;
-  color: rgba(245,240,232,0.5);
-  line-height: 1.65;
-  margin-bottom: 1.25rem;
-}
-.tool-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.tool-tag {
-  font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(245,240,232,0.35);
-  border: 1px solid rgba(255,255,255,0.1);
-  padding: 3px 8px;
-}
-
-/* ── Benefits ─────────────────────────────────────────── */
-.benefits {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
-}
-.benefits-left {
-  padding: 6rem 3rem 6rem 3rem;
-  border-right: 1px solid var(--border);
-}
-.benefits-right {
-  padding: 6rem 3rem;
-}
-
-.benefit-list {
-  margin-top: 2.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-.benefit-item {
-  display: grid;
-  grid-template-columns: 40px 1fr;
-  gap: 1rem;
-  padding: 1.5rem 0;
-  border-bottom: 1px solid var(--border);
-}
-.benefit-item:first-child { border-top: 1px solid var(--border); }
-.benefit-num {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--red);
-  padding-top: 3px;
-}
-.benefit-body {}
-.benefit-title {
-  font-family: var(--serif);
-  font-size: 17px;
-  font-weight: 500;
-  margin-bottom: 5px;
-  line-height: 1.2;
-}
-.benefit-text {
-  font-size: 13px;
-  color: var(--ink-mid);
-  line-height: 1.65;
-}
-
-/* Valuation methods visual */
-.methods-visual {
-  margin-top: 2.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.method-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.method-label {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--ink-muted);
-  width: 160px;
-  flex-shrink: 0;
-}
-.method-bar-track {
-  flex: 1;
-  height: 2px;
-  background: var(--cream-d);
-  position: relative;
-}
-.method-bar-fill {
-  height: 100%;
-  background: var(--ink);
-  position: absolute;
-  left: 0;
-}
-.method-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  position: relative;
-}
-.method-val {
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--ink);
-  width: 60px;
-  text-align: right;
-}
-.method-dot.green { background: #1D9E75; }
-.method-dot.amber { background: #BA7517; }
-.method-dot.red   { background: #C8392B; }
-
-.composite-row {
-  margin-top: 8px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.composite-label {
-  font-family: var(--serif);
-  font-size: 16px;
-  font-weight: 500;
-}
-.composite-val {
-  font-family: var(--mono);
-  font-size: 18px;
-  color: var(--red);
-  font-weight: 500;
-}
-
-/* ── Tabs section (what you see) ──────────────────────── */
-.tabs-section {
-  padding: 6rem 3rem;
-  background: var(--cream-d);
-}
-
-.tabs-nav {
-  display: flex;
-  gap: 0;
-  border-bottom: 1px solid var(--border);
-  margin-top: 3rem;
-  margin-bottom: 3rem;
-  overflow-x: auto;
-}
-.tab-btn {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-muted);
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  padding: 12px 24px;
-  cursor: pointer;
-  transition: all .2s;
-  white-space: nowrap;
-  margin-bottom: -1px;
-}
-.tab-btn:hover { color: var(--ink); }
-.tab-btn.active {
-  color: var(--ink);
-  border-bottom-color: var(--red);
-}
-
-.tab-content { display: none; }
-.tab-content.active { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
-
-.tab-visual {
-  background: var(--ink);
-  border: 1px solid rgba(255,255,255,0.06);
-  padding: 2rem;
-  min-height: 280px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.tab-ui-title {
-  font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.25);
-  margin-bottom: 1.5rem;
-}
-.fake-score {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-  margin-bottom: 1rem;
-}
-.fake-score-num {
-  font-family: var(--serif);
-  font-size: 3rem;
-  color: #F5A623;
-  line-height: 1;
-}
-.fake-score-denom {
-  font-family: var(--mono);
-  font-size: 14px;
-  color: rgba(255,255,255,0.3);
-}
-.fake-dim-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 6px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-.fake-dim-row:last-child { border-bottom: none; }
-.fake-dim-label { font-family: var(--mono); font-size: 9px; color: rgba(255,255,255,0.35); letter-spacing: 0.06em; text-transform: uppercase; }
-.fake-dim-val { font-family: var(--mono); font-size: 11px; font-weight: 500; }
-.fake-dim-val.g { color: #1D9E75; }
-.fake-dim-val.a { color: #F5A623; }
-.fake-dim-val.r { color: #E24B4A; }
-
-.tab-text {}
-.tab-text-title {
-  font-family: var(--serif);
-  font-size: 1.75rem;
-  font-weight: 400;
-  line-height: 1.15;
-  margin-bottom: 1rem;
-}
-.tab-text-body {
-  font-size: 14px;
-  color: var(--ink-mid);
-  line-height: 1.75;
-  margin-bottom: 1.5rem;
-}
-.tab-feature-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.tab-feature {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 13px;
-  color: var(--ink-mid);
-}
-.tab-feature::before {
-  content: '→';
-  color: var(--red);
-  font-size: 12px;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-
-/* ── Testimonials ─────────────────────────────────────── */
-.testimonials {
-  padding: 6rem 3rem;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
-  background: var(--border);
-}
-
-.testimonial {
-  background: var(--cream);
-  padding: 2.5rem 2rem;
-}
-.testimonial-quote {
-  font-family: var(--serif);
-  font-size: 1.1rem;
-  font-weight: 400;
-  line-height: 1.55;
-  color: var(--ink);
-  margin-bottom: 1.5rem;
-}
-.testimonial-quote em { font-style: italic; color: var(--red); }
-.testimonial-author {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.author-avatar {
-  width: 32px;
-  height: 32px;
-  background: var(--ink);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--serif);
-  font-size: 13px;
-  color: var(--cream);
-  font-style: italic;
-  flex-shrink: 0;
-}
-.author-name {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--ink);
-}
-.author-title {
-  font-size: 11px;
-  color: var(--ink-muted);
-}
-
-/* ── Pricing / CTA ────────────────────────────────────── */
-.pricing {
-  padding: 6rem 3rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
-}
-
-.pricing-left .section-body { margin-bottom: 2rem; }
-
-.pricing-features {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 2.5rem;
-}
-.pricing-feature {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 14px;
-  color: var(--ink-mid);
-}
-.pricing-feature-dot {
-  width: 6px;
-  height: 6px;
-  background: var(--red);
-  flex-shrink: 0;
-}
-
-.pricing-card {
-  border: 1px solid var(--border);
-  padding: 2.5rem;
-  position: relative;
-}
-.pricing-card-label {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-muted);
-  margin-bottom: 1.5rem;
-}
-.pricing-price {
-  font-family: var(--serif);
-  font-size: 3rem;
-  font-weight: 400;
-  line-height: 1;
-  margin-bottom: 4px;
-}
-.pricing-price-sub {
-  font-size: 13px;
-  color: var(--ink-muted);
-  margin-bottom: 2rem;
-}
-.pricing-divider {
-  border: none;
-  border-top: 1px solid var(--border);
-  margin: 1.5rem 0;
-}
-.pricing-items {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 2rem;
-}
-.pricing-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--ink-mid);
-}
-.pricing-item-check {
-  font-size: 12px;
-  color: #1D9E75;
-  flex-shrink: 0;
-}
-.pricing-badge {
-  position: absolute;
-  top: -1px;
-  right: 2rem;
-  background: var(--red);
-  color: white;
-  font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 5px 10px;
-}
-
-/* ── Footer ───────────────────────────────────────────── */
-footer {
-  background: var(--ink);
-  color: rgba(245,240,232,0.5);
-  padding: 4rem 3rem 3rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: 2rem;
-}
-.footer-brand {
-  grid-column: 1;
-}
-.footer-logo {
-  font-family: var(--sans);
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--cream);
-  margin-bottom: 0.75rem;
-}
-.footer-logo span { color: var(--red); }
-.footer-tagline {
-  font-size: 12px;
-  color: rgba(245,240,232,0.4);
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-}
-.footer-col-title {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(245,240,232,0.35);
-  margin-bottom: 1rem;
-}
-.footer-links {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  list-style: none;
-}
-.footer-links a {
-  font-size: 13px;
-  color: rgba(245,240,232,0.5);
-  text-decoration: none;
-  transition: color .2s;
-}
-.footer-links a:hover { color: var(--cream); }
-.footer-bottom {
-  grid-column: 1 / -1;
-  border-top: 1px solid rgba(255,255,255,0.08);
-  padding-top: 1.5rem;
-  margin-top: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 12px;
-  color: rgba(245,240,232,0.3);
-}
-.footer-bottom a {
-  color: rgba(245,240,232,0.3);
-  text-decoration: none;
-}
-
-/* ── Animations ───────────────────────────────────────── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.fade-up {
-  opacity: 0;
-  animation: fadeUp .7s ease forwards;
-}
-.fade-up-1 { animation-delay: .1s; }
-.fade-up-2 { animation-delay: .2s; }
-.fade-up-3 { animation-delay: .3s; }
-.fade-up-4 { animation-delay: .4s; }
-.fade-up-5 { animation-delay: .5s; }
-
-/* ── Responsive ───────────────────────────────────────── */
-@media (max-width: 900px) {
-
-  /* Nav */
-  nav { padding: 0 1.25rem; }
-  .nav-links { display: none; }
-  .nav-right { gap: 0.75rem; }
-  .btn-ghost { display: none; }
-  .btn-primary { padding: 7px 14px; font-size: 12px; }
-
-  /* Hero */
-  .hero {
-    grid-template-columns: 1fr;
-    min-height: auto;
-    padding: 90px 1.25rem 50px;
-    gap: 2rem;
-  }
-  .hero-video {
-    display: block;
-    width: 100%;
-    margin-top: 1.5rem;
-  }
-  .video-frame {
-    box-shadow: 12px 12px 0 0 var(--cream-d), 12px 12px 0 1px var(--border);
-  }
-  .hero-title { font-size: clamp(2.2rem, 8vw, 3rem); }
-  .hero-body { font-size: 14px; max-width: 100%; }
-  .hero-cta { flex-direction: column; gap: 10px; }
-  .btn-large, .btn-large-ghost {
-    width: 100%;
-    justify-content: center;
-    padding: 12px 20px;
-    font-size: 13px;
-  }
-  .hero-stats { gap: 6px; }
-  .stat-chip { font-size: 11px; padding: 6px 11px; }
-  .hero::before, .hero::after { display: none; }
-
-  /* Sections padding */
-  .included,
-  .benefits-left,
-  .benefits-right,
-  .tabs-section,
-  .pricing { padding: 3.5rem 1.25rem; }
-  section { padding: 3.5rem 1.25rem; }
-
-  /* Section titles */
-  .section-title { font-size: clamp(1.6rem, 6vw, 2.2rem); }
-
-  /* Tools grid */
-  .tools-grid { grid-template-columns: 1fr; }
-  .tool-card { padding: 1.5rem 1.25rem; }
-
-  /* Benefits */
-  .benefits { grid-template-columns: 1fr; }
-  .benefits-left {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 3rem;
-  }
-  .benefits-right { padding-top: 3rem; }
-  .method-label { width: 120px; font-size: 10px; }
-  .method-val { width: 48px; font-size: 11px; }
-
-  /* Pricing */
-  .pricing {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-  .pricing-card { padding: 1.75rem 1.25rem; }
-  .pricing-price { font-size: 2.4rem; }
-
-  /* How to access */
-  .access-section { padding: 3.5rem 1.25rem !important; }
-
-  /* Footer */
-  footer {
-    grid-template-columns: 1fr 1fr;
-    padding: 3rem 1.25rem 2rem;
-    gap: 1.5rem;
-  }
-  .footer-brand { grid-column: 1 / -1; }
-  .footer-bottom {
-    flex-direction: column;
-    gap: 6px;
-    text-align: center;
-  }
-}
-
-@media (max-width: 480px) {
-
-  /* Nav */
-  nav { height: 56px; }
-  .nav-logo { font-size: 13px; }
-
-  /* Hero */
-  .hero { padding: 80px 1rem 40px; }
-  .hero-title { font-size: 2rem; }
-  .hero-stats { gap: 5px; }
-  .stat-chip { font-size: 10px; padding: 5px 10px; }
-
-  /* Sections */
-  .included,
-  .benefits-left,
-  .benefits-right,
-  .pricing { padding: 2.5rem 1rem; }
-  section { padding: 2.5rem 1rem; }
-
-  /* Tools */
-  .tool-num { font-size: 10px; }
-  .tool-name { font-size: 16px; }
-  .tool-desc { font-size: 12px; }
-
-  /* Benefit items */
-  .benefit-item { grid-template-columns: 32px 1fr; gap: 0.75rem; }
-  .benefit-title { font-size: 15px; }
-  .benefit-text { font-size: 12px; }
-
-  /* Methods visual */
-  .methods-visual { gap: 10px; }
-  .method-label { width: 100px; font-size: 9px; }
-
-  /* Pricing */
-  .pricing-price { font-size: 2rem; }
-  .pricing-item { font-size: 12px; }
-  .pricing-badge { font-size: 8px; padding: 4px 8px; right: 1rem; }
-
-  /* How to access steps */
-  .access-step { grid-template-columns: 40px 1fr !important; gap: 0.75rem !important; }
-  .access-num { width: 30px !important; height: 30px !important; font-size: 11px !important; }
-
-  /* Footer */
-  footer { grid-template-columns: 1fr; padding: 2.5rem 1rem 2rem; }
-  .footer-brand { grid-column: 1; }
+/* ── MOBILE ── */
+@media(max-width:768px){
+  nav{padding:0 1.25rem}
+  .hero{padding:90px 1.25rem 50px}
+  .hero-title{font-size:clamp(2.2rem,9vw,3rem)}
+  .hero-sub{font-size:14px}
+  .video-section{padding:0 1.25rem 4rem}
+  .section,.section-wide,.pricing-section{padding:3.5rem 1.25rem}
+  .problem-section,.dark-section,.access-section{padding:3.5rem 1.25rem}
+  .get-grid{grid-template-columns:1fr}
+  .what-list{grid-template-columns:1fr}
+  .step{grid-template-columns:40px 1fr;gap:1rem}
+  .step-num{font-size:2rem}
+  footer{padding:2rem 1.25rem;flex-direction:column;align-items:flex-start}
+}
+@media(max-width:480px){
+  .hero{padding:80px 1rem 40px}
+  .hero-title{font-size:2rem}
+  .hero-btn{width:100%;justify-content:center;padding:13px}
+  .pricing-card{padding:1.75rem 1.25rem}
+  .pricing-price{font-size:2.8rem}
+  .section,.section-wide,.pricing-section{padding:3rem 1rem}
+  .problem-section,.dark-section,.access-section{padding:3rem 1rem}
+  .get-item,.what-item{padding:1.25rem}
 }
 </style>
 </head>
 <body>
 
-<!-- ── Nav ──────────────────────────────────────────────── -->
+<!-- NAV -->
 <nav>
   <a href="#" class="nav-logo">Insight<span>·</span>Invest</a>
-  <ul class="nav-links">
-    <li><a href="#tools" class="active">Tools</a></li>
-    <li><a href="#benefits">Benefits</a></li>
-    <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#">Curriculum</a></li>
-    <li><a href="#">Members</a></li>
-  </ul>
-  <div class="nav-right">
-    <a href="#" class="btn-ghost">Sign in</a>
-    <a href="https://www.patreon.com/checkout/Insightinvest?rid=28712192&amp;vanity=15273026" class="btn-primary">Subscribe</a>
-  </div>
+  <a href="https://www.patreon.com/checkout/Insightinvest?rid=28712192&vanity=15273026" class="nav-cta">Get access →</a>
 </nav>
 
-<!-- ── Hero ─────────────────────────────────────────────── -->
-<section class="hero" style="padding-top:120px">
-  <div class="hero-left">
-    <div class="hero-eyebrow fade-up fade-up-1">Stock research platform · Built for serious investors</div>
-    <h1 class="hero-title fade-up fade-up-2">
-      Research that<br><em>does the work</em><br>with you.
-    </h1>
-    <p class="hero-body fade-up fade-up-3">
-      InsightInvest pulls live financials, runs five valuation models, scores business quality across six dimensions, and generates research reports — all from a single search.
-    </p>
-    <div class="hero-cta fade-up fade-up-4">
-      <a href="https://www.patreon.com/checkout/Insightinvest?rid=28712192&vanity=15273026" class="btn-large">
-        Open the tool
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M8 3l4 4-4 4"/></svg>
-      </a>
-      <a href="#tools" class="btn-large-ghost">See what's inside</a>
-    </div>
-    <div class="hero-stats fade-up fade-up-5">
-      <div class="stat-chip">
-        <div class="stat-chip-dot"></div>
-        <span>Real-time financial data</span>
-      </div>
-      <div class="stat-chip">
-        <div class="stat-chip-dot"></div>
-        <span>6,000+ US stocks covered</span>
-      </div>
-      <div class="stat-chip">
-        <div class="stat-chip-dot"></div>
-        <span>Built-in financial models</span>
-      </div>
-      <div class="stat-chip">
-        <div class="stat-chip-dot"></div>
-        <span>Live stock news</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="hero-video fade-up fade-up-3">
-    <div class="video-frame">
-      <video
-        autoplay
-        muted
-        loop
-        playsinline
-        controls
-        style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
-        <source src="https://pub-634811a9919940a6a595751343b8dcd3.r2.dev/e.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-    </div>
-  </div>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow fade fade-1">Stock research · Intrinsic value · Professional tools</div>
+  <h1 class="hero-title fade fade-2">
+    Stop guessing.<br>Start researching<br><em>like a professional.</em>
+  </h1>
+  <p class="hero-sub fade fade-3">
+    InsightInvest tells you what a stock is actually worth — using the same valuation methods professional analysts use. One search. Instant results.
+  </p>
+  <a href="https://www.patreon.com/checkout/Insightinvest?rid=28712192&vanity=15273026" class="hero-btn fade fade-4">
+    Get access for $18/mo
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M8 3l4 4-4 4"/></svg>
+  </a>
+  <div class="hero-btn-note fade fade-5">Updated monthly · Cancel any time · Patreon membership</div>
 </section>
 
-<hr class="divider">
+<!-- VIDEO -->
+<div class="video-section">
+  <div class="video-wrap">
+    <video autoplay muted loop playsinline controls>
+      <source src="https://pub-634811a9919940a6a595751343b8dcd3.r2.dev/e.mp4" type="video/mp4">
+    </video>
+  </div>
+</div>
 
-<!-- ── What's included ──────────────────────────────────── -->
-<div class="included" id="tools">
-  <div class="section-eyebrow">Folio 01 / The Platform</div>
-  <h2 class="section-title">Everything you need to <em>research a stock</em> properly.</h2>
-  <p class="section-body">Eight tabs. One search. Live data from Financial Modeling Prep, five valuation methods, and research reports generated from real numbers — not generic AI.</p>
+<hr>
 
-  <div class="tools-grid">
-    <div class="tool-card">
-      <div class="tool-num">01</div>
-      <div class="tool-name">Financial Statements</div>
-      <div class="tool-desc">Income statement, balance sheet, and cash flow — annual and quarterly — with trend charts and margin overlays across 10 years of history.</div>
-      <div class="tool-tags">
-        <span class="tool-tag">Income</span>
-        <span class="tool-tag">Balance sheet</span>
-        <span class="tool-tag">Cash flow</span>
-        <span class="tool-tag">Charts</span>
+<!-- PROBLEM -->
+<div class="problem-section">
+  <div class="problem-inner">
+    <div class="eyebrow">The problem</div>
+    <h2 class="section-title">Most investors buy on <em>feeling,</em> not facts.</h2>
+    <p class="section-body">Reddit threads, Twitter takes, CNBC headlines — none of it tells you what a stock is actually worth. You end up overpaying, panic-selling, or missing the ones that mattered.</p>
+    <div class="problem-list">
+      <div class="problem-item">
+        <div class="problem-x">✗</div>
+        <div class="problem-text"><strong>No framework for valuation.</strong> You know the ticker but not whether the price is fair, cheap, or expensive relative to the business.</div>
       </div>
-    </div>
-    <div class="tool-card">
-      <div class="tool-num">02</div>
-      <div class="tool-name">Company Metrics</div>
-      <div class="tool-desc">Bloomberg-style tables covering profitability, growth, liquidity, leverage, and efficiency — with peer comparison context for every metric.</div>
-      <div class="tool-tags">
-        <span class="tool-tag">ROE · ROIC</span>
-        <span class="tool-tag">Margins</span>
-        <span class="tool-tag">Ratios</span>
+      <div class="problem-item">
+        <div class="problem-x">✗</div>
+        <div class="problem-text"><strong>Data is everywhere, insight is nowhere.</strong> Financial data is available to anyone. Knowing what to do with it isn't.</div>
       </div>
-    </div>
-    <div class="tool-card">
-      <div class="tool-num">03</div>
-      <div class="tool-name">Intrinsic Value</div>
-      <div class="tool-desc">Five valuation methods in one place — EPV, Reverse DCF, Forward DCF (3 scenarios), Owner Earnings Yield, and Peer Relative Value — combined into a single composite fair value estimate.</div>
-      <div class="tool-tags">
-        <span class="tool-tag">DCF</span>
-        <span class="tool-tag">EPV</span>
-        <span class="tool-tag">Owner earnings</span>
-        <span class="tool-tag">Composite</span>
+      <div class="problem-item">
+        <div class="problem-x">✗</div>
+        <div class="problem-text"><strong>Professional tools are gatekept.</strong> Bloomberg terminals cost $24,000 a year. Institutional research isn't available to retail investors.</div>
       </div>
-    </div>
-    <div class="tool-card">
-      <div class="tool-num">04</div>
-      <div class="tool-name">InsightInvestMoat™</div>
-      <div class="tool-desc">A Bloomberg-style terminal view scoring the business across six dimensions — Predictability, Profitability, Growth, Moat, Financial Strength, and Valuation — with a composite quality score out of 100.</div>
-      <div class="tool-tags">
-        <span class="tool-tag">6 dimensions</span>
-        <span class="tool-tag">Quality gate</span>
-        <span class="tool-tag">Live news</span>
-      </div>
-    </div>
-    <div class="tool-card" style="opacity:0.75">
-      <div class="tool-num" style="display:flex;align-items:center;justify-content:space-between">
-        <span>05</span>
-        <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--red);border:1px solid var(--red);padding:3px 8px">Coming soon · ITW</span>
-      </div>
-      <div class="tool-name">Research Reports</div>
-      <div class="tool-desc">Five report types generated instantly from real financial data — Bull Case, Bear Case, Base Case, Key Risks, and Valuation Deep Dive. No generic AI output. Every report adapts to the actual numbers.</div>
-      <div class="tool-tags">
-        <span class="tool-tag">Bull / Bear</span>
-        <span class="tool-tag">Key risks</span>
-        <span class="tool-tag">Valuation</span>
-      </div>
-    </div>
-    <div class="tool-card">
-      <div class="tool-num">06</div>
-      <div class="tool-name">News · Markets · Screener</div>
-      <div class="tool-desc">Stock-specific news with sentiment tagging, live crypto and forex quotes, and a full US stock screener filterable by sector, market cap, margins, and quality score.</div>
-      <div class="tool-tags">
-        <span class="tool-tag">Sentiment</span>
-        <span class="tool-tag">Crypto · Forex</span>
-        <span class="tool-tag">Screener</span>
+      <div class="problem-item">
+        <div class="problem-x">✗</div>
+        <div class="problem-text"><strong>You're making permanent decisions with temporary information.</strong> A stock price today tells you nothing about what the business is worth.</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ── Benefits + Valuation Visual ──────────────────────── -->
-<div class="benefits" id="benefits">
-  <div class="benefits-left">
-    <div class="section-eyebrow">Folio 02 / Why it matters</div>
-    <h2 class="section-title">Not a <em>screener.</em><br>A research platform.</h2>
-    <p class="section-body">Most tools give you data. InsightInvest gives you a framework — a consistent, repeatable process for evaluating any stock the way a professional analyst would.</p>
+<hr>
 
-    <div class="benefit-list">
-      <div class="benefit-item">
-        <div class="benefit-num">01</div>
-        <div class="benefit-body">
-          <div class="benefit-title">Five valuation methods, one answer</div>
-          <div class="benefit-text">No single model is reliable in isolation. InsightInvest runs EPV, two DCF variants, owner earnings yield, and peer relative value — then combines them into a single composite fair value with a plain-English verdict.</div>
-        </div>
-      </div>
-      <div class="benefit-item">
-        <div class="benefit-num">02</div>
-        <div class="benefit-body">
-          <div class="benefit-title">Quality before price</div>
-          <div class="benefit-text">The InsightInvestMoat™ engine scores every stock across six dimensions before you look at valuation. Buying cheap businesses is not investing — buying quality businesses at fair prices is.</div>
-        </div>
-      </div>
-      <div class="benefit-item">
-        <div class="benefit-num">03</div>
-        <div class="benefit-body">
-          <div class="benefit-title">Live data, always current</div>
-          <div class="benefit-text">Prices, quotes, news, and financials are pulled live from Financial Modeling Prep on every search. No stale data. No cached reports from six months ago.</div>
-        </div>
-      </div>
+<!-- WHAT YOU GET -->
+<div class="section-wide">
+  <div class="eyebrow">What's inside</div>
+  <h2 class="section-title">Everything you need to research <em>any stock</em> properly.</h2>
+  <div class="get-grid">
+    <div class="get-item">
+      <div class="get-num">01</div>
+      <div class="get-title">Intrinsic Value — 5 methods</div>
+      <div class="get-desc">EPV, Reverse DCF, Forward DCF (bear/base/bull), Owner Earnings Yield, and Peer Relative Value — combined into one composite fair value estimate with a plain-English verdict.</div>
+    </div>
+    <div class="get-item">
+      <div class="get-num">02</div>
+      <div class="get-title">InsightInvestMoat™ Quality Score</div>
+      <div class="get-desc">Six dimensions scored 0–100 — Predictability, Profitability, Growth, Moat, Financial Strength, and Valuation. Know the quality of the business before you look at price.</div>
+    </div>
+    <div class="get-item">
+      <div class="get-num">03</div>
+      <div class="get-title">Full Financial Statements</div>
+      <div class="get-desc">Income statement, balance sheet, and cash flow — annual and quarterly — with trend charts, margin overlays, and Bloomberg-style metric tables.</div>
+    </div>
+    <div class="get-item">
+      <div class="get-num">04</div>
+      <div class="get-title">Live News + Stock Screener</div>
+      <div class="get-desc">Stock-specific news with sentiment tagging, a full US stock screener, and live crypto and forex quotes — all in one place.</div>
+    </div>
+    <div class="get-item">
+      <div class="get-num">05</div>
+      <div class="get-title">Research Reports <span style="font-family:var(--mono);font-size:9px;color:var(--red);letter-spacing:0.08em;margin-left:6px;vertical-align:middle">COMING SOON</span></div>
+      <div class="get-desc">Bull case, bear case, base case, key risks, and valuation deep-dive — generated from the actual financial data of each stock.</div>
+    </div>
+    <div class="get-item">
+      <div class="get-num">06</div>
+      <div class="get-title">6,000+ US Stocks · Real-time</div>
+      <div class="get-desc">NYSE, NASDAQ, and AMEX coverage. Live prices, real-time quotes, and financials updated as soon as they're filed. No stale data.</div>
     </div>
   </div>
+</div>
 
-  <div class="benefits-right">
-    <div class="section-eyebrow">Folio 03 / Valuation engine</div>
-    <h2 class="section-title" style="font-size:1.75rem">How the composite<br>fair value works.</h2>
-    <p class="section-body" style="font-size:13px;margin-bottom:2rem">Five independent methods, each using a different approach to estimating intrinsic value. The highest and lowest are trimmed. The remainder are averaged into a single, defensible composite estimate.</p>
+<hr>
 
-    <div class="methods-visual">
-      <div class="method-row">
-        <span class="method-label">EPV (zero growth)</span>
-        <div class="method-bar-track"><div class="method-bar-fill" style="width:62%"></div></div>
-        <div class="method-dot red"></div>
-        <span class="method-val">$229</span>
+<!-- HOW IT WORKS -->
+<div class="section">
+  <div class="eyebrow">How it works</div>
+  <h2 class="section-title">From ticker to <em>informed decision</em> in under a minute.</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-body">
+        <div class="step-title">Search any US ticker</div>
+        <div class="step-desc">Type a ticker symbol — AAPL, NVDA, JPM, anything on NYSE, NASDAQ, or AMEX. The platform loads live financials, quotes, and news instantly.</div>
       </div>
-      <div class="method-row">
-        <span class="method-label">Reverse DCF</span>
-        <div class="method-bar-track"><div class="method-bar-fill" style="width:68%"></div></div>
-        <div class="method-dot red"></div>
-        <span class="method-val">$241</span>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-body">
+        <div class="step-title">Get the quality score first</div>
+        <div class="step-desc">The InsightInvestMoat™ engine scores the business across six dimensions before you look at valuation. Quality first, price second — the order that matters.</div>
       </div>
-      <div class="method-row">
-        <span class="method-label">Forward DCF (base)</span>
-        <div class="method-bar-track"><div class="method-bar-fill" style="width:78%"></div></div>
-        <div class="method-dot amber"></div>
-        <span class="method-val">$268</span>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-body">
+        <div class="step-title">See what it's actually worth</div>
+        <div class="step-desc">Five independent valuation methods run simultaneously. The composite fair value tells you whether the stock is cheap, fairly priced, or expensive — and by how much.</div>
       </div>
-      <div class="method-row">
-        <span class="method-label">Peer relative value</span>
-        <div class="method-bar-track"><div class="method-bar-fill" style="width:90%"></div></div>
-        <div class="method-dot amber"></div>
-        <span class="method-val">$298</span>
-      </div>
-      <div class="method-row">
-        <span class="method-label">Owner earnings yield</span>
-        <div class="method-bar-track"><div class="method-bar-fill" style="width:100%"></div></div>
-        <div class="method-dot green"></div>
-        <span class="method-val">11.2%</span>
-      </div>
-      <div class="composite-row">
-        <span class="composite-label">Composite fair value</span>
-        <span class="composite-val">$274</span>
-      </div>
-      <div style="font-size:11px;color:var(--ink-muted);line-height:1.6;margin-top:4px">
-        Current price $306.74 · <span style="color:#C8392B;font-weight:500">+11.9% above fair value</span> · Verdict: fairly valued, watch for pullback
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-body">
+        <div class="step-title">Make a decision based on data</div>
+        <div class="step-desc">Buy zone, hold zone, trim zone, avoid zone — every stock gets a clear framework. No guessing. No noise. Just the numbers and what they mean.</div>
       </div>
     </div>
   </div>
 </div>
 
-
-<!-- ── Pricing ───────────────────────────────────────────── -->
-<div class="pricing" id="pricing">
-  <div class="pricing-left">
-    <div class="section-eyebrow">Folio 05 / Membership</div>
-    <h2 class="section-title">One membership.<br><em>Full access.</em></h2>
-    <p class="section-body">Every tool, every tab, every report. No feature tiers, no usage limits on reports, no upsells. One price, everything included — and new features ship every month.</p>
-
-    <div style="background:var(--ink);padding:1rem 1.25rem;margin-bottom:2rem;border-left:2px solid var(--red)">
-      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--red);margin-bottom:5px">Monthly updates</div>
-      <div style="font-size:13px;color:var(--cream);line-height:1.6">The platform ships new tools, data sources, and improvements every month. Your membership gets better automatically — no upgrades, no extra cost.</div>
-    </div>
-
-    <div class="pricing-features">
-      <div class="pricing-feature"><div class="pricing-feature-dot"></div>All eight research tabs</div>
-      <div class="pricing-feature"><div class="pricing-feature-dot"></div>Five valuation models + composite fair value</div>
-      <div class="pricing-feature"><div class="pricing-feature-dot"></div>InsightInvestMoat™ quality scoring</div>
-      <div class="pricing-feature"><div class="pricing-feature-dot"></div>Five research report types — unlimited</div>
-      <div class="pricing-feature"><div class="pricing-feature-dot"></div>Live news, screener, crypto and forex</div>
-      <div class="pricing-feature"><div class="pricing-feature-dot"></div>6,000+ US stocks, real-time data</div>
-    </div>
-
-    <a href="https://www.patreon.com/checkout/Insightinvest?rid=28712192&vanity=15273026" class="btn-large">Start researching →</a>
-  </div>
-
-  <div>
-    <div class="pricing-card">
-      <div class="pricing-badge">Most popular</div>
-      <div class="pricing-card-label">Annual membership</div>
-      <div class="pricing-price">$18<span style="font-size:1.5rem;font-weight:300">/mo</span></div>
-      <div class="pricing-price-sub">Billed annually · Updated monthly · Cancel any time</div>
-      <hr class="pricing-divider">
-      <div class="pricing-items">
-        <div class="pricing-item"><span class="pricing-item-check">✓</span>Financial statements — 10 years annual, 5 years quarterly</div>
-        <div class="pricing-item"><span class="pricing-item-check">✓</span>Five valuation models + composite fair value</div>
-        <div class="pricing-item"><span class="pricing-item-check">✓</span>InsightInvestMoat™ terminal — six dimension scoring</div>
-        <div class="pricing-item"><span class="pricing-item-check">✓</span>Research reports — Bull, Bear, Base, Risks, Valuation</div>
-        <div class="pricing-item"><span class="pricing-item-check">✓</span>Live news feed with sentiment analysis</div>
-        <div class="pricing-item"><span class="pricing-item-check">✓</span>US stock screener — NYSE, NASDAQ, AMEX</div>
-        <div class="pricing-item"><span class="pricing-item-check">✓</span>Real-time crypto and forex quotes</div>
-        <div class="pricing-item"><span class="pricing-item-check">✓</span>Earnings calendar and EPS history</div>
-      </div>
-      <a href="https://www.patreon.com/checkout/Insightinvest?rid=28712192&vanity=15273026" class="btn-large" style="width:100%;justify-content:center">Get access →</a>
-    </div>
-</div>
-
-<!-- ── How to access ────────────────────────────────────── -->
-<div style="background:var(--ink);padding:5rem 3rem" class="access-section">
-  <div style="max-width:640px;margin:0 auto;padding:0 0.25rem">
-    <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(245,240,232,0.35);margin-bottom:1rem">After subscribing</div>
-    <h2 style="font-family:var(--serif);font-size:2rem;font-weight:400;color:var(--cream);line-height:1.1;margin-bottom:1rem">How to access<br><em style="color:var(--red)">InsightInvest.</em></h2>
-    <p style="font-size:14px;color:rgba(245,240,232,0.55);line-height:1.75;margin-bottom:2.5rem">Once your Patreon membership is active, getting into the platform takes less than a minute. Here's exactly what to do.</p>
-
-    <div style="display:flex;flex-direction:column;gap:0">
-
-      <div class="access-step" style="display:grid;grid-template-columns:48px 1fr;gap:1rem;padding:1.5rem 0;border-bottom:1px solid rgba(255,255,255,0.08)">
-        <div class="access-num" style="width:36px;height:36px;border:1px solid var(--red);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;color:var(--red);flex-shrink:0">01</div>
-        <div>
-          <div style="font-family:var(--serif);font-size:16px;font-weight:500;color:var(--cream);margin-bottom:5px">Subscribe on Patreon</div>
-          <div style="font-size:13px;color:rgba(245,240,232,0.5);line-height:1.65">Click any Subscribe button on this page. You'll be taken to the InsightInvest Patreon checkout — complete your membership there.</div>
-        </div>
-      </div>
-
-      <div class="access-step" style="display:grid;grid-template-columns:48px 1fr;gap:1rem;padding:1.5rem 0;border-bottom:1px solid rgba(255,255,255,0.08)">
-        <div class="access-num" style="width:36px;height:36px;border:1px solid var(--red);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;color:var(--red);flex-shrink:0">02</div>
-        <div>
-          <div style="font-family:var(--serif);font-size:16px;font-weight:500;color:var(--cream);margin-bottom:5px">Open InsightInvest</div>
-          <div style="font-size:13px;color:rgba(245,240,232,0.5);line-height:1.65">Go to <a href="https://www.leiholding.com/stock-details" style="color:var(--red);text-decoration:underline;text-underline-offset:3px">leiholding.com/stock-details</a>. You'll see a Sign in button in the top right corner of the platform.</div>
-        </div>
-      </div>
-
-      <div class="access-step" style="display:grid;grid-template-columns:48px 1fr;gap:1rem;padding:1.5rem 0;border-bottom:1px solid rgba(255,255,255,0.08)">
-        <div class="access-num" style="width:36px;height:36px;border:1px solid var(--red);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;color:var(--red);flex-shrink:0">03</div>
-        <div>
-          <div style="font-family:var(--serif);font-size:16px;font-weight:500;color:var(--cream);margin-bottom:5px">Sign in with Patreon</div>
-          <div style="font-size:13px;color:rgba(245,240,232,0.5);line-height:1.65">Click <strong style="color:var(--cream);font-weight:500">"Sign in with Patreon"</strong> and log in using the same Patreon account you subscribed with. Your membership is verified automatically — no extra steps, no codes.</div>
-        </div>
-      </div>
-
-      <div class="access-step" style="display:grid;grid-template-columns:48px 1fr;gap:1rem;padding:1.5rem 0">
-        <div class="access-num" style="width:36px;height:36px;border:1px solid #1D9E75;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;color:#1D9E75;flex-shrink:0">04</div>
-        <div>
-          <div style="font-family:var(--serif);font-size:16px;font-weight:500;color:var(--cream);margin-bottom:5px">You're in</div>
-          <div style="font-size:13px;color:rgba(245,240,232,0.5);line-height:1.65">Full access to every tab, every tool, and every update — automatically. Search any US ticker to get started.</div>
-        </div>
-      </div>
-
-    </div>
-
-    <div style="margin-top:2rem;padding:1rem 1.25rem;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);font-size:12px;color:rgba(245,240,232,0.4);line-height:1.65">
-      <strong style="color:rgba(245,240,232,0.6);font-weight:500">Already a Patreon member?</strong> Just go straight to step 2 — your access is already active.
+<!-- DARK — WHAT'S INCLUDED -->
+<div class="dark-section">
+  <div class="dark-inner">
+    <div class="eyebrow">Your membership includes</div>
+    <h2 class="section-title">One price. <em>Everything</em> included.</h2>
+    <p class="section-body">No feature tiers. No paywalled tools. No upsells. Every tab, every valuation method, every update — included from day one.</p>
+    <div class="what-list">
+      <div class="what-item"><div class="what-check">INCLUDED</div><div class="what-title">5 valuation models + composite fair value</div></div>
+      <div class="what-item"><div class="what-check">INCLUDED</div><div class="what-title">InsightInvestMoat™ — 6 dimension quality scoring</div></div>
+      <div class="what-item"><div class="what-check">INCLUDED</div><div class="what-title">Full financial statements — annual & quarterly</div></div>
+      <div class="what-item"><div class="what-check">INCLUDED</div><div class="what-title">Live stock news with sentiment analysis</div></div>
+      <div class="what-item"><div class="what-check">INCLUDED</div><div class="what-title">US stock screener — 6,000+ stocks</div></div>
+      <div class="what-item"><div class="what-check">INCLUDED</div><div class="what-title">Real-time crypto & forex quotes</div></div>
+      <div class="what-item"><div class="what-check">INCLUDED</div><div class="what-title">Earnings calendar & EPS history</div></div>
+      <div class="what-item"><div class="what-check">COMING SOON</div><div class="what-title">Research reports — bull, bear, base, risks</div></div>
     </div>
   </div>
 </div>
 
-<hr class="divider">
+<!-- PRICING -->
+<div class="pricing-section">
+  <div class="eyebrow" style="text-align:center;margin-bottom:2rem">Membership</div>
+  <div class="pricing-card">
+    <div class="pricing-badge">Monthly updates</div>
+    <div class="pricing-label">InsightInvest membership</div>
+    <div class="pricing-price">$18<sub>/mo</sub></div>
+    <div class="pricing-note">Billed annually · Cancel any time</div>
+    <div class="pricing-update">
+      <strong>Gets better every month.</strong> New tools, data sources, and improvements ship automatically to every member — no upgrades, no extra cost.
+    </div>
+    <div class="pricing-items">
+      <div class="pricing-item">5 valuation models + composite fair value</div>
+      <div class="pricing-item">InsightInvestMoat™ quality scoring</div>
+      <div class="pricing-item">Full financial statements — annual & quarterly</div>
+      <div class="pricing-item">Live news, screener, crypto & forex</div>
+      <div class="pricing-item">6,000+ US stocks · Real-time data</div>
+      <div class="pricing-item">Research reports (coming soon)</div>
+    </div>
+    <hr class="pricing-divider">
+    <a href="https://www.patreon.com/checkout/Insightinvest?rid=28712192&vanity=15273026" class="btn-full">Get access for $18/mo →</a>
+    <div class="btn-note">Patreon membership · Instant access after subscribing</div>
+  </div>
+</div>
 
-<!-- ── Footer ────────────────────────────────────────────── -->
+<hr>
+
+<!-- HOW TO ACCESS -->
+<div class="access-section">
+  <div class="access-inner">
+    <div class="eyebrow">After subscribing</div>
+    <h2 class="section-title" style="font-family:var(--serif);font-size:clamp(1.75rem,4vw,2.25rem);font-weight:400;line-height:1.1;letter-spacing:-0.02em;margin-bottom:0.75rem;color:#F7F3EC">How to get in.</h2>
+    <p class="section-body" style="font-size:13px;color:rgba(247,243,236,0.45);line-height:1.75;margin-bottom:2.5rem">Once your Patreon membership is active, access takes less than a minute.</p>
+    <div class="access-steps">
+      <div class="access-step">
+        <div class="access-step-num">01</div>
+        <div>
+          <div class="access-step-title">Subscribe on Patreon</div>
+          <div class="access-step-body">Click any Subscribe button. Complete your membership on the InsightInvest Patreon checkout page.</div>
+        </div>
+      </div>
+      <div class="access-step">
+        <div class="access-step-num">02</div>
+        <div>
+          <div class="access-step-title">Open InsightInvest</div>
+          <div class="access-step-body">Go to <a href="https://www.leiholding.com/stock-details">leiholding.com/stock-details</a> and click Sign in in the top right.</div>
+        </div>
+      </div>
+      <div class="access-step">
+        <div class="access-step-num">03</div>
+        <div>
+          <div class="access-step-title">Sign in with Patreon</div>
+          <div class="access-step-body">Log in with the same Patreon account you subscribed with. Membership verified automatically — no codes, no extra steps.</div>
+        </div>
+      </div>
+      <div class="access-step">
+        <div class="access-step-num done">04</div>
+        <div>
+          <div class="access-step-title">You're in. Start researching.</div>
+          <div class="access-step-body">Full access to every tool and every update from day one. Search any US ticker to get started.</div>
+        </div>
+      </div>
+    </div>
+    <div class="access-note">
+      <strong>Already a Patreon member?</strong> Skip to step 2 — your access is already active.
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
 <footer>
-  <div class="footer-brand">
-    <div class="footer-logo">Insight<span>·</span>Invest</div>
-    <div class="footer-tagline">Stock research built for investors who think before they act.</div>
+  <div class="footer-logo">Insight<span>·</span>Invest</div>
+  <div class="footer-links">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms</a>
+    <a href="https://www.leiholding.com/stock-details">Open app</a>
   </div>
-
-  <div>
-    <div class="footer-col-title">Platform</div>
-    <ul class="footer-links">
-      <li><a href="#">Stock research</a></li>
-      <li><a href="#">Screener</a></li>
-      <li><a href="#">Market news</a></li>
-      <li><a href="#">Crypto & forex</a></li>
-    </ul>
-  </div>
-
-  <div>
-    <div class="footer-col-title">Company</div>
-    <ul class="footer-links">
-      <li><a href="#">Reports</a></li>
-      <li><a href="#">Curriculum</a></li>
-      <li><a href="#">Members</a></li>
-      <li><a href="#">LEI Holding</a></li>
-    </ul>
-  </div>
-
-  <div>
-    <div class="footer-col-title">Legal</div>
-    <ul class="footer-links">
-      <li><a href="#">Terms of service</a></li>
-      <li><a href="#">Privacy policy</a></li>
-      <li><a href="#">Disclaimer</a></li>
-    </ul>
-  </div>
-
-  <div class="footer-bottom">
-    <span>© 2026 LEI Holding · InsightInvest. Not financial advice.</span>
-    <span>Data powered by Financial Modeling Prep</span>
+  <div class="footer-legal">
+    © 2026 LEI Holding · InsightInvest. Not financial advice. Data powered by Financial Modeling Prep. This website is not affiliated with YouTube, Google, or Facebook Inc.
   </div>
 </footer>
-
-<script>
-function switchTab(btn, id) {
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById(id).classList.add('active');
-}
-</script>
 
 </body>
 </html>
