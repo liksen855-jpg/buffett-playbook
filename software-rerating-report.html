@@ -244,22 +244,110 @@
   .vt-cta-btn:hover { opacity: 0.85; }
   .vt-cta-btn span { margin-left: 4px; }
 
-  @media (max-width: 900px) {
-    .topbar { grid-template-columns: 1fr 1fr; gap: 4px; padding: 12px 20px; }
-    .topbar-center { display: none; }
-    .hero { padding: 32px 20px 0; }
-    .stat-bar { grid-template-columns: 1fr 1fr; }
-    .stat-cell:nth-child(5) { grid-column: span 2; }
+  /* ── TABLET ── */
+  @media (max-width: 1024px) {
     .main { grid-template-columns: 1fr; }
-    .content { padding: 32px 20px; border-right: none; border-bottom: 1px solid var(--border); }
-    .sidebar { padding: 32px 20px; }
+    .content { padding: 40px 32px; border-right: none; border-bottom: 1px solid var(--border); }
+    .sidebar { padding: 32px 32px; }
+    .sidebar-block { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .sidebar-title { grid-column: span 2; }
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 680px) {
+    /* typography scale-down */
+    p { font-size: 16px; line-height: 1.7; }
+    .drop-cap::first-letter { font-size: 52px; }
+
+    /* topbar */
+    .topbar { grid-template-columns: 1fr; gap: 2px; padding: 10px 16px; }
+    .topbar-center { display: none; }
+    .topbar-right { display: none; }
+
+    /* hero */
+    .hero { padding: 24px 16px 0; }
+    .hero h1 { font-size: 36px; line-height: 1.05; margin-bottom: 20px; }
+    .hero-lede { font-size: 15px; margin-bottom: 24px; padding-left: 14px; }
+    .hero-meta { flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .hero-byline { flex-direction: column; gap: 6px; padding: 14px 0; }
+    .hero-byline div:nth-child(even) { display: none; }
+
+    /* main layout */
+    .main { grid-template-columns: 1fr; }
+    .content { padding: 24px 16px; border-right: none; border-bottom: 1px solid var(--border); }
+    .sidebar { padding: 24px 16px; }
+    .sidebar-block { display: block; }
+
+    /* sections */
+    .section { margin-bottom: 44px; }
+    .section h2 { font-size: 22px; }
+    .section h3 { font-size: 17px; }
+
+    /* pull quote */
+    .pull-quote { padding: 22px 20px; margin: 24px 0; }
+    .pull-quote p { font-size: 15px; }
+
+    /* two legs */
     .legs { grid-template-columns: 1fr; }
-    .hero-byline { gap: 16px; }
-    .decision-item { flex-direction: column; gap: 8px; }
-    .decision-q { flex: none; }
+    .leg { padding: 20px; }
+
+    /* bucket canvas */
+    #bucket-canvas { height: 260px; }
+
+    /* bucket list */
+    .bucket-item { grid-template-columns: 20px 1fr; gap: 10px; }
+    .bucket-title { font-size: 16px; }
+    .bucket-desc { font-size: 13px; }
+    .ticker-pill { font-size: 10px; padding: 2px 8px; }
+
+    /* valuation sticker */
+    .vt-sticker-wrap { margin-top: 12px; }
+
+    /* valuation teaser */
+    .vt-stats { grid-template-columns: 1fr 1fr; }
+    .vt-stat-val { font-size: 14px; }
+    .vt-bar-row { grid-template-columns: 72px 1fr 58px 46px; gap: 4px; }
+    .vt-bar-name { font-size: 8px; }
+    .vt-bar-val { font-size: 8px; }
+    .vt-bar-vs { font-size: 8px; }
+    .vt-cta-block { flex-direction: column; align-items: flex-start; gap: 12px; padding: 14px 14px; }
+    .vt-cta-headline { font-size: 15px; }
+    .vt-cta-btn { width: 100%; text-align: center; padding: 11px; }
+
+    /* positions table */
+    .pos-table { font-size: 11px; }
+    .pos-table th { font-size: 8px; }
+    .pos-table td:nth-child(2),
+    .pos-table td:nth-child(3) { display: none; }
+    .ret { font-size: 16px !important; }
+
+    /* decision tree */
+    .decision-item { flex-direction: column; gap: 6px; padding: 14px 0; }
+    .decision-q { flex: none; font-size: 14px; font-style: italic; color: var(--muted); }
+    .decision-a { font-size: 14px; }
+
+    /* risk grid */
     .risk-grid { grid-template-columns: 1fr; }
-    .verdict-box { padding: 32px 20px; }
-    footer { padding: 20px; }
+    .risk-cell { padding: 14px; }
+
+    /* verdict */
+    .verdict-box { padding: 24px 16px; margin: 32px 0 0; }
+    .verdict-box h2 { font-size: 24px; }
+    .verdict-box p { font-size: 15px; }
+
+    /* perf chart */
+    #perf-chart { height: 160px; }
+
+    /* sidebar */
+    .sidebar-row { padding: 8px 0; }
+    .sidebar-name { font-size: 10px; }
+    .sidebar-val { font-size: 15px; }
+    .sidebar-card { padding: 12px; }
+    .sidebar-card-text { font-size: 12px; }
+
+    /* footer */
+    footer { padding: 16px; flex-direction: column; gap: 6px; }
+    footer p { font-size: 9px; }
   }
 </style>
 </head>
@@ -812,8 +900,8 @@ tape.innerHTML=html;
   if(!canvas) return;
   const ctx = canvas.getContext('2d');
   const dpr = window.devicePixelRatio||1;
-  const W = canvas.parentElement.offsetWidth;
-  const H = 180;
+  const W = Math.min(canvas.parentElement.offsetWidth, window.innerWidth - 32);
+  const H = window.innerWidth < 680 ? 160 : 180;
   canvas.width = W*dpr; canvas.height = H*dpr;
   canvas.style.width = W+'px'; canvas.style.height = H+'px';
   ctx.scale(dpr,dpr);
@@ -883,8 +971,8 @@ tape.innerHTML=html;
   if(!canvas) return;
   const ctx = canvas.getContext('2d');
   const dpr = window.devicePixelRatio||1;
-  const W = canvas.parentElement.offsetWidth;
-  const H = 320;
+  const W = Math.min(canvas.parentElement.offsetWidth, window.innerWidth - 32);
+  const H = window.innerWidth < 680 ? 260 : 320;
   canvas.width = W*dpr; canvas.height = H*dpr;
   canvas.style.width = W+'px'; canvas.style.height = H+'px';
   ctx.scale(dpr,dpr);
