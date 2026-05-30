@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Software Rerating — Insight Invest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,300;1,6..72,400;1,6..72,500&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #f5f0e8;
+    --cream-dark: #ede7d9;
+    --ink: #1a1814;
+    --ink-light: #3d3830;
+    --muted: #7a7165;
+    --red: #c0392b;
+    --green: #1a6b3a;
+    --border: #d4cdc0;
+    --serif: 'Newsreader', Georgia, serif;
+    --sans: 'Geist', sans-serif;
+    --mono: 'Geist Mono', monospace;
+  }
+
+  html { background: var(--cream); color: var(--ink); font-family: var(--serif); }
+  body { max-width: 1440px; margin: 0 auto; }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 14px 48px;
+    border-bottom: 1px solid var(--ink);
+    background: var(--ink);
+    color: var(--cream);
+  }
+  .topbar-left { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; line-height: 1.6; color: rgba(245,240,232,0.6); }
+  .topbar-center { font-family: var(--mono); font-size: 11px; letter-spacing: 0.15em; color: var(--cream); text-align: center; }
+  .topbar-right { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-align: right; color: rgba(245,240,232,0.6); line-height: 1.6; }
+
+  /* ── TICKER TAPE ── */
+  .ticker-wrap { background: var(--ink); border-bottom: 1px solid rgba(245,240,232,0.1); overflow: hidden; padding: 6px 0; }
+  .ticker-inner { display: flex; gap: 0; white-space: nowrap; animation: ticker 30s linear infinite; }
+  .ticker-item { font-family: var(--mono); font-size: 10px; color: rgba(245,240,232,0.55); padding: 0 28px; letter-spacing: 0.06em; }
+  .ticker-item .up { color: #4ade80; }
+  .ticker-item .dn { color: #f87171; }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ── HERO ── */
+  .hero { padding: 56px 48px 0; border-bottom: 1px solid var(--border); }
+  .hero-meta { display: flex; gap: 20px; align-items: center; margin-bottom: 32px; }
+  .hero-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+  .hero-tag::before { content: '▌'; color: var(--red); font-size: 10px; }
+  .hero-tag span { color: var(--muted); }
+  .hero-tag .sep { color: var(--border); }
+  .hero h1 { font-family: var(--serif); font-size: clamp(52px, 7vw, 88px); font-weight: 400; line-height: 1.0; letter-spacing: -0.02em; color: var(--ink); max-width: 820px; margin-bottom: 32px; }
+  .hero h1 em { color: var(--red); font-style: italic; }
+  .hero-lede { font-family: var(--serif); font-size: 18px; font-weight: 300; line-height: 1.65; color: var(--ink-light); max-width: 560px; border-left: 2px solid var(--ink); padding-left: 20px; margin-bottom: 36px; }
+  .hero-byline { display: flex; gap: 32px; align-items: center; padding: 20px 0; border-top: 1px solid var(--border); font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; color: var(--muted); flex-wrap: wrap; }
+  .hero-byline strong { color: var(--ink); font-weight: 500; }
+
+  /* ── STAT BAR ── */
+  .stat-bar { display: grid; grid-template-columns: repeat(5, 1fr); border-bottom: 1px solid var(--border); }
+  .stat-cell { padding: 24px 28px; border-right: 1px solid var(--border); }
+  .stat-cell:last-child { border-right: none; }
+  .stat-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
+  .stat-num { font-family: var(--serif); font-size: 36px; font-weight: 300; line-height: 1; margin-bottom: 4px; }
+  .stat-num.red { color: var(--red); }
+  .stat-num.green { color: var(--green); }
+  .stat-sub { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 0.04em; }
+
+  /* ── MAIN LAYOUT ── */
+  .main { display: grid; grid-template-columns: 1fr 300px; gap: 0; }
+  .content { padding: 56px 48px 56px 48px; border-right: 1px solid var(--border); }
+  .sidebar { padding: 40px 32px; }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 64px; }
+  .section-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; color: var(--muted); display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .section-label span { color: var(--red); }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); max-width: 80px; }
+  .section h2 { font-family: var(--serif); font-size: clamp(24px, 3vw, 34px); font-weight: 400; line-height: 1.2; letter-spacing: -0.01em; color: var(--ink); margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
+  .section h3 { font-family: var(--serif); font-size: 20px; font-weight: 500; color: var(--ink); margin: 32px 0 12px; }
+
+  /* ── BODY TEXT ── */
+  .drop-cap::first-letter { font-family: var(--serif); font-size: 72px; font-weight: 400; float: left; line-height: 0.8; margin: 6px 8px 0 0; color: var(--ink); }
+  p { font-family: var(--serif); font-size: 17px; line-height: 1.75; color: var(--ink-light); margin-bottom: 20px; }
+  p strong { color: var(--ink); font-weight: 500; }
+  p em { font-style: italic; }
+
+  /* ── BLOCKQUOTE ── */
+  .pull-quote { background: var(--ink); color: var(--cream); padding: 32px 36px; margin: 36px 0; border-radius: 2px; }
+  .pull-quote-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; color: rgba(245,240,232,0.4); margin-bottom: 16px; }
+  .pull-quote p { font-family: var(--serif); font-size: 18px; font-style: italic; line-height: 1.6; color: var(--cream); margin: 0 0 12px; font-weight: 300; }
+  .pull-quote-source { font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em; color: rgba(245,240,232,0.4); }
+
+  /* ── FORCE BLOCKS ── */
+  .force-block { border-left: 2px solid var(--ink); padding: 0 0 0 24px; margin: 28px 0; }
+  .force-block p { margin-bottom: 0; }
+  .force-block strong { color: var(--ink); }
+
+  /* ── LEG CARDS ── */
+  .legs { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); margin: 32px 0; border: 1px solid var(--border); }
+  .leg { background: var(--cream); padding: 28px 28px; }
+  .leg-num { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 12px; }
+  .leg-title { font-family: var(--serif); font-size: 20px; font-weight: 500; color: var(--ink); margin-bottom: 8px; }
+  .leg-status { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; padding: 3px 10px; display: inline-block; margin-bottom: 16px; }
+  .leg-status.done { background: var(--ink); color: var(--cream); }
+  .leg-status.now { background: var(--red); color: var(--cream); }
+  .leg p { font-size: 14px; line-height: 1.6; color: var(--muted); margin: 0; }
+
+  /* ── BUCKET CANVAS ── */
+  #bucket-canvas { display: block; width: 100%; height: 320px; background: #0a0a12; border-radius: 4px; margin: 28px 0; }
+
+  /* ── BUCKET LIST ── */
+  .bucket-list { margin: 0 0 28px; }
+  .bucket-item { display: grid; grid-template-columns: 28px 1fr; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--border); align-items: start; }
+  .bucket-num { font-family: var(--mono); font-size: 10px; color: var(--muted); padding-top: 3px; }
+  .bucket-title { font-family: var(--serif); font-size: 17px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+  .bucket-desc { font-family: var(--serif); font-size: 14px; color: var(--muted); line-height: 1.5; margin-bottom: 10px; }
+  .bucket-tickers { display: flex; gap: 8px; flex-wrap: wrap; }
+  .ticker-pill { font-family: var(--mono); font-size: 10px; padding: 3px 10px; border: 1px solid var(--border); color: var(--ink-light); border-radius: 2px; letter-spacing: 0.04em; }
+
+  /* ── POSITIONS TABLE ── */
+  .pos-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-family: var(--mono); font-size: 12px; }
+  .pos-table th { text-align: left; font-size: 9px; letter-spacing: 0.1em; color: var(--muted); padding: 8px 0; border-bottom: 1px solid var(--border); font-weight: 400; }
+  .pos-table td { padding: 12px 0; border-bottom: 1px solid var(--border); color: var(--ink-light); vertical-align: top; }
+  .pos-table td:last-child { text-align: right; }
+  .pos-table .ret { font-family: var(--serif); font-size: 20px; font-weight: 300; }
+  .pos-table .ret.green { color: var(--green); }
+  .pos-name { color: var(--ink); font-weight: 500; display: block; margin-bottom: 2px; }
+  .pos-sub { color: var(--muted); font-size: 10px; }
+
+  /* ── DECISION TREE ── */
+  .decision-tree { margin: 28px 0; }
+  .decision-item { display: flex; gap: 20px; padding: 20px 0; border-bottom: 1px solid var(--border); }
+  .decision-q { font-family: var(--serif); font-size: 15px; font-style: italic; color: var(--ink); flex: 0 0 260px; line-height: 1.5; }
+  .decision-a { font-family: var(--serif); font-size: 15px; color: var(--ink-light); line-height: 1.5; flex: 1; }
+  .decision-a strong { color: var(--ink); }
+
+  /* ── RISK GRID ── */
+  .risk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); margin: 24px 0; }
+  .risk-cell { background: var(--cream); padding: 20px 20px; }
+  .risk-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
+  .risk-text { font-family: var(--serif); font-size: 14px; color: var(--ink-light); line-height: 1.55; }
+
+  /* ── VERDICT ── */
+  .verdict-box { background: var(--ink); color: var(--cream); padding: 48px; margin: 48px 0 0; }
+  .verdict-box h2 { font-family: var(--serif); font-size: 36px; font-weight: 400; color: var(--cream); margin-bottom: 16px; line-height: 1.15; }
+  .verdict-box h2 em { color: #e87461; font-style: italic; }
+  .verdict-box p { color: rgba(245,240,232,0.7); font-size: 16px; line-height: 1.7; margin-bottom: 16px; }
+  .verdict-box p:last-child { margin: 0; }
+  .verdict-box strong { color: var(--cream); }
+
+  /* ── SIDEBAR ── */
+  .sidebar-block { margin-bottom: 40px; }
+  .sidebar-title { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; color: var(--muted); border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 16px; }
+  .sidebar-row { display: flex; justify-content: space-between; align-items: baseline; padding: 9px 0; border-bottom: 1px solid var(--border); }
+  .sidebar-name { font-family: var(--mono); font-size: 11px; color: var(--ink-light); }
+  .sidebar-val { font-family: var(--serif); font-size: 17px; font-weight: 300; }
+  .sidebar-val.red { color: var(--red); }
+  .sidebar-val.green { color: var(--green); }
+  .sidebar-card { background: var(--cream-dark); border: 1px solid var(--border); padding: 16px; margin-bottom: 10px; border-radius: 2px; }
+  .sidebar-card-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
+  .sidebar-card-text { font-family: var(--serif); font-size: 13px; color: var(--ink-light); line-height: 1.5; }
+
+  /* ── FOOTER ── */
+  footer { border-top: 1px solid var(--border); padding: 28px 48px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  footer p { font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em; color: var(--muted); }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--ink); }
+
+  /* ── PERFORMANCE CHART ── */
+  #perf-chart { display: block; width: 100%; height: 180px; }
+
+  /* ── STICKER ── */
+  .vt-sticker-wrap { margin-top: 16px; margin-bottom: 10px; }
+  .vt-sticker {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--ink); color: var(--cream);
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em;
+    padding: 7px 14px 7px 10px; border-radius: 999px;
+    cursor: pointer; user-select: none;
+    box-shadow: 2px 2px 0px var(--border);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    position: relative;
+  }
+  .vt-sticker:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0px var(--border); }
+  .vt-sticker:active { transform: translate(1px,1px); box-shadow: 1px 1px 0px var(--border); }
+  .vt-sticker-pulse {
+    width: 7px; height: 7px; border-radius: 50%; background: #4ade80;
+    position: relative; flex-shrink: 0;
+  }
+  .vt-sticker-pulse::after {
+    content: ''; position: absolute; inset: -3px; border-radius: 50%;
+    background: rgba(74,222,128,0.35);
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{transform:scale(1);opacity:0.8;} 50%{transform:scale(1.7);opacity:0;} }
+  .vt-sticker-text { color: var(--cream); }
+  .vt-sticker-arrow { color: rgba(245,240,232,0.5); font-size: 11px; }
+
+  /* ── VALUATION TEASER ── */
+  .val-teaser { margin-top: 20px; border: 1px solid var(--border); border-radius: 3px; overflow: hidden; background: var(--cream-dark); }
+  .val-teaser-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; color: var(--muted); padding: 10px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .val-teaser-badge { background: var(--green); color: #fff; padding: 2px 8px; border-radius: 2px; font-size: 8px; letter-spacing: 0.08em; }
+  .val-teaser-tabs { display: flex; border-bottom: 1px solid var(--border); }
+  .vt-tab { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; padding: 8px 16px; background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; color: var(--muted); transition: color 0.15s, border-color 0.15s; }
+  .vt-tab:hover { color: var(--ink); }
+  .vt-tab.active { color: var(--ink); border-bottom: 2px solid var(--ink); }
+  .vt-panel { display: none; padding: 16px; }
+  .vt-panel.active { display: block; animation: vtFade 0.18s ease; }
+  @keyframes vtFade { from{opacity:0;transform:translateY(3px);}to{opacity:1;transform:none;} }
+  .vt-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 14px; border-radius: 2px; overflow: hidden; }
+  .vt-stat { background: var(--cream); padding: 10px 12px; }
+  .vt-stat-label { font-family: var(--mono); font-size: 8px; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 5px; }
+  .vt-stat-val { font-family: var(--serif); font-size: 16px; font-weight: 400; line-height: 1; }
+  .vt-stat-val.green { color: var(--green); }
+  .vt-stat-val.small { font-size: 12px; }
+  .vt-bar-row { display: grid; grid-template-columns: 110px 1fr 72px 60px; gap: 8px; align-items: center; padding: 5px 0; border-bottom: 1px solid rgba(212,205,192,0.5); }
+  .vt-bar-row:last-child { border-bottom: none; }
+  .vt-bar-name { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 0.04em; }
+  .vt-bar-name.composite { color: #2563eb; font-weight: 500; }
+  .vt-bar-wrap { position: relative; height: 5px; background: rgba(0,0,0,0.07); border-radius: 1px; }
+  .vt-bar-fill { height: 100%; border-radius: 1px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); }
+  .vt-bar-fill.up { background: var(--green); }
+  .vt-bar-fill.dn { background: var(--red); }
+  .vt-bar-fill.near { background: #b07d2a; }
+  .vt-bar-fill.composite { background: #2563eb; }
+  .vt-bar-marker { position: absolute; top: -3px; width: 1px; height: 11px; background: rgba(26,24,20,0.3); }
+  .vt-bar-val { font-family: var(--mono); font-size: 9px; color: var(--ink-light); text-align: right; }
+  .vt-bar-vs { font-family: var(--mono); font-size: 9px; text-align: right; font-weight: 500; }
+  .vt-bar-vs.up { color: var(--green); }
+  .vt-bar-vs.dn { color: var(--red); }
+  .vt-bar-vs.near { color: #b07d2a; }
+  .vt-cta-block { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 16px; border-top: 1px solid var(--border); background: var(--ink); flex-wrap: wrap; }
+  .vt-cta-eyebrow { font-family: var(--mono); font-size: 8px; letter-spacing: 0.1em; color: rgba(245,240,232,0.35); margin-bottom: 5px; }
+  .vt-cta-headline { font-family: var(--serif); font-size: 17px; font-weight: 400; color: var(--cream); line-height: 1.2; margin-bottom: 4px; }
+  .vt-cta-sub { font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em; color: rgba(245,240,232,0.4); }
+  .vt-cta-btn { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; padding: 9px 18px; background: var(--cream); color: var(--ink); text-decoration: none; border-radius: 2px; white-space: nowrap; flex-shrink: 0; transition: opacity 0.15s; }
+  .vt-cta-btn:hover { opacity: 0.85; }
+  .vt-cta-btn span { margin-left: 4px; }
+
+  @media (max-width: 900px) {
+    .topbar { grid-template-columns: 1fr 1fr; gap: 4px; padding: 12px 20px; }
+    .topbar-center { display: none; }
+    .hero { padding: 32px 20px 0; }
+    .stat-bar { grid-template-columns: 1fr 1fr; }
+    .stat-cell:nth-child(5) { grid-column: span 2; }
+    .main { grid-template-columns: 1fr; }
+    .content { padding: 32px 20px; border-right: none; border-bottom: 1px solid var(--border); }
+    .sidebar { padding: 32px 20px; }
+    .legs { grid-template-columns: 1fr; }
+    .hero-byline { gap: 16px; }
+    .decision-item { flex-direction: column; gap: 8px; }
+    .decision-q { flex: none; }
+    .risk-grid { grid-template-columns: 1fr; }
+    .verdict-box { padding: 32px 20px; }
+    footer { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="topbar-left">VOL. II · SPECIAL REPORT<br>EQUITY RESEARCH · SOFTWARE</div>
+  <div class="topbar-center">INSIGHT · INVEST</div>
+  <div class="topbar-right">MAY 30, 2026<br>KUALA LUMPUR, MY</div>
+</header>
+
+<!-- TICKER TAPE -->
+<div class="ticker-wrap">
+  <div class="ticker-inner" id="tape"></div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-meta">
+    <div class="hero-tag">SOFTWARE RERATING <span class="sep">·</span> <span>MARKET STRUCTURE</span></div>
+    <div class="hero-tag">SECTOR ANALYSIS</div>
+  </div>
+  <h1>The People Who Think They Missed It Are About to Make the <em>Most Money.</em></h1>
+  <p class="hero-lede">Software stocks were left for dead. The SaaSpocalypse narrative convinced Wall Street to dump the entire sector. Here is why that panic was the setup — and why the real trade is still ahead.</p>
+  <div class="hero-byline">
+    <div>ANALYSIS BY <strong>Insight Invest</strong></div>
+    <div>·</div>
+    <div>BASED ON <strong>IGV · NOW · CRWD · ZETA · SNOW</strong></div>
+    <div>·</div>
+    <div>PERIOD DATA <strong>JAN 2 — MAY 30, 2026</strong></div>
+  </div>
+</section>
+
+
+
+<!-- MAIN -->
+<div class="main">
+<div class="content">
+
+  <!-- SECTION 01 — MACRO -->
+  <div class="section">
+    <div class="section-label"><span>01</span> SETTING THE SCENE — MACRO</div>
+    <h2>Why the Market Was Ripe for a Software Comeback</h2>
+    <p class="drop-cap">Before we talk about individual stocks, we need to understand the environment we are operating in. Markets don't move in isolation. Software didn't recover because a few companies had good earnings. It recovered because the macro backdrop quietly shifted — and most people missed it.</p>
+    <p>Three things converged. First, the rate environment stabilised. Growth stocks need falling or stable rates to breathe — when rates are rising, investors discount future earnings more aggressively and high-multiple stocks get punished. The stabilisation gave software room to re-expand its multiples.</p>
+    <p>Second, the US-Iran geopolitical shock sent investors fleeing into real assets — energy, gold, defensives. This caused a broad market selloff that dragged software down even further than its fundamentals justified. When that fear faded, money had to find a home. And software was sitting at generational lows.</p>
+    <p>Third, and most importantly — <strong>risk appetite returned.</strong> When investors feel safe, they reach for growth. Software is the purest growth trade in the market. These three forces didn't just create a bounce. They created the conditions for a full-scale sector rerating.</p>
+
+    <div class="pull-quote">
+      <div class="pull-quote-label">THE MACRO SETUP</div>
+      <p>"Stabilising rates. Fading geopolitical fear. Risk appetite returning. You couldn't have designed a better entry point for beaten-down growth stocks if you tried."</p>
+      <div class="pull-quote-source">Insight Invest · Macro Framework · May 2026</div>
+    </div>
+  </div>
+
+  <!-- SECTION 02 — SECTOR ROTATION -->
+  <div class="section">
+    <div class="section-label"><span>02</span> THE SECTOR ROTATION STORY</div>
+    <h2>How Software Became the Most Hated Sector in the Market</h2>
+    <p>Here is something most investors forget: <em>the best opportunities are always hiding inside the most hated narratives.</em> And in the first half of 2026, there was no narrative more hated than enterprise software.</p>
+
+    <div class="force-block">
+      <p><strong>The SaaSpocalypse.</strong> The fear was simple and terrifying — AI agents would replace every SaaS subscription. Why pay for software when AI does the job for free? Salesforce fell 26% despite a 24.9% earnings beat. ServiceNow fell 9–11% in single sessions despite intact subscription growth. The fear was vivid. The selloff was brutal.</p>
+    </div>
+
+    <div class="force-block">
+      <p><strong>The institutional rotation.</strong> Money physically had to go somewhere. It went into semiconductors, AI infrastructure, and mega-cap tech. Nvidia. Broadcom. The picks-and-shovels of AI. Software got left behind entirely as institutions chased the AI infrastructure trade.</p>
+    </div>
+
+    <div class="force-block">
+      <p><strong>The technicals amplified it.</strong> The IGV — the iShares Expanded Tech-Software ETF — fell over 30% from its September 2025 highs. Its RSI dipped below 20. To put that in context: that is the most oversold reading in nearly 30 years. The selling had become self-reinforcing, completely detached from the underlying fundamentals of the businesses.</p>
+    </div>
+
+    <p>That is your setup. Extreme pessimism. Extreme undervaluation. Institutions underweight. And fundamentals that hadn't actually deteriorated. The SaaSpocalypse was a fear, not a fact.</p>
+  </div>
+
+  <!-- PERFORMANCE VIZ -->
+  <div class="section">
+    <div class="section-label"><span>03</span> THE CATALYST — WHAT CHANGED</div>
+    <h2>Earnings Season Flipped the Narrative Overnight</h2>
+
+    <p>The turning point wasn't a Fed announcement. It wasn't a macro data point. It was earnings calls. Specifically — the language on those earnings calls.</p>
+    <p>Company after company sat down with analysts and said the same thing: <strong>AI isn't killing our business. AI is our business.</strong></p>
+
+    <div style="margin: 28px 0;">
+      <div style="font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; color: var(--muted); border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 0;">SINGLE-NAME CATALYST MOVES · Q1 2026 EARNINGS</div>
+      <canvas id="perf-chart"></canvas>
+    </div>
+
+    <p>Snowflake was the landmark moment. The company announced a $6 billion cloud and AI deal with Amazon, surged 36% — its best single day on record. The CEO told analysts: <strong>"We're seeing customers deploy and scale AI workloads at a faster pace."</strong></p>
+    <p>That single data point reframed everything. The market had priced in disruption. It forgot to price in adoption. Enterprise customers aren't replacing SaaS — they're buying <em>more</em> software to manage, deploy, and extract value from AI.</p>
+    <p>The options market noticed immediately. Call volumes on IGV ran four-to-one against puts. More than 50,000 calls traded in a single session versus under 6,000 puts. Smart money was repositioning in real time.</p>
+  </div>
+
+  <!-- TWO LEGS -->
+  <div class="section">
+    <div class="section-label"><span>04</span> THE FRAMEWORK — TWO LEGS</div>
+    <h2>Understanding Where We Actually Are in This Trade</h2>
+    <p>The most important thing to understand right now is that this rerating has two distinct legs. They require completely different thinking. Most people confuse them — and that confusion is expensive.</p>
+
+    <div class="legs">
+      <div class="leg">
+        <div class="leg-num">LEG ONE</div>
+        <div class="leg-title">The Relief Rally</div>
+        <div class="leg-status done">COMPLETE</div>
+        <p>Software survived. The SaaSpocalypse didn't materialise. Valuations that had been compressed on existential fear snapped back as that fear proved overblown. IGV +29% from April lows. This leg rewarded the early believers — the ones who bought into maximum pessimism.</p>
+      </div>
+      <div class="leg">
+        <div class="leg-num">LEG TWO</div>
+        <div class="leg-title">The Growth Rerating</div>
+        <div class="leg-status now">IN PROGRESS</div>
+        <p>The market stops asking "will these companies survive AI?" and starts asking "how much will they grow because of AI?" This is where new revenue lines get priced in. Where AI monetisation becomes a real earnings driver. This leg rewards the patient — and the ones paying attention right now.</p>
+      </div>
+    </div>
+
+    <p>Here is the key insight: <strong>the IGV is still down roughly 19% for the year. The Nasdaq is up 18%.</strong> That gap — nearly 37 percentage points — doesn't exist because software is structurally broken. It exists because institutions are still underweight after rotating out in 2025. When they come back — and they have to come back — they don't buy a little. They buy a lot.</p>
+  </div>
+
+  <!-- PULLBACK -->
+  <div class="section">
+    <div class="section-label"><span>05</span> THE PULLBACK THESIS</div>
+    <h2>Why a Dip Is the Entry, Not the Exit</h2>
+    <p>Before we go further — a note of honesty. <strong>A pullback is coming. Almost certainly.</strong> The IGV is up nearly 30% from its April lows. ServiceNow ran 14% in a single day. These moves don't go in a straight line, and anyone telling you otherwise is selling something.</p>
+    <p>The leveraged ETFs in particular — NOWL, CRWL, ZETX — need sustained upward momentum to work properly. A sideways or choppy market eats them alive through daily decay. If you missed the first leg, chasing here with full size is not the move.</p>
+
+    <div class="pull-quote">
+      <div class="pull-quote-label">THE CONTRARIAN FRAMING</div>
+      <p>"The pullback is not the trade failing. The pullback is the trade offering you a second invitation. Most people will mistake the dip for a reason to stay out. The ones who understand the thesis will see it as the entry they were waiting for."</p>
+      <div class="pull-quote-source">Insight Invest · May 2026</div>
+    </div>
+
+    <p>The people who think they missed the software rerating are actually the best-positioned people in the market right now. They haven't chased. They haven't bought the top of the relief rally. They're sitting in cash, watching, and a pullback gives them the cleanest entry into leg two at a reset price.</p>
+  </div>
+
+  <!-- THREE BUCKETS -->
+  <div class="section">
+    <div class="section-label"><span>06</span> THE MICRO — THREE BUCKETS OF WINNERS</div>
+    <h2>Not All Software Is the Same. Here Is How to Think About It.</h2>
+    <p>The mistake most people make is treating software as a monolith. It isn't. There are three distinct categories of companies inside this rerating — and they have different risk profiles, different upside drivers, and different timelines. Understanding which bucket you're in matters enormously.</p>
+
+    <canvas id="bucket-canvas"></canvas>
+
+    <div class="bucket-list">
+      <div class="bucket-item">
+        <div class="bucket-num">01</div>
+        <div>
+          <div class="bucket-title">The Enablers</div>
+          <div class="bucket-desc">These are the platforms that every enterprise needs to <em>orchestrate</em> AI. The fear was that AI would replace them. The reality is that AI made them more essential — every company deploying AI needs these platforms to manage, route, and govern those workflows. AI made them stickier, not obsolete.</div>
+          <div class="bucket-tickers">
+            <span class="ticker-pill">ServiceNow</span>
+            <span class="ticker-pill">Salesforce</span>
+            <span class="ticker-pill">Workday</span>
+          </div>
+
+          <!-- VALUATION TEASER -->
+          <div class="vt-sticker-wrap">
+            <div class="vt-sticker" onclick="this.closest('.bucket-item').querySelector('.val-teaser').scrollIntoView({behavior:'smooth',block:'nearest'})">
+              <span class="vt-sticker-pulse"></span>
+              <span class="vt-sticker-text">Live valuation — tap to explore</span>
+              <span class="vt-sticker-arrow">↓</span>
+            </div>
+          </div>
+          <div class="val-teaser">
+            <div class="val-teaser-label">INSIGHTVALUE COMPOSITE · MAY 30, 2026 <span class="val-teaser-badge">All Undervalued</span></div>
+
+            <div class="val-teaser-tabs">
+              <button class="vt-tab active" onclick="vtSwitch('now',this)">NOW</button>
+              <button class="vt-tab" onclick="vtSwitch('crm',this)">CRM</button>
+              <button class="vt-tab" onclick="vtSwitch('wday',this)">WDAY</button>
+            </div>
+
+            <div class="vt-panel active" id="vt-now">
+              <div class="vt-stats">
+                <div class="vt-stat">
+                  <div class="vt-stat-label">Fair Value</div>
+                  <div class="vt-stat-val green">$145.32</div>
+                </div>
+                <div class="vt-stat">
+                  <div class="vt-stat-label">Market Price</div>
+                  <div class="vt-stat-val">$124.37</div>
+                </div>
+                <div class="vt-stat">
+                  <div class="vt-stat-label">Implied Upside</div>
+                  <div class="vt-stat-val green">+16.8%</div>
+                </div>
+                <div class="vt-stat">
+                  <div class="vt-stat-label">Method Range</div>
+                  <div class="vt-stat-val small">$77.92 – $398.41</div>
+                </div>
+              </div>
+              <div class="vt-bars" id="vt-bars-now"></div>
+            </div>
+
+            <div class="vt-panel" id="vt-crm">
+              <div class="vt-stats">
+                <div class="vt-stat">
+                  <div class="vt-stat-label">Fair Value</div>
+                  <div class="vt-stat-val green">$317.30</div>
+                </div>
+                <div class="vt-stat">
+                  <div class="vt-stat-label">Market Price</div>
+                  <div class="vt-stat-val">$191.10</div>
+                </div>
+                <div class="vt-stat">
+                  <div class="vt-stat-label">Implied Upside</div>
+                  <div class="vt-stat-val green">+66.0%</div>
+                </div>
+                <div class="vt-stat">
+                  <div class="vt-stat-label">Method Range</div>
+                  <div class="vt-stat-val small">$194.91 – $558.03</div>
+                </div>
+              </div>
+              <div class="vt-bars" id="vt-bars-crm"></div>
+            </div>
+
+            <div class="vt-panel" id="vt-wday">
+              <div class="vt-stats">
+                <div class="vt-stat">
+                  <div class="vt-stat-label">Fair Value</div>
+                  <div class="vt-stat-val green">$258.89</div>
+                </div>
+                <div class="vt-stat">
+                  <div class="vt-stat-label">Market Price</div>
+                  <div class="vt-stat-val">$146.19</div>
+                </div>
+                <div class="vt-stat">
+                  <div class="vt-stat-label">Implied Upside</div>
+                  <div class="vt-stat-val green">+77.1%</div>
+                </div>
+                <div class="vt-stat">
+                  <div class="vt-stat-label">Method Range</div>
+                  <div class="vt-stat-val small">$97.44 – $788.90</div>
+                </div>
+              </div>
+              <div class="vt-bars" id="vt-bars-wday"></div>
+            </div>
+
+            <div class="vt-cta-block">
+              <div class="vt-cta-left">
+                <div class="vt-cta-eyebrow">InsightInvest · Valuation Tool</div>
+                <div class="vt-cta-headline">Value any company.<br>The easy way.</div>
+                <div class="vt-cta-sub">10 methods. One composite. No spreadsheets.</div>
+              </div>
+              <a href="https://www.leiholding.com/insightinvest-landing" class="vt-cta-btn">Try the tool <span>→</span></a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="bucket-item">
+        <div class="bucket-num">02</div>
+        <div>
+          <div class="bucket-title">The Data Platforms</div>
+          <div class="bucket-desc">Every AI model needs clean, structured, accessible data. These companies own that layer. You cannot build an enterprise AI system without solving the data problem first — and these are the companies that solve it. The AI boom doesn't threaten them. It accelerates them.</div>
+          <div class="bucket-tickers">
+            <span class="ticker-pill">Snowflake</span>
+            <span class="ticker-pill">Databricks</span>
+            <span class="ticker-pill">MongoDB</span>
+          </div>
+        </div>
+      </div>
+      <div class="bucket-item">
+        <div class="bucket-num">03</div>
+        <div>
+          <div class="bucket-title">Vertical AI</div>
+          <div class="bucket-desc">These companies have embedded AI natively into their product and are charging for it as a brand new revenue line. This isn't cost savings — this is revenue that simply didn't exist two years ago. The market hasn't fully priced this in because it requires believing the monetisation story, not just the survival story.</div>
+          <div class="bucket-tickers">
+            <span class="ticker-pill">Zeta Global</span>
+            <span class="ticker-pill">Palantir</span>
+            <span class="ticker-pill">GitLab</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PORTFOLIO LENS -->
+  <div class="section">
+    <div class="section-label"><span>07</span> THE PORTFOLIO LENS — REAL POSITIONS</div>
+    <h2>What the Actual Trades Looked Like</h2>
+    <p>Theory is useful. But the proof is in the positions. Here is what catching the rerating early actually looked like in a real portfolio — and what it tells you about how to think about the next leg.</p>
+
+    <table class="pos-table">
+      <thead>
+        <tr>
+          <th>TICKER</th>
+          <th>UNDERLYING</th>
+          <th>TYPE</th>
+          <th style="text-align:right">RETURN YTD</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="pos-name">CRWL</span><span class="pos-sub">GraniteShares 2x Long CRWD</span></td>
+          <td>CrowdStrike · Cybersecurity</td>
+          <td>2x Leveraged ETF</td>
+          <td><span class="ret green">+240%</span></td>
+        </tr>
+        <tr>
+          <td><span class="pos-name">NOWL</span><span class="pos-sub">GraniteShares 2x Long NOW</span></td>
+          <td>ServiceNow · Enterprise Software</td>
+          <td>2x Leveraged ETF</td>
+          <td><span class="ret green">+144%</span></td>
+        </tr>
+        <tr>
+          <td><span class="pos-name">ZETX</span><span class="pos-sub">Defiance 2x Long ZETA</span></td>
+          <td>Zeta Global · AI Marketing</td>
+          <td>2x Leveraged ETF</td>
+          <td><span class="ret green">+98%</span></td>
+        </tr>
+        <tr>
+          <td><span class="pos-name">HOOG</span><span class="pos-sub">Leveraged Robinhood (HOOD)</span></td>
+          <td>Robinhood · Fintech</td>
+          <td>2x Leveraged ETF</td>
+          <td><span class="ret green">+56%</span></td>
+        </tr>
+        <tr>
+          <td><span class="pos-name">AMD</span><span class="pos-sub">Advanced Micro Devices</span></td>
+          <td>AMD · Semiconductors</td>
+          <td>Direct Equity</td>
+          <td><span class="ret green">+138%</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>A note on the leveraged ETFs — these are not buy-and-hold instruments. They are designed for short-to-medium term directional conviction. They compound daily, which means they outperform dramatically in trending markets and decay in sideways ones. The returns above reflect a market that trended hard. <strong>Always size these positions appropriately.</strong></p>
+  </div>
+
+  <!-- RISK -->
+  <div class="section">
+    <div class="section-label"><span>08</span> THE RISK FRAMEWORK</div>
+    <h2>What Kills This Thesis — and When to Worry</h2>
+    <p>Every conviction trade has a kill condition. Here are the four scenarios that would force a re-evaluation of the software thesis.</p>
+
+    <div class="risk-grid">
+      <div class="risk-cell">
+        <div class="risk-label">EARNINGS DISAPPOINTMENT</div>
+        <div class="risk-text">If Q2 2026 earnings fail to show AI revenue acceleration, the growth rerating thesis collapses. The relief rally was priced on survival. Leg two requires proof of growth.</div>
+      </div>
+      <div class="risk-cell">
+        <div class="risk-label">LEVERAGED ETF DECAY</div>
+        <div class="risk-text">NOWL, CRWL, ZETX need upward momentum to work. A prolonged sideways or choppy market erodes these positions through daily rebalancing costs. Not a thesis killer — but a position sizing issue.</div>
+      </div>
+      <div class="risk-cell">
+        <div class="risk-label">VALUATION STRETCH</div>
+        <div class="risk-text">After a 30%+ move, some names are approaching fair value on current estimates. If the growth acceleration doesn't materialise in the numbers, multiples compress again.</div>
+      </div>
+      <div class="risk-cell">
+        <div class="risk-label">MACRO DETERIORATION</div>
+        <div class="risk-text">A rate spike, a recession signal, or a fresh geopolitical shock would send money back into defensives. Growth stocks get hit first and hardest in risk-off environments.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VERDICT -->
+  <div class="section">
+    <div class="section-label"><span>09</span> THE VERDICT</div>
+    <h2>Is It Too Late? The Decision Tree.</h2>
+    <p>The honest answer is: it depends entirely on which part of the trade you're entering. Here is how to think through it.</p>
+
+    <div class="decision-tree">
+      <div class="decision-item">
+        <div class="decision-q">If you believe leg two exists and AI monetisation is real…</div>
+        <div class="decision-a"><strong>No, it's not too late.</strong> You're buying momentum, not value — but the fundamental thesis is actually stronger now than it was in April, because earnings have begun to confirm it.</div>
+      </div>
+      <div class="decision-item">
+        <div class="decision-q">If you want leveraged single-stock ETF exposure…</div>
+        <div class="decision-a"><strong>Wait for a pullback.</strong> The risk/reward on chasing here with full size is worse than April. The thesis is intact — but entry point matters with leveraged instruments.</div>
+      </div>
+      <div class="decision-item">
+        <div class="decision-q">If you want lower-risk software exposure…</div>
+        <div class="decision-a"><strong>IGV still has room.</strong> The ETF is still down roughly 19% YTD while the Nasdaq is up 18%. A diversified software exposure through IGV captures the sector rerating without single-stock or leverage risk.</div>
+      </div>
+      <div class="decision-item">
+        <div class="decision-q">If you're not sure and want to wait…</div>
+        <div class="decision-a"><strong>That's actually fine.</strong> A pullback is coming. The people who wait for the reset and buy into weakness are the ones who catch leg two at the right price. Patience here is a strategy, not indecision.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VERDICT BOX -->
+  <div class="verdict-box">
+    <h2>Software was left for dead.<br>The SaaSpocalypse <em>never came.</em></h2>
+    <p>Leg one rewarded the believers. The pullback rewards the patient. Leg two rewards the ones paying attention right now.</p>
+    <p><strong>The question isn't whether you missed it. The question is — are you going to miss it twice?</strong></p>
+  </div>
+
+</div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+
+  <div class="sidebar-block">
+    <div class="sidebar-title">PERIOD PERFORMANCE · YTD 2026</div>
+    <div class="sidebar-row"><span class="sidebar-name">IGV (Software)</span><span class="sidebar-val red">−19%</span></div>
+    <div class="sidebar-row"><span class="sidebar-name">QQQ (Nasdaq)</span><span class="sidebar-val green">+18%</span></div>
+    <div class="sidebar-row"><span class="sidebar-name">SPY (S&amp;P 500)</span><span class="sidebar-val green">+6%</span></div>
+    <div class="sidebar-row"><span class="sidebar-name">XLE (Energy)</span><span class="sidebar-val red">−8%</span></div>
+    <div class="sidebar-row"><span class="sidebar-name">SMH (Semis)</span><span class="sidebar-val green">+22%</span></div>
+  </div>
+
+  <div class="sidebar-block">
+    <div class="sidebar-title">SINGLE-NAME CATALYST MOVES</div>
+    <div class="sidebar-row"><span class="sidebar-name">ServiceNow (1d)</span><span class="sidebar-val green">+14%</span></div>
+    <div class="sidebar-row"><span class="sidebar-name">Snowflake (4d)</span><span class="sidebar-val green">+50%</span></div>
+    <div class="sidebar-row"><span class="sidebar-name">Workday (1wk)</span><span class="sidebar-val green">+18%</span></div>
+    <div class="sidebar-row"><span class="sidebar-name">Atlassian (1wk)</span><span class="sidebar-val green">+22%</span></div>
+    <div class="sidebar-row"><span class="sidebar-name">Twilio (1wk)</span><span class="sidebar-val green">+28%</span></div>
+    <div class="sidebar-row"><span class="sidebar-name">Salesforce (1wk)</span><span class="sidebar-val green">+16%</span></div>
+  </div>
+
+  <div class="sidebar-block">
+    <div class="sidebar-title">THESIS CHECKLIST</div>
+    <div class="sidebar-card">
+      <div class="sidebar-card-label">VALUATIONS</div>
+      <div class="sidebar-card-text">SaaS multiples still below 5-year averages despite the relief rally. Room to re-expand if earnings follow through.</div>
+    </div>
+    <div class="sidebar-card">
+      <div class="sidebar-card-label">FUNDAMENTALS</div>
+      <div class="sidebar-card-text">Earnings beats across the board. ARR growth intact. GAAP profitability emerging across the sector.</div>
+    </div>
+    <div class="sidebar-card">
+      <div class="sidebar-card-label">SENTIMENT</div>
+      <div class="sidebar-card-text">Flipped from maximum pessimism to cautious optimism. Institutions still rebuilding positions — not yet crowded.</div>
+    </div>
+    <div class="sidebar-card">
+      <div class="sidebar-card-label">NARRATIVE SHIFT</div>
+      <div class="sidebar-card-text">CEOs calling AI a revenue driver, not a threat. The SaaSpocalypse framing is dead. Adoption is the new story.</div>
+    </div>
+    <div class="sidebar-card">
+      <div class="sidebar-card-label">CATALYST PIPELINE</div>
+      <div class="sidebar-card-text">Q2 2026 earnings will validate or break the AI monetisation thesis. The next leg depends on the numbers.</div>
+    </div>
+  </div>
+
+  <div class="sidebar-block">
+    <div class="sidebar-title">PORTFOLIO POSITIONS · YTD RETURNS</div>
+    <div class="sidebar-row"><span class="sidebar-name">CRWL</span><span class="sidebar-val green">+240%</span></div>
+    <div class="sidebar-row"><span class="sidebar-name">AMD</span><span class="sidebar-val green">+138%</span></div>
+    <div class="sidebar-row"><span class="sidebar-name">NOWL</span><span class="sidebar-val green">+144%</span></div>
+    <div class="sidebar-row"><span class="sidebar-name">ZETX</span><span class="sidebar-val green">+98%</span></div>
+    <div class="sidebar-row"><span class="sidebar-name">HOOG</span><span class="sidebar-val green">+56%</span></div>
+    <div class="sidebar-row"><span class="sidebar-name">AVGX</span><span class="sidebar-val green">+79%</span></div>
+  </div>
+
+  <div class="sidebar-block">
+    <div class="sidebar-title">NOT INVESTMENT ADVICE</div>
+    <div class="sidebar-card">
+      <div class="sidebar-card-text">This report is an independent analytical perspective. It is not financial advice. All investments carry risk. Past performance does not indicate future results. Always do your own research.</div>
+    </div>
+  </div>
+
+</aside>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>INSIGHT · INVEST · KUALA LUMPUR · MAY 2026</p>
+  <p>Independent publication · Not investment advice · Work shown, opinions own</p>
+  <p><a href="https://www.leiholding.com">leiholding.com</a> · <a href="https://www.patreon.com/15273026/join">Join via Patreon →</a></p>
+</footer>
+
+<script>
+// VALUATION TEASER
+const VT = {
+  now:  { market:124.37, max:398.41, methods:[
+    {n:'DCF-20',v:234.95,vs:+88.9,t:'up'},{n:'DFCF-20',v:200.64,vs:+61.3,t:'up'},
+    {n:'DNI-20',v:77.92,vs:-37.4,t:'dn'},{n:'H-Model DCF',v:136.34,vs:+9.6,t:'near'},
+    {n:'EV/EBITDA',v:398.41,vs:+220.3,t:'up'},{n:'EV/Revenue',v:85.95,vs:-30.9,t:'dn'},
+    {n:'P/FCF',v:132.75,vs:+6.7,t:'near'},{n:'Revenue DCF',v:185.15,vs:+48.9,t:'up'},
+    {n:'PEG-implied',v:103.62,vs:-16.7,t:'dn'},{n:'Graham Rev.',v:83.19,vs:-33.1,t:'dn'},
+    {n:'IV Composite',v:145.32,vs:+16.8,t:'composite'}
+  ]},
+  crm:  { market:191.10, max:558.03, methods:[
+    {n:'DCF-20',v:388.78,vs:+103.4,t:'up'},{n:'DFCF-20',v:374.19,vs:+95.8,t:'up'},
+    {n:'DNI-20',v:201.16,vs:+5.3,t:'near'},{n:'H-Model DCF',v:265.73,vs:+39.1,t:'up'},
+    {n:'EV/EBITDA',v:558.03,vs:+192.0,t:'up'},{n:'EV/Revenue',v:257.01,vs:+34.5,t:'up'},
+    {n:'P/FCF',v:460.07,vs:+140.7,t:'up'},{n:'Revenue DCF',v:336.31,vs:+76.0,t:'up'},
+    {n:'PEG-implied',v:194.91,vs:+2.0,t:'near'},{n:'Graham Rev.',v:255.14,vs:+33.5,t:'up'},
+    {n:'IV Composite',v:317.30,vs:+66.0,t:'composite'}
+  ]},
+  wday: { market:146.19, max:788.90, methods:[
+    {n:'DCF-20',v:363.78,vs:+148.8,t:'up'},{n:'DFCF-20',v:340.60,vs:+133.0,t:'up'},
+    {n:'DNI-20',v:101.47,vs:-30.6,t:'dn'},{n:'H-Model DCF',v:254.09,vs:+73.8,t:'up'},
+    {n:'EV/EBITDA',v:788.90,vs:+439.6,t:'up'},{n:'EV/Revenue',v:224.07,vs:+53.3,t:'up'},
+    {n:'P/FCF',v:338.48,vs:+131.5,t:'up'},{n:'Revenue DCF',v:345.35,vs:+136.2,t:'up'},
+    {n:'PEG-implied',v:103.27,vs:-29.4,t:'dn'},{n:'Graham Rev.',v:97.44,vs:-33.3,t:'dn'},
+    {n:'IV Composite',v:258.89,vs:+77.1,t:'composite'}
+  ]}
+};
+
+function vtRender(ticker) {
+  const el = document.getElementById('vt-bars-'+ticker);
+  if(!el||el.dataset.r) return;
+  el.dataset.r='1';
+  const d = VT[ticker];
+  const mPct = (d.market/d.max)*100;
+  let html='';
+  d.methods.forEach(m=>{
+    const bPct = Math.min((m.v/d.max)*100,100);
+    const vsC = m.t==='composite'?'up':m.t;
+    const vsStr = m.vs>0?'+'+m.vs.toFixed(1)+'%':m.vs.toFixed(1)+'%';
+    html+=`<div class="vt-bar-row">
+      <div class="vt-bar-name ${m.t==='composite'?'composite':''}">${m.n}</div>
+      <div class="vt-bar-wrap">
+        <div class="vt-bar-fill ${m.t}" style="width:0%" data-w="${bPct}"></div>
+        <div class="vt-bar-marker" style="left:${mPct.toFixed(1)}%"></div>
+      </div>
+      <div class="vt-bar-val">$${m.v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</div>
+      <div class="vt-bar-vs ${vsC}">${vsStr}</div>
+    </div>`;
+  });
+  el.innerHTML=html;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    el.querySelectorAll('.vt-bar-fill').forEach(b=>{
+      b.style.transition='width 0.65s cubic-bezier(0.4,0,0.2,1)';
+      b.style.width=b.dataset.w+'%';
+    });
+  }));
+}
+
+function vtSwitch(ticker, btn) {
+  btn.closest('.val-teaser').querySelectorAll('.vt-tab').forEach(t=>t.classList.remove('active'));
+  btn.closest('.val-teaser').querySelectorAll('.vt-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('vt-'+ticker).classList.add('active');
+  vtRender(ticker);
+}
+
+vtRender('now');
+
+const tickers = [
+  {s:'NOW',p:'+14.2%',u:true},{s:'SNOW',p:'+48.7%',u:true},{s:'CRWD',p:'+22.1%',u:true},
+  {s:'ZETA',p:'+31.4%',u:true},{s:'HOOD',p:'+18.9%',u:true},{s:'MSFT',p:'+8.2%',u:true},
+  {s:'NVDA',p:'+31.0%',u:true},{s:'IGV',p:'-19%',u:false},{s:'WORK',p:'+18.4%',u:true},
+  {s:'CRM',p:'+16.1%',u:true},{s:'TEAM',p:'+22.0%',u:true},{s:'TWLO',p:'+28.3%',u:true},
+  {s:'PLTR',p:'+44.2%',u:true},{s:'MDB',p:'+19.8%',u:true},{s:'DDOG',p:'+25.1%',u:true}
+];
+const tape = document.getElementById('tape');
+let html = '';
+for(let i=0;i<2;i++) tickers.forEach(t=>{
+  html+=`<span class="ticker-item">${t.s} <span class="${t.u?'up':'dn'}">${t.p}</span></span>`;
+});
+tape.innerHTML=html;
+
+// PERFORMANCE CHART
+(function(){
+  const canvas = document.getElementById('perf-chart');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio||1;
+  const W = canvas.parentElement.offsetWidth;
+  const H = 180;
+  canvas.width = W*dpr; canvas.height = H*dpr;
+  canvas.style.width = W+'px'; canvas.style.height = H+'px';
+  ctx.scale(dpr,dpr);
+
+  const data = [
+    {name:'ServiceNow',val:14,color:'#1a6b3a'},
+    {name:'Snowflake',val:50,color:'#1a6b3a'},
+    {name:'Workday',val:18,color:'#1a6b3a'},
+    {name:'Atlassian',val:22,color:'#1a6b3a'},
+    {name:'Twilio',val:28,color:'#1a6b3a'},
+    {name:'Salesforce',val:16,color:'#1a6b3a'},
+  ];
+
+  const pad = {l:20,r:20,t:16,b:36};
+  const maxVal = 55;
+  const barW = (W - pad.l - pad.r) / data.length - 8;
+  const chartH = H - pad.t - pad.b;
+
+  ctx.fillStyle = '#f5f0e8';
+  ctx.fillRect(0,0,W,H);
+
+  // grid lines
+  [0,20,40,60].forEach(v=>{
+    const y = pad.t + chartH - (v/maxVal)*chartH;
+    ctx.strokeStyle = 'rgba(26,24,20,0.08)';
+    ctx.lineWidth = 0.5;
+    ctx.setLineDash([3,4]);
+    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
+    ctx.setLineDash([]);
+    if(v>0){
+      ctx.fillStyle='rgba(26,24,20,0.3)';
+      ctx.font=`9px 'Geist Mono', monospace`;
+      ctx.fillText('+'+v+'%',2,y+3);
+    }
+  });
+
+  let drawn = 0;
+  function animate(){
+    drawn = Math.min(drawn+3, 100);
+    data.forEach((d,i)=>{
+      const x = pad.l + i*(barW+8);
+      const fullH = (d.val/maxVal)*chartH;
+      const bH = fullH*(drawn/100);
+      const y = pad.t + chartH - bH;
+      ctx.fillStyle = '#f5f0e8';
+      ctx.fillRect(x, pad.t, barW, chartH);
+      ctx.fillStyle = d.color;
+      ctx.fillRect(x, y, barW, bH);
+      // value label
+      ctx.fillStyle = '#1a6b3a';
+      ctx.font = `500 11px 'Geist Mono', monospace`;
+      ctx.fillText('+'+d.val+'%', x, y-4);
+      // name label
+      ctx.fillStyle = 'rgba(26,24,20,0.5)';
+      ctx.font = `9px 'Geist', sans-serif`;
+      const words = d.name.split(' ');
+      words.forEach((w,wi)=>ctx.fillText(w, x, H-pad.b+12+wi*10));
+    });
+    if(drawn<100) requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
+// 3D BUCKET CANVAS
+(function(){
+  const canvas = document.getElementById('bucket-canvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio||1;
+  const W = canvas.parentElement.offsetWidth;
+  const H = 320;
+  canvas.width = W*dpr; canvas.height = H*dpr;
+  canvas.style.width = W+'px'; canvas.style.height = H+'px';
+  ctx.scale(dpr,dpr);
+
+  const layers = [
+    {num:'01',title:'The Enablers',tickers:['ServiceNow','Salesforce','Workday'],
+     face:'#1a6bbf',top:'#2389ef',right:'#0d3d6e',left:'#0f4f8a',glow:'rgba(35,137,239,0.2)'},
+    {num:'02',title:'Data Platforms',tickers:['Snowflake','Databricks','MongoDB'],
+     face:'#5a4fcf',top:'#7b6ff0',right:'#2e2870',left:'#3d348a',glow:'rgba(123,111,240,0.2)'},
+    {num:'03',title:'Vertical AI',tickers:['Zeta Global','Palantir','GitLab'],
+     face:'#2d7a1f',top:'#3da828',right:'#163d0e',left:'#1f5515',glow:'rgba(61,168,40,0.2)'}
+  ];
+
+  const startTime = performance.now();
+  function ease(t){return t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
+  function easeOut(t){return 1-Math.pow(1-t,3);}
+
+  function drawBox(cx,cy,w,h,dx,dy,layer,textAlpha){
+    const tl=[cx-w/2,cy-h/2],tr=[cx+w/2,cy-h/2],br=[cx+w/2,cy+h/2],bl=[cx-w/2,cy+h/2];
+    const ttl=[tl[0]+dx,tl[1]+dy],ttr=[tr[0]+dx,tr[1]+dy],tbr=[br[0]+dx,br[1]+dy],tbl=[bl[0]+dx,bl[1]+dy];
+    const grd=ctx.createRadialGradient(cx,cy+h/2,0,cx,cy+h/2,w*0.55);
+    grd.addColorStop(0,layer.glow);grd.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=grd;ctx.beginPath();ctx.ellipse(cx,cy+h/2+8,w*0.55,24,0,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.moveTo(...ttl);ctx.lineTo(...ttr);ctx.lineTo(...tr);ctx.lineTo(...tl);ctx.closePath();
+    const tg=ctx.createLinearGradient(ttl[0],ttl[1],tr[0],tr[1]);
+    tg.addColorStop(0,layer.top);tg.addColorStop(1,layer.face);ctx.fillStyle=tg;ctx.fill();
+    ctx.beginPath();ctx.moveTo(...tr);ctx.lineTo(...ttr);ctx.lineTo(...tbr);ctx.lineTo(...br);ctx.closePath();ctx.fillStyle=layer.right;ctx.fill();
+    ctx.beginPath();ctx.moveTo(...tl);ctx.lineTo(...ttl);ctx.lineTo(...tbl);ctx.lineTo(...bl);ctx.closePath();ctx.fillStyle=layer.left;ctx.fill();
+    ctx.beginPath();ctx.moveTo(...tl);ctx.lineTo(...tr);ctx.lineTo(...br);ctx.lineTo(...bl);ctx.closePath();
+    const fg=ctx.createLinearGradient(cx,tl[1],cx,bl[1]);fg.addColorStop(0,layer.face+'ff');fg.addColorStop(1,layer.face+'88');ctx.fillStyle=fg;ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,0.12)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(...ttl);ctx.lineTo(...ttr);ctx.lineTo(...tr);ctx.lineTo(...tl);ctx.lineTo(...ttl);ctx.stroke();
+    if(textAlpha>0){
+      ctx.save();ctx.globalAlpha=textAlpha;
+      ctx.fillStyle='rgba(255,255,255,0.5)';ctx.font=`500 10px 'Geist Mono',monospace`;ctx.fillText(layer.num,cx-w/2+14,cy-h/2+18);
+      ctx.fillStyle='#fff';ctx.font=`500 16px 'Newsreader',serif`;ctx.fillText(layer.title,cx-w/2+14,cy-h/2+38);
+      layer.tickers.forEach((t,i)=>{
+        const tx=cx-w/2+14+i*(Math.min(120,w/3-6));const ty=cy+h/2-18;
+        ctx.fillStyle='rgba(255,255,255,0.12)';ctx.beginPath();
+        const pw=Math.min(110,w/3-10);ctx.roundRect(tx,ty-13,pw,18,9);ctx.fill();
+        ctx.strokeStyle='rgba(255,255,255,0.18)';ctx.lineWidth=0.5;ctx.stroke();
+        ctx.fillStyle='rgba(255,255,255,0.85)';ctx.font=`500 10px 'Geist Mono',monospace`;ctx.fillText(t,tx+8,ty);
+      });
+      ctx.restore();
+    }
+  }
+
+  function animate(ts){
+    const elapsed=(ts-startTime)/1000;
+    ctx.clearRect(0,0,W,H);
+    const bw=W-40,h=72,dx=Math.min(30,W*0.04),dy=-18,cx=W/2+dx/2,baseY=H-24,gap=88,stagger=0.45;
+    for(let i=layers.length-1;i>=0;i--){
+      const delay=(layers.length-1-i)*stagger+0.2;
+      const raw=Math.max(0,Math.min(1,(elapsed-delay)/0.7));
+      const progress=ease(raw);
+      const textRaw=Math.max(0,Math.min(1,(elapsed-delay-0.25)/0.4));
+      const textAlpha=easeOut(textRaw);
+      const targetY=baseY-i*gap;
+      const cy=(targetY+140)+(targetY-(targetY+140))*progress;
+      if(raw>0) drawBox(cx,cy,bw,h,dx,dy,layers[i],textAlpha);
+    }
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
+})();
+</script>
+</body>
+</html>
