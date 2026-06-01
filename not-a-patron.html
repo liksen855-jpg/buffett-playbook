@@ -28,6 +28,25 @@
     <p class="muted">If you just signed up, it can take a minute for Patreon to update your status. Try again in a moment.</p>
     <a class="cta" href="https://patreon.com/InsightInvest" target="_blank" rel="noopener">Become a Patron →</a>
     <span class="secondary">Already pledged? <a href="/api/auth/login">Try signing in again</a></span>
+    <div id="diag" style="display:none;margin-top:22px;padding:12px 14px;border:1px solid #ECEAE6;border-radius:8px;background:#FBFBFA;text-align:left;font-family:ui-monospace,monospace;font-size:12px;line-height:1.7;color:#44443F;word-break:break-word"></div>
   </div>
+  <script>
+    // Diagnostic readout: shows which Patreon account signed in and why it was rejected.
+    (function(){
+      var q = new URLSearchParams(location.search);
+      if(!q.has('reason')) return;
+      var rows = [
+        ['Signed in as', q.get('email') || '—'],
+        ['Reason', q.get('reason') || '—'],
+        ['Detail', q.get('detail') || '—'],
+        ['Memberships seen', q.get('members') || '0'],
+        ['Expected campaign', q.get('campaign') || '—'],
+      ];
+      var el = document.getElementById('diag');
+      el.innerHTML = '<div style="font-weight:600;color:#1A1A18;margin-bottom:8px">Diagnostic</div>' +
+        rows.map(function(r){return '<div><span style="color:#8A887F">'+r[0]+':</span> '+r[1]+'</div>';}).join('');
+      el.style.display = 'block';
+    })();
+  </script>
 </body>
 </html>

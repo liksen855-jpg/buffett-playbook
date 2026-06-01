@@ -121,8 +121,29 @@ export default async function handler(req, res) {
   });
 
   if (!validMember && !isOwner) {
-    // Authenticated with Patreon but not a paid patron of this campaign
-    res.writeHead(302, { Location: '/not-a-patron' });
+    // Authenticated with Patreon but not a paid patron of this campaign.
+    // Diagnostic: surface WHY (and which account) so a failed sign-in is debuggable.
+    // Only the user's own email is exposed; safe to remove once resolved.
+    let reason = 'no_membership_found';
+    let detail = '';
+    if (members.length) {
+      const ours = members.filter(m => String(m.relationships?.campaign?.data?.id) === String(PATREON_CAMPAIGN_ID));
+      if (!ours.length) {
+        reason = 'membership_other_campaign';
+        detail = 'campaigns=' + members.map(m => m.relationships?.campaign?.data?.id || '?').join(',');
+      } else {
+        const m = ours[0];
+        reason = 'inactive_or_unpaid';
+        detail = `status=${m.attributes?.patron_status || 'none'};cents=${m.attributes?.currently_entitled_amount_cents || 0}`;
+      }
+    }
+    const qp = new URLSearchParams({
+      reason, detail,
+      email: userEmail || '(none)',
+      campaign: String(PATREON_CAMPAIGN_ID),
+      members: String(members.length),
+    });
+    res.writeHead(302, { Location: '/not-a-patron?' + qp.toString() });
     res.end();
     return;
   }
