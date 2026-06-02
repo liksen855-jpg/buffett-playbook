@@ -140,10 +140,18 @@
     let rows = [];
     try { rows = await fmp(`/earnings-calendar?from=${ymd(d0)}&to=${ymd(d1)}`); } catch (e) {}
     if (!Array.isArray(rows) || !rows.length) return;
+    // The calendar spans the whole market; keep only names the dashboard cares
+    // about (loaded universe + default watchlist + curated picks) so the
+    // watchlist-filtered Earnings card actually has entries.
+    const relevant = new Set([
+      ...Object.keys(window.STOCK_BY_SYM || {}),
+      ...(window.DEFAULT_WATCHLIST || []),
+      ...((window.PICKS || []).map((p) => p.symbol)),
+    ]);
     window.EARNINGS = rows
-      .filter((e) => e.symbol && e.date)
+      .filter((e) => e.symbol && e.date && relevant.has(e.symbol))
       .sort((a, b) => new Date(a.date) - new Date(b.date))
-      .slice(0, 40)
+      .slice(0, 60)
       .map((e) => {
         const dt = new Date(String(e.date).replace(" ", "T"));
         const when = /before|bmo/i.test(e.time || "") ? "BMO" : "AMC";
