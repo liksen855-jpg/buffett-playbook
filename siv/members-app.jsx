@@ -63,12 +63,19 @@ function Dash() {
   const cls = ["dash", "density-" + t.density].join(" ");
   const today = new Date().toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
 
+  // Signed-in patron identity (stashed by the auth gate before mount)
+  const userName = ((typeof window !== "undefined" && window.__IIUSER && window.__IIUSER.name) || "").trim();
+  const firstName = userName ? userName.split(/\s+/)[0] : "";
+  const initials = userName
+    ? userName.split(/\s+/).map((w) => w[0]).slice(0, 2).join("").toUpperCase()
+    : "II";
+
   return (
     <div className={cls} style={root}>
       <header className="appbar">
         <div className="brand">
           <span className="brand-dot" />
-          <span className="brand-name">Screener</span>
+          <span className="brand-name">InsightInvest</span>
         </div>
         <nav className="nav">
           <a className="nav-link nav-on" href="/terminal">Dashboard</a>
@@ -77,7 +84,8 @@ function Dash() {
         <div className="appbar-spacer" />
         <div className="market-state"><span className="ms-dot" />Market open</div>
         <div className="appbar-date">{today}</div>
-        <div className="avatar">JM</div>
+        {firstName && <span className="appbar-date" style={{ color: "var(--fg2)", fontWeight: 600 }}>{firstName}</span>}
+        <div className="avatar" title={userName || "InsightInvest"}>{initials}</div>
       </header>
 
       <PulseBar />

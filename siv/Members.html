@@ -311,7 +311,7 @@ body.iv-auth-pending #iv-auth-overlay,body.iv-auth-needed #iv-auth-overlay{displ
   fetch('/api/auth/check',{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(d){
     var ov=document.getElementById('iv-auth-overlay');
     document.body.classList.remove('iv-auth-pending');
-    if(d&&d.authenticated){ boot(); }
+    if(d&&d.authenticated){ window.__IIUSER={name:d.name||'',email:d.email||''}; boot(); }
     else { document.body.classList.add('iv-auth-needed'); if(ov) ov.classList.remove('iv-auth-state-loading'); }
   }).catch(function(){
     document.body.classList.remove('iv-auth-pending'); document.body.classList.add('iv-auth-needed');
