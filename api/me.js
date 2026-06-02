@@ -37,14 +37,18 @@ function verifyJWT(token, secret) {
 }
 
 // ── KV (Upstash REST) — single command via POST to the base URL ──
+// Accept either the Vercel KV (KV_REST_API_*) or native Upstash
+// (UPSTASH_REDIS_REST_*) env naming, depending on which integration is added.
+const KV_URL = () => process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+const KV_TOKEN = () => process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
 function kvConfigured() {
-  return !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
+  return !!(KV_URL() && KV_TOKEN());
 }
 async function kvCmd(args) {
-  const r = await fetch(process.env.KV_REST_API_URL, {
+  const r = await fetch(KV_URL(), {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}`,
+      Authorization: `Bearer ${KV_TOKEN()}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(args),
