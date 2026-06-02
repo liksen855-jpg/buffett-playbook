@@ -2171,6 +2171,7 @@ function hideKeyBar() { document.getElementById('key-bar').classList.add('hidden
 
 // ── State ──
 let S = {};
+let _loadSeq = 0;   // guards against overlapping loadTicker() runs double-converting S
 let priceChartInst, revenueChartInst, marginChartInst, multiplesChartInst, epsChartInst;
 let currentPeriod = 'annual';
 
@@ -2326,6 +2327,7 @@ async function loadTicker(ticker){
   const key=getFmpKey();
   if(!key){showKeyBar();return;}
   ticker=ticker.toUpperCase().trim();
+  const _seq = ++_loadSeq;   // newest load wins; older overlapping runs bail out
   searchInput.value=ticker;
   searchResults.classList.remove('open');
   setState('loading','Fetching '+ticker+'…');
@@ -2352,6 +2354,7 @@ async function loadTicker(ticker){
       fmpFetch(`/cash-flow-statement?symbol=${ticker}&period=quarter&limit=5`),   // 10
       fmpFetch(`/earnings?symbol=${ticker}`),                                      // 11
     ]);
+    if(_seq !== _loadSeq) return;   // a newer load started while we awaited — abandon this one
 
     // Profile is the only truly required endpoint. Everything else is optional —
     // on FMP free-tier, many tickers (e.g. APP, PDD) return 402 for quote/financials
@@ -2392,6 +2395,7 @@ async function loadTicker(ticker){
 
     // Reconcile statement currency to the listing/price currency (ADRs etc.)
     await normalizeCurrency();
+    if(_seq !== _loadSeq) return;   // guard: never let a superseded run convert/render
 
     // Derive missing quote fields
     const eps=S.income[0]?.epsdiluted;
@@ -6117,8 +6121,9 @@ function esc(str) {
 
 // ── Init ──
 setState('idle');
-const urlTicker=new URLSearchParams(location.search).get('ticker');
-if(urlTicker)loadTicker(urlTicker);
+// URL autoload (?t= or ?ticker=) is handled by the auth gate's autoLoadTicker
+// once a patron is verified — a second loader here caused overlapping loads
+// that double-converted ADR currency (e.g. TSM showing ~1/31 of fair value).
 </script>
 </body>
 </html>
