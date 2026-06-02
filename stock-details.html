@@ -4178,6 +4178,11 @@ function renderValuationSummary(){
   if(valid.length>=4){const t=valid.slice(1,-1);composite=t.reduce((s,v)=>s+v,0)/t.length;}
   else if(valid.length>0){composite=valid.reduce((s,v)=>s+v,0)/valid.length;}
 
+  // Single source of truth: the InsightInvest™ tab reads this exact composite
+  // so its "fair value" is always identical to the Intrinsic Value tab's.
+  S._cfFair = (composite && isFinite(composite) && composite > 0) ? composite : null;
+  if(typeof refreshIIWatch==='function') refreshIIWatch();
+
   const gapPct=(composite&&cur)?(composite-cur)/cur*100:null;
 
   // KPI strip
@@ -5100,26 +5105,21 @@ function renderMoatHeat() {
 }
 
 // Watch-item gap: composite fair value vs current price (feeds MoatHeat sidebar)
+// Reuses the Intrinsic Value tab's composite (S._cfFair) so the InsightInvest™
+// fair value is always identical to it. renderValuationSummary() runs before
+// renderMoatHeat() in renderAll, and re-syncs this whenever inputs change.
 function computeIIWatchGap() {
   const cur = getCurPrice();
-  if (!cur) return { gap: null, fair: null };
-  const wacc = computeWACC(), termGr = 0.03;
-  const vals = [];
-  try {
-    const v1=computeCfFcff(wacc,termGr,0);       if(v1&&isFinite(v1)&&v1>0) vals.push(v1);
-    const v2=computeCfHModel(wacc,termGr);        if(v2&&isFinite(v2)&&v2>0) vals.push(v2);
-    const v3=computeCfEvEbitda();                 if(v3&&isFinite(v3)&&v3>0) vals.push(v3);
-    const v4=computeCfEvRev();                    if(v4&&isFinite(v4)&&v4>0) vals.push(v4);
-    const v5=computeCfPFcf();                     if(v5&&isFinite(v5)&&v5>0) vals.push(v5);
-    const v6=computeCfRevDcf(wacc,termGr);        if(v6&&isFinite(v6)&&v6>0) vals.push(v6);
-    const v7=computeCfPeg();                      if(v7&&isFinite(v7)&&v7>0) vals.push(v7);
-    const v8=computeCfGraham();                   if(v8&&isFinite(v8)&&v8>0) vals.push(v8);
-  } catch(_) {}
-  if (!vals.length) return { gap: null, fair: null };
-  vals.sort((a,b)=>a-b);
-  const pool = vals.length >= 4 ? vals.slice(1,-1) : vals;
-  const fair = pool.reduce((s,v)=>s+v,0)/pool.length;
-  return { gap: (fair-cur)/cur*100, fair };
+  const fair = (typeof S !== 'undefined' && S._cfFair && isFinite(S._cfFair) && S._cfFair > 0) ? S._cfFair : null;
+  if (!cur || fair === null) return { gap: null, fair: null };
+  return { gap: (fair - cur) / cur * 100, fair };
+}
+
+// Light re-sync of the MoatHeat sidebar's fair-value/upside rows when the
+// composite recomputes (e.g. user edits growth/WACC on the Intrinsic tab).
+function refreshIIWatch() {
+  const el = document.getElementById('ii-sb-stats');
+  if (el && typeof buildIISidebarStats === 'function') el.innerHTML = buildIISidebarStats(computeIIWatchGap());
 }
 
 function buildIISidebarStats(watch) {
