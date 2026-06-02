@@ -114,9 +114,17 @@ function PresetsCard() {
   );
 }
 
-// ── Portfolio summary (links out) ────────────────────────────────────────────
-function PortfolioCard() {
-  const p = window.PORTFOLIO;
+// ── Portfolio summary (per-account, editable) ────────────────────────────────
+// Receives the signed-in user's portfolio + an onChange to persist it (the app
+// debounces saves to /api/me). Holdings can be added/removed; cash is editable.
+// Prices/day-change are live via look() over the loaded universe.
+function PortfolioCard({ portfolio, onChange }) {
+  const p = portfolio && portfolio.holdings ? portfolio : { cash: 0, holdings: [] };
+  const [editing, setEditing] = React.useState(false);
+  const [q, setQ] = React.useState("");
+  const [shares, setShares] = React.useState("");
+  const [cost, setCost] = React.useState("");
+
   const rows = p.holdings.map((h) => {
     const s = mLook(h.symbol);
     const value = h.shares * s.price;
@@ -125,18 +133,34 @@ function PortfolioCard() {
     return { ...h, s, value, dayChg, pl };
   });
   const holdingsVal = rows.reduce((a, r) => a + r.value, 0);
-  const total = holdingsVal + p.cash;
+  const total = holdingsVal + (p.cash || 0);
   const dayChg = rows.reduce((a, r) => a + r.dayChg, 0);
-  const dayPct = (dayChg / (holdingsVal - dayChg)) * 100;
+  const dayBase = holdingsVal - dayChg;
+  const dayPct = dayBase ? (dayChg / dayBase) * 100 : 0;
   const totalPL = rows.reduce((a, r) => a + r.pl, 0);
   const costBasis = rows.reduce((a, r) => a + r.avgCost * r.shares, 0);
-  const plPct = (totalPL / costBasis) * 100;
+  const plPct = costBasis ? (totalPL / costBasis) * 100 : 0;
   const movers = [...rows].sort((a, b) => Math.abs(b.dayChg) - Math.abs(a.dayChg)).slice(0, 3);
   const up = dayChg >= 0;
 
+  const matches = q.trim()
+    ? window.STOCKS.filter((s) => !p.holdings.some((h) => h.symbol === s.symbol) &&
+        (s.symbol.toLowerCase().includes(q.toLowerCase()) || (s.companyName || "").toLowerCase().includes(q.toLowerCase()))).slice(0, 5)
+    : [];
+  const addHolding = (sym) => {
+    const sh = +shares || 0, ac = +cost || 0;
+    if (!sym || sh <= 0) return;
+    onChange({ ...p, holdings: [{ symbol: sym, shares: sh, avgCost: ac }, ...p.holdings] });
+    setQ(""); setShares(""); setCost("");
+  };
+  const removeHolding = (sym) => onChange({ ...p, holdings: p.holdings.filter((h) => h.symbol !== sym) });
+  const setCash = (v) => onChange({ ...p, cash: Math.max(0, +v || 0) });
+
+  const ipStyle = { height: 28, border: "1px solid var(--border2)", borderRadius: 6, padding: "0 8px", font: "inherit", fontSize: 12, outline: "none", minWidth: 0 };
+
   return (
-    <MCard title="Portfolio" sub={rows.length + " holdings"}
-      action={<a className="card-action" href="#" onClick={(e) => e.preventDefault()}>Full view →</a>}>
+    <MCard title="Portfolio" sub={rows.length + " holding" + (rows.length === 1 ? "" : "s")}
+      action={<button className="card-action" onClick={() => setEditing((e) => !e)}>{editing ? "Done" : "Edit"}</button>}>
       <div className="pf-value">
         <span className="pf-total num">{mMoney(total)}</span>
         <span className={"pf-day num " + (up ? "chg-pos" : "chg-neg")}>{up ? "▲" : "▼"} {mMoney(Math.abs(dayChg))} ({mSigned(dayPct)}%)</span>
@@ -149,23 +173,67 @@ function PortfolioCard() {
         </div>
         <div className="pf-stat">
           <span className="pf-k">Cash</span>
-          <span className="pf-v num">{mMoney(p.cash)}</span>
+          {editing
+            ? <input className="num" style={{ ...ipStyle, width: 110 }} type="number" min="0" value={p.cash} onChange={(e) => setCash(e.target.value)} />
+            : <span className="pf-v num">{mMoney(p.cash || 0)}</span>}
         </div>
       </div>
-      <div className="pf-movers">
-        <span className="pf-movers-label">Top movers</span>
-        {movers.map((m) => {
-          const mu = m.dayChg >= 0;
-          return (
-            <div className="pf-mover" key={m.symbol}>
-              <span className="pf-mover-sym">{m.symbol}</span>
-              <span className={"num pf-mover-chg " + (mu ? "chg-pos" : "chg-neg")}>{mSigned(m.s.changePct)}%</span>
+
+      {editing ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 4 }}>
+          {rows.map((r) => (
+            <div key={r.symbol} style={{ display: "flex", alignItems: "center", gap: 10, padding: "6px 0", borderTop: "1px solid var(--border)" }}>
+              <span className="num" style={{ fontWeight: 700, color: "var(--accent)", width: 56 }}>{r.symbol}</span>
+              <span className="num td-muted" style={{ fontSize: 11 }}>{r.shares} sh @ ${mFmtPrice(r.avgCost)}</span>
+              <span className="num" style={{ marginLeft: "auto", fontSize: 12, fontWeight: 600 }}>{mMoney(r.value)}</span>
+              <button title="Remove" onClick={() => removeHolding(r.symbol)}
+                style={{ border: 0, background: "none", color: "var(--red)", fontSize: 17, lineHeight: 1, cursor: "pointer", width: 18 }}>×</button>
             </div>
-          );
-        })}
-      </div>
+          ))}
+          <div style={{ position: "relative", display: "grid", gridTemplateColumns: "1fr 64px 74px", gap: 6, marginTop: 4 }}>
+            <input style={ipStyle} placeholder="Add ticker…" value={q} onChange={(e) => setQ(e.target.value)} />
+            <input style={ipStyle} type="number" min="0" placeholder="Shares" value={shares} onChange={(e) => setShares(e.target.value)} />
+            <input style={ipStyle} type="number" min="0" placeholder="Avg $" value={cost} onChange={(e) => setCost(e.target.value)} />
+            {matches.length > 0 && (
+              <div className="wl-menu" style={{ top: 32 }}>
+                {matches.map((s) => (
+                  <button key={s.symbol} className="wl-opt" onClick={() => { setQ(s.symbol); }}>
+                    <span className="wl-opt-sym">{s.symbol}</span>
+                    <span className="wl-opt-name">{s.companyName}</span>
+                    <span className="wl-opt-plus">＋</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          <button className="run-btn run-dirty" style={{ height: 32 }}
+            onClick={() => addHolding(cleanAddSym(q))}>Add holding</button>
+        </div>
+      ) : (
+        <div className="pf-movers">
+          <span className="pf-movers-label">Top movers</span>
+          {movers.length === 0 && <span className="td-muted" style={{ fontSize: 11.5 }}>No holdings yet — tap Edit to add.</span>}
+          {movers.map((m) => {
+            const mu = m.dayChg >= 0;
+            return (
+              <div className="pf-mover" key={m.symbol}>
+                <span className="pf-mover-sym">{m.symbol}</span>
+                <span className={"num pf-mover-chg " + (mu ? "chg-pos" : "chg-neg")}>{mSigned(m.s.changePct)}%</span>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </MCard>
   );
+}
+// Resolve a typed ticker to a real universe symbol (exact match wins, else first prefix).
+function cleanAddSym(q) {
+  const Q = String(q || "").trim().toUpperCase();
+  if (!Q) return "";
+  if (window.STOCK_BY_SYM && window.STOCK_BY_SYM[Q]) return Q;
+  const m = (window.STOCKS || []).find((s) => s.symbol.toUpperCase().startsWith(Q));
+  return m ? m.symbol : Q;
 }
 
 window.MemberFeatures = { PicksFeed, PresetsCard, PortfolioCard };

@@ -1,5 +1,5 @@
 // ── Members dashboard — app root ─────────────────────────────────────────────
-const { useState, useEffect } = React;
+const { useState, useEffect, useRef } = React;
 const { PulseBar, Watchlist, NewsFeed, EarningsList, look } = window.MemberParts;
 const { PicksFeed, PresetsCard, PortfolioCard } = window.MemberFeatures;
 const { fmtPrice: dFmtPrice, fmtCap: dFmtCap, fmtVol: dFmtVol, yieldOf: dYield } = window.ScreenerParts;
@@ -18,10 +18,43 @@ function loadWL() {
 function Dash() {
   const [t, setTweak] = useTweaks(MTWEAKS);
   const [watchlist, setWatchlist] = useState(loadWL);
+  const [portfolio, setPortfolio] = useState(() => window.PORTFOLIO); // seed fallback
   const [scope, setScope] = useState("watchlist");
   const [selected, setSelected] = useState(null);
+  const meLoaded = useRef(false);
+  const saveTimer = useRef(null);
 
-  useEffect(() => { localStorage.setItem(WL_KEY, JSON.stringify(watchlist)); }, [watchlist]);
+  // Load this patron's saved watchlist + portfolio from their account (KV).
+  useEffect(() => {
+    let cancel = false;
+    fetch("/api/me", { credentials: "same-origin" })
+      .then((r) => r.json())
+      .then((d) => {
+        if (cancel) return;
+        if (d && d.authenticated && d.data) {
+          if (Array.isArray(d.data.watchlist)) setWatchlist(d.data.watchlist);
+          if (d.data.portfolio) setPortfolio(d.data.portfolio);
+        }
+      })
+      .catch(() => {})
+      .finally(() => { if (!cancel) meLoaded.current = true; });
+    return () => { cancel = true; };
+  }, []);
+
+  // Persist on change — localStorage immediately + debounced write to the account.
+  // Gated on meLoaded so the initial defaults don't clobber the saved copy.
+  useEffect(() => {
+    localStorage.setItem(WL_KEY, JSON.stringify(watchlist));
+    if (!meLoaded.current) return;
+    clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => {
+      fetch("/api/me", {
+        method: "PUT", credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ watchlist, portfolio }),
+      }).catch(() => {});
+    }, 700);
+  }, [watchlist, portfolio]);
 
   const addTicker = (sym) => setWatchlist((l) => l.includes(sym) ? l : [sym, ...l]);
   const removeTicker = (sym) => setWatchlist((l) => l.filter((s) => s !== sym));
@@ -58,7 +91,7 @@ function Dash() {
           <Watchlist list={watchlist} onAdd={addTicker} onRemove={removeTicker} onSelect={setSelected} />
           <EarningsList list={watchlist} />
           <PresetsCard />
-          <PortfolioCard />
+          <PortfolioCard portfolio={portfolio} onChange={setPortfolio} />
         </aside>
       </div>
 
