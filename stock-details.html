@@ -90,6 +90,10 @@ input{font-family:var(--sans)}
 .company-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px}
 .ticker-badge{font-family:var(--mono);font-size:12px;font-weight:700;background:hsl(208,52%,36%,.12);color:var(--primary);border:1px solid hsl(208,52%,36%,.25);padding:2px 8px;border-radius:999px}
 .badge{font-size:11px;color:var(--muted);background:var(--card);border:1px solid var(--border);padding:2px 7px;border-radius:999px}
+.wl-toggle{font-size:11px;font-weight:600;color:var(--primary);background:hsl(208,52%,36%,.08);border:1px solid hsl(208,52%,36%,.3);padding:3px 11px;border-radius:999px;cursor:pointer;transition:all .15s;line-height:1.4}
+.wl-toggle:hover{background:hsl(208,52%,36%,.16)}
+.wl-toggle.on{color:var(--green);background:hsl(146,46%,33%,.1);border-color:hsl(146,46%,33%,.35)}
+.wl-toggle:disabled{opacity:.55;cursor:default}
 .price-block{text-align:right}
 .price-main{font-family:var(--mono);font-size:32px;font-weight:700;letter-spacing:-.02em;line-height:1}
 .price-change{display:flex;align-items:center;gap:6px;margin-top:4px;justify-content:flex-end}
@@ -1395,6 +1399,7 @@ table.iv-dt,table.iv-qg-table{min-width:520px}
           <span class="badge" id="exchange-badge">—</span>
           <span class="badge" id="sector-badge">—</span>
           <span class="badge" id="industry-badge" style="display:none">—</span>
+          <button class="wl-toggle" id="wl-toggle" onclick="toggleWatchlist()" style="display:none">＋ Watchlist</button>
         </div>
       </div>
       <div class="price-block">
@@ -2648,8 +2653,49 @@ function renderAll(){
 // ═══════════════════════════════════════════════════════════════════
 // HERO
 // ═══════════════════════════════════════════════════════════════════
+// ── Per-account watchlist (shared with /terminal via /api/me + Vercel KV) ──
+let _wl = null;              // cached watchlist array, null until first load
+let _wlBusy = false;
+async function wlEnsure(){
+  if(_wl !== null) return;
+  try{
+    const r = await fetch('/api/me',{credentials:'same-origin'});
+    const d = await r.json();
+    _wl = (d && d.authenticated && d.data && Array.isArray(d.data.watchlist)) ? d.data.watchlist : [];
+  }catch(_){ _wl = []; }
+  wlRender();
+}
+function wlRender(){
+  const btn = document.getElementById('wl-toggle');
+  const sym = S.profile?.symbol;
+  if(!btn || !sym) return;
+  btn.style.display = '';
+  const on = Array.isArray(_wl) && _wl.includes(sym);
+  btn.classList.toggle('on', on);
+  btn.disabled = _wlBusy;
+  btn.textContent = _wlBusy ? '…' : (on ? '✓ Watchlisted' : '＋ Watchlist');
+}
+async function toggleWatchlist(){
+  const sym = S.profile?.symbol;
+  if(!sym) return;
+  await wlEnsure();
+  const i = _wl.indexOf(sym);
+  if(i >= 0) _wl.splice(i,1); else _wl.unshift(sym);
+  _wlBusy = true; wlRender();
+  try{
+    const r = await fetch('/api/me',{method:'PUT',credentials:'same-origin',
+      headers:{'Content-Type':'application/json'},body:JSON.stringify({watchlist:_wl})});
+    if(!r.ok) throw new Error('save failed');
+  }catch(_){ /* revert on failure */ if(i>=0) _wl.splice(i,0,sym); else _wl.shift(); }
+  _wlBusy = false; wlRender();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// HERO
+// ═══════════════════════════════════════════════════════════════════
 function renderHero(){
   const p=S.profile,q=S.quote;
+  wlRender(); wlEnsure();   // per-account watchlist button state
   const logoWrap=document.getElementById('company-logo-wrap');
   if(p.image){
     logoWrap.innerHTML=`<img class="company-logo" src="${p.image}" onerror="this.parentElement.innerHTML='<div class=company-logo-fallback>${(p.symbol||'?').slice(0,3)}</div>'" alt="${p.symbol}"/>`;
