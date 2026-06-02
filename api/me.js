@@ -134,3 +134,5 @@ export default async function handler(req, res) {
 
   res.status(405).json({ ok: false, error: 'method_not_allowed' });
 }
+
+// redeploy: pick up Vercel KV env (2026-06-02T06:45Z)
