@@ -4890,64 +4890,22 @@ function scoreFinancialStrength(S, isBank) {
 
 // 6. VALUATION
 function scoreValuation(S) {
-  let score = 0;
-  const q = S.quote || {};
-  const price = q.price || 0;
-
-  try {
-    const epv = typeof computeEPV === 'function' ? computeEPV() : null;
-    if (epv && epv.epvPerShare > 0 && price > 0) {
-      const ratio = price / epv.epvPerShare;
-      if (ratio <= 1.0) score += 25;
-      else if (ratio <= 1.2) score += 25;
-      else if (ratio <= 1.5) score += 15;
-      else if (ratio <= 2.0) score += 8;
-    } else { score += 12; }
-  } catch (_) { score += 12; }
-
-  try {
-    if (typeof dcfDeclining === 'function' && typeof computeWACC === 'function') {
-      const wacc = computeWACC();
-      const baseG = typeof getBaseGrowthEstimate === 'function' ? getBaseGrowthEstimate() : 0.05;
-      const fcf = computeTTMFcf();
-      const shares = getSharesOut();
-      const pv = dcfDeclining(fcf, baseG, 0.03, wacc);
-      const dcfVal = (pv && shares > 0) ? pv / shares : 0;
-      if (price > 0 && dcfVal > 0) {
-        const gap = (dcfVal - price) / price * 100;
-        if (gap >= 20) score += 25;
-        else if (gap >= 0) score += 20;
-        else if (gap >= -15) score += 12;
-        else if (gap >= -30) score += 6;
-      } else { score += 12; }
-    } else { score += 12; }
-  } catch (_) { score += 12; }
-
-  try {
-    const oe = typeof computeOwnerEarnings === 'function' ? computeOwnerEarnings() : null;
-    if (oe && oe.mktCap > 0) {
-      const treasury = parseFloat(document.getElementById('oey-rfr')?.value || '4.5');
-      const oYield = oe.yld * 100;
-      const spread = oYield - treasury;
-      if (spread >= 4) score += 25;
-      else if (spread >= 2) score += 25;
-      else if (spread >= 0) score += 15;
-      else if (spread >= -2) score += 6;
-    } else { score += 12; }
-  } catch (_) { score += 12; }
-
-  const l4 = S._l4Score ?? null;
-  if (l4 !== null) {
-    if (l4 >= 70) score += 25;
-    else if (l4 >= 50) score += 25;
-    else if (l4 >= 35) score += 15;
-    else if (l4 >= 20) score += 8;
-  } else { score += 12; }
-
+  // Derive the Valuation dimension from the SAME Composite Fair Value shown at the
+  // top of the Intrinsic tab (S._cfFair, set by renderValuationSummary before the
+  // moat renders) so the dimension can't contradict the headline upside/downside.
+  // Map: at fair value → 50; ~+25% upside → Attractive (≥70); ~−12% → Expensive (<40).
+  const price = (S.quote?.price) ?? (S.profile?.price) ?? 0;
+  const fair  = (S._cfFair && isFinite(S._cfFair) && S._cfFair > 0) ? S._cfFair : null;
+  let score = 50, up = null;
+  if (fair && price > 0) {
+    up = (fair - price) / price * 100;
+    score = Math.max(0, Math.min(100, Math.round(50 + up * 0.8)));
+  }
+  const pct = up === null ? '' : ` (${up >= 0 ? '+' : ''}${up.toFixed(0)}% vs composite)`;
   return buildSixDimResult(score, [
-    { threshold: 70, label: 'Attractive', verdict: 'Trading below or near fair value across multiple methods' },
-    { threshold: 40, label: 'Fair',       verdict: 'Fairly priced — limited margin of safety' },
-    { threshold: 0,  label: 'Expensive',  verdict: 'Above fair value — paying a premium' },
+    { threshold: 70, label: 'Attractive', verdict: `Trading well below composite fair value${pct}` },
+    { threshold: 40, label: 'Fair',       verdict: `Roughly fair vs composite — limited margin of safety${pct}` },
+    { threshold: 0,  label: 'Expensive',  verdict: `Above composite fair value — paying a premium${pct}` },
   ]);
 }
 
