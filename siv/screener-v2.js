@@ -143,28 +143,28 @@ async function scr_batchQuote(symbols) {
   if (Array.isArray(data)) data.forEach(q => { if (q.symbol) map[q.symbol] = q; });
   return map;
 }
-async function scr_batchKeyMetrics(symbols) {
+// Concurrency-limited map — keeps total in-flight requests well under the
+// free-tier rate limit (fundamentals = 3 endpoints × N symbols).
+async function scr_mapLimit(items, limit, fn) {
+  const out = new Array(items.length);
+  let i = 0;
+  async function worker() {
+    while (i < items.length) { const idx = i++; try { out[idx] = await fn(items[idx], idx); } catch (_) { out[idx] = null; } }
+  }
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+  return out;
+}
+async function scr_batchPerSym(symbols, path, conc = 6) {
   if (!symbols.length) return {};
-  const results = await Promise.allSettled(symbols.map(sym => fmpFetch(`/key-metrics?symbol=${sym}&limit=2`)));
+  const res = await scr_mapLimit(symbols, conc, sym => fmpFetch(path(sym)));
   const map = {};
-  results.forEach((r, i) => { if (r.status === 'fulfilled' && Array.isArray(r.value) && r.value.length) map[symbols[i]] = r.value; });
+  res.forEach((v, i) => { if (Array.isArray(v) && v.length) map[symbols[i]] = v; });
   return map;
 }
-async function scr_batchIncome(symbols) {
-  if (!symbols.length) return {};
-  const results = await Promise.allSettled(symbols.map(sym => fmpFetch(`/income-statement?symbol=${sym}&limit=2`)));
-  const map = {};
-  results.forEach((r, i) => { if (r.status === 'fulfilled' && Array.isArray(r.value) && r.value.length) map[symbols[i]] = r.value; });
-  return map;
-}
+const scr_batchKeyMetrics = syms => scr_batchPerSym(syms, s => `/key-metrics?symbol=${s}&limit=2`);
+const scr_batchIncome     = syms => scr_batchPerSym(syms, s => `/income-statement?symbol=${s}&limit=2`);
 // /ratios holds D/E, P/FCF, P/E (not present in /key-metrics on the stable tier)
-async function scr_batchRatios(symbols) {
-  if (!symbols.length) return {};
-  const results = await Promise.allSettled(symbols.map(sym => fmpFetch(`/ratios?symbol=${sym}&limit=1`)));
-  const map = {};
-  results.forEach((r, i) => { if (r.status === 'fulfilled' && Array.isArray(r.value) && r.value.length) map[symbols[i]] = r.value; });
-  return map;
-}
+const scr_batchRatios     = syms => scr_batchPerSym(syms, s => `/ratios?symbol=${s}&limit=1`);
 
 function scr_mergeEnrichment(rows, quoteMap, metricsMap, incomeMap, ratioMap) {
   const pctScale = v => v == null ? null : (Math.abs(v) < 2 ? v * 100 : v); // 0.15→15, 15→15
