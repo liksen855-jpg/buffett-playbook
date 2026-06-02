@@ -4893,13 +4893,14 @@ function scoreValuation(S) {
   // Derive the Valuation dimension from the SAME Composite Fair Value shown at the
   // top of the Intrinsic tab (S._cfFair, set by renderValuationSummary before the
   // moat renders) so the dimension can't contradict the headline upside/downside.
-  // Map: at fair value → 50; ~+25% upside → Attractive (≥70); ~−12% → Expensive (<40).
+  // Map (slope 1.0 → boundaries match the analyst-note thresholds exactly):
+  // at fair value → 50; +20% upside → Attractive (≥70); −10% → Expensive (<40).
   const price = (S.quote?.price) ?? (S.profile?.price) ?? 0;
   const fair  = (S._cfFair && isFinite(S._cfFair) && S._cfFair > 0) ? S._cfFair : null;
   let score = 50, up = null;
   if (fair && price > 0) {
     up = (fair - price) / price * 100;
-    score = Math.max(0, Math.min(100, Math.round(50 + up * 0.8)));
+    score = Math.max(0, Math.min(100, Math.round(50 + up)));
   }
   const pct = up === null ? '' : ` (${up >= 0 ? '+' : ''}${up.toFixed(0)}% vs composite)`;
   return buildSixDimResult(score, [
