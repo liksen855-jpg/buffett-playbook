@@ -5,37 +5,57 @@ import { WatchlistPanel } from './WatchlistPanel';
 import { NewsPanel } from './NewsPanel';
 import { PicksPanel } from './PicksPanel';
 import { PortfolioPanel } from './PortfolioPanel';
+import { DEMO_STOCKS, DEMO_PULSE, DEMO_NEWS, DEMO_PICKS } from './demo-data';
 
-const DEFAULT_DATA: DashboardData = {
-  stocks: [],
-  stockBySym: {},
-  pulse: [],
-  news: [],
-  earnings: [],
-  breadth: { advancers: 0, decliners: 0, unchanged: 0 },
-  picks: [],
-  presets: [
-    { id: 'quality', label: 'Quality Growth', query: 'marketCap>10B&pe<30&debtToEquity<0.5&roe>15' },
-    { id: 'value', label: 'Deep Value', query: 'pe<15&pb<2&debtToEquity<1' },
-    { id: 'dividend', label: 'Dividend Aristocrats', query: 'dividendYield>2&payoutRatio<0.6&marketCap>5B' },
-    { id: 'momentum', label: 'Momentum', query: 'changesPercentage>5&volume>1000000' },
-  ],
-  portfolio: { cash: 0, holdings: [] },
-  defaultWatchlist: ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA'],
-};
+function buildStockMap(stocks: Stock[]): Record<string, Stock> {
+  const m: Record<string, Stock> = {};
+  stocks.forEach(s => { m[s.symbol] = s; });
+  return m;
+}
+
+function buildBreadth(stocks: Stock[]) {
+  const adv = stocks.filter(s => s.changesPercentage > 0).length;
+  const dec = stocks.filter(s => s.changesPercentage < 0).length;
+  return { advancers: adv, decliners: dec, unchanged: stocks.length - adv - dec };
+}
+
+const PRESETS = [
+  { id: 'quality', label: 'Quality Growth', query: 'marketCap>10B&pe<30&debtToEquity<0.5&roe>15' },
+  { id: 'value', label: 'Deep Value', query: 'pe<15&pb<2&debtToEquity<1' },
+  { id: 'dividend', label: 'Dividend Aristocrats', query: 'dividendYield>2&payoutRatio<0.6&marketCap>5B' },
+  { id: 'momentum', label: 'Momentum', query: 'changesPercentage>5&volume>1000000' },
+];
+
+const DEFAULT_WATCHLIST = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA'];
 
 export const Dashboard: React.FC = () => {
-  const [data, setData] = useState<DashboardData>(DEFAULT_DATA);
-  const [watchlist, setWatchlist] = useState<string[]>(DEFAULT_DATA.defaultWatchlist);
-  const [portfolio, setPortfolio] = useState<Portfolio>(DEFAULT_DATA.portfolio);
-  const [picks, setPicks] = useState<Pick[]>([]);
+  const [data, setData] = useState<DashboardData>({
+    stocks: DEMO_STOCKS,
+    stockBySym: buildStockMap(DEMO_STOCKS),
+    pulse: DEMO_PULSE,
+    news: DEMO_NEWS,
+    earnings: [],
+    breadth: buildBreadth(DEMO_STOCKS),
+    picks: DEMO_PICKS,
+    presets: PRESETS,
+    portfolio: { cash: 25000, holdings: [
+      { symbol: 'AAPL', shares: 50, costBasis: 175.00 },
+      { symbol: 'MSFT', shares: 25, costBasis: 380.00 },
+      { symbol: 'NVDA', shares: 30, costBasis: 85.00 },
+    ]},
+    defaultWatchlist: DEFAULT_WATCHLIST,
+  });
+  const [watchlist, setWatchlist] = useState<string[]>(DEFAULT_WATCHLIST);
+  const [portfolio, setPortfolio] = useState<Portfolio>(data.portfolio);
+  const [picks, setPicks] = useState<Pick[]>(DEMO_PICKS);
   const [isOwner, setIsOwner] = useState(false);
   const [selected, setSelected] = useState<Stock | null>(null);
   const [loading, setLoading] = useState(true);
+  const [apiError, setApiError] = useState<string | null>(null);
   const saveTimer = useRef<ReturnType<typeof setTimeout>>();
   const picksTimer = useRef<ReturnType<typeof setTimeout>>();
 
-  // Load dashboard data
+  // Load real data from APIs (fallback to demo if fail)
   useEffect(() => {
     let cancelled = false;
     async function load() {
@@ -56,7 +76,7 @@ export const Dashboard: React.FC = () => {
           setIsOwner(picksRes.value.isOwner ?? false);
         }
       } catch {
-        // ignore
+        setApiError('Using demo data — API unavailable');
       } finally {
         setLoading(false);
       }
@@ -65,7 +85,7 @@ export const Dashboard: React.FC = () => {
     return () => { cancelled = true; };
   }, []);
 
-  // Load FMP stock universe + quotes
+  // Try to load FMP stock universe (fallback already seeded)
   useEffect(() => {
     let cancelled = false;
     async function loadStocks() {
@@ -74,32 +94,24 @@ export const Dashboard: React.FC = () => {
         const res = await fetch(
           `https://financialmodelingprep.com/stable/company-screener?marketCapMoreThan=2000&exchange=NASDAQ,NYSE&apikey=${key}`
         );
-        if (!res.ok) return;
+        if (!res.ok) { setApiError('FMP screener unavailable — using demo data'); return; }
         const stocks: Stock[] = await res.json();
         if (cancelled) return;
-
-        const stockBySym: Record<string, Stock> = {};
-        stocks.forEach(s => { stockBySym[s.symbol] = s; });
-
-        const adv = stocks.filter(s => s.changesPercentage > 0).length;
-        const dec = stocks.filter(s => s.changesPercentage < 0).length;
-        const unch = stocks.length - adv - dec;
-
         setData(prev => ({
           ...prev,
           stocks,
-          stockBySym,
-          breadth: { advancers: adv, decliners: dec, unchanged: unch },
+          stockBySym: buildStockMap(stocks),
+          breadth: buildBreadth(stocks),
         }));
+        setApiError(null);
       } catch {
-        // ignore
+        setApiError('FMP screener failed — using demo data');
       }
     }
     loadStocks();
     return () => { cancelled = true; };
   }, []);
 
-  // Debounced save
   const saveMe = useCallback(() => {
     if (saveTimer.current) clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(async () => {
@@ -109,9 +121,7 @@ export const Dashboard: React.FC = () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ watchlist, portfolio }),
         });
-      } catch {
-        // ignore
-      }
+      } catch { /* ignore */ }
     }, 700);
   }, [watchlist, portfolio]);
 
@@ -124,9 +134,7 @@ export const Dashboard: React.FC = () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ picks }),
         });
-      } catch {
-        // ignore
-      }
+      } catch { /* ignore */ }
     }, 800);
   }, [picks]);
 
@@ -163,12 +171,26 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div>
+      {apiError && (
+        <div style={{
+          background: '#fffbeb', borderBottom: '1px solid #fcd34d',
+          padding: '8px 16px', fontSize: 12, color: '#92400e', textAlign: 'center',
+        }}>
+          {apiError}
+        </div>
+      )}
+
       <PulseBar pulse={data.pulse} breadth={data.breadth} />
 
       <div style={{ padding: 16, maxWidth: 1400, margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr 320px', gap: 16 }}>
+        {/* Responsive: 1-col mobile, 2-col tablet, 3-col desktop */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gap: 16,
+        }}>
           {/* Left column */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16, minWidth: 0 }}>
             <WatchlistPanel
               watchlist={watchlist}
               stocks={data.stocks}
@@ -184,12 +206,12 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {/* Center column */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16, minWidth: 0 }}>
             {selected ? (
               <div style={{
                 background: '#fff', borderRadius: 8, border: '1px solid #e5e7eb', padding: 20,
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
                   <div>
                     <h2 style={{ margin: 0, fontSize: 20, fontWeight: 800 }}>{selected.symbol}</h2>
                     <div style={{ fontSize: 13, color: '#6b7280' }}>{selected.name}</div>
@@ -249,7 +271,7 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {/* Right column */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16, minWidth: 0 }}>
             <PicksPanel
               picks={picks}
               stocks={data.stocks}
