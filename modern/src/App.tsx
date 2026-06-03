@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import TerminalPage from './pages/TerminalPage'
+import { TerminalPage } from './pages/TerminalPage'
 import StockDetailsPage from './pages/StockDetailsPage'
 
 type Page = 'terminal' | 'stock-details'
