@@ -1,0 +1,1851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Equity Research — The Undervalued Playbook | Lei Holdings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root {
+  --white: #ffffff;
+  --bg: #f7f8fa;
+  --bg-subtle: #f0f2f5;
+  --navy: #0a1628;
+  --navy-mid: #152847;
+  --navy-light: #1e3a5f;
+  --blue: #1a4fa0;
+  --blue-mid: #2563b0;
+  --blue-light: #3b82c4;
+  --blue-pale: #e8f0fb;
+  --green: #0d5c3a;
+  --green-mid: #166d46;
+  --green-pale: #e6f4ee;
+  --red: #8b1a1a;
+  --red-mid: #a52828;
+  --red-pale: #fdf0f0;
+  --amber: #92650a;
+  --amber-pale: #fdf5e6;
+  --gold: #b08d3c;
+  --rule: #dde2ea;
+  --rule-light: #eaecf0;
+  --text: #0d1b2e;
+  --text-secondary: #3d4f66;
+  --text-muted: #6b7f99;
+  --text-faint: #98a8bc;
+  --sidebar-w: 280px;
+}
+
+html { font-size: 15px; scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  background: var(--navy);
+  color: rgba(255,255,255,0.9);
+  padding: 0 32px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid var(--navy-light);
+}
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.topbar-brand {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+.topbar-divider {
+  width: 1px;
+  height: 14px;
+  background: rgba(255,255,255,0.2);
+}
+.topbar-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.08em;
+}
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.topbar-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+}
+.topbar-members {
+  background: var(--blue);
+  color: #fff;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+}
+
+/* ── REPORT HEADER ── */
+.report-header {
+  background: var(--white);
+  border-bottom: 3px solid var(--navy);
+  padding: 32px 32px 0;
+}
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+.header-left {}
+.report-type {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 8px;
+  display: block;
+}
+.report-title {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: clamp(28px, 3.5vw, 42px);
+  font-weight: 500;
+  line-height: 1.1;
+  color: var(--navy);
+  letter-spacing: -0.01em;
+}
+.report-subtitle {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  font-weight: 400;
+}
+.header-right {
+  text-align: right;
+  flex-shrink: 0;
+  margin-left: 40px;
+}
+.rating-badge {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--navy);
+  color: #fff;
+  padding: 12px 20px;
+  min-width: 120px;
+}
+.rating-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 4px;
+}
+.rating-value {
+  font-family: 'EB Garamond', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: #52c4a0;
+}
+
+.header-meta-row {
+  display: flex;
+  gap: 0;
+  border-top: 1px solid var(--rule);
+  margin-top: 0;
+}
+.header-meta-cell {
+  padding: 10px 20px 10px 0;
+  margin-right: 20px;
+  border-right: 1px solid var(--rule-light);
+}
+.header-meta-cell:last-child { border-right: none; }
+.hm-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  display: block;
+  margin-bottom: 2px;
+}
+.hm-value {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+/* ── LAYOUT ── */
+.page-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.body-grid {
+  display: grid;
+  grid-template-columns: 1fr var(--sidebar-w);
+  gap: 0;
+  align-items: start;
+}
+
+/* ── MAIN ── */
+.main-col {
+  padding: 32px 40px 60px 0;
+  border-right: 1px solid var(--rule);
+  min-width: 0;
+}
+
+/* ── SECTIONS ── */
+.section {
+  margin-bottom: 48px;
+  padding-bottom: 48px;
+  border-bottom: 1px solid var(--rule-light);
+}
+.section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+.section-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.sec-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: var(--text-faint);
+  letter-spacing: 0.1em;
+}
+.sec-rule { flex: 0 0 24px; height: 1px; background: var(--rule); }
+.sec-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+h2 {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: clamp(20px, 2.5vw, 28px);
+  font-weight: 500;
+  color: var(--navy);
+  line-height: 1.2;
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 28px 0 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--rule-light);
+}
+
+p {
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+p strong { color: var(--text); font-weight: 600; }
+p em { font-style: italic; color: var(--text); }
+p:last-child { margin-bottom: 0; }
+
+/* ── STOCK HEADER ── */
+.stock-header {
+  background: var(--navy);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sh-left {}
+.sh-company {
+  font-family: 'EB Garamond', serif;
+  font-size: 26px;
+  font-weight: 500;
+  color: #ffffff;
+  line-height: 1;
+}
+.sh-ticker {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.08em;
+  margin-top: 4px;
+  display: block;
+}
+.sh-right {
+  display: flex;
+  gap: 24px;
+}
+.sh-stat {}
+.sh-stat-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  display: block;
+  margin-bottom: 3px;
+}
+.sh-stat-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+}
+.sh-stat-val.up { color: #52c4a0; }
+.sh-stat-val.down { color: #f08080; }
+
+/* ── METRICS GRID ── */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--rule);
+  margin: 20px 0;
+}
+.metric-cell {
+  padding: 14px 16px;
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  background: var(--white);
+}
+.metric-cell:nth-child(3n) { border-right: none; }
+.metric-cell:nth-last-child(-n+3) { border-bottom: none; }
+.mc-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  display: block;
+  margin-bottom: 6px;
+}
+.mc-value {
+  font-family: 'EB Garamond', serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--navy);
+  line-height: 1;
+}
+.mc-value.pos { color: var(--green); }
+.mc-value.neg { color: var(--red); }
+.mc-sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: var(--text-faint);
+  margin-top: 4px;
+  display: block;
+}
+
+/* ── KEY FINDING BOX ── */
+.finding-box {
+  border-left: 3px solid var(--blue);
+  background: var(--blue-pale);
+  padding: 14px 18px;
+  margin: 20px 0;
+}
+.finding-box p {
+  font-size: 13px;
+  color: var(--navy-mid);
+  margin: 0;
+  line-height: 1.65;
+}
+.finding-box p strong { color: var(--navy); }
+
+/* ── ANALYST NOTE ── */
+.analyst-note {
+  background: var(--navy);
+  padding: 20px 24px;
+  margin: 24px 0;
+}
+.an-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  display: block;
+  margin-bottom: 10px;
+}
+.analyst-note p {
+  font-family: 'EB Garamond', serif;
+  font-size: 16px;
+  font-style: italic;
+  color: rgba(255,255,255,0.9);
+  line-height: 1.65;
+  margin: 0;
+}
+.an-source {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: rgba(255,255,255,0.35);
+  margin-top: 10px;
+  display: block;
+  letter-spacing: 0.05em;
+}
+
+/* ── MAG7 CHART ── */
+.chart-wrap {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  padding: 20px;
+  margin: 20px 0;
+}
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule-light);
+}
+.chart-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+.chart-source {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: var(--text-faint);
+}
+.bar-row {
+  display: grid;
+  grid-template-columns: 52px 1fr 64px;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 7px;
+}
+.bar-row:last-child { margin-bottom: 0; }
+.bar-ticker {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  letter-spacing: 0.03em;
+}
+.bar-ticker.featured { color: var(--navy); font-weight: 500; }
+.bar-track {
+  height: 18px;
+  background: var(--bg-subtle);
+  position: relative;
+  overflow: hidden;
+}
+.bar-fill {
+  position: absolute;
+  left: 0; top: 0;
+  height: 100%;
+}
+.bar-fill.pos { background: #1e6e4e; }
+.bar-fill.neg { background: #b03030; }
+.bar-fill.featured { background: var(--navy); }
+.bar-pct {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  text-align: right;
+  letter-spacing: 0.03em;
+}
+.bar-pct.pos { color: var(--green); }
+.bar-pct.neg { color: var(--red); }
+.bar-pct.featured { color: var(--navy); font-weight: 500; }
+.chart-note {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: var(--text-faint);
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid var(--rule-light);
+  letter-spacing: 0.03em;
+  line-height: 1.5;
+}
+
+/* ── PEER TABLE ── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin: 16px 0;
+}
+.data-table thead tr {
+  border-bottom: 2px solid var(--navy);
+}
+.data-table th {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 8px 12px;
+  text-align: right;
+  font-weight: 400;
+  background: var(--white);
+}
+.data-table th:first-child { text-align: left; }
+.data-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--rule-light);
+  text-align: right;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--text-secondary);
+  background: var(--white);
+}
+.data-table td:first-child {
+  text-align: left;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 400;
+}
+.data-table tr.featured td {
+  background: #f0f4fb;
+  color: var(--navy);
+  font-weight: 500;
+}
+.data-table tr.featured td:first-child { font-weight: 600; }
+.td-green { color: var(--green) !important; }
+.td-red { color: var(--red) !important; }
+.td-tag {
+  display: inline-block;
+  background: var(--navy);
+  color: #fff;
+  font-size: 8px;
+  padding: 1px 5px;
+  letter-spacing: 0.08em;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+/* ── VALUATION PANEL ── */
+.val-panel {
+  border: 1px solid var(--rule);
+  background: var(--white);
+  margin: 24px 0;
+}
+.val-panel-header {
+  background: var(--navy-mid);
+  padding: 12px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.val-panel-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+}
+.val-panel-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: #52c4a0;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+.val-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid var(--rule);
+}
+.val-stat {
+  padding: 16px 18px;
+  border-right: 1px solid var(--rule);
+}
+.val-stat:last-child { border-right: none; }
+.vs-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  display: block;
+  margin-bottom: 6px;
+}
+.vs-value {
+  font-family: 'EB Garamond', serif;
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--navy);
+  line-height: 1;
+}
+.vs-value.highlight { color: var(--green); }
+.vs-value.blue { color: var(--blue); }
+.vs-sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: var(--text-faint);
+  margin-top: 4px;
+  display: block;
+}
+
+/* ── INSIGHTVALUE TABLE ── */
+.iv-section {}
+.iv-legend-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 18px;
+  background: var(--bg-subtle);
+  border-bottom: 1px solid var(--rule);
+}
+.iv-legend-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+.iv-legend-items {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.iv-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 1px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+.iv-dot-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: var(--text-muted);
+}
+.iv-table-head {
+  display: grid;
+  grid-template-columns: 130px 120px 1fr 80px 72px;
+  padding: 7px 18px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--bg-subtle);
+}
+.iv-table-head span {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+.iv-row {
+  display: grid;
+  grid-template-columns: 130px 120px 1fr 80px 72px;
+  padding: 8px 18px;
+  border-bottom: 1px solid var(--rule-light);
+  align-items: center;
+}
+.iv-row:last-child { border-bottom: none; }
+.iv-row.composite {
+  background: #f0f4fb;
+  border-top: 1px solid #c8d4e8;
+  border-bottom: 1px solid var(--rule);
+}
+.iv-method {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  color: var(--text);
+}
+.iv-method.composite-label { font-weight: 600; color: var(--navy); }
+.iv-variant {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--text-faint);
+}
+.iv-bar-col { padding: 0 6px; }
+.iv-track {
+  height: 8px;
+  background: var(--rule-light);
+  position: relative;
+  overflow: visible;
+}
+.iv-fill { position: absolute; left: 0; top: 0; height: 100%; }
+.iv-fill.up { background: var(--green-mid); }
+.iv-fill.nf { background: var(--amber); }
+.iv-fill.dn { background: var(--red-mid); }
+.iv-fill.comp { background: var(--blue); }
+.iv-mline {
+  position: absolute;
+  top: -3px; bottom: -3px;
+  width: 1px;
+  background: var(--text-muted);
+  z-index: 2;
+}
+.iv-value {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-align: right;
+}
+.iv-value.composite-val { font-weight: 500; color: var(--navy); }
+.iv-vs {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  text-align: right;
+}
+.iv-vs.pos { color: var(--green); }
+.iv-vs.neg { color: var(--red); }
+.iv-vs.nf { color: var(--amber); }
+.iv-vs.composite-vs { font-weight: 600; color: var(--blue); }
+.iv-params {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--rule);
+}
+.iv-param {
+  padding: 10px 14px;
+  border-right: 1px solid var(--rule-light);
+  background: var(--bg-subtle);
+}
+.iv-param:last-child { border-right: none; }
+.iv-param-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  display: block;
+  margin-bottom: 5px;
+}
+.iv-param-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--text);
+  background: var(--white);
+  border: 1px solid var(--rule);
+  padding: 4px 8px;
+  display: block;
+}
+.iv-cta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  background: var(--navy);
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.iv-cta-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.03em;
+}
+.iv-cta-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: #ffffff;
+  background: var(--blue);
+  border: none;
+  padding: 7px 16px;
+  text-decoration: none;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+.iv-cta-btn:hover { background: var(--blue-mid); }
+
+/* ── VERSUS COMPARE ── */
+.versus-panel {
+  display: grid;
+  grid-template-columns: 1fr 40px 1fr;
+  border: 1px solid var(--rule);
+  margin: 16px 0;
+}
+.versus-col { padding: 18px; background: var(--white); }
+.versus-col.lhs { background: #f4f7fc; }
+.versus-mid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-subtle);
+  font-family: 'EB Garamond', serif;
+  font-size: 14px;
+  color: var(--text-muted);
+  font-style: italic;
+  border-left: 1px solid var(--rule);
+  border-right: 1px solid var(--rule);
+}
+.vc-brand {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  display: block;
+  margin-bottom: 14px;
+}
+.vc-metric { margin-bottom: 10px; }
+.vc-ml {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  display: block;
+  margin-bottom: 2px;
+}
+.vc-val {
+  font-family: 'EB Garamond', serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--navy);
+}
+.vc-val.better { color: var(--green); }
+.vc-val.worse { color: var(--red); }
+
+/* ── CATALYST LIST ── */
+.catalyst-list { list-style: none; margin: 16px 0; }
+.catalyst-item {
+  display: flex;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rule-light);
+  align-items: flex-start;
+}
+.catalyst-item:last-child { border-bottom: none; }
+.catalyst-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--blue);
+  flex-shrink: 0;
+  min-width: 22px;
+  margin-top: 2px;
+  font-weight: 500;
+}
+.catalyst-body {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+.catalyst-body strong { color: var(--text); font-weight: 600; }
+
+/* ── RISK GRID ── */
+.risk-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  margin: 16px 0;
+}
+.risk-col {
+  background: var(--white);
+  padding: 18px;
+}
+.risk-col-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  display: block;
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--rule-light);
+}
+.risk-item {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 9px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  align-items: flex-start;
+}
+.risk-dash {
+  color: var(--red);
+  flex-shrink: 0;
+  margin-top: 1px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* ── CLOSING ── */
+.closing-panel {
+  background: var(--navy);
+  padding: 28px 32px;
+  margin-top: 32px;
+}
+.closing-panel h3 {
+  font-family: 'EB Garamond', serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: #ffffff;
+  text-transform: none;
+  letter-spacing: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+  margin: 0 0 14px;
+}
+.closing-panel p {
+  color: rgba(255,255,255,0.65);
+  font-size: 13px;
+}
+
+.disclaimer {
+  padding: 16px 0;
+  border-top: 1px solid var(--rule-light);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: var(--text-faint);
+  letter-spacing: 0.03em;
+  line-height: 1.7;
+  margin-top: 32px;
+}
+
+/* ── SIDEBAR ── */
+.sidebar-col {
+  padding: 24px 0 24px 28px;
+}
+.sb-section {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--rule-light);
+}
+.sb-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.sb-heading {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  display: block;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule-light);
+}
+
+/* market snapshot */
+.mkt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--rule-light);
+}
+.mkt-row:last-child { border-bottom: none; }
+.mkt-name {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.mkt-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+}
+.mkt-val.up { color: var(--green); }
+.mkt-val.dn { color: var(--red); }
+
+/* targets */
+.target-block {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  margin-bottom: 8px;
+  padding: 12px 14px;
+}
+.tb-ticker {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 8px;
+}
+.tb-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+.tb-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: var(--text-faint);
+}
+.tb-price {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+}
+.tb-price.current { color: var(--text-secondary); }
+.tb-price.lei { color: var(--blue); }
+.tb-price.target { color: var(--green); }
+.tb-divider { height: 1px; background: var(--rule-light); margin: 6px 0; }
+.tb-upside {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--green);
+  font-weight: 500;
+}
+
+/* alert */
+.alert-box {
+  background: #fffbf0;
+  border: 1px solid var(--gold);
+  padding: 12px 14px;
+  margin-bottom: 8px;
+}
+.alert-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--amber);
+  display: block;
+  margin-bottom: 6px;
+}
+.alert-text {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* thesis checklist */
+.thesis-row {
+  padding: 10px 12px;
+  background: var(--white);
+  border: 1px solid var(--rule);
+  margin-bottom: 6px;
+}
+.thesis-row:last-child { margin-bottom: 0; }
+.tr-cat {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--blue);
+  display: block;
+  margin-bottom: 4px;
+}
+.tr-text {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ── RESPONSIVE — TABLET ── */
+@media (max-width: 900px) {
+  .page-wrap { padding: 0 20px; }
+  .report-header { padding: 24px 20px 0; }
+  .main-col { padding: 24px 28px 40px 0; }
+  .sidebar-col { padding: 24px 0 24px 20px; }
+  .metrics-grid { grid-template-columns: 1fr 1fr; }
+  .iv-params { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ── RESPONSIVE — MOBILE ── */
+@media (max-width: 680px) {
+  html { font-size: 14px; }
+
+  /* topbar */
+  .topbar { padding: 0 16px; height: auto; min-height: 38px; flex-wrap: wrap; gap: 4px; padding-top: 6px; padding-bottom: 6px; }
+  .topbar-right { display: none; }
+
+  /* header */
+  .report-header { padding: 20px 16px 0; }
+  .header-top { flex-direction: column; gap: 12px; }
+  .header-right { text-align: left; margin-left: 0; }
+  .report-title { font-size: 24px; }
+  .header-meta-row { flex-wrap: wrap; gap: 0; }
+  .header-meta-cell { padding: 5px 10px 5px 0; margin-right: 6px; }
+
+  /* layout */
+  .page-wrap { padding: 0 16px; }
+  .body-grid { grid-template-columns: 1fr; }
+  .main-col { padding: 20px 0 40px; border-right: none; }
+  .sidebar-col { padding: 0; border-top: 2px solid var(--rule); padding-top: 24px; }
+
+  /* typography */
+  h2 { font-size: 20px; }
+  h3 { font-size: 11px; }
+  p { font-size: 13px; }
+
+  /* stock header */
+  .stock-header { padding: 14px 16px; flex-direction: column; gap: 10px; }
+  .sh-company { font-size: 20px; }
+  .sh-right { flex-wrap: wrap; gap: 10px; }
+  .sh-stat-val { font-size: 13px; }
+
+  /* metrics */
+  .metrics-grid { grid-template-columns: 1fr 1fr; }
+  .mc-value { font-size: 18px; }
+
+  /* analyst note */
+  .analyst-note { padding: 16px; }
+  .analyst-note p { font-size: 14px; }
+
+  /* bar chart */
+  .chart-wrap { padding: 14px; }
+  .bar-row { grid-template-columns: 40px 1fr 50px; gap: 6px; }
+  .bar-ticker { font-size: 10px; }
+  .bar-pct { font-size: 10px; }
+
+  /* peer table - scroll horizontally on mobile */
+  .data-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .data-table { min-width: 420px; font-size: 11px; }
+  .data-table th { font-size: 8px; padding: 6px 8px; }
+  .data-table td { padding: 7px 8px; font-size: 10px; }
+  .data-table td:first-child { font-size: 12px; }
+
+  /* valuation panel */
+  .val-panel-header { padding: 10px 14px; flex-direction: column; align-items: flex-start; gap: 4px; }
+  .val-stats-row { grid-template-columns: 1fr 1fr; }
+  .val-stat { padding: 12px 14px; }
+  .vs-value { font-size: 20px; }
+
+  /* InsightValue */
+  .iv-legend-row { flex-direction: column; gap: 6px; align-items: flex-start; padding: 10px 14px; }
+  .iv-legend-items { flex-wrap: wrap; gap: 8px; }
+  .iv-table-head { display: none; }
+  .iv-row { grid-template-columns: 1fr 66px 58px; padding: 7px 14px; gap: 4px; }
+  .iv-row .iv-variant { display: none; }
+  .iv-row .iv-bar-col { display: none; }
+  .iv-method { font-size: 11px; }
+  .iv-value { font-size: 10px; }
+  .iv-vs { font-size: 10px; }
+  .iv-params { grid-template-columns: 1fr 1fr; }
+  .iv-param { padding: 8px 10px; }
+  .iv-cta { flex-direction: column; gap: 8px; padding: 12px 14px; }
+  .iv-cta-btn { width: 100%; text-align: center; padding: 10px; }
+  .iv-cta-text { font-size: 10px; }
+
+  /* versus */
+  .versus-panel { grid-template-columns: 1fr; }
+  .versus-mid { display: none; }
+  .versus-col.lhs { border-bottom: 1px solid var(--rule); }
+  .vc-val { font-size: 17px; }
+
+  /* catalyst */
+  .catalyst-item { gap: 10px; padding: 12px 0; }
+  .catalyst-body { font-size: 12px; }
+
+  /* risk */
+  .risk-grid { grid-template-columns: 1fr; }
+  .risk-item { font-size: 12px; }
+
+  /* closing */
+  .closing-panel { padding: 20px; }
+  .closing-panel h3 { font-size: 18px; }
+  .closing-panel p { font-size: 12px; }
+
+  /* sidebar */
+  .sb-section { margin-bottom: 20px; padding-bottom: 20px; }
+  .target-block { padding: 10px 12px; }
+  .thesis-row { padding: 8px 10px; }
+  .tr-text { font-size: 11px; }
+  .alert-text { font-size: 11px; }
+}
+
+/* ── RESPONSIVE — SMALL MOBILE ── */
+@media (max-width: 380px) {
+  .metrics-grid { grid-template-columns: 1fr; }
+  .val-stats-row { grid-template-columns: 1fr; }
+  .iv-params { grid-template-columns: 1fr 1fr; }
+  .header-meta-cell { padding: 4px 0; border-right: none; margin-right: 0; width: 50%; }
+  .sh-right { gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <span class="topbar-brand">Lei Holdings</span>
+    <div class="topbar-divider"></div>
+    <span class="topbar-meta">Equity Research · June 2026</span>
+    <div class="topbar-divider"></div>
+    <span class="topbar-meta">Issue No. 01</span>
+  </div>
+  <div class="topbar-right">
+    <span class="topbar-tag">For Distribution to Members Only</span>
+    <span class="topbar-members">Members</span>
+  </div>
+</div>
+
+<!-- REPORT HEADER -->
+<div class="report-header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="header-left">
+        <span class="report-type">Equity Research · Special Report</span>
+        <h1 class="report-title">The Undervalued Playbook</h1>
+        <p class="report-subtitle">Two household names, historic discounts, and why the most expensive market in years is creating the entry point</p>
+      </div>
+      <div class="header-right">
+        <div class="rating-badge">
+          <span class="rating-label">Conviction</span>
+          <span class="rating-value">BUY</span>
+        </div>
+      </div>
+    </div>
+    <div class="header-meta-row">
+      <div class="header-meta-cell">
+        <span class="hm-label">Published</span>
+        <span class="hm-value">June 3, 2026</span>
+      </div>
+      <div class="header-meta-cell">
+        <span class="hm-label">Stocks Covered</span>
+        <span class="hm-value">META · LULU</span>
+      </div>
+      <div class="header-meta-cell">
+        <span class="hm-label">S&P 500 YTD</span>
+        <span class="hm-value">+8.1%</span>
+      </div>
+      <div class="header-meta-cell">
+        <span class="hm-label">Analyst</span>
+        <span class="hm-value">Lei Holdings Research</span>
+      </div>
+      <div class="header-meta-cell">
+        <span class="hm-label">Risk Level</span>
+        <span class="hm-value">Moderate</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="page-wrap">
+  <div class="body-grid">
+    <main class="main-col">
+
+      <!-- §01 MACRO -->
+      <section class="section">
+        <div class="section-eyebrow">
+          <span class="sec-num">01</span>
+          <div class="sec-rule"></div>
+          <span class="sec-tag">Macro Context</span>
+        </div>
+        <h2>The Most Expensive Market in Years — And Why That's Creating Opportunity</h2>
+
+        <p>The S&P 500 is up 8.1% year-to-date. The Magnificent 7 represent <strong>34.8% of the entire index</strong> — a concentration level not seen since the dot-com era. Valuations on the most popular names are stretched. Most investors are either chasing what has already run or sitting on the sidelines waiting for a pullback that may not come.</p>
+
+        <p>Both of those responses miss the real opportunity. Expensive markets don't mean <em>every</em> stock is expensive. They mean the crowded trades are expensive. And when institutional capital concentrates in one corner, it inevitably leaves value elsewhere. That gap — between sentiment and underlying fundamentals — is where this report is focused.</p>
+
+        <div class="analyst-note">
+          <span class="an-label">Lei Holdings Research — Core Thesis</span>
+          <p>"The expensive part of this market is priced for perfection. One earnings miss and it collapses. The two names in this report are priced for failure. They are not failing. That asymmetry is the opportunity."</p>
+          <span class="an-source">Lei Holdings Equity Research · June 2026</span>
+        </div>
+
+        <h3>Sector Rotation — What's Actually Happening</h3>
+
+        <p>The Magnificent 7 cohort that drove markets for three consecutive years has fractured. Alphabet is up 22% YTD, Apple up 14%, while Microsoft is down 16% and Tesla down 13%. The group is no longer moving as one. Institutional investors are rotating selectively — and that selectivity is creating mispricings within some of the most fundamentally strong businesses in the market.</p>
+
+        <div class="finding-box">
+          <p><strong>The rotation signal:</strong> When funds sell indiscriminately — not because fundamentals deteriorated, but because a sector is being trimmed — they create windows. The companies with the strongest underlying businesses but the weakest near-term sentiment are precisely where risk-adjusted returns are most attractive. Both names in this report fit that profile exactly.</p>
+        </div>
+      </section>
+
+      <!-- §02 META -->
+      <section class="section">
+        <div class="section-eyebrow">
+          <span class="sec-num">02</span>
+          <div class="sec-rule"></div>
+          <span class="sec-tag">Stock Analysis — No. 1</span>
+        </div>
+
+        <div class="stock-header">
+          <div class="sh-left">
+            <div class="sh-company">Meta Platforms</div>
+            <span class="sh-ticker">NASDAQ: META · Family of Apps + Reality Labs</span>
+          </div>
+          <div class="sh-right">
+            <div class="sh-stat">
+              <span class="sh-stat-label">Current Price</span>
+              <span class="sh-stat-val">~$615</span>
+            </div>
+            <div class="sh-stat">
+              <span class="sh-stat-label">YTD Return</span>
+              <span class="sh-stat-val down">−7%</span>
+            </div>
+            <div class="sh-stat">
+              <span class="sh-stat-label">Rating</span>
+              <span class="sh-stat-val up">BUY</span>
+            </div>
+          </div>
+        </div>
+
+        <h2>The Fastest-Growing Mag 7 Name — Trading at Its Cheapest Relative Multiple in Years</h2>
+
+        <p>Meta is down 7–8% year-to-date while Alphabet — which is growing slower, spending more on capex, and will be free cash flow negative in 2026 — is up 22%. That performance gap cannot be explained by fundamentals. It is explained by narrative. And when the narrative diverges from financial reality this sharply, that is where the opportunity lives.</p>
+
+        <div class="metrics-grid">
+          <div class="metric-cell">
+            <span class="mc-label">Revenue Growth YoY</span>
+            <div class="mc-value pos">+33.1%</div>
+            <span class="mc-sub">Q1 2026 · fastest since 2021</span>
+          </div>
+          <div class="metric-cell">
+            <span class="mc-label">Q1 2026 Revenue</span>
+            <div class="mc-value">$56.31B</div>
+            <span class="mc-sub">Beat consensus by $862M</span>
+          </div>
+          <div class="metric-cell">
+            <span class="mc-label">Operating Margin</span>
+            <div class="mc-value">~41%</div>
+            <span class="mc-sub">Q1 2026 · sustained through capex ramp</span>
+          </div>
+          <div class="metric-cell">
+            <span class="mc-label">TTM Free Cash Flow</span>
+            <div class="mc-value pos">$48.3B</div>
+            <span class="mc-sub">FCF positive; Alphabet goes negative</span>
+          </div>
+          <div class="metric-cell">
+            <span class="mc-label">Ad Impressions YoY</span>
+            <div class="mc-value pos">+19%</div>
+            <span class="mc-sub">Q1 2026 · volume and price expanding</span>
+          </div>
+          <div class="metric-cell">
+            <span class="mc-label">Price Per Ad YoY</span>
+            <div class="mc-value pos">+12%</div>
+            <span class="mc-sub">Simultaneous with volume growth — rare</span>
+          </div>
+          <div class="metric-cell">
+            <span class="mc-label">Daily Active People</span>
+            <div class="mc-value">3.56B</div>
+            <span class="mc-sub">March 2026 average</span>
+          </div>
+          <div class="metric-cell">
+            <span class="mc-label">Adjusted EPS</span>
+            <div class="mc-value">$7.31</div>
+            <span class="mc-sub">Beat consensus $6.66 by 9.6%</span>
+          </div>
+          <div class="metric-cell">
+            <span class="mc-label">2026 Capex Guidance</span>
+            <div class="mc-value neg">$125–145B</div>
+            <span class="mc-sub">Primary market concern; AI infrastructure</span>
+          </div>
+        </div>
+
+        <p>The dual expansion of ad impressions (+19%) and price per ad (+12%) occurring simultaneously is the critical tell. At a platform of Meta's maturity and scale, this almost never happens. Volume and price growing together signals that the AI-driven ad targeting improvements are not merely working — they are compounding. Advertisers earn better returns, so they spend more, which increases prices, which attracts more advertisers. This is a self-reinforcing flywheel that the current valuation does not reflect.</p>
+
+        <h3>The Valuation Disconnect vs. Mag 7 Peers</h3>
+
+        <div class="chart-wrap">
+          <div class="chart-header">
+            <span class="chart-title">Magnificent 7 — YTD Performance 2026</span>
+            <span class="chart-source">Source: FinanceCharts · PortfoliosLab · as of June 2026</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-ticker">GOOGL</span>
+            <div class="bar-track"><div class="bar-fill pos" style="width:55%"></div></div>
+            <span class="bar-pct pos">+22.0%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-ticker">AAPL</span>
+            <div class="bar-track"><div class="bar-fill pos" style="width:35%"></div></div>
+            <span class="bar-pct pos">+14.3%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-ticker">AMZN</span>
+            <div class="bar-track"><div class="bar-fill pos" style="width:8%"></div></div>
+            <span class="bar-pct pos">+3.0%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-ticker">NVDA</span>
+            <div class="bar-track"><div class="bar-fill pos" style="width:5%"></div></div>
+            <span class="bar-pct pos">+2.0%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-ticker featured">META ★</span>
+            <div class="bar-track"><div class="bar-fill featured" style="width:18%"></div></div>
+            <span class="bar-pct featured">−7.0%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-ticker">TSLA</span>
+            <div class="bar-track"><div class="bar-fill neg" style="width:32%"></div></div>
+            <span class="bar-pct neg">−13.0%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-ticker">MSFT</span>
+            <div class="bar-track"><div class="bar-fill neg" style="width:40%"></div></div>
+            <span class="bar-pct neg">−16.2%</span>
+          </div>
+          <p class="chart-note">Meta is the fastest-growing Mag 7 company by revenue (+33% YoY) and the worst performer YTD. Alphabet grows at 21% and is up 22%. This 29-point performance divergence is not explained by fundamentals.</p>
+        </div>
+
+        <h3>Why the Market Is Wrong — The Validation Tax</h3>
+
+        <p>The market's primary concern is Meta's raised full-year 2026 capex guidance of $125–145 billion. When this was announced, the stock fell ~6% in after-hours trading. The sell-off conflated capital intensity with capital destruction. The distinction matters.</p>
+
+        <p>Alphabet is projected to spend $180–190 billion in capex and go FCF negative. Yet Alphabet trades at a 29x forward P/E vs Meta's 19x — despite Meta growing 33% vs Alphabet's 21%. The reason: Google Cloud provides a visible, external B2B revenue line that "proves" AI spend is generating returns. Meta's AI is doing the same work internally — directly driving ad targeting to record efficiency — but without a public-facing cloud business to validate it. This discount for doing the same work less visibly is the opportunity.</p>
+
+        <div class="data-table-wrap"><table class="data-table">
+          <thead>
+            <tr>
+              <th>Company</th>
+              <th>Fwd P/E</th>
+              <th>Rev Growth</th>
+              <th>Op. Margin</th>
+              <th>EV/EBITDA</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="featured">
+              <td>Meta Platforms <span class="td-tag">★</span></td>
+              <td>~18–19x</td>
+              <td class="td-green">+33.1%</td>
+              <td class="td-green">~41%</td>
+              <td>14.5x</td>
+            </tr>
+            <tr>
+              <td>Alphabet (GOOGL)</td>
+              <td>29x</td>
+              <td>+21.8%</td>
+              <td>32.7%</td>
+              <td>27.3x</td>
+            </tr>
+            <tr>
+              <td>Pinterest (PINS)</td>
+              <td>42x</td>
+              <td>—</td>
+              <td>Negative</td>
+              <td>31.8x</td>
+            </tr>
+            <tr>
+              <td>Snap Inc. (SNAP)</td>
+              <td>Negative</td>
+              <td>+15.0%</td>
+              <td>−6.8%</td>
+              <td>Negative</td>
+            </tr>
+          </tbody>
+        </table></div>
+
+        <h3>Valuation — Lei Holdings InsightValue Model</h3>
+
+        <div class="val-panel">
+          <div class="val-panel-header">
+            <span class="val-panel-title">Composite Fair Value — META · 10 methods, trimmed-mean composite</span>
+            <span class="val-panel-badge">● Undervalued · Updated Jun 3, 2026</span>
+          </div>
+          <div class="val-stats-row">
+            <div class="val-stat">
+              <span class="vs-label">Lei Holdings Fair Value</span>
+              <div class="vs-value highlight">$658.72</div>
+              <span class="vs-sub">per share · trimmed mean</span>
+            </div>
+            <div class="val-stat">
+              <span class="vs-label">Market Price</span>
+              <div class="vs-value">$597.63</div>
+              <span class="vs-sub" style="color:var(--red)">−2.84 (−0.47%) today</span>
+            </div>
+            <div class="val-stat">
+              <span class="vs-label">Conservative Upside</span>
+              <div class="vs-value highlight">+10.2%</div>
+              <span class="vs-sub">This is the floor, not the bull case</span>
+            </div>
+            <div class="val-stat">
+              <span class="vs-label">Method Range</span>
+              <div class="vs-value blue" style="font-size:17px;">$332 – $1,544</div>
+              <span class="vs-sub">10 of 10 methods</span>
+            </div>
+          </div>
+
+          <div class="iv-section">
+            <div class="iv-legend-row">
+              <span class="iv-legend-label">Method-by-method · implied price per share</span>
+              <div class="iv-legend-items">
+                <span><span class="iv-dot" style="background:var(--green-mid)"></span><span class="iv-dot-text">Upside</span></span>
+                <span><span class="iv-dot" style="background:var(--amber)"></span><span class="iv-dot-text">Near fair</span></span>
+                <span><span class="iv-dot" style="background:var(--red-mid)"></span><span class="iv-dot-text">Downside</span></span>
+                <span><span class="iv-dot" style="background:var(--blue)"></span><span class="iv-dot-text">Composite</span></span>
+              </div>
+            </div>
+            <div class="iv-table-head">
+              <span>Method</span>
+              <span>Variant</span>
+              <span>Implied Price</span>
+              <span>Value</span>
+              <span>vs Market</span>
+            </div>
+            <!-- rows -->
+            <div class="iv-row">
+              <span class="iv-method">DCF-20</span>
+              <span class="iv-variant">20Y · Operating CF</span>
+              <div class="iv-bar-col"><div class="iv-track"><div class="iv-mline" style="left:28%"></div><div class="iv-fill up" style="width:100%"></div></div></div>
+              <span class="iv-value">$1,543.57</span>
+              <span class="iv-vs pos">+158.3%</span>
+            </div>
+            <div class="iv-row">
+              <span class="iv-method">DFCF-20</span>
+              <span class="iv-variant">20Y · Free CF</span>
+              <div class="iv-bar-col"><div class="iv-track"><div class="iv-mline" style="left:28%"></div><div class="iv-fill nf" style="width:30%"></div></div></div>
+              <span class="iv-value">$600.11</span>
+              <span class="iv-vs nf">+0.4%</span>
+            </div>
+            <div class="iv-row">
+              <span class="iv-method">DNI-20</span>
+              <span class="iv-variant">20Y · Net Income</span>
+              <div class="iv-bar-col"><div class="iv-track"><div class="iv-mline" style="left:28%"></div><div class="iv-fill up" style="width:57%"></div></div></div>
+              <span class="iv-value">$878.29</span>
+              <span class="iv-vs pos">+47.0%</span>
+            </div>
+            <div class="iv-row">
+              <span class="iv-method">H-Model DCF</span>
+              <span class="iv-variant">Intrinsic</span>
+              <div class="iv-bar-col"><div class="iv-track"><div class="iv-mline" style="left:28%"></div><div class="iv-fill dn" style="width:17%"></div></div></div>
+              <span class="iv-value">$331.96</span>
+              <span class="iv-vs neg">−44.5%</span>
+            </div>
+            <div class="iv-row">
+              <span class="iv-method">EV / EBITDA</span>
+              <span class="iv-variant">Multiples</span>
+              <div class="iv-bar-col"><div class="iv-track"><div class="iv-mline" style="left:28%"></div><div class="iv-fill up" style="width:40%"></div></div></div>
+              <span class="iv-value">$688.98</span>
+              <span class="iv-vs pos">+15.3%</span>
+            </div>
+            <div class="iv-row">
+              <span class="iv-method">EV / Revenue</span>
+              <span class="iv-variant">Multiples</span>
+              <div class="iv-bar-col"><div class="iv-track"><div class="iv-mline" style="left:28%"></div><div class="iv-fill dn" style="width:22%"></div></div></div>
+              <span class="iv-value">$471.97</span>
+              <span class="iv-vs neg">−21.0%</span>
+            </div>
+            <div class="iv-row">
+              <span class="iv-method">P / FCF</span>
+              <span class="iv-variant">Multiples</span>
+              <div class="iv-bar-col"><div class="iv-track"><div class="iv-mline" style="left:28%"></div><div class="iv-fill dn" style="width:18%"></div></div></div>
+              <span class="iv-value">$412.42</span>
+              <span class="iv-vs neg">−31.0%</span>
+            </div>
+            <div class="iv-row">
+              <span class="iv-method">Revenue DCF</span>
+              <span class="iv-variant">Growth</span>
+              <div class="iv-bar-col"><div class="iv-track"><div class="iv-mline" style="left:28%"></div><div class="iv-fill dn" style="width:25%"></div></div></div>
+              <span class="iv-value">$527.85</span>
+              <span class="iv-vs neg">−11.7%</span>
+            </div>
+            <div class="iv-row">
+              <span class="iv-method">PEG-implied</span>
+              <span class="iv-variant">Growth</span>
+              <div class="iv-bar-col"><div class="iv-track"><div class="iv-mline" style="left:28%"></div><div class="iv-fill up" style="width:46%"></div></div></div>
+              <span class="iv-value">$749.15</span>
+              <span class="iv-vs pos">+25.4%</span>
+            </div>
+            <div class="iv-row">
+              <span class="iv-method">Graham Revised</span>
+              <span class="iv-variant">EPS × growth</span>
+              <div class="iv-bar-col"><div class="iv-track"><div class="iv-mline" style="left:28%"></div><div class="iv-fill up" style="width:63%"></div></div></div>
+              <span class="iv-value">$941.01</span>
+              <span class="iv-vs pos">+57.5%</span>
+            </div>
+            <div class="iv-row composite">
+              <span class="iv-method composite-label">InsightValue Composite</span>
+              <span class="iv-variant">Trimmed mean</span>
+              <div class="iv-bar-col"><div class="iv-track"><div class="iv-mline" style="left:28%"></div><div class="iv-fill comp" style="width:34%"></div></div></div>
+              <span class="iv-value composite-val">$658.72</span>
+              <span class="iv-vs pos composite-vs">+10.2%</span>
+            </div>
+            <div class="iv-params">
+              <div class="iv-param"><span class="iv-param-label">Normal Growth</span><span class="iv-param-val">14.3% (auto)</span></div>
+              <div class="iv-param"><span class="iv-param-label">Terminal Growth</span><span class="iv-param-val">3.0%</span></div>
+              <div class="iv-param"><span class="iv-param-label">Margin Expansion</span><span class="iv-param-val">0%</span></div>
+              <div class="iv-param"><span class="iv-param-label">WACC</span><span class="iv-param-val">11.3% (auto)</span></div>
+              <div class="iv-param"><span class="iv-param-label">H Half-Life (yrs)</span><span class="iv-param-val">4</span></div>
+            </div>
+            <div class="iv-cta">
+              <span class="iv-cta-text">Get full access to InsightValue and all Lei Holdings research →</span>
+              <a href="https://www.patreon.com/15273026/join" class="iv-cta-btn" target="_blank">Unlock Full Access on Patreon ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <p>Our proprietary InsightValue model puts Meta's fair value at <strong>$658.72 — a 10.2% upside from current levels.</strong> That is the conservative, trimmed-mean composite. It is not the bull case. It is the floor. Separately, Wall Street consensus puts the target at <strong>$840 — representing 38% upside</strong> from current levels, with UBS at $908 and Evercore at $900.</p>
+
+        <div class="finding-box">
+          <p><strong>Bottom line on Meta:</strong> You are buying the fastest-growing Mag 7 company at a 30% discount to Alphabet, a 14% discount to its five-year average multiple, at a time when the AI spend the market is penalising it for is already delivering record ad results. The capex overhang is cyclical. The monetisation flywheel is structural.</p>
+        </div>
+      </section>
+
+      <!-- §03 LULU -->
+      <section class="section">
+        <div class="section-eyebrow">
+          <span class="sec-num">03</span>
+          <div class="sec-rule"></div>
+          <span class="sec-tag">Stock Analysis — No. 2</span>
+        </div>
+
+        <div class="stock-header">
+          <div class="sh-left">
+            <div class="sh-company">Lululemon Athletica</div>
+            <span class="sh-ticker">NASDAQ: LULU · Athletic Apparel &amp; Accessories</span>
+          </div>
+          <div class="sh-right">
+            <div class="sh-stat">
+              <span class="sh-stat-label">Current Price</span>
+              <span class="sh-stat-val">~$131</span>
+            </div>
+            <div class="sh-stat">
+              <span class="sh-stat-label">vs 52W High</span>
+              <span class="sh-stat-val down">−61%</span>
+            </div>
+            <div class="sh-stat">
+              <span class="sh-stat-label">Rating</span>
+              <span class="sh-stat-val up">BUY</span>
+            </div>
+          </div>
+        </div>
+
+        <h2>Down 61% From Its High. Trading at 9x Earnings. The Market Is Pricing a Premium Brand Like a Distressed Retailer.</h2>
+
+        <p>Lululemon has fallen 61% from its 52-week high of $340.25. At ~9x trailing earnings, the market has re-rated it from a premium growth compounder to something closer to a legacy mid-tier retailer. That re-rating is analytically wrong — and the gap between what the market is pricing and what the business actually looks like is the opportunity.</p>
+
+        <h3>The Business vs. The Stock Price</h3>
+
+        <div class="versus-panel">
+          <div class="versus-col lhs">
+            <span class="vc-brand">Lululemon Athletica · LULU</span>
+            <div class="vc-metric"><span class="vc-ml">Gross Margin (FY2025)</span><div class="vc-val better">56.6%</div></div>
+            <div class="vc-metric"><span class="vc-ml">ROIC (TTM)</span><div class="vc-val better">~30%</div></div>
+            <div class="vc-metric"><span class="vc-ml">Long-Term Financial Debt</span><div class="vc-val better">Zero</div></div>
+            <div class="vc-metric"><span class="vc-ml">Cash on Balance Sheet</span><div class="vc-val">$1.8B</div></div>
+            <div class="vc-metric"><span class="vc-ml">Forward P/E</span><div class="vc-val better">~10x</div></div>
+          </div>
+          <div class="versus-mid">vs</div>
+          <div class="versus-col">
+            <span class="vc-brand">Nike Inc. · NKE</span>
+            <div class="vc-metric"><span class="vc-ml">Gross Margin</span><div class="vc-val worse">40.6%</div></div>
+            <div class="vc-metric"><span class="vc-ml">ROIC (TTM)</span><div class="vc-val worse">~15%</div></div>
+            <div class="vc-metric"><span class="vc-ml">Long-Term Financial Debt</span><div class="vc-val worse">Carries debt</div></div>
+            <div class="vc-metric"><span class="vc-ml">Cash on Balance Sheet</span><div class="vc-val">$8.1B</div></div>
+            <div class="vc-metric"><span class="vc-ml">Forward P/E</span><div class="vc-val worse">~30x</div></div>
+          </div>
+        </div>
+
+        <p>Lululemon generates <strong>16 percentage points more gross margin than Nike</strong>, earns double the return on invested capital, carries zero long-term financial debt, and trades at one-third of Nike's valuation multiple. This is not a rational pricing differential. It is sentiment-driven dislocation created by a series of near-term headwinds that are cyclical in nature, not structural.</p>
+
+        <h3>What Went Wrong — And Why Each Headwind Is Temporary</h3>
+
+        <p>The bear case is real and worth engaging with directly. US retail sales have been soft, with Americas revenues declining 1% in fiscal 2025. The company faces a gross tariff burden of approximately <strong>$380 million</strong> that compressed Q4 2025 gross margins by 520 basis points. The previous CEO departed in January 2026, leaving an interim leadership structure. And founder Chip Wilson spent months publicly disputing the board's direction.</p>
+
+        <p>Every one of these headwinds is <em>cyclical</em>, not structural. The brand has not broken. Product quality remains industry-leading. The direct-to-consumer model — with 56.6% gross margins — is intact. What has broken is the narrative around the stock, not the underlying company.</p>
+
+        <h3>Catalyst Stack — Three Triggers Converging at Once</h3>
+
+        <ul class="catalyst-list">
+          <li class="catalyst-item">
+            <span class="catalyst-num">01</span>
+            <span class="catalyst-body"><strong>Earnings report — June 4, 2026 (tomorrow).</strong> The bar has been set at historic lows. Analysts project $2.43B in revenue and EPS of $1.67 — a 35.8% YoY decline already priced into the stock. Any sign of stabilisation — international growth holding, margins not collapsing further, guidance that does not shock negatively — and this stock moves materially. The asymmetry is clear: the downside surprise is priced in, the upside is not.</span>
+          </li>
+          <li class="catalyst-item">
+            <span class="catalyst-num">02</span>
+            <span class="catalyst-body"><strong>Governance overhang resolved.</strong> In late May 2026, Lululemon and founder Chip Wilson reached a cooperation agreement. Wilson agreed to an 18-month standstill in exchange for two nominated directors joining the board. The single largest non-fundamental overhang on the stock — months of public criticism from the founder — has been removed.</span>
+          </li>
+          <li class="catalyst-item">
+            <span class="catalyst-num">03</span>
+            <span class="catalyst-body"><strong>New CEO, September 8, 2026.</strong> Heidi O'Neill, announced April 22, 2026, brings more than 30 years of experience including 25+ years at Nike where she helped grow the company from $9B to $45B in revenue as President of Consumer, Product &amp; Brand. Her deep product and merchandising background directly addresses the core issue the market has flagged at Lululemon.</span>
+          </li>
+          <li class="catalyst-item">
+            <span class="catalyst-num">04</span>
+            <span class="catalyst-body"><strong>China revenue growing 28% last quarter.</strong> While the Americas narrative dominates, China Mainland revenue grew 28% in Q4 2025, with management guiding for ~20% growth in fiscal 2026 and 25–30% in Q1 2026. Lululemon has 0.2 stores per million urban residents in China versus 1.3 in the US. The international runway is a decade-long growth story that the domestic weakness narrative is obscuring entirely.</span>
+          </li>
+        </ul>
+
+        <h3>Valuation Summary</h3>
+
+        <div class="val-panel">
+          <div class="val-panel-header">
+            <span class="val-panel-title">Price Target Summary — LULU</span>
+            <span class="val-panel-badge">● Structurally Undervalued</span>
+          </div>
+          <div class="val-stats-row">
+            <div class="val-stat">
+              <span class="vs-label">Current Price</span>
+              <div class="vs-value">~$131</div>
+              <span class="vs-sub">−61% from 52W high of $340.25</span>
+            </div>
+            <div class="val-stat">
+              <span class="vs-label">Trailing P/E</span>
+              <div class="vs-value">9.5x</div>
+              <span class="vs-sub">76% below 10-year avg of 41x</span>
+            </div>
+            <div class="val-stat">
+              <span class="vs-label">Avg. Analyst Price Target</span>
+              <div class="vs-value highlight">$177</div>
+              <span class="vs-sub">32 analysts · BTIG bull case at $225</span>
+            </div>
+            <div class="val-stat">
+              <span class="vs-label">Implied Upside</span>
+              <div class="vs-value highlight">+35%</div>
+              <span class="vs-sub">From ~$131 to $177 target · consensus Hold</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="finding-box">
+          <p><strong>Bottom line on Lululemon:</strong> The market is valuing a 56.6% gross margin, debt-free, 30% ROIC business at the same multiple as a mid-tier apparel retailer. Three catalysts are converging — earnings tomorrow, governance resolved, new CEO in September. The brand is intact. The balance sheet is pristine. Analyst consensus target of $177 implies ~35% upside from current levels.</p>
+        </div>
+      </section>
+
+      <!-- §04 RISKS -->
+      <section class="section">
+        <div class="section-eyebrow">
+          <span class="sec-num">04</span>
+          <div class="sec-rule"></div>
+          <span class="sec-tag">Risk Factors</span>
+        </div>
+        <h2>Key Risks to Monitor</h2>
+        <p>Every investment thesis carries risk. The following factors represent the primary scenarios in which the thesis outlined in this report would not play out as expected.</p>
+
+        <div class="risk-grid">
+          <div class="risk-col">
+            <span class="risk-col-label">Meta Platforms — Risk Factors</span>
+            <div class="risk-item"><span class="risk-dash">—</span>Full-year capex guidance of $125–145B could expand further, compressing FCF recovery timeline</div>
+            <div class="risk-item"><span class="risk-dash">—</span>Reality Labs has accumulated over $80B in cumulative losses with no clear near-term profitability path</div>
+            <div class="risk-item"><span class="risk-dash">—</span>EU regulatory exposure and ongoing adolescent platform litigation represent ongoing legal overhead</div>
+            <div class="risk-item"><span class="risk-dash">—</span>AI monetisation is validated internally only — market re-rating may require external revenue proof point</div>
+            <div class="risk-item"><span class="risk-dash">—</span>Any deceleration in ad market spending would compress both the volume and price expansion thesis</div>
+          </div>
+          <div class="risk-col">
+            <span class="risk-col-label">Lululemon Athletica — Risk Factors</span>
+            <div class="risk-item"><span class="risk-dash">—</span>US consumer weakness could deepen beyond current FY2026 guidance of −1% to −3% Americas revenue</div>
+            <div class="risk-item"><span class="risk-dash">—</span>$380M tariff burden may persist longer than expected, extending margin pressure through 2027</div>
+            <div class="risk-item"><span class="risk-dash">—</span>Leadership gap between January CEO departure and September O'Neill arrival risks execution continuity</div>
+            <div class="risk-item"><span class="risk-dash">—</span>Alo Yoga, Vuori, and a restructuring Nike intensifying competitive pressure on core US market</div>
+            <div class="risk-item"><span class="risk-dash">—</span>China growth moderating from peak — management guided ~20% FY2026 vs 28% in Q4 2025</div>
+          </div>
+        </div>
+
+        <p>Our assessment: both sets of headwinds are cyclical, not structural. The capex cycle for Meta will peak and FCF will expand — the ad results prove the spend is working. For Lululemon, tariffs will ease, a new CEO arrives in September, and the brand's premium positioning and balance sheet provide resilience through the transition.</p>
+      </section>
+
+      <!-- §05 CLOSE -->
+      <section class="section" style="border-bottom:none;margin-bottom:0;padding-bottom:0;">
+        <div class="section-eyebrow">
+          <span class="sec-num">05</span>
+          <div class="sec-rule"></div>
+          <span class="sec-tag">Investment Conclusion</span>
+        </div>
+        <h2>Priced for Failure. Not Failing.</h2>
+
+        <p>Meta is growing faster than every other company in the Magnificent 7 and trading at its cheapest relative multiple in years. Lululemon has better gross margins than Nike, zero long-term financial debt, and a balance sheet that could weather years of headwinds — and it is priced at 9x earnings. These are not speculative positions. These are institutional-grade businesses being mispriced by a market fixated on near-term narrative over long-term fundamentals.</p>
+
+        <p>In every market cycle, the investors who build durable wealth are the ones who buy quality at historic discounts — when sentiment is at its worst, when the narrative is most negative, when most participants are looking elsewhere. That is precisely the setup we have identified in both names today.</p>
+
+        <div class="closing-panel">
+          <h3>The Window Is Open. It Won't Stay That Way.</h3>
+          <p>Both companies report earnings in the near term. Catalysts are stacking. Sentiment is at or near the floor. The asymmetry is clear: priced for continued failure, not failing. The confirmation comes when the stock is 30% higher — and that is when the opportunity will feel obvious in hindsight.</p>
+          <p style="margin-top:12px;">Manage position sizing appropriately. Conduct your own due diligence. But the data in this report is clear — both names represent historically attractive entry points in the context of a market that has priced everything else for perfection.</p>
+        </div>
+
+        <div class="disclaimer">DISCLAIMER: This report is produced by Lei Holdings Research for distribution to members only. It is for informational and educational purposes and does not constitute investment advice, a solicitation, or a recommendation to buy or sell any security. All data sourced from company SEC filings, GuruFocus, TIKR, FinanceCharts, AlphaSpread, and Lei Holdings proprietary analysis as of June 2026. Figures have been independently verified against primary sources. Past performance is not indicative of future results. Investing in equities involves risk including potential loss of principal. Always conduct your own due diligence before making investment decisions.
+        </div>
+      </section>
+
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar-col">
+
+      <div class="sb-section">
+        <span class="sb-heading">Market Snapshot · June 2026</span>
+        <div class="mkt-row"><span class="mkt-name">S&P 500 YTD</span><span class="mkt-val up">+8.1%</span></div>
+        <div class="mkt-row"><span class="mkt-name">Nasdaq YTD</span><span class="mkt-val up">+11.0%</span></div>
+        <div class="mkt-row"><span class="mkt-name">META YTD</span><span class="mkt-val dn">−7.0%</span></div>
+        <div class="mkt-row"><span class="mkt-name">LULU YTD</span><span class="mkt-val dn">−40.0%</span></div>
+        <div class="mkt-row"><span class="mkt-name">GOOGL YTD</span><span class="mkt-val up">+22.0%</span></div>
+        <div class="mkt-row"><span class="mkt-name">MSFT YTD</span><span class="mkt-val dn">−16.2%</span></div>
+        <div class="mkt-row"><span class="mkt-name">AAPL YTD</span><span class="mkt-val up">+14.3%</span></div>
+      </div>
+
+      <div class="sb-section">
+        <span class="sb-heading">⚡ Live Catalyst</span>
+        <div class="alert-box">
+          <span class="alert-label">Earnings Tomorrow · June 4, 2026</span>
+          <p class="alert-text">Lululemon reports Q1 FY2026 after market close. Consensus: $2.43B revenue, $1.67 EPS — a 35.8% YoY decline already in the price. Bar is at historic lows. Any stabilisation signal could move the stock materially.</p>
+        </div>
+      </div>
+
+      <div class="sb-section">
+        <span class="sb-heading">Price Targets</span>
+        <div class="target-block">
+          <span class="tb-ticker">META · Meta Platforms</span>
+          <div class="tb-row"><span class="tb-label">Current Price</span><span class="tb-price current">~$615</span></div>
+          <div class="tb-divider"></div>
+          <div class="tb-row"><span class="tb-label">Lei IV (conservative)</span><span class="tb-price lei">$658.72</span></div>
+          <div class="tb-row"><span class="tb-label">Wall St. Consensus</span><span class="tb-price target">~$827–847</span></div>
+          <div class="tb-row"><span class="tb-label">UBS / Evercore</span><span class="tb-price target">$908 / $900</span></div>
+          <div class="tb-divider"></div>
+          <div class="tb-row"><span class="tb-label">Consensus Upside</span><span class="tb-upside">+38%</span></div>
+        </div>
+        <div class="target-block">
+          <span class="tb-ticker">LULU · Lululemon Athletica</span>
+          <div class="tb-row"><span class="tb-label">Current Price</span><span class="tb-price current">~$131</span></div>
+          <div class="tb-divider"></div>
+          <div class="tb-row"><span class="tb-label">Wall St. Average</span><span class="tb-price target">$177</span></div>
+          <div class="tb-row"><span class="tb-label">BTIG Bull Case</span><span class="tb-price target">$225</span></div>
+          <div class="tb-divider"></div>
+          <div class="tb-row"><span class="tb-label">Average Upside</span><span class="tb-upside">+35%</span></div>
+        </div>
+      </div>
+
+      <div class="sb-section">
+        <span class="sb-heading">Investment Thesis Summary</span>
+        <div class="thesis-row">
+          <span class="tr-cat">Macro Setup</span>
+          <p class="tr-text">S&P near all-time highs. Concentrated markets create value pockets in out-of-favour names with intact fundamentals.</p>
+        </div>
+        <div class="thesis-row">
+          <span class="tr-cat">META — Fundamentals</span>
+          <p class="tr-text">+33% revenue growth. ~41% op. margin. $48.3B TTM FCF. Trading 30% below Alphabet on EV/EBITDA despite faster growth.</p>
+        </div>
+        <div class="thesis-row">
+          <span class="tr-cat">META — Catalyst</span>
+          <p class="tr-text">AI ad flywheel compounding. Capex fear overstated vs. FCF reality. Lei IV $658.72 (+10.2% conservative); Wall St. ~$827–847 (~35–42%).</p>
+        </div>
+        <div class="thesis-row">
+          <span class="tr-cat">LULU — Fundamentals</span>
+          <p class="tr-text">56.6% gross margin. ~30% ROIC. Zero long-term financial debt. $1.8B cash. Priced at 9x earnings — same as a mid-tier retailer.</p>
+        </div>
+        <div class="thesis-row">
+          <span class="tr-cat">LULU — Catalyst Stack</span>
+          <p class="tr-text">Earnings tomorrow. Governance overhang resolved. New CEO Sept. 8. China +28%. Three triggers, one historic entry point.</p>
+        </div>
+      </div>
+
+      <div class="sb-section" style="border-bottom:none;padding-bottom:0;margin-bottom:0;">
+        <span class="sb-he
