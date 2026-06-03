@@ -49,7 +49,9 @@ function PickCard({ pick, rank, featured, onSelect }) {
   const up = s.changePct >= 0;
   const tone = SENT_TONE[pick.sentiment];
   return (
-    <article className={"pick" + (featured ? " pick-featured" : "")} onClick={() => onSelect(s)}>
+    <article className={"pick" + (featured ? " pick-featured" : "")}
+      title={`Open ${pick.symbol} research`}
+      onClick={() => window.open('/stock-details?ticker=' + encodeURIComponent(pick.symbol), '_blank', 'noopener')}>
       <div className="pick-rank">#{rank}</div>
       <div className="pick-main">
         <div className="pick-head">
