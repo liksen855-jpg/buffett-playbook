@@ -106,8 +106,11 @@ export default async function handler(req, res) {
 
   // 3) Owner bypass: if PATREON_OWNER_EMAILS contains this user's email,
   //    skip the patron check (lets the creator access without self-pledging).
-  const ownerEmails = (process.env.PATREON_OWNER_EMAILS || '')
-    .split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+  const OWNER_FALLBACK = ['liksen855@gmail.com'];  // creator — always allowed even if env unset
+  const ownerEmails = [
+    ...OWNER_FALLBACK,
+    ...(process.env.PATREON_OWNER_EMAILS || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean),
+  ];
   const userEmail = (ident.data?.attributes?.email || '').toLowerCase();
   const isOwner = userEmail && ownerEmails.includes(userEmail);
 

@@ -62,7 +62,7 @@ export default async function handler(req, res) {
   const payload = verifyJWT(parseCookie(req.headers.cookie, 'pt_session'), SESSION_SECRET);
   if (!payload) { res.status(401).json({ picks: null, isOwner: false }); return; }
 
-  const ownerEmails = (process.env.PATREON_OWNER_EMAILS || '').split(',').map((s) => s.trim().toLowerCase()).filter(Boolean);
+  const ownerEmails = ['liksen855@gmail.com', ...(process.env.PATREON_OWNER_EMAILS || '').split(',').map((s) => s.trim().toLowerCase()).filter(Boolean)];
   const isOwner = !!(payload.email && ownerEmails.includes(String(payload.email).toLowerCase()));
 
   if (req.method === 'GET') {
