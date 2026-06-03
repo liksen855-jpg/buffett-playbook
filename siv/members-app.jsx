@@ -19,10 +19,30 @@ function Dash() {
   const [t, setTweak] = useTweaks(MTWEAKS);
   const [watchlist, setWatchlist] = useState(loadWL);
   const [portfolio, setPortfolio] = useState(() => window.PORTFOLIO); // seed fallback
+  const [picks, setPicks] = useState(() => window.PICKS);             // global, seed fallback
+  const [isOwner, setIsOwner] = useState(false);
   const [scope, setScope] = useState("watchlist");
   const [selected, setSelected] = useState(null);
   const meLoaded = useRef(false);
   const saveTimer = useRef(null);
+  const picksSaveTimer = useRef(null);
+
+  // Shared editorial picks + whether this patron may edit them.
+  useEffect(() => {
+    fetch("/api/picks", { credentials: "same-origin" })
+      .then((r) => r.json())
+      .then((d) => { if (d) { if (Array.isArray(d.picks)) setPicks(d.picks); setIsOwner(!!d.isOwner); } })
+      .catch(() => {});
+  }, []);
+
+  const savePicks = (next) => {
+    setPicks(next);
+    clearTimeout(picksSaveTimer.current);
+    picksSaveTimer.current = setTimeout(() => {
+      fetch("/api/picks", { method: "PUT", credentials: "same-origin",
+        headers: { "Content-Type": "application/json" }, body: JSON.stringify({ picks: next }) }).catch(() => {});
+    }, 800);
+  };
 
   // Load this patron's saved watchlist + portfolio from their account (KV).
   useEffect(() => {
@@ -92,7 +112,7 @@ function Dash() {
 
       <div className="dash-body">
         <main className="dash-main">
-          <PicksFeed onSelect={setSelected} />
+          <PicksFeed picks={picks} isOwner={isOwner} onChange={savePicks} onSelect={setSelected} />
           <NewsFeed list={watchlist} scope={scope} setScope={setScope} onSelect={setSelected} />
         </main>
         <aside className="dash-rail">

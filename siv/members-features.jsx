@@ -79,15 +79,50 @@ function PickCard({ pick, rank, featured, onSelect }) {
   );
 }
 
-function PicksFeed({ onSelect }) {
+// Editorial picks. `picks` is the shared global list; the owner (isOwner) gets an
+// inline editor whose changes persist to /api/picks for all members to view.
+function PicksFeed({ picks, isOwner, onChange, onSelect }) {
+  const [editing, setEditing] = React.useState(false);
+  const list = Array.isArray(picks) ? picks : [];
+  const ip = { height: 28, border: "1px solid var(--border2)", borderRadius: 6, padding: "0 8px", font: "inherit", fontSize: 12, outline: "none", minWidth: 0, width: "100%", background: "var(--panel)", color: "var(--fg)" };
+  const upd = (i, k, v) => { const n = list.slice(); n[i] = { ...n[i], [k]: v }; onChange(n); };
+  const remove = (i) => { const n = list.slice(); n.splice(i, 1); onChange(n); };
+  const add = () => onChange([...list, { symbol: "", score: 75, sentiment: "Bullish", sentimentScore: 70, conviction: "Medium", narrative: 70, tags: [], thesis: "" }]);
+
   return (
     <MCard title="Quality Picks" sub="Scored on narrative · sentiment · conviction"
-      action={<span className="card-stamp">Updated today · 09:30 ET</span>} className="card-picks">
-      <div className="picks">
-        {window.PICKS.map((p, i) => (
-          <PickCard key={p.symbol} pick={p} rank={i + 1} featured={i === 0} onSelect={onSelect} />
-        ))}
-      </div>
+      action={isOwner
+        ? <button className="card-action" onClick={() => setEditing((e) => !e)}>{editing ? "Done" : "Edit"}</button>
+        : <span className="card-stamp">Updated today</span>}
+      className="card-picks">
+      {editing ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {list.map((p, i) => (
+            <div key={i} style={{ border: "1px solid var(--border)", borderRadius: 10, padding: "12px 13px", display: "flex", flexDirection: "column", gap: 8, background: "var(--strip)" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 70px 1fr 1fr 26px", gap: 8, alignItems: "center" }}>
+                <input style={ip} placeholder="TICKER" value={p.symbol || ""} onChange={(e) => upd(i, "symbol", e.target.value.toUpperCase())} />
+                <input style={ip} type="number" min="0" max="100" placeholder="Score" value={p.score} onChange={(e) => upd(i, "score", +e.target.value)} />
+                <select style={ip} value={p.sentiment} onChange={(e) => upd(i, "sentiment", e.target.value)}><option>Bullish</option><option>Neutral</option><option>Bearish</option></select>
+                <select style={ip} value={p.conviction} onChange={(e) => upd(i, "conviction", e.target.value)}><option>High</option><option>Medium</option><option>Low</option></select>
+                <button onClick={() => remove(i)} title="Remove" style={{ border: 0, background: "none", color: "var(--red)", fontSize: 18, cursor: "pointer", lineHeight: 1 }}>×</button>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                <label style={{ fontSize: 10, color: "var(--muted)", display: "flex", flexDirection: "column", gap: 3 }}>Narrative (0–100)<input style={ip} type="number" min="0" max="100" value={p.narrative} onChange={(e) => upd(i, "narrative", +e.target.value)} /></label>
+                <label style={{ fontSize: 10, color: "var(--muted)", display: "flex", flexDirection: "column", gap: 3 }}>Sentiment score (0–100)<input style={ip} type="number" min="0" max="100" value={p.sentimentScore} onChange={(e) => upd(i, "sentimentScore", +e.target.value)} /></label>
+              </div>
+              <input style={ip} placeholder="Tags (comma-separated)" value={(p.tags || []).join(", ")} onChange={(e) => upd(i, "tags", e.target.value.split(",").map((s) => s.trim()).filter(Boolean))} />
+              <textarea style={{ ...ip, height: 58, padding: "6px 8px", resize: "vertical", fontFamily: "inherit", lineHeight: 1.4 }} placeholder="Thesis…" value={p.thesis || ""} onChange={(e) => upd(i, "thesis", e.target.value)} />
+            </div>
+          ))}
+          <button className="run-btn run-dirty" style={{ height: 34, borderRadius: 8 }} onClick={add}>+ Add pick</button>
+          <div style={{ fontSize: 11, color: "var(--faint)" }}>Saved automatically · visible to all members.</div>
+        </div>
+      ) : (
+        <div className="picks">
+          {list.length === 0 && <div style={{ fontSize: 12, color: "var(--faint)", padding: "8px 2px" }}>No picks published yet.</div>}
+          {list.map((p, i) => (<PickCard key={p.symbol + i} pick={p} rank={i + 1} featured={i === 0} onSelect={onSelect} />))}
+        </div>
+      )}
     </MCard>
   );
 }
