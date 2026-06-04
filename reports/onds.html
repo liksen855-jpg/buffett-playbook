@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ONDS — Equity Research / Trade Brief</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:        #111318;
+  --ink-2:      #2e3240;
+  --ink-3:      #5c6278;
+  --ink-4:      #969cb0;
+  --rule:       #d8dbe6;
+  --rule-lt:    #eceef5;
+  --paper:      #fcfcfb;
+  --paper-2:    #f4f4f1;
+  --accent:     #0f2d52;
+  --accent-lt:  #e8eef6;
+  --accent-md:  #c0cedf;
+  --green:      #144d2f;
+  --green-lt:   #e5f0eb;
+  --red:        #6e1515;
+  --red-lt:     #f4e8e8;
+  --amber:      #5e3a08;
+  --serif:      "Libre Baskerville", Georgia, serif;
+  --sans:       "Source Sans 3", "Helvetica Neue", Arial, sans-serif;
+  --mono:       "Source Code Pro", "Courier New", monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-weight: 400;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.page { max-width: 780px; margin: 0 auto; padding: 0 32px 80px; }
+.masthead { height: 5px; background: var(--accent); }
+
+/* COVER */
+.cover { padding: 40px 0 28px; border-bottom: 2px solid var(--ink); margin-bottom: 32px; }
+.cover-meta { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.cover-firm { font-family: var(--sans); font-weight: 600; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-4); }
+.cover-date { font-family: var(--mono); font-size: 10px; color: var(--ink-4); letter-spacing: 0.06em; }
+.cover-body { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.cover-ticker { font-family: var(--mono); font-size: 11px; font-weight: 500; color: var(--accent); letter-spacing: 0.1em; margin-bottom: 6px; }
+.cover-h1 { font-family: var(--serif); font-size: clamp(24px, 5vw, 36px); font-weight: 700; line-height: 1.12; letter-spacing: -0.01em; color: var(--ink); margin-bottom: 6px; }
+.cover-h2 { font-family: var(--serif); font-size: clamp(14px, 2.5vw, 18px); font-weight: 400; font-style: italic; color: var(--ink-3); line-height: 1.4; }
+.cover-right { flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; padding-top: 2px; }
+.rating { font-family: var(--sans); font-weight: 600; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; background: var(--accent); color: #fff; padding: 7px 14px; white-space: nowrap; }
+.horizon { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.06em; border: 1px solid var(--rule); padding: 5px 9px; white-space: nowrap; }
+.cover-abstract { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--rule); font-family: var(--serif); font-size: clamp(13px, 2vw, 14.5px); font-style: italic; color: var(--ink-3); line-height: 1.8; }
+
+/* SECTION HEADERS */
+.sec { display: flex; align-items: center; gap: 11px; margin: 40px 0 18px; }
+.sec-num { font-family: var(--mono); font-size: 9.5px; font-weight: 500; letter-spacing: 0.14em; color: var(--ink-4); text-transform: uppercase; white-space: nowrap; }
+.sec-title { font-family: var(--sans); font-weight: 600; font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; }
+.sec-rule { flex: 1; height: 1px; background: var(--rule); min-width: 12px; }
+
+/* STATS BAR */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--rule); margin-bottom: 30px; }
+.stat { padding: 14px 16px; border-right: 1px solid var(--rule); }
+.stat:last-child { border-right: none; }
+.stat-l { font-family: var(--sans); font-weight: 600; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-4); margin-bottom: 6px; }
+.stat-v { font-family: var(--serif); font-size: clamp(18px, 3.5vw, 26px); font-weight: 700; line-height: 1; color: var(--ink); letter-spacing: -0.01em; }
+.stat-c { font-family: var(--mono); font-size: 10px; margin-top: 5px; }
+.pos { color: var(--green); } .neg { color: var(--red); } .neu { color: var(--accent); }
+
+/* EXHIBIT */
+.exhibit { border: 1px solid var(--rule); margin: 22px 0 28px; }
+.ex-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 10px 16px; border-bottom: 1px solid var(--rule); background: var(--paper-2); flex-wrap: wrap; }
+.ex-title { font-family: var(--sans); font-weight: 600; font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+.ex-src { font-family: var(--mono); font-size: 9px; color: var(--ink-4); letter-spacing: 0.04em; }
+.exhibit img { width: 100%; display: block; }
+.chart-ph { display: flex; align-items: center; justify-content: center; min-height: 240px; padding: 40px 24px; background: repeating-linear-gradient(45deg, #f7f7f5, #f7f7f5 12px, #f1f1ee 12px, #f1f1ee 24px); text-align: center; }
+.chart-ph span { font-family: var(--mono); font-size: 11px; color: var(--ink-4); line-height: 1.8; max-width: 360px; }
+.ex-foot { padding: 12px 16px; border-top: 1px solid var(--rule); background: var(--paper-2); }
+.ex-cap { font-family: var(--sans); font-size: 12px; font-weight: 300; color: var(--ink-3); line-height: 1.65; }
+.ex-cap strong { font-weight: 600; }
+.ex-leg { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 10px; }
+.ex-leg span { display: flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 9px; color: var(--ink-4); }
+.swatch { width: 20px; height: 2px; display: inline-block; flex-shrink: 0; }
+
+/* THESIS BOX */
+.thesis { border-left: 3px solid var(--accent); background: var(--accent-lt); padding: 15px 18px; margin: 0 0 22px; }
+.thesis p { font-family: var(--serif); font-size: clamp(14px, 2vw, 15.5px); color: var(--ink-2); line-height: 1.8; margin: 0; }
+.thesis strong { font-weight: 700; color: var(--ink); }
+
+/* SEQUENCE */
+.seq-wrap { margin: 0 0 26px; }
+.seq-row { display: flex; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--rule-lt); }
+.seq-row:last-child { border-bottom: none; }
+.seq-n { flex-shrink: 0; width: 24px; height: 24px; border: 1.5px solid var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 10px; font-weight: 500; color: var(--accent); margin-top: 1px; }
+.seq-hd { font-family: var(--sans); font-weight: 600; font-size: 13px; color: var(--ink); margin-bottom: 3px; }
+.seq-bd { font-family: var(--serif); font-size: clamp(13px, 2vw, 14px); font-style: italic; color: var(--ink-3); line-height: 1.65; }
+
+/* TABLES */
+.tbl-wrap { margin: 8px 0 26px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.tbl-scroll-hint { display: none; font-family: var(--mono); font-size: 9px; color: var(--ink-4); letter-spacing: 0.08em; text-align: right; margin-bottom: 4px; }
+.data-tbl { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 420px; }
+.data-tbl thead tr { border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); }
+.data-tbl th { font-family: var(--sans); font-weight: 600; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); padding: 9px 12px 9px 0; text-align: left; }
+.data-tbl tbody tr { border-bottom: 1px solid var(--rule-lt); }
+.data-tbl tbody tr:last-child { border-bottom: 1.5px solid var(--ink); }
+.data-tbl td { padding: 10px 12px 10px 0; color: var(--ink-2); font-size: 13px; vertical-align: top; }
+.data-tbl td.mono { font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--ink); white-space: nowrap; }
+.badge { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid; padding: 2px 7px; display: inline-block; white-space: nowrap; }
+.b-g { color: var(--green); border-color: var(--green); }
+.b-b { color: var(--accent); border-color: var(--accent-md); }
+.b-a { color: var(--amber); border-color: var(--amber); }
+.b-r { color: var(--red); border-color: var(--red); }
+
+/* CATALYST */
+.cat-row { display: flex; gap: 18px; padding: 13px 0; border-bottom: 1px solid var(--rule-lt); align-items: baseline; }
+.cat-row:last-child { border-bottom: none; }
+.cat-d { flex-shrink: 0; width: 88px; font-family: var(--mono); font-size: 10px; font-weight: 500; color: var(--accent); letter-spacing: 0.05em; }
+.cat-t { font-family: var(--serif); font-size: clamp(13px, 2vw, 14.5px); color: var(--ink-2); line-height: 1.7; }
+
+/* SCENARIOS */
+.scen-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 12px 0 26px; }
+.scen { border: 1px solid var(--rule); padding: 16px; }
+.scen-hd { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--rule); }
+.scen-name { font-family: var(--sans); font-weight: 700; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; }
+.scen-p { font-family: var(--mono); font-size: 9.5px; color: var(--ink-4); }
+.scen ul { list-style: none; }
+.scen li { font-family: var(--sans); font-size: 12px; color: var(--ink-3); padding: 4px 0 4px 13px; position: relative; line-height: 1.5; }
+.scen li::before { content: ""; position: absolute; left: 0; top: 10px; width: 5px; height: 1px; background: var(--rule); }
+.scen-ft { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: baseline; }
+.scen-fl { font-family: var(--sans); font-weight: 600; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-4); }
+.scen-fv { font-family: var(--mono); font-size: 12.5px; font-weight: 500; }
+
+/* RISKS */
+.risk-row { display: flex; gap: 14px; padding: 13px 0; border-bottom: 1px solid var(--rule-lt); }
+.risk-row:last-child { border-bottom: none; }
+.risk-id { flex-shrink: 0; font-family: var(--mono); font-size: 9.5px; font-weight: 500; color: var(--red); letter-spacing: 0.08em; border: 1px solid var(--red); padding: 1px 5px; height: fit-content; margin-top: 2px; }
+.risk-t { font-family: var(--serif); font-size: clamp(13px, 2vw, 14.5px); color: var(--ink-2); line-height: 1.7; }
+
+/* FOOTER */
+.disc { margin-top: 52px; padding: 15px 17px; border-top: 1.5px solid var(--ink); border-bottom: 1px solid var(--rule); background: var(--paper-2); }
+.disc p { font-family: var(--sans); font-size: 9.5px; font-weight: 300; color: var(--ink-4); line-height: 1.85; }
+.footer { margin-top: 16px; padding-top: 14px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--rule); gap: 12px; flex-wrap: wrap; }
+.footer span { font-family: var(--mono); font-size: 9px; color: var(--ink-4); letter-spacing: 0.1em; text-transform: uppercase; }
+.footer-bar { width: 24px; height: 2px; background: var(--accent); flex-shrink: 0; }
+
+@media (max-width: 600px) {
+  .page { padding: 0 20px 72px; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .stat:nth-child(2) { border-right: none; }
+  .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid var(--rule); }
+  .scen-grid { grid-template-columns: 1fr; gap: 10px; }
+  .cover-body { flex-direction: column; gap: 16px; }
+  .cover-right { flex-direction: row; align-items: center; }
+  .tbl-scroll-hint { display: block; }
+  .cat-d { width: 76px; }
+  .sec-title { white-space: normal; }
+}
+@media (max-width: 420px) {
+  html { font-size: 14px; }
+  .page { padding: 0 16px 64px; }
+  .cover { padding: 28px 0 22px; }
+  .cover-meta { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .cover-right { flex-wrap: wrap; gap: 8px; }
+  .stats { grid-template-columns: 1fr 1fr; }
+  .stat { padding: 12px 14px; }
+  .seq-row { gap: 12px; }
+  .seq-n { width: 22px; height: 22px; font-size: 9px; }
+  .cat-row { flex-direction: column; gap: 4px; }
+  .cat-d { width: auto; }
+  .risk-row { gap: 10px; }
+  .sec { gap: 8px; margin: 32px 0 16px; }
+  .sec-num, .sec-title { font-size: 8.5px; }
+  .cover-abstract { font-size: 13px; }
+  .ex-leg { flex-direction: column; gap: 8px; }
+  .footer { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .footer-bar { display: none; }
+}
+@media print {
+  .stats, .scen-grid, .exhibit { break-inside: avoid; }
+  body { background: #fff; }
+  .tbl-scroll-hint { display: none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="masthead"></div>
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-meta">
+      <div class="cover-firm">Equity Research &nbsp;&middot;&nbsp; Autonomous Defense &nbsp;&middot;&nbsp; Trade Brief</div>
+      <div class="cover-date">June 4, 2026 &nbsp;&middot;&nbsp; NASDAQ: ONDS</div>
+    </div>
+    <div class="cover-body">
+      <div class="cover-left">
+        <div class="cover-ticker">ONDS &nbsp;/&nbsp; ONDAS INC.</div>
+        <div class="cover-h1">Gap-Fill, Liquidity Sweep<br>&amp; Break of Structure</div>
+        <div class="cover-h2">Entry Plan &amp; Investment Thesis</div>
+      </div>
+      <div class="cover-right">
+        <div class="rating">Long &nbsp;/&nbsp; Swing</div>
+        <div class="horizon">Horizon: 3&ndash;9 months</div>
+      </div>
+    </div>
+    <div class="cover-abstract">
+      Multi-domain autonomous defense consolidator with $1.48B in liquidity and a $457M pro forma backlog. Technical setup targets a gap fill at $11.00&ndash;11.28, a buy-side liquidity sweep, and a confirmed break of structure as the entry trigger. Fundamental conviction rests on Mistral prime contractor access, Omnisys AI software margins, and the Pentagon&rsquo;s $75B Drone Dominance procurement cycle.
+    </div>
+  </div>
+
+  <!-- 01 KEY METRICS -->
+  <div class="sec"><div class="sec-num">01</div><div class="sec-title">Key Metrics &mdash; Q1 2026</div><div class="sec-rule"></div></div>
+  <div class="stats">
+    <div class="stat"><div class="stat-l">Revenue</div><div class="stat-v">$50.1M</div><div class="stat-c pos">+1,080% YoY</div></div>
+    <div class="stat"><div class="stat-l">Gross Margin</div><div class="stat-v">49.2%</div><div class="stat-c pos">+1,420 bps</div></div>
+    <div class="stat"><div class="stat-l">Liquidity</div><div class="stat-v">$1.48B</div><div class="stat-c neu">~10yr runway</div></div>
+    <div class="stat"><div class="stat-l">Pro Forma Backlog</div><div class="stat-v">$457M</div><div class="stat-c pos">+570% vs. YE25</div></div>
+  </div>
+
+  <!-- 02 CHART -->
+  <div class="sec"><div class="sec-num">02</div><div class="sec-title">Technical Setup &mdash; Daily</div><div class="sec-rule"></div></div>
+  <div class="exhibit">
+    <div class="ex-head">
+      <span class="ex-title">Exhibit 1 &mdash; ONDS Daily Price Action</span>
+      <span class="ex-src">Source: TradingView</span>
+    </div>
+    <div class="chart-ph"><span>[ CHART PLACEHOLDER ]<br>Replace this block with your TradingView chart &lt;img&gt; (see note in /reports/onds.html).</span></div>
+    <div class="ex-foot">
+      <div class="ex-cap">Months-long descending wedge compressing into the $11&ndash;12 horizontal supply shelf. The news-driven spike into resistance reversed sharply on a large-bodied red candle. Rising moving averages below price are curling constructively. The gap-fill zone at <strong>$11.00&ndash;11.28</strong> and the resistance band occupy the same decision area.</div>
+      <div class="ex-leg">
+        <span><span class="swatch" style="background:#5b8fc4"></span>Descending trendline</span>
+        <span><span class="swatch" style="background:#c8912a"></span>Gap fill $11.00&ndash;11.28</span>
+        <span><span class="swatch" style="background:#4a9e6b"></span>Moving averages</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 TRADE TRIGGER -->
+  <div class="sec"><div class="sec-num">03</div><div class="sec-title">Trade Trigger &mdash; Entry Sequence</div><div class="sec-rule"></div></div>
+  <div class="thesis">
+    <p><strong>Core thesis.</strong> Wait for price to retrace and fill the $11.00&ndash;11.28 gap, sweep the buy-side liquidity above the spike high, then confirm a bullish break of structure before committing size. The BOS is the trigger &mdash; not the gap fill. Do not anticipate.</p>
+  </div>
+  <div class="seq-wrap">
+    <div class="seq-row"><div class="seq-n">1</div><div><div class="seq-hd">Retrace into gap &mdash; $11.00&ndash;11.28</div><div class="seq-bd">Price returns to the gap zone created by the news spike. No position initiated &mdash; observe structure and behaviour at this level.</div></div></div>
+    <div class="seq-row"><div class="seq-n">2</div><div><div class="seq-hd">Buy-side liquidity sweep</div><div class="seq-bd">Price sweeps stops and buy orders clustered above the spike wick high. The grab clears weak hands and traps late breakout buyers.</div></div></div>
+    <div class="seq-row"><div class="seq-n">3</div><div><div class="seq-hd">Break of structure confirmed</div><div class="seq-bd">Following the sweep, price prints a clean bullish BOS taking out the most recent swing high on rising volume. This is the entry signal.</div></div></div>
+    <div class="seq-row"><div class="seq-n">4</div><div><div class="seq-hd">Scale into position across tranches</div><div class="seq-bd">Initiate on BOS confirmation. Add on retest of zone holding as support. Complete to full size on a sustained daily close above $12.</div></div></div>
+  </div>
+
+  <!-- 04 EXECUTION -->
+  <div class="sec"><div class="sec-num">04</div><div class="sec-title">Execution &mdash; Entries &amp; Exits</div><div class="sec-rule"></div></div>
+  <div class="tbl-wrap">
+    <div class="tbl-scroll-hint">scroll to see full table &rarr;</div>
+    <table class="data-tbl">
+      <thead><tr><th>Tranche</th><th>Trigger condition</th><th>Price zone</th><th>Allocation</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge b-a">Starter</span></td><td>BOS confirmed off gap-fill zone following sweep</td><td class="mono">$11.00&ndash;11.28</td><td>30%</td></tr>
+        <tr><td><span class="badge b-b">Add</span></td><td>Successful retest of zone holding as structural support</td><td class="mono">$11.30&ndash;11.60</td><td>40%</td></tr>
+        <tr><td><span class="badge b-g">Full size</span></td><td>Sustained daily close above $12 supply shelf</td><td class="mono">$12.00 +</td><td>30%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-scroll-hint">scroll to see full table &rarr;</div>
+    <table class="data-tbl">
+      <thead><tr><th>Level</th><th>Rationale</th><th>Target</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge b-r">Stop</span></td><td>Structural failure &mdash; close below sweep low, no BOS</td><td class="mono">Below sweep low</td><td>Exit full position</td></tr>
+        <tr><td><span class="badge b-g">T1</span></td><td>Wedge breakout measured move; de-risk partial</td><td class="mono">~$15&ndash;16</td><td>Trim 25&ndash;33%</td></tr>
+        <tr><td><span class="badge b-g">T2</span></td><td>Catalyst extension &mdash; Mistral deliveries, Omnisys revenues</td><td class="mono">~$20 +</td><td>Trim further third</td></tr>
+        <tr><td><span class="badge b-g">Runner</span></td><td>Institutional re-rating; Drone Dominance budget enacted</td><td class="mono">Trail</td><td>Trailing stop</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 05 CATALYSTS -->
+  <div class="sec"><div class="sec-num">05</div><div class="sec-title">Catalyst Calendar</div><div class="sec-rule"></div></div>
+  <div>
+    <div class="cat-row"><div class="cat-d">Mid 2026</div><div class="cat-t">Hero-120 loitering munition deliveries commence under the Mistral/UVision U.S. Army IDIQ. First hard evidence of the $264M backlog converting to recognised revenue.</div></div>
+    <div class="cat-row"><div class="cat-d">H2 2026</div><div class="cat-t">Omnisys SkyWeaver battlefield AI software revenue begins. Watch gross margin expansion through 50% as the sales mix shifts toward software.</div></div>
+    <div class="cat-row"><div class="cat-d">Jun 2026 +</div><div class="cat-t">World View SOUTHCOM stratospheric ISR contract billing commences, validating the transition from experimental to recurring government procurement.</div></div>
+    <div class="cat-row"><div class="cat-d">Q2 / Q3</div><div class="cat-t">Quarterly earnings prints. Backlog-to-revenue conversion rate is the single cleanest read on which scenario is playing out. Monitor burn rate and any ATM filings.</div></div>
+    <div class="cat-row"><div class="cat-d">2027</div><div class="cat-t">Pentagon &ldquo;Drone Dominance&rdquo; budget vote (~$75B). The structural macro catalyst underpinning the bull case.</div></div>
+  </div>
+
+  <!-- 06 SCENARIOS -->
+  <div class="sec"><div class="sec-num">06</div><div class="sec-title">Scenario Analysis</div><div class="sec-rule"></div></div>
+  <div class="scen-grid">
+    <div class="scen">
+      <div class="scen-hd"><span class="scen-name pos">Bull</span><span class="scen-p">p &asymp; 20%</span></div>
+      <ul>
+        <li>Mistral deliveries ramp on schedule; IDIQ expands</li>
+        <li>Omnisys = program of record; $100M+ SaaS</li>
+        <li>$75B Drone Dominance budget enacted</li>
+        <li>ONBERG wins Germany / NATO in H2</li>
+        <li>Rail IP royalties materialise</li>
+      </ul>
+      <div class="scen-ft"><span class="scen-fl">FY26 Revenue</span><span class="scen-fv pos">$450M +</span></div>
+    </div>
+    <div class="scen">
+      <div class="scen-hd"><span class="scen-name neu">Base</span><span class="scen-p">p &asymp; 50%</span></div>
+      <ul>
+        <li>Deliveries slip 1&ndash;2 quarters; back-half loaded</li>
+        <li>Omnisys contributes $60&ndash;70M vs. $100M</li>
+        <li>Israel concentration falls to ~35&ndash;40%</li>
+        <li>Cash cushion prevents forced dilution</li>
+        <li>Rail IP optionality, not yet material</li>
+      </ul>
+      <div class="scen-ft"><span class="scen-fl">FY26 Revenue</span><span class="scen-fv neu">$350&ndash;390M</span></div>
+    </div>
+    <div class="scen">
+      <div class="scen-hd"><span class="scen-name neg">Bear</span><span class="scen-p">p &asymp; 30%</span></div>
+      <ul>
+        <li>Integration delayed 6&ndash;12 months</li>
+        <li>Omnisys fails to win program of record</li>
+        <li>Israel escalation freezes execution</li>
+        <li>Dilutive raise off 1.2B auth. shares</li>
+        <li>Backlog conversion below 50%</li>
+      </ul>
+      <div class="scen-ft"><span class="scen-fl">FY26 Revenue</span><span class="scen-fv neg">$150&ndash;250M</span></div>
+    </div>
+  </div>
+
+  <!-- 07 RISKS -->
+  <div class="sec"><div class="sec-num">07</div><div class="sec-title">Key Risks</div><div class="sec-rule"></div></div>
+  <div>
+    <div class="risk-row"><div class="risk-id">R1</div><div class="risk-t">Dilutive equity issuance via S-3 shelf or ATM program. The authorisation of 1.2 billion shares gives management significant latitude. Monitor SEC filings continuously.</div></div>
+    <div class="risk-row"><div class="risk-id">R2</div><div class="risk-t">Israel conflict escalation freezing 4M Defense and Airobotics execution. Direct Israel exposure represents ~40&ndash;60% of current backlog.</div></div>
+    <div class="risk-row"><div class="risk-id">R3</div><div class="risk-t">Backlog grows but recognised revenue stalls for consecutive quarters &mdash; a signal that integration complexity is exceeding management bandwidth.</div></div>
+    <div class="risk-row"><div class="risk-id">R4</div><div class="risk-t">Technical setup failure. If price sweeps but fails to print a clean BOS, the setup is invalidated. No BOS, no trade.</div></div>
+    <div class="risk-row"><div class="risk-id">R5</div><div class="risk-t">Overnight gap risk on event-driven newsflow. Technical stops do not protect against pre-market moves. Size accordingly before BOS confirmation.</div></div>
+  </div>
+
+  <!-- DISCLAIMER -->
+  <div class="disc">
+    <p>IMPORTANT DISCLOSURES. This document has been prepared for informational and educational purposes only. It does not constitute investment advice, a research recommendation, or a solicitation or offer to buy or sell any security. Price levels are derived in part from user-supplied chart data and should be independently verified prior to any trading decision. Investing in equities, particularly small-capitalisation, event-driven, or acquisition-intensive securities, involves substantial risk, including possible loss of the entire amount invested. Past performance is not indicative of future results. The author is not a registered investment adviser. Recipients should conduct their own due diligence and consult a licensed financial professional before making any investment decision.</p>
+  </div>
+  <div class="footer">
+    <span>ONDS &mdash; Trade Brief &mdash; June 4, 2026</span>
+    <div class="footer-bar"></div>
+    <span>Not investment advice &mdash; informational use only</span>
+  </div>
+
+</div>
+</body>
+</html>

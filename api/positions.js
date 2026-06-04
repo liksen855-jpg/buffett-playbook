@@ -35,6 +35,8 @@ const kvSet = (k, v) => kvCmd(['SET', k, JSON.stringify(v)]);
 
 const str = (s, n) => String(s == null ? '' : s).slice(0, n);
 const numF = (v) => { const n = Number(v); return Number.isFinite(n) && n >= 0 ? n : 0; };
+// Only allow a same-origin path or an explicit https URL — blocks javascript:/data: iframe XSS.
+const cleanUrl = (u) => { const s = str(u, 300).trim(); return (/^\/[^/]/.test(s) || /^https:\/\//i.test(s)) ? s : ''; };
 const DIR = ['Long', 'Short'];
 const STATUS = ['Open', 'Watching', 'Closed'];
 function cleanPositions(arr) {
@@ -48,6 +50,7 @@ function cleanPositions(arr) {
     status: STATUS.includes(p && p.status) ? p.status : 'Open',
     sizing: str(p && p.sizing, 60),
     report: str(p && p.report, 4000),
+    reportUrl: cleanUrl(p && p.reportUrl),
   })).filter((p) => p.symbol);
 }
 

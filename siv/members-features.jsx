@@ -292,6 +292,30 @@ function PositionReport({ position: p, onClose }) {
     return () => window.removeEventListener("keydown", h);
   }, [onClose]);
   const Row = ({ k, v, cls }) => <div className="pk-row"><span>{k}</span><span className={"num " + (cls || "")}>{v}</span></div>;
+
+  // Rich HTML brief: render the hosted report in an isolated iframe.
+  if (p.reportUrl) {
+    return (
+      <div className="peek-overlay" onClick={onClose}>
+        <div className="report-modal" onClick={(e) => e.stopPropagation()}>
+          <div className="report-modal-head">
+            <div className="report-modal-id">
+              <span className="report-modal-sym">{p.symbol}</span>
+              <span className={"pos-dir " + (p.direction === "Short" ? "pos-short" : "pos-long")}>{p.direction}</span>
+              <span className={"pos-status pos-st-" + (p.status || "Open").toLowerCase()}>{p.status}</span>
+              {ret != null && <span className={"num " + (up ? "chg-pos" : "chg-neg")} style={{ fontSize: 12, fontWeight: 600 }}>{(up ? "+" : "") + ret.toFixed(1) + "%"}</span>}
+            </div>
+            <div className="report-modal-actions">
+              <a className="peek-open" href={p.reportUrl} target="_blank" rel="noopener">Open ↗</a>
+              <button className="peek-x" onClick={onClose}>×</button>
+            </div>
+          </div>
+          <iframe className="report-frame" src={p.reportUrl} title={p.symbol + " research brief"} loading="lazy" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="peek-overlay" onClick={onClose}>
       <div className="peek" onClick={(e) => e.stopPropagation()} style={{ width: 560, maxWidth: "94vw" }}>
@@ -330,7 +354,7 @@ function PositionsCard({ positions, isOwner, onChange }) {
   const ip = { height: 28, border: "1px solid var(--border2)", borderRadius: 6, padding: "0 8px", font: "inherit", fontSize: 12, outline: "none", minWidth: 0, width: "100%", background: "var(--panel)", color: "var(--fg)" };
   const upd = (i, k, v) => { const n = list.slice(); n[i] = { ...n[i], [k]: v }; onChange(n); };
   const remove = (i) => { const n = list.slice(); n.splice(i, 1); onChange(n); };
-  const add = () => onChange([...list, { symbol: "", direction: "Long", entry: 0, target: null, date: "", status: "Open", sizing: "", report: "" }]);
+  const add = () => onChange([...list, { symbol: "", direction: "Long", entry: 0, target: null, date: "", status: "Open", sizing: "", report: "", reportUrl: "" }]);
 
   return (
     <MCard title="Positions" sub="The desk's live book · tap a name for the full write-up"
@@ -354,7 +378,8 @@ function PositionsCard({ positions, isOwner, onChange }) {
                 <label style={{ fontSize: 10, color: "var(--muted)", display: "flex", flexDirection: "column", gap: 3 }}>Opened<input style={ip} type="date" value={p.date || ""} onChange={(e) => upd(i, "date", e.target.value)} /></label>
               </div>
               <input style={ip} placeholder="Sizing (e.g. 5% of book)" value={p.sizing || ""} onChange={(e) => upd(i, "sizing", e.target.value)} />
-              <textarea style={{ ...ip, height: 84, padding: "6px 8px", resize: "vertical", fontFamily: "inherit", lineHeight: 1.45 }} placeholder="Report / thesis — shown when a member opens this position…" value={p.report || ""} onChange={(e) => upd(i, "report", e.target.value)} />
+              <input style={ip} placeholder="Report URL — optional (e.g. /reports/onds.html)" value={p.reportUrl || ""} onChange={(e) => upd(i, "reportUrl", e.target.value)} />
+              <textarea style={{ ...ip, height: 84, padding: "6px 8px", resize: "vertical", fontFamily: "inherit", lineHeight: 1.45 }} placeholder="Report / thesis — shown if no Report URL is set…" value={p.report || ""} onChange={(e) => upd(i, "report", e.target.value)} />
             </div>
           ))}
           <button className="run-btn run-dirty" style={{ height: 34, borderRadius: 8 }} onClick={add}>+ Add position</button>

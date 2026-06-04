@@ -79,6 +79,12 @@ window.DEFAULT_WATCHLIST = ["AAPL", "NVDA", "TSLA", "JPM", "AMD", "COIN"];
 // Positions book — seed/fallback; the live list is owner-edited via /api/positions.
 window.POSITIONS = [
   {
+    symbol: "ONDS", direction: "Long", entry: 11.20, target: 16, date: "2026-06-04",
+    status: "Watching", sizing: "Swing · scale in on BOS",
+    report: "Gap-fill, liquidity sweep & break-of-structure setup on a multi-domain autonomous-defense consolidator. Full brief attached.",
+    reportUrl: "/reports/onds.html",
+  },
+  {
     symbol: "NVDA", direction: "Long", entry: 118.50, target: 185, date: "2025-09-12",
     status: "Open", sizing: "6% of book",
     report: "Entered on the Blackwell ramp. Data-center demand still supply-constrained into 2026 with hyperscaler capex guides revised up two quarters running. Gross margins holding ~75% even as mix shifts to systems.\n\nThesis: consensus still underwrites a cyclical peak that hasn't arrived — networking + software attach extend the runway. Risk: a single-customer concentration shock or an export-control escalation. Trim into the high-$170s, add on any macro-driven flush below $105.",
