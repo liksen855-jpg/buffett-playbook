@@ -1,7 +1,7 @@
 /**
  * InsightInvest Service Worker
  * Intercepts data/fred_*.json and data/prices.json requests,
- * serves live data from FRED API and Yahoo Finance.
+ * serves live data from FRED API (direct) and Yahoo Finance (via /api/yahoo-proxy).
  *
  * The FRED API key is set via index.html before this SW is registered.
  * It's stored in the Cache API so it survives page reloads.
@@ -26,11 +26,8 @@ const MONTHLY_SERIES = new Set([
     "UMCSENT", "UNRATE", "WTREGEN",
 ]);
 
-// Proxy URLs for Yahoo Finance (browser same-origin restriction)
-const YF_PROXIES = [
-    sym => `https://corsproxy.io/?url=${encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=2d`)}`,
-    sym => `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=2d`)}`,
-];
+// Yahoo Finance proxy endpoint (runs on same origin, no CORS issues)
+const YF_PROXY_URL = '/api/yahoo-proxy';
 
 // ── Config storage (FRED key) ────────────────────────────────────────────────
 
@@ -129,47 +126,38 @@ async function fetchCpiYoy(apiKey) {
     return JSON.stringify(result);
 }
 
-// ── Yahoo Finance price fetch (via CORS proxy) ───────────────────────────────
+// ── Yahoo Finance price fetch (via local proxy) ──────────────────────────────
 
 async function fetchPrices(existingPrices) {
     const symbols = Object.keys(existingPrices);
-    const updated = { ...existingPrices };
+    if (!symbols.length) return JSON.stringify({ ts: new Date().toISOString(), data: {} });
 
-    for (const sym of symbols) {
-        const encoded = encodeURIComponent(sym);
-        let got = false;
-        for (const proxyFn of YF_PROXIES) {
-            try {
-                const r = await fetch(proxyFn(encoded), { signal: AbortSignal.timeout(8000) });
-                if (!r.ok) continue;
-                const d = await r.json();
-                const meta = d?.chart?.result?.[0]?.meta;
-                if (!meta) continue;
-                const price = meta.regularMarketPrice || meta.previousClose;
-                const prev  = meta.previousClose || meta.chartPreviousClose || price;
-                if (!price) continue;
-                const change = price - prev;
-                const pct    = prev ? change / prev * 100 : 0;
-                updated[sym] = {
-                    symbol: sym,
-                    price: Math.round(price * 10000) / 10000,
-                    change: Math.round(change * 10000) / 10000,
-                    changePct: Math.round(pct * 1000000) / 1000000,
-                    name: (meta.longName || meta.shortName || sym).slice(0, 34),
-                };
-                got = true;
-                break;
-            } catch { continue; }
+    try {
+        const r = await fetch(`${YF_PROXY_URL}?symbols=${symbols.join(',')}`, {
+            signal: AbortSignal.timeout(15000),
+        });
+        if (!r.ok) throw new Error(`Proxy HTTP ${r.status}`);
+        const payload = await r.json();
+        const fresh = payload?.data || {};
+
+        // Merge: fresh data wins, keep existing as fallback
+        const merged = { ...existingPrices };
+        for (const sym of symbols) {
+            if (fresh[sym]) {
+                merged[sym] = fresh[sym];
+            }
         }
-        if (!got) {
-            // keep existing value for this symbol
-        }
+        return JSON.stringify({
+            ts: payload?.ts || new Date().toISOString(),
+            data: merged,
+        });
+    } catch (err) {
+        console.warn('[SW] YF proxy failed, keeping stale prices:', err.message);
+        return JSON.stringify({
+            ts: new Date().toISOString(),
+            data: existingPrices,
+        });
     }
-
-    return JSON.stringify({
-        ts: new Date().toISOString(),
-        data: updated,
-    });
 }
 
 // ── Service worker event handlers ────────────────────────────────────────────

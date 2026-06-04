@@ -1,0 +1,57 @@
+name: Refresh Macro Intelligence Data
+
+on:
+  schedule:
+    # Every 15 minutes — refresh Yahoo Finance prices
+    - cron: '*/15 * * * *'
+  workflow_dispatch:  # Allow manual trigger from GitHub UI
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Refresh data
+        env:
+          FRED_KEY: ${{ secrets.FRED_API_KEY }}
+        run: |
+          cd macro_intelligence
+
+          # Use secret key if set, otherwise fall back to the hardcoded one
+          KEY="${FRED_KEY:-14c2e2df5cd903e2e7c7b882cabb899f}"
+
+          HOUR=$(date -u +%H)
+          MIN=$(date -u +%M)
+
+          # Every 4 hours (at :00) → full refresh (FRED + prices)
+          # Otherwise → prices only
+          if [ "$MIN" = "00" ] && [ $((HOUR % 4)) -eq 0 ]; then
+            echo "=== FULL REFRESH (FRED + prices) ==="
+            python3 refresh-data.py --fred-key "$KEY"
+          else
+            echo "=== PRICES ONLY ==="
+            python3 refresh-data.py --fred-key "$KEY" --skip-fred
+          fi
+
+      - name: Commit & push if changed
+        run: |
+          git config user.name "macro-bot"
+          git config user.email "bot@leiholding.com"
+          git add macro_intelligence/data/
+
+          # Only commit if there are actual changes
+          if git diff --cached --quiet; then
+            echo "No data changes — nothing to commit"
+          else
+            git commit -m "auto: refresh macro data [$(date -u '+%Y-%m-%d %H:%M UTC')]"
+            git push
+          fi
