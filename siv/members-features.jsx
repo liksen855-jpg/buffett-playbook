@@ -273,4 +273,116 @@ function cleanAddSym(q) {
   return m ? m.symbol : Q;
 }
 
-window.MemberFeatures = { PicksFeed, PresetsCard, PortfolioCard };
+// ── Positions book (owner-editable; click a row to pop the full write-up) ─────
+const POS_DIR = ["Long", "Short"];
+const POS_STATUS = ["Open", "Watching", "Closed"];
+
+function posReturn(p, s) {
+  if (!(p.entry > 0) || !s || !(s.price > 0)) return null;
+  return ((p.direction === "Short" ? p.entry - s.price : s.price - p.entry) / p.entry) * 100;
+}
+
+function PositionReport({ position: p, onClose }) {
+  const s = mLook(p.symbol);
+  const ret = posReturn(p, s);
+  const up = (ret || 0) >= 0;
+  React.useEffect(() => {
+    const h = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", h);
+    return () => window.removeEventListener("keydown", h);
+  }, [onClose]);
+  const Row = ({ k, v, cls }) => <div className="pk-row"><span>{k}</span><span className={"num " + (cls || "")}>{v}</span></div>;
+  return (
+    <div className="peek-overlay" onClick={onClose}>
+      <div className="peek" onClick={(e) => e.stopPropagation()} style={{ width: 560, maxWidth: "94vw" }}>
+        <div className="peek-head">
+          <div>
+            <div className="peek-sym">{p.symbol}
+              <span className={"pos-dir " + (p.direction === "Short" ? "pos-short" : "pos-long")}>{p.direction}</span>
+              <span className={"pos-status pos-st-" + (p.status || "Open").toLowerCase()}>{p.status}</span>
+            </div>
+            <div className="peek-name">{s.companyName}</div>
+          </div>
+          <button className="peek-x" onClick={onClose}>×</button>
+        </div>
+        <div className="peek-grid">
+          <Row k="Entry" v={"$" + mFmtPrice(p.entry)} />
+          <Row k="Current" v={"$" + mFmtPrice(s.price)} />
+          <Row k="Return" v={ret == null ? "—" : (up ? "+" : "") + ret.toFixed(1) + "%"} cls={up ? "chg-pos" : "chg-neg"} />
+          <Row k="Target" v={p.target ? "$" + mFmtPrice(p.target) : "—"} />
+          <Row k="Sizing" v={p.sizing || "—"} />
+          <Row k="Opened" v={p.date || "—"} />
+        </div>
+        <div className="pos-report">{p.report || "No write-up yet."}</div>
+        <div className="peek-actions">
+          <a className="peek-open" style={{ flex: 1, justifyContent: "center" }}
+            href={"/stock-details?ticker=" + encodeURIComponent(p.symbol)} target="_blank" rel="noopener">Open full research →</a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PositionsCard({ positions, isOwner, onChange }) {
+  const [editing, setEditing] = React.useState(false);
+  const [open, setOpen] = React.useState(null);   // position whose report is shown
+  const list = Array.isArray(positions) ? positions : [];
+  const ip = { height: 28, border: "1px solid var(--border2)", borderRadius: 6, padding: "0 8px", font: "inherit", fontSize: 12, outline: "none", minWidth: 0, width: "100%", background: "var(--panel)", color: "var(--fg)" };
+  const upd = (i, k, v) => { const n = list.slice(); n[i] = { ...n[i], [k]: v }; onChange(n); };
+  const remove = (i) => { const n = list.slice(); n.splice(i, 1); onChange(n); };
+  const add = () => onChange([...list, { symbol: "", direction: "Long", entry: 0, target: null, date: "", status: "Open", sizing: "", report: "" }]);
+
+  return (
+    <MCard title="Positions" sub="The desk's live book · tap a name for the full write-up"
+      action={isOwner
+        ? <button className="card-action" onClick={() => setEditing((e) => !e)}>{editing ? "Done" : "Edit"}</button>
+        : <span className="card-stamp">Updated today</span>}
+      className="card-positions">
+      {editing ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {list.map((p, i) => (
+            <div key={i} style={{ border: "1px solid var(--border)", borderRadius: 10, padding: "12px 13px", display: "flex", flexDirection: "column", gap: 8, background: "var(--strip)" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 26px", gap: 8, alignItems: "center" }}>
+                <input style={ip} placeholder="TICKER" value={p.symbol || ""} onChange={(e) => upd(i, "symbol", e.target.value.toUpperCase())} />
+                <select style={ip} value={p.direction} onChange={(e) => upd(i, "direction", e.target.value)}>{POS_DIR.map((d) => <option key={d}>{d}</option>)}</select>
+                <select style={ip} value={p.status} onChange={(e) => upd(i, "status", e.target.value)}>{POS_STATUS.map((d) => <option key={d}>{d}</option>)}</select>
+                <button onClick={() => remove(i)} title="Remove" style={{ border: 0, background: "none", color: "var(--red)", fontSize: 18, cursor: "pointer", lineHeight: 1 }}>×</button>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+                <label style={{ fontSize: 10, color: "var(--muted)", display: "flex", flexDirection: "column", gap: 3 }}>Entry $<input style={ip} type="number" min="0" step="0.01" value={p.entry} onChange={(e) => upd(i, "entry", +e.target.value)} /></label>
+                <label style={{ fontSize: 10, color: "var(--muted)", display: "flex", flexDirection: "column", gap: 3 }}>Target $<input style={ip} type="number" min="0" step="0.01" value={p.target == null ? "" : p.target} onChange={(e) => upd(i, "target", e.target.value === "" ? null : +e.target.value)} /></label>
+                <label style={{ fontSize: 10, color: "var(--muted)", display: "flex", flexDirection: "column", gap: 3 }}>Opened<input style={ip} type="date" value={p.date || ""} onChange={(e) => upd(i, "date", e.target.value)} /></label>
+              </div>
+              <input style={ip} placeholder="Sizing (e.g. 5% of book)" value={p.sizing || ""} onChange={(e) => upd(i, "sizing", e.target.value)} />
+              <textarea style={{ ...ip, height: 84, padding: "6px 8px", resize: "vertical", fontFamily: "inherit", lineHeight: 1.45 }} placeholder="Report / thesis — shown when a member opens this position…" value={p.report || ""} onChange={(e) => upd(i, "report", e.target.value)} />
+            </div>
+          ))}
+          <button className="run-btn run-dirty" style={{ height: 34, borderRadius: 8 }} onClick={add}>+ Add position</button>
+          <div style={{ fontSize: 11, color: "var(--faint)" }}>Saved automatically · visible to all members.</div>
+        </div>
+      ) : (
+        <div className="positions">
+          {list.length === 0 && <div style={{ fontSize: 12, color: "var(--faint)", padding: "8px 2px" }}>No positions published yet.</div>}
+          {list.map((p, i) => {
+            const s = mLook(p.symbol);
+            const ret = posReturn(p, s);
+            const up = (ret || 0) >= 0;
+            return (
+              <button className="pos-row" key={p.symbol + i} onClick={() => setOpen(p)} title={`Open ${p.symbol} write-up`}>
+                <span className="pos-sym">{p.symbol}</span>
+                <span className={"pos-dir " + (p.direction === "Short" ? "pos-short" : "pos-long")}>{p.direction}</span>
+                <span className="pos-entry num">@ ${mFmtPrice(p.entry)}</span>
+                <span className={"pos-ret num " + (up ? "chg-pos" : "chg-neg")}>{ret == null ? "—" : (up ? "+" : "") + ret.toFixed(1) + "%"}</span>
+                <span className={"pos-status-chip pos-st-" + (p.status || "Open").toLowerCase()}>{p.status}</span>
+                <span className="pos-arrow">→</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+      {open && <PositionReport position={open} onClose={() => setOpen(null)} />}
+    </MCard>
+  );
+}
+
+window.MemberFeatures = { PicksFeed, PresetsCard, PortfolioCard, PositionsCard };

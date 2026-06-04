@@ -75,3 +75,17 @@ window.PORTFOLIO = {
 };
 
 window.DEFAULT_WATCHLIST = ["AAPL", "NVDA", "TSLA", "JPM", "AMD", "COIN"];
+
+// Positions book — seed/fallback; the live list is owner-edited via /api/positions.
+window.POSITIONS = [
+  {
+    symbol: "NVDA", direction: "Long", entry: 118.50, target: 185, date: "2025-09-12",
+    status: "Open", sizing: "6% of book",
+    report: "Entered on the Blackwell ramp. Data-center demand still supply-constrained into 2026 with hyperscaler capex guides revised up two quarters running. Gross margins holding ~75% even as mix shifts to systems.\n\nThesis: consensus still underwrites a cyclical peak that hasn't arrived — networking + software attach extend the runway. Risk: a single-customer concentration shock or an export-control escalation. Trim into the high-$170s, add on any macro-driven flush below $105.",
+  },
+  {
+    symbol: "PYPL", direction: "Long", entry: 62.30, target: 95, date: "2025-07-01",
+    status: "Watching", sizing: "3% starter",
+    report: "Turnaround starter under the new CEO. Branded checkout re-accelerating, Venmo monetization finally moving, and buybacks shrinking the float ~6%/yr at a single-digit FCF multiple.\n\nWaiting on two clean quarters of branded TPV growth before sizing up. Stop-think level: a break of the prior low on deteriorating take-rate.",
+  },
+];

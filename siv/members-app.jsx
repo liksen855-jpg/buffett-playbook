@@ -1,7 +1,7 @@
 // ── Members dashboard — app root ─────────────────────────────────────────────
 const { useState, useEffect, useRef } = React;
 const { PulseBar, Watchlist, NewsFeed, EarningsList, look } = window.MemberParts;
-const { PicksFeed, PresetsCard, PortfolioCard } = window.MemberFeatures;
+const { PicksFeed, PresetsCard, PortfolioCard, PositionsCard } = window.MemberFeatures;
 const { fmtPrice: dFmtPrice, fmtCap: dFmtCap, fmtVol: dFmtVol, yieldOf: dYield } = window.ScreenerParts;
 
 const MTWEAKS = /*EDITMODE-BEGIN*/{
@@ -20,18 +20,24 @@ function Dash() {
   const [watchlist, setWatchlist] = useState(loadWL);
   const [portfolio, setPortfolio] = useState(() => window.PORTFOLIO); // seed fallback
   const [picks, setPicks] = useState(() => window.PICKS);             // global, seed fallback
+  const [positions, setPositions] = useState(() => window.POSITIONS); // global, seed fallback
   const [isOwner, setIsOwner] = useState(false);
   const [scope, setScope] = useState("watchlist");
   const [selected, setSelected] = useState(null);
   const meLoaded = useRef(false);
   const saveTimer = useRef(null);
   const picksSaveTimer = useRef(null);
+  const posSaveTimer = useRef(null);
 
   // Shared editorial picks + whether this patron may edit them.
   useEffect(() => {
     fetch("/api/picks", { credentials: "same-origin" })
       .then((r) => r.json())
       .then((d) => { if (d) { if (Array.isArray(d.picks)) setPicks(d.picks); setIsOwner(!!d.isOwner); } })
+      .catch(() => {});
+    fetch("/api/positions", { credentials: "same-origin" })
+      .then((r) => r.json())
+      .then((d) => { if (d && Array.isArray(d.positions)) setPositions(d.positions); })
       .catch(() => {});
   }, []);
 
@@ -41,6 +47,15 @@ function Dash() {
     picksSaveTimer.current = setTimeout(() => {
       fetch("/api/picks", { method: "PUT", credentials: "same-origin",
         headers: { "Content-Type": "application/json" }, body: JSON.stringify({ picks: next }) }).catch(() => {});
+    }, 800);
+  };
+
+  const savePositions = (next) => {
+    setPositions(next);
+    clearTimeout(posSaveTimer.current);
+    posSaveTimer.current = setTimeout(() => {
+      fetch("/api/positions", { method: "PUT", credentials: "same-origin",
+        headers: { "Content-Type": "application/json" }, body: JSON.stringify({ positions: next }) }).catch(() => {});
     }, 800);
   };
 
@@ -113,6 +128,7 @@ function Dash() {
       <div className="dash-body">
         <main className="dash-main">
           <PicksFeed picks={picks} isOwner={isOwner} onChange={savePicks} onSelect={setSelected} />
+          <PositionsCard positions={positions} isOwner={isOwner} onChange={savePositions} />
           <NewsFeed list={watchlist} scope={scope} setScope={setScope} onSelect={setSelected} />
         </main>
         <aside className="dash-rail">
