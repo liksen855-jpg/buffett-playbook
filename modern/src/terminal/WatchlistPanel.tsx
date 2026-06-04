@@ -111,14 +111,14 @@ export const WatchlistPanel: React.FC<WatchlistPanelProps> = ({
           >
             <div>
               <div style={{ fontWeight: 700, fontSize: 13, color: '#111' }}>{s.symbol}</div>
-              <div style={{ fontSize: 11, color: '#6b7280' }}>${s.price.toFixed(2)}</div>
+              <div style={{ fontSize: 11, color: '#6b7280' }}>${(s.price ?? 0).toFixed(2)}</div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span style={{
                 fontSize: 12, fontWeight: 600,
-                color: s.changesPercentage >= 0 ? '#16a34a' : '#dc2626',
+                color: (s.changesPercentage ?? 0) >= 0 ? '#16a34a' : '#dc2626',
               }}>
-                {s.changesPercentage >= 0 ? '+' : ''}{s.changesPercentage.toFixed(1)}%
+                {(s.changesPercentage ?? 0) >= 0 ? '+' : ''}{(s.changesPercentage ?? 0).toFixed(1)}%
               </span>
               <button
                 onClick={e => { e.stopPropagation(); onRemove(s.symbol); }}

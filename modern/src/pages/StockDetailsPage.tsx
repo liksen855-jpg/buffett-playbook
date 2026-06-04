@@ -1,7 +1,6 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import { useTickerData } from '@/hooks'
-import { runValuation, computeEPV, computeOwnerEarningsYield, computeSixDimensions } from '../valuation'
-import type { ValuationOutput, MoatHeatOutput } from '../valuation'
+import IntrinsicValuationSection from '../components/IntrinsicValuationSection'
 
 export default function StockDetailsPage() {
   const [input, setInput] = useState('AAPL')
@@ -13,74 +12,6 @@ export default function StockDetailsPage() {
     const t = input.trim().toUpperCase()
     if (t) setTicker(t)
   }
-
-  // ── Valuation computations ──
-  const valuation = useMemo<ValuationOutput | null>(() => {
-    if (!data || !data.income.length) return null
-    const shares = data.income[0]?.weightedAverageShsOutDil
-      ?? data.quote?.sharesOutstanding
-      ?? 0
-    const price = data.quote?.price ?? 0
-    if (!shares || !price) return null
-    return runValuation({
-      income: data.income,
-      balance: data.balance,
-      cashflow: data.cashflow,
-      metrics: data.metrics,
-      price,
-      shares,
-      sector: data.profile?.sector ?? undefined,
-      beta: data.profile?.beta ?? undefined,
-    })
-  }, [data])
-
-  const moat = useMemo<MoatHeatOutput | null>(() => {
-    if (!data || !data.income.length) return null
-    return computeSixDimensions({
-      profile: data.profile,
-      quote: data.quote,
-      income: data.income,
-      balance: data.balance,
-      cashflow: data.cashflow,
-      metrics: data.metrics,
-      earnings: data.earnings,
-      fairValue: valuation?.composite ?? null,
-      beta: data.profile?.beta ?? undefined,
-    })
-  }, [data, valuation])
-
-  const epv = useMemo(() => {
-    if (!data || !data.income.length) return null
-    const shares = data.income[0]?.weightedAverageShsOutDil
-      ?? data.quote?.sharesOutstanding
-      ?? 0
-    if (!shares) return null
-    return computeEPV({
-      income: data.income,
-      balance: data.balance,
-      cashflow: data.cashflow,
-      metrics: data.metrics,
-      price: data.quote?.price ?? 0,
-      shares,
-      beta: data.profile?.beta ?? undefined,
-    })
-  }, [data])
-
-  const ownerYield = useMemo(() => {
-    if (!data || !data.income.length) return null
-    const shares = data.income[0]?.weightedAverageShsOutDil
-      ?? data.quote?.sharesOutstanding
-      ?? 0
-    if (!shares) return null
-    return computeOwnerEarningsYield({
-      income: data.income,
-      balance: data.balance,
-      cashflow: data.cashflow,
-      metrics: data.metrics,
-      price: data.quote?.price ?? 0,
-      shares,
-    })
-  }, [data])
 
   return (
     <div style={{ maxWidth: 1200, margin: '0 auto', padding: 24 }}>
@@ -286,141 +217,8 @@ export default function StockDetailsPage() {
             />
           </div>
 
-          {/* ── Valuation ── */}
-          {valuation && (
-            <div style={{ background: 'var(--panel)', border: '1px solid var(--border)', borderRadius: 8, padding: '18px 20px' }}>
-              <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 14 }}>
-                Intrinsic Valuation
-              </div>
-
-              {/* Composite */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 16, flexWrap: 'wrap' }}>
-                <div>
-                  <div style={{ fontSize: 11, color: 'var(--muted)' }}>Composite Fair Value</div>
-                  <div style={{ fontFamily: 'var(--mono)', fontSize: 24, fontWeight: 700, color: 'var(--accent)' }}>
-                    {valuation.composite ? `$${valuation.composite.toFixed(2)}` : '—'}
-                  </div>
-                </div>
-                <div>
-                  <div style={{ fontSize: 11, color: 'var(--muted)' }}>Upside / Downside</div>
-                  <div style={{
-                    fontFamily: 'var(--mono)', fontSize: 20, fontWeight: 700,
-                    color: (valuation.upside ?? 0) >= 0 ? 'var(--green)' : 'var(--red)',
-                  }}>
-                    {valuation.upside != null
-                      ? `${valuation.upside >= 0 ? '+' : ''}${(valuation.upside * 100).toFixed(1)}%`
-                      : '—'}
-                  </div>
-                </div>
-                <div>
-                  <div style={{ fontSize: 11, color: 'var(--muted)' }}>Current Price</div>
-                  <div style={{ fontFamily: 'var(--mono)', fontSize: 20, fontWeight: 700 }}>
-                    ${data.quote?.price?.toFixed(2) ?? '—'}
-                  </div>
-                </div>
-              </div>
-
-              {/* Method grid */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 8 }}>
-                {valuation.results.map(r => (
-                  <div key={r.method} style={{
-                    padding: '10px 12px',
-                    background: 'var(--bg)',
-                    borderRadius: 6,
-                    border: '1px solid var(--border)',
-                  }}>
-                    <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 4 }}>{r.method}</div>
-                    <div style={{ fontFamily: 'var(--mono)', fontSize: 14, fontWeight: 600 }}>
-                      {r.value != null ? `$${r.value.toFixed(2)}` : '—'}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* ── EPV & Owner Earnings ── */}
-          {(epv || ownerYield) && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-              {epv && (
-                <div style={{ background: 'var(--panel)', border: '1px solid var(--border)', borderRadius: 8, padding: '16px 18px' }}>
-                  <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>
-                    Earnings Power Value
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                    <Row label="WACC" value={`${(epv.wacc * 100).toFixed(1)}%`} />
-                    <Row label="NOPAT" value={fmtMoney(epv.nopat)} />
-                    <Row label="EPV" value={fmtMoney(epv.epv)} />
-                    <Row label="EPV / Share" value={`$${epv.epvPerShare.toFixed(2)}`} />
-                  </div>
-                </div>
-              )}
-              {ownerYield && (
-                <div style={{ background: 'var(--panel)', border: '1px solid var(--border)', borderRadius: 8, padding: '16px 18px' }}>
-                  <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>
-                    Owner Earnings Yield
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                    <Row label="Net Income" value={fmtMoney(ownerYield.netIncome)} />
-                    <Row label="D&A" value={fmtMoney(ownerYield.da)} />
-                    <Row label="Maint. Capex" value={fmtMoney(ownerYield.maintCapex)} />
-                    <Row label="Owner Earnings" value={fmtMoney(ownerYield.ownerEarnings)} />
-                    <Row label="Yield" value={`${(ownerYield.yield * 100).toFixed(2)}%`} />
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* ── MoatHeat ── */}
-          {moat && (
-            <div style={{ background: 'var(--panel)', border: '1px solid var(--border)', borderRadius: 8, padding: '18px 20px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-                <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                  InsightInvest™ MoatHeat
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{
-                    fontFamily: 'var(--mono)', fontSize: 20, fontWeight: 800,
-                    color: moat.composite >= 65 ? 'var(--green)' : moat.composite >= 50 ? 'var(--accent)' : 'var(--red)',
-                  }}>
-                    {moat.composite}
-                  </span>
-                  <span style={{
-                    fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 4,
-                    background: moat.composite >= 65 ? 'rgba(34,197,94,0.12)' : moat.composite >= 50 ? 'rgba(14,165,233,0.12)' : 'rgba(239,68,68,0.12)',
-                    color: moat.composite >= 65 ? '#166534' : moat.composite >= 50 ? '#0c4a6e' : '#991b1b',
-                  }}>
-                    {moat.rating}
-                  </span>
-                </div>
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
-                {moat.dimensions.map(d => (
-                  <div key={d.label} style={{
-                    padding: '12px 14px',
-                    background: 'var(--bg)',
-                    borderRadius: 6,
-                    border: '1px solid var(--border)',
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-                      <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--fg2)' }}>{d.label}</span>
-                      <span style={{ fontSize: 11, fontWeight: 700, color: d.color }}>{d.score}</span>
-                    </div>
-                    <div style={{ width: '100%', height: 6, background: 'var(--border)', borderRadius: 3, overflow: 'hidden' }}>
-                      <div style={{
-                        width: `${d.score}%`, height: '100%',
-                        background: d.color, borderRadius: 3,
-                        transition: 'width 0.4s ease',
-                      }} />
-                    </div>
-                    <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>{d.verdict}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          {/* ── Intrinsic Valuation ── */}
+          {data && <IntrinsicValuationSection data={data} />}
 
           {/* Description */}
           {data.profile?.description && (
@@ -488,15 +286,6 @@ function MetricCard({ title, rows }: { title: string; rows: { label: string; val
           </div>
         ))}
       </div>
-    </div>
-  )
-}
-
-function Row({ label, value }: { label: string; value: string }) {
-  return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <span style={{ fontSize: 12, color: 'var(--fg2)' }}>{label}</span>
-      <span style={{ fontFamily: 'var(--mono)', fontSize: 13, fontWeight: 600 }}>{value}</span>
     </div>
   )
 }

@@ -14,8 +14,8 @@ function buildStockMap(stocks: Stock[]): Record<string, Stock> {
 }
 
 function buildBreadth(stocks: Stock[]) {
-  const adv = stocks.filter(s => s.changesPercentage > 0).length;
-  const dec = stocks.filter(s => s.changesPercentage < 0).length;
+  const adv = stocks.filter(s => (s.changesPercentage ?? 0) > 0).length;
+  const dec = stocks.filter(s => (s.changesPercentage ?? 0) < 0).length;
   return { advancers: adv, decliners: dec, unchanged: stocks.length - adv - dec };
 }
 
@@ -95,14 +95,32 @@ export const Dashboard: React.FC = () => {
           `https://financialmodelingprep.com/stable/company-screener?marketCapMoreThan=2000&exchange=NASDAQ,NYSE&apikey=${key}`
         );
         if (!res.ok) { setApiError('FMP screener unavailable — using demo data'); return; }
-        const stocks: Stock[] = await res.json();
+        const rawStocks: Stock[] = await res.json();
         if (cancelled) return;
-        setData(prev => ({
-          ...prev,
-          stocks,
-          stockBySym: buildStockMap(stocks),
-          breadth: buildBreadth(stocks),
-        }));
+        setData(prev => {
+          // Merge screener data with existing stocks — screener often lacks price/change
+          const mergedStocks = rawStocks.map(newS => {
+            const existing = prev.stockBySym[newS.symbol];
+            if (!existing) return newS;
+            return {
+              ...existing,
+              ...newS,
+              price: newS.price ?? existing.price ?? 0,
+              change: newS.change ?? existing.change ?? 0,
+              changesPercentage: newS.changesPercentage ?? existing.changesPercentage ?? 0,
+            };
+          });
+          // Keep demo stocks not returned by screener
+          const mergedSymbols = new Set(mergedStocks.map(s => s.symbol));
+          const keptStocks = prev.stocks.filter(s => !mergedSymbols.has(s.symbol));
+          const allStocks = [...keptStocks, ...mergedStocks];
+          return {
+            ...prev,
+            stocks: allStocks,
+            stockBySym: buildStockMap(allStocks),
+            breadth: buildBreadth(allStocks),
+          };
+        });
         setApiError(null);
       } catch {
         setApiError('FMP screener failed — using demo data');
@@ -225,16 +243,16 @@ export const Dashboard: React.FC = () => {
                 </div>
                 <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
                   <div>
-                    <div style={{ fontSize: 24, fontWeight: 800, color: '#111' }}>${selected.price.toFixed(2)}</div>
+                    <div style={{ fontSize: 24, fontWeight: 800, color: '#111' }}>${(selected.price ?? 0).toFixed(2)}</div>
                     <div style={{
                       fontSize: 14, fontWeight: 600,
-                      color: selected.changesPercentage >= 0 ? '#16a34a' : '#dc2626',
+                      color: (selected.changesPercentage ?? 0) >= 0 ? '#16a34a' : '#dc2626',
                     }}>
-                      {selected.changesPercentage >= 0 ? '+' : ''}{selected.changesPercentage.toFixed(2)}%
+                      {(selected.changesPercentage ?? 0) >= 0 ? '+' : ''}{(selected.changesPercentage ?? 0).toFixed(2)}%
                     </div>
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px 24px', fontSize: 12 }}>
-                    <div><span style={{ color: '#6b7280' }}>Market Cap</span><br/><b>${(selected.marketCap / 1e9).toFixed(1)}B</b></div>
+                    <div><span style={{ color: '#6b7280' }}>Market Cap</span><br/><b>${((selected.marketCap ?? 0) / 1e9).toFixed(1)}B</b></div>
                     <div><span style={{ color: '#6b7280' }}>P/E</span><br/><b>{selected.pe?.toFixed(1) ?? '—'}</b></div>
                     <div><span style={{ color: '#6b7280' }}>EPS</span><br/><b>{selected.eps?.toFixed(2) ?? '—'}</b></div>
                     <div><span style={{ color: '#6b7280' }}>Div Yield</span><br/><b>{selected.dividendYield ? (selected.dividendYield * 100).toFixed(2) + '%' : '—'}</b></div>

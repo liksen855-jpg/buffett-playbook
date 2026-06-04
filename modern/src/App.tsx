@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { TerminalPage } from './pages/TerminalPage'
 import StockDetailsPage from './pages/StockDetailsPage'
+import ScreenerPage from './pages/ScreenerPage'
 
-type Page = 'terminal' | 'stock-details'
+type Page = 'terminal' | 'stock-details' | 'screener'
 
 export default function App() {
   const [page, setPage] = useState<Page>('terminal')
@@ -50,11 +51,26 @@ export default function App() {
           >
             Stock Details
           </button>
+          <button
+            onClick={() => setPage('screener')}
+            style={{
+              padding: '6px 14px',
+              borderRadius: 6,
+              border: 'none',
+              background: page === 'screener' ? 'var(--accent-soft)' : 'transparent',
+              color: page === 'screener' ? 'var(--accent)' : 'var(--muted)',
+              fontWeight: page === 'screener' ? 600 : 500,
+              fontSize: 13,
+            }}
+          >
+            Screener
+          </button>
         </div>
       </nav>
 
       {page === 'terminal' && <TerminalPage />}
       {page === 'stock-details' && <StockDetailsPage />}
+      {page === 'screener' && <ScreenerPage />}
     </div>
   )
 }

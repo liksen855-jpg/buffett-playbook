@@ -119,12 +119,12 @@ export const PicksPanel: React.FC<PicksPanelProps> = ({
               </div>
               {stock && (
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: 13, fontWeight: 700 }}>${stock.price.toFixed(2)}</div>
+                  <div style={{ fontSize: 13, fontWeight: 700 }}>${(stock.price ?? 0).toFixed(2)}</div>
                   <div style={{
                     fontSize: 11, fontWeight: 600,
-                    color: stock.changesPercentage >= 0 ? '#16a34a' : '#dc2626',
+                    color: (stock.changesPercentage ?? 0) >= 0 ? '#16a34a' : '#dc2626',
                   }}>
-                    {stock.changesPercentage >= 0 ? '+' : ''}{stock.changesPercentage.toFixed(1)}%
+                    {(stock.changesPercentage ?? 0) >= 0 ? '+' : ''}{(stock.changesPercentage ?? 0).toFixed(1)}%
                   </div>
                 </div>
               )}

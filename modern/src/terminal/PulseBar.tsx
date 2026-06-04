@@ -21,13 +21,13 @@ export const PulseBar: React.FC<PulseBarProps> = ({ pulse, breadth }) => {
         {pulse.map(tile => (
           <div key={tile.symbol} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <span style={{ fontWeight: 600, fontSize: 13, color: '#111' }}>{tile.name || tile.symbol}</span>
-            <span style={{ fontSize: 13, color: '#374151' }}>${tile.price.toFixed(2)}</span>
+            <span style={{ fontSize: 13, color: '#374151' }}>${(tile.price ?? 0).toFixed(2)}</span>
             <span style={{
               fontSize: 12,
               fontWeight: 600,
-              color: tile.changesPercentage >= 0 ? '#16a34a' : '#dc2626',
+              color: (tile.changesPercentage ?? 0) >= 0 ? '#16a34a' : '#dc2626',
             }}>
-              {signed(tile.changesPercentage, 1)}%
+              {signed(tile.changesPercentage ?? 0, 1)}%
             </span>
           </div>
         ))}

@@ -21,14 +21,14 @@ export const PortfolioPanel: React.FC<PortfolioPanelProps> = ({
 
   const totalValue = portfolio.holdings.reduce((sum, h) => {
     const stock = bySym.get(h.symbol);
-    return sum + (stock ? stock.price * h.shares : 0);
+    return sum + (stock && stock.price != null ? stock.price * h.shares : 0);
   }, portfolio.cash);
 
   const totalCost = portfolio.holdings.reduce((sum, h) => sum + h.costBasis * h.shares, 0);
   const totalPnL = totalValue - totalCost - portfolio.cash;
   const dayChange = portfolio.holdings.reduce((sum, h) => {
     const stock = bySym.get(h.symbol);
-    return sum + (stock ? stock.price * stock.changesPercentage / 100 * h.shares : 0);
+    return sum + (stock && stock.price != null && stock.changesPercentage != null ? stock.price * stock.changesPercentage / 100 * h.shares : 0);
   }, 0);
 
   const addHolding = () => {
