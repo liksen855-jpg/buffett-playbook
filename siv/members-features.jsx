@@ -282,8 +282,8 @@ function posReturn(p, s) {
   return ((p.direction === "Short" ? p.entry - s.price : s.price - p.entry) / p.entry) * 100;
 }
 
-function PositionReport({ position: p, onClose }) {
-  const s = mLook(p.symbol);
+function PositionReport({ position: p, live, onClose }) {
+  const s = (live && live.price) ? live : mLook(p.symbol);
   const ret = posReturn(p, s);
   const up = (ret || 0) >= 0;
   React.useEffect(() => {
@@ -347,10 +347,11 @@ function PositionReport({ position: p, onClose }) {
   );
 }
 
-function PositionsCard({ positions, isOwner, onChange }) {
+function PositionsCard({ positions, isOwner, onChange, quotes }) {
   const [editing, setEditing] = React.useState(false);
   const [open, setOpen] = React.useState(null);   // position whose report is shown
   const list = Array.isArray(positions) ? positions : [];
+  const liveOf = (sym) => (quotes && quotes[sym] && quotes[sym].price) ? quotes[sym] : mLook(sym);
   const ip = { height: 28, border: "1px solid var(--border2)", borderRadius: 6, padding: "0 8px", font: "inherit", fontSize: 12, outline: "none", minWidth: 0, width: "100%", background: "var(--panel)", color: "var(--fg)" };
   const upd = (i, k, v) => { const n = list.slice(); n[i] = { ...n[i], [k]: v }; onChange(n); };
   const remove = (i) => { const n = list.slice(); n.splice(i, 1); onChange(n); };
@@ -389,7 +390,7 @@ function PositionsCard({ positions, isOwner, onChange }) {
         <div className="positions">
           {list.length === 0 && <div style={{ fontSize: 12, color: "var(--faint)", padding: "8px 2px" }}>No positions published yet.</div>}
           {list.map((p, i) => {
-            const s = mLook(p.symbol);
+            const s = liveOf(p.symbol);
             const ret = posReturn(p, s);
             const up = (ret || 0) >= 0;
             return (
@@ -397,6 +398,7 @@ function PositionsCard({ positions, isOwner, onChange }) {
                 <span className="pos-sym">{p.symbol}</span>
                 <span className={"pos-dir " + (p.direction === "Short" ? "pos-short" : "pos-long")}>{p.direction}</span>
                 <span className="pos-entry num">@ ${mFmtPrice(p.entry)}</span>
+                <span className="pos-last num">{s.price ? "→ $" + mFmtPrice(s.price) : ""}</span>
                 <span className={"pos-ret num " + (up ? "chg-pos" : "chg-neg")}>{ret == null ? "—" : (up ? "+" : "") + ret.toFixed(1) + "%"}</span>
                 <span className={"pos-status-chip pos-st-" + (p.status || "Open").toLowerCase()}>{p.status}</span>
                 <span className="pos-arrow">→</span>
@@ -405,7 +407,7 @@ function PositionsCard({ positions, isOwner, onChange }) {
           })}
         </div>
       )}
-      {open && <PositionReport position={open} onClose={() => setOpen(null)} />}
+      {open && <PositionReport position={open} live={liveOf(open.symbol)} onClose={() => setOpen(null)} />}
     </MCard>
   );
 }

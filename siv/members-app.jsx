@@ -21,6 +21,7 @@ function Dash() {
   const [portfolio, setPortfolio] = useState(() => window.PORTFOLIO); // seed fallback
   const [picks, setPicks] = useState(() => window.PICKS);             // global, seed fallback
   const [positions, setPositions] = useState(() => window.POSITIONS); // global, seed fallback
+  const [posQuotes, setPosQuotes] = useState({});                     // live FMP quotes for position tickers
   const [isOwner, setIsOwner] = useState(false);
   const [scope, setScope] = useState("watchlist");
   const [selected, setSelected] = useState(null);
@@ -51,6 +52,18 @@ function Dash() {
         headers: { "Content-Type": "application/json" }, body: JSON.stringify({ picks: next }) }).catch(() => {});
     }, 800);
   };
+
+  // Live prices for the position tickers (any symbol, not just the universe).
+  // Refreshes on change and every 60s so returns stay current.
+  useEffect(() => {
+    const syms = [...new Set((positions || []).map((p) => p && p.symbol).filter(Boolean))];
+    if (!syms.length || !(window.IIData && window.IIData.quotes)) return;
+    let cancel = false;
+    const run = () => window.IIData.quotes(syms).then((m) => { if (!cancel) setPosQuotes((q) => ({ ...q, ...m })); }).catch(() => {});
+    run();
+    const id = setInterval(run, 60000);
+    return () => { cancel = true; clearInterval(id); };
+  }, [positions]);
 
   const savePositions = (next) => {
     setPositions(next);
@@ -130,7 +143,7 @@ function Dash() {
       <div className="dash-body">
         <main className="dash-main">
           <PicksFeed picks={picks} isOwner={isOwner} onChange={savePicks} onSelect={setSelected} />
-          {PositionsCard && <PositionsCard positions={positions} isOwner={isOwner} onChange={savePositions} />}
+          {PositionsCard && <PositionsCard positions={positions} isOwner={isOwner} onChange={savePositions} quotes={posQuotes} />}
           <NewsFeed list={watchlist} scope={scope} setScope={setScope} onSelect={setSelected} />
         </main>
         <aside className="dash-rail">

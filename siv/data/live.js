@@ -165,6 +165,30 @@
       });
   }
 
+  // Live quotes for arbitrary tickers (e.g. positions outside the screener
+  // universe). Returns { SYM: { price, changePct, companyName } }.
+  async function quotes(symbols) {
+    const out = {};
+    const list = [...new Set((symbols || []).map((s) => String(s || "").toUpperCase()).filter(Boolean))];
+    if (!list.length) return out;
+    await Promise.all(
+      chunk(list, 50).map(async (syms) => {
+        try {
+          const q = await fmp("/quote?symbol=" + encodeURIComponent(syms.join(",")));
+          (Array.isArray(q) ? q : []).forEach((x) => {
+            if (x && x.symbol) out[x.symbol] = {
+              symbol: x.symbol,
+              price: x.price ?? 0,
+              changePct: x.changePercentage ?? x.changesPercentage ?? 0,
+              companyName: x.name || x.symbol,
+            };
+          });
+        } catch (e) {}
+      })
+    );
+    return out;
+  }
+
   let _loaded = false;
   window.IIData = {
     async load() {
@@ -173,5 +197,6 @@
       await Promise.allSettled([loadPulse(), loadNews(), loadEarnings()]);
       _loaded = true;
     },
+    quotes,
   };
 })();
