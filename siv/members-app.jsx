@@ -128,7 +128,7 @@ function Dash() {
       <div className="dash-body">
         <main className="dash-main">
           <PicksFeed picks={picks} isOwner={isOwner} onChange={savePicks} onSelect={setSelected} />
-          <PositionsCard positions={positions} isOwner={isOwner} onChange={savePositions} />
+          {PositionsCard && <PositionsCard positions={positions} isOwner={isOwner} onChange={savePositions} />}
           <NewsFeed list={watchlist} scope={scope} setScope={setScope} onSelect={setSelected} />
         </main>
         <aside className="dash-rail">
