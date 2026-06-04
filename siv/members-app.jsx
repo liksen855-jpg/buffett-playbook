@@ -33,11 +33,13 @@ function Dash() {
   useEffect(() => {
     fetch("/api/picks", { credentials: "same-origin" })
       .then((r) => r.json())
-      .then((d) => { if (d) { if (Array.isArray(d.picks)) setPicks(d.picks); setIsOwner(!!d.isOwner); } })
+      .then((d) => { if (d) { if (Array.isArray(d.picks) && d.picks.length) setPicks(d.picks); setIsOwner(!!d.isOwner); } })
       .catch(() => {});
     fetch("/api/positions", { credentials: "same-origin" })
       .then((r) => r.json())
-      .then((d) => { if (d && Array.isArray(d.positions)) setPositions(d.positions); })
+      // Empty saved list → keep the seed defaults (avoids a blank section if a
+      // stray empty save ever landed in KV). Any published list takes over.
+      .then((d) => { if (d && Array.isArray(d.positions) && d.positions.length) setPositions(d.positions); })
       .catch(() => {});
   }, []);
 
