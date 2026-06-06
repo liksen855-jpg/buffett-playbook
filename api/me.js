@@ -1,68 +1,9 @@
 // Per-account store for the signed-in patron: watchlist + portfolio.
-// Keyed on the verified `sub` from the pt_session JWT (set by auth/callback).
-// Backed by Vercel KV (Upstash) via its REST API — no npm dependency needed.
-//
-//   GET  /api/me            -> { authenticated, data: { watchlist, portfolio } | null }
-//   PUT  /api/me   {body}   -> { ok } ; body = { watchlist?, portfolio? } (merged)
-//
-// Requires env: SESSION_SECRET (already set for auth) and the KV pair
-// KV_REST_API_URL + KV_REST_API_TOKEN (added by the Vercel KV integration).
-// If KV isn't configured yet, GET returns null data and PUT returns 503 — the
-// pages fall back to localStorage/seed so nothing breaks before provisioning.
+// Refactored to use shared auth + KV utilities.
 
-import crypto from 'node:crypto';
-
-function parseCookie(header, name) {
-  if (!header) return null;
-  for (const c of header.split(';')) {
-    const [k, ...v] = c.trim().split('=');
-    if (k === name) return v.join('=');
-  }
-  return null;
-}
-
-function verifyJWT(token, secret) {
-  if (!token) return null;
-  const parts = token.split('.');
-  if (parts.length !== 3) return null;
-  const [h, b, sig] = parts;
-  const expected = crypto.createHmac('sha256', secret).update(`${h}.${b}`).digest('base64url');
-  if (sig.length !== expected.length) return null;
-  if (!crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) return null;
-  try {
-    const payload = JSON.parse(Buffer.from(b, 'base64url').toString());
-    if (payload.exp && payload.exp * 1000 < Date.now()) return null;
-    return payload;
-  } catch (_) { return null; }
-}
-
-// ── KV (Upstash REST) — single command via POST to the base URL ──
-// Accept either the Vercel KV (KV_REST_API_*) or native Upstash
-// (UPSTASH_REDIS_REST_*) env naming, depending on which integration is added.
-const KV_URL = () => process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
-const KV_TOKEN = () => process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
-function kvConfigured() {
-  return !!(KV_URL() && KV_TOKEN());
-}
-async function kvCmd(args) {
-  const r = await fetch(KV_URL(), {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${KV_TOKEN()}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(args),
-  });
-  if (!r.ok) throw new Error('KV ' + r.status);
-  const j = await r.json();
-  return j.result;
-}
-const kvGet = async (key) => {
-  const raw = await kvCmd(['GET', key]);
-  if (raw == null) return null;
-  try { return JSON.parse(raw); } catch (_) { return null; }
-};
-const kvSet = (key, val) => kvCmd(['SET', key, JSON.stringify(val)]);
+import { getSession, setNoCache } from './lib/auth.js';
+import { kvConfigured, kvGet, kvSet } from './lib/kv.js';
+import { checkRateLimit, rateLimitHeaders } from './lib/rate-limit.js';
 
 // ── Sanitizers — never trust the client body ──
 const cleanSym = (s) => String(s || '').toUpperCase().replace(/[^A-Z0-9.\-]/g, '').slice(0, 12);
@@ -92,13 +33,23 @@ function cleanPortfolio(pf) {
 }
 
 export default async function handler(req, res) {
-  res.setHeader('Cache-Control', 'no-store, max-age=0');
-  const { SESSION_SECRET } = process.env;
-  if (!SESSION_SECRET) { res.status(200).json({ authenticated: false, reason: 'not_configured' }); return; }
+  setNoCache(res);
 
-  const payload = verifyJWT(parseCookie(req.headers.cookie, 'pt_session'), SESSION_SECRET);
-  if (!payload || !payload.sub) { res.status(401).json({ authenticated: false }); return; }
-  const key = 'user:' + payload.sub;
+  // Rate limiting: 60 writes/min, 120 reads/min
+  const isWrite = req.method === 'PUT' || req.method === 'POST';
+  const rl = checkRateLimit(req, { maxReqs: isWrite ? 60 : 120 });
+  rateLimitHeaders(res, rl);
+  if (!rl.allowed) {
+    res.status(429).json({ error: 'Rate limit exceeded', retryAfter: rl.retryAfter });
+    return;
+  }
+
+  const session = getSession(req);
+  if (!session.ok) {
+    res.status(200).json({ authenticated: false, reason: session.reason });
+    return;
+  }
+  const key = 'user:' + session.payload.sub;
 
   if (req.method === 'GET') {
     if (!kvConfigured()) { res.status(200).json({ authenticated: true, data: null, store: 'unconfigured' }); return; }
@@ -134,5 +85,3 @@ export default async function handler(req, res) {
 
   res.status(405).json({ ok: false, error: 'method_not_allowed' });
 }
-
-// redeploy: pick up Vercel KV env (2026-06-02T06:45Z)

@@ -1,28 +1,11 @@
 // Receives the OAuth code from Patreon, exchanges it for an access token,
 // fetches the user's identity + memberships, verifies they are an active
 // PAID member of the configured campaign, and sets a signed session cookie.
+//
+// REFACTORED: Uses shared auth utilities. Owner email is now ONLY from env var.
 
-import crypto from 'node:crypto';
-
-function b64url(buf) {
-  return Buffer.from(buf).toString('base64url');
-}
-
-function signJWT(payload, secret) {
-  const header = b64url(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
-  const body = b64url(JSON.stringify(payload));
-  const sig = crypto.createHmac('sha256', secret).update(`${header}.${body}`).digest('base64url');
-  return `${header}.${body}.${sig}`;
-}
-
-function parseCookie(header, name) {
-  if (!header) return null;
-  for (const c of header.split(';')) {
-    const [k, ...v] = c.trim().split('=');
-    if (k === name) return v.join('=');
-  }
-  return null;
-}
+import { parseCookie, signJWT } from '../lib/auth.js';
+import { checkRateLimit, rateLimitHeaders } from '../lib/rate-limit.js';
 
 export default async function handler(req, res) {
   const {
@@ -34,6 +17,13 @@ export default async function handler(req, res) {
 
   if (!PATREON_CLIENT_ID || !PATREON_CLIENT_SECRET || !PATREON_CAMPAIGN_ID || !SESSION_SECRET) {
     res.status(500).send('Auth not configured. Set PATREON_CLIENT_ID, PATREON_CLIENT_SECRET, PATREON_CAMPAIGN_ID, and SESSION_SECRET as environment variables.');
+    return;
+  }
+
+  const rl = checkRateLimit(req, { maxReqs: 30 });
+  rateLimitHeaders(res, rl);
+  if (!rl.allowed) {
+    res.status(429).json({ error: 'Rate limit exceeded', retryAfter: rl.retryAfter });
     return;
   }
 
@@ -104,13 +94,8 @@ export default async function handler(req, res) {
     return;
   }
 
-  // 3) Owner bypass: if PATREON_OWNER_EMAILS contains this user's email,
-  //    skip the patron check (lets the creator access without self-pledging).
-  const OWNER_FALLBACK = ['liksen855@gmail.com'];  // creator — always allowed even if env unset
-  const ownerEmails = [
-    ...OWNER_FALLBACK,
-    ...(process.env.PATREON_OWNER_EMAILS || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean),
-  ];
+  // 3) Owner bypass: ONLY from env var (no hardcoded fallback)
+  const ownerEmails = (process.env.PATREON_OWNER_EMAILS || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
   const userEmail = (ident.data?.attributes?.email || '').toLowerCase();
   const isOwner = userEmail && ownerEmails.includes(userEmail);
 
@@ -124,9 +109,6 @@ export default async function handler(req, res) {
   });
 
   if (!validMember && !isOwner) {
-    // Authenticated with Patreon but not a paid patron of this campaign.
-    // Diagnostic: surface WHY (and which account) so a failed sign-in is debuggable.
-    // Only the user's own email is exposed; safe to remove once resolved.
     let reason = 'no_membership_found';
     let detail = '';
     if (members.length) {
@@ -151,7 +133,7 @@ export default async function handler(req, res) {
     return;
   }
 
-  // 4) Mint session JWT (7 days)
+  // 5) Mint session JWT (7 days)
   const name = ident.data?.attributes?.full_name || 'Patron';
   const email = ident.data?.attributes?.email || '';
   const payload = {
@@ -163,7 +145,7 @@ export default async function handler(req, res) {
   };
   const jwt = signJWT(payload, SESSION_SECRET);
 
-  // 5) Set cookie + clear state cookie + redirect
+  // 6) Set cookie + clear state cookie + redirect
   res.setHeader('Set-Cookie', [
     `pt_session=${jwt}; HttpOnly; Path=/; Max-Age=${7 * 24 * 3600}; SameSite=Lax; Secure`,
     `pt_state=; HttpOnly; Path=/; Max-Age=0; SameSite=Lax; Secure`,

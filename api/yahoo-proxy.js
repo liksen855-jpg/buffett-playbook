@@ -1,18 +1,10 @@
 /**
  * Yahoo Finance proxy — reliable CORS-free price fetcher.
- *
- * Why this exists:
- *   Free public CORS proxies (corsproxy.io, allorigins.win) are unreliable
- *   and often block or rate-limit requests. This serverless function runs
- *   on the same Vercel infrastructure, so it never hits CORS issues.
- *
- * Usage:
- *   GET /api/yahoo-proxy?symbol=SPY
- *   GET /api/yahoo-proxy?symbols=SPY,QQQ,AAPL
- *
- * Response:
- *   { "SPY": { price, change, changePct, name }, ... }
+ * Refactored: uses shared rate limiting + auth utilities.
  */
+
+import { setCORS, setShortCache } from './lib/auth.js';
+import { checkRateLimit, rateLimitHeaders } from './lib/rate-limit.js';
 
 const YF_BASE = 'https://query1.finance.yahoo.com/v8/finance/chart';
 
@@ -44,9 +36,14 @@ async function fetchYahoo(sym) {
 }
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET');
-  res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=60');
+  setCORS(res, { methods: 'GET' });
+
+  const rl = checkRateLimit(req, { maxReqs: 120 });
+  rateLimitHeaders(res, rl);
+  if (!rl.allowed) {
+    res.status(429).json({ error: 'Rate limit exceeded', retryAfter: rl.retryAfter });
+    return;
+  }
 
   const raw = req.query?.symbols || req.query?.symbol || '';
   const symbols = String(raw)
@@ -62,7 +59,6 @@ export default async function handler(req, res) {
   const results = {};
   const errors = [];
 
-  // Fetch in parallel with individual error isolation
   await Promise.all(
     symbols.map(async (sym) => {
       try {
@@ -73,6 +69,7 @@ export default async function handler(req, res) {
     })
   );
 
+  setShortCache(res, 60);
   res.status(200).json({
     ts: new Date().toISOString(),
     data: results,
