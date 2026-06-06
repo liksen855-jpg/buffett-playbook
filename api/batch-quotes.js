@@ -11,7 +11,7 @@
  * Usage:
  *   GET /api/batch-quotes?symbols=AAPL,MSFT,GOOGL
  *   GET /api/batch-quotes?symbols=AAPL,MSFT,GOOGL&source=fmp
- *   GET /api/batch-quotes?symbols=SPY,QQQ&source=yahoo
+ *   GET /api/batch-quotes?symbols=SPY,QQQ&source=yahoo  (fallback, no key needed)
  *
  * Headers:
  *   x-fmp-key: YOUR_FMP_KEY  (optional — overrides shared demo key)

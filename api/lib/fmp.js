@@ -1,6 +1,7 @@
 /**
  * Shared FMP (Financial Modeling Prep) client with caching.
  * Supports per-user API key override via x-fmp-key header.
+ * Primary key from FMP_API_KEY env var (paid tier).
  */
 
 import { kvConfigured, kvGetWithTTL, kvSetEx } from './kv.js';
@@ -15,8 +16,8 @@ function getKey(req) {
       return override;
     }
   }
-  // Shared demo key (rate-limited, for general use)
-  return 'n2TIc6JypdMUhyFVtxrdqDBv0dIsK2Zg';
+  // Paid FMP key — set via FMP_API_KEY env var
+  return process.env.FMP_API_KEY || '';
 }
 
 function cacheKey(path) {
