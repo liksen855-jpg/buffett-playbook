@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Semiconductor Opportunity Brief — June 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0c0c0b;--ink2:#2e2e2a;--ink3:#6b6b63;--ink4:#aeaea4;
+  --paper:#f6f4ef;--paper2:#eeebe3;--paper3:#e4e0d5;
+  --rule:#d6d2c6;--rule2:#c4c0b2;
+  --blue:#1a3d6b;--blue2:#2255a0;--blue-bg:#e8eef7;
+  --red:#b83010;--red-bg:#f7ece8;
+  --green:#1a5c38;--green-bg:#e6f2ec;
+  --gold:#8a6d1e;--gold-bg:#f5eed8;
+  --f-serif:'EB Garamond', Georgia, serif;
+  --f-sans:'Inter', system-ui, sans-serif;
+  --f-mono:'IBM Plex Mono', monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--paper);color:var(--ink);font-size:15px}
+body{font-family:var(--f-sans);font-weight:400;line-height:1.65;max-width:960px;margin:0 auto;padding:0 28px 100px}
+
+/* ─ MASTHEAD ─ */
+.mast{padding:52px 0 32px;margin-bottom:52px;border-bottom:2px solid var(--ink)}
+.mast-eyebrow{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.mast-label{font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink3)}
+.mast-pill{font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px 12px}
+.mast h1{font-family:var(--f-serif);font-size:clamp(42px,7vw,76px);line-height:.98;letter-spacing:-.03em;font-weight:400;margin-bottom:20px}
+.mast h1 i{color:var(--blue);font-style:italic}
+.mast-deck{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end}
+.mast-desc{font-size:15px;color:var(--ink2);max-width:520px;line-height:1.65}
+.mast-stats{display:flex;flex-direction:column;gap:6px;text-align:right}
+.mast-stat{font-family:var(--f-mono);font-size:11px;color:var(--ink3)}
+.mast-stat strong{color:var(--blue);font-weight:400}
+
+/* ─ NAV ─ */
+.nav{display:grid;grid-template-columns:repeat(6,1fr);border:1px solid var(--rule);margin-bottom:64px}
+.nav-item{padding:14px 12px;border-right:1px solid var(--rule);cursor:pointer;transition:background .12s}
+.nav-item:last-child{border-right:none}
+.nav-item:hover{background:var(--paper2)}
+.nav-n{font-family:var(--f-mono);font-size:9px;color:var(--ink4);letter-spacing:.1em;margin-bottom:5px}
+.nav-t{font-size:11px;font-weight:500;color:var(--ink);line-height:1.3}
+.nav-s{font-size:10px;color:var(--ink3);margin-top:2px}
+
+/* ─ SECTIONS ─ */
+.sec{margin-bottom:72px}
+.sec-hd{display:flex;align-items:baseline;gap:14px;border-bottom:1px solid var(--rule);padding-bottom:14px;margin-bottom:32px}
+.sec-n{font-family:var(--f-mono);font-size:10px;color:var(--ink4);letter-spacing:.12em}
+.sec-t{font-family:var(--f-serif);font-size:30px;font-weight:400;letter-spacing:-.01em}
+.sec-sub{margin-left:auto;font-family:var(--f-mono);font-size:10px;color:var(--ink3);letter-spacing:.08em}
+
+p{font-size:14px;color:var(--ink2);line-height:1.75;margin-bottom:14px}
+p strong{color:var(--ink);font-weight:500}
+.lead{font-size:16px;line-height:1.7;color:var(--ink);font-weight:400;margin-bottom:20px}
+
+/* ─ CALLOUTS ─ */
+.cta{padding:15px 18px;margin:22px 0;border-left:3px solid}
+.cta p{margin:0;font-size:13px;line-height:1.65}
+.cta-b{border-color:var(--blue);background:var(--blue-bg)}
+.cta-b p strong{color:var(--blue)}
+.cta-r{border-color:var(--red);background:var(--red-bg)}
+.cta-r p strong{color:var(--red)}
+.cta-g{border-color:var(--green);background:var(--green-bg)}
+.cta-g p strong{color:var(--green)}
+
+/* ─ MACRO GRID ─ */
+.mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin:28px 0}
+.mc{background:var(--paper);padding:18px 16px}
+.mc-l{font-family:var(--f-mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink4);margin-bottom:6px}
+.mc-v{font-family:var(--f-serif);font-size:26px;font-weight:400;line-height:1;margin-bottom:6px}
+.mc-c{font-size:11px;color:var(--ink3);line-height:1.5}
+.neg{color:var(--red)}.pos{color:var(--green)}.neu{color:var(--blue)}
+
+/* ─ WHAT HAPPENED BOXES ─ */
+.wh-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);margin:24px 0}
+.wh-box{background:var(--paper);padding:20px 18px}
+.wh-label{font-family:var(--f-mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--rule)}
+.wh-label.was{color:var(--red)}
+.wh-label.wasnt{color:var(--green)}
+.wh-box p{font-size:13px;margin:0;line-height:1.65}
+
+/* ─ STACK ─ */
+.stack{border:1px solid var(--rule);margin:28px 0;overflow:hidden}
+.srow{display:grid;grid-template-columns:130px 1fr;border-bottom:1px solid var(--rule)}
+.srow:last-child{border-bottom:none}
+.slayer{background:var(--paper2);padding:14px 14px;border-right:1px solid var(--rule)}
+.sl-name{font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin-bottom:3px}
+.sl-desc{font-size:10px;color:var(--ink4)}
+.sstocks{padding:12px 18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.schip{display:flex;flex-direction:column;padding:7px 11px;border:1px solid var(--rule);background:var(--paper);min-width:68px}
+.schip-t{font-family:var(--f-mono);font-size:12px;font-weight:500;color:var(--ink)}
+.schip-n{font-size:9px;color:var(--ink4);margin-top:1px}
+.sdesc{font-size:12px;color:var(--ink3);line-height:1.5;margin-left:4px;max-width:360px}
+
+/* ─ TIMELINE ─ */
+/* ── MARKET CONTEXT ── */
+.ctx-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin:28px 0}
+.ctx-cell{background:var(--paper);padding:20px}
+.ctx-cell-full{grid-column:1/-1}
+.ctx-label{font-family:var(--f-mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink4);margin-bottom:12px}
+.ctx-title{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:14px}
+.chart-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.chart-bar-row:last-child{margin-bottom:0}
+.cbr-label{font-family:var(--f-mono);font-size:10px;color:var(--ink3);min-width:58px;text-align:right}
+.cbr-track{flex:1;height:6px;background:var(--paper3);border-radius:0;position:relative;overflow:visible}
+.cbr-fill{height:100%;border-radius:0;transition:width .6s}
+.cbr-fill-b{background:var(--blue2)}
+.cbr-fill-g{background:var(--green)}
+.cbr-fill-r{background:var(--red)}
+.cbr-val{font-family:var(--f-mono);font-size:10px;color:var(--ink2);min-width:44px}
+.chart-leg{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap}
+.chart-leg-item{display:flex;align-items:center;gap:6px;font-family:var(--f-mono);font-size:9px;color:var(--ink3)}
+.chart-leg-dot{width:8px;height:8px}
+.sparkline-row{display:flex;align-items:flex-end;gap:3px;height:52px;margin:4px 0 8px}
+.spark-bar{flex:1;border-radius:0;min-height:3px}
+.spark-label-row{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:8px;color:var(--ink4)}
+.stat-pair{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);margin-top:12px}
+.stat-box{background:var(--paper);padding:12px 14px}
+.stat-box-label{font-family:var(--f-mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink4);margin-bottom:4px}
+.stat-box-val{font-family:'EB Garamond',serif;font-size:22px;font-weight:400;line-height:1}
+.stat-box-note{font-size:10px;color:var(--ink3);margin-top:3px;line-height:1.4}
+.scatter-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin:8px 0 0}
+.sg-cell{background:var(--paper);padding:14px}
+.sg-ticker{font-family:var(--f-mono);font-size:11px;font-weight:500;color:var(--ink);margin-bottom:6px}
+.sg-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.sg-bar-label{font-family:var(--f-mono);font-size:8px;color:var(--ink4);min-width:32px}
+.sg-track{flex:1;height:4px;background:var(--paper3)}
+.sg-fill{height:100%}
+.sg-pct{font-family:var(--f-mono);font-size:9px;color:var(--ink3);min-width:34px;text-align:right}
+
+/* ── MOAT ── */
+.moat-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin:28px 0}
+.moat-card{background:var(--paper);padding:20px}
+.moat-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--rule)}
+.moat-ticker{font-family:'EB Garamond',serif;font-size:24px;font-weight:400;letter-spacing:-.01em}
+.moat-badge{font-family:var(--f-mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;border:1px solid;border-radius:0;white-space:nowrap}
+.mb-high{border-color:var(--blue);color:var(--blue)}
+.mb-med{border-color:var(--gold);color:var(--gold)}
+.mb-wide{border-color:var(--green);color:var(--green)}
+.moat-row{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start}
+.moat-row:last-child{margin-bottom:0}
+.moat-icon{font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper);padding:2px 6px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+.mi-lock{background:var(--blue)}
+.mi-switch{background:var(--green)}
+.mi-scale{background:var(--gold)}
+.mi-net{background:var(--ink3)}
+.mi-poly{background:var(--red)}
+.moat-text{font-size:12px;color:var(--ink2);line-height:1.6}
+.moat-text strong{color:var(--ink);font-weight:500}
+.moat-score{display:flex;gap:3px;margin-top:12px;padding-top:10px;border-top:1px solid var(--rule);align-items:center}
+.moat-score-label{font-family:var(--f-mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink4);margin-right:6px}
+.ms-pip{width:16px;height:4px;background:var(--paper3)}
+.ms-pip.filled{background:var(--blue2)}
+
+/* ─ STOCK CARDS ─ */
+.cards{border:1px solid var(--rule);margin-top:8px}
+.card{border-bottom:1px solid var(--rule);padding:28px}
+.card:last-child{border-bottom:none}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}
+.card-tl{}
+.cticker{font-family:var(--f-serif);font-size:38px;letter-spacing:-.02em;font-weight:400;line-height:1}
+.cname{font-size:12px;color:var(--ink3);margin-top:4px}
+.card-tr{display:flex;flex-direction:column;align-items:flex-end;gap:7px}
+.cbadge{font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:4px 10px;border:1px solid}
+.cb1{border-color:var(--blue);color:var(--blue)}
+.cb2{border-color:var(--gold);color:var(--gold)}
+.cb3{border-color:var(--green);color:var(--green)}
+.cseg{font-family:var(--f-mono);font-size:9px;color:var(--ink4);letter-spacing:.08em}
+.cmets{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin-bottom:20px}
+.cmet{background:var(--paper);padding:11px 13px}
+.cmet-l{font-family:var(--f-mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink4);margin-bottom:5px}
+.cmet-v{font-family:var(--f-serif);font-size:20px;font-weight:400}
+.cv-dn{color:var(--red)}.cv-up{color:var(--green)}.cv-ne{color:var(--blue)}
+.cbody{display:grid;grid-template-columns:1fr 200px;gap:22px}
+.cthesis p{font-size:13px;margin-bottom:10px;line-height:1.7}
+.cthesis p:last-child{margin-bottom:0}
+.cside{}
+.csb{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--rule)}
+.csb:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.csb-l{font-family:var(--f-mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink4);margin-bottom:5px}
+.csb-v{font-size:12px;color:var(--ink2);line-height:1.5}
+.csb-v strong{color:var(--ink);font-weight:500}
+.csb-v.risk{color:var(--red)}
+
+/* ─ VISUAL BARS (price vs ATH) ─ */
+.bar-wrap{margin:4px 0 0}
+.bar-track{height:4px;background:var(--paper3);border-radius:2px;margin-bottom:3px;position:relative;overflow:hidden}
+.bar-fill{height:100%;background:var(--blue2);border-radius:2px;transition:width .4s}
+.bar-fill.dn{background:var(--red)}
+.bar-labels{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:9px;color:var(--ink4)}
+
+/* ─ SUMMARY TABLE ─ */
+.stbl{width:100%;border-collapse:collapse;margin-top:16px;font-size:12px}
+.stbl th{font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink4);padding:9px 12px;text-align:left;border-bottom:2px solid var(--ink);font-weight:400;white-space:nowrap}
+.stbl td{padding:11px 12px;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--ink2);line-height:1.45}
+.stbl tr:last-child td{border-bottom:none}
+.stbl tr:hover td{background:var(--paper2)}
+.tc{font-family:var(--f-mono);font-size:12px;font-weight:500;color:var(--ink)}
+.tl{font-family:var(--f-mono);font-size:11px;color:var(--green)}
+.td{font-family:var(--f-mono);font-size:11px;color:var(--blue)}
+.tr-col{font-size:11px;color:var(--red)}
+.stbl .pill{display:inline-block;font-family:var(--f-mono);font-size:8px;letter-spacing:.1em;padding:2px 7px;border:1px solid;border-radius:2px;white-space:nowrap}
+.p1{border-color:var(--blue);color:var(--blue)}.p2{border-color:var(--gold);color:var(--gold)}.p3{border-color:var(--green);color:var(--green)}
+
+/* ─ FACT-CHECK BANNER ─ */
+.fc-banner{background:var(--paper2);border:1px solid var(--rule);padding:14px 18px;margin-bottom:40px;display:flex;align-items:flex-start;gap:12px}
+.fc-icon{font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--green);background:var(--green-bg);border:1px solid var(--green);padding:4px 8px;white-space:nowrap;margin-top:1px}
+.fc-text{font-size:12px;color:var(--ink3);line-height:1.55}
+.fc-text strong{color:var(--ink2);font-weight:500}
+
+/* ─ DIVIDER ─ */
+hr{border:none;border-top:1px solid var(--rule);margin:40px 0}
+
+/* ─ DISC ─ */
+.disc{border-top:1px solid var(--rule);padding-top:22px;margin-top:48px}
+.disc p{font-size:10px;color:var(--ink4);line-height:1.7;margin-bottom:6px}
+
+/* RESPONSIVE */
+/* ── TABLET ── */
+@media(max-width:760px){
+  body{padding:0 18px 80px}
+  .mast{padding:36px 0 24px}
+  .mast h1{font-size:clamp(38px,10vw,58px)}
+  .mast-eyebrow{flex-direction:column;align-items:flex-start;gap:10px}
+  .mast-pill{align-self:flex-start}
+  .mast-deck{grid-template-columns:1fr}
+  .mast-stats{flex-direction:row;flex-wrap:wrap;text-align:left;gap:10px 20px;margin-top:12px}
+  .nav{grid-template-columns:repeat(3,1fr)}
+  .nav-item:nth-child(3){border-right:none}
+  .nav-item:nth-child(n+4){border-top:1px solid var(--rule)}
+  .nav-item:nth-child(6){border-right:none}
+  .mgrid{grid-template-columns:repeat(2,1fr)}
+  .wh-grid{grid-template-columns:1fr}
+  .srow{grid-template-columns:100px 1fr}
+
+  .cbody{grid-template-columns:1fr}
+  .cside{border-top:1px solid var(--rule);padding-top:16px;margin-top:4px}
+  .cmets{grid-template-columns:repeat(2,1fr)}
+  .card-top{flex-direction:column;gap:10px}
+  .card-tr{align-items:flex-start}
+  .stbl th:nth-child(2),.stbl td:nth-child(2){display:none}
+  .stbl th:nth-child(6),.stbl td:nth-child(6){display:none}
+  .sec-sub{display:none}
+  .fc-banner{flex-direction:column;gap:8px}
+  .ctx-grid{grid-template-columns:1fr}
+  .moat-grid{grid-template-columns:1fr}
+  .scatter-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* ── MOBILE ── */
+@media(max-width:480px){
+  body{padding:0 14px 72px}
+  .mast{padding:28px 0 20px;margin-bottom:32px}
+  .mast h1{font-size:clamp(34px,12vw,50px);letter-spacing:-.02em}
+  .mast-label{font-size:9px;letter-spacing:.12em}
+  .mast-stats{gap:8px 16px}
+  .mast-stat{font-size:10px}
+  .nav{grid-template-columns:repeat(2,1fr);margin-bottom:40px}
+  .nav-item:nth-child(2){border-right:none}
+  .nav-item:nth-child(n+3){border-top:1px solid var(--rule)}
+  .nav-item:nth-child(4){border-right:none}
+  .nav-item:nth-child(6){border-right:none}
+  .nav-n{font-size:8px}
+  .nav-t{font-size:10px}
+  .nav-s{display:none}
+  .nav-item{padding:11px 10px}
+  .sec{margin-bottom:48px}
+  .sec-hd{margin-bottom:20px;padding-bottom:10px}
+  .sec-t{font-size:24px}
+  .sec-n{font-size:9px}
+  .lead{font-size:14px}
+  p{font-size:13px}
+  .mgrid{grid-template-columns:1fr}
+  .mc{padding:14px 13px}
+  .mc-v{font-size:22px}
+  .mc-c{font-size:11px}
+  .wh-grid{grid-template-columns:1fr}
+  .wh-box{padding:16px 14px}
+  .srow{grid-template-columns:1fr}
+  .slayer{border-right:none;border-bottom:1px solid var(--rule);padding:10px 14px}
+  .sl-desc{display:none}
+  .sstocks{padding:10px 14px;gap:8px}
+  .sdesc{display:none}
+  .schip{min-width:60px;padding:6px 9px}
+  .schip-t{font-size:11px}
+  .ctx-grid{grid-template-columns:1fr}
+  .moat-grid{grid-template-columns:1fr}
+  .scatter-grid{grid-template-columns:1fr 1fr}
+  .card{padding:18px 16px}
+  .cticker{font-size:30px}
+  .cname{font-size:11px}
+  .cbadge{font-size:8px;padding:3px 8px}
+  .cseg{font-size:8px}
+  .cmets{grid-template-columns:repeat(2,1fr)}
+  .cmet{padding:9px 10px}
+  .cmet-l{font-size:7px;letter-spacing:.12em}
+  .cmet-v{font-size:16px}
+  .bar-labels{font-size:8px}
+  .cthesis p{font-size:12px}
+  .csb-l{font-size:7px;letter-spacing:.12em}
+  .csb-v{font-size:11px}
+  .stbl{font-size:11px}
+  .stbl th{font-size:8px;padding:8px 8px;letter-spacing:.08em}
+  .stbl td{padding:9px 8px;font-size:11px}
+  .stbl th:nth-child(3),.stbl td:nth-child(3){display:none}
+  .stbl th:nth-child(5),.stbl td:nth-child(5){display:none}
+  .tc{font-size:11px}
+  .tl{font-size:10px}
+  .td{font-size:10px}
+  .tr-col{font-size:10px}
+  .cta{padding:12px 14px}
+  .cta p{font-size:12px}
+  .wh-label{font-size:8px;letter-spacing:.14em}
+  .fc-banner{padding:12px 14px}
+  .fc-icon{font-size:8px;padding:3px 7px}
+  .fc-text{font-size:11px}
+  .disc p{font-size:10px}
+}
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<header class="mast">
+  <div class="mast-eyebrow">
+    <span class="mast-label">Members Intelligence Brief &nbsp;·&nbsp; Semiconductor & AI Infrastructure</span>
+    <span class="mast-pill">Vol. 01 · June 8, 2026</span>
+  </div>
+  <h1>The <i>Selloff</i><br>& the Opportunity</h1>
+  <div class="mast-deck">
+    <p class="mast-desc">A macro-to-micro breakdown of where semiconductor markets stand after last week's trillion-dollar wipeout — and six names worth watching on any further dips in June.</p>
+    <div class="mast-stats">
+      <span class="mast-stat">SOX June 5 &nbsp;<strong>−8.5%</strong></span>
+      <span class="mast-stat">Market cap wiped &nbsp;<strong>$1T+</strong></span>
+      <span class="mast-stat">AI capex 2026 &nbsp;<strong>$660–700B</strong></span>
+      <span class="mast-stat">Stocks covered &nbsp;<strong>6</strong></span>
+    </div>
+  </div>
+</header>
+
+<!-- FACT CHECK BANNER -->
+<div class="fc-banner">
+  <span class="fc-icon">Verified</span>
+  <p class="fc-text"><strong>Every data point in this brief has been triple fact-checked against primary sources</strong> — SEC filings, earnings transcripts, official press releases, Reuters, CNBC, and company IR pages as of June 8, 2026. All prices reflect June 7, 2026 closing data. Analyst targets and price levels are observational, not investment advice.</p>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-item"><div class="nav-n">01</div><div class="nav-t">Macro</div><div class="nav-s">Fed, rates, capex</div></div>
+  <div class="nav-item"><div class="nav-n">02</div><div class="nav-t">The Selloff</div><div class="nav-s">What actually happened</div></div>
+  <div class="nav-item"><div class="nav-n">03</div><div class="nav-t">Sector Map</div><div class="nav-s">How the stack fits</div></div>
+  <div class="nav-item"><div class="nav-n">04</div><div class="nav-t">Catalysts</div><div class="nav-s">Dates & events</div></div>
+  <div class="nav-item"><div class="nav-n">05</div><div class="nav-t">Six Stocks</div><div class="nav-s">Full breakdowns</div></div>
+  <div class="nav-item"><div class="nav-n">06</div><div class="nav-t">Summary</div><div class="nav-s">One-page reference</div></div>
+</nav>
+
+<!-- ── 01 MACRO ── -->
+<section class="sec" id="s1">
+  <div class="sec-hd">
+    <span class="sec-n">01</span>
+    <h2 class="sec-t">The Macro Environment</h2>
+    <span class="sec-sub">Where we are right now</span>
+  </div>
+  <p class="lead">Three forces are running in parallel: a Fed holding rates higher for longer, a $600B AI infrastructure spending wave that hasn't blinked, and a geopolitical push to reshore semiconductor manufacturing onto US soil. Understanding all three is how you separate a real entry from a falling knife.</p>
+
+  <div class="mgrid">
+    <div class="mc">
+      <div class="mc-l">Fed Funds Rate</div>
+      <div class="mc-v neu">4.25–4.50%</div>
+      <div class="mc-c">Hot May jobs report pushed first cut expectations to Q4 2026 at earliest. Higher-for-longer compresses growth multiples — that's the rate mechanism behind the selloff.</div>
+    </div>
+    <div class="mc">
+      <div class="mc-l">Hyperscaler AI Capex 2026</div>
+      <div class="mc-v pos">$660–700B</div>
+      <div class="mc-c">Amazon, Alphabet, Microsoft, Meta, Oracle combined 2026 commitments. This number has increased every single earnings season. It does not pause for sentiment resets.</div>
+    </div>
+    <div class="mc">
+      <div class="mc-l">SOX — June 5 Drop</div>
+      <div class="mc-v neg">−8.5%</div>
+      <div class="mc-c">Philadelphia Semiconductor Index. Worst single session since March 2020. Triggered by Broadcom's AI guidance vs. whisper numbers, amplified by jobs data.</div>
+    </div>
+    <div class="mc">
+      <div class="mc-l">CHIPS Act Deployed</div>
+      <div class="mc-v neu">$52B+</div>
+      <div class="mc-c">Intel alone received $7.86B in finalized grants (Nov 2024). Domestic manufacturing subsidies are a policy priority that transcends administrations.</div>
+    </div>
+    <div class="mc">
+      <div class="mc-l">US Data Center Power</div>
+      <div class="mc-v neg">×2 by 2030</div>
+      <div class="mc-c">On pace to nearly double its share of the US grid. Power infrastructure is the binding constraint — not compute, not software, not chips. Power.</div>
+    </div>
+    <div class="mc">
+      <div class="mc-l">China Tariff Environment</div>
+      <div class="mc-v pos">Accelerating</div>
+      <div class="mc-c">Section 232 semiconductor tariffs and NDAA compliance mandates are structurally redirecting procurement toward domestic alternatives. Durable, not cyclical.</div>
+    </div>
+  </div>
+
+  <div class="cta cta-b">
+    <p><strong>The key distinction:</strong> Rates affect sentiment and multiples. They do not cancel $600B in committed AI infrastructure spending. The hyperscalers are not pausing data center builds because the Fed held rates — they are spending $660–700B this year because their businesses demand it and their CEOs have committed to it publicly.</p>
+  </div>
+</section>
+
+<!-- ── 02 SELLOFF ── -->
+<section class="sec" id="s2">
+  <div class="sec-hd">
+    <span class="sec-n">02</span>
+    <h2 class="sec-t">What Actually Happened</h2>
+    <span class="sec-sub">The selloff decoded</span>
+  </div>
+  <p class="lead">Over $1 trillion was wiped from semiconductor stocks in two days. Here is exactly what triggered it, why it spread, and — critically — what it doesn't mean for the six stocks in this brief.</p>
+
+  <p>On June 4, Broadcom reported Q2 FY2026 results. AI chip revenue grew 200% year over year. But their Q3 guidance came in at $16 billion — against analyst whisper numbers of $17.2 billion. That $1.2 billion shortfall against an expectation, not against the official consensus, was enough to trigger a sector-wide selloff. The following day, a hotter-than-expected US jobs report added the macro pressure: strong employment data means the Fed holds rates higher, which compresses high-growth multiples. The combination sent the SOX down 8.5% in a single session.</p>
+
+  <div class="wh-grid">
+    <div class="wh-box">
+      <div class="wh-label was">What this was</div>
+      <p>A sentiment reset after nine weeks of near-uninterrupted gains. Profits were taken. Whisper numbers weren't met. The jobs report gave institutional sellers the macro cover they needed to reduce exposure. This is standard market mechanics after an extended rally — not a signal about the underlying AI infrastructure buildout.</p>
+    </div>
+    <div class="wh-box">
+      <div class="wh-label wasnt">What this was not</div>
+      <p>A fundamental breakdown. Not one hyperscaler cancelled a data center. Not one AI roadmap was revised. Jensen Huang called Marvell "the next trillion-dollar company" six days before this selloff and has not walked it back. NVIDIA's $2 billion investment in Marvell has not changed. The Nebius–Bloom Energy $2.6 billion power deal signed May 14 has not changed.</p>
+    </div>
+  </div>
+
+  <div class="cta cta-g">
+    <p><strong>Sentiment resets create entries. Fundamental breakdowns require exits.</strong> Every name in this brief experienced the former. None experienced the latter. That distinction is the entire basis for this report.</p>
+  </div>
+</section>
+
+<!-- ── 03 SECTOR MAP ── -->
+<section class="sec" id="s3">
+  <div class="sec-hd">
+    <span class="sec-n">03</span>
+    <h2 class="sec-t">The Sector Map</h2>
+    <span class="sec-sub">Where each name sits in the AI stack</span>
+  </div>
+  <p class="lead">These six stocks occupy four distinct, non-duplicating layers of the AI infrastructure chain. Each layer has a different risk profile, a different growth driver, and a different catalyst calendar. Understanding the map prevents you from treating them as interchangeable.</p>
+
+  <div class="stack">
+    <div class="srow">
+      <div class="slayer"><div class="sl-name">Custom Silicon</div><div class="sl-desc">Designing the compute</div></div>
+      <div class="sstocks">
+        <div class="schip"><span class="schip-t">$MRVL</span><span class="schip-n">Marvell</span></div>
+        <div class="schip"><span class="schip-t">$QCOM</span><span class="schip-n">Qualcomm</span></div>
+        <span class="sdesc">Custom XPUs, ASICs, and hyperscaler silicon. Determines what AI can compute and at what efficiency. The highest-value layer in the stack.</span>
+      </div>
+    </div>
+    <div class="srow">
+      <div class="slayer"><div class="sl-name">Connectivity</div><div class="sl-desc">Moving data between chips</div></div>
+      <div class="sstocks">
+        <div class="schip"><span class="schip-t">$CRDO</span><span class="schip-n">Credo</span></div>
+        <div class="schip"><span class="schip-t">$MXL</span><span class="schip-n">MaxLinear</span></div>
+        <span class="sdesc">Active electrical cables, SerDes chiplets, and optical ICs. Lets thousands of GPUs communicate at scale. Demand scales with every GPU added to every cluster.</span>
+      </div>
+    </div>
+    <div class="srow">
+      <div class="slayer"><div class="sl-name">Power Chips</div><div class="sl-desc">Powering the compute</div></div>
+      <div class="sstocks">
+        <div class="schip"><span class="schip-t">$NVTS</span><span class="schip-n">Navitas</span></div>
+        <span class="sdesc">GaN and SiC power semiconductors enabling 800 VDC server rack architectures. The hidden bottleneck — without efficient power delivery, next-gen GPU racks don't function.</span>
+      </div>
+    </div>
+    <div class="srow">
+      <div class="slayer"><div class="sl-name">Site Power</div><div class="sl-desc">Powering the facility</div></div>
+      <div class="sstocks">
+        <div class="schip"><span class="schip-t">$BE</span><span class="schip-n">Bloom Energy</span></div>
+        <span class="sdesc">Solid oxide fuel cells generating electricity on-site for AI data centers. Bypasses 5–10 year grid connection queues. Demand is model-agnostic — it doesn't matter which chip wins.</span>
+      </div>
+    </div>
+  </div>
+
+  <p>These layers are additive, not competitive. Marvell and Credo don't compete — one designs the chip, the other connects it. Navitas doesn't compete with Bloom — one powers the chip, the other powers the building. A rising AI capex tide lifts all four layers simultaneously, which is why a sector-wide selloff presents an opportunity across the whole map.</p>
+</section>
+
+<!-- ── 04A MARKET CONTEXT ── -->
+<section class="sec" id="s4">
+  <div class="sec-hd">
+    <span class="sec-n">04</span>
+    <h2 class="sec-t">Market Context</h2>
+    <span class="sec-sub">The supercycle in numbers</span>
+  </div>
+  <p class="lead">The AI infrastructure buildout is not a theme — it is a capital allocation decision already made, at a scale that is structurally reshaping semiconductor demand. These charts show the magnitude of what is being built and where the six names in this brief sit relative to it.</p>
+
+  <div class="ctx-grid">
+
+    <!-- HYPERSCALER CAPEX BAR CHART -->
+    <div class="ctx-cell">
+      <div class="ctx-label">Hyperscaler AI Capex 2026 — Committed</div>
+      <div class="ctx-title">Who is spending and how much</div>
+      <div class="chart-bar-row">
+        <span class="cbr-label">Amazon</span>
+        <div class="cbr-track"><div class="cbr-fill cbr-fill-b" style="width:100%"></div></div>
+        <span class="cbr-val">~$200B</span>
+      </div>
+      <div class="chart-bar-row">
+        <span class="cbr-label">Alphabet</span>
+        <div class="cbr-track"><div class="cbr-fill cbr-fill-b" style="width:95%"></div></div>
+        <span class="cbr-val">$180–190B</span>
+      </div>
+      <div class="chart-bar-row">
+        <span class="cbr-label">Microsoft</span>
+        <div class="cbr-track"><div class="cbr-fill cbr-fill-b" style="width:95%"></div></div>
+        <span class="cbr-val">~$190B</span>
+      </div>
+      <div class="chart-bar-row">
+        <span class="cbr-label">Meta</span>
+        <div class="cbr-track"><div class="cbr-fill cbr-fill-b" style="width:72%"></div></div>
+        <span class="cbr-val">$125–145B</span>
+      </div>
+      <div class="chart-bar-row">
+        <span class="cbr-label">Oracle</span>
+        <div class="cbr-track"><div class="cbr-fill cbr-fill-b" style="width:25%"></div></div>
+        <span class="cbr-val">~$50B</span>
+      </div>
+      <div class="stat-pair">
+        <div class="stat-box">
+          <div class="stat-box-label">Combined 2026</div>
+          <div class="stat-box-val pos">$660–700B</div>
+          <div class="stat-box-note">Up from ~$448B in 2025 (Epoch AI)</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-label">YoY Growth</div>
+          <div class="stat-box-val pos">~+55%</div>
+          <div class="stat-box-note">Every quarter has surprised higher</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DATA CENTER POWER DEMAND -->
+    <div class="ctx-cell">
+      <div class="ctx-label">US Data Center Power Demand — Grid Share</div>
+      <div class="ctx-title">Why power is the binding constraint</div>
+      <div class="chart-bar-row">
+        <span class="cbr-label">2023</span>
+        <div class="cbr-track"><div class="cbr-fill cbr-fill-g" style="width:24%"></div></div>
+        <span class="cbr-val">~4% (EPRI)</span>
+      </div>
+      <div class="chart-bar-row">
+        <span class="cbr-label">2025</span>
+        <div class="cbr-track"><div class="cbr-fill cbr-fill-g" style="width:30%"></div></div>
+        <span class="cbr-val">~4–5%</span>
+      </div>
+      <div class="chart-bar-row">
+        <span class="cbr-label">2026E</span>
+        <div class="cbr-track"><div class="cbr-fill cbr-fill-r" style="width:42%"></div></div>
+        <span class="cbr-val">~5%</span>
+      </div>
+      <div class="chart-bar-row">
+        <span class="cbr-label">2030 Low</span>
+        <div class="cbr-track"><div class="cbr-fill cbr-fill-r" style="width:53%"></div></div>
+        <span class="cbr-val">9% (EPRI)</span>
+      </div>
+      <div class="chart-bar-row">
+        <span class="cbr-label">2030 High</span>
+        <div class="cbr-track"><div class="cbr-fill cbr-fill-r" style="width:100%"></div></div>
+        <span class="cbr-val">17% (EPRI)</span>
+      </div>
+      <div class="stat-pair">
+        <div class="stat-box">
+          <div class="stat-box-label">Grid queue wait</div>
+          <div class="stat-box-val neg">5–10 yr</div>
+          <div class="stat-box-note">Why $BE bypasses it entirely</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-label">2030 demand</div>
+          <div class="stat-box-val neg">2–4×</div>
+          <div class="stat-box-note">EPRI 2026: 9–17% of US grid by 2030 vs 4–5% today</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOX SELLOFF CONTEXT -->
+    <div class="ctx-cell">
+      <div class="ctx-label">SOX Index — 2026 Performance in Context</div>
+      <div class="ctx-title">Where the selloff sits in the year</div>
+      <div class="sparkline-row">
+        <div class="spark-bar" style="height:28%;background:var(--paper3)"></div>
+        <div class="spark-bar" style="height:34%;background:var(--paper3)"></div>
+        <div class="spark-bar" style="height:44%;background:var(--paper3)"></div>
+        <div class="spark-bar" style="height:40%;background:var(--paper3)"></div>
+        <div class="spark-bar" style="height:52%;background:var(--ink4)"></div>
+        <div class="spark-bar" style="height:58%;background:var(--ink4)"></div>
+        <div class="spark-bar" style="height:64%;background:var(--ink4)"></div>
+        <div class="spark-bar" style="height:70%;background:var(--ink4)"></div>
+        <div class="spark-bar" style="height:82%;background:var(--ink3)"></div>
+        <div class="spark-bar" style="height:90%;background:var(--ink3)"></div>
+        <div class="spark-bar" style="height:100%;background:var(--blue2)"></div>
+        <div class="spark-bar" style="height:96%;background:var(--blue2)"></div>
+        <div class="spark-bar" style="height:88%;background:var(--blue2)"></div>
+        <div class="spark-bar" style="height:82%;background:var(--blue2)"></div>
+        <div class="spark-bar" style="height:76%;background:var(--blue2)"></div>
+        <div class="spark-bar" style="height:88%;background:var(--blue2)"></div>
+        <div class="spark-bar" style="height:96%;background:var(--blue2)"></div>
+        <div class="spark-bar" style="height:100%;background:var(--blue2)"></div>
+        <div class="spark-bar" style="height:98%;background:var(--blue2)"></div>
+        <div class="spark-bar" style="height:72%;background:var(--red)"></div>
+        <div class="spark-bar" style="height:66%;background:var(--red)"></div>
+      </div>
+      <div class="spark-label-row"><span>Jan 2026</span><span style="color:var(--red);font-weight:500">← Jun 5 selloff</span><span>Now</span></div>
+      <div class="stat-pair" style="margin-top:10px">
+        <div class="stat-box">
+          <div class="stat-box-label">SOX YTD Peak</div>
+          <div class="stat-box-val pos">~+40%+</div>
+          <div class="stat-box-note">Approximate YTD gain before Jun 5 selloff</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-label">Jun 5 drop</div>
+          <div class="stat-box-val neg">−8.5%</div>
+          <div class="stat-box-note">Worst day since Mar 2020</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REVENUE GROWTH COMPARISON -->
+    <div class="ctx-cell">
+      <div class="ctx-label">Revenue Growth — Most Recent Quarter YoY</div>
+      <div class="ctx-title">How fast these businesses are growing</div>
+      <div class="scatter-grid">
+        <div class="sg-cell">
+          <div class="sg-ticker">$CRDO</div>
+          <div class="sg-bar-row"><span class="sg-bar-label">Rev YoY</span><div class="sg-track"><div class="sg-fill" style="width:100%;height:100%;background:var(--blue2)"></div></div><span class="sg-pct">+157%</span></div>
+          <div class="sg-bar-row"><span class="sg-bar-label">Gross M.</span><div class="sg-track"><div class="sg-fill" style="width:68%;height:100%;background:var(--ink4)"></div></div><span class="sg-pct">68.2%</span></div>
+        </div>
+        <div class="sg-cell">
+          <div class="sg-ticker">$MXL</div>
+          <div class="sg-bar-row"><span class="sg-bar-label">Rev YoY</span><div class="sg-track"><div class="sg-fill" style="width:43%;height:100%;background:var(--blue2)"></div></div><span class="sg-pct">+43%</span></div>
+          <div class="sg-bar-row"><span class="sg-bar-label">Infra YoY</span><div class="sg-track"><div class="sg-fill" style="width:100%;height:100%;background:var(--ink4)"></div></div><span class="sg-pct">+136%</span></div>
+        </div>
+        <div class="sg-cell">
+          <div class="sg-ticker">$MRVL</div>
+          <div class="sg-bar-row"><span class="sg-bar-label">Rev YoY</span><div class="sg-track"><div class="sg-fill" style="width:28%;height:100%;background:var(--blue2)"></div></div><span class="sg-pct">+28%</span></div>
+          <div class="sg-bar-row"><span class="sg-bar-label">Q2 Guide</span><div class="sg-track"><div class="sg-fill" style="width:35%;height:100%;background:var(--ink4)"></div></div><span class="sg-pct">+35%</span></div>
+        </div>
+        <div class="sg-cell">
+          <div class="sg-ticker">$QCOM</div>
+          <div class="sg-bar-row"><span class="sg-bar-label">Rev YoY</span><div class="sg-track"><div class="sg-fill" style="width:5%;height:100%;background:var(--blue2)"></div></div><span class="sg-pct">+5%</span></div>
+          <div class="sg-bar-row"><span class="sg-bar-label">Auto YoY</span><div class="sg-track"><div class="sg-fill" style="width:38%;height:100%;background:var(--ink4)"></div></div><span class="sg-pct">+38%</span></div>
+        </div>
+        <div class="sg-cell">
+          <div class="sg-ticker">$BE</div>
+          <div class="sg-bar-row"><span class="sg-bar-label">Rev Guide</span><div class="sg-track"><div class="sg-fill" style="width:55%;height:100%;background:var(--green)"></div></div><span class="sg-pct">$3.4–3.8B</span></div>
+          <div class="sg-bar-row"><span class="sg-bar-label">Deal Val.</span><div class="sg-track"><div class="sg-fill" style="width:100%;height:100%;background:var(--ink4)"></div></div><span class="sg-pct">$2.6B</span></div>
+        </div>
+        <div class="sg-cell">
+          <div class="sg-ticker">$NVTS</div>
+          <div class="sg-bar-row"><span class="sg-bar-label">Rev (Q)</span><div class="sg-track"><div class="sg-fill" style="width:9%;height:100%;background:var(--gold)"></div></div><span class="sg-pct">$8.6M</span></div>
+          <div class="sg-bar-row"><span class="sg-bar-label">Thesis</span><div class="sg-track"><div class="sg-fill" style="width:100%;height:100%;background:var(--ink4)"></div></div><span class="sg-pct">Pre-rev</span></div>
+        </div>
+      </div>
+      <p style="font-size:11px;color:var(--ink4);margin-top:10px;margin-bottom:0">NVTS revenue is pre-NVIDIA ramp — the thesis is forward-looking, not trailing. All other figures from most recent confirmed earnings releases.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── 04B COMPETITIVE MOAT ── -->
+<section class="sec" id="s4b">
+  <div class="sec-hd">
+    <span class="sec-n">04B</span>
+    <h2 class="sec-t">Competitive Moat</h2>
+    <span class="sec-sub">Why the hyperscalers can't just replace them</span>
+  </div>
+  <p class="lead">A stock at a good price is not enough. The question is whether the revenue is defensible — whether switching costs, network effects, or structural positioning make each company difficult to displace. Here is the honest answer for each name.</p>
+
+  <div class="moat-grid">
+
+    <div class="moat-card">
+      <div class="moat-top">
+        <span class="moat-ticker">$MRVL</span>
+        <span class="moat-badge mb-high">Wide Moat</span>
+      </div>
+      <div class="moat-row">
+        <span class="moat-icon mi-lock">Design-in</span>
+        <p class="moat-text"><strong>Custom silicon is a multi-year lock-in.</strong> Once a hyperscaler designs Marvell's XPU into their AI cluster architecture, the switching cost is enormous — every layer of software, toolchain, and interconnect is built around that chip. Ripping it out means rebuilding the entire stack.</p>
+      </div>
+      <div class="moat-row">
+        <span class="moat-icon mi-scale">Scale</span>
+        <p class="moat-text"><strong>20+ custom chip design wins already in pipeline for FY2028–29.</strong> The revenue flywheel is being loaded now. Each design win adds another multi-year program — the business compounds through volume, not one-off contracts.</p>
+      </div>
+      <div class="moat-row">
+        <span class="moat-icon mi-net">NVIDIA</span>
+        <p class="moat-text"><strong>$2B NVIDIA investment and NVLink Fusion integration</strong> creates a structural alliance, not just a partnership. NVIDIA has a financial incentive to route hyperscaler demand through Marvell's custom silicon platform.</p>
+      </div>
+      <div class="moat-score">
+        <span class="moat-score-label">Moat strength</span>
+        <div class="ms-pip filled"></div><div class="ms-pip filled"></div><div class="ms-pip filled"></div><div class="ms-pip filled"></div><div class="ms-pip filled"></div>
+      </div>
+    </div>
+
+    <div class="moat-card">
+      <div class="moat-top">
+        <span class="moat-ticker">$CRDO</span>
+        <span class="moat-badge mb-high">Wide Moat</span>
+      </div>
+      <div class="moat-row">
+        <span class="moat-icon mi-switch">Switch</span>
+        <p class="moat-text"><strong>Active electrical cables are a qualification-intensive product.</strong> Hyperscalers run extensive interoperability and reliability testing before deploying AECs at scale. Once qualified across a data center fleet, Credo's cables are not easily swapped — the certification process alone takes 12–18 months.</p>
+      </div>
+      <div class="moat-row">
+        <span class="moat-icon mi-scale">TAM</span>
+        <p class="moat-text"><strong>Demand scales directly with GPU density.</strong> Every GPU added to every cluster adds connectivity demand — Credo's TAM is structurally tied to the AI capex buildout, not a fixed install base. The more the hyperscalers spend, the bigger the addressable market.</p>
+      </div>
+      <div class="moat-row">
+        <span class="moat-icon mi-poly">Risk</span>
+        <p class="moat-text"><strong>~39% revenue from one customer</strong> is a real concentration risk. This is not hidden — it is the primary bear case. Diversification is the key thing to watch in future earnings calls.</p>
+      </div>
+      <div class="moat-score">
+        <span class="moat-score-label">Moat strength</span>
+        <div class="ms-pip filled"></div><div class="ms-pip filled"></div><div class="ms-pip filled"></div><div class="ms-pip filled"></div><div class="ms-pip"></div>
+      </div>
+    </div>
+
+    <div class="moat-card">
+      <div class="moat-top">
+        <span class="moat-ticker">$NVTS</span>
+        <span class="moat-badge mb-med">Emerging</span>
+      </div>
+      <div class="moat-row">
+        <span class="moat-icon mi-lock">IP</span>
+        <p class="moat-text"><strong>GaNFast platform is proprietary IP.</strong> Navitas's monolithic GaN integration — combining power, drive, control, and protection on one chip — is patented and not easily replicated. Gallium nitride process expertise takes years to develop at yield.</p>
+      </div>
+      <div class="moat-row">
+        <span class="moat-icon mi-net">NVIDIA</span>
+        <p class="moat-text"><strong>MGX ecosystem integration is a structural position.</strong> Being inside NVIDIA's reference architecture means every OEM building to that spec is a potential customer. The moat is being built now — it does not exist at scale yet, which is both the risk and the opportunity.</p>
+      </div>
+      <div class="moat-row">
+        <span class="moat-icon mi-poly">Risk</span>
+        <p class="moat-text"><strong>Still loss-making at $8.6M quarterly revenue.</strong> The moat thesis is forward-looking. Texas Instruments, Infineon, and ON Semi are larger, better-capitalised competitors in power semiconductors. Execution matters enormously here.</p>
+      </div>
+      <div class="moat-score">
+        <span class="moat-score-label">Moat strength</span>
+        <div class="ms-pip filled"></div><div class="ms-pip filled"></div><div class="ms-pip filled"></div><div class="ms-pip"></div><div class="ms-pip"></div>
+      </div>
+    </div>
+
+    <div class="moat-card">
+      <div class="moat-top">
+        <span class="moat-ticker">$QCOM</span>
+        <span class="moat-badge mb-med">Mixed</span>
+      </div>
+      <div class="moat-row">
+        <span class="moat-icon mi-lock">Licensing</span>
+        <p class="moat-text"><strong>CDMA and 5G patent portfolio generates royalty revenue regardless of chip wins.</strong> Every smartphone sold globally — including competitors' devices — pays Qualcomm. This annuity-like licensing stream is genuinely difficult to displace and provides a revenue floor independent of design competition.</p>
+      </div>
+      <div class="moat-row">
+        <span class="moat-icon mi-scale">Auto</span>
+        <p class="moat-text"><strong>Snapdragon Ride is deeply embedded in automotive roadmaps.</strong> With $1.33B in quarterly automotive revenue and growing, Qualcomm has multi-year design commitments from OEMs. Automotive design cycles run 4–7 years — once in, they are difficult to displace.</p>
+      </div>
+      <div class="moat-row">
+        <span class="moat-icon mi-poly">Risk</span>
+        <p class="moat-text"><strong>Data center moat is unproven.</strong> The custom silicon thesis is forward-looking. NVIDIA entering the PC chip market is a genuine new competitive threat in Qualcomm's core smartphone segment. The moat is strong in licensing and auto; speculative in data center.</p>
+      </div>
+      <div class="moat-score">
+        <span class="moat-score-label">Moat strength</span>
+        <div class="ms-pip filled"></div><div class="ms-pip filled"></div><div class="ms-pip filled"></div><div class="ms-pip filled"></div><div class="ms-pip"></div>
+      </div>
+    </div>
+
+    <div class="moat-card">
+      <div class="moat-top">
+        <span class="moat-ticker">$MXL</span>
+        <span class="moat-badge mb-med">Building</span>
+      </div>
+      <div class="moat-row">
+        <span class="moat-icon mi-switch">Certif.</span>
+        <p class="moat-text"><strong>Optical IC qualification cycles are long and sticky.</strong> Data center operators test MaxLinear's SerDes and optical ICs extensively before deployment. The PCIe 7.0 and 800G ethernet ramps require re-qualification — and MaxLinear is already in that process with hyperscalers, giving them a first-mover advantage in the next-generation connectivity cycle.</p>
+      </div>
+      <div class="moat-row">
+        <span class="moat-icon mi-scale">Ramp</span>
+        <p class="moat-text"><strong>Revenue inflection only just started.</strong> The moat is being built as the business scales — $137M in Q1 is the start, not the peak. The question is whether MaxLinear can convert the current hyperscaler relationships into multi-year program wins before larger competitors move in.</p>
+      </div>
+      <div class="moat-row">
+        <span class="moat-icon mi-poly">Risk</span>
+        <p class="moat-text"><strong>Still GAAP loss-making.</strong> Marvell, Broadcom, and Cisco are all competing in data center optical — MaxLinear's moat is real but narrow. Execution over the next two quarters is critical to establishing durable customer relationships.</p>
+      </div>
+      <div class="moat-score">
+        <span class="moat-score-label">Moat strength</span>
+        <div class="ms-pip filled"></div><div class="ms-pip filled"></div><div class="ms-pip filled"></div><div class="ms-pip"></div><div class="ms-pip"></div>
+      </div>
+    </div>
+
+    <div class="moat-card">
+      <div class="moat-top">
+        <span class="moat-ticker">$BE</span>
+        <span class="moat-badge mb-wide">Structural</span>
+      </div>
+      <div class="moat-row">
+        <span class="moat-icon mi-lock">Contracts</span>
+        <p class="moat-text"><strong>10-year supply contracts are structural lock-in.</strong> The Nebius deal runs ten years per phase. The Oracle 2.8 GW deal is multi-year. Once a data center is built around Bloom's fuel cells — with site infrastructure, maintenance agreements, and power delivery architecture designed around them — the switching cost is the data center itself.</p>
+      </div>
+      <div class="moat-row">
+        <span class="moat-icon mi-net">Agnostic</span>
+        <p class="moat-text"><strong>Power demand is model-agnostic and chip-agnostic.</strong> It does not matter whether NVIDIA, AMD, or custom ASICs win the AI compute race — the data center still needs electricity. Bloom's moat is not tied to any single technology outcome, which makes it uniquely resilient among the six names.</p>
+      </div>
+      <div class="moat-row">
+        <span class="moat-icon mi-scale">Backlog</span>
+        <p class="moat-text"><strong>FY2026 revenue guidance raised to $3.4–3.8B.</strong> The order backlog is growing faster than the business can deploy. Grid queue constraints that frustrate competitors actually strengthen Bloom's position — their on-site model is the only solution that doesn't require waiting a decade for grid access.</p>
+      </div>
+      <div class="moat-score">
+        <span class="moat-score-label">Moat strength</span>
+        <div class="ms-pip filled"></div><div class="ms-pip filled"></div><div class="ms-pip filled"></div><div class="ms-pip filled"></div><div class="ms-pip filled"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── 05 STOCKS ── -->
+<section class="sec" id="s5">
+  <div class="sec-hd">
+    <span class="sec-n">05</span>
+    <h2 class="sec-t">Stock Breakdowns</h2>
+    <span class="sec-sub">Six names · one card each · all data verified</span>
+  </div>
+
+  <div class="cards">
+
+    <!-- MRVL -->
+    <div class="card">
+      <div class="card-top">
+        <div class="card-tl"><div class="cticker">$MRVL</div><div class="cname">Marvell Technology, Inc.</div></div>
+        <div class="card-tr"><span class="cbadge cb1">Tier 1 — Highest Conviction</span><span class="cseg">CUSTOM SILICON · CHIP DESIGN (FABLESS)</span></div>
+      </div>
+      <div class="cmets">
+        <div class="cmet"><div class="cmet-l">Price (Jun 7)</div><div class="cmet-v">~$263</div></div>
+        <div class="cmet"><div class="cmet-l">ATH (Jun 3)</div><div class="cmet-v">$324.20</div></div>
+        <div class="cmet"><div class="cmet-l">Off ATH</div><div class="cmet-v cv-dn">−19%</div></div>
+        <div class="cmet"><div class="cmet-l">Q1 FY27 Rev</div><div class="cmet-v cv-up">$2.42B</div></div>
+      </div>
+      <div class="bar-wrap" style="margin-bottom:18px">
+        <div class="bar-track"><div class="bar-fill" style="width:81%"></div></div>
+        <div class="bar-labels"><span>52w low $61</span><span>Current $263 (81% of ATH)</span><span>ATH $324</span></div>
+      </div>
+      <div class="cbody">
+        <div class="cthesis">
+          <p>Marvell designs the custom silicon — XPUs, optical DSPs, networking chips — that sits at the center of NVIDIA's AI factory architecture. On June 2, Jensen Huang walked on stage at Computex in Taipei and called them the "next trillion-dollar company." NVIDIA had already written a $2 billion check in March. The stock ripped 32.52% that session and hit an ATH of $324.20 on June 3.</p>
+          <p>Then the sector sold off. Marvell fell 16.74% on June 5. Not because anything changed about the partnership, the roadmap, or the custom silicon business. It fell because institutional sellers reduced semiconductor exposure after Broadcom's whisper number miss. That is the setup.</p>
+          <p>The S&P 500 inclusion on June 22 is a structural catalyst independent of sentiment — every index fund tracking the S&P 500 is now a forced buyer. Marvell has 20+ custom AI chip design wins entering production in FY2028–29, and Q2 FY2027 guidance of $2.7B midpoint implies 35% year-over-year growth.</p>
+        </div>
+        <div class="cside">
+          <div class="csb"><div class="csb-l">Key Support</div><div class="csb-v"><strong>$230–$240</strong> pre-Jensen breakout base. 200-day MA ~$185 (deep floor).</div></div>
+          <div class="csb"><div class="csb-l">Next Catalysts</div><div class="csb-v"><strong>Jun 22</strong> S&P 500 inclusion. <strong>~Aug 20</strong> Q2 FY2027 earnings.</div></div>
+          <div class="csb"><div class="csb-l">Analyst Range</div><div class="csb-v">Low $233 → <strong>High $360</strong>. Consensus above current price.</div></div>
+          <div class="csb"><div class="csb-l">Confirmed Facts</div><div class="csb-v">NVIDIA $2B investment Mar 31, 2026 ✓ &nbsp; S&P 500 Jun 22 ✓ &nbsp; ATH $324.20 Jun 3 ✓</div></div>
+          <div class="csb"><div class="csb-l">The Risk</div><div class="csb-v risk">Beta 1.79. High multiple — P/E 85x TTM. If sector sells again, MRVL sells harder. Insider selling noted.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CRDO -->
+    <div class="card">
+      <div class="card-top">
+        <div class="card-tl"><div class="cticker">$CRDO</div><div class="cname">Credo Technology Group Holding Ltd.</div></div>
+        <div class="card-tr"><span class="cbadge cb1">Tier 1 — Growth + Support</span><span class="cseg">CONNECTIVITY · CHIP DESIGN (FABLESS)</span></div>
+      </div>
+      <div class="cmets">
+        <div class="cmet"><div class="cmet-l">Price (Jun 7)</div><div class="cmet-v">~$207</div></div>
+        <div class="cmet"><div class="cmet-l">ATH (May 29)</div><div class="cmet-v">$243</div></div>
+        <div class="cmet"><div class="cmet-l">Q4 Rev YoY</div><div class="cmet-v cv-up">+157%</div></div>
+        <div class="cmet"><div class="cmet-l">Q1 FY27 Guide</div><div class="cmet-v cv-up">$465–475M</div></div>
+      </div>
+      <div class="bar-wrap" style="margin-bottom:18px">
+        <div class="bar-track"><div class="bar-fill" style="width:85%"></div></div>
+        <div class="bar-labels"><span>52w low $67</span><span>Current $207 (85% of ATH)</span><span>ATH $243</span></div>
+      </div>
+      <div class="cbody">
+        <div class="cthesis">
+          <p>Credo makes the active electrical cables and SerDes chiplets that physically connect GPU clusters — the plumbing inside every AI data center. Q4 FY2026 revenue: $437M, up 157% year over year. Non-GAAP EPS: $1.16 vs. $1.03 expected. Q1 FY2027 guidance: $465–475M, above consensus. Full-year FY2026 revenue tripled to $1.34B.</p>
+          <p>The stock fell anyway. Down ~12% after hours on June 1 earnings, then carried lower by the sector selloff. That reaction — falling on a clean beat-and-raise at a 157% growth rate — is a "priced for perfection" dynamic, not a fundamental signal. When the business is growing faster than the stock can keep up, the entry window tends to close fast.</p>
+          <p>FY2027 management guidance implies 80%+ growth, driven by the DustPhotonics optical portfolio acquisition. The CEO's performance PSU award has a top tranche tied to $7.5B revenue by 2031 — management is explicitly betting on hypergrowth continuing for five years.</p>
+        </div>
+        <div class="cside">
+          <div class="csb"><div class="csb-l">Key Support</div><div class="csb-v"><strong>$195–$210</strong> post-earnings base. Prior breakout ~$160.</div></div>
+          <div class="csb"><div class="csb-l">Next Catalyst</div><div class="csb-v"><strong>Q3 2026</strong> Q1 FY2027 earnings ($465–475M guide to beat).</div></div>
+          <div class="csb"><div class="csb-l">Analyst Targets</div><div class="csb-v">Roth Capital <strong>$300</strong>. Jefferies <strong>$270</strong>. TD Cowen Buy. 90%+ Buy ratings.</div></div>
+          <div class="csb"><div class="csb-l">Confirmed Facts</div><div class="csb-v">$437M Q4 rev SEC 8-K ✓ &nbsp; EPS $1.16 ✓ &nbsp; FY26 total $1.34B ✓ &nbsp; FY27 guide 80%+ ✓</div></div>
+          <div class="csb"><div class="csb-l">The Risk</div><div class="csb-v risk">~39% revenue from top customer. Concentration risk is real. A single customer pause moves the stock hard.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NVTS -->
+    <div class="card">
+      <div class="card-top">
+        <div class="card-tl"><div class="cticker">$NVTS</div><div class="cname">Navitas Semiconductor Corporation</div></div>
+        <div class="card-tr"><span class="cbadge cb1">Tier 1 — Asymmetric Setup</span><span class="cseg">POWER DELIVERY · GaN / SiC CHIPS</span></div>
+      </div>
+      <div class="cmets">
+        <div class="cmet"><div class="cmet-l">Price (Jun 7)</div><div class="cmet-v">~$24.55</div></div>
+        <div class="cmet"><div class="cmet-l">ATH (May 26)</div><div class="cmet-v">$33.82</div></div>
+        <div class="cmet"><div class="cmet-l">52w Low</div><div class="cmet-v cv-dn">$5.44</div></div>
+        <div class="cmet"><div class="cmet-l">Next Earnings</div><div class="cmet-v cv-ne">Aug 17</div></div>
+      </div>
+      <div class="bar-wrap" style="margin-bottom:18px">
+        <div class="bar-track"><div class="bar-fill dn" style="width:73%"></div></div>
+        <div class="bar-labels"><span>52w low $5.44</span><span>Current $24.55 (73% of ATH)</span><span>ATH $33.82</span></div>
+      </div>
+      <div class="cbody">
+        <div class="cthesis">
+          <p>Power delivery is the hidden bottleneck of the AI supercycle. As GPU power density scales toward kilowatts per chip, conventional silicon power delivery fails. Navitas's GaNFast platform enables the 800 VDC architectures that next-gen AI server racks require — and they are now officially inside NVIDIA's hardware ecosystem.</p>
+          <p>On May 29, Navitas participated in NVIDIA's AI Factory MGX Partner Ceremony in Taipei. Their 20 kW 800 V-to-6 V power delivery board was showcased at NVIDIA's MGX Ecosystem Showcase at Computex (June 2–5). The press release was June 3. The partnership has not generated a dollar of revenue yet — that's what makes the August 17 earnings report a genuine binary event.</p>
+          <p>The June 5 drop of ~20% was caused by Navitas completing a previously announced share issuance for triggering events — a dilution mechanics issue, not a fundamental problem. The NVIDIA partnership is intact. The 800 VDC AI power market it addresses is structural.</p>
+        </div>
+        <div class="cside">
+          <div class="csb"><div class="csb-l">Key Support</div><div class="csb-v"><strong>$22–$24</strong> pre-NVIDIA base. Floor ~$18–$20.</div></div>
+          <div class="csb"><div class="csb-l">Next Catalyst</div><div class="csb-v"><strong>Aug 17</strong> Q2 2026 earnings. First report post-MGX. Confirmed via TradingView earnings calendar.</div></div>
+          <div class="csb"><div class="csb-l">Market Cap</div><div class="csb-v">~$5.86B mid-cap. Beta <strong>3.62</strong> — high volatility both directions.</div></div>
+          <div class="csb"><div class="csb-l">Confirmed Facts</div><div class="csb-v">MGX ceremony May 29 ✓ &nbsp; Computex June 2–5 ✓ &nbsp; ATH $33.82 May 26 ✓ &nbsp; Earnings Aug 17 ✓</div></div>
+          <div class="csb"><div class="csb-l">The Risk</div><div class="csb-v risk">Beta 3.62. Still loss-making (EPS −$0.04). Share dilution risk ongoing. Revenue from NVIDIA partnership unquantified.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QCOM -->
+    <div class="card">
+      <div class="card-top">
+        <div class="card-tl"><div class="cticker">$QCOM</div><div class="cname">QUALCOMM Incorporated</div></div>
+        <div class="card-tr"><span class="cbadge cb2">Tier 2 — Live Catalyst</span><span class="cseg">CUSTOM SILICON · CHIP DESIGN (FABLESS)</span></div>
+      </div>
+      <div class="cmets">
+        <div class="cmet"><div class="cmet-l">Price (Jun 7)</div><div class="cmet-v">~$216</div></div>
+        <div class="cmet"><div class="cmet-l">52w Range</div><div class="cmet-v">$122–$258</div></div>
+        <div class="cmet"><div class="cmet-l">Auto Rev Q2</div><div class="cmet-v cv-up">$1.33B</div></div>
+        <div class="cmet"><div class="cmet-l">Investor Day</div><div class="cmet-v cv-ne">Jun 24</div></div>
+      </div>
+      <div class="bar-wrap" style="margin-bottom:18px">
+        <div class="bar-track"><div class="bar-fill" style="width:84%"></div></div>
+        <div class="bar-labels"><span>52w low $122</span><span>Current $216 (84% of 52w high)</span><span>52w high $258</span></div>
+      </div>
+      <div class="cbody">
+        <div class="cthesis">
+          <p>Qualcomm is in the middle of a business transformation. The company is moving from cyclical smartphone chips toward data center custom silicon, automotive, and agentic AI. Q2 FY2026 delivered $10.6B revenue and record automotive revenue of $1.33B (+38% YoY) — exceeding a $5B annualized run rate for the first time.</p>
+          <p>The immediate catalyst is June 24. At Investor Day in New York, CEO Cristiano Amon has already confirmed Qualcomm will update investors on its custom silicon engagement with a leading hyperscaler — with initial shipments in December 2026. A named customer announcement at that event would represent the market formally pricing in Qualcomm's data center transition. That date is 16 days away.</p>
+          <p>The selloff last week was partly driven by NVIDIA announcing an AI PC chip at Computex competing with Qualcomm's Snapdragon X — adding competitive noise on top of the broader sector flush. That combined pressure created a lower entry ahead of a concrete, scheduled catalyst.</p>
+        </div>
+        <div class="cside">
+          <div class="csb"><div class="csb-l">Key Support</div><div class="csb-v"><strong>$200–$210</strong> post-selloff level. Strong floor ~$185.</div></div>
+          <div class="csb"><div class="csb-l">Next Catalyst</div><div class="csb-v"><strong>Jun 24</strong> Investor Day NYC. Hyperscaler custom chip reveal confirmed by management.</div></div>
+          <div class="csb"><div class="csb-l">Capital Return</div><div class="csb-v">$3.56/share annual dividend. $20B buyback authorized Mar 2026. $3.7B returned Q2.</div></div>
+          <div class="csb"><div class="csb-l">Confirmed Facts</div><div class="csb-v">Q2 rev $10.6B ✓ &nbsp; Auto $1.33B ✓ &nbsp; Investor Day Jun 24 NYC ✓ &nbsp; Dec 2026 shipment ✓</div></div>
+          <div class="csb"><div class="csb-l">The Risk</div><div class="csb-v risk">Apple modem loss headwind. NVIDIA PC chip competition is new. Data center revenue still forward-looking — Investor Day is the inflection point or the disappointment.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MXL -->
+    <div class="card">
+      <div class="card-top">
+        <div class="card-tl"><div class="cticker">$MXL</div><div class="cname">MaxLinear, Inc.</div></div>
+        <div class="card-tr"><span class="cbadge cb2">Tier 2 — Re-rating Early</span><span class="cseg">CONNECTIVITY · OPTICAL DATA CENTER</span></div>
+      </div>
+      <div class="cmets">
+        <div class="cmet"><div class="cmet-l">Price (Jun 4)</div><div class="cmet-v">~$94</div></div>
+        <div class="cmet"><div class="cmet-l">ATH (May 26)</div><div class="cmet-v">$106.28</div></div>
+        <div class="cmet"><div class="cmet-l">Q1 Rev YoY</div><div class="cmet-v cv-up">+43%</div></div>
+        <div class="cmet"><div class="cmet-l">Infra Rev YoY</div><div class="cmet-v cv-up">+136%</div></div>
+      </div>
+      <div class="bar-wrap" style="margin-bottom:18px">
+        <div class="bar-track"><div class="bar-fill" style="width:88%"></div></div>
+        <div class="bar-labels"><span>52w low $11.63</span><span>Current $94 (88% of ATH)</span><span>ATH $106.28</span></div>
+      </div>
+      <div class="cbody">
+        <div class="cthesis">
+          <p>Six weeks ago MaxLinear was trading under $20. Then they reported Q1 2026: revenue $137.2M (+43% YoY), infrastructure revenue +136% YoY, non-GAAP EPS $0.22 vs. $0.18 expected, non-GAAP gross margin 59.5%. The stock repriced 75% in a single session on April 27. That kind of move from that kind of base typically signals the beginning of a re-rating, not the end.</p>
+          <p>MaxLinear makes the optical ICs and SerDes technology inside AI data center switches and routers — the physical layer moving data between GPU clusters. Q2 guidance: $160–170M, implying 17–24% sequential growth. The July 29 earnings report is the confirmation moment. If the ramp is sustained, the consensus — currently averaging $68 — will be forced upward again.</p>
+          <p>Northland raised their target to $110 on June 3. Stifel raised to $105 on June 3. Benchmark has a $125 target set May 27. The analyst community is just starting to reprice the business — most of the upgrade cycle is still ahead.</p>
+        </div>
+        <div class="cside">
+          <div class="csb"><div class="csb-l">Key Support</div><div class="csb-v"><strong>$80–$85</strong> post-earnings consolidation. Prior breakout ~$60.</div></div>
+          <div class="csb"><div class="csb-l">Next Catalyst</div><div class="csb-v"><strong>Jul 29</strong> Q2 2026 earnings. $160–170M guide confirmation is the key event.</div></div>
+          <div class="csb"><div class="csb-l">Analyst Targets</div><div class="csb-v">Northland <strong>$110</strong>. Stifel <strong>$105</strong>. Benchmark <strong>$125</strong>. Avg consensus ~$68.</div></div>
+          <div class="csb"><div class="csb-l">Confirmed Facts</div><div class="csb-v">Q1 $137.2M ✓ &nbsp; +75% session Apr 27 ✓ &nbsp; Q2 guide $160–170M ✓ &nbsp; ATH $106.28 ✓</div></div>
+          <div class="csb"><div class="csb-l">The Risk</div><div class="csb-v risk">GAAP net loss −$45M in Q1. Still unprofitable. Beta 3.0. A Q2 miss against elevated expectations would be sharply punished.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BE -->
+    <div class="card">
+      <div class="card-top">
+        <div class="card-tl"><div class="cticker">$BE</div><div class="cname">Bloom Energy Corporation</div></div>
+        <div class="card-tr"><span class="cbadge cb3">Tier 3 — Defensive Anchor</span><span class="cseg">SITE POWER · ON-SITE FUEL CELLS</span></div>
+      </div>
+      <div class="cmets">
+        <div class="cmet"><div class="cmet-l">Price (Jun 7)</div><div class="cmet-v">~$252</div></div>
+        <div class="cmet"><div class="cmet-l">52w High</div><div class="cmet-v">$322.83</div></div>
+        <div class="cmet"><div class="cmet-l">Nebius Deal</div><div class="cmet-v cv-up">$2.6B</div></div>
+        <div class="cmet"><div class="cmet-l">FY26 Rev Guide</div><div class="cmet-v cv-up">$3.4–3.8B</div></div>
+      </div>
+      <div class="bar-wrap" style="margin-bottom:18px">
+        <div class="bar-track"><div class="bar-fill" style="width:78%"></div></div>
+        <div class="bar-labels"><span>52w low $20.81</span><span>Current $252 (78% of 52w high)</span><span>52w high $322.83</span></div>
+      </div>
+      <div class="cbody">
+        <div class="cthesis">
+          <p>Bloom Energy is not a semiconductor company. It is in this brief because it addresses the binding constraint that limits everything else on this list: power. AI data centers need massive, always-on electricity. US data center power demand is projected to reach 9–17% of the US grid by 2030 — up from 4–5% today (EPRI 2026). Grid interconnection queues run 5–10 years.</p>
+          <p>Bloom's solid oxide fuel cells generate electricity on-site, bypassing the grid entirely. On May 14, 2026 (per SEC filing), Nebius Group signed a Master Fuel Cell Capacity Agreement with Bloom — $2.6B in service fees over the term, 250MW guaranteed capacity, 328MW installed, three phases each with a 10-year supply term. Bloom's stock rose more than 11% on the announcement. Separately, Bloom has a 2.8 GW expanded deal with Oracle for AI cloud infrastructure. FY2026 revenue guidance was raised to $3.4–3.8B.</p>
+          <p>The most important data point from last week: when the SOX fell 8.5%, Bloom barely moved. Power demand is model-agnostic — it doesn't matter which chip wins, which AI model dominates, or what the Fed does with rates. The data centers still need electricity.</p>
+        </div>
+        <div class="cside">
+          <div class="csb"><div class="csb-l">Key Support</div><div class="csb-v"><strong>$230–$240</strong> near-term. Floor ~$200–$210.</div></div>
+          <div class="csb"><div class="csb-l">Next Catalyst</div><div class="csb-v"><strong>Jul 29</strong> Q2 2026 earnings. Next hyperscaler power contract announcement.</div></div>
+          <div class="csb"><div class="csb-l">Deal Structure</div><div class="csb-v">Nebius: <strong>250MW guaranteed</strong>, 328MW installed, 3-phase, 10-yr terms. Oracle: 2.8 GW expanded.</div></div>
+          <div class="csb"><div class="csb-l">Confirmed Facts</div><div class="csb-v">Nebius deal May 14 SEC filing ✓ &nbsp; $2.6B ✓ &nbsp; 250MW / 328MW ✓ &nbsp; Oracle 2.8 GW ✓ &nbsp; FY26 guide $3.4–3.8B ✓</div></div>
+          <div class="csb"><div class="csb-l">The Risk</div><div class="csb-v risk">Not a chip stock — doesn't benefit from AI chip re-ratings. Debt/equity 306%. Insiders have been selling. Citi rates it fully valued near current levels.</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── 06 SUMMARY ── -->
+<section class="sec" id="s6">
+  <div class="sec-hd">
+    <span class="sec-n">06</span>
+    <h2 class="sec-t">Quick Reference</h2>
+    <span class="sec-sub">Screenshot or save · all data verified</span>
+  </div>
+
+  <table class="stbl">
+    <thead>
+      <tr>
+        <th>Stock</th>
+        <th>Layer</th>
+        <th>Why now</th>
+        <th>Key support</th>
+        <th>Next catalyst</th>
+        <th>Key risk</th>
+        <th>Tier</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="tc">$MRVL</td>
+        <td>Custom silicon</td>
+        <td>Jensen endorsement + NVIDIA $2B + S&P 500 inclusion Jun 22. Down 19% from ATH with no fundamental change.</td>
+        <td class="tl">$230–$240</td>
+        <td class="td">Jun 22 · ~Aug 20</td>
+        <td class="tr-col">Beta 1.79 · P/E 85x</td>
+        <td><span class="pill p1">T1</span></td>
+      </tr>
+      <tr>
+        <td class="tc">$CRDO</td>
+        <td>Connectivity</td>
+        <td>+157% revenue, beat & raised, Q1 FY27 guide $465–475M. Sold off on sector contagion not fundamentals.</td>
+        <td class="tl">$195–$210</td>
+        <td class="td">Q3 2026 earnings</td>
+        <td class="tr-col">~39% customer concentration</td>
+        <td><span class="pill p1">T1</span></td>
+      </tr>
+      <tr>
+        <td class="tc">$NVTS</td>
+        <td>Power chips</td>
+        <td>Entered NVIDIA MGX ecosystem Jun 3. Revenue ramp not started. Down 27% from ATH on dilution mechanics not thesis.</td>
+        <td class="tl">$22–$24</td>
+        <td class="td">Aug 17 earnings</td>
+        <td class="tr-col">Beta 3.62 · still loss-making</td>
+        <td><span class="pill p1">T1</span></td>
+      </tr>
+      <tr>
+        <td class="tc">$QCOM</td>
+        <td>Custom silicon</td>
+        <td>Investor Day Jun 24 with confirmed hyperscaler chip reveal. Record auto rev $1.33B. Down 11% in selloff.</td>
+        <td class="tl">$200–$210</td>
+        <td class="td">Jun 24 Investor Day</td>
+        <td class="tr-col">NVIDIA PC competition · Apple modem</td>
+        <td><span class="pill p2">T2</span></td>
+      </tr>
+      <tr>
+        <td class="tc">$MXL</td>
+        <td>Connectivity</td>
+        <td>Business inflected Q1 (+43% rev, +136% infra). Re-rating early innings. Consensus avg $68 vs analyst high $125.</td>
+        <td class="tl">$80–$85</td>
+        <td class="td">Jul 29 earnings</td>
+        <td class="tr-col">GAAP unprofitable · Beta 3.0</td>
+        <td><span class="pill p2">T2</span></td>
+      </tr>
+      <tr>
+        <td class="tc">$BE</td>
+        <td>Site power</td>
+        <td>$2.6B Nebius deal (May 14) + 2.8GW Oracle deal. FY26 guide $3.4–3.8B. Held during the SOX selloff.</td>
+        <td class="tl">$230–$240</td>
+        <td class="td">Jul 29 earnings</td>
+        <td class="tr-col">Debt/equity 306% · fully valued per Citi</td>
+        <td><span class="pill p3">T3</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="cta cta-b" style="margin-top:24px">
+    <p><strong>How to read this table:</strong> "Key support" is where to look for entries on further dips — derived from prior breakout levels and moving averages, not guaranteed floors. "Next catalyst" is the event most likely to determine near-term direction. Cross-reference both before sizing any position. Prices as of June 7, 2026.</p>
+  </div>
+</section>
+
+<div class="disc">
+  <p><strong>Important disclaimer:</strong> This brief is produced for informational and educational purposes only. It does not constitute financial advice, investment advice, or a recommendation to buy or sell any security.</p>
+  <p>All price levels, analyst targets, earnings figures, and market data are sourced from publicly available primary sources — SEC filings, company press releases, earnings transcripts, Reuters, CNBC, and Robinhood market data — as of June 8, 2026. Prices reflect June 7, 2026 closing data where available. Support levels are observational, not guaranteed. Semiconductor stocks carry significant volatility risk.</p>
+  <p>Past performance does not guarantee future results. Always conduct your own due diligence and consult a licensed financial advisor before making any investment decision. The author may hold positions in securities mentioned in this report.</p>
+</div>
+
+</body>
+</html>
