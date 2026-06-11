@@ -1295,6 +1295,20 @@ table.iv-dt,table.iv-qg-table{min-width:520px}
 // Gate the page until auth resolves. The overlay starts in loading state;
 // success → remove gate classes; failure → swap loading→login UI.
 (function(){
+  // Local preview bypass: when opened from disk or localhost there is no
+  // /api/auth backend — skip the gate entirely. Production hosts are unaffected.
+  const isLocal = location.protocol === 'file:' ||
+                  ['localhost','127.0.0.1','[::1]'].includes(location.hostname);
+  if (isLocal) {
+    document.documentElement.classList.remove('iv-auth-pending-html');
+    const unGate = () => {
+      document.body.classList.remove('iv-auth-pending');
+      const ov = document.getElementById('iv-auth-overlay');
+      if (ov) ov.style.display = 'none';
+    };
+    document.body ? unGate() : document.addEventListener('DOMContentLoaded', unGate);
+    return;
+  }
   document.documentElement.classList.add('iv-auth-pending-html');
   document.body && document.body.classList.add('iv-auth-pending');
   // Defensive: in case body isn't ready yet, set on DOMContentLoaded too
