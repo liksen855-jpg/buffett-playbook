@@ -20,9 +20,9 @@
  *   { "ts": "2026-06-04T...", "count": 3, "data": { "AAPL": {...}, ... } }
  */
 
-import { setCORS, setShortCache } from './lib/auth.js';
-import { checkRateLimit, rateLimitHeaders } from './lib/rate-limit.js';
-import { fmpBatchQuotes } from './lib/fmp.js';
+import { setCORS, setShortCache } from '../lib/auth.js';
+import { checkRateLimit, rateLimitHeaders } from '../lib/rate-limit.js';
+import { fmpBatchQuotes } from '../lib/fmp.js';
 
 const YF_BASE = 'https://query1.finance.yahoo.com/v8/finance/chart';
 

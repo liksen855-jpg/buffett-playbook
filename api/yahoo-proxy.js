@@ -3,8 +3,8 @@
  * Refactored: uses shared rate limiting + auth utilities.
  */
 
-import { setCORS, setShortCache } from './lib/auth.js';
-import { checkRateLimit, rateLimitHeaders } from './lib/rate-limit.js';
+import { setCORS, setShortCache } from '../lib/auth.js';
+import { checkRateLimit, rateLimitHeaders } from '../lib/rate-limit.js';
 
 const YF_BASE = 'https://query1.finance.yahoo.com/v8/finance/chart';
 

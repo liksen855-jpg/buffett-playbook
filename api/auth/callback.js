@@ -4,8 +4,8 @@
 //
 // REFACTORED: Uses shared auth utilities. Owner email is now ONLY from env var.
 
-import { parseCookie, signJWT } from '../lib/auth.js';
-import { checkRateLimit, rateLimitHeaders } from '../lib/rate-limit.js';
+import { parseCookie, signJWT } from '../../lib/auth.js';
+import { checkRateLimit, rateLimitHeaders } from '../../lib/rate-limit.js';
 
 export default async function handler(req, res) {
   const {
