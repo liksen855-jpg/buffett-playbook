@@ -4,6 +4,7 @@
 // Same model as /api/picks: owner = email in PATREON_OWNER_EMAILS, stored in KV.
 
 import crypto from 'node:crypto';
+import { notifyPositions } from './lib/discord.js';
 
 const KEY = 'positions:v1';
 const OWNER_FALLBACK = ['liksen855@gmail.com'];
@@ -78,7 +79,7 @@ export default async function handler(req, res) {
     let body = req.body; if (typeof body === 'string') { try { body = JSON.parse(body); } catch (_) { body = {}; } }
     const positions = cleanPositions(body && body.positions);
     if (positions == null) { res.status(400).json({ ok: false, error: 'bad_positions' }); return; }
-    try { await kvSet(KEY, { positions, updatedAt: Date.now(), by: payload.email || '' }); res.status(200).json({ ok: true, count: positions.length }); }
+    try { await kvSet(KEY, { positions, updatedAt: Date.now(), by: payload.email || '' }); notifyPositions(positions); res.status(200).json({ ok: true, count: positions.length }); }
     catch (_) { res.status(502).json({ ok: false, error: 'kv_write_failed' }); }
     return;
   }

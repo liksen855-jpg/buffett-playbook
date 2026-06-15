@@ -3,6 +3,7 @@
 import { getSession, setNoCache } from './lib/auth.js';
 import { kvConfigured, kvGet, kvSet } from './lib/kv.js';
 import { checkRateLimit, rateLimitHeaders } from './lib/rate-limit.js';
+import { notifyPicks } from './lib/discord.js';
 
 const KEY = 'picks:v1';
 
@@ -65,7 +66,7 @@ export default async function handler(req, res) {
     let body = req.body; if (typeof body === 'string') { try { body = JSON.parse(body); } catch (_) { body = {}; } }
     const picks = cleanPicks(body && body.picks);
     if (picks == null) { res.status(400).json({ ok: false, error: 'bad_picks' }); return; }
-    try { await kvSet(KEY, { picks, updatedAt: Date.now(), by: session.payload.email || '' }); res.status(200).json({ ok: true, count: picks.length }); }
+    try { await kvSet(KEY, { picks, updatedAt: Date.now(), by: session.payload.email || '' }); notifyPicks(picks); res.status(200).json({ ok: true, count: picks.length }); }
     catch (_) { res.status(502).json({ ok: false, error: 'kv_write_failed' }); }
     return;
   }
