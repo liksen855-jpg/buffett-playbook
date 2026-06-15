@@ -139,8 +139,32 @@ async function handleBrief() {
   }
 }
 
+// ── Cron: morning market brief ───────────────────────────────────────────────
+const CRON_WATCHLIST = ['SPY','QQQ','DIA','AAPL','MSFT','NVDA','HOOD','SOFI','COIN','GLD','USO'];
+
+async function handleCron(req, res) {
+  const auth = req.headers['authorization'];
+  if (auth !== `Bearer ${process.env.CRON_SECRET}`) {
+    res.status(401).json({ error: 'unauthorized' }); return;
+  }
+  try {
+    const { notifyMarketBrief } = await import('../lib/discord.js');
+    const batch = await fmpBatchQuotes(CRON_WATCHLIST, { cacheSeconds: 0 });
+    const data = {};
+    for (const sym of CRON_WATCHLIST) {
+      const q = batch[sym]; if (!q) continue;
+      data[sym] = { symbol: sym, price: q.price ?? 0, changePct: q.changesPercentage ?? q.changePercentage ?? 0 };
+    }
+    await notifyMarketBrief(data);
+    res.status(200).json({ ok: true, symbols: Object.keys(data).length });
+  } catch (e) { res.status(500).json({ ok: false, error: e.message }); }
+}
+
 // ── Main handler ─────────────────────────────────────────────────────────────
 export default async function handler(req, res) {
+  // Cron brief: GET /api/discord?action=cron
+  if (req.method === 'GET' && req.query?.action === 'cron') { await handleCron(req, res); return; }
+
   if (req.method !== 'POST') { res.status(405).end(); return; }
 
   // Read raw body for signature verification
