@@ -1,6 +1,8 @@
 // Discord slash command interaction handler.
 // Registered commands: /quote, /picks, /brief, /watchlist
 
+export const config = { api: { bodyParser: false } };
+
 import { kvGet } from '../lib/kv.js';
 import { fmpBatchQuotes } from '../lib/fmp.js';
 
