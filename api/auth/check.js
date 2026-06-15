@@ -1,7 +1,7 @@
 // Validates the pt_session cookie. Refactored to use shared auth utilities.
 
-import { getSession, setNoCache } from '../lib/auth.js';
-import { checkRateLimit, rateLimitHeaders } from '../lib/rate-limit.js';
+import { getSession, setNoCache } from '../../lib/auth.js';
+import { checkRateLimit, rateLimitHeaders } from '../../lib/rate-limit.js';
 
 export default function handler(req, res) {
   setNoCache(res);

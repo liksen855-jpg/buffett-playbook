@@ -18,9 +18,9 @@
  *   ]}
  */
 
-import { setCORS, setShortCache } from './lib/auth.js';
-import { checkRateLimit, rateLimitHeaders } from './lib/rate-limit.js';
-import { fmpSearch } from './lib/fmp.js';
+import { setCORS, setShortCache } from '../lib/auth.js';
+import { checkRateLimit, rateLimitHeaders } from '../lib/rate-limit.js';
+import { fmpSearch } from '../lib/fmp.js';
 
 export default async function handler(req, res) {
   setCORS(res, { methods: 'GET' });

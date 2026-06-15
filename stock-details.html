@@ -1235,8 +1235,17 @@ table.iv-dt,table.iv-qg-table{min-width:520px}
   .iv-mx-grid,.iv-kpi-row{grid-template-columns:1fr}
   .iv-mx,.iv-kpi{border-right:none;border-bottom:1px solid var(--line)}
   /* Financial sheets: tighter cells + narrower sticky label so data shows */
-  .fin-detail td,.fin-detail th{padding-left:10px;padding-right:10px;font-size:12px}
-  .fin-detail td:first-child,.fin-detail th:first-child{max-width:160px;font-size:11.5px}
+  .fin-detail td,.fin-detail th{padding-left:8px;padding-right:8px;font-size:11.5px}
+  .fin-detail td:first-child,.fin-detail th:first-child{max-width:220px;font-size:11px;padding-left:6px}
+  .fin-detail th .ttm-line{font-size:9.5px}
+  .table-wrap{margin-bottom:10px}
+  .fin-table-nav{gap:4px;margin-bottom:4px}
+  .fin-subtab{font-size:12px}
+}
+@media(max-width:420px){
+  .fin-detail td,.fin-detail th{padding-left:6px;padding-right:6px;font-size:10.5px}
+  .fin-detail td:first-child,.fin-detail th:first-child{max-width:180px;font-size:10px}
+  .fin-detail th .ttm-line{font-size:8.5px}
 }
 </style>
 
@@ -1286,6 +1295,20 @@ table.iv-dt,table.iv-qg-table{min-width:520px}
 // Gate the page until auth resolves. The overlay starts in loading state;
 // success → remove gate classes; failure → swap loading→login UI.
 (function(){
+  // Local preview bypass: when opened from disk or localhost there is no
+  // /api/auth backend — skip the gate entirely. Production hosts are unaffected.
+  const isLocal = location.protocol === 'file:' ||
+                  ['localhost','127.0.0.1','[::1]'].includes(location.hostname);
+  if (isLocal) {
+    document.documentElement.classList.remove('iv-auth-pending-html');
+    const unGate = () => {
+      document.body.classList.remove('iv-auth-pending');
+      const ov = document.getElementById('iv-auth-overlay');
+      if (ov) ov.style.display = 'none';
+    };
+    document.body ? unGate() : document.addEventListener('DOMContentLoaded', unGate);
+    return;
+  }
   document.documentElement.classList.add('iv-auth-pending-html');
   document.body && document.body.classList.add('iv-auth-pending');
   // Defensive: in case body isn't ready yet, set on DOMContentLoaded too
@@ -1336,6 +1359,116 @@ table.iv-dt,table.iv-qg-table{min-width:520px}
 })();
 </script>
 
+<style>
+/* ═══ THE STORY · v1 (st-*) — editorial register over terminal tokens ═══ */
+#page-story{max-width:980px;margin:0 auto}
+.st-empty{padding:60px 0;text-align:center;color:var(--mute);font-size:14px}
+.st-serif{font-family:"Source Serif 4",Georgia,serif}
+/* Block 0 · stamp */
+.st-stamp{background:var(--card,#fff);border:1px solid var(--line);border-radius:12px;padding:18px 20px 0;margin-bottom:26px}
+.st-frozen{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--mono,monospace);font-size:11px;color:var(--fg2,#44443F)}
+.st-frozen .sep{color:var(--mute)}
+.st-rating{font-weight:600;letter-spacing:.08em;padding:4px 10px;border-radius:6px}
+.st-rating.pos{background:var(--pos-soft,#EFF6F1);color:var(--pos,#2E7D55)}
+.st-rating.warn{background:#FBF5E9;color:#A77A1E}
+.st-rating.neg{background:var(--neg-soft,#FBF1F0);color:var(--neg,#B23B3B)}
+.st-vbtn{font-family:var(--mono,monospace);font-size:10.5px;color:var(--accent,#2C5E8A);background:none;border:none;cursor:pointer;border-bottom:1px dashed var(--accent,#2C5E8A);padding:0 0 1px}
+.st-live{margin-top:14px;display:flex;gap:24px;flex-wrap:wrap;padding:13px 0;border-top:1px solid var(--line);font-size:12px}
+.st-lk{font-family:var(--mono,monospace);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);display:block}
+.st-lv{font-family:var(--mono,monospace);font-size:12.5px;font-weight:600}
+.st-zonechip{font-family:var(--mono,monospace);font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:6px;background:#FBF5E9;color:#A77A1E}
+.st-vdrawer{display:none;border-top:1px solid var(--line);padding:6px 0 12px}
+.st-vdrawer.open{display:block}
+.st-vrow{display:grid;grid-template-columns:42px 96px 1fr;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:12px;align-items:baseline}
+.st-vrow:last-child{border-bottom:none}
+.st-vrow .v{font-family:var(--mono,monospace);font-weight:600;color:var(--accent,#2C5E8A)}
+.st-vrow .d{font-family:var(--mono,monospace);font-size:10.5px;color:var(--mute)}
+/* blocks */
+.st-blk{padding:34px 0;border-bottom:1px solid var(--line)}
+.st-blk:last-child{border-bottom:none}
+.st-no{font-family:var(--mono,monospace);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent,#2C5E8A);margin-bottom:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.st-speed{font-size:9px;letter-spacing:.08em;padding:2px 7px;border-radius:99px;border:1px solid var(--line);color:var(--mute)}
+.st-speed.live{color:var(--pos,#2E7D55);background:var(--pos-soft,#EFF6F1);border-color:transparent}
+.st-h{font-family:"Source Serif 4",Georgia,serif;font-weight:600;font-size:25px;line-height:1.2;letter-spacing:-.01em;margin-bottom:14px;max-width:30ch}
+.st-prose{font-family:"Source Serif 4",Georgia,serif;font-size:15.5px;line-height:1.75;color:var(--fg2,#44443F);max-width:66ch}
+.st-prose p{margin-bottom:14px}.st-prose p:last-child{margin-bottom:0}
+.st-prose b{color:var(--fg,#1A1A18)}
+.st-answer{font-family:"Source Serif 4",Georgia,serif;font-size:17px;line-height:1.7;color:var(--fg,#1A1A18);max-width:64ch;border-left:3px solid var(--accent,#2C5E8A);padding-left:20px}
+.st-cite{display:inline-block;font-family:var(--mono,monospace);font-size:9.5px;color:var(--accent,#2C5E8A);background:hsl(208,52%,36%,.07);border:1px solid hsl(208,52%,36%,.18);padding:1px 7px;border-radius:99px;vertical-align:2px;cursor:pointer}
+.st-src{font-family:var(--mono,monospace);font-size:10px;color:var(--mute);margin-top:10px}
+.st-draft{font-family:var(--mono,monospace);font-size:9.5px;letter-spacing:.06em;padding:2px 8px;border-radius:99px;background:#FBF5E9;color:#A77A1E}
+/* pillars */
+.st-pillars{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card,#fff)}
+.st-pillar{display:grid;grid-template-columns:46px 1fr;gap:16px;padding:19px 22px;border-bottom:1px solid var(--line)}
+.st-pillar:last-child{border-bottom:none}
+.st-pn{font-family:"Source Serif 4",Georgia,serif;font-size:26px;font-weight:600;color:var(--line)}
+.st-pillar h4{font-family:"Source Serif 4",Georgia,serif;font-size:16.5px;font-weight:600;margin-bottom:4px}
+.st-pillar p{font-size:13px;color:var(--fg2,#44443F)}
+/* field */
+.st-ff{position:relative;border:1px solid var(--line);border-radius:12px;padding:16px 18px 6px;background:var(--card,#fff)}
+.st-ffrow{display:grid;grid-template-columns:118px 1fr 64px;gap:12px;align-items:center;padding:5px 0}
+.st-ffn{font-family:var(--mono,monospace);font-size:10.5px;white-space:nowrap}
+.st-ffn span{display:block;font-size:9px;color:var(--mute)}
+.st-fft{position:relative;height:12px}
+.st-ffb{position:absolute;top:2px;height:8px;border-radius:99px;background:var(--accent,#2C5E8A);opacity:.85}
+.st-ffrow.cut .st-ffb{background:var(--line)}
+.st-ffrow.cut .st-ffn,.st-ffrow.cut .st-ffv{color:var(--mute);text-decoration:line-through}
+.st-ffv{font-family:var(--mono,monospace);font-size:10.5px;font-weight:600;text-align:right}
+.st-ffaxis{position:relative;height:24px;margin-top:4px;font-family:var(--mono,monospace);font-size:9px;color:var(--mute)}
+.st-ffaxis span{position:absolute;transform:translateX(-50%)}
+.st-ffline{position:absolute;width:2px;background:var(--fg,#1A1A18);pointer-events:none}
+.st-fftag{position:absolute;transform:translateX(-50%);font-family:var(--mono,monospace);font-size:9px;font-weight:600;background:var(--fg,#1A1A18);color:#fff;padding:1px 6px;border-radius:4px;white-space:nowrap}
+.st-ffband{position:absolute;background:var(--pos-soft,#EFF6F1);border-left:1px dashed var(--pos,#2E7D55);border-right:1px dashed var(--pos,#2E7D55);opacity:.7;pointer-events:none}
+/* scenarios */
+.st-scen{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+@media(max-width:760px){.st-scen{grid-template-columns:1fr}}
+.st-sc{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--card,#fff)}
+.st-sc.base{border-color:var(--accent,#2C5E8A)}
+.st-sck{font-family:var(--mono,monospace);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}
+.st-sc.bear .st-sck{color:var(--neg,#B23B3B)}.st-sc.base .st-sck{color:var(--accent,#2C5E8A)}.st-sc.bull .st-sck{color:var(--pos,#2E7D55)}
+.st-scv{font-family:var(--mono,monospace);font-size:21px;font-weight:600}
+.st-scu{font-family:var(--mono,monospace);font-size:10.5px;margin:1px 0 9px;color:var(--mute)}
+.st-sc p{font-family:"Source Serif 4",Georgia,serif;font-size:12.5px;color:var(--fg2,#44443F);line-height:1.55}
+/* zones */
+.st-zones{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card,#fff)}
+.st-zone{display:grid;grid-template-columns:1fr 120px 104px;gap:12px;align-items:center;padding:11px 18px;border-bottom:1px solid var(--line);font-size:12.5px}
+.st-zone:last-child{border-bottom:none}
+.st-zone .r{font-family:var(--mono,monospace);font-size:11px;color:var(--mute);text-align:right}
+.st-zone .here{font-family:var(--mono,monospace);font-size:9px;font-weight:600;letter-spacing:.08em;color:#A77A1E;background:#FBF5E9;padding:3px 7px;border-radius:6px;text-align:center;visibility:hidden}
+.st-zone.on{background:#FBF5E9}
+.st-zone.on .here{visibility:visible}
+/* catalysts & kills */
+.st-card{background:var(--card,#fff);border:1px solid var(--line);border-radius:12px;padding:4px 20px}
+.st-cat{display:grid;grid-template-columns:84px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:12.5px;align-items:baseline}
+.st-cat:last-child{border-bottom:none}
+.st-cat .d{font-family:var(--mono,monospace);font-size:10.5px;color:var(--accent,#2C5E8A);white-space:nowrap}
+.st-kill{display:grid;grid-template-columns:92px 1fr;gap:14px;padding:12px 0;border-bottom:1px solid var(--line);align-items:start}
+.st-kill:last-child{border-bottom:none}
+.st-lamp{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono,monospace);font-size:9px;letter-spacing:.08em;font-weight:600;padding:4px 8px;border-radius:6px;white-space:nowrap}
+.st-lamp::before{content:"";width:6px;height:6px;border-radius:99px;background:currentColor}
+.st-lamp.dormant{color:var(--mute);background:var(--bg2,#F6F6F5)}
+.st-lamp.armed{color:#A77A1E;background:#FBF5E9}
+.st-lamp.breached{color:#fff;background:var(--neg,#B23B3B)}
+.st-kill b{display:block;font-size:13px;margin-bottom:2px}
+.st-kill p{font-size:12px;color:var(--fg2,#44443F)}
+.st-kill .w{font-family:var(--mono,monospace);font-size:9.5px;color:var(--mute);margin-top:4px}
+/* risks */
+.st-risk{display:grid;grid-template-columns:112px 1fr;gap:14px;padding:12px 0;border-bottom:1px solid var(--line);align-items:start}
+.st-risk:last-child{border-bottom:none}
+.st-rtag{font-family:var(--mono,monospace);font-size:9px;letter-spacing:.06em;text-transform:uppercase;padding:3px 7px;border-radius:5px;text-align:center}
+.st-rtag.hi{background:var(--neg-soft,#FBF1F0);color:var(--neg,#B23B3B)}
+.st-rtag.md{background:#FBF5E9;color:#A77A1E}
+.st-risk b{display:block;font-size:13px;margin-bottom:2px}
+.st-risk p{font-size:12px;color:var(--fg2,#44443F)}
+/* actions */
+.st-actions{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0 4px}
+.st-btn{font-size:12.5px;font-weight:600;padding:9px 16px;border-radius:8px;cursor:pointer;border:1px solid var(--line);background:var(--card,#fff);color:var(--fg,#1A1A18)}
+.st-btn:hover{border-color:var(--accent,#2C5E8A);color:var(--accent,#2C5E8A)}
+.st-btn.primary{background:var(--accent,#2C5E8A);border-color:var(--accent,#2C5E8A);color:#fff}
+.st-btn.primary:hover{opacity:.92;color:#fff}
+.st-btn:disabled{opacity:.5;cursor:default}
+@media(max-width:680px){.st-zone{grid-template-columns:1fr 90px}.st-zone .here{display:none}.st-zone.on{box-shadow:inset 3px 0 0 #A77A1E}}
+</style>
 </head>
 <body>
 
@@ -1423,6 +1556,7 @@ table.iv-dt,table.iv-qg-table{min-width:520px}
     <button class="tab-btn" data-tab="metrics"          onclick="switchTab('metrics')">Company Metrics</button>
     <button class="tab-btn" data-tab="intrinsic"        onclick="switchTab('intrinsic')">Intrinsic Value</button>
     <button class="tab-btn" data-tab="moatheat"         onclick="switchTab('moatheat')">InsightInvest™</button>
+    <button class="tab-btn" data-tab="story"            onclick="switchTab('story')">The Story</button>
     <button class="tab-btn" data-tab="ai"               onclick="switchTab('ai')">AI Insights</button>
     <button class="tab-btn" data-tab="earnings"         onclick="switchTab('earnings')">Earnings</button>
     <button class="tab-btn" data-tab="stock-news"       onclick="switchTab('stock-news')">News</button>
@@ -2004,6 +2138,11 @@ table.iv-dt,table.iv-qg-table{min-width:520px}
   </div>
 
   <!-- ══ AI INSIGHTS ══ -->
+  <!-- ════════ THE STORY · versioned thesis (st-*) ════════ -->
+  <div class="tab-page" id="page-story">
+    <div id="st-root"><div class="st-empty">Load a ticker to build its story.</div></div>
+  </div>
+
   <div class="tab-page" id="page-ai">
     <div style="margin-bottom:16px;padding:14px 18px;background:hsl(208,52%,36%,.06);border:1px solid hsl(208,52%,36%,.15);border-radius:8px;font-size:13px;color:var(--fg2)">
       Powered by Claude — uses all loaded financial data. You'll be prompted for a Claude API key the first time you run an analysis.
@@ -2637,6 +2776,7 @@ function switchTab(id){
     case 'markets':    loadMarketsTab();   break;
     case 'screener':   /* fires on demand */ break;
     case 'stock-news': loadStockNewsTab(); break;
+    case 'story':      try{renderStory();}catch(e){console.warn('story render',e);} break;
   }
 }
 
@@ -2651,6 +2791,7 @@ function renderAll(){
   renderMoatHeat();
   renderEarnings();
   loadPriceChart(365);
+  try{renderStory();}catch(e){console.warn('story render',e);}
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -4184,6 +4325,9 @@ function renderValuationSummary(){
   // Single source of truth: the InsightInvest™ tab reads this exact composite
   // so its "fair value" is always identical to the Intrinsic Value tab's.
   S._cfFair = (composite && isFinite(composite) && composite > 0) ? composite : null;
+  // The Story tab reads these: every method's value + which two the trim discarded.
+  S._cfMethods = results.map(r=>({name:r.name, type:r.type, val:r.val}));
+  S._cfTrimmed = (valid.length>=4) ? [valid[0], valid[valid.length-1]] : [];
   if(typeof refreshIIWatch==='function') refreshIIWatch();
 
   const gapPct=(composite&&cur)?(composite-cur)/cur*100:null;
@@ -6082,6 +6226,245 @@ setState('idle');
 // URL autoload (?t= or ?ticker=) is handled by the auth gate's autoLoadTicker
 // once a patron is verified — a second loader here caused overlapping loads
 // that double-converted ADR currency (e.g. TSM showing ~1/31 of fair value).
+</script>
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   THE STORY · v1 — versioned thesis layer over the live terminal
+   Frozen layer: a THESIS object per ticker (localStorage, versioned).
+   Live layer:   price/zone/gap/lamps recomputed from S on every render.
+   Story prose never contains prices — price-conditional language only.
+   ═══════════════════════════════════════════════════════════════════ */
+function _stKey(sym){ return 'ii_thesis_'+sym; }
+function _stVersions(sym){
+  try{ const a=JSON.parse(localStorage.getItem(_stKey(sym))||'[]'); return Array.isArray(a)?a:[]; }catch(_){ return []; }
+}
+function _stSave(sym,arr){ try{ localStorage.setItem(_stKey(sym),JSON.stringify(arr)); }catch(_){} }
+const _stUSD=v=>(v||v===0)?'$'+(+v).toFixed(2):'—';
+
+/* ── derived facts from S (the Record, summarized) ─────────────── */
+function _stFacts(){
+  const p=S.profile||{}, q=S.quote||{};
+  const price=q.price||p.price||null;
+  const fair=(S._cfFair&&isFinite(S._cfFair))?S._cfFair:null;
+  const inc=S.income||[], cf=S.cashflow||[], m=(S.metrics||[])[0]||{};
+  const rev0=inc[0]?.revenue, op0=inc[0]?.operatingIncome;
+  const opM=(rev0&&op0!=null)?op0/rev0:null;
+  const opM5=(()=>{ const xs=inc.slice(0,5).map(r=>(r.revenue&&r.operatingIncome!=null)?r.operatingIncome/r.revenue:null).filter(v=>v!=null); return xs.length?xs.reduce((s,v)=>s+v,0)/xs.length:null; })();
+  const fcf0=cf[0]?.freeCashFlow;
+  const fcfG=(()=>{ const a=cf[4]?.freeCashFlow, b=cf[0]?.freeCashFlow; return (a>0&&b>0)?(Math.pow(b/a,1/4)-1)*100:null; })();
+  const roic=(m.roic??m.returnOnInvestedCapital??m.returnOnCapitalEmployed??null);
+  const roicPct=roic!=null?roic*100:null;
+  let implied=null;
+  try{ if(typeof reverseDCF==='function'&&q.marketCap&&fcf0>0){ const g=reverseDCF(q.marketCap,fcf0,0.10); if(isFinite(g)) implied=g*100; } }catch(_){}
+  const meth=(S._cfMethods||[]).filter(r=>r.val), trim=S._cfTrimmed||[];
+  const survivors=meth.filter(r=>!trim.includes(r.val)).map(r=>r.val);
+  const floor=survivors.length?Math.min(...survivors):null;
+  const ceil=survivors.length?Math.max(...survivors):null;
+  const six=(typeof computeSixDimensions==='function')?(()=>{try{return computeSixDimensions(S);}catch(_){return null;}})():null;
+  const qual=(six&&typeof sixDimComposite==='function')?(()=>{try{return sixDimComposite(six);}catch(_){return null;}})():null;
+  const upcoming=(S.earnings||[]).filter(e=>e.date&&new Date(e.date)>new Date()&&(e.epsActual==null)).sort((a,b)=>new Date(a.date)-new Date(b.date)).slice(0,2);
+  return {sym:p.symbol||'—',name:p.companyName||'',price,fair,opM,opM5,fcfG,roicPct,implied,floor,ceil,qual,upcoming,
+          gap:(price&&fair)?(fair-price)/price*100:null};
+}
+
+/* ── machine-drafted thesis from current facts (Model View) ────── */
+function genModelThesis(){
+  const f=_stFacts();
+  const F=f.fair, P=f.price;
+  const z=F?[Math.round(F*0.80),Math.round(F*0.95),Math.round(F*1.05),Math.round(F*1.15)]:null;
+  const rating=f.gap==null?'WATCH':f.gap>=10?'ACCUMULATE':f.gap<=-10?'AVOID AT THIS PRICE':'HOLD';
+  return {
+    v:0, machine:true, date:new Date().toISOString().slice(0,10), priceAt:P, rating,
+    composite:F, validLo:f.floor?Math.round(f.floor*0.95):null, validHi:f.ceil?Math.round(f.ceil*1.05):null,
+    zones:z,
+    answer:`${f.name||f.sym} carries a quality composite of ${f.qual!=null?Math.round(f.qual):'—'}/100 with a trimmed-mean fair value of ${_stUSD(F)} across ${(S._cfMethods||[]).filter(r=>r.val).length} surviving methods. ${f.gap!=null?(f.gap>=0?`The market price sits ${f.gap.toFixed(0)}% below that estimate`:`The market price sits ${Math.abs(f.gap).toFixed(0)}% above that estimate`):''}${f.implied!=null&&f.fcfG!=null?`, while today's price implies ~${f.implied.toFixed(0)}% annual FCF growth against a delivered five-year record of ~${f.fcfG.toFixed(0)}%`:''}. Rated ${rating.toLowerCase()} pending analyst review — this draft was generated from the model alone.`,
+    narrative:[
+      `This narrative is machine-drafted from the loaded filings; press “Draft with AI” to generate a full editorial pass, then freeze it as v1. The quality picture: ${f.roicPct!=null?`returns on invested capital of ~${f.roicPct.toFixed(0)}% against a ~10% cost of capital`:'returns data unavailable'}, ${f.opM!=null?`operating margins of ${(f.opM*100).toFixed(0)}%`:''}${f.opM5!=null&&f.opM!=null?` versus a five-year average of ${(f.opM5*100).toFixed(0)}%`:''}.`,
+      `What the market believes: ${f.implied!=null?`the current price embeds roughly ${f.implied.toFixed(0)}% annual cash-flow growth for a decade`:'implied growth could not be solved'}${f.fcfG!=null?`, against a delivered record of ${f.fcfG.toFixed(0)}%`:''}. The gap between those two numbers is where this story will be argued.`
+    ],
+    pillars:[
+      {h:'The quality reading', p:`Composite quality ${f.qual!=null?Math.round(f.qual):'—'}/100 across six dimensions; ${f.roicPct!=null?`ROIC ~${f.roicPct.toFixed(0)}% vs ~10% cost of capital.`:''}`, cite:'intrinsic'},
+      {h:'The pricing gap', p:`${f.implied!=null&&f.fcfG!=null?`Implied growth ${f.implied.toFixed(1)}% vs delivered ${f.fcfG.toFixed(1)}% — the burden of proof currently sits on ${f.implied<f.fcfG?'the bears':'the bulls'}.`:'Implied vs delivered growth unavailable for this ticker.'}`, cite:'intrinsic'},
+      {h:'The named floor', p:`The lowest surviving valuation method lands at ${_stUSD(f.floor)} — the model's answer to “what if the optimism is wrong.”`, cite:'intrinsic'},
+    ],
+    killDefs:[
+      {id:1,name:'Returns spread collapses', p:'ROIC falls to or below the ~10% cost-of-capital assumption.', metric:'spread'},
+      {id:2,name:'The gap closes from the wrong side', p:'Reverse-DCF implied growth rises to meet the delivered five-year FCF record.', metric:'implied'},
+      {id:3,name:'The margin base erodes', p:'Operating margin falls below 50% of its own five-year average.', metric:'margin'},
+      {id:4,name:'Price exits the valid range', p:'Price closes below the bear floor or above the bull ceiling — the original question has changed.', metric:'range'},
+    ],
+    risks:[
+      {sev:'hi', tag:'Model · High', name:'Single-source data', p:'Every number here derives from one data vendor; a restated filing reprices the whole story.', watch:'next 10-Q vs loaded figures'},
+      {sev:'md', tag:'Valuation · Med', name:'Discount-rate sensitivity', p:'The composite leans on an 8% rate by design; at materially higher rates the fair value compresses toward price.', watch:'10Y yield'},
+      {sev:'md', tag:'Cyclical · Med', name:'Trend extrapolation', p:'Staged DCFs seed growth from the trailing record; a cycle peak in that record inflates every stage.', watch:'next two revenue prints'},
+    ],
+  };
+}
+
+/* ── live layer: lamps + zone, computed fresh each render ──────── */
+function _stLive(T){
+  const f=_stFacts(); const P=f.price;
+  const lamps=(T.killDefs||[]).map(k=>{
+    let state='dormant', read='—';
+    try{
+      if(k.metric==='spread'&&f.roicPct!=null){ const s=f.roicPct-10; read=`spread ${s>=0?'+':''}${s.toFixed(0)} pts vs cost of capital`; state=s<=0?'breached':s<3?'armed':'dormant'; }
+      if(k.metric==='implied'&&f.implied!=null&&f.fcfG!=null){ const g=f.fcfG-f.implied; read=`implied ${f.implied.toFixed(1)}% vs delivered ${f.fcfG.toFixed(1)}%`; state=g<=0?'breached':g<3?'armed':'dormant'; }
+      if(k.metric==='margin'&&f.opM!=null&&f.opM5!=null){ const r=f.opM/f.opM5; read=`margin at ${(r*100).toFixed(0)}% of 5Y average`; state=r<0.5?'breached':r<0.75?'armed':'dormant'; }
+      if(k.metric==='range'&&P&&T.validLo&&T.validHi){ read=`price ${_stUSD(P)} in $${T.validLo}–$${T.validHi}`; state=(P<T.validLo||P>T.validHi)?'breached':(P<T.validLo*1.05||P>T.validHi*0.95)?'armed':'dormant'; }
+    }catch(_){}
+    return {...k,state,read};
+  });
+  let zoneIdx=null, zoneName='—';
+  if(P&&T.zones){ const z=T.zones, names=['Full conviction','Accumulate','Hold, don\u2019t add','Patience','Trim into strength'];
+    zoneIdx=P<z[0]?0:P<z[1]?1:P<z[2]?2:P<z[3]?3:4; zoneName=names[zoneIdx]; }
+  return {price:P, gap:(P&&T.composite)?(T.composite/P-1)*100:null, lamps, zoneIdx, zoneName,
+          armed:lamps.filter(l=>l.state==='armed').length, breached:lamps.filter(l=>l.state==='breached').length};
+}
+
+/* ── renderer ──────────────────────────────────────────────────── */
+function renderStory(){
+  const root=document.getElementById('st-root'); if(!root) return;
+  if(!S.profile){ root.innerHTML='<div class="st-empty">Load a ticker to build its story.</div>'; return; }
+  const sym=S.profile.symbol;
+  const versions=_stVersions(sym);
+  const T=versions.length?versions[versions.length-1]:genModelThesis();
+  const L=_stLive(T);
+  const f=_stFacts();
+  const ratingCls=/ACCUM|BUY/.test(T.rating)?'pos':/AVOID|SELL/.test(T.rating)?'neg':'warn';
+  const zoneNames=['Full conviction — margin of safety vs even the bear case','Accumulate — base case offers meaningful upside','Hold, don\u2019t add — the record is mostly paid for','Patience — let the next catalyst speak first','Trim into strength — price assumes the bull case'];
+  const zoneRanges=T.zones?[`< $${T.zones[0]}`,`$${T.zones[0]} – ${T.zones[1]}`,`$${T.zones[1]} – ${T.zones[2]}`,`$${T.zones[2]} – ${T.zones[3]}`,`> $${T.zones[3]}`]:[];
+  const cite=t=>`<span class="st-cite" onclick="switchTab('${t}');window.scrollTo({top:0})">→ ${t==='intrinsic'?'Intrinsic Value':t==='financials'?'Financials':'Record'}</span>`;
+
+  root.innerHTML=`
+  <div class="st-stamp">
+    <div class="st-frozen">
+      <span class="st-rating ${ratingCls}">${T.rating}</span>
+      <span><b>${T.machine?'Model View (unfrozen)':'Thesis v'+T.v}</b></span><span class="sep">·</span>
+      <span>${T.machine?'generated now':'published '+T.date}</span><span class="sep">·</span>
+      <span>written at ${_stUSD(T.priceAt)}</span><span class="sep">·</span>
+      <span>valid ${T.validLo&&T.validHi?('$'+T.validLo+' – $'+T.validHi):'—'}</span><span class="sep">·</span>
+      <button class="st-vbtn" onclick="document.getElementById('st-vd').classList.toggle('open')">versions (${versions.length}) ▾</button>
+      ${T.machine?'<span class="st-draft">MACHINE-DRAFTED · NOT ANALYST-REVIEWED</span>':''}
+    </div>
+    <div class="st-live">
+      <span><span class="st-lk">Today</span><span class="st-lv tnum">${_stUSD(L.price)}</span></span>
+      <span><span class="st-lk">Zone</span><span class="st-zonechip">${L.zoneName.toUpperCase()}</span></span>
+      <span><span class="st-lk">Gap to composite</span><span class="st-lv tnum">${L.gap!=null?(L.gap>=0?'+':'')+L.gap.toFixed(1)+'%':'—'}</span></span>
+      <span><span class="st-lk">Kill criteria</span><span class="st-lv">${L.armed} armed · ${L.breached} breached</span></span>
+      <span><span class="st-lk">Next catalyst</span><span class="st-lv">${f.upcoming[0]?new Date(f.upcoming[0].date).toLocaleDateString('en-US',{month:'short',day:'numeric'}).toUpperCase()+' · earnings':'—'}</span></span>
+    </div>
+    <div class="st-vdrawer" id="st-vd">
+      ${versions.length?versions.slice().reverse().map(v=>`<div class="st-vrow"><span class="v">v${v.v}</span><span class="d">${v.date} · at ${_stUSD(v.priceAt)}</span><span>${v.note||v.rating}</span></div>`).join(''):'<div class="st-vrow"><span class="v">—</span><span class="d"></span><span>No frozen versions yet. Freeze the current draft to start the thesis track record.</span></div>'}
+    </div>
+  </div>
+
+  <div class="st-actions">
+    <button class="st-btn primary" onclick="stDraftAI()" id="st-ai-btn">✦ Draft with AI</button>
+    <button class="st-btn" onclick="stFreeze()">Freeze as v${versions.length+1}</button>
+    ${versions.length?'<button class="st-btn" onclick="stRetire()">Retire thesis</button>':''}
+  </div>
+
+  <section class="st-blk"><div class="st-no">Block 1 · The answer <span class="st-speed">EVENT-DRIVEN</span></div>
+    <p class="st-answer">${T.answer||''}</p></section>
+
+  <section class="st-blk"><div class="st-no">Block 2 · The narrative <span class="st-speed">EVENT-DRIVEN</span></div>
+    <div class="st-prose">${(T.narrative||[]).map(p=>`<p>${p} ${cite('intrinsic')}</p>`).join('')}</div>
+    <div class="st-src">Rule: no prices in this prose — price-conditional language only. Frozen until a re-issue trigger fires.</div></section>
+
+  <section class="st-blk"><div class="st-no">Block 3 · The thesis, numbered <span class="st-speed">EVENT-DRIVEN</span></div>
+    <div class="st-pillars">${(T.pillars||[]).map((p,i)=>`<div class="st-pillar"><div class="st-pn">${i+1}</div><div><h4>${p.h}</h4><p>${p.p} ${cite(p.cite||'intrinsic')}</p></div></div>`).join('')}</div></section>
+
+  <section class="st-blk"><div class="st-no">Block 4 · What it's worth <span class="st-speed">QUARTERLY</span> <span class="st-speed live">PRICE LINE LIVE</span></div>
+    <h3 class="st-h">${(S._cfMethods||[]).filter(r=>r.val).length} surviving models, the trim, and three futures.</h3>
+    <div class="st-ff" id="st-ff"></div>
+    <div class="st-scen">
+      <div class="st-sc bear"><div class="st-sck">Bear · lowest survivor</div><div class="st-scv tnum">${_stUSD(f.floor)}</div><div class="st-scu tnum">${f.floor&&L.price?((f.floor/L.price-1)*100).toFixed(0)+'% from here':''}</div><p>The most pessimistic method the trim allowed to vote — the model's named floor.</p></div>
+      <div class="st-sc base"><div class="st-sck">Base · trimmed composite</div><div class="st-scv tnum">${_stUSD(T.composite)}</div><div class="st-scu tnum">${T.composite&&L.price?((T.composite/L.price-1)*100).toFixed(0)+'% from here':''}</div><p>The record, extended and discounted, with the extremes removed.</p></div>
+      <div class="st-sc bull"><div class="st-sck">Bull · highest survivor</div><div class="st-scv tnum">${_stUSD(f.ceil)}</div><div class="st-scu tnum">${f.ceil&&L.price?((f.ceil/L.price-1)*100).toFixed(0)+'% from here':''}</div><p>The most optimistic surviving method — what being very right is worth.</p></div>
+    </div></section>
+
+  <section class="st-blk"><div class="st-no">Block 5 · The plan <span class="st-speed">EVENT-DRIVEN</span> <span class="st-speed live">ZONE LIVE</span></div>
+    <div class="st-zones">${zoneRanges.map((r,i)=>`<div class="st-zone${L.zoneIdx===i?' on':''}"><span><b>${zoneNames[i].split(' — ')[0]}</b> — ${zoneNames[i].split(' — ')[1]}</span><span class="r">${r}</span><span class="here">YOU ARE HERE</span></div>`).join('')}</div>
+    <div class="st-card" style="margin-top:14px">
+      ${f.upcoming.length?f.upcoming.map(e=>`<div class="st-cat"><span class="d">${new Date(e.date).toLocaleDateString('en-US',{month:'short',day:'numeric'}).toUpperCase()}</span><span>Earnings — watch the growth print against the ${f.implied!=null?'~'+f.implied.toFixed(0)+'%':''} the price assumes${e.epsEstimated?', consensus EPS '+(+e.epsEstimated).toFixed(2):''}.</span></div>`).join(''):'<div class="st-cat"><span class="d">—</span><span>No upcoming earnings dates in the loaded data.</span></div>'}
+    </div></section>
+
+  <section class="st-blk"><div class="st-no">Block 6 · Kill criteria <span class="st-speed">DEFINITIONS FROZEN</span> <span class="st-speed live">STATUS LIVE</span></div>
+    <div class="st-card">${L.lamps.map(k=>`<div class="st-kill"><span class="st-lamp ${k.state}">${k.state.toUpperCase()}</span><div><b>${k.id} · ${k.name}</b><p>${k.p}</p><div class="w">${k.read}</div></div></div>`).join('')}</div>
+    <div class="st-src">A breach forces a re-issue or retirement — it never gets argued with in place.</div></section>
+
+  <section class="st-blk"><div class="st-no">Block 7 · Risks, ranked <span class="st-speed">EVENT-DRIVEN</span></div>
+    <div class="st-card">${(T.risks||[]).map(r=>`<div class="st-risk"><span class="st-rtag ${r.sev}">${r.tag}</span><div><b>${r.name}</b><p>${r.p}</p><div class="w" style="font-family:var(--mono,monospace);font-size:9.5px;color:var(--mute);margin-top:3px">watch: ${r.watch}</div></div></div>`).join('')}</div></section>`;
+
+  _stField(T,L);
+}
+
+/* football field — bars frozen with thesis methods, price line live */
+function _stField(T,L){
+  const host=document.getElementById('st-ff'); if(!host) return;
+  const meth=(S._cfMethods||[]).filter(r=>r.val); if(!meth.length){host.innerHTML='<div class="st-empty">Run the Intrinsic Value tab once to populate the field.</div>';return;}
+  const trim=S._cfTrimmed||[];
+  const vals=meth.map(r=>r.val).concat(L.price||[]).filter(Boolean);
+  const MIN=Math.min(...vals)*0.88, MAX=Math.max(...vals)*1.06, pct=v=>((v-MIN)/(MAX-MIN)*100);
+  host.innerHTML=meth.map(r=>{const cut=trim.includes(r.val);const lo=r.val*0.93,hi=r.val*1.07;
+    return `<div class="st-ffrow${cut?' cut':''}"><div class="st-ffn">${r.name}<span>${r.type}${cut?' · trimmed':''}</span></div><div class="st-fft"><div class="st-ffb" style="left:${pct(lo)}%;width:${(pct(hi)-pct(lo))}%"></div></div><div class="st-ffv tnum">${_stUSD(r.val)}</div></div>`;}).join('')
+    +`<div class="st-ffaxis" id="st-ffax"></div>`;
+  requestAnimationFrame(()=>{
+    const fr=host.getBoundingClientRect(), tr=host.querySelector('.st-fft')?.getBoundingClientRect(); if(!tr)return;
+    const x=v=>(tr.left-fr.left)+pct(v)/100*tr.width;
+    if(T.composite){const lo=T.composite*0.95,hi=T.composite*1.05;
+      const band=document.createElement('div');band.className='st-ffband';Object.assign(band.style,{left:x(lo)+'px',width:(x(hi)-x(lo))+'px',top:'14px',bottom:'28px'});host.appendChild(band);}
+    if(L.price){const line=document.createElement('div');line.className='st-ffline';Object.assign(line.style,{left:x(L.price)+'px',top:'14px',bottom:'28px'});host.appendChild(line);
+      const tag=document.createElement('div');tag.className='st-fftag';Object.assign(tag.style,{left:x(L.price)+'px',top:'-2px'});tag.textContent='today '+_stUSD(L.price);host.appendChild(tag);}
+    const ax=document.getElementById('st-ffax');ax.style.marginLeft=(tr.left-fr.left-18)+'px';ax.style.width=tr.width+'px';
+    const step=Math.max(5,Math.round((MAX-MIN)/6/5)*5);
+    for(let v=Math.ceil(MIN/step)*step; v<MAX; v+=step){const s=document.createElement('span');s.style.left=pct(v)+'%';s.textContent='$'+v;ax.appendChild(s);}
+  });
+}
+
+/* freeze / retire / AI draft */
+function stFreeze(note){
+  const sym=S.profile?.symbol; if(!sym) return;
+  const versions=_stVersions(sym);
+  const T=versions.length?{...versions[versions.length-1]}:genModelThesis();
+  const f=_stFacts();
+  T.v=versions.length+1; T.machine=false; T.date=new Date().toISOString().slice(0,10);
+  T.priceAt=f.price; T.composite=f.fair??T.composite;
+  T.note=note||('Frozen at '+_stUSD(f.price)+' · composite '+_stUSD(T.composite));
+  versions.push(T); _stSave(sym,versions); renderStory();
+}
+function stRetire(){
+  const sym=S.profile?.symbol; if(!sym) return;
+  if(confirm('Retire this thesis? Version history is kept; the Story returns to Model View.')){
+    const versions=_stVersions(sym);
+    if(versions.length){versions[versions.length-1]._retired=true;}
+    _stSave(sym,versions.filter(v=>!v._retired)); renderStory();
+  }
+}
+async function stDraftAI(){
+  const key=getClaudeKey(); if(!key){showKeyBar();return;}
+  if(!S.profile) return;
+  const btn=document.getElementById('st-ai-btn'); btn.disabled=true; btn.textContent='Drafting…';
+  const f=_stFacts();
+  const sys='You are a senior equity analyst writing a versioned investment thesis. Respond with ONLY valid JSON, no markdown fences, matching exactly: {"answer":string(~80 words, the whole thesis in one paragraph),"narrative":[3 strings, each one paragraph],"pillars":[{"h":string,"p":string} x3],"risks":[{"sev":"hi"|"md","tag":string,"name":string,"p":string,"watch":string} x4]}. CRITICAL RULE: never write a dollar price in answer/narrative/pillars — use price-conditional language only (e.g. "the market pays for X% growth"). Risks end with the most worrying one acknowledged.';
+  const ctx=(typeof buildContext==='function')?buildContext():'';
+  const extra=`\nMODEL FACTS: trimmed composite ${_stUSD(f.fair)}; implied FCF growth ${f.implied!=null?f.implied.toFixed(1)+'%':'n/a'} vs delivered 5Y ${f.fcfG!=null?f.fcfG.toFixed(1)+'%':'n/a'}; ROIC ${f.roicPct!=null?f.roicPct.toFixed(0)+'%':'n/a'}; quality composite ${f.qual!=null?Math.round(f.qual):'n/a'}/100; floor (lowest surviving method) ${_stUSD(f.floor)}.`;
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:CLAUDE_MODEL,max_tokens:1600,system:sys,messages:[{role:'user',content:ctx+extra}]})});
+    if(!resp.ok){const e=await resp.json().catch(()=>({}));throw new Error('Claude '+resp.status+': '+(e?.error?.message||'unknown'));}
+    const data=await resp.json();
+    const raw=(data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('').replace(/```json|```/g,'').trim();
+    const j=JSON.parse(raw);
+    const sym=S.profile.symbol, versions=_stVersions(sym);
+    const T=versions.length?{...versions[versions.length-1]}:genModelThesis();
+    Object.assign(T,{answer:j.answer,narrative:j.narrative,pillars:(j.pillars||[]).map(p=>({...p,cite:'intrinsic'})),risks:j.risks,
+      machine:false,v:versions.length+1,date:new Date().toISOString().slice(0,10),priceAt:f.price,composite:f.fair??T.composite,
+      note:'AI-drafted re-issue at '+_stUSD(f.price)});
+    versions.push(T); _stSave(sym,versions); renderStory();
+  }catch(err){ alert('Draft failed: '+err.message); btn.disabled=false; btn.textContent='✦ Draft with AI'; }
+}
 </script>
 </body>
 </html>

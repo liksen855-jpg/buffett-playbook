@@ -1,9 +1,9 @@
 // Global editorial "Quality Picks" — refactored to use shared auth + KV utilities.
 
-import { getSession, setNoCache } from './lib/auth.js';
-import { kvConfigured, kvGet, kvSet } from './lib/kv.js';
-import { checkRateLimit, rateLimitHeaders } from './lib/rate-limit.js';
-import { notifyPicks } from './lib/discord.js';
+import { getSession, setNoCache } from '../lib/auth.js';
+import { kvConfigured, kvGet, kvSet } from '../lib/kv.js';
+import { checkRateLimit, rateLimitHeaders } from '../lib/rate-limit.js';
+import { notifyPicks } from '../lib/discord.js';
 
 const KEY = 'picks:v1';
 

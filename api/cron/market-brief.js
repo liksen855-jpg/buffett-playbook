@@ -1,8 +1,8 @@
 // Cron job — runs daily at 8:00 AM UTC (4am ET / 8am MYT).
 // Fetches quotes for the watchlist and posts a morning brief to Discord.
 
-import { notifyMarketBrief } from '../lib/discord.js';
-import { fmpBatchQuotes } from '../lib/fmp.js';
+import { notifyMarketBrief } from '../../lib/discord.js';
+import { fmpBatchQuotes } from '../../lib/fmp.js';
 
 const WATCHLIST = [
   'SPY', 'QQQ', 'DIA',       // indices

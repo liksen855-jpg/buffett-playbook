@@ -11,7 +11,7 @@
  * Usage:
  *   GET /api/batch-quotes?symbols=AAPL,MSFT,GOOGL
  *   GET /api/batch-quotes?symbols=AAPL,MSFT,GOOGL&source=fmp
- *   GET /api/batch-quotes?symbols=SPY,QQQ&source=yahoo
+ *   GET /api/batch-quotes?symbols=SPY,QQQ&source=yahoo  (fallback, no key needed)
  *
  * Headers:
  *   x-fmp-key: YOUR_FMP_KEY  (optional — overrides shared demo key)
@@ -20,9 +20,9 @@
  *   { "ts": "2026-06-04T...", "count": 3, "data": { "AAPL": {...}, ... } }
  */
 
-import { setCORS, setShortCache } from './lib/auth.js';
-import { checkRateLimit, rateLimitHeaders } from './lib/rate-limit.js';
-import { fmpBatchQuotes } from './lib/fmp.js';
+import { setCORS, setShortCache } from '../lib/auth.js';
+import { checkRateLimit, rateLimitHeaders } from '../lib/rate-limit.js';
+import { fmpBatchQuotes } from '../lib/fmp.js';
 
 const YF_BASE = 'https://query1.finance.yahoo.com/v8/finance/chart';
 
