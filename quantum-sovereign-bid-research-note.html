@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quantum's Sovereign Bid — Research Note</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B1220;
+    --paper:#F7F5F0;
+    --paper2:#F1EEE6;
+    --navy:#1C2B4A;
+    --brass:#8C6D31;
+    --brass-soft:#9B7B3F;
+    --slate:#5A6472;
+    --slate-light:#8993A1;
+    --rule:#D8D2C4;
+    --rule-strong:#B9B19D;
+    --warn:#9C3A1E;
+    --warn-bg:#F3E6E0;
+    --good:#3F5E4A;
+    --good-bg:#E7EEE6;
+    --maxw:760px;
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--navy);}
+
+  .serif{font-family:'Source Serif 4', serif;}
+  .mono{font-family:'IBM Plex Mono', monospace;}
+
+  /* ===== Masthead ===== */
+  .masthead{
+    border-bottom:3px solid var(--ink);
+    padding:28px 24px 18px;
+    max-width:var(--maxw);
+    margin:0 auto;
+  }
+  .masthead-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    flex-wrap:wrap;
+    gap:6px 12px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--slate);
+    margin-bottom:18px;
+  }
+  .masthead-top span.tag{
+    color:var(--brass);
+    font-weight:600;
+  }
+  h1.title{
+    font-family:'Source Serif 4', serif;
+    font-weight:700;
+    font-size:clamp(2rem, 7vw, 2.85rem);
+    line-height:1.05;
+    letter-spacing:-0.01em;
+    margin:0 0 10px;
+  }
+  .subtitle{
+    font-size:1.02rem;
+    color:var(--slate);
+    max-width:54ch;
+    margin:0 0 18px;
+  }
+  .meta-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px 18px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:var(--slate);
+    border-top:1px solid var(--rule);
+    padding-top:14px;
+  }
+  .meta-row strong{color:var(--ink); font-weight:600;}
+
+  /* ===== Ticker strip — signature element ===== */
+  .ticker-wrap{
+    background:var(--ink);
+    overflow:hidden;
+    border-bottom:1px solid var(--brass);
+  }
+  .ticker-strip{
+    display:flex;
+    width:max-content;
+    animation:scroll-tick 38s linear infinite;
+  }
+  .ticker-strip:hover{animation-play-state:paused;}
+  @keyframes scroll-tick{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+  .tick{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    padding:11px 26px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    white-space:nowrap;
+    border-right:1px solid rgba(255,255,255,0.12);
+    color:#E8E5DC;
+  }
+  .tick .sym{color:#fff; font-weight:600; letter-spacing:.02em;}
+  .tick .amt{color:var(--brass-soft); font-weight:600;}
+  .tick .role{color:#8A93A3; font-size:11px;}
+  @media (prefers-reduced-motion: reduce){
+    .ticker-strip{animation:none;}
+  }
+
+  /* ===== Body shell ===== */
+  .shell{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:0 24px 80px;
+  }
+
+  /* Lede / thesis block */
+  .lede{
+    padding:32px 0 8px;
+  }
+  .lede p{
+    font-family:'Source Serif 4', serif;
+    font-size:1.18rem;
+    line-height:1.55;
+    color:var(--ink);
+    margin:0 0 18px;
+  }
+  .lede p:first-child::first-letter{
+    font-size:3.4rem;
+    font-weight:700;
+    float:left;
+    line-height:0.82;
+    padding-right:9px;
+    color:var(--navy);
+  }
+
+  /* Pull quote — the core distinction */
+  .pull{
+    margin:30px 0 36px;
+    padding:22px 22px 22px 22px;
+    border-left:3px solid var(--brass);
+    background:var(--paper2);
+  }
+  .pull .pull-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--brass);
+    font-weight:600;
+    margin-bottom:10px;
+    display:block;
+  }
+  .pull .line{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13.5px;
+    line-height:1.85;
+    color:var(--ink);
+  }
+  .pull .line b{color:var(--navy);}
+
+  /* Section headers */
+  .section{
+    padding-top:46px;
+    margin-top:46px;
+    border-top:1px solid var(--rule);
+  }
+  .section:first-of-type{border-top:none; margin-top:8px; padding-top:8px;}
+  .sec-num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:var(--brass);
+    letter-spacing:.12em;
+    font-weight:600;
+    margin-bottom:6px;
+    display:block;
+  }
+  .sec-title{
+    font-family:'Source Serif 4', serif;
+    font-weight:700;
+    font-size:1.55rem;
+    margin:0 0 18px;
+    letter-spacing:-0.01em;
+  }
+  .sec-intro{
+    color:var(--slate);
+    font-size:0.97rem;
+    margin:0 0 22px;
+    max-width:58ch;
+  }
+
+  h3.sub{
+    font-family:'Source Serif 4', serif;
+    font-weight:600;
+    font-size:1.12rem;
+    margin:28px 0 10px;
+    color:var(--ink);
+  }
+  p{margin:0 0 15px; font-size:0.985rem;}
+  ul, ol{margin:0 0 18px; padding-left:1.3em;}
+  li{margin-bottom:7px; font-size:0.985rem;}
+
+  /* Order cards */
+  .order-card{
+    background:#fff;
+    border:1px solid var(--rule);
+    border-radius:3px;
+    padding:20px 20px 18px;
+    margin-bottom:18px;
+  }
+  .order-card .order-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:#fff;
+    background:var(--navy);
+    padding:3px 9px;
+    border-radius:2px;
+    display:inline-block;
+    margin-bottom:10px;
+  }
+  .order-card h4{
+    font-family:'Source Serif 4', serif;
+    font-size:1.08rem;
+    margin:0 0 12px;
+  }
+  .order-card .caveat{
+    margin-top:12px;
+    padding-top:12px;
+    border-top:1px dashed var(--rule-strong);
+    font-size:.88rem;
+    color:var(--slate);
+  }
+  .order-card .caveat b{color:var(--warn);}
+
+  /* Company cards */
+  .co-card{
+    border:1px solid var(--rule);
+    background:#fff;
+    border-radius:3px;
+    margin-bottom:14px;
+    overflow:hidden;
+  }
+  .co-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    padding:14px 18px;
+    background:var(--paper2);
+    border-bottom:1px solid var(--rule);
+  }
+  .co-head-left{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;}
+  .co-name{font-family:'Source Serif 4', serif; font-weight:600; font-size:1.05rem;}
+  .co-tick{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--navy);
+    background:#fff;
+    border:1px solid var(--rule-strong);
+    padding:1px 7px;
+    border-radius:2px;
+  }
+  .co-amt{
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:600;
+    font-size:.95rem;
+    color:var(--brass);
+    white-space:nowrap;
+  }
+  .co-body{padding:16px 18px 18px;}
+  .co-body p{margin-bottom:10px; font-size:.93rem;}
+  .co-tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;}
+  .co-tags span{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    color:var(--slate);
+    background:var(--paper2);
+    border:1px solid var(--rule);
+    padding:2px 8px;
+    border-radius:10px;
+  }
+  .co-flag{
+    margin-top:12px;
+    font-size:.85rem;
+    background:var(--warn-bg);
+    color:var(--warn);
+    padding:9px 12px;
+    border-radius:2px;
+    border-left:2px solid var(--warn);
+  }
+
+  /* Tier label */
+  .tier-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--slate);
+    margin:26px 0 12px;
+    padding-bottom:6px;
+    border-bottom:1px solid var(--rule);
+  }
+
+  /* Tables */
+  .tbl-wrap{
+    overflow-x:auto;
+    margin-bottom:22px;
+    border:1px solid var(--rule);
+    -webkit-overflow-scrolling:touch;
+    background:
+      linear-gradient(to right, var(--paper) 0%, rgba(247,245,240,0) 16px) 0 0,
+      linear-gradient(to left, var(--paper) 0%, rgba(247,245,240,0) 16px) 100% 0;
+    background-repeat:no-repeat;
+    background-size:16px 100%, 16px 100%;
+    background-attachment:local, local;
+  }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:.87rem;
+    min-width:480px;
+  }
+  thead th{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    text-align:left;
+    background:var(--navy);
+    color:#fff;
+    padding:10px 12px;
+    font-weight:600;
+  }
+  tbody td{
+    padding:9px 12px;
+    border-bottom:1px solid var(--rule);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.84rem;
+  }
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:rgba(0,0,0,0.015);}
+  td.up{color:var(--good); font-weight:600;}
+  td.tick-cell{color:var(--navy); font-weight:600;}
+
+  /* Timeline */
+  .tl{position:relative; padding-left:26px; margin:18px 0 26px;}
+  .tl::before{
+    content:'';
+    position:absolute; left:6px; top:4px; bottom:4px;
+    width:1px; background:var(--rule-strong);
+  }
+  .tl-item{position:relative; margin-bottom:22px;}
+  .tl-item::before{
+    content:'';
+    position:absolute; left:-26px; top:4px;
+    width:9px; height:9px;
+    background:var(--brass);
+    border-radius:50%;
+    border:2px solid var(--paper);
+    box-shadow:0 0 0 1px var(--brass);
+  }
+  .tl-when{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--brass);
+    font-weight:600;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    display:block;
+    margin-bottom:4px;
+  }
+  .tl-item h4{font-family:'Source Serif 4', serif; font-size:1rem; margin:0 0 6px;}
+  .tl-item p{font-size:.9rem; margin-bottom:0; color:var(--slate);}
+
+  /* Risk register */
+  .risk-row{
+    display:flex;
+    gap:14px;
+    padding:14px 0;
+    border-bottom:1px solid var(--rule);
+  }
+  .risk-row:last-child{border-bottom:none;}
+  .risk-icon{
+    flex:0 0 28px;
+    height:28px;
+    border-radius:50%;
+    background:var(--warn-bg);
+    color:var(--warn);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:700;
+    font-size:12px;
+  }
+  .risk-text h4{font-family:'IBM Plex Sans',sans-serif; font-weight:600; font-size:.93rem; margin:0 0 3px;}
+  .risk-text p{font-size:.87rem; color:var(--slate); margin:0;}
+
+  /* Macro callout */
+  .macro-box{
+    background:var(--ink);
+    color:#E8E5DC;
+    border-radius:4px;
+    padding:24px 22px;
+    margin:20px 0 26px;
+  }
+  .macro-box .stat-row{
+    display:flex;
+    gap:28px;
+    flex-wrap:wrap;
+    margin:16px 0 18px;
+  }
+  .macro-box .stat{flex:1 1 120px;}
+  .macro-box .stat .num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:1.9rem;
+    font-weight:600;
+    color:#fff;
+    line-height:1;
+  }
+  .macro-box .stat .lbl{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    color:#8A93A3;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    margin-top:4px;
+  }
+  .macro-box p{color:#C9C5BA; font-size:.92rem; margin-bottom:12px;}
+  .macro-box .symmetry{
+    margin-top:14px;
+    padding-top:14px;
+    border-top:1px solid rgba(255,255,255,0.15);
+    font-family:'Source Serif 4', serif;
+    font-style:italic;
+    font-size:.98rem;
+    color:#F0EDE4;
+  }
+
+  /* Fact-check table verdicts */
+  .v-ok{color:var(--good); font-weight:700;}
+  .v-warn{color:var(--brass); font-weight:700;}
+  .v-bad{color:var(--warn); font-weight:700;}
+
+  /* Appendix ticker grid */
+  .appendix-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:14px;
+  }
+  .ap-item{
+    border:1px solid var(--rule);
+    background:#fff;
+    padding:10px 12px;
+    border-radius:2px;
+  }
+  .ap-item .ap-tick{font-family:'IBM Plex Mono', monospace; font-weight:700; color:var(--navy); font-size:.85rem;}
+  .ap-item .ap-name{font-size:.78rem; color:var(--slate); display:block; margin-top:1px;}
+  .ap-item .ap-role{font-size:.72rem; color:var(--brass); display:block; margin-top:4px; font-family:'IBM Plex Mono', monospace;}
+
+  /* Footer */
+  .footer{
+    border-top:3px solid var(--ink);
+    padding:26px 24px 50px;
+    max-width:var(--maxw);
+    margin:0 auto;
+  }
+  .footer p{
+    font-size:.8rem;
+    color:var(--slate-light);
+    margin-bottom:8px;
+  }
+  .footer .disclaimer{
+    font-style:italic;
+  }
+
+  /* index nav (desktop side rail) */
+  .toc{
+    display:none;
+  }
+  @media (min-width: 980px){
+    body{position:relative;}
+    .toc{
+      display:block;
+      position:fixed;
+      top:120px;
+      left:calc(50% - 380px - 230px);
+      width:200px;
+      font-family:'IBM Plex Mono', monospace;
+      font-size:11px;
+    }
+    .toc a{
+      display:block;
+      color:var(--slate);
+      text-decoration:none;
+      padding:6px 0;
+      border-left:2px solid transparent;
+      padding-left:12px;
+      letter-spacing:.02em;
+    }
+    .toc a:hover{color:var(--navy); border-left-color:var(--brass);}
+    .toc .toc-label{
+      color:var(--brass);
+      text-transform:uppercase;
+      letter-spacing:.1em;
+      font-size:10px;
+      margin-bottom:10px;
+      padding-left:12px;
+      font-weight:600;
+    }
+  }
+
+  /* ============ RESPONSIVE ============ */
+
+  /* Tablet / small desktop: tighten max-width usage, keep comfortable reading */
+  @media (max-width: 760px){
+    .meta-row{ font-size:11px; }
+  }
+
+  /* Phones */
+  @media (max-width: 600px){
+    .masthead{padding:20px 18px 14px;}
+    .shell{padding:0 18px 56px;}
+    .footer{padding:22px 18px 44px;}
+
+    h1.title{ font-size:clamp(1.7rem, 9vw, 2.2rem); }
+    .subtitle{ font-size:.95rem; max-width:none; }
+
+    .ticker-wrap{ }
+    .tick{ padding:10px 18px; font-size:11.5px; gap:7px; }
+    .ticker-strip{ animation-duration:26s; }
+
+    .lede{ padding:24px 0 4px; }
+    .lede p{ font-size:1.05rem; }
+    .lede p:first-child::first-letter{ font-size:2.7rem; padding-right:7px; }
+
+    .pull{ padding:18px 16px; margin:24px 0 28px; }
+    .pull .line{ font-size:12.5px; line-height:1.75; }
+
+    .section{ padding-top:36px; margin-top:36px; }
+    .sec-title{ font-size:1.32rem; }
+    .sec-intro{ max-width:none; }
+
+    .order-card{ padding:16px 16px 14px; }
+    .co-head{ flex-direction:column; align-items:flex-start; gap:6px; padding:13px 15px; }
+    .co-amt{ font-size:.92rem; }
+    .co-body{ padding:14px 15px 16px; }
+
+    .tier-label{ margin:22px 0 10px; }
+
+    table{ font-size:.82rem; min-width:420px; }
+    thead th{ padding:9px 10px; font-size:10px; }
+    tbody td{ padding:8px 10px; font-size:.8rem; }
+
+    .tl{ padding-left:22px; }
+    .tl-item::before{ left:-22px; }
+
+    .risk-row{ gap:11px; padding:12px 0; }
+    .risk-icon{ flex:0 0 24px; height:24px; font-size:11px; }
+    .risk-text h4{ font-size:.9rem; }
+    .risk-text p{ font-size:.84rem; }
+
+    .macro-box{ padding:20px 16px; }
+    .macro-box .stat-row{ gap:14px 16px; }
+    .macro-box .stat{ flex:1 1 90px; }
+    .macro-box .stat .num{ font-size:1.55rem; }
+    .macro-box .stat .lbl{ font-size:9.5px; }
+    .macro-box .symmetry{ font-size:.92rem; }
+
+    .appendix-grid{ grid-template-columns:1fr; gap:8px; }
+
+    /* comfortable tap targets */
+    a{ padding:1px 0; }
+  }
+
+  /* Very small phones */
+  @media (max-width: 380px){
+    h1.title{ font-size:1.55rem; }
+    .masthead-top{ font-size:10px; }
+    .meta-row{ font-size:10.5px; gap:8px 14px; }
+    .pull .line{ font-size:11.5px; }
+    .co-tick{ font-size:11px; }
+    .macro-box .stat-row{ flex-wrap:wrap; }
+    .macro-box .stat{ flex:1 1 100%; }
+  }
+
+  /* Respect reduced-motion preference already set above for ticker;
+     also avoid layout jank on hover-less touch devices */
+  @media (hover: none){
+    .toc a:hover{ color:var(--slate); border-left-color:transparent; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="toc" aria-label="Section index">
+  <div class="toc-label">Contents</div>
+  <a href="#summary">I — Summary</a>
+  <a href="#catalysts">II — Catalysts</a>
+  <a href="#map">III — Beneficiaries</a>
+  <a href="#reaction">IV — Market Reaction</a>
+  <a href="#timeline">V — Timeline</a>
+  <a href="#risk">VI — Risk Register</a>
+  <a href="#macro">VII — Macro Backdrop</a>
+  <a href="#gaps">VIII — Open Gaps</a>
+  <a href="#appendix">Appendix — Tickers</a>
+</nav>
+
+<header class="masthead">
+  <div class="masthead-top">
+    <span><span class="tag">Members Research</span> · Quantum &amp; Policy</span>
+    <span>23 Jun 2026</span>
+  </div>
+  <h1 class="title">Quantum's Sovereign Bid</h1>
+  <p class="subtitle">How a $2.013bn equity-for-grants program — and the executive orders layered on top of it — are reshaping who wins in quantum computing, and why the two catalysts are not the same trade.</p>
+  <div class="meta-row">
+    <span>Coverage: <strong>9 funded issuers</strong></span>
+    <span>Program: <strong>CHIPS Act, May 21 2026</strong></span>
+    <span>Policy: <strong>2 Executive Orders, Jun 22 2026</strong></span>
+  </div>
+</header>
+
+<div class="ticker-wrap" aria-label="Funded companies ticker">
+  <div class="ticker-strip" id="tickerStrip">
+    <!-- set x2 via JS-free duplication below for seamless loop -->
+  </div>
+</div>
+
+<div class="shell">
+
+  <section class="lede">
+    <p>Washington has taken equity stakes in nine quantum computing companies — not granted them money, <em>bought into them</em> — in a $2.013 billion CHIPS Act program that closed weeks before this month's executive orders gave the sector a formal national strategy. The two events are routinely conflated in coverage. They shouldn't be: one moved capital and ownership; the other moved policy and demand. This note separates them, maps who actually benefits and how, and weighs the case against the backdrop of a market whose breadth — illustrated starkly by this week's renewed circuit-breaker halt in Seoul — is thinner than the headlines suggest.</p>
+  </section>
+
+  <div class="pull">
+    <span class="pull-label">The distinction that matters</span>
+    <div class="line">
+      <b>Executive Orders</b> (Jun 22) → demand signal + strategic designation. <b>Zero new dollars appropriated.</b><br>
+      <b>CHIPS Funding Program</b> (May 21) → $2.013bn in actual capital, <b>in exchange for equity</b> in nine recipients.<br>
+      <span style="color:var(--slate)">→ The funding program is the investable event. The orders are the policy scaffold built on top of it.</span>
+    </div>
+  </div>
+
+  <!-- ================= I. SUMMARY ================= -->
+  <section class="section" id="summary">
+    <span class="sec-num">I.</span>
+    <h2 class="sec-title">Executive Summary</h2>
+    <ul>
+      <li><strong>The mechanism is the Intel precedent, repeated at scale.</strong> In August 2025, Washington converted CHIPS grants into a 9.9% Intel equity stake. The same architecture — federal capital for federal ownership — has now been extended across nine quantum companies simultaneously.</li>
+      <li><strong>Direct, publicly traded beneficiaries:</strong> IBM, GlobalFoundries (GFS), D-Wave (QBTS), Rigetti (RGTI), and Infleqtion (INFQ).</li>
+      <li><strong>Sentiment beneficiaries that received no funding</strong> rallied anyway on sector read-through: IonQ (IONQ), Quantum Computing Inc. (QUBT), Arqit (ARQQ).</li>
+      <li><strong>Microsoft and Alphabet were deliberately excluded.</strong> Both self-fund world-class quantum research; the equity-for-grant mechanic has no application to balance sheets their size. Their exposure runs instead through the second executive order's cryptography mandate.</li>
+      <li><strong>The portfolio is architecture-agnostic by design</strong> — superconducting, annealing, neutral-atom, trapped-ion, photonic, and silicon-spin approaches were all funded. Washington is hedging across the field, not picking a winner.</li>
+      <li><strong>The risk frame is not theoretical.</strong> South Korea's KOSPI tripped its circuit breaker for the second time this month on June 23, a live demonstration of what concentrated, leveraged positioning does when sentiment turns.</li>
+    </ul>
+  </section>
+
+  <!-- ================= II. CATALYSTS ================= -->
+  <section class="section" id="catalysts">
+    <span class="sec-num">II.</span>
+    <h2 class="sec-title">The Policy Catalysts</h2>
+    <p class="sec-intro">Two distinct government actions, three weeks apart, are driving the narrative. Each is detailed below in the order it occurred.</p>
+
+    <h3 class="sub">A. The $2.013bn CHIPS Funding Program — May 21, 2026</h3>
+    <p>Commerce, via NIST, distributed CHIPS Act incentives across nine quantum companies. The defining feature is structural: as a condition of every award, the government takes a <strong>minority, non-controlling equity stake</strong> in the recipient. This converts what would normally be a conventional R&amp;D grant into a sovereign ownership position — the same model used on Intel ten months earlier, where the resulting stake later showed a substantial unrealized gain.</p>
+    <p style="color:var(--slate); font-size:.88rem;">Status: letters of intent. Exact equity percentages, governance terms, and milestone conditions remain largely undisclosed for most recipients.</p>
+
+    <h3 class="sub">B. Two Executive Orders — June 22, 2026</h3>
+
+    <div class="order-card">
+      <span class="order-tag">Order I — Innovation</span>
+      <h4>"Ushering in the Next Frontier of Quantum Innovation"</h4>
+      <ul>
+        <li>Targets a quantum computer "powerful enough for scientific research" by <strong>2028</strong>, delivered to a Department of Energy facility.</li>
+        <li>Department of War to identify ≥3 next-generation sensor projects within 60 days, fielded by Sept 30, 2028.</li>
+        <li>NASA to submit a five-year civilian quantum sensing/networking plan within 120 days.</li>
+        <li>Directs domestic supply-chain, materials, and workforce expansion.</li>
+      </ul>
+      <div class="caveat"><b>Caveat:</b> allocates no additional funds — agencies must use existing budgets. The DOE has not yet defined the 2028 performance threshold.</div>
+    </div>
+
+    <div class="order-card">
+      <span class="order-tag">Order II — Cryptography</span>
+      <h4>"Securing the Nation Against Advanced Cryptographic Attacks"</h4>
+      <ul>
+        <li>Pulls the federal post-quantum cryptography migration deadline forward by several years: <strong>key establishment by end-2030</strong>, <strong>digital signatures by end-2031</strong>.</li>
+        <li>NIST to complete a pilot migration of federal systems by <strong>end-2027</strong>.</li>
+        <li>CISA tasked with assisting critical-infrastructure operators through the transition.</li>
+      </ul>
+      <div class="caveat"><b>Effect:</b> creates a concrete federal procurement pipeline for cloud, security, and cryptography vendors — the channel through which incumbents like Microsoft and Google are most exposed.</div>
+    </div>
+
+    <p style="color:var(--slate); font-size:.88rem; margin-top:18px;"><strong>On targeting:</strong> a senior White House official stated there are no specific quantum companies the administration plans to prioritize as a direct result of these orders — reinforcing that the orders are a policy and demand signal, distinct from the funding program's named recipients.</p>
+  </section>
+
+  <!-- ================= III. BENEFICIARY MAP ================= -->
+  <section class="section" id="map">
+    <span class="sec-num">III.</span>
+    <h2 class="sec-title">The Beneficiary Map</h2>
+    <p class="sec-intro">Ranked by directness of exposure: funded recipients first, then sentiment beneficiaries, indirect plays, and the frontier incumbents who were deliberately left out.</p>
+
+    <div class="tier-label">Tier 1 — Directly Funded, Publicly Traded</div>
+
+    <div class="co-card">
+      <div class="co-head">
+        <div class="co-head-left"><span class="co-name">IBM</span><span class="co-tick">NYSE: IBM</span></div>
+        <span class="co-amt">$1.0bn</span>
+      </div>
+      <div class="co-body">
+        <p>The anchor recipient. Capital is directed toward <strong>Anderon</strong>, a new 300mm quantum wafer foundry in Albany, NY — matched dollar-for-dollar by IBM's own capital. Quantum remains a small slice of a large, profitable company, so the program reads as a sentiment positive rather than a fundamentals shift.</p>
+        <div class="co-tags"><span>Superconducting</span><span>Foundry</span><span>Diversified</span></div>
+        <div class="co-flag">The government's equity stake sits in Anderon, the standalone subsidiary — not in IBM common stock.</div>
+      </div>
+    </div>
+
+    <div class="co-card">
+      <div class="co-head">
+        <div class="co-head-left"><span class="co-name">GlobalFoundries</span><span class="co-tick">NASDAQ: GFS</span></div>
+        <span class="co-amt">$375m</span>
+      </div>
+      <div class="co-body">
+        <p>The clearest infrastructure play in the program. The government's stake — roughly 1% — sits in the parent company itself, not a subsidiary. As a components and foundry supplier, GFS benefits from the supply-chain mandate regardless of which qubit architecture ultimately wins.</p>
+        <div class="co-tags"><span>Foundry / Components</span><span>Architecture-agnostic</span></div>
+      </div>
+    </div>
+
+    <div class="co-card">
+      <div class="co-head">
+        <div class="co-head-left"><span class="co-name">D-Wave Quantum</span><span class="co-tick">NYSE: QBTS</span></div>
+        <span class="co-amt">$100m</span>
+      </div>
+      <div class="co-body">
+        <p>Quantum annealing pioneer. The award mechanic is explicit — D-Wave would issue $100m of common stock directly to the Department of Commerce. One of the highest-beta names in the funded cohort.</p>
+        <div class="co-tags"><span>Annealing</span><span>High-beta</span></div>
+      </div>
+    </div>
+
+    <div class="co-card">
+      <div class="co-head">
+        <div class="co-head-left"><span class="co-name">Rigetti Computing</span><span class="co-tick">NASDAQ: RGTI</span></div>
+        <span class="co-amt">$100m</span>
+      </div>
+      <div class="co-body">
+        <p>Gate-based superconducting qubits, the same broad architecture family as IBM and Google. Trades with high sensitivity to sector-wide sentiment shifts.</p>
+        <div class="co-tags"><span>Superconducting (gate)</span><span>High-beta</span></div>
+      </div>
+    </div>
+
+    <div class="co-card">
+      <div class="co-head">
+        <div class="co-head-left"><span class="co-name">Infleqtion</span><span class="co-tick">NASDAQ: INFQ</span></div>
+        <span class="co-amt">$100m</span>
+      </div>
+      <div class="co-body">
+        <p>Neutral-atom architecture. Newly public via a February 2026 SPAC merger. Leadership was prominently featured at the executive order signing, and the company has since launched an "America's Quantum Space Initiative" coalition — positioning it well for the sensing and space-related provisions in Order I.</p>
+        <div class="co-tags"><span>Neutral-atom</span><span>Recent IPO</span><span>Space/sensing aligned</span></div>
+      </div>
+    </div>
+
+    <div class="tier-label">Tier 2 — Directly Funded, Privately Held</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Company</th><th>Award</th><th>Architecture</th><th>Public exposure</th></tr></thead>
+        <tbody>
+          <tr><td class="tick-cell">PsiQuantum</td><td>$100m</td><td>Photonic</td><td>None — private</td></tr>
+          <tr><td class="tick-cell">Quantinuum</td><td>$100m</td><td>Trapped-ion</td><td>Indirect via Honeywell (HON)</td></tr>
+          <tr><td class="tick-cell">Atom Computing</td><td>$100m</td><td>Neutral-atom</td><td>None — private</td></tr>
+          <tr><td class="tick-cell">Diraq</td><td>$38m</td><td>Silicon spin</td><td>None — private</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tier-label">Tier 3 — Sentiment Beneficiaries (Not Funded)</div>
+    <p>These names received no award but moved on sector read-through — investors treating federal validation of the category as a rising tide.</p>
+    <ul>
+      <li><strong>IonQ (IONQ)</strong> — the largest standalone quantum pure-play; trapped-ion. Conspicuously absent from the recipient list, yet rallied regardless.</li>
+      <li><strong>Quantum Computing Inc. (QUBT)</strong> — broad sector-beta name.</li>
+      <li><strong>Arqit (ARQQ)</strong> — a post-quantum cryptography specialist; its exposure runs specifically through Order II's accelerated migration timeline rather than the funding program.</li>
+    </ul>
+
+    <div class="tier-label">Tier 4 — Indirect &amp; Infrastructure Exposure</div>
+    <ul>
+      <li><strong>Nvidia (NVDA)</strong> — supplies the classical-quantum hybrid tooling (CUDA-Q, calibration software) nearly every recipient depends on, with no single-architecture risk.</li>
+      <li><strong>Honeywell (HON)</strong> — majority owner of Quantinuum, the only path to public exposure on that recipient.</li>
+      <li><strong>PQC and cybersecurity vendors</strong> broadly — direct beneficiaries of the 2027 NIST pilot and 2030–31 federal migration mandate.</li>
+    </ul>
+
+    <div class="tier-label">Tier 5 — Frontier Incumbents (Deliberately Excluded)</div>
+
+    <div class="co-card">
+      <div class="co-head">
+        <div class="co-head-left"><span class="co-name">Microsoft</span><span class="co-tick">NASDAQ: MSFT</span></div>
+        <span class="co-amt">Not funded</span>
+      </div>
+      <div class="co-body">
+        <p>Pursuing topological qubits via the Majorana architecture. The latest iteration, shown at Build 2026, reported qubit lifetimes exceeding 20 seconds — roughly 1,000x prior devices — targeting a scalable, fault-tolerant system by 2029. The approach carries more binary technical risk than competing architectures; earlier claims drew sustained scrutiny from the physics community. Exposure to this policy cycle runs through Order II: Azure, Windows, and Microsoft's federal security business sit directly in the post-quantum migration procurement path.</p>
+        <div class="co-tags"><span>Topological</span><span>Cryptography exposure</span><span>Self-funded</span></div>
+      </div>
+    </div>
+
+    <div class="co-card">
+      <div class="co-head">
+        <div class="co-head-left"><span class="co-name">Alphabet / Google</span><span class="co-tick">NASDAQ: GOOGL</span></div>
+        <span class="co-amt">Not funded</span>
+      </div>
+      <div class="co-body">
+        <p>Holds the strongest recent technical result in the field: the Willow chip's verifiable quantum advantage via the "Quantum Echoes" algorithm, reported at roughly 13,000x faster than a leading classical supercomputer on the same task. This aligns closely with Order I's "scientific discovery" framing — molecular modeling and drug discovery in particular. Google leadership was present at the signing. The path to a cryptographically relevant machine remains, by the company's own account, an enormous distance away.</p>
+        <div class="co-tags"><span>Superconducting</span><span>Verified advantage</span><span>Self-funded</span></div>
+      </div>
+    </div>
+
+    <p style="color:var(--slate); font-size:.88rem;">Neither company sought nor was offered CHIPS quantum funding — the equity-for-grant mechanic has no rationale against balance sheets of this scale. Their exposure is real but indirect, and not the subject of an "EO trade" in the way the Tier 1 and Tier 3 names are.</p>
+  </section>
+
+  <!-- ================= IV. MARKET REACTION ================= -->
+  <section class="section" id="reaction">
+    <span class="sec-num">IV.</span>
+    <h2 class="sec-title">Market Reaction: Money vs. Policy</h2>
+    <p class="sec-intro">The same names reacted very differently to the two catalysts. Capital moved stocks; policy mostly didn't.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Name</th><th>May 21 — Funding</th><th>Jun 22 — Executive Orders</th></tr></thead>
+        <tbody>
+          <tr><td class="tick-cell">D-Wave (QBTS)</td><td class="up">+33%</td><td class="up">~+7.5%</td></tr>
+          <tr><td class="tick-cell">Rigetti (RGTI)</td><td class="up">+30%</td><td class="up">+5.9%</td></tr>
+          <tr><td class="tick-cell">Infleqtion (INFQ)</td><td class="up">~+31%</td><td class="up">+13.2% (after hours)</td></tr>
+          <tr><td class="tick-cell">IBM</td><td class="up">+12%</td><td class="up">+3.6%</td></tr>
+          <tr><td class="tick-cell">IonQ (IONQ)</td><td class="up">+12%</td><td class="up">~+3%</td></tr>
+          <tr><td class="tick-cell">Quantum Computing (QUBT)</td><td class="up">+19%</td><td>—</td></tr>
+          <tr><td class="tick-cell">Arqit (ARQQ)</td><td class="up">+25%</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="color:var(--slate); font-size:.88rem;">Reading: federal capital — and the equity signal attached to it — is the catalyst that moves these stocks. The executive orders function as a reinforcing demand signal layered on top, not a standalone driver.</p>
+  </section>
+
+  <!-- ================= V. TIMELINE ================= -->
+  <section class="section" id="timeline">
+    <span class="sec-num">V.</span>
+    <h2 class="sec-title">Implementation Timeline</h2>
+    <div class="tl">
+      <div class="tl-item">
+        <span class="tl-when">2026 — Near term</span>
+        <h4>Letters of intent, not closed deals</h4>
+        <p>Equity percentages, governance rights, and milestone gates remain undisclosed for most of the nine recipients. Department of War sensor shortlist (60 days) and NASA's five-year space plan (120 days) are planning deliverables, not contracts.</p>
+      </div>
+      <div class="tl-item">
+        <span class="tl-when">2027–2028 — Medium term</span>
+        <h4>First hard deadlines arrive</h4>
+        <p>NIST's federal PQC pilot migration is due by end-2027. The "scientifically relevant" quantum computer and first fielded sensors are targeted for 2028 — though DOE has not yet defined the performance threshold that would satisfy the order.</p>
+      </div>
+      <div class="tl-item">
+        <span class="tl-when">2030s — Long term</span>
+        <h4>Full migration and commercial scale</h4>
+        <p>Federal post-quantum cryptography migration completes by 2030–31. Commercial revenue at meaningful scale, and any cryptographically relevant "Q-day" threshold, remain 2030s-dated across most credible industry estimates.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= VI. RISK REGISTER ================= -->
+  <section class="section" id="risk">
+    <span class="sec-num">VI.</span>
+    <h2 class="sec-title">Risk Register</h2>
+    <div class="risk-row">
+      <div class="risk-icon">!</div>
+      <div class="risk-text"><h4>No new appropriated funds in the executive orders</h4><p>The investable catalyst was the May funding program; the orders alone carry no capital.</p></div>
+    </div>
+    <div class="risk-row">
+      <div class="risk-icon">!</div>
+      <div class="risk-text"><h4>Deals are not finalized</h4><p>Letters of intent can change. Equity stakes, governance terms, and milestone conditions are largely undisclosed.</p></div>
+    </div>
+    <div class="risk-row">
+      <div class="risk-icon">!</div>
+      <div class="risk-text"><h4>Dilution from share issuance</h4><p>Several recipients issue new equity directly to the government as a condition of the award — dilutive to existing holders even as it provides capital.</p></div>
+    </div>
+    <div class="risk-row">
+      <div class="risk-icon">!</div>
+      <div class="risk-text"><h4>Valuations are stretched and reflexive</h4><p>Multi-billion-dollar market caps sit against minimal current revenue. Single-day moves of 30%+ in either direction have already occurred.</p></div>
+    </div>
+    <div class="risk-row">
+      <div class="risk-icon">!</div>
+      <div class="risk-text"><h4>Government-equity distortion</h4><p>Critics argue federal stakes can politicize capital allocation and create an incentive to protect favored firms — a status that can reverse.</p></div>
+    </div>
+    <div class="risk-row">
+      <div class="risk-icon">!</div>
+      <div class="risk-text"><h4>Long, uncertain commercialization path</h4><p>No consensus exists on which qubit architecture ultimately wins, and genuine technical risk remains across every modality funded.</p></div>
+    </div>
+  </section>
+
+  <!-- ================= VII. MACRO ================= -->
+  <section class="section" id="macro">
+    <span class="sec-num">VII.</span>
+    <h2 class="sec-title">Macro Backdrop: A Narrow Tape</h2>
+    <p class="sec-intro">The broader equity market this thesis sits inside is itself thinly held up — and South Korea is currently demonstrating, in real time, what that looks like when it breaks.</p>
+
+    <div class="macro-box">
+      <p style="color:#fff; font-weight:600; margin-bottom:4px;">KOSPI — June 23, 2026</p>
+      <div class="stat-row">
+        <div class="stat"><div class="num">~10%</div><div class="lbl">Close-to-close decline</div></div>
+        <div class="stat"><div class="num">4th</div><div class="lbl">Circuit breaker this year</div></div>
+        <div class="stat"><div class="num">~50%</div><div class="lbl">Index weight in 2 stocks</div></div>
+      </div>
+      <p>Samsung Electronics and SK Hynix together represent roughly half of the KOSPI's total market capitalization. When sentiment in semiconductors and AI infrastructure turns, the entire national index moves with it — today's decline closed near 10%, triggered by profit-taking after SK Hynix briefly overtook Samsung as the index's most valuable company, alongside broader AI-valuation jitters and regulatory scrutiny of leverage in semiconductor-linked products. It was the index's fourth circuit breaker of 2026.</p>
+      <p>Record retail margin debt has amplified every downward move this year, turning ordinary repricing into forced, mechanical liquidation.</p>
+      <div class="symmetry">The structural parallel is direct: a market already concentrated in a handful of names, layered with a government now concentrating its own capital into a handful of quantum names. Concentration compounds in both directions.</div>
+    </div>
+  </section>
+
+  <!-- ================= VIII. GAPS ================= -->
+  <section class="section" id="gaps">
+    <span class="sec-num">VIII.</span>
+    <h2 class="sec-title">Open Questions</h2>
+    <ul>
+      <li>Equity percentages, governance rights, and milestone conditions are undisclosed for most of the nine recipients.</li>
+      <li>The Department of Energy has not yet defined the performance threshold for the 2028 "scientifically relevant" machine.</li>
+      <li>The scale of federal post-quantum-cryptography procurement dollars flowing to cloud and security vendors — including Microsoft and Google — has not been quantified.</li>
+      <li>No public reporting indicates Microsoft or Alphabet sought or were offered CHIPS quantum funding.</li>
+    </ul>
+  </section>
+
+  <!-- ================= APPENDIX ================= -->
+  <section class="section" id="appendix">
+    <span class="sec-num">Appendix</span>
+    <h2 class="sec-title">Ticker Reference</h2>
+    <div class="appendix-grid">
+      <div class="ap-item"><span class="ap-tick">IBM</span><span class="ap-name">IBM</span><span class="ap-role">Funded · Anderon</span></div>
+      <div class="ap-item"><span class="ap-tick">GFS</span><span class="ap-name">GlobalFoundries</span><span class="ap-role">Funded · ~1% stake</span></div>
+      <div class="ap-item"><span class="ap-tick">QBTS</span><span class="ap-name">D-Wave Quantum</span><span class="ap-role">Funded · Annealing</span></div>
+      <div class="ap-item"><span class="ap-tick">RGTI</span><span class="ap-name">Rigetti Computing</span><span class="ap-role">Funded · Superconducting</span></div>
+      <div class="ap-item"><span class="ap-tick">INFQ</span><span class="ap-name">Infleqtion</span><span class="ap-role">Funded · Neutral-atom</span></div>
+      <div class="ap-item"><span class="ap-tick">IONQ</span><span class="ap-name">IonQ</span><span class="ap-role">Not funded · Sentiment</span></div>
+      <div class="ap-item"><span class="ap-tick">QUBT</span><span class="ap-name">Quantum Computing Inc.</span><span class="ap-role">Not funded · Sentiment</span></div>
+      <div class="ap-item"><span class="ap-tick">ARQQ</span><span class="ap-name">Arqit</span><span class="ap-role">Not funded · PQC</span></div>
+      <div class="ap-item"><span class="ap-tick">NVDA</span><span class="ap-name">Nvidia</span><span class="ap-role">Indirect · Tooling</span></div>
+      <div class="ap-item"><span class="ap-tick">HON</span><span class="ap-name">Honeywell</span><span class="ap-role">Indirect · Quantinuum</span></div>
+      <div class="ap-item"><span class="ap-tick">MSFT</span><span class="ap-name">Microsoft</span><span class="ap-role">Excluded · Topological</span></div>
+      <div class="ap-item"><span class="ap-tick">GOOGL</span><span class="ap-name">Alphabet</span><span class="ap-role">Excluded · Superconducting</span></div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="footer">
+  <p><strong>Methodology</strong> — Compiled from contemporaneous reporting on the May 21, 2026 CHIPS Act quantum funding program, the June 22, 2026 executive orders, and corresponding equity market reaction data as of June 23, 2026.</p>
+  <p class="disclaimer">This document is research and editorial material prepared for members. It is not investment advice, and the author is not a registered financial advisor. Several companies discussed are early-stage, pre-revenue, and subject to significant price volatility. Do your own diligence before making any investment decision.</p>
+</footer>
+
+<script>
+  // Build the ticker strip from data, duplicated for seamless scroll
+  const tickerData = [
+    {sym:"IBM", amt:"$1.0B", role:"Anderon Foundry"},
+    {sym:"GFS", amt:"$375M", role:"~1% Equity"},
+    {sym:"QBTS", amt:"$100M", role:"Annealing"},
+    {sym:"RGTI", amt:"$100M", role:"Superconducting"},
+    {sym:"INFQ", amt:"$100M", role:"Neutral-Atom"},
+    {sym:"PSIQ*", amt:"$100M", role:"Photonic · Private"},
+    {sym:"QTUUM*", amt:"$100M", role:"Trapped-Ion · Private"},
+    {sym:"ATOM*", amt:"$100M", role:"Neutral-Atom · Private"},
+    {sym:"DIRAQ*", amt:"$38M", role:"Silicon Spin · Private"},
+  ];
+  const strip = document.getElementById('tickerStrip');
+  function buildTicks(){
+    let html = '';
+    tickerData.forEach(t=>{
+      html += `<div class="tick"><span class="sym">${t.sym}</span><span class="amt">${t.amt}</span><span class="role">${t.role}</span></div>`;
+    });
+    return html;
+  }
+  strip.innerHTML = buildTicks() + buildTicks();
+</script>
+
+</body>
+</html>
