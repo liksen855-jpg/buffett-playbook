@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Five-Name Coverage Note — NVDA · META · UBER · MSFT · ONDS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF9F5;
+    --panel:#F1EFE8;
+    --ink:#171C22;
+    --ink-soft:#4E5761;
+    --ink-faint:#8B9199;
+    --line:#DAD7CC;
+    --line-strong:#171C22;
+    --gold:#93701C;
+    --gold-dim:#F1E6C6;
+    --green:#2E6B4B;
+    --green-dim:#E1EEE4;
+    --red:#9A3B2C;
+    --red-dim:#F3E1DC;
+    --navy:#1E3552;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:'IBM Plex Sans',sans-serif; font-size:16px; line-height:1.6;}
+  .serif{font-family:'Newsreader', serif;}
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  .wrap{max-width:900px; margin:0 auto; padding:0 26px;}
+
+  /* Masthead */
+  header.masthead{border-bottom:3px double var(--line-strong); padding:22px 0 16px;}
+  .masthead-top{display:flex; justify-content:space-between; align-items:center; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint);}
+  .masthead-title{text-align:center; padding:20px 0 6px;}
+  .masthead-title h1{font-family:'Newsreader',serif; font-weight:600; font-size:clamp(28px,4.4vw,42px); margin:0; letter-spacing:-0.01em;}
+  .masthead-sub{text-align:center; font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-top:8px;}
+
+  /* Exec summary */
+  .exec{padding:34px 0 10px;}
+  .exec h2{font-family:'Newsreader',serif; font-size:15px; letter-spacing:.06em; text-transform:uppercase; font-weight:600; color:var(--ink-soft); margin:0 0 6px;}
+  .exec p.lede{font-family:'Newsreader',serif; font-size:19px; font-style:italic; color:var(--ink-soft); max-width:64ch; margin:0 0 26px;}
+
+  table.summary{width:100%; min-width:420px; border-collapse:collapse; font-family:'IBM Plex Mono',monospace; font-size:13.5px; margin-bottom:10px;}
+  table.summary th{text-align:left; font-family:'IBM Plex Sans',sans-serif; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); font-weight:600; padding:8px 10px; border-bottom:2px solid var(--line-strong);}
+  table.summary td{padding:12px 10px; border-bottom:1px solid var(--line);}
+  table.summary td.tk{font-family:'Newsreader',serif; font-weight:600; font-size:16px;}
+  table.summary td.up{color:var(--green); font-weight:600;}
+  table.summary td.down{color:var(--red); font-weight:600;}
+  table.summary tr:last-child td{border-bottom:2px solid var(--line-strong);}
+  .flag{display:inline-block; font-family:'IBM Plex Sans',sans-serif; font-size:9.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--red); border:1px solid var(--red); border-radius:2px; padding:1px 5px; margin-left:6px; vertical-align:middle;}
+
+  /* Upside/downside bar chart */
+  .vizchart{margin:20px 0 28px; border:1px solid var(--line); padding:18px 22px 16px;}
+  .vizchart-title{font-family:'IBM Plex Sans',sans-serif; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); font-weight:700; margin-bottom:16px;}
+  .vizchart-row{display:flex; align-items:center; gap:14px; margin-bottom:11px;}
+  .vizchart-tk{width:46px; flex-shrink:0; font-family:'Newsreader',serif; font-weight:600; font-size:15px;}
+  .vizchart-track{flex:1; height:15px; background:var(--panel); border-radius:2px; position:relative; overflow:hidden;}
+  .vizchart-bar{height:15px; border-radius:2px;}
+  .vizchart-bar.up{background:var(--green);}
+  .vizchart-bar.down{background:var(--red);}
+  .vizchart-val{width:64px; text-align:right; flex-shrink:0; font-family:'IBM Plex Mono',monospace; font-size:13px; font-weight:600;}
+  .vizchart-val.up{color:var(--green);}
+  .vizchart-val.down{color:var(--red);}
+
+  /* Per-company valuation range strip */
+  .legend{display:flex; gap:22px; align-items:center; font-family:'IBM Plex Sans',sans-serif; font-size:11px; color:var(--ink-faint); margin:4px 0 24px;}
+  .legend span{display:inline-flex; align-items:center; gap:6px;}
+  .legend .dot{width:9px; height:9px; border-radius:50%; background:var(--ink); display:inline-block;}
+  .legend .diamond{width:9px; height:9px; background:var(--navy); display:inline-block; transform:rotate(45deg);}
+  .legend .band{width:20px; height:5px; background:var(--panel); border:1px solid var(--line); display:inline-block; border-radius:2px;}
+
+  .rangestrip{margin:2px 0 28px;}
+  .rangestrip-track{position:relative; height:30px;}
+  .rangestrip-track::before{content:''; position:absolute; top:50%; left:0; right:0; height:1px; background:var(--line); transform:translateY(-50%);}
+  .rangestrip-band{position:absolute; top:50%; height:6px; background:var(--panel); border:1px solid var(--line); border-radius:3px; transform:translateY(-50%);}
+  .rangestrip-marker{position:absolute; top:50%; transform:translate(-50%,-50%);}
+  .rangestrip-marker.market{width:11px; height:11px; border-radius:50%; background:var(--ink); border:2px solid var(--paper); box-shadow:0 0 0 1px var(--ink);}
+  .rangestrip-marker.fv{width:12px; height:12px; background:var(--navy); border:2px solid var(--paper); box-shadow:0 0 0 1px var(--navy); transform:translate(-50%,-50%) rotate(45deg);}
+  .rangestrip-labels{display:flex; justify-content:space-between; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-faint); margin-top:2px;}
+
+  /* Company sections */
+  section.co{margin-top:64px; padding-top:22px; border-top:3px double var(--line-strong);}
+  .co-head{display:flex; justify-content:space-between; align-items:flex-end; gap:16px; margin-bottom:4px;}
+  .co-tk{font-family:'Newsreader',serif; font-weight:600; font-size:38px; letter-spacing:-0.01em;}
+  .co-name{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.06em;}
+  .co-tag{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.05em; text-transform:uppercase; padding:4px 9px; border-radius:2px; white-space:nowrap;}
+  .tag-core{background:var(--green-dim); color:var(--green); border:1px solid var(--green);}
+  .tag-fair{background:var(--gold-dim); color:var(--gold); border:1px solid var(--gold);}
+  .tag-wild{background:var(--red-dim); color:var(--red); border:1px solid var(--red);}
+
+  .co-lede{font-family:'Newsreader',serif; font-style:italic; font-size:18px; color:var(--ink-soft); max-width:60ch; margin:10px 0 24px;}
+
+  .snap{display:grid; grid-template-columns:repeat(4,1fr); gap:0; border:1px solid var(--line); margin-bottom:26px;}
+  .snap div{padding:14px 16px; border-right:1px solid var(--line);}
+  .snap div:last-child{border-right:none;}
+  .snap .lbl{font-family:'IBM Plex Sans',sans-serif; font-size:10px; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:5px;}
+  .snap .val{font-family:'IBM Plex Mono',monospace; font-size:19px; font-weight:600;}
+  .snap .val.up{color:var(--green);} .snap .val.down{color:var(--red);}
+
+  h3.h{font-family:'IBM Plex Sans',sans-serif; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; font-weight:700; color:var(--ink); margin:28px 0 12px; padding-bottom:6px; border-bottom:1px solid var(--line);}
+
+  .grid2{display:grid; grid-template-columns:1.15fr 0.85fr; gap:34px;}
+  .thesis ul, .risk ul{margin:0; padding-left:18px;}
+  .thesis li, .risk li{margin-bottom:10px; font-size:15px; color:var(--ink-soft);}
+  .thesis li strong, .risk li strong{color:var(--ink);}
+  .risk li{color:var(--red);}
+  .risk li strong{color:#6B2318;}
+
+  /* method table */
+  table.method{width:100%; min-width:480px; border-collapse:collapse; font-family:'IBM Plex Mono',monospace; font-size:12px; margin-top:6px;}
+  table.method th{text-align:left; font-family:'IBM Plex Sans',sans-serif; font-size:9.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-faint); padding:6px 8px; border-bottom:1px solid var(--line-strong);}
+  table.method td{padding:7px 8px; border-bottom:1px solid var(--line); vertical-align:middle;}
+  table.method td.m{font-family:'IBM Plex Sans',sans-serif; font-weight:600; color:var(--ink); font-size:12.5px;}
+  table.method td.variant{color:var(--ink-faint); font-size:11px;}
+  table.method td.na{color:var(--ink-faint); font-style:italic;}
+  .barcell{width:150px;}
+  .bar-track{position:relative; height:6px; background:var(--line); border-radius:2px;}
+  .bar-fill{position:absolute; top:0; left:50%; height:6px; border-radius:2px;}
+  .bar-fill.up{background:var(--green);}
+  .bar-fill.down{background:var(--red); left:auto; right:50%;}
+  table.method td.pct.up{color:var(--green); font-weight:600;}
+  table.method td.pct.down{color:var(--red); font-weight:600;}
+  tr.composite td{border-top:1.5px solid var(--line-strong); border-bottom:2px solid var(--line-strong); font-weight:700; background:var(--panel);}
+  tr.composite td.m{color:var(--navy);}
+
+  .methnote{font-family:'Newsreader',serif; font-style:italic; font-size:13.5px; color:var(--ink-faint); margin-top:10px; padding:10px 14px; border-left:2px solid var(--line);}
+
+  .bottomline{margin-top:24px; padding:16px 18px; background:var(--panel); border-left:3px solid var(--navy);}
+  .bottomline .lbl{font-family:'IBM Plex Sans',sans-serif; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--navy); font-weight:700; margin-bottom:6px;}
+  .bottomline p{margin:0; font-size:14.5px; color:var(--ink-soft);}
+
+  footer.disc{margin-top:70px; padding:30px 0 60px; border-top:3px double var(--line-strong);}
+  footer.disc p{font-family:'IBM Plex Mono',monospace; font-size:11px; line-height:1.8; color:var(--ink-faint); max-width:78ch;}
+  footer.disc strong{color:var(--red);}
+
+  .tablewrap{overflow-x:auto; -webkit-overflow-scrolling:touch;}
+
+  @media (max-width:680px){
+    .grid2{grid-template-columns:1fr;}
+    .snap{grid-template-columns:repeat(2,1fr);}
+    .snap div:nth-child(2){border-right:none;}
+    .snap div{padding:11px 12px;}
+    .snap .val{font-size:16px;}
+    .barcell{width:70px;}
+    table.summary{font-size:11px;}
+    table.method{font-size:11px;}
+    table.method td, table.method th{padding:6px 5px;}
+    .vizchart-tk{width:38px; font-size:13px;}
+    .vizchart-val{width:52px; font-size:11.5px;}
+    .legend{flex-wrap:wrap; gap:10px 18px;}
+    .co-head{flex-wrap:wrap; align-items:flex-start; gap:8px;}
+    .co-tag{white-space:normal; font-size:10px; line-height:1.4;}
+    .co-tk{font-size:30px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap masthead-top">
+    <span>Coverage Note</span>
+    <span>July 1, 2026</span>
+  </div>
+  <div class="wrap masthead-title">
+    <h1>Five-Name Coverage Note</h1>
+    <div class="masthead-sub">NVDA · META · UBER · MSFT · ONDS — Composite Valuation &amp; Thesis Review</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="exec">
+    <h2>Executive Summary</h2>
+    <p class="lede">Five names, five different stories — a compute monopoly re-rating, an ad engine mispriced on capex fear, a mobility platform trading at a discount to its own cash flows, a software compounder priced almost exactly at fair value, and a defense-tech roll-up too new to model cleanly.</p>
+
+    <div class="tablewrap">
+    <table class="summary">
+      <tr><th>Ticker</th><th>Price</th><th>Composite FV</th><th>Upside / Downside</th><th>Method Coverage</th></tr>
+      <tr><td class="tk">NVDA</td><td>$200.09</td><td>$233.99</td><td class="up">+16.9%</td><td>10 of 10</td></tr>
+      <tr><td class="tk">META</td><td>$563.29</td><td>$669.70</td><td class="up">+18.9%</td><td>10 of 10</td></tr>
+      <tr><td class="tk">UBER</td><td>$72.16</td><td>$244.89</td><td class="up">+239.4%<span class="flag">wide spread</span></td><td>10 of 10</td></tr>
+      <tr><td class="tk">MSFT</td><td>$373.02</td><td>$366.30</td><td class="down">−1.8%</td><td>10 of 10</td></tr>
+      <tr><td class="tk">ONDS</td><td>$8.24</td><td>$26.34</td><td class="up">+219.7%<span class="flag">thin coverage</span></td><td>3 of 10</td></tr>
+    </table>
+    </div>
+
+    <div class="vizchart">
+      <div class="vizchart-title">Upside / Downside at a Glance — Composite FV vs Market Price</div>
+      <div class="vizchart-row"><span class="vizchart-tk">NVDA</span><div class="vizchart-track"><div class="vizchart-bar up" style="width:7.1%"></div></div><span class="vizchart-val up">+16.9%</span></div>
+      <div class="vizchart-row"><span class="vizchart-tk">META</span><div class="vizchart-track"><div class="vizchart-bar up" style="width:7.9%"></div></div><span class="vizchart-val up">+18.9%</span></div>
+      <div class="vizchart-row"><span class="vizchart-tk">UBER</span><div class="vizchart-track"><div class="vizchart-bar up" style="width:100%"></div></div><span class="vizchart-val up">+239.4%</span></div>
+      <div class="vizchart-row"><span class="vizchart-tk">MSFT</span><div class="vizchart-track"><div class="vizchart-bar down" style="width:1.5%"></div></div><span class="vizchart-val down">−1.8%</span></div>
+      <div class="vizchart-row"><span class="vizchart-tk">ONDS</span><div class="vizchart-track"><div class="vizchart-bar up" style="width:91.8%"></div></div><span class="vizchart-val up">+219.7%</span></div>
+    </div>
+    <p class="methnote" style="margin-left:0; margin-top:-6px;">Bars are scaled to UBER's +239.4% for direct visual comparison — note how much of the chart the two flagged names (UBER, ONDS) dominate relative to the other three. That's the dispersion problem in one picture.</p>
+
+    <div class="legend">
+      <span><span class="dot"></span> Market Price</span>
+      <span><span class="diamond"></span> Composite Fair Value</span>
+      <span><span class="band"></span> 10-Method Range</span>
+    </div>
+
+    <p class="methnote" style="margin-left:0;">Composite fair value is a trimmed mean across ten valuation methods (DCF variants, multiples, growth-implied models). Two names are flagged: UBER's composite is pulled upward by growth-extrapolation methods (Revenue DCF, PEG-implied) that assume current growth persists for two decades — treat the headline upside as a range, not a point estimate. ONDS only populates 3 of 10 methods because most require sustained profitability the company doesn't yet have; its composite should be read as directional, not precise.</p>
+  </div>
+
+  <!-- NVDA -->
+  <section class="co">
+    <div class="co-head">
+      <div><div class="co-tk">NVDA</div><div class="co-name">Nvidia Corporation</div></div>
+      <div class="co-tag tag-core">Core — cheapest AI name</div>
+    </div>
+    <p class="co-lede">The chips every AI company is racing to buy, trading at the lowest multiple of the AI cycle — while every fundamental kept accelerating.</p>
+
+    <div class="snap">
+      <div><div class="lbl">Market Price</div><div class="val">$200.09</div></div>
+      <div><div class="lbl">Composite FV</div><div class="val">$233.99</div></div>
+      <div><div class="lbl">Upside</div><div class="val up">+16.9%</div></div>
+      <div><div class="lbl">Method Range</div><div class="val" style="font-size:14px;">$60.53 – $415.42</div></div>
+    </div>
+
+    <div class="rangestrip">
+      <div class="rangestrip-track">
+        <div class="rangestrip-band" style="left:4.5%; right:4.5%;"></div>
+        <div class="rangestrip-marker market" style="left:40.3%;" title="Market $200.09"></div>
+        <div class="rangestrip-marker fv" style="left:49.0%;" title="Composite FV $233.99"></div>
+      </div>
+      <div class="rangestrip-labels"><span>$60.53</span><span>$415.42</span></div>
+    </div>
+
+    <div class="grid2">
+      <div>
+        <h3 class="h">Business &amp; Thesis</h3>
+        <div class="thesis">
+          <ul>
+            <li><strong>What it does:</strong> designs the GPUs and AI accelerators that train and run the world's AI models — commands an estimated 80–90% share of the AI accelerator market by revenue.</li>
+            <li><strong>The re-rating:</strong> forward multiple compressed from 51x to roughly 20–22x over the past year, even as revenue grew 85% and the company posted its 15th consecutive quarterly revenue beat and 14th straight EPS beat (Q1 FY27, reported May 2026).</li>
+            <li><strong>Visibility:</strong> management has flagged roughly $500B of revenue visibility across the Blackwell and Rubin generations — booked demand, not a forecast.</li>
+            <li><strong>Positioning:</strong> trading below the Street's consensus average target (~$284–301 across 22–68 analysts), alongside a fresh $80B buyback authorization and optionality from potential China re-entry.</li>
+            <li><strong>Moat:</strong> the CUDA software ecosystem — switching away from Nvidia means rewriting the entire AI stack, not just swapping a chip.</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <h3 class="h">Risk Factors</h3>
+        <div class="risk">
+          <ul>
+            <li><strong>Custom silicon:</strong> hyperscaler in-house chips (Google TPU, AWS Trainium, Broadcom ASICs) are the fastest-growing competitive threat, projected toward 10–15% share by 2026.</li>
+            <li><strong>AMD encroachment:</strong> still small (5–8% share) but growing every quarter.</li>
+            <li><strong>Capacity/export risk:</strong> China policy and TSMC allocation remain outside management's control.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="h">Method-by-Method</h3>
+    <div class="tablewrap">
+    <table class="method">
+      <tr><th>Method</th><th>Variant</th><th class="barcell">Implied</th><th>Value</th><th>vs Market</th></tr>
+      <tr><td class="m">DCF-20</td><td class="variant">20Y · Operating CF</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:32%"></div></div></td><td>$327.46</td><td class="pct up">+63.7%</td></tr>
+      <tr><td class="m">DFCF-20</td><td class="variant">20Y · Free CF</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:28%"></div></div></td><td>$310.44</td><td class="pct up">+55.2%</td></tr>
+      <tr><td class="m">DNI-20</td><td class="variant">20Y · Net Income</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:46%"></div></div></td><td>$415.42</td><td class="pct up">+107.6%</td></tr>
+      <tr><td class="m">H-Model DCF</td><td class="variant">Intrinsic</td><td class="barcell"><div class="bar-track"><div class="bar-fill down" style="width:24%"></div></div></td><td>$105.17</td><td class="pct down">−47.4%</td></tr>
+      <tr><td class="m">EV / EBITDA</td><td class="variant">Multiples</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:11%"></div></div></td><td>$245.06</td><td class="pct up">+22.5%</td></tr>
+      <tr><td class="m">EV / Revenue</td><td class="variant">Multiples</td><td class="barcell"><div class="bar-track"><div class="bar-fill down" style="width:35%"></div></div></td><td>$60.53</td><td class="pct down">−69.7%</td></tr>
+      <tr><td class="m">P / FCF</td><td class="variant">Multiples</td><td class="barcell"><div class="bar-track"><div class="bar-fill down" style="width:14%"></div></div></td><td>$145.72</td><td class="pct down">−27.2%</td></tr>
+      <tr><td class="m">Revenue DCF</td><td class="variant">Growth</td><td class="barcell"><div class="bar-track"><div class="bar-fill down" style="width:22%"></div></div></td><td>$110.62</td><td class="pct down">−44.7%</td></tr>
+      <tr><td class="m">PEG-implied</td><td class="variant">Growth</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:40%"></div></div></td><td>$358.89</td><td class="pct up">+79.4%</td></tr>
+      <tr><td class="m">Graham Revised</td><td class="variant">EPS × growth</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:17%"></div></div></td><td>$268.52</td><td class="pct up">+34.2%</td></tr>
+      <tr class="composite"><td class="m">InsightValue Composite</td><td class="variant">Trimmed mean</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:9%"></div></div></td><td>$233.99</td><td class="pct up">+16.9%</td></tr>
+    </table>
+    </div>
+    <p class="methnote">Every method except two clusters comfortably above the current price — a rare case of near-unanimous method agreement, which is itself the signal worth noting.</p>
+
+    <div class="bottomline"><div class="lbl">Bottom Line</div><p>Ten of ten methods run, eight showing upside. The dispersion here is narrower than the other four names — this is the closest thing on the list to a consensus-cheap mega-cap.</p></div>
+  </section>
+
+  <!-- META -->
+  <section class="co">
+    <div class="co-head">
+      <div><div class="co-tk">META</div><div class="co-name">Meta Platforms, Inc.</div></div>
+      <div class="co-tag tag-core">Core — ad rails AI runs on</div>
+    </div>
+    <p class="co-lede">Down 14.7% year-to-date against a market up roughly 9.6% — sold off on capex fear while the core ad engine kept compounding.</p>
+
+    <div class="snap">
+      <div><div class="lbl">Market Price</div><div class="val">$563.29</div></div>
+      <div><div class="lbl">Composite FV</div><div class="val">$669.70</div></div>
+      <div><div class="lbl">Upside</div><div class="val up">+18.9%</div></div>
+      <div><div class="lbl">Method Range</div><div class="val" style="font-size:14px;">$372.89 – $1,543.57</div></div>
+    </div>
+
+    <div class="rangestrip">
+      <div class="rangestrip-track">
+        <div class="rangestrip-band" style="left:4.5%; right:4.5%;"></div>
+        <div class="rangestrip-marker market" style="left:19.3%;" title="Market $563.29"></div>
+        <div class="rangestrip-marker fv" style="left:27.6%;" title="Composite FV $669.70"></div>
+      </div>
+      <div class="rangestrip-labels"><span>$372.89</span><span>$1,543.57</span></div>
+    </div>
+
+    <div class="grid2">
+      <div>
+        <h3 class="h">Business &amp; Thesis</h3>
+        <div class="thesis">
+          <ul>
+            <li><strong>What it does:</strong> sells advertising across Facebook, Instagram, and WhatsApp to roughly 3.5–3.6 billion daily active people.</li>
+            <li><strong>Advantage+:</strong> Meta's AI-driven ad automation tool has scaled to an estimated $60B annual run-rate on its own.</li>
+            <li><strong>The drawdown:</strong> stock is down ~28% from its 52-week high of $796, and down 14.7% YTD while the S&amp;P 500 is up ~9.6% — a rare underperformance stretch for the name.</li>
+            <li><strong>Moat:</strong> daily-active-user scale (3.5B+) generates a behavioral data advantage that's genuinely difficult for rivals to replicate in ad targeting.</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <h3 class="h">Risk Factors</h3>
+        <div class="risk">
+          <ul>
+            <li><strong>Capex payoff:</strong> the market's central fear — $125–145B of 2026 capital spending needs to convert into revenue, not just infrastructure.</li>
+            <li><strong>Reality Labs:</strong> continues to post large operating losses with no clear monetization timeline.</li>
+            <li><strong>Regulatory:</strong> ongoing antitrust and privacy exposure across the US and EU.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="h">Method-by-Method</h3>
+    <div class="tablewrap">
+    <table class="method">
+      <tr><th>Method</th><th>Variant</th><th class="barcell">Implied</th><th>Value</th><th>vs Market</th></tr>
+      <tr><td class="m">DCF-20</td><td class="variant">20Y · Operating CF</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:48%"></div></div></td><td>$1,543.57</td><td class="pct up">+174.0%</td></tr>
+      <tr><td class="m">DFCF-20</td><td class="variant">20Y · Free CF</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:4%"></div></div></td><td>$600.11</td><td class="pct up">+6.5%</td></tr>
+      <tr><td class="m">DNI-20</td><td class="variant">20Y · Net Income</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:22%"></div></div></td><td>$878.29</td><td class="pct up">+55.9%</td></tr>
+      <tr><td class="m">H-Model DCF</td><td class="variant">Intrinsic</td><td class="barcell"><div class="bar-track"><div class="bar-fill down" style="width:20%"></div></div></td><td>$372.89</td><td class="pct down">−33.8%</td></tr>
+      <tr><td class="m">EV / EBITDA</td><td class="variant">Multiples</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:15%"></div></div></td><td>$697.19</td><td class="pct up">+23.8%</td></tr>
+      <tr><td class="m">EV / Revenue</td><td class="variant">Multiples</td><td class="barcell"><div class="bar-track"><div class="bar-fill down" style="width:9%"></div></div></td><td>$477.67</td><td class="pct down">−15.2%</td></tr>
+      <tr><td class="m">P / FCF</td><td class="variant">Multiples</td><td class="barcell"><div class="bar-track"><div class="bar-fill down" style="width:16%"></div></div></td><td>$412.42</td><td class="pct down">−26.8%</td></tr>
+      <tr><td class="m">Revenue DCF</td><td class="variant">Growth</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:3%"></div></div></td><td>$588.76</td><td class="pct up">+4.5%</td></tr>
+      <tr><td class="m">PEG-implied</td><td class="variant">Growth</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:25%"></div></div></td><td>$847.70</td><td class="pct up">+50.5%</td></tr>
+      <tr><td class="m">Graham Revised</td><td class="variant">EPS × growth</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:26%"></div></div></td><td>$855.47</td><td class="pct up">+51.9%</td></tr>
+      <tr class="composite"><td class="m">InsightValue Composite</td><td class="variant">Trimmed mean</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:9%"></div></div></td><td>$669.70</td><td class="pct up">+18.9%</td></tr>
+    </table>
+    </div>
+    <p class="methnote">The DCF-20 Operating CF output ($1,543.57) is a clear outlier versus every other method and pulls the raw average up sharply — the trimmed-mean composite ($669.70) correctly discounts it, which is the more trustworthy figure of the two.</p>
+
+    <div class="bottomline"><div class="lbl">Bottom Line</div><p>Seven of ten methods show upside; the three showing downside (H-Model, EV/Revenue, P/FCF) all lean on current-year multiples rather than forward growth — reasonable to weight the growth-adjusted methods higher given Advantage+'s trajectory.</p></div>
+  </section>
+
+  <!-- UBER -->
+  <section class="co">
+    <div class="co-head">
+      <div><div class="co-tk">UBER</div><div class="co-name">Uber Technologies, Inc.</div></div>
+      <div class="co-tag tag-core">Core — priced for disaster, growing like dominance</div>
+    </div>
+    <p class="co-lede">Trips up 22%, bookings up 21%, two straight quarters of accelerating active riders — while the market keeps pricing in a robotaxi extinction event that hasn't shown up in the numbers.</p>
+
+    <div class="snap">
+      <div><div class="lbl">Market Price</div><div class="val">$72.16</div></div>
+      <div><div class="lbl">Composite FV</div><div class="val">$244.89</div></div>
+      <div><div class="lbl">Upside</div><div class="val up">+239.4%</div></div>
+      <div><div class="lbl">Method Range</div><div class="val" style="font-size:14px;">$121.80 – $357.19</div></div>
+    </div>
+
+    <div class="rangestrip">
+      <div class="rangestrip-track">
+        <div class="rangestrip-band" style="left:20.4%; right:4.5%;"></div>
+        <div class="rangestrip-marker market" style="left:4.5%;" title="Market $72.16"></div>
+        <div class="rangestrip-marker fv" style="left:59.6%;" title="Composite FV $244.89"></div>
+      </div>
+      <div class="rangestrip-labels"><span>$72.16 (market)</span><span>$357.19</span></div>
+    </div>
+    <p class="methnote" style="margin-top:-14px; margin-bottom:24px;">Note the market-price dot sits at the far left edge, outside the shaded method range — every method's floor is above where the stock trades today.</p>
+
+    <div class="grid2">
+      <div>
+        <h3 class="h">Business &amp; Thesis</h3>
+        <div class="thesis">
+          <ul>
+            <li><strong>What it does:</strong> the largest combined ride-hail and delivery platform in the West — a two-sided marketplace where more riders attract more drivers, which shortens wait times and attracts more riders.</li>
+            <li><strong>Growth:</strong> trips +22%, gross bookings +21%, monthly active platform consumers accelerating for two consecutive quarters.</li>
+            <li><strong>The reframe:</strong> we view Uber as the likely <em>autonomy aggregator</em> — the demand layer robotaxi fleets will plug into — rather than a company being disrupted by autonomy.</li>
+            <li><strong>Cash generation:</strong> roughly a 6.5% free-cash-flow yield on a business still compounding bookings at 20–25% a year.</li>
+            <li><strong>Sponsorship:</strong> Uber is Bill Ackman's single largest disclosed equity position (~15.7% of Pershing Square's 13F as of Q1 2026) — trimmed modestly last quarter, but still the anchor holding.</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <h3 class="h">Risk Factors</h3>
+        <div class="risk">
+          <ul>
+            <li><strong>Autonomy disintermediation:</strong> the bear case is that Waymo, Tesla, or others bypass Uber's marketplace entirely and go direct to consumer.</li>
+            <li><strong>Regulatory:</strong> driver classification fights remain live across multiple jurisdictions.</li>
+            <li><strong>Margin risk:</strong> delivery segment economics remain thinner than mobility.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="h">Method-by-Method</h3>
+    <div class="tablewrap">
+    <table class="method">
+      <tr><th>Method</th><th>Variant</th><th class="barcell">Implied</th><th>Value</th><th>vs Market</th></tr>
+      <tr><td class="m">DCF-20</td><td class="variant">20Y · Operating CF</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:46%"></div></div></td><td>$301.16</td><td class="pct up">+317.3%</td></tr>
+      <tr><td class="m">DFCF-20</td><td class="variant">20Y · Free CF</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:44%"></div></div></td><td>$291.37</td><td class="pct up">+303.8%</td></tr>
+      <tr><td class="m">DNI-20</td><td class="variant">20Y · Net Income</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:38%"></div></div></td><td>$253.66</td><td class="pct up">+251.5%</td></tr>
+      <tr><td class="m">H-Model DCF</td><td class="variant">Intrinsic</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:10%"></div></div></td><td>$121.80</td><td class="pct up">+68.8%</td></tr>
+      <tr><td class="m">EV / EBITDA</td><td class="variant">Multiples</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:26%"></div></div></td><td>$202.26</td><td class="pct up">+180.3%</td></tr>
+      <tr><td class="m">EV / Revenue</td><td class="variant">Multiples</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:19%"></div></div></td><td>$166.36</td><td class="pct up">+130.6%</td></tr>
+      <tr><td class="m">P / FCF</td><td class="variant">Multiples</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:13%"></div></div></td><td>$138.69</td><td class="pct up">+92.2%</td></tr>
+      <tr><td class="m">Revenue DCF</td><td class="variant">Growth</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:54%"></div></div></td><td>$357.19</td><td class="pct up">+395.0%</td></tr>
+      <tr><td class="m">PEG-implied</td><td class="variant">Growth</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:52%"></div></div></td><td>$346.44</td><td class="pct up">+380.1%</td></tr>
+      <tr><td class="m">Graham Revised</td><td class="variant">EPS × growth</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:35%"></div></div></td><td>$259.20</td><td class="pct up">+259.2%</td></tr>
+      <tr class="composite"><td class="m">InsightValue Composite</td><td class="variant">Trimmed mean</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:33%"></div></div></td><td>$244.89</td><td class="pct up">+239.4%</td></tr>
+    </table>
+    </div>
+    <p class="methnote">Read this one with caution. All ten methods show upside — but the two growth-extrapolation methods (Revenue DCF, PEG-implied) imply +380–395%, well above every multiples-based method. That's a function of compounding today's ~21% bookings growth for two decades, which is an aggressive assumption for any company at this scale. The multiples-based cluster ($138–$202) is arguably the more grounded read; the composite still sits meaningfully above market either way.</p>
+
+    <div class="bottomline"><div class="lbl">Bottom Line</div><p>Directionally the most undervalued name on the list by every method — the size of the gap is the part to treat skeptically, not the direction.</p></div>
+  </section>
+
+  <!-- MSFT -->
+  <section class="co">
+    <div class="co-head">
+      <div><div class="co-tk">MSFT</div><div class="co-name">Microsoft Corporation</div></div>
+      <div class="co-tag tag-fair">Core — fairly priced, highest-conviction fundamentals</div>
+    </div>
+    <p class="co-lede">$627B of revenue is already signed and under contract. This is the one name on the list where the model says the market has it about right — which, for a business growing Azure at 40%, is itself the interesting part.</p>
+
+    <div class="snap">
+      <div><div class="lbl">Market Price</div><div class="val">$373.02</div></div>
+      <div><div class="lbl">Composite FV</div><div class="val">$366.30</div></div>
+      <div><div class="lbl">Upside</div><div class="val down">−1.8%</div></div>
+      <div><div class="lbl">Method Range</div><div class="val" style="font-size:14px;">$199.24 – $572.01</div></div>
+    </div>
+
+    <div class="rangestrip">
+      <div class="rangestrip-track">
+        <div class="rangestrip-band" style="left:4.5%; right:4.5%;"></div>
+        <div class="rangestrip-marker market" style="left:46.9%;" title="Market $373.02"></div>
+        <div class="rangestrip-marker fv" style="left:45.3%;" title="Composite FV $366.30"></div>
+      </div>
+      <div class="rangestrip-labels"><span>$199.24</span><span>$572.01</span></div>
+    </div>
+
+    <div class="grid2">
+      <div>
+        <h3 class="h">Business &amp; Thesis</h3>
+        <div class="thesis">
+          <ul>
+            <li><strong>What it does:</strong> sells enterprise software (Office, Windows), the Azure cloud platform, and — increasingly — Copilot AI seats.</li>
+            <li><strong>Booked demand:</strong> commercial remaining performance obligation hit $627B, up 99% YoY — revenue that's already contracted, not projected.</li>
+            <li><strong>Azure:</strong> grew 40% in the most recent quarter (39% constant currency), guided to 39–40% next quarter — capacity-constrained, not demand-constrained.</li>
+            <li><strong>Copilot:</strong> surpassed 20 million paid seats, with seat adds up 250% year-over-year — the fastest growth since launch. AI business overall crossed a $37B annual run-rate, up 123%.</li>
+            <li><strong>Valuation:</strong> cheapest forward earnings multiple in roughly three years, despite the accelerating AI numbers.</li>
+            <li><strong>Optionality:</strong> Microsoft's stake in OpenAI (~27%) means it's paid whether OpenAI wins, loses, or gets disrupted by a competitor.</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <h3 class="h">Risk Factors</h3>
+        <div class="risk">
+          <ul>
+            <li><strong>Capex load:</strong> guided to ~$190B in calendar 2026 capital expenditure, with ~$25B of that from component price inflation alone.</li>
+            <li><strong>Margin compression:</strong> Microsoft Cloud gross margin has slipped from 70.1% to roughly 68% as AI investment ramps.</li>
+            <li><strong>OpenAI concentration:</strong> a large piece of the AI narrative rests on one partner's trajectory.</li>
+            <li><strong>Regulatory:</strong> an active FTC probe remains a background risk.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="h">Method-by-Method</h3>
+    <div class="tablewrap">
+    <table class="method">
+      <tr><th>Method</th><th>Variant</th><th class="barcell">Implied</th><th>Value</th><th>vs Market</th></tr>
+      <tr><td class="m">DCF-20</td><td class="variant">20Y · Operating CF</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:27%"></div></div></td><td>$572.01</td><td class="pct up">+53.3%</td></tr>
+      <tr><td class="m">DFCF-20</td><td class="variant">20Y · Free CF</td><td class="barcell"><div class="bar-track"><div class="bar-fill down" style="width:17%"></div></div></td><td>$243.79</td><td class="pct down">−34.6%</td></tr>
+      <tr><td class="m">DNI-20</td><td class="variant">20Y · Net Income</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:6%"></div></div></td><td>$420.35</td><td class="pct up">+12.7%</td></tr>
+      <tr><td class="m">H-Model DCF</td><td class="variant">Intrinsic</td><td class="barcell"><div class="bar-track"><div class="bar-fill down" style="width:23%"></div></div></td><td>$199.24</td><td class="pct down">−46.6%</td></tr>
+      <tr><td class="m">EV / EBITDA</td><td class="variant">Multiples</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:13%"></div></div></td><td>$471.68</td><td class="pct up">+26.4%</td></tr>
+      <tr><td class="m">EV / Revenue</td><td class="variant">Multiples</td><td class="barcell"><div class="bar-track"><div class="bar-fill down" style="width:20%"></div></div></td><td>$226.73</td><td class="pct down">−39.2%</td></tr>
+      <tr><td class="m">P / FCF</td><td class="variant">Multiples</td><td class="barcell"><div class="bar-track"><div class="bar-fill down" style="width:11%"></div></div></td><td>$293.03</td><td class="pct down">−21.4%</td></tr>
+      <tr><td class="m">Revenue DCF</td><td class="variant">Growth</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:6%"></div></div></td><td>$418.89</td><td class="pct up">+12.3%</td></tr>
+      <tr><td class="m">PEG-implied</td><td class="variant">Growth</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:10%"></div></div></td><td>$446.27</td><td class="pct up">+19.6%</td></tr>
+      <tr><td class="m">Graham Revised</td><td class="variant">EPS × growth</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:5%"></div></div></td><td>$409.68</td><td class="pct up">+9.8%</td></tr>
+      <tr class="composite"><td class="m">InsightValue Composite</td><td class="variant">Trimmed mean</td><td class="barcell"><div class="bar-track"><div class="bar-fill down" style="width:1%"></div></div></td><td>$366.30</td><td class="pct down">−1.8%</td></tr>
+    </table>
+    </div>
+    <p class="methnote">Methods split almost evenly — six show upside, four show downside — and cluster tightly around the current price relative to the other names. This is the model telling you Microsoft is efficiently priced today, not cheap and not expensive.</p>
+
+    <div class="bottomline"><div class="lbl">Bottom Line</div><p>Not a valuation dislocation — a quality compounder trading close to fair value. The case here rests on execution (Azure capacity, Copilot monetization) continuing to outrun the current multiple, not on the stock being mispriced today.</p></div>
+  </section>
+
+  <!-- ONDS -->
+  <section class="co">
+    <div class="co-head">
+      <div><div class="co-tk">ONDS</div><div class="co-name">Ondas Holdings, Inc.</div></div>
+      <div class="co-tag tag-wild">Wild card — speculative, thin valuation coverage</div>
+    </div>
+    <p class="co-lede">Revenue up over 1,000% year-over-year on the back of a rapid acquisition spree. The upside case is real; so is the fact that seven of ten standard valuation methods can't even be run on this business yet.</p>
+
+    <div class="snap">
+      <div><div class="lbl">Market Price</div><div class="val">$8.24</div></div>
+      <div><div class="lbl">Composite FV</div><div class="val">$26.34</div></div>
+      <div><div class="lbl">Upside</div><div class="val up">+219.7%</div></div>
+      <div><div class="lbl">Method Range</div><div class="val" style="font-size:14px;">$1.96 – $72.87 (3 of 10)</div></div>
+    </div>
+
+    <div class="rangestrip">
+      <div class="rangestrip-track">
+        <div class="rangestrip-band" style="left:4.5%; right:4.5%;"></div>
+        <div class="rangestrip-marker market" style="left:12.6%;" title="Market $8.24"></div>
+        <div class="rangestrip-marker fv" style="left:35.8%;" title="Composite FV $26.34"></div>
+      </div>
+      <div class="rangestrip-labels"><span>$1.96</span><span>$72.87</span></div>
+    </div>
+
+    <div class="grid2">
+      <div>
+        <h3 class="h">Business &amp; Thesis</h3>
+        <div class="thesis">
+          <ul>
+            <li><strong>What it does:</strong> a multi-domain autonomous-defense roll-up assembled over roughly a year — attack and surveillance drones, counter-drone cyber defense, stratospheric balloons, robotic minefield clearance, AI battlefield software (Omnisys), and private wireless networks.</li>
+            <li><strong>Growth:</strong> revenue jumped from $4.25M to $50.12M year-over-year (+1,080%), almost entirely from acquisitions rather than organic expansion.</li>
+            <li><strong>Balance sheet:</strong> roughly $1.48B in cash and a $457M backlog, alongside a Mistral prime-contractor relationship giving access to U.S. defense procurement.</li>
+            <li><strong>Macro tailwind:</strong> positioned into the Pentagon's roughly $75B drone-modernization cycle.</li>
+            <li><strong>Price action:</strong> down more than 45% from its 52-week high of $15.28, currently around $8.24 — well below the $11.00–11.28 technical zone we'd previously flagged.</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <h3 class="h">Risk Factors</h3>
+        <div class="risk">
+          <ul>
+            <li><strong>Not yet profitable:</strong> the headline $361M GAAP net income figure is mostly non-cash accounting gains; adjusted EBITDA was actually a $10.9M loss.</li>
+            <li><strong>Complexity:</strong> six-plus business lines assembled in under a year — no multi-year track record to underwrite the "moat" thesis yet.</li>
+            <li><strong>Lumpy revenue:</strong> inorganic, acquisition-driven growth is much harder to model forward than organic growth.</li>
+            <li><strong>Broken technical structure:</strong> price has fallen through both the entry zone and the stop-loss level from the original swing-trade setup — the chart no longer supports the trade it was built on.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="h">Method-by-Method</h3>
+    <div class="tablewrap">
+    <table class="method">
+      <tr><th>Method</th><th>Variant</th><th class="barcell">Implied</th><th>Value</th><th>vs Market</th></tr>
+      <tr><td class="m">DCF-20</td><td class="variant">20Y · Operating CF</td><td class="na" colspan="3">n/a — insufficient operating cash flow history</td></tr>
+      <tr><td class="m">DFCF-20</td><td class="variant">20Y · Free CF</td><td class="na" colspan="3">n/a</td></tr>
+      <tr><td class="m">DNI-20</td><td class="variant">20Y · Net Income</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:48%"></div></div></td><td>$72.87</td><td class="pct up">+784.4%</td></tr>
+      <tr><td class="m">H-Model DCF</td><td class="variant">Intrinsic</td><td class="na" colspan="3">n/a</td></tr>
+      <tr><td class="m">EV / EBITDA</td><td class="variant">Multiples</td><td class="na" colspan="3">n/a — negative EBITDA</td></tr>
+      <tr><td class="m">EV / Revenue</td><td class="variant">Multiples</td><td class="barcell"><div class="bar-track"><div class="bar-fill down" style="width:20%"></div></div></td><td>$4.20</td><td class="pct down">−49.1%</td></tr>
+      <tr><td class="m">P / FCF</td><td class="variant">Multiples</td><td class="na" colspan="3">n/a — negative free cash flow</td></tr>
+      <tr><td class="m">Revenue DCF</td><td class="variant">Growth</td><td class="barcell"><div class="bar-track"><div class="bar-fill down" style="width:32%"></div></div></td><td>$1.96</td><td class="pct down">−76.2%</td></tr>
+      <tr><td class="m">PEG-implied</td><td class="variant">Growth</td><td class="na" colspan="3">n/a — no stable earnings growth rate</td></tr>
+      <tr><td class="m">Graham Revised</td><td class="variant">EPS × growth</td><td class="na" colspan="3">n/a</td></tr>
+      <tr class="composite"><td class="m">InsightValue Composite</td><td class="variant">Trimmed mean</td><td class="barcell"><div class="bar-track"><div class="bar-fill up" style="width:20%"></div></div></td><td>$26.34</td><td class="pct up">+219.7%</td></tr>
+    </table>
+    </div>
+    <p class="methnote">This is the most important table on the page to read carefully. Only 3 of 10 methods could even be calculated — the rest require profitability metrics Ondas doesn't have yet. And the three that <em>did</em> run disagree by nearly 40x with each other: net-income-based DNI-20 says $72.87, revenue-growth-based methods say $1.96–$4.20. The $26.34 composite is a trimmed mean of three wildly disagreeing numbers, not a converged estimate. Treat it as "somewhere between deeply undervalued and overvalued, we genuinely don't know yet" rather than a precise target.</p>
+
+    <div class="bottomline"><div class="lbl">Bottom Line</div><p>The fundamental growth story is real. The valuation model can't yet confirm or deny whether the stock is cheap, because the business hasn't existed in its current form long enough to value conventionally. Size accordingly — this is a speculative slot, not a core holding.</p></div>
+  </section>
+
+  <footer class="disc">
+    <p><strong>Not investment advice.</strong> Prepared for informational and educational purposes only. Composite fair values shown are model outputs from a third-party valuation tool (InsightValue), reflecting a trimmed mean across up to ten valuation methods per name; they are estimates built on assumptions about growth, margins, and discount rates that may not hold, and are not price targets or recommendations. Several methods for high-growth names extrapolate current growth rates over 20-year horizons, which can materially overstate fair value — see the per-name notes above. Market prices, financial figures, and 13F holdings data are point-in-time as of July 1, 2026, and may be stale by the time this is read. Nothing here is a solicitation or offer to buy or sell any security. Do your own research, verify all figures against a live source, and consider your own risk tolerance before acting.</p>
+  </footer>
+
+</div>
+</body>
+</html>
