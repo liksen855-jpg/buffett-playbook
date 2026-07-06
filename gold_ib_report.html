@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gold — Special Situation Report | July 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a2240;
+    --navy-2: #123258;
+    --blue: #1e5aa8;
+    --blue-light: #eaf1f9;
+    --blue-mid: #cfe0f2;
+    --hairline: #d9dee4;
+    --hairline-strong: #b7c2cd;
+    --paper: #ffffff;
+    --paper-2: #f7f9fb;
+    --text: #1a1f26;
+    --text-dim: #4c5561;
+    --text-faint: #838d99;
+    --green: #1c7a4d;
+    --green-bg: #e7f4ec;
+    --red: #b0332b;
+    --red-bg: #fbeceb;
+    --amber: #9a6b12;
+    --amber-bg: #fbf1de;
+    --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --sans: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper-2);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15.5px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 880px; margin: 0 auto; background: var(--paper); box-shadow: 0 0 0 1px var(--hairline); }
+  .inner { padding: 0 44px 64px; }
+
+  .topbar { background: var(--navy); padding: 9px 44px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
+  .topbar .firm { color: #ffffff; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; }
+  .topbar .desk { color: #9db3cc; font-size: 11px; letter-spacing: 0.06em; }
+
+  .report-head { padding: 30px 0 22px; border-bottom: 2px solid var(--navy); }
+  .kicker-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+  .kicker { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue); }
+  .doc-date { font-size: 11.5px; color: var(--text-faint); }
+  h1.title {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(26px, 4vw, 33px);
+    line-height: 1.28;
+    color: var(--navy);
+    max-width: 24ch;
+  }
+  .deck { margin-top: 12px; font-size: 16.5px; color: var(--text-dim); max-width: 62ch; }
+
+  .rating-box {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    border: 1px solid var(--hairline-strong);
+    margin-top: 24px;
+  }
+  .rating-box > div { padding: 14px 18px; border-right: 1px solid var(--hairline); }
+  .rating-box > div:last-child { border-right: none; }
+  .rating-box .k { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); }
+  .rating-box .v { font-family: var(--serif); font-size: 18px; color: var(--navy); margin-top: 5px; font-weight: 600; }
+  .rating-box .v.up { color: var(--green); }
+  .rating-box .v small { font-family: var(--sans); font-size: 12px; font-weight: 500; color: var(--text-dim); }
+
+  section { padding: 40px 0 4px; }
+  .sec-head { border-bottom: 1px solid var(--navy); padding-bottom: 10px; margin-bottom: 22px; display: flex; align-items: baseline; gap: 12px; }
+  .sec-num { font-family: var(--serif); font-weight: 700; font-size: 13px; color: var(--blue); }
+  .sec-head h2 { font-family: var(--serif); font-weight: 600; font-size: 21px; color: var(--navy); }
+  .sec-head .sec-sub { font-size: 12.5px; color: var(--text-faint); margin-top: 2px; }
+
+  p { color: var(--text-dim); margin-bottom: 16px; max-width: 70ch; }
+  p strong { color: var(--text); font-weight: 600; }
+  .lede { font-size: 16.5px; color: var(--text); }
+  .translate { color: var(--text-faint); font-style: italic; }
+
+  .findings { margin: 4px 0 8px; }
+  .finding { display: grid; grid-template-columns: 40px 1fr; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--hairline); }
+  .finding .fn { font-family: var(--serif); font-weight: 700; font-size: 18px; color: var(--blue-mid); background: var(--navy); color: #fff; width: 28px; height: 28px; border-radius: 2px; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+  .finding .head { font-weight: 600; color: var(--navy); margin-bottom: 4px; font-size: 15.5px; }
+  .finding .body { font-size: 14.5px; color: var(--text-dim); max-width: 64ch; }
+
+  .timeframe { display: grid; grid-template-columns: 108px 1fr; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--hairline); }
+  .timeframe .when { font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); padding-top: 3px; }
+  .timeframe .what p { margin-bottom: 8px; font-size: 14.5px; }
+  .timeframe .what p:last-child { margin-bottom: 0; }
+
+  .chart-block { margin: 30px 0 16px; background: var(--paper); border: 1px solid var(--hairline-strong); }
+  .chart-block .chart-title-bar { background: var(--navy); padding: 10px 20px; }
+  .chart-block .chart-title { font-family: var(--serif); font-weight: 600; font-size: 14.5px; color: #ffffff; }
+  .chart-block .chart-sub { font-size: 11.5px; color: #9db3cc; margin-top: 2px; }
+  .chart-canvas-wrap { position: relative; width: 100%; height: 420px; padding: 22px 18px 8px; }
+  .chart-legend { display: flex; flex-wrap: wrap; gap: 8px 18px; padding: 4px 20px 16px; font-size: 12px; color: var(--text-dim); }
+  .chart-legend .cl-item { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .chart-legend .cl-dot { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+  @media (max-width: 640px) { .chart-canvas-wrap { height: 300px; padding: 16px 8px 4px; } }
+  .chart-note { font-size: 11px; color: var(--text-faint); padding: 10px 20px 14px; border-top: 1px solid var(--hairline); }
+
+  .table-scroll { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 6px 0 24px; }
+  table.levels { width: 100%; min-width: 480px; border-collapse: collapse; margin: 0; font-size: 14px; }
+  table.levels th {
+    text-align: left; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: #ffffff; font-weight: 700; padding: 10px 14px;
+    background: var(--navy);
+  }
+  table.levels td { padding: 13px 14px; border-bottom: 1px solid var(--hairline); vertical-align: top; color: var(--text-dim); background: var(--paper); }
+  table.levels tr:nth-child(even) td { background: var(--paper-2); }
+  table.levels td.lv { font-family: var(--serif); font-weight: 700; color: var(--navy); white-space: nowrap; }
+  .pill { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 9px; border-radius: 2px; white-space: nowrap; }
+  .pill.support { background: var(--green-bg); color: var(--green); }
+  .pill.resist { background: var(--red-bg); color: var(--red); }
+  .pill.invalid { background: var(--red-bg); color: var(--red); }
+  .pill.confirm { background: var(--blue-light); color: var(--blue); }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 6px 0 22px; }
+  @media (max-width: 640px) { .split { grid-template-columns: 1fr; } .timeframe, .finding { grid-template-columns: 1fr; gap: 6px; } .inner { padding: 0 20px 48px; } .topbar { padding: 9px 20px; } .reward-steps { flex-direction: column; gap: 8px; } }
+  .panel { background: var(--blue-light); border: 1px solid var(--blue-mid); padding: 18px 20px; }
+  .panel .panel-k { font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue); margin-bottom: 10px; }
+  .panel p { font-size: 14px; margin-bottom: 0; }
+  .panel .big { font-family: var(--serif); font-weight: 700; font-size: 25px; color: var(--navy); margin-bottom: 2px; }
+  .panel .big-sub { font-size: 12px; color: var(--text-faint); margin-bottom: 12px; }
+
+  .conflict {
+    border-left: 3px solid var(--amber);
+    background: var(--amber-bg);
+    padding: 16px 20px;
+    margin: 20px 0 24px;
+  }
+  .conflict .c-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amber); margin-bottom: 8px; }
+  .conflict p { font-size: 14px; margin-bottom: 0; color: var(--text-dim); }
+
+  .scenario-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin: 6px 0 24px; }
+  .scenario { border: 1px solid var(--hairline-strong); background: var(--paper); }
+  .scenario .s-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; padding: 12px 20px; background: var(--paper-2); border-bottom: 1px solid var(--hairline); }
+  .scenario .s-name { font-family: var(--serif); font-weight: 700; font-size: 15.5px; color: var(--navy); }
+  .scenario .s-prob { font-size: 10.5px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-faint); }
+  .scenario .s-body { padding: 16px 20px; }
+  .scenario p { font-size: 14px; margin-bottom: 10px; }
+  .scenario .s-path { font-size: 12.5px; color: var(--blue); font-weight: 600; }
+
+  .pull-quote {
+    border-top: 1px solid var(--navy);
+    border-bottom: 1px solid var(--navy);
+    padding: 30px 0;
+    margin: 40px 0;
+  }
+  .pull-quote .q { font-family: var(--serif); font-weight: 600; font-style: italic; font-size: clamp(18px, 2.6vw, 22px); line-height: 1.5; color: var(--navy); max-width: 46ch; }
+  .pull-quote .q-sub { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); margin-top: 10px; }
+
+  .sponsor-wrap { margin: 44px 0 48px; }
+  .sponsor-min-tag { display: inline-block; font-size: 9.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 10px; }
+
+  .sponsor-card { border: 1px solid var(--hairline-strong); border-top: 3px solid #d99a1f; background: var(--paper); }
+  .sponsor-head { display: flex; align-items: center; gap: 12px; padding: 20px 24px 16px; border-bottom: 1px solid var(--hairline); }
+  .sponsor-logo { width: 42px; height: 42px; border-radius: 8px; background: var(--navy); color: #fff; display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-weight: 700; font-size: 18px; flex-shrink: 0; }
+  .sponsor-brand { font-size: 16.5px; font-weight: 700; color: var(--navy); }
+  .sponsor-tag { font-size: 12px; color: var(--text-faint); margin-top: 1px; }
+
+  .sponsor-body { padding: 20px 24px 6px; }
+  .sponsor-body h3 { font-family: var(--serif); font-weight: 600; font-size: 19px; color: var(--navy); margin-bottom: 10px; }
+  .sponsor-body p { font-size: 14.5px; color: var(--text-dim); margin-bottom: 14px; max-width: none; }
+
+  .reward-hero { background: linear-gradient(0deg, #fff8ea, #fffcf4); border: 1.5px solid #eddca4; border-radius: 8px; padding: 20px 22px; margin: 4px 0 18px; text-align: center; }
+  .reward-hero .rh-eyebrow { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #9a6b12; margin-bottom: 6px; }
+  .reward-hero .rh-amt { font-family: var(--serif); font-weight: 700; font-size: 38px; color: #9a6b12; line-height: 1; }
+  .reward-hero .rh-sub { font-size: 13px; color: var(--text-dim); margin-top: 6px; }
+
+  .reward-track { display: flex; flex-wrap: wrap; gap: 0; margin: 0 0 18px; border: 1px solid var(--hairline); border-radius: 6px; overflow: hidden; }
+  .reward-step { flex: 1; min-width: 130px; padding: 12px 14px; text-align: center; border-right: 1px solid var(--hairline); background: var(--paper-2); }
+  .reward-step:last-child { border-right: none; }
+  .reward-step .rs-label { font-size: 11.5px; color: var(--text-dim); }
+  .reward-step .rs-amt { font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--green); margin-top: 3px; }
+
+  .sponsor-cta-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding: 0 24px 20px; }
+  .sponsor-cta-btn { display: inline-block; background: #9a6b12; color: #fff; font-size: 15px; font-weight: 700; padding: 13px 28px; border-radius: 6px; text-decoration: none; white-space: nowrap; }
+  .sponsor-cta-fine { font-size: 11.5px; color: var(--text-faint); }
+
+  .sponsor-disclosure { font-size: 10px; color: var(--text-faint); padding: 8px 24px 12px; }
+
+  .framework { margin: 6px 0 20px; }
+  .fw-row { display: grid; grid-template-columns: 180px 1fr; gap: 18px; padding: 14px 0; border-bottom: 1px solid var(--hairline); }
+  @media (max-width: 640px) { .fw-row { grid-template-columns: 1fr; gap: 4px; } }
+  .fw-row .fw-k { font-family: var(--serif); font-weight: 700; font-size: 14px; color: var(--navy); }
+  .fw-row .fw-v { font-size: 14px; color: var(--text-dim); }
+
+  .disclosures { margin-top: 56px; border-top: 2px solid var(--navy); padding-top: 22px; }
+  .disclosures h3 { font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--navy); margin-bottom: 12px; }
+  .disclosures p { font-size: 11.5px; color: var(--text-faint); max-width: none; margin-bottom: 9px; }
+
+  .footer-bar { background: var(--navy); padding: 14px 44px; display: flex; justify-content: space-between; font-size: 10.5px; color: #9db3cc; flex-wrap: wrap; gap: 6px; }
+
+  @media print {
+    body { background: #ffffff; }
+    .page { box-shadow: none; }
+    .topbar, .footer-bar { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="topbar">
+    <span class="firm">MACRO &amp; COMMODITIES RESEARCH</span>
+    <span class="desk">Special situation report &nbsp;·&nbsp; Precious metals</span>
+  </div>
+
+  <div class="inner">
+
+    <div class="report-head">
+      <div class="kicker-row">
+        <span class="kicker">Gold · GC=F · Commodities</span>
+        <span class="doc-date">July 6, 2026 &nbsp;|&nbsp; Data through July 3 settlement</span>
+      </div>
+      <h1 class="title">Gold: the price broke, the buyers underneath it didn't</h1>
+      <p class="deck">Gold has fallen 22% from January's record while the structural bid — central banks, reserve managers, long-duration holders — barely moved. This report maps why the selloff happened, where accumulation is occurring, and the two dates in July that decide what comes next.</p>
+
+      <div class="rating-box">
+        <div>
+          <div class="k">Stance</div>
+          <div class="v" style="font-size:16px;">Constructive on weakness</div>
+        </div>
+        <div>
+          <div class="k">Accumulation zone</div>
+          <div class="v">$3,900&ndash;4,100</div>
+        </div>
+        <div>
+          <div class="k">Last price</div>
+          <div class="v">$4,171 <small class="up" style="color: var(--green);">+1.1%</small></div>
+        </div>
+        <div>
+          <div class="k">Key catalysts</div>
+          <div class="v" style="font-size:15px;">Jul 14 CPI · Jul 29 FOMC</div>
+        </div>
+      </div>
+    </div>
+
+    <section>
+      <div class="sec-head">
+        <span class="sec-num">&mdash;</span>
+        <div>
+          <h2>Key findings</h2>
+          <div class="sec-sub">The five conclusions that matter, before the detail</div>
+        </div>
+      </div>
+      <div class="findings">
+        <div class="finding">
+          <div class="fn">1</div>
+          <div>
+            <div class="head">The selloff was a rates event, not a gold event</div>
+            <div class="body">The 22% drawdown from January's $5,355 record was driven by leveraged funds repricing Federal Reserve policy — first the March positioning washout, then June's hike scare after inflation printed 4.2%. The structural demand base did not participate in the selling.</div>
+          </div>
+        </div>
+        <div class="finding">
+          <div class="fn">2</div>
+          <div>
+            <div class="head">The structural bid held through the entire drawdown</div>
+            <div class="body">Global gold ETF holdings fell roughly 1% from their February record despite a one-fifth price decline. Central banks returned to net buying in May (+41 tonnes), and China's official buying streak extended past 19 consecutive months. Holders stepped aside; they did not exit.</div>
+          </div>
+        </div>
+        <div class="finding">
+          <div class="fn">3</div>
+          <div>
+            <div class="head">Speculative positioning is washed out</div>
+            <div class="body">Money-manager net longs were cut 18% by late February and total COMEX net length sat in neutral territory by end-May. The crowded-trade risk that made January dangerous is not present at $4,100. That converts dips into accumulation setups rather than distribution.</div>
+          </div>
+        </div>
+        <div class="finding">
+          <div class="fn">4</div>
+          <div>
+            <div class="head">$3,900&ndash;4,100 has been defended twice</div>
+            <div class="body">June 24 ($4,009 settlement) and the turn of the month both saw buyers absorb supply at this shelf — the same zone where the November 2025 base was built. Below it, $3,886 is where the correction thesis breaks.</div>
+          </div>
+        </div>
+        <div class="finding">
+          <div class="fn">5</div>
+          <div>
+            <div class="head">July 14 and July 29 are the fulcrum</div>
+            <div class="body">Last week's payrolls miss (57k vs ~114k expected) cut September hike odds from two-thirds to a coin flip and produced the bounce off $4,000. A soft CPI on July 14 confirms the floor; a hot one re-arms the hike trade and reopens the $3,700s.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <span class="sec-num">I.</span>
+        <div>
+          <h2>Anatomy of the decline</h2>
+          <div class="sec-sub">What changed in the last year, quarter, month, and week — kept separate on purpose</div>
+        </div>
+      </div>
+
+      <p class="lede">Gold's 2026 has been a story of one market wearing two prices: the price set by traders reacting to the Federal Reserve, and the price paid by institutions accumulating reserves. For six months, the first price fell while the second kept buying.</p>
+
+      <div class="timeframe">
+        <div class="when">The year</div>
+        <div class="what">
+          <p>Gold gained roughly 65% in 2025, then went parabolic into late January 2026 — settling at a record <strong>$5,354.80 on January 29</strong> on the year's heaviest volume (intraday prints ran higher, to roughly $5,586&ndash;5,595 depending on venue). The next session it crashed 11% in a single day, a textbook blowoff top. The market then rebuilt, briefly reclaiming the settlement high at $5,366.50 on March 1 before the March breakdown began, and ETF holdings hit an all-time record of 4,176 tonnes on February 27.</p>
+        </div>
+      </div>
+      <div class="timeframe">
+        <div class="when">The quarter</div>
+        <div class="what">
+          <p>Two forces dominated Q2. First, a ~15% March break ($5,062 &rarr; $4,376 in under two weeks) that Goldman characterized as a leveraged-positioning unwind rather than a fundamental rupture. Second, the US&ndash;Iran conflict and Strait of Hormuz disruption <span class="translate">— the shipping lane carrying roughly a fifth of the world's oil —</span> pushed Brent crude toward $120, which kept inflation sticky, which kept the Fed hawkish, which kept real yields high. Q2 became gold's worst quarterly decline since the second quarter of 2013.</p>
+        </div>
+      </div>
+      <div class="timeframe">
+        <div class="when">The month</div>
+        <div class="what">
+          <p>June was the capitulation leg. Strong June 5 payrolls plus a June 10 CPI print of 4.2% flipped the market from pricing cuts to pricing a possible <em>hike</em>. The 10-year TIPS real yield <span class="translate">— the return on a government bond after inflation, gold's direct competitor —</span> reached 2.28%, and the dollar hit thirteen-month highs. Gold broke $4,000 for the first time since November 2025. Goldman cut its year-end target from $5,400 to $4,900 on June 20.</p>
+        </div>
+      </div>
+      <div class="timeframe">
+        <div class="when">The week</div>
+        <div class="what">
+          <p>The hawkish premise cracked. July 1: soft ADP payrolls and a less hawkish tone from Fed Chair Warsh at the ECB forum. July 2: the economy added just <strong>57,000 jobs</strong> — the fewest in four months, versus ~114,000 expected — and September hike odds fell from two-thirds to roughly even. Gold jumped over 2% in a day, while Hormuz shipping resumed and oil returned to pre-war levels near $69 WTI.</p>
+        </div>
+      </div>
+
+      <div class="chart-block">
+        <div class="chart-title-bar">
+          <div class="chart-title">Exhibit 1 &mdash; Gold futures with technical structure</div>
+          <div class="chart-sub">COMEX GC, daily settlements, January&ndash;July 2026</div>
+        </div>
+        <div class="chart-canvas-wrap">
+          <canvas id="mainChart" role="img" aria-label="Line chart of gold futures from January to July 2026, falling from a January 29 record of 5,355 dollars to a June 24 low of 4,009 dollars, now at 4,171 and testing the 3,900 to 4,100 support zone, with the 50-day moving average at 4,406 and 200-day reclaim level at 4,600 overhead">Gold fell from a January 29 record of $5,354.80 to a June 24 low of $4,008.80 and now trades at $4,171, testing support at $3,900&ndash;4,100.</canvas>
+        </div>
+        <div class="chart-legend">
+          <span class="cl-item"><span class="cl-dot" style="background:#8a6d33;"></span>Jan high $5,355</span>
+          <span class="cl-item"><span class="cl-dot" style="background:#1c7a4d;"></span>Reclaim $4,600 (200D MA)</span>
+          <span class="cl-item"><span class="cl-dot" style="background:#838d99;"></span>50D MA $4,406</span>
+          <span class="cl-item"><span class="cl-dot" style="background:#1c7a4d;"></span>Support $3,900&ndash;4,100</span>
+          <span class="cl-item"><span class="cl-dot" style="background:#b0332b;"></span>Invalidation $3,886</span>
+        </div>
+        <div class="chart-note">Source: COMEX gold futures (GCUSD) daily settlements via Financial Modeling Prep, as of July 3, 2026.</div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <span class="sec-num">II.</span>
+        <div>
+          <h2>The levels that matter</h2>
+          <div class="sec-sub">Where buyers act, where the thesis breaks, and where the trend repairs</div>
+        </div>
+      </div>
+
+      <p>Production cost is not the floor here. Industry median all-in sustaining cost <span class="translate">(what it costs miners to produce an ounce, all expenses included)</span> sits near $1,500&ndash;1,650. Gold would need to fall over 55% before the cost curve matters. The relevant thresholds are behavioral and monetary, not geological.</p>
+
+      <div class="table-scroll">
+      <table class="levels">
+        <thead>
+          <tr><th>Level</th><th>Role</th><th>Why it matters</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="lv">$4,600</td>
+            <td><span class="pill confirm">Confirmation</span></td>
+            <td>The 200-day moving average. A weekly close above it signals the correction phase is over rather than paused.</td>
+          </tr>
+          <tr>
+            <td class="lv">$4,370&ndash;4,406</td>
+            <td><span class="pill resist">Resistance</span></td>
+            <td>The 50-day moving average and first structural ceiling. J.P. Morgan's former $4,400&ndash;4,600 support zone failed in June &mdash; failed support becomes resistance.</td>
+          </tr>
+          <tr>
+            <td class="lv">$3,900&ndash;4,100</td>
+            <td><span class="pill support">Support</span></td>
+            <td>The defended shelf. Tested June 24 and again July 1, absorbed both times, coinciding with the November 2025 base. This is the accumulation zone.</td>
+          </tr>
+          <tr>
+            <td class="lv">$3,886</td>
+            <td><span class="pill invalid">Invalidation</span></td>
+            <td>Origin swing low of the final leg up. A weekly close below breaks the correction structure and opens the $3,700s.</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+
+      <div class="split">
+        <div class="panel">
+          <div class="panel-k">The monetary threshold</div>
+          <div class="big">2.28%</div>
+          <div class="big-sub">10-year TIPS real yield, late June</div>
+          <p>Gold pays no income, so its hurdle is the real return on the safest alternative. Every hawkish repricing raises that hurdle; every dovish one lowers it.</p>
+        </div>
+        <div class="panel">
+          <div class="panel-k">The valuation anchor</div>
+          <div class="big">$4,916</div>
+          <div class="big-sub">Reuters poll median, April 2026 (most recent available)</div>
+          <p>Sell-side consensus sits well above spot: Goldman $4,900 (Jun), J.P. Morgan ~$6,000 by Q4, Wells Fargo $6,100&ndash;6,300 (Mar), UBS ~$5,600 (Apr). Targets are dated because banks have revised repeatedly through the year.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <span class="sec-num">III.</span>
+        <div>
+          <h2>Institutional positioning</h2>
+          <div class="sec-sub">Who sold, who held, who's still buying &mdash; and one data conflict worth naming</div>
+        </div>
+      </div>
+
+      <p class="lede">A 22% drawdown with intact institutional holdings is the signature of a positioning washout, not a broken thesis.</p>
+
+      <p><strong>Central banks.</strong> From 2021&ndash;2025, official institutions bought an average of 225 tonnes per quarter &mdash; roughly double the prior five-year pace. The World Gold Council reported central banks back in net buying mode in May, adding 41 tonnes, and China's central bank extended its reported buying streak past 19 consecutive months. Chinese net gold imports hit 317 tonnes in Q1 &mdash; nearly triple the prior quarter.</p>
+
+      <div class="conflict">
+        <div class="c-label">Flagged &mdash; the reported-vs-estimated gap</div>
+        <p>On a <em>reported</em> basis, net Q1 central bank purchases were only 16 tonnes, with 129 tonnes of gross selling headlined by T&uuml;rkiye's 60-tonne March sale. Using London OTC and Swiss refinery flow data, the World Gold Council estimates total Q1 buying at 244 tonnes &mdash; up from Q4. Both figures are presented because the unreported component cannot be independently verified.</p>
+      </div>
+
+      <p><strong>ETFs.</strong> February saw $5.3bn of inflows &mdash; the ninth consecutive month of North American inflows. May slowed to modest net outflows and June brought the first Asian monthly outflow since August 2025. But the stock, not the flow, is the story: holdings of roughly 4,121 tonnes sit barely 1% below the record, through the entire drawdown.</p>
+
+      <p><strong>Futures positioning.</strong> Money-manager net longs fell 18% to 311 tonnes by late February; by end-May, total COMEX net length of 466 tonnes sat in neutral territory &mdash; and managed money actually <em>added</em> length in three of May's four weeks.</p>
+
+      <p><strong>Forward intent.</strong> An OMFIF survey of 90 central banks and sovereign funds published June 30 found, for the first time on record, more institutions planning to <em>cut</em> dollar allocations than raise them over the coming decade, with a net 30% planning to increase gold within two years.</p>
+    </section>
+
+    <div class="pull-quote">
+      <div class="q">"Selloffs caused by the fast layer, while the slow layer holds, are what accumulation windows look like."</div>
+      <div class="q-sub">The core read of this report</div>
+    </div>
+
+    <div class="sponsor-wrap">
+      <span class="sponsor-min-tag">Partner offer</span>
+
+      <div class="sponsor-card">
+        <div class="sponsor-head">
+          <div class="sponsor-logo">M</div>
+          <div>
+            <div class="sponsor-brand">Mitrade</div>
+            <div class="sponsor-tag">Trade gold and commodity CFDs</div>
+          </div>
+        </div>
+
+        <div class="sponsor-body">
+          <h3>Trade the move, not just the story</h3>
+          <p>If you're watching this setup the way this desk is &mdash; trading it rather than just tracking it &mdash; Mitrade is the platform used to trade gold and a full range of commodity CFDs. Zero commission, tight spreads, and position sizing built to match your own risk tolerance.</p>
+
+          <div class="reward-hero">
+            <div class="rh-eyebrow">New users unlock</div>
+            <div class="rh-amt">$100</div>
+            <div class="rh-sub">in rewards just for getting started*</div>
+          </div>
+
+          <div class="reward-track">
+            <div class="reward-step">
+              <div class="rs-label">Sign up</div>
+              <div class="rs-amt">+$10</div>
+            </div>
+            <div class="reward-step">
+              <div class="rs-label">Complete profile</div>
+              <div class="rs-amt">+$20</div>
+            </div>
+            <div class="reward-step">
+              <div class="rs-label">Verify identity</div>
+              <div class="rs-amt">+$30</div>
+            </div>
+            <div class="reward-step">
+              <div class="rs-label">First deposit</div>
+              <div class="rs-amt">+$40</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sponsor-cta-row">
+          <a href="https://mytd.cc/APu5" class="sponsor-cta-btn">Claim your $100 &rarr;</a>
+          <span class="sponsor-cta-fine">*Deposits and trading required. Terms and conditions apply.</span>
+        </div>
+
+        <div class="sponsor-disclosure">Paid partnership. The author may earn a commission from sign-ups via this link. CFDs are leveraged products; losses can exceed deposits.</div>
+      </div>
+    </div>
+
+    <section>
+      <div class="sec-head">
+        <span class="sec-num">IV.</span>
+        <div>
+          <h2>The asymmetric layer</h2>
+          <div class="sec-sub">Tail scenarios, the structural thesis, and the honest bear case</div>
+        </div>
+      </div>
+
+      <p><strong>The stagflation setup markets are not pricing cleanly.</strong> Last week produced 57,000 jobs alongside 4.2% inflation. The consensus debate is binary: hawkish Fed versus cuts. The third scenario is a Fed unable to move in either direction &mdash; a rate hold driven by inflation paralysis rather than confidence. That loss of monetary agency is historically gold's best regime.</p>
+
+      <p><strong>Tail scenarios favoring gold.</strong> Renewed Hormuz escalation, a hard-landing signal forcing emergency easing into 4% inflation, a fiscal or Treasury-market stress event, or accelerated reserve diversification. Each is low-probability individually; gold is the asset that gets paid on all of them simultaneously.</p>
+
+      <p><strong>The structural thesis, separate from price.</strong> The 2022 freezing of Russian reserves demonstrated that offshore currency assets carry counterparty risk <span class="translate">— they can be frozen by someone else's decision —</span> while gold in a domestic vault cannot. Supply is inelastic: new mines take seven to ten years from discovery to production.</p>
+
+      <p><strong>The honest bear case.</strong> ING and BMO both cut H2 targets in June; OCBC sees declines through end-2026 on firm yields and a strong dollar. That scenario requires growth <em>and</em> inflation re-accelerating together &mdash; a high bar the July 2 payrolls miss raised further. But a hot July 14 CPI would revive it within hours.</p>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <span class="sec-num">V.</span>
+        <div>
+          <h2>Scenarios into the two catalysts</h2>
+          <div class="sec-sub">July 14 CPI, then July 29 FOMC</div>
+        </div>
+      </div>
+
+      <div class="scenario-grid">
+        <div class="scenario">
+          <div class="s-head">
+            <span class="s-name">Base &mdash; the floor confirms</span>
+            <span class="s-prob">Soft/in-line CPI &middot; Fed holds neutral</span>
+          </div>
+          <div class="s-body">
+            <p>The hike premium bleeds out of the curve. Gold consolidates above $4,100 and challenges the $4,370&ndash;4,406 resistance cluster. Trend repair still requires the 200-day at ~$4,600.</p>
+            <div class="s-path">Path: $4,100 holds &rarr; $4,370&ndash;4,406 test &rarr; range $4,100&ndash;4,600</div>
+          </div>
+        </div>
+        <div class="scenario">
+          <div class="s-head">
+            <span class="s-name">Bull &mdash; the stagflation print</span>
+            <span class="s-prob">Hot-ish CPI with weakening labor data</span>
+          </div>
+          <div class="s-body">
+            <p>The Fed is revealed as cornered. Real yields fall as credibility gets repriced. Gold reclaims the 200-day faster than consensus expects.</p>
+            <div class="s-path">Path: fast reclaim of $4,600 &rarr; trend resumption toward $5,000+</div>
+          </div>
+        </div>
+        <div class="scenario">
+          <div class="s-head">
+            <span class="s-name">Bear &mdash; the hike trade re-arms</span>
+            <span class="s-prob">Hot CPI &middot; Fed signals live September hike</span>
+          </div>
+          <div class="s-body">
+            <p>Real yields push back through recent highs, the dollar resumes its advance, and the shelf gets a third, harder test. A weekly close below $3,886 opens the $3,700s.</p>
+            <div class="s-path">Path: $3,900&ndash;4,010 retest &rarr; $3,886 decision &rarr; $3,700s if it fails</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <span class="sec-num">VI.</span>
+        <div>
+          <h2>Synthesis &mdash; the accumulation framework</h2>
+          <div class="sec-sub">How the layers combine into a plan rather than a prediction</div>
+        </div>
+      </div>
+
+      <p class="lede">The selloff was made by the layer of the market that always overshoots. The layer that doesn't &mdash; reserve managers, long-duration holders, physical buyers &mdash; held its ground. That divergence, plus a twice-defended floor and washed-out speculative positioning, defines the setup.</p>
+
+      <div class="framework">
+        <div class="fw-row">
+          <div class="fw-k">Where to accumulate</div>
+          <div class="fw-v">In tranches on tests of $3,900&ndash;4,100 &mdash; the zone institutions have defended twice &mdash; rather than chasing strength into resistance ahead of two binary events.</div>
+        </div>
+        <div class="fw-row">
+          <div class="fw-k">How to size</div>
+          <div class="fw-v">As portfolio insurance, not a directional bet: the industry-standard 5&ndash;15% allocation range, scaled to tolerance for a possible $3,700s tail if July 14 runs hot.</div>
+        </div>
+        <div class="fw-row">
+          <div class="fw-k">What confirms</div>
+          <div class="fw-v">A weekly close above the 200-day moving average (~$4,600). Until then, treat strength as range-trading, not trend.</div>
+        </div>
+        <div class="fw-row">
+          <div class="fw-k">What invalidates</div>
+          <div class="fw-v">A weekly close below $3,886. At that point the correction thesis is wrong.</div>
+        </div>
+        <div class="fw-row">
+          <div class="fw-k">What to watch</div>
+          <div class="fw-v">July 14 CPI, July 29 FOMC, Iran transit-fee negotiations, and the WGC's Q2 central-bank data.</div>
+        </div>
+      </div>
+
+      <p>The realistic scenario is not a straight line in either direction. It is a floor being built by slow money while fast money finishes repricing the Fed &mdash; with the decisive information arriving on two known dates.</p>
+    </section>
+
+    <div class="disclosures">
+      <h3>Sources &amp; disclosures</h3>
+      <p>Price data: COMEX gold futures (GCUSD) daily settlements via Financial Modeling Prep, through July 3, 2026. Positioning and demand data: World Gold Council, J.P. Morgan Global Research, CFTC/COMEX positioning reports, OMFIF Global Public Investor survey (June 30, 2026). Macro data: US Bureau of Labor Statistics, Federal Reserve communications. Bank forecasts as publicly reported: Goldman Sachs, J.P. Morgan, UBS, Wells Fargo, Deutsche Bank, ING, BMO, OCBC, Reuters analyst poll.</p>
+      <p>The Q1 2026 central-bank purchase figures conflict across methodologies (16t reported net vs. 244t estimated total including unreported flows); both are presented and flagged in Section III. Intraday record highs vary by source and venue ($5,586&ndash;5,595); settlement records are used throughout for consistency. Bank price targets and the Reuters poll median are dated at first citation because several were revised more than once during H1 2026; treat each as a snapshot rather than a current live figure.</p>
+      <p>This document is market commentary prepared for editorial purposes. It is not investment advice, an offer, or a solicitation. Commodity prices are volatile; leveraged instruments amplify both gains and losses. Past performance does not guarantee future results. Readers should conduct their own due diligence and consult a licensed advisor before making investment decisions.</p>
+    </div>
+
+  </div>
+
+  <div class="footer-bar">
+    <span>Macro &amp; Commodities Research</span>
+    <span>Confidential &mdash; for informational purposes only</span>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+<script>
+const dates = ["Jan","","","","Feb","","","","Mar","","","","Apr","","","","May","","","","Jun","","Jul"];
+const prices = [5354.8,4889.5,4948.4,4997.4,5194.2,5078.7,5125.8,4605.7,4376.3,4679.7,4818.0,4808.3,4724.0,4629.6,4710.9,4685.3,4542.5,4532.4,4505.0,4114.0,4245.9,4008.8,4171.1];
+
+Chart.register(window['chartjs-plugin-annotation']);
+
+const lineColor = '#0a2240';
+const dimText = '#838d99';
+const gridLine = 'rgba(131,141,153,0.18)';
+const isMobile = window.innerWidth < 640;
+const showAnnotationLabels = !isMobile;
+
+new Chart(document.getElementById('mainChart'), {
+  type: 'line',
+  data: {
+    labels: dates,
+    datasets: [{
+      data: prices,
+      borderColor: lineColor,
+      borderWidth: 2.2,
+      pointRadius: function(ctx) { return ctx.dataIndex === prices.length - 1 ? 4 : 0; },
+      pointBackgroundColor: '#1e5aa8',
+      pointBorderColor: '#ffffff',
+      pointBorderWidth: 1.5,
+      tension: 0.25,
+      fill: { target: 'origin', above: 'rgba(30,90,168,0.06)' }
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    layout: { padding: { right: isMobile ? 12 : 190, top: 8 } },
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#0a2240',
+        borderColor: '#1e5aa8',
+        borderWidth: 1,
+        titleColor: '#ffffff',
+        bodyColor: '#cfe0f2',
+        callbacks: { label: function(ctx) { return '$' + ctx.parsed.y.toLocaleString(); } }
+      },
+      annotation: {
+        clip: false,
+        annotations: {
+          supportBox: {
+            type: 'box', yMin: 3900, yMax: 4100,
+            backgroundColor: 'rgba(28,122,77,0.08)', borderWidth: 0
+          },
+          janHigh: {
+            type: 'line', yMin: 5354.8, yMax: 5354.8,
+            borderColor: '#9a6b12', borderWidth: 1.2, borderDash: [6,4],
+            label: { display: showAnnotationLabels, content: ['JAN HIGH $5,355', '\u221222% to today'], position: 'end', textAlign: 'left',
+              backgroundColor: 'transparent', color: '#9a6b12', font: { size: 11.5, weight: '600', family: "'Inter', sans-serif" }, xAdjust: 10 }
+          },
+          reclaim: {
+            type: 'line', yMin: 4600, yMax: 4600,
+            borderColor: '#1c7a4d', borderWidth: 1, borderDash: [4,4],
+            label: { display: showAnnotationLabels, content: ['RECLAIM $4,600', '(200D MA)'], position: 'end', textAlign: 'left',
+              backgroundColor: 'transparent', color: '#1c7a4d', font: { size: 11.5, weight: '600', family: "'Inter', sans-serif" }, xAdjust: 10 }
+          },
+          ma50: {
+            type: 'line', yMin: 4406, yMax: 4406,
+            borderColor: '#838d99', borderWidth: 1, borderDash: [2,3],
+            label: { display: showAnnotationLabels, content: '50D MA $4,406', position: 'end', textAlign: 'left',
+              backgroundColor: 'transparent', color: '#4c5561', font: { size: 11.5, weight: '600', family: "'Inter', sans-serif" }, xAdjust: 10 }
+          },
+          support: {
+            type: 'line', yMin: 3900, yMax: 3900,
+            borderColor: '#1c7a4d', borderWidth: 2.5,
+            label: { display: showAnnotationLabels, content: ['SUPPORT', '$3,900\u20134,100'], position: 'end', textAlign: 'left',
+              backgroundColor: 'transparent', color: '#1c7a4d', font: { size: 11.5, weight: '600', family: "'Inter', sans-serif" }, xAdjust: 10, yAdjust: 4 }
+          },
+          invalid: {
+            type: 'line', yMin: 3886, yMax: 3886,
+            borderColor: '#b0332b', borderWidth: 1, borderDash: [3,3],
+            label: { display: showAnnotationLabels, content: 'INVALIDATION $3,886', position: 'start', textAlign: 'left',
+              backgroundColor: 'transparent', color: '#b0332b', font: { size: 11, weight: '600', family: "'Inter', sans-serif" }, yAdjust: 12 }
+          }
+        }
+      }
+    },
+    scales: {
+      x: { ticks: { color: dimText, maxRotation: 0, font: { size: 11, family: "'Inter', sans-serif" } }, grid: { display: false } },
+      y: {
+        min: 3600, max: 5700,
+        ticks: { color: dimText, font: { size: 11, family: "'Inter', sans-serif" }, callback: function(v) { return '$' + v.toLocaleString(); } },
+        grid: { color: gridLine }
+      }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
