@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Three Choke Points and a Basket — InsightInvest Research</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: #111111;
+    margin: 0;
+    background: #ffffff;
+    line-height: 1.5;
+    font-size: 13.5px;
+  }
+  .sheet { max-width: 760px; margin: 0 auto; padding: 0 4px; }
+
+  .firmrow { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 3px solid #111111; padding-bottom: 6px; margin-top: 28px; }
+  .firmname { font-family: Georgia, serif; font-weight: 700; font-size: 19px; letter-spacing: 0.2px; }
+  .firmname .i { font-style: italic; font-weight: 400; }
+  .doctype { font-family: Arial, Helvetica, sans-serif; font-size: 9.5px; letter-spacing: 1.6px; text-transform: uppercase; color: #555; }
+
+  .metarow { font-family: Arial, Helvetica, sans-serif; font-size: 10px; color: #555; display: flex; justify-content: space-between; padding: 5px 0 18px 0; border-bottom: 1px solid #ccc; }
+
+  h1.headline { font-family: Georgia, serif; font-size: 25px; font-weight: 700; margin: 22px 0 8px 0; line-height: 1.22; }
+  .dek { font-family: Arial, Helvetica, sans-serif; font-size: 13.5px; color: #333; line-height: 1.55; margin: 0 0 14px 0; font-style: italic; }
+
+  .rating-line { font-family: Arial, Helvetica, sans-serif; font-size: 11px; margin: 4px 0 20px 0; padding-bottom: 14px; border-bottom: 1px solid #ccc; }
+  .rating-line .tag { display: inline-block; border: 1px solid #111; padding: 2px 8px; font-weight: 700; letter-spacing: 0.5px; margin-right: 10px; }
+  .rating-line .byline { color: #777; }
+
+  h2.seclabel { font-family: Arial, Helvetica, sans-serif; font-size: 10.5px; letter-spacing: 1.6px; text-transform: uppercase; font-weight: 700; color: #111; margin: 30px 0 10px 0; padding-bottom: 5px; border-bottom: 1.5px solid #111; }
+
+  p.body-copy { text-align: justify; margin: 0 0 12px 0; font-size: 13.5px; }
+  p.body-copy b { font-weight: 700; }
+
+  table.stack3 { width: 100%; border-collapse: collapse; margin: 10px 0 16px 0; font-family: Arial, Helvetica, sans-serif; }
+  table.stack3 td { width: 33.33%; vertical-align: top; border: 1px solid #bbb; padding: 12px 14px; font-size: 12px; }
+  table.stack3 .verb { font-size: 9px; letter-spacing: 1.4px; text-transform: uppercase; color: #777; }
+  table.stack3 .role { font-family: Georgia, serif; font-size: 15px; font-weight: 700; margin: 3px 0 6px 0; }
+  table.stack3 .need { color: #444; font-size: 11.5px; min-height: 46px; display: block; }
+  table.stack3 .tk { font-family: Georgia, serif; font-weight: 700; font-size: 16px; margin-top: 8px; border-top: 1px solid #ddd; padding-top: 8px; }
+  table.stack3 .tk .nm { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 10.5px; color: #777; display: block; }
+
+  .koid-line { font-family: Arial, Helvetica, sans-serif; font-size: 12px; border: 1px solid #111; padding: 10px 14px; margin-bottom: 4px; }
+  .koid-line b { font-weight: 700; }
+  .note-italic { font-family: Arial, Helvetica, sans-serif; font-size: 10.5px; color: #777; font-style: italic; margin: 4px 0 18px 0; }
+
+  table.snap { width: 100%; border-collapse: collapse; font-family: Arial, Helvetica, sans-serif; font-size: 11.5px; margin-top: 6px; }
+  table.snap th { background: #f0f0f0; border: 1px solid #bbb; padding: 6px 8px; text-align: left; font-weight: 700; font-size: 10px; text-transform: uppercase; letter-spacing: 0.3px; }
+  table.snap th.num, table.snap td.num { text-align: right; }
+  table.snap td { border: 1px solid #d5d5d5; padding: 6px 8px; }
+  table.snap .tkr { font-weight: 700; font-family: Georgia, serif; font-size: 12.5px; }
+  .neg { color: #a52a2a; font-weight: 700; }
+  .src { font-family: Arial, Helvetica, sans-serif; font-size: 9.5px; color: #888; margin-top: 6px; line-height: 1.5; }
+
+  .profile { border-top: 2px solid #111; margin-top: 30px; padding-top: 10px; }
+  .profile-head { font-family: Arial, Helvetica, sans-serif; display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+  .profile-head .tk { font-family: Georgia, serif; font-size: 21px; font-weight: 700; }
+  .profile-head .role { font-size: 10.5px; letter-spacing: 0.8px; text-transform: uppercase; color: #555; text-align: right; }
+  .profile-sub { font-family: Arial, Helvetica, sans-serif; font-size: 11px; color: #666; display: flex; justify-content: space-between; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #ccc; }
+  .profile-sub .px { font-weight: 700; color: #111; }
+
+  .thesis-line { font-size: 14px; font-weight: 700; margin: 0 0 12px 0; line-height: 1.4; font-style: italic; }
+
+  .why-label { font-family: Arial, Helvetica, sans-serif; font-size: 10px; letter-spacing: 1.3px; text-transform: uppercase; color: #555; font-weight: 700; margin: 14px 0 6px 0; }
+  ul.why { margin: 0 0 10px 0; padding-left: 18px; }
+  ul.why li { margin-bottom: 6px; text-align: justify; font-size: 13px; }
+
+  .catch { border-left: 3px solid #a52a2a; padding: 8px 0 8px 14px; font-size: 12px; text-align: justify; margin-top: 10px; font-family: Arial, Helvetica, sans-serif; color: #333; }
+  .catch b { color: #a52a2a; font-family: Georgia, serif; }
+
+  .statline { margin-top: 12px; padding-top: 8px; border-top: 1px solid #ddd; font-family: Arial, Helvetica, sans-serif; font-size: 10.5px; color: #444; }
+  .statline b { color: #111; }
+  .statline .sep { color: #bbb; margin: 0 8px; }
+
+  .feature { border-top: 3px double #111; margin-top: 34px; padding-top: 10px; }
+
+  table.fit { width: 100%; border-collapse: collapse; margin: 12px 0 20px 0; font-family: Arial, Helvetica, sans-serif; font-size: 12px; }
+  table.fit td { border-top: 1px solid #ddd; padding: 8px 0; vertical-align: top; }
+  table.fit td.k { width: 150px; font-weight: 700; font-family: Georgia, serif; padding-right: 14px; }
+  table.fit tr:first-child td { border-top: none; }
+  table.fit tr.summary td { border-top: 1.5px solid #111; font-weight: 700; padding-top: 10px; }
+
+  .disc-box { font-family: Arial, Helvetica, sans-serif; font-size: 10px; color: #666; text-align: justify; line-height: 1.6; border-top: 1px solid #ccc; margin-top: 30px; padding-top: 14px; }
+  .disc-box b { color: #333; }
+
+  footer { font-family: Arial, Helvetica, sans-serif; font-size: 9.5px; color: #999; display: flex; justify-content: space-between; border-top: 1px solid #ccc; margin-top: 20px; padding: 12px 0 30px 0; }
+
+  /* ---- CTA ---- */
+  .cta { border-top: 3px double #111; border-bottom: 1px solid #ccc; margin-top: 34px; padding: 22px 0 24px 0; text-align: center; }
+  .cta .eyebrow { font-family: Arial, Helvetica, sans-serif; font-size: 10px; letter-spacing: 1.8px; text-transform: uppercase; color: #888; margin-bottom: 10px; }
+  .cta h3 { font-family: Georgia, serif; font-size: 19px; font-weight: 700; color: #111; margin: 0 0 8px 0; }
+  .cta p { font-family: Arial, Helvetica, sans-serif; font-size: 12.5px; color: #444; max-width: 480px; margin: 0 auto 18px auto; line-height: 1.55; }
+  .cta a.btn { display: inline-block; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.4px; color: #fff; background: #111; text-decoration: none; padding: 11px 28px; border: 1px solid #111; }
+  .cta a.btn:hover { background: #333; }
+  .cta .fine { font-family: Arial, Helvetica, sans-serif; font-size: 9.5px; color: #999; margin-top: 14px; }
+
+  /* ---- chart figures ---- */
+  .chart-block { margin: 18px 0 8px 0; }
+  .fig-cap { font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: 700; color: #111; margin-bottom: 4px; }
+  .fig-cap .num { color: #555; font-weight: 400; }
+  .chart-frame { border: 1px solid #ccc; padding: 14px 18px 10px 18px; }
+  .chart-frame svg text { font-family: Arial, Helvetica, sans-serif; }
+  .chart-frame svg .axis { stroke: #999; stroke-width: 1; }
+  .chart-frame svg .gridline { stroke: #e5e5e5; stroke-width: 1; }
+  .chart-frame svg .lbl { fill: #333; font-size: 11px; }
+  .chart-frame svg .lbl-sub { fill: #888; font-size: 9px; }
+  .chart-frame svg .val { fill: #111; font-size: 11px; font-weight: 700; }
+  .chart-frame svg .val-neg { fill: #a52a2a; font-weight: 700; }
+
+  /* ---- mobile chart fallback: real HTML, hidden on desktop ---- */
+  .mobile-chart { display: none; }
+  .hbar-row { margin-bottom: 12px; }
+  .hbar-top { display: flex; justify-content: space-between; align-items: baseline; font-family: Arial, Helvetica, sans-serif; font-size: 12.5px; margin-bottom: 4px; }
+  .hbar-top .nm { font-weight: 700; color: #111; }
+  .hbar-top .sub { font-size: 10px; color: #888; margin-left: 6px; }
+  .hbar-top .v { font-weight: 700; }
+  .hbar-top .v.neg { color: #a52a2a; }
+  .hbar-track { background: #eee; height: 16px; width: 100%; }
+  .hbar-fill { height: 100%; }
+
+  @media (max-width: 640px) {
+    body { font-size: 13px; }
+    .sheet { padding: 0 14px; }
+    table.stack3 { display: block; }
+    table.stack3, table.stack3 tbody, table.stack3 tr { display: block; width: 100%; }
+    table.stack3 td { display: block; width: 100%; border-bottom: none; }
+    table.stack3 tr td:last-child { border-bottom: 1px solid #bbb; }
+    .profile-head { flex-direction: column; }
+    .profile-head .role { text-align: left; margin-top: 4px; }
+    .profile-sub { flex-direction: column; }
+
+    /* stack the snapshot table into label/value cards */
+    table.snap, table.snap tbody, table.snap th, table.snap td, table.snap tr { display: block; }
+    table.snap tr.snap-head { display: none; }
+    table.snap tr { border: 1px solid #bbb; margin-bottom: 10px; padding: 8px 10px; }
+    table.snap td { border: none; padding: 3px 0; text-align: left !important; }
+    table.snap td.tkr { font-size: 15px; padding-bottom: 4px; }
+    table.snap td:not(.tkr)::before { content: attr(data-label) ": "; color: #888; font-weight: 700; }
+
+    /* stack the "how it fits together" table */
+    table.fit, table.fit tbody, table.fit tr, table.fit td { display: block; width: 100%; }
+    table.fit td.k { width: 100%; padding-bottom: 2px; border-top: 1px solid #ddd; padding-top: 10px; }
+    table.fit tr:first-child td.k { border-top: none; }
+    table.fit td:not(.k) { padding-top: 0; padding-bottom: 10px; }
+    table.fit tr.summary td.k { border-top: 1.5px solid #111; }
+
+    /* charts: hide SVG, show HTML bar fallback on mobile */
+    .chart-frame { display: none; }
+    .mobile-chart { display: block; border: 1px solid #ccc; padding: 14px 14px 6px 14px; }
+    .fig-cap { font-size: 10.5px; }
+
+    .cta a.btn { display: block; }
+    .disc-box, .src { text-align: left; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="firmrow">
+    <div class="firmname">Insight<span class="i">Invest</span></div>
+    <div class="doctype">Thematic Research Note</div>
+  </div>
+  <div class="metarow">
+    <div>Humanoid Robotics &amp; Physical AI — Bottleneck Series</div>
+    <div>30 June 2026</div>
+  </div>
+
+  <h1 class="headline">Three Choke Points and a Basket</h1>
+  <p class="dek">Forget guessing which humanoid brand wins. A robot is three miracles stacked together — it has to think, it has
+  to move, and it has to stay powered — and right now all three are supply-choked. Own the choke points, not the robot.</p>
+
+  <div class="rating-line">
+    <span class="tag">SECTOR VIEW: CONSTRUCTIVE</span><span class="byline">InsightInvest Thematic Strategy &nbsp;|&nbsp; Market data as of 30 June 2026 &nbsp;|&nbsp; For discussion — not investment advice</span>
+  </div>
+
+  <p class="body-copy">Below: one concentrated name for each of the three bottlenecks a humanoid robot cannot ship without,
+  plus <b>KOID</b>, the single ETF ticket that wraps the broader supply chain. The thesis is deliberately brand-agnostic —
+  whichever humanoid maker ultimately wins, every robot requires the same three inputs, so these names capture the theme
+  without taking on single-company risk on which platform succeeds.</p>
+
+  <h2 class="seclabel">The Three Bottlenecks</h2>
+  <table class="stack3">
+    <tr>
+      <td>
+        <div class="verb">Think</div>
+        <div class="role">The Brain</div>
+        <span class="need">On-device AI vision — perception and inference in real time, on a battery, without the cloud.</span>
+        <div class="tk">AMBA<span class="nm">Ambarella, Inc.</span></div>
+      </td>
+      <td>
+        <div class="verb">Move</div>
+        <div class="role">The Muscle</div>
+        <span class="need">Rare-earth magnets for every actuator — the joint China controls roughly 90% of.</span>
+        <div class="tk">MP<span class="nm">MP Materials Corp.</span></div>
+      </td>
+      <td>
+        <div class="verb">Power</div>
+        <div class="role">The Power</div>
+        <span class="need">Carbon-free, 24/7 baseload for the compute the brain runs on — the real ceiling.</span>
+        <div class="tk">CEG<span class="nm">Constellation Energy Corp.</span></div>
+      </td>
+    </tr>
+  </table>
+
+  <div class="koid-line"><b>The Basket — KOID.</b> One ticket, 57 holdings. KraneShares' humanoid &amp; physical-AI ETF already
+  owns the brain leg (edge/AI semiconductors) and the muscle leg (actuators plus rare earths — it holds MP Materials directly).
+  A single fund covering the supply chain without picking a single-name winner.</div>
+  <p class="note-italic">Note: KOID covers two of the three legs described above. The power leg (CEG / nuclear) sits outside
+  the fund — see "How It Fits Together" on the final page.</p>
+
+  <h2 class="seclabel">Snapshot — The Four Names at a Glance</h2>
+  <table class="snap">
+    <tr class="snap-head">
+      <th>Ticker</th><th>Role in the Stack</th><th class="num">Price</th><th class="num">Mkt Cap / AUM</th>
+      <th class="num">52-Wk Range</th><th class="num">Off High</th><th>Read</th>
+    </tr>
+    <tr>
+      <td class="tkr">AMBA</td><td data-label="Role">The brain — edge-AI vision chips</td>
+      <td class="num" data-label="Price">$74.74</td><td class="num" data-label="Mkt Cap">~$3.3bn</td>
+      <td class="num" data-label="52-Wk Range">$48.30–96.69</td><td class="num neg" data-label="Off High">&minus;23%</td>
+      <td data-label="Read">Already working</td>
+    </tr>
+    <tr>
+      <td class="tkr">MP</td><td data-label="Role">The muscle — rare-earth magnets</td>
+      <td class="num" data-label="Price">$53.00</td><td class="num" data-label="Mkt Cap">~$9.4bn</td>
+      <td class="num" data-label="52-Wk Range">$29.58–100.25</td><td class="num neg" data-label="Off High">&minus;47%</td>
+      <td data-label="Read">Reset / structural</td>
+    </tr>
+    <tr>
+      <td class="tkr">CEG</td><td data-label="Role">The power — nuclear baseload</td>
+      <td class="num" data-label="Price">$244.52</td><td class="num" data-label="Mkt Cap">~$88bn</td>
+      <td class="num" data-label="52-Wk Range">$228.63–412.70</td><td class="num neg" data-label="Off High">&minus;41%</td>
+      <td data-label="Read">Reset / structural</td>
+    </tr>
+    <tr>
+      <td class="tkr">KOID</td><td data-label="Role">The basket — whole supply chain (ETF)</td>
+      <td class="num" data-label="Price">~$39</td><td class="num" data-label="AUM">~$261mn</td>
+      <td class="num" data-label="52-Wk Range">$25.30–43.32</td><td class="num" data-label="Off High">n/a</td>
+      <td data-label="Read">One-ticket core</td>
+    </tr>
+  </table>
+  <p class="src">Source: Financial Modeling Prep and fund-provider pages; prices and ranges as of 30 June 2026. AMBA/MP/CEG
+  figures denote market capitalization; KOID denotes net assets (AUM). "Off high" measures decline from the 52-week high.
+  KOID net expense ratio 0.69% (0.79% gross).</p>
+
+  <p class="body-copy" style="margin-top:16px;">Two of the three single names — MP and CEG — trade roughly 40–50% below their
+  52-week highs, having de-rated alongside the broader AI-hardware and nuclear complex through 2026 even as their underlying
+  commercial contracts expanded. That divergence between price and fundamentals is the reset this note leans on. AMBA is the
+  exception, down only ~23% from its high and already converting the thesis into reported revenue rather than trading purely
+  on narrative. KOID remains the diversified wrapper for readers who prefer supply-chain breadth to single-name conviction.</p>
+
+  <div class="chart-block">
+    <div class="fig-cap"><span class="num">Figure 1.</span> Distance from 52-Week High</div>
+    <div class="chart-frame">
+      <svg viewBox="0 0 700 230" width="100%" role="img" aria-label="Bar chart showing percentage decline from 52-week high for AMBA, MP, CEG and KOID">
+        <line x1="60" y1="30" x2="660" y2="30" class="axis"/>
+        <text x="60" y="22" class="lbl-sub">0%</text>
+        <line x1="60" y1="30" x2="60" y2="185" class="axis"/>
+        <!-- gridlines at -20/-40/-60 -->
+        <line x1="60" y1="85" x2="660" y2="85" class="gridline"/>
+        <text x="30" y="89" class="lbl-sub">-20%</text>
+        <line x1="60" y1="140" x2="660" y2="140" class="gridline"/>
+        <text x="30" y="144" class="lbl-sub">-40%</text>
+        <line x1="60" y1="185" x2="660" y2="185" class="gridline"/>
+        <text x="30" y="189" class="lbl-sub">-60%</text>
+
+        <!-- AMBA -23% -->
+        <rect x="120" y="30" width="90" height="63" fill="#a52a2a"/>
+        <text x="165" y="107" text-anchor="middle" class="val-neg">-23%</text>
+        <text x="165" y="205" text-anchor="middle" class="lbl">AMBA</text>
+
+        <!-- MP -47% -->
+        <rect x="280" y="30" width="90" height="129" fill="#a52a2a"/>
+        <text x="325" y="173" text-anchor="middle" class="val-neg">-47%</text>
+        <text x="325" y="205" text-anchor="middle" class="lbl">MP</text>
+
+        <!-- CEG -41% -->
+        <rect x="440" y="30" width="90" height="113" fill="#a52a2a"/>
+        <text x="485" y="157" text-anchor="middle" class="val-neg">-41%</text>
+        <text x="485" y="205" text-anchor="middle" class="lbl">CEG</text>
+
+        <!-- KOID ~-10% -->
+        <rect x="560" y="30" width="60" height="27" fill="#999"/>
+        <text x="590" y="71" text-anchor="middle" class="val-neg" fill="#666">~-10%</text>
+        <text x="590" y="205" text-anchor="middle" class="lbl">KOID</text>
+      </svg>
+    </div>
+    <div class="mobile-chart">
+      <div class="hbar-row">
+        <div class="hbar-top"><span class="nm">AMBA</span><span class="v neg">&minus;23%</span></div>
+        <div class="hbar-track"><div class="hbar-fill" style="width:38%; background:#a52a2a;"></div></div>
+      </div>
+      <div class="hbar-row">
+        <div class="hbar-top"><span class="nm">MP</span><span class="v neg">&minus;47%</span></div>
+        <div class="hbar-track"><div class="hbar-fill" style="width:78%; background:#a52a2a;"></div></div>
+      </div>
+      <div class="hbar-row">
+        <div class="hbar-top"><span class="nm">CEG</span><span class="v neg">&minus;41%</span></div>
+        <div class="hbar-track"><div class="hbar-fill" style="width:68%; background:#a52a2a;"></div></div>
+      </div>
+      <div class="hbar-row">
+        <div class="hbar-top"><span class="nm">KOID <span class="sub">(fund, approx.)</span></span><span class="v" style="color:#666;">~&minus;10%</span></div>
+        <div class="hbar-track"><div class="hbar-fill" style="width:17%; background:#999;"></div></div>
+      </div>
+    </div>
+    <p class="src">Source: Financial Modeling Prep; 52-week price data as of 30 June 2026. KOID figure derived from its
+    52-week range and is approximate; shown in gray as a diversified fund rather than a single-stock decline.</p>
+  </div>
+
+  <div class="chart-block">
+    <div class="fig-cap"><span class="num">Figure 2.</span> Fundamentals Kept Growing Through the De-Rate</div>
+    <div class="chart-frame">
+      <svg viewBox="0 0 700 230" width="100%" role="img" aria-label="Bar chart showing year-on-year fundamental growth for AMBA revenue, MP magnet production and CEG revenue">
+        <line x1="60" y1="185" x2="660" y2="185" class="axis"/>
+        <text x="30" y="189" class="lbl-sub">0%</text>
+        <line x1="60" y1="185" x2="60" y2="30" class="axis"/>
+        <line x1="60" y1="130" x2="660" y2="130" class="gridline"/>
+        <text x="26" y="134" class="lbl-sub">30%</text>
+        <line x1="60" y1="75" x2="660" y2="75" class="gridline"/>
+        <text x="26" y="79" class="lbl-sub">60%</text>
+
+        <!-- AMBA revenue +37% -->
+        <rect x="140" y="117" width="100" height="68" fill="#111111"/>
+        <text x="190" y="110" text-anchor="middle" class="val">+37%</text>
+        <text x="190" y="205" text-anchor="middle" class="lbl">AMBA</text>
+        <text x="190" y="219" text-anchor="middle" class="lbl-sub">FY26 revenue</text>
+
+        <!-- MP NdPr production +63% -->
+        <rect x="320" y="70" width="100" height="115" fill="#111111"/>
+        <text x="370" y="63" text-anchor="middle" class="val">+63%</text>
+        <text x="370" y="205" text-anchor="middle" class="lbl">MP</text>
+        <text x="370" y="219" text-anchor="middle" class="lbl-sub">Q1'26 NdPr output</text>
+
+        <!-- CEG revenue +64% -->
+        <rect x="500" y="67" width="100" height="118" fill="#111111"/>
+        <text x="550" y="60" text-anchor="middle" class="val">+64%</text>
+        <text x="550" y="205" text-anchor="middle" class="lbl">CEG</text>
+        <text x="550" y="219" text-anchor="middle" class="lbl-sub">Q1 FY26 revenue</text>
+      </svg>
+    </div>
+    <div class="mobile-chart">
+      <div class="hbar-row">
+        <div class="hbar-top"><span class="nm">AMBA <span class="sub">FY26 revenue</span></span><span class="v">+37%</span></div>
+        <div class="hbar-track"><div class="hbar-fill" style="width:37%; background:#111;"></div></div>
+      </div>
+      <div class="hbar-row">
+        <div class="hbar-top"><span class="nm">MP <span class="sub">Q1'26 NdPr output</span></span><span class="v">+63%</span></div>
+        <div class="hbar-track"><div class="hbar-fill" style="width:63%; background:#111;"></div></div>
+      </div>
+      <div class="hbar-row">
+        <div class="hbar-top"><span class="nm">CEG <span class="sub">Q1 FY26 revenue</span></span><span class="v">+64%</span></div>
+        <div class="hbar-track"><div class="hbar-fill" style="width:64%; background:#111;"></div></div>
+      </div>
+    </div>
+    <p class="src">Source: Company financial disclosures (Ambarella FY2026 10-K/earnings release; MP Materials Q1 2026
+    production update; Constellation Energy Q1 FY2026 earnings release). Year-on-year comparisons as reported by each
+    company; metrics are not directly comparable across names (revenue vs. production volume) and are shown to illustrate
+    that operating momentum continued through the share-price de-rate, not to imply a common unit of measure.</p>
+  </div>
+
+
+  <!-- ================= AMBA ================= -->
+  <div class="profile">
+    <div class="profile-head"><div class="tk">AMBA</div><div class="role">The Brain<br>Edge-AI Vision</div></div>
+    <div class="profile-sub"><div>Ambarella, Inc. &middot; NASDAQ</div><div class="px">$74.74 &nbsp;(&minus;23% off high)</div></div>
+
+    <p class="thesis-line">The chip that lets a robot see and understand the world in real time, on a battery — the
+    edge-inference layer overlooked by capital crowding into Nvidia's data-center GPUs.</p>
+
+    <div class="why-label">Why It's the Pick</div>
+    <ul class="why">
+      <li><b>The pivot is complete, not aspirational.</b> Approximately 80% of fiscal 2026 revenue ($390.7mn, +37% year-on-year)
+      already derives from edge AI.</li>
+      <li><b>Documented robotics traction.</b> Management reports 15+ robotics design wins across 30+ customers (names
+      undisclosed) and $100mn-plus in cumulative robotics revenue; a named long-term agreement with Hanwha Group, worth up to
+      $800mn over a decade, spans security, robotics, and industrial automation.</li>
+      <li><b>Provider-agnostic positioning.</b> Regardless of which humanoid brand prevails, robots require on-device vision
+      inference at single-digit power draw — precisely Ambarella's core competency.</li>
+    </ul>
+
+    <div class="catch"><b>The catch.</b> The 15+ design wins are company-reported and unaudited — no customer names have been
+    disclosed, so the figure cannot be independently verified, and the principal risk flagged by covering analysts is that
+    design wins fail to convert into high-volume shipments. The company remains GAAP-unprofitable and trades near 80x forward
+    earnings, meaning the edge-AI narrative is already substantially reflected in the share price. Robotics remains a modest
+    share of total revenue today, with the bulk still derived from automotive cameras and IoT. At only 23% off its high, this
+    name is confirming the thesis rather than trading at a discount to it.</div>
+
+    <div class="statline"><b>$74.74</b> price <span class="sep">&middot;</span> <b>~$3.3bn</b> market cap
+    <span class="sep">&middot;</span> 52-wk <b>$48.30&ndash;96.69</b> <span class="sep">&middot;</span> FY26 revenue
+    <b>$390.7mn (+37%)</b> <span class="sep">&middot;</span> <b>~80%</b> edge AI mix</div>
+  </div>
+
+  <!-- ================= MP ================= -->
+  <div class="profile">
+    <div class="profile-head"><div class="tk">MP</div><div class="role">The Muscle<br>Rare-Earth Magnets</div></div>
+    <div class="profile-sub"><div>MP Materials Corp. &middot; NYSE</div><div class="px">$53.00 &nbsp;(&minus;47% off high)</div></div>
+
+    <p class="thesis-line">Every actuator requires a rare-earth magnet, and China controls roughly 90% of global supply. MP is
+    the only rare-earth-to-magnet producer already operating at commercial scale in the United States — the direct answer to
+    the exact constraint Elon Musk has cited as slowing his own robotics production.</p>
+
+    <div class="why-label">Why It's the Pick</div>
+    <ul class="why">
+      <li><b>The only producer operating at scale today.</b> Operates the sole major producing rare-earth mine in the US
+      (Mountain Pass, California) and is already shipping magnets from its Independence facility in Fort Worth — record NdPr
+      output of 917 metric tons in Q1 2026, up 63% year-on-year, with a 10x capacity expansion (10,000 metric tons) targeted
+      for 2028.</li>
+      <li><b>Extraordinary institutional backing.</b> The Pentagon is the company's largest shareholder (~15%), with a 10-year,
+      100% offtake agreement and a $110/kg price floor; Apple has committed $500mn (including a $200mn prepayment); General
+      Motors is its first magnet customer.</li>
+      <li><b>Structural scarcity, policy tailwind.</b> Western supply-chain de-risking is a multi-year, bipartisan priority,
+      and MP is its flagship domestic beneficiary.</li>
+    </ul>
+
+    <div class="catch"><b>The catch.</b> Shares trade 47% below their 52-week high and remain partly correlated to global
+    rare-earth pricing, so volatility should be expected. The "only fully integrated" claim is itself contested — USA Rare
+    Earth (USAR) asserts a similar position following a 2026 acquisition spree ($3.5bn in committed capital, including the
+    Serra Verde deal) — though its mining and magnet assets remain in build-out, years from commercial scale. MP is, at
+    present, the only producer of the two already shipping. Magnet demand also spans EVs, consumer electronics, drones, and
+    defense; humanoid robotics is one demand vector among several, not the current driver of revenue.</div>
+
+    <div class="statline"><b>$53.00</b> price <span class="sep">&middot;</span> <b>~$9.4bn</b> market cap
+    <span class="sep">&middot;</span> 52-wk <b>$29.58&ndash;100.25</b> <span class="sep">&middot;</span> 2025 NdPr oxide
+    <b>2,599mt (+101%)</b> <span class="sep">&middot;</span> Pentagon <b>~15%</b> holder</div>
+  </div>
+
+  <!-- ================= CEG ================= -->
+  <div class="profile">
+    <div class="profile-head"><div class="tk">CEG</div><div class="role">The Power<br>Nuclear Baseload</div></div>
+    <div class="profile-sub"><div>Constellation Energy Corp. &middot; NASDAQ</div><div class="px">$244.52 &nbsp;(&minus;41% off high)</div></div>
+
+    <p class="thesis-line">The robot's brain runs on compute; compute runs on electricity; and power — not chips — is
+    increasingly the binding constraint. Constellation is the largest nuclear operator in the United States, selling
+    round-the-clock, carbon-free baseload directly to the hyperscalers building AI infrastructure.</p>
+
+    <div class="why-label">Why It's the Pick</div>
+    <ul class="why">
+      <li><b>Scale leadership.</b> Operates the largest nuclear fleet in the US (21 reactors across 15 sites); following the
+      Calpine acquisition, the largest private power producer globally (~55 GW).</li>
+      <li><b>Contracted hyperscaler demand.</b> A 20-year power purchase agreement with Microsoft to restart Three Mile Island
+      Unit 1 (now the Crane Clean Energy Center, 835 MW, online 2027) and a separate 20-year, 1.1 GW agreement with Meta at
+      the Clinton facility, beginning June 2027.</li>
+      <li><b>Genuinely profitable today.</b> Q1 FY2026 adjusted EPS of $2.74 (versus $2.60 consensus), revenue of $11.1bn
+      (+64% year-on-year), EBITDA of $3.58bn, and an ongoing dividend — the only one of the three names with current
+      earnings.</li>
+    </ul>
+
+    <div class="catch"><b>The catch.</b> Shares are 41% below their 52-week high following a substantial 2025 rally, as the
+    broader AI-power trade de-rated through 2026 even while underlying contracts expanded. The stock behaves like a
+    regulated utility rather than a semiconductor name, and the marquee restart revenue does not begin flowing until 2027.
+    Power is also two steps removed from humanoid robotics specifically, functioning more as a broad AI-infrastructure play
+    than a pure robotics name.</div>
+
+    <div class="statline"><b>$244.52</b> price <span class="sep">&middot;</span> <b>~$88bn</b> market cap
+    <span class="sep">&middot;</span> 52-wk <b>$228.63&ndash;412.70</b> <span class="sep">&middot;</span> Q1 FY26 revenue
+    <b>$11.1bn (+64%)</b> <span class="sep">&middot;</span> <b>Microsoft + Meta</b> 20-yr PPAs</div>
+  </div>
+
+  <!-- ================= KOID FEATURE ================= -->
+  <div class="feature">
+    <h2 class="seclabel" style="border-bottom:none; margin-bottom:2px;">The Special Play</h2>
+    <div class="profile-head" style="margin-top:8px;"><div class="tk">KOID</div><div class="role">The Basket<br>Whole Supply Chain</div></div>
+    <div class="profile-sub"><div>KraneShares Global Humanoid &amp; Physical AI ETF &middot; NYSE Arca</div><div class="px">~$39 &nbsp;(+51% past 12 months)</div></div>
+
+    <p class="thesis-line">One ticket for the entire build-out. KOID is the first US humanoid and physical-AI ETF — 57 holdings
+    spanning semiconductors, actuators, sensors, and rare-earth magnets — offering supply-chain exposure without a single-name
+    bet on the eventual winning robot.</p>
+
+    <div class="why-label">Why It's the Special Play</div>
+    <ul class="why">
+      <li><b>Covers two of the three bottlenecks in one line.</b> Holds the brain leg (Credo, STMicroelectronics, Renesas,
+      Infineon, Nvidia) and the muscle leg (Harmonic Drive, Leaderdrive, Nabtesco, THK) — and holds MP Materials and Lynas
+      directly for the rare-earth component.</li>
+      <li><b>Access to otherwise unreachable names.</b> Provides exposure to Asian humanoid manufacturers — UBTech, Rainbow
+      Robotics — that most US investors cannot easily access directly.</li>
+      <li><b>Diversified by design.</b> No single position exceeds approximately 4% of the fund, mitigating concentrated
+      single-stock risk; net expense ratio of 0.69%, approximately $261mn in assets, and a 51% return over the trailing
+      twelve months.</li>
+    </ul>
+
+    <div class="chart-block">
+      <div class="fig-cap"><span class="num">Figure 3.</span> KOID's Disclosed Sector Allocation</div>
+      <div class="chart-frame">
+        <svg viewBox="0 0 700 150" width="100%" role="img" aria-label="Segmented bar showing KOID's actual disclosed sector allocation across technology, industrials, consumer cyclical and materials">
+          <!-- single stacked horizontal bar, real FactSet sector weights -->
+          <rect x="60" y="30" width="277" height="34" fill="#111111"/>
+          <rect x="337" y="30" width="192" height="34" fill="#555555"/>
+          <rect x="529" y="30" width="115" height="34" fill="#999999"/>
+          <rect x="644" y="30" width="36" height="34" fill="#cccccc"/>
+
+          <text x="198" y="51" text-anchor="middle" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700">Technology 44%</text>
+          <text x="433" y="51" text-anchor="middle" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700">Industrials 31%</text>
+
+          <!-- legend -->
+          <rect x="60" y="90" width="12" height="12" fill="#111111"/>
+          <text x="78" y="100" class="lbl">Technology 44% (edge/AI semiconductors — maps to "brain")</text>
+          <rect x="60" y="110" width="12" height="12" fill="#555555"/>
+          <text x="78" y="120" class="lbl">Industrials 31% (actuators, motion — maps to "muscle")</text>
+          <rect x="380" y="90" width="12" height="12" fill="#999999"/>
+          <text x="398" y="100" class="lbl">Consumer Cyclical 18% (Tesla, robot makers)</text>
+          <rect x="380" y="110" width="12" height="12" fill="#cccccc"/>
+          <text x="398" y="120" class="lbl">Materials 6% (rare earths) + Cash &lt;1%</text>
+        </svg>
+      </div>
+      <div class="mobile-chart">
+        <div style="display:flex; width:100%; height:22px; margin-bottom:10px;">
+          <div style="width:44%; background:#111111;"></div>
+          <div style="width:31%; background:#555555;"></div>
+          <div style="width:18%; background:#999999;"></div>
+          <div style="width:6%; background:#cccccc;"></div>
+        </div>
+        <div class="hbar-row" style="margin-bottom:6px;">
+          <div class="hbar-top"><span class="nm">&#9632; Technology <span class="sub">edge/AI semis — "brain"</span></span><span class="v">44%</span></div>
+        </div>
+        <div class="hbar-row" style="margin-bottom:6px;">
+          <div class="hbar-top"><span class="nm" style="color:#555;">&#9632; Industrials <span class="sub">actuators — "muscle"</span></span><span class="v">31%</span></div>
+        </div>
+        <div class="hbar-row" style="margin-bottom:6px;">
+          <div class="hbar-top"><span class="nm" style="color:#999;">&#9632; Consumer Cyclical <span class="sub">Tesla, robot makers</span></span><span class="v">18%</span></div>
+        </div>
+        <div class="hbar-row" style="margin-bottom:0;">
+          <div class="hbar-top"><span class="nm" style="color:#bbb;">&#9632; Materials + Cash <span class="sub">rare earths</span></span><span class="v">6%</span></div>
+        </div>
+      </div>
+      <p class="src">Source: KraneShares/FactSet sector classification, fund data as of 10 July 2026. Technology and
+      Industrials are mapped to this note's "brain" and "muscle" framework as an approximation — the underlying FactSet
+      categories do not exactly align with those labels, and Consumer Cyclical (which includes Tesla and listed robot
+      makers) and Materials (rare earths, including MP Materials) sit outside both. The fund discloses no distinct
+      power/nuclear category, consistent with holding minimal exposure to that bottleneck. This chart supersedes any
+      earlier illustrative estimate; figures shown are the fund's actual disclosed weights, rounded.</p>
+    </div>
+
+    <div class="catch"><b>The catch.</b> The youngest of the four names discussed (inception June 2025, roughly a 13-month
+    track record), classified as non-diversified, and heavily weighted toward Asia and China — a source of geopolitical and
+    rare-earth supply risk that cuts in both directions. The fund holds essentially no power or nuclear exposure, leaving the
+    third bottleneck outside its scope. Because KOID already holds MP Materials, pairing the two positions compounds magnet
+    exposure — a feature for investors bullish on rare earths specifically, but a concentration consideration otherwise.</div>
+
+    <div class="statline"><b>~$39</b> price <span class="sep">&middot;</span> <b>~$261mn</b> AUM <span class="sep">&middot;</span>
+    <b>57</b> holdings <span class="sep">&middot;</span> <b>0.69%</b> net expense ratio <span class="sep">&middot;</span>
+    <b>+51%</b> trailing 1-year <span class="sep">&middot;</span> inception <b>June 2025</b></div>
+  </div>
+
+  <h2 class="seclabel">How It Fits Together</h2>
+  <table class="fit">
+    <tr><td class="k">KOID — the core</td><td>One ticket covering the brain and muscle legs in diversified form (and holding
+    MP Materials directly). The lowest-effort way to hold the theme.</td></tr>
+    <tr><td class="k">CEG — the bolt-on</td><td>The power leg KOID does not hold. Adding it brings all three bottlenecks
+    into a two-ticket portfolio (KOID + CEG).</td></tr>
+    <tr><td class="k">AMBA + MP — overlays</td><td>High-conviction, concentrated expressions of two legs KOID holds only in
+    diluted form, for investors seeking to overweight the brain and the magnets specifically.</td></tr>
+    <tr class="summary"><td class="k">The clean version</td><td>KOID + CEG together capture all three choke points in two
+    tickets. Layer in AMBA and/or MP to overweight conviction where held.</td></tr>
+  </table>
+
+  <div class="cta">
+    <div class="eyebrow">Continue the Series</div>
+    <h3>Get the Full Bottleneck Breakdown</h3>
+    <p>This note covers three names and one basket. Members get the extended coverage — deeper name-by-name diligence,
+    position sizing frameworks, and the names we're watching next as the humanoid build-out develops.</p>
+    <a class="btn" href="https://www.patreon.com/c/insightinvest/membership" target="_blank" rel="noopener">Join InsightInvest on Patreon</a>
+    <div class="fine">patreon.com/c/insightinvest/membership</div>
+  </div>
+
+
+  <div class="disc-box">
+    <b>Important disclosures.</b> This document is an editorial thematic framework prepared by InsightInvest for discussion
+    purposes only. It is not investment advice, a recommendation, or an offer or solicitation to buy or sell any security,
+    and the author is not acting as your financial or investment adviser. All prices, market capitalizations, fund assets,
+    and financial figures are as of 30 June 2026, are sourced from Financial Modeling Prep, SEC filings, and fund-provider
+    disclosures, and are subject to change; certain figures — including contract values, capacity estimates, and offtake
+    terms — are as reported by the companies and approximate. Forward-looking statements and estimates are not guarantees
+    of future results. Thematic exposure to nascent sectors such as humanoid robotics carries above-average volatility and
+    risk of loss; the ETF discussed is non-diversified and geographically concentrated. Where a single-stock name and the
+    ETF are held concurrently, security-level exposures overlap (KOID holds MP Materials directly). Readers should conduct
+    independent due diligence and consult a licensed adviser before acting on any information presented here.
+  </div>
+
+  <footer>
+    <div>InsightInvest — Thematic Trade Ideas — Strictly Private &amp; Confidential — Not Investment Advice</div>
+    <div>30 June 2026</div>
+  </footer>
+
+</div>
+</body>
+</html>
