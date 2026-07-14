@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5 ETFs for the Risk-Tolerant Investor — Research Note</title>
+<style>
+  :root{
+    --navy:#14213D;
+    --navy-deep:#0B1526;
+    --steel:#3D4A5C;
+    --green:#1E6B3C;
+    --amber:#A9670A;
+    --red:#A32F2F;
+    --grey-bg:#F4F4F4;
+    --grey-line:#DADADA;
+    --text:#1A1A1A;
+    --text-soft:#5C5C5C;
+    --paper:#FFFFFF;
+  }
+
+  *{box-sizing:border-box;}
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    margin:0;
+    background:var(--grey-bg);
+    color:var(--text);
+    font-family:"Calibri","Segoe UI",Arial,sans-serif;
+    font-size:15px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .sheet{
+    max-width:900px;
+    margin:0 auto 80px;
+    background:var(--paper);
+    box-shadow:0 1px 3px rgba(0,0,0,0.08), 0 12px 32px rgba(20,25,40,0.08);
+  }
+
+  .masthead{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 48px;
+    border-bottom:1px solid var(--grey-line);
+    font-size:11px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:#8a8a8a;
+  }
+
+  /* ---- Sticky quick-nav ---- */
+  .quicknav{
+    position:sticky;
+    top:0;
+    z-index:20;
+    background:var(--navy);
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:9px 16px;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .quicknav::-webkit-scrollbar{ display:none; }
+  .quicknav a{
+    flex:0 0 auto;
+    color:#C6CCD6;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:0.03em;
+    padding:7px 13px;
+    border-radius:20px;
+    border:1px solid rgba(255,255,255,0.18);
+    white-space:nowrap;
+    transition:background 0.15s, color 0.15s;
+  }
+  .quicknav a:hover, .quicknav a.active{
+    background:#fff;
+    color:var(--navy);
+  }
+
+  .title-block{
+    padding:36px 48px 24px;
+    border-bottom:3px solid var(--navy);
+  }
+
+  h1{
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:34px;
+    color:var(--navy);
+    margin:0 0 6px;
+    letter-spacing:-0.01em;
+  }
+
+  .subtitle{
+    font-style:italic;
+    color:var(--steel);
+    font-size:17px;
+    margin:0 0 10px;
+  }
+
+  .meta-line{
+    font-size:12.5px;
+    color:#888;
+  }
+
+  .content{
+    padding:8px 48px 48px;
+  }
+
+  h2.section{
+    font-family:Georgia, serif;
+    font-size:16px;
+    letter-spacing:0.06em;
+    color:var(--navy);
+    text-transform:uppercase;
+    border-bottom:1px solid var(--navy);
+    padding-bottom:8px;
+    margin:40px 0 16px;
+  }
+
+  p{ margin:0 0 12px; }
+
+  .stats-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1px;
+    background:var(--grey-line);
+    border:1px solid var(--grey-line);
+    margin:14px 0 6px;
+  }
+
+  .stat-cell{
+    display:flex;
+    background:var(--paper);
+  }
+  .stat-cell .k{
+    background:var(--grey-bg);
+    color:var(--navy);
+    font-weight:700;
+    font-size:12.5px;
+    padding:9px 12px;
+    flex:1.1;
+    display:flex;
+    align-items:center;
+  }
+  .stat-cell .v{
+    padding:9px 12px;
+    flex:1;
+    font-weight:700;
+    font-size:13px;
+    display:flex;
+    align-items:center;
+  }
+
+  .note-italic{
+    font-style:italic;
+    color:var(--text-soft);
+    font-size:13px;
+  }
+  .correction-note{
+    background:#FBF3E8;
+    border-left:3px solid var(--amber);
+    padding:10px 14px;
+    font-size:13px;
+    font-style:italic;
+    color:#6b4f1f;
+    margin:12px 0;
+  }
+
+  hr.divider{
+    border:none;
+    border-top:1px solid var(--navy);
+    margin:28px 0 6px;
+  }
+
+  /* ---- Filter pills ---- */
+  .filter-bar{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+    margin:18px 0 4px;
+  }
+  .filter-bar span.flabel{
+    font-size:12px;
+    font-weight:700;
+    color:var(--steel);
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    margin-right:2px;
+  }
+  .filter-pill{
+    font-family:inherit;
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--navy);
+    background:var(--paper);
+    border:1.5px solid var(--grey-line);
+    border-radius:20px;
+    padding:6px 14px;
+    cursor:pointer;
+    transition:all 0.15s;
+  }
+  .filter-pill:hover{ border-color:var(--navy); }
+  .filter-pill.active{
+    background:var(--navy);
+    color:#fff;
+    border-color:var(--navy);
+  }
+  .fund.is-hidden{ display:none; }
+
+  /* ---- Collapsible fund cards ---- */
+  details.fund{
+    margin-top:20px;
+    border:1px solid var(--grey-line);
+    border-radius:6px;
+    overflow:hidden;
+    scroll-margin-top:64px;
+  }
+  details.fund:first-of-type{ margin-top:12px; }
+
+  summary.fund-summary{
+    list-style:none;
+    cursor:pointer;
+    padding:16px 18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    background:var(--grey-bg);
+    -webkit-tap-highlight-color:transparent;
+  }
+  summary.fund-summary::-webkit-details-marker{ display:none; }
+
+  .summary-left{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    flex-wrap:wrap;
+    min-width:0;
+  }
+  .ticker{
+    font-family:Georgia, serif;
+    font-size:24px;
+    font-weight:700;
+    color:var(--navy);
+  }
+  .fund-name{
+    font-style:italic;
+    color:#555;
+    font-size:13.5px;
+  }
+  .summary-right{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-shrink:0;
+  }
+  .chevron{
+    width:10px; height:10px;
+    border-right:2px solid var(--navy);
+    border-bottom:2px solid var(--navy);
+    transform:rotate(-45deg);
+    transition:transform 0.2s;
+    flex-shrink:0;
+  }
+  details[open] > summary .chevron{ transform:rotate(45deg); }
+
+  .fund-body{ padding:6px 18px 22px; }
+
+  .tagline{
+    color:var(--steel);
+    font-weight:700;
+    font-size:11.5px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    margin:2px 0 14px;
+    padding-bottom:10px;
+    border-bottom:1px solid var(--grey-line);
+  }
+
+  .label{
+    font-weight:700;
+    color:var(--navy);
+    font-size:13.5px;
+  }
+
+  .returns-label{
+    margin:18px 0 8px;
+  }
+
+  table.returns{
+    width:100%;
+    border-collapse:collapse;
+    margin-bottom:16px;
+  }
+  table.returns th{
+    background:var(--navy);
+    color:#fff;
+    font-size:11px;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    padding:8px 4px;
+    text-align:center;
+    font-weight:600;
+  }
+  table.returns td{
+    text-align:center;
+    padding:10px 4px;
+    font-weight:700;
+    font-size:14px;
+    border:1px solid var(--grey-line);
+  }
+  .pos{ color:var(--green); }
+  .neg{ color:var(--red); }
+  .flat{ color:#999; font-weight:500; }
+
+  .holdings{ margin:14px 0; font-size:13.5px; }
+
+  .thesis-block{ margin:14px 0; }
+  .thesis-block p{ font-size:14px; }
+
+  .risk-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:16px 0 4px;
+    flex-wrap:wrap;
+  }
+  .risk-badge{
+    display:inline-block;
+    padding:4px 13px;
+    border-radius:2px;
+    color:#fff;
+    font-weight:700;
+    font-size:11.5px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+  }
+  .risk-moderate{ background:var(--green); }
+  .risk-modhigh{ background:var(--amber); }
+  .risk-high{ background:var(--red); }
+
+  .risk-note{
+    font-style:italic;
+    color:var(--text-soft);
+    font-size:13px;
+    margin-top:6px;
+  }
+
+  ul.notes{
+    list-style:none;
+    padding:0;
+    margin:0;
+  }
+  ul.notes li{
+    padding:10px 0;
+    border-bottom:1px solid var(--grey-line);
+    font-size:14px;
+  }
+  ul.notes li:last-child{ border-bottom:none; }
+  ul.notes li .label{ margin-right:4px; }
+
+  .disclaimer{
+    margin-top:44px;
+    padding-top:16px;
+    border-top:1px solid var(--grey-line);
+    font-style:italic;
+    color:#999;
+    font-size:11.5px;
+    line-height:1.6;
+  }
+
+  /* ---- Charts ---- */
+  .chart-block{
+    margin:26px 0 8px;
+  }
+  .chart-title{
+    font-weight:700;
+    font-size:13px;
+    color:var(--navy);
+    margin:0 0 4px;
+  }
+  .chart-sub{
+    font-size:12px;
+    color:var(--text-soft);
+    margin:0 0 12px;
+  }
+  .chart-svg{
+    width:100%;
+    height:auto;
+    display:block;
+  }
+  .chart-svg .bar{ transition:opacity 0.15s, filter 0.15s; cursor:pointer; }
+  .chart-svg .bar:hover{ filter:brightness(1.12); }
+  .legend{
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+    margin:18px 0 6px;
+    font-size:12px;
+    color:var(--text-soft);
+  }
+  .legend-item{
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .legend-swatch{
+    width:11px;
+    height:11px;
+    border-radius:2px;
+    display:inline-block;
+  }
+
+  /* ---- Back to top ---- */
+  .backtotop{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    background:var(--navy);
+    color:#fff;
+    border:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    box-shadow:0 4px 14px rgba(0,0,0,0.25);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.2s, transform 0.2s;
+    z-index:30;
+  }
+  .backtotop.show{ opacity:1; pointer-events:auto; }
+  .backtotop:hover{ transform:translateY(-2px); }
+  .backtotop svg{ width:18px; height:18px; }
+
+  @media (max-width:640px){
+    .sheet{ margin:0; }
+    .masthead{ padding:12px 18px; font-size:9.5px; }
+    .title-block, .content{ padding-left:20px; padding-right:20px; }
+    h1{ font-size:25px; }
+    .subtitle{ font-size:14.5px; }
+    .stats-grid{ grid-template-columns:1fr; }
+    table.returns td, table.returns th{ font-size:11px; padding:7px 3px; }
+    summary.fund-summary{ padding:13px 14px; }
+    .ticker{ font-size:20px; }
+    .fund-name{ display:block; font-size:12px; }
+    .fund-body{ padding:4px 14px 18px; }
+    .quicknav{ padding:8px 12px; }
+    .quicknav a{ font-size:11px; padding:6px 11px; }
+    .backtotop{ right:14px; bottom:14px; width:40px; height:40px; }
+  }
+
+  @media print{
+    body{ background:#fff; }
+    .sheet{ box-shadow:none; margin:0; max-width:none; }
+    .quicknav, .backtotop, .filter-bar{ display:none; }
+    details.fund{ break-inside:avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+
+  <div class="masthead">
+    <span>High-Conviction Growth Basket</span>
+    <span>Research Note — Not Investment Advice</span>
+  </div>
+
+  <nav class="quicknav" id="quicknav">
+    <a href="#fund-qqqm">QQQM</a>
+    <a href="#fund-avuv">AVUV</a>
+    <a href="#fund-xbi">XBI</a>
+    <a href="#fund-dram">DRAM</a>
+    <a href="#fund-koid">KOID</a>
+    <a href="#construction-notes">Notes</a>
+  </nav>
+
+  <div class="title-block">
+    <h1>5 ETFs for the Risk-Tolerant Investor</h1>
+    <p class="subtitle">A Growth &amp; Thematic Basket for Young, Risk-Tolerant Investors</p>
+    <p class="meta-line">Prepared for informational purposes&nbsp;&nbsp;|&nbsp;&nbsp;Data verified July 14, 2026 across FMP and independent sources</p>
+  </div>
+
+  <div class="content">
+
+    <h2 class="section">Executive Summary</h2>
+    <p>This note profiles five exchange-traded funds selected for investors with an elevated risk tolerance seeking exposure to structurally-growing themes — mega-cap technology, small-cap value, biotechnology, and two early-stage AI/robotics infrastructure plays. The basket blends three established, diversified funds with two young, narrow, thematic satellites. Positioning size should scale inversely with fund maturity and concentration. Tap any fund below to expand its full profile, or use the pills to filter by role.</p>
+
+    <div class="stats-grid">
+      <div class="stat-cell"><div class="k">Average Beta (3 established funds)</div><div class="v">1.11</div></div>
+      <div class="stat-cell"><div class="k">Funds with usable beta data</div><div class="v">3 of 5</div></div>
+      <div class="stat-cell"><div class="k">Expense Ratio Range</div><div class="v">0.15% – 0.79%</div></div>
+      <div class="stat-cell"><div class="k">Combined AUM Range</div><div class="v">$262M – $80.6B</div></div>
+    </div>
+    <p class="correction-note">Corrected July 14, 2026: an earlier data pull materially understated DRAM's and KOID's AUM. Both have been re-verified against multiple independent sources — see figures below.</p>
+    <p class="note-italic">Beta could not be calculated for DRAM and KOID due to insufficient trading history (both funds are under 15 months old). This is itself a risk signal — both funds lack the track record needed for standard volatility benchmarking.</p>
+
+    <div class="legend">
+      <span class="legend-item"><span class="legend-swatch" style="background:var(--green)"></span>Moderate</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:var(--amber)"></span>Moderate-High</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:var(--red)"></span>High</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:#C9CDD3"></span>N/A — insufficient history</span>
+    </div>
+
+    <!-- Expense Ratio Chart -->
+    <div class="chart-block">
+      <p class="chart-title">Expense Ratio Comparison</p>
+      <p class="chart-sub">Annual fee as % of assets — lower is cheaper to hold. Tap a bar to jump to that fund.</p>
+      <svg class="chart-svg" viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg">
+        <line x1="110" y1="10" x2="110" y2="210" stroke="#DADADA" stroke-width="1"/>
+        <line x1="240" y1="10" x2="240" y2="210" stroke="#EDEDED" stroke-width="1"/>
+        <line x1="370" y1="10" x2="370" y2="210" stroke="#EDEDED" stroke-width="1"/>
+        <line x1="500" y1="10" x2="500" y2="210" stroke="#EDEDED" stroke-width="1"/>
+        <line x1="630" y1="10" x2="630" y2="210" stroke="#EDEDED" stroke-width="1"/>
+
+        <text x="110" y="8" font-size="9" fill="#999" text-anchor="middle">0%</text>
+        <text x="240" y="8" font-size="9" fill="#999" text-anchor="middle">0.17%</text>
+        <text x="370" y="8" font-size="9" fill="#999" text-anchor="middle">0.35%</text>
+        <text x="500" y="8" font-size="9" fill="#999" text-anchor="middle">0.52%</text>
+        <text x="630" y="8" font-size="9" fill="#999" text-anchor="middle">0.69%</text>
+
+        <a href="#fund-qqqm"><text x="100" y="30" font-size="12.5" font-weight="700" fill="#14213D" text-anchor="end">QQQM</text>
+        <rect class="bar" x="110" y="18" width="91" height="20" fill="#A9670A" rx="1"/>
+        <text x="207" y="33" font-size="12" font-weight="700" fill="#1A1A1A">0.15%</text></a>
+
+        <a href="#fund-avuv"><text x="100" y="66" font-size="12.5" font-weight="700" fill="#14213D" text-anchor="end">AVUV</text>
+        <rect class="bar" x="110" y="54" width="152" height="20" fill="#1E6B3C" rx="1"/>
+        <text x="268" y="69" font-size="12" font-weight="700" fill="#1A1A1A">0.25%</text></a>
+
+        <a href="#fund-xbi"><text x="100" y="102" font-size="12.5" font-weight="700" fill="#14213D" text-anchor="end">XBI</text>
+        <rect class="bar" x="110" y="90" width="213" height="20" fill="#A9670A" rx="1"/>
+        <text x="329" y="105" font-size="12" font-weight="700" fill="#1A1A1A">0.35%</text></a>
+
+        <a href="#fund-dram"><text x="100" y="138" font-size="12.5" font-weight="700" fill="#14213D" text-anchor="end">DRAM</text>
+        <rect class="bar" x="110" y="126" width="396" height="20" fill="#A32F2F" rx="1"/>
+        <text x="512" y="141" font-size="12" font-weight="700" fill="#1A1A1A">0.65%</text></a>
+
+        <a href="#fund-koid"><text x="100" y="174" font-size="12.5" font-weight="700" fill="#14213D" text-anchor="end">KOID</text>
+        <rect class="bar" x="110" y="162" width="420" height="20" fill="#A32F2F" rx="1"/>
+        <text x="536" y="177" font-size="12" font-weight="700" fill="#1A1A1A">0.69%</text></a>
+      </svg>
+    </div>
+
+    <!-- 1-Year Return Chart -->
+    <div class="chart-block">
+      <p class="chart-title">Trailing 1-Year Return</p>
+      <p class="chart-sub">DRAM has insufficient history for a true 1-year figure (fund is ~3.5 months old)</p>
+      <svg class="chart-svg" viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg">
+        <line x1="110" y1="10" x2="110" y2="210" stroke="#DADADA" stroke-width="1"/>
+        <line x1="215" y1="10" x2="215" y2="210" stroke="#EDEDED" stroke-width="1"/>
+        <line x1="320" y1="10" x2="320" y2="210" stroke="#EDEDED" stroke-width="1"/>
+        <line x1="425" y1="10" x2="425" y2="210" stroke="#EDEDED" stroke-width="1"/>
+        <line x1="530" y1="10" x2="530" y2="210" stroke="#EDEDED" stroke-width="1"/>
+
+        <text x="110" y="8" font-size="9" fill="#999" text-anchor="middle">0%</text>
+        <text x="215" y="8" font-size="9" fill="#999" text-anchor="middle">19%</text>
+        <text x="320" y="8" font-size="9" fill="#999" text-anchor="middle">38%</text>
+        <text x="425" y="8" font-size="9" fill="#999" text-anchor="middle">57%</text>
+        <text x="530" y="8" font-size="9" fill="#999" text-anchor="middle">76%</text>
+
+        <a href="#fund-qqqm"><text x="100" y="30" font-size="12.5" font-weight="700" fill="#14213D" text-anchor="end">QQQM</text>
+        <rect class="bar" x="110" y="18" width="155" height="20" fill="#A9670A" rx="1"/>
+        <text x="271" y="33" font-size="12" font-weight="700" fill="#1A1A1A">+28.01%</text></a>
+
+        <a href="#fund-avuv"><text x="100" y="66" font-size="12.5" font-weight="700" fill="#14213D" text-anchor="end">AVUV</text>
+        <rect class="bar" x="110" y="54" width="168" height="20" fill="#1E6B3C" rx="1"/>
+        <text x="284" y="69" font-size="12" font-weight="700" fill="#1A1A1A">+30.40%</text></a>
+
+        <a href="#fund-xbi"><text x="100" y="102" font-size="12.5" font-weight="700" fill="#14213D" text-anchor="end">XBI</text>
+        <rect class="bar" x="110" y="90" width="420" height="20" fill="#A9670A" rx="1"/>
+        <text x="536" y="105" font-size="12" font-weight="700" fill="#1A1A1A">+75.98%</text></a>
+
+        <a href="#fund-dram"><text x="100" y="138" font-size="12.5" font-weight="700" fill="#14213D" text-anchor="end">DRAM</text>
+        <rect class="bar" x="110" y="126" width="60" height="20" fill="#C9CDD3" rx="1"/>
+        <text x="180" y="141" font-size="12" font-weight="700" fill="#999">n/a</text></a>
+
+        <a href="#fund-koid"><text x="100" y="174" font-size="12.5" font-weight="700" fill="#14213D" text-anchor="end">KOID</text>
+        <rect class="bar" x="110" y="162" width="244" height="20" fill="#A32F2F" rx="1"/>
+        <text x="360" y="177" font-size="12" font-weight="700" fill="#1A1A1A">+44.08%</text></a>
+      </svg>
+    </div>
+
+    <!-- Beta Chart -->
+    <div class="chart-block">
+      <p class="chart-title">Beta (vs. Broad Market)</p>
+      <p class="chart-sub">Dashed line marks market beta of 1.00 — bars right of the line move more than the market</p>
+      <svg class="chart-svg" viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg">
+        <line x1="110" y1="10" x2="110" y2="210" stroke="#DADADA" stroke-width="1"/>
+        <line x1="278" y1="10" x2="278" y2="210" stroke="#EDEDED" stroke-width="1"/>
+        <line x1="446" y1="10" x2="446" y2="210" stroke="#3D4A5C" stroke-width="1.4" stroke-dasharray="4,3"/>
+        <line x1="614" y1="10" x2="614" y2="210" stroke="#EDEDED" stroke-width="1"/>
+
+        <text x="110" y="8" font-size="9" fill="#999" text-anchor="middle">0.0</text>
+        <text x="278" y="8" font-size="9" fill="#999" text-anchor="middle">0.5</text>
+        <text x="446" y="8" font-size="9" fill="#3D4A5C" text-anchor="middle" font-weight="700">1.0</text>
+        <text x="614" y="8" font-size="9" fill="#999" text-anchor="middle">1.5</text>
+
+        <a href="#fund-qqqm"><text x="100" y="30" font-size="12.5" font-weight="700" fill="#14213D" text-anchor="end">QQQM</text>
+        <rect class="bar" x="110" y="18" width="416" height="20" fill="#A9670A" rx="1"/>
+        <text x="532" y="33" font-size="12" font-weight="700" fill="#1A1A1A">1.24</text></a>
+
+        <a href="#fund-avuv"><text x="100" y="66" font-size="12.5" font-weight="700" fill="#14213D" text-anchor="end">AVUV</text>
+        <rect class="bar" x="110" y="54" width="329" height="20" fill="#1E6B3C" rx="1"/>
+        <text x="445" y="69" font-size="12" font-weight="700" fill="#1A1A1A">0.98</text></a>
+
+        <a href="#fund-xbi"><text x="100" y="102" font-size="12.5" font-weight="700" fill="#14213D" text-anchor="end">XBI</text>
+        <rect class="bar" x="110" y="90" width="369" height="20" fill="#A9670A" rx="1"/>
+        <text x="485" y="105" font-size="12" font-weight="700" fill="#1A1A1A">1.10</text></a>
+
+        <a href="#fund-dram"><text x="100" y="138" font-size="12.5" font-weight="700" fill="#14213D" text-anchor="end">DRAM</text>
+        <rect class="bar" x="110" y="126" width="60" height="20" fill="#C9CDD3" rx="1"/>
+        <text x="180" y="141" font-size="12" font-weight="700" fill="#999">n/a</text></a>
+
+        <a href="#fund-koid"><text x="100" y="174" font-size="12.5" font-weight="700" fill="#14213D" text-anchor="end">KOID</text>
+        <rect class="bar" x="110" y="162" width="60" height="20" fill="#C9CDD3" rx="1"/>
+        <text x="180" y="177" font-size="12" font-weight="700" fill="#999">n/a</text></a>
+      </svg>
+    </div>
+
+    <hr class="divider">
+
+    <h2 class="section">Fund Profiles</h2>
+
+    <div class="filter-bar" id="filterbar">
+      <span class="flabel">Filter:</span>
+      <button class="filter-pill active" data-filter="all">All 5</button>
+      <button class="filter-pill" data-filter="core">Core (3)</button>
+      <button class="filter-pill" data-filter="satellite">Satellite (2)</button>
+      <button class="filter-pill" data-filter="high">High Risk (2)</button>
+    </div>
+
+    <!-- QQQM -->
+    <details class="fund" id="fund-qqqm" data-role="core" data-risk="modhigh" open>
+      <summary class="fund-summary">
+        <span class="summary-left">
+          <span class="ticker">QQQM</span>
+          <span class="fund-name">Invesco NASDAQ-100 ETF</span>
+        </span>
+        <span class="summary-right">
+          <span class="risk-badge risk-modhigh">Mod-High</span>
+          <span class="chevron"></span>
+        </span>
+      </summary>
+      <div class="fund-body">
+        <p class="tagline">Core Holding — Mega-Cap Tech / AI Infrastructure</p>
+
+        <div class="stats-grid">
+          <div class="stat-cell"><div class="k">Expense Ratio</div><div class="v">0.15%</div></div>
+          <div class="stat-cell"><div class="k">Beta (vs. Market)</div><div class="v">1.24</div></div>
+          <div class="stat-cell"><div class="k">AUM</div><div class="v">$80.6B</div></div>
+          <div class="stat-cell"><div class="k">52-Week Range</div><div class="v">$227.00 – $308.21</div></div>
+          <div class="stat-cell"><div class="k">Exchange</div><div class="v">NASDAQ</div></div>
+          <div class="stat-cell"><div class="k">Structure</div><div class="v">Passive, 108 holdings</div></div>
+        </div>
+
+        <p class="label returns-label">Trailing Returns</p>
+        <table class="returns">
+          <tr><th>YTD</th><th>1-Year</th><th>3-Year</th><th>Since Inception</th></tr>
+          <tr><td class="pos">+15.87%</td><td class="pos">+28.01%</td><td class="pos">+87.90%</td><td class="pos">+142.10%</td></tr>
+        </table>
+
+        <p class="holdings"><span class="label">Top Holdings: </span>Nvidia (7.90%), Apple (7.36%), Micron Technology (4.72%), Microsoft (4.55%), Amazon (4.19%) — top ~100 non-financial NASDAQ companies, cap-weighted.</p>
+
+        <div class="thesis-block">
+          <p class="label">Investment Thesis — How It Captures the Trend</p>
+          <p>QQQM tracks the Nasdaq-100 on a market-cap-weighted basis, meaning the fund's exposure to AI/tech leaders scales automatically as those companies compound gains from cloud, AI infrastructure, and semiconductor demand. Investors are not required to forecast which mega-cap wins the AI cycle — the index re-weights toward the winners in real time. The trade-off: concentration, as the top 10 holdings typically represent ~45-50% of the fund.</p>
+        </div>
+
+        <p class="risk-note">Broad enough (100 names) to avoid single-stock risk, but sector-concentrated in technology/communications.</p>
+      </div>
+    </details>
+
+    <!-- AVUV -->
+    <details class="fund" id="fund-avuv" data-role="core" data-risk="moderate" open>
+      <summary class="fund-summary">
+        <span class="summary-left">
+          <span class="ticker">AVUV</span>
+          <span class="fund-name">Avantis U.S. Small Cap Value ETF</span>
+        </span>
+        <span class="summary-right">
+          <span class="risk-badge risk-moderate">Moderate</span>
+          <span class="chevron"></span>
+        </span>
+      </summary>
+      <div class="fund-body">
+        <p class="tagline">Factor Holding — Value + Profitability Tilt</p>
+
+        <div class="stats-grid">
+          <div class="stat-cell"><div class="k">Expense Ratio</div><div class="v">0.25%</div></div>
+          <div class="stat-cell"><div class="k">Beta (vs. Market)</div><div class="v">0.98</div></div>
+          <div class="stat-cell"><div class="k">AUM</div><div class="v">$29.2B</div></div>
+          <div class="stat-cell"><div class="k">52-Week Range</div><div class="v">$89.27 – $125.69</div></div>
+          <div class="stat-cell"><div class="k">Exchange</div><div class="v">NYSE Arca</div></div>
+          <div class="stat-cell"><div class="k">Structure</div><div class="v">Active factor screen, 780+ holdings</div></div>
+        </div>
+
+        <p class="label returns-label">Trailing Returns</p>
+        <table class="returns">
+          <tr><th>YTD</th><th>1-Year</th><th>3-Year</th><th>Since Inception</th></tr>
+          <tr><td class="pos">+21.56%</td><td class="pos">+30.40%</td><td class="pos">+56.00%</td><td class="pos">+146.95%</td></tr>
+        </table>
+
+        <p class="holdings"><span class="label">Top Holdings: </span>780+ holdings incl. Viasat, Matson, Lantheus, Lear, GATX, Avnet — diversified small-cap industrials/consumer names.</p>
+
+        <div class="thesis-block">
+          <p class="label">Investment Thesis — How It Captures the Trend</p>
+          <p>AVUV systematically screens small-cap U.S. equities on two academically-supported factors: low relative valuation and high profitability. The fund tilts weight toward companies scoring well on both, rebalancing quarterly with deliberately low turnover (~3-6%). The thesis is structural rather than narrative-driven — it captures a long-documented factor premium rather than betting on a specific theme.</p>
+        </div>
+
+        <p class="risk-note">Lowest beta in the basket; broad diversification across 780+ names meaningfully reduces single-stock risk.</p>
+      </div>
+    </details>
+
+    <!-- XBI -->
+    <details class="fund" id="fund-xbi" data-role="core" data-risk="modhigh" open>
+      <summary class="fund-summary">
+        <span class="summary-left">
+          <span class="ticker">XBI</span>
+          <span class="fund-name">SPDR S&amp;P Biotech ETF</span>
+        </span>
+        <span class="summary-right">
+          <span class="risk-badge risk-modhigh">Mod-High</span>
+          <span class="chevron"></span>
+        </span>
+      </summary>
+      <div class="fund-body">
+        <p class="tagline">Sector Holding — Biotech Innovation Cycle</p>
+
+        <div class="stats-grid">
+          <div class="stat-cell"><div class="k">Expense Ratio</div><div class="v">0.35%</div></div>
+          <div class="stat-cell"><div class="k">Beta (vs. Market)</div><div class="v">1.10</div></div>
+          <div class="stat-cell"><div class="k">AUM</div><div class="v">$8.1B</div></div>
+          <div class="stat-cell"><div class="k">52-Week Range</div><div class="v">$84.39 – $165.71</div></div>
+          <div class="stat-cell"><div class="k">Exchange</div><div class="v">NYSE Arca</div></div>
+          <div class="stat-cell"><div class="k">Structure</div><div class="v">Passive, equal-weighted, 159 holdings</div></div>
+        </div>
+
+        <p class="label returns-label">Trailing Returns</p>
+        <table class="returns">
+          <tr><th>YTD</th><th>1-Year</th><th>3-Year</th><th>Since Inception (10Y)</th></tr>
+          <tr><td class="pos">+27.40%</td><td class="pos">+75.98%</td><td class="pos">+84.01%</td><td class="pos">+176.55%</td></tr>
+        </table>
+
+        <p class="holdings"><span class="label">Top Holdings: </span>Apogee Therapeutics (1.49%), Kymera Therapeutics (1.41%), Moderna (1.37%), Viking Therapeutics (1.29%), Erasca (1.28%) — top 10 just ~13% of assets.</p>
+
+        <div class="thesis-block">
+          <p class="label">Investment Thesis — How It Captures the Trend</p>
+          <p>XBI's defining design choice is equal-weighting rather than cap-weighting. This deliberately preserves the influence of small and mid-cap biotech names — the companies most likely to deliver outsized returns from a single drug approval, breakthrough trial result, or acquisition. A cap-weighted biotech fund would be dominated by a handful of large pharma names; XBI is built specifically to avoid that and capture the sector's asymmetric upside.</p>
+        </div>
+
+        <p class="risk-note">Binary catalysts (FDA decisions, trial readouts) drive sharp, event-based volatility even with sector diversification.</p>
+      </div>
+    </details>
+
+    <!-- DRAM -->
+    <details class="fund" id="fund-dram" data-role="satellite" data-risk="high" open>
+      <summary class="fund-summary">
+        <span class="summary-left">
+          <span class="ticker">DRAM</span>
+          <span class="fund-name">Roundhill Memory ETF</span>
+        </span>
+        <span class="summary-right">
+          <span class="risk-badge risk-high">High</span>
+          <span class="chevron"></span>
+        </span>
+      </summary>
+      <div class="fund-body">
+        <p class="tagline">Thematic / Satellite — AI Memory Chip Bottleneck</p>
+
+        <div class="stats-grid">
+          <div class="stat-cell"><div class="k">Expense Ratio</div><div class="v">0.65%</div></div>
+          <div class="stat-cell"><div class="k">Beta (vs. Market)</div><div class="v">N/A — insufficient history</div></div>
+          <div class="stat-cell"><div class="k">AUM</div><div class="v">~$23B</div></div>
+          <div class="stat-cell"><div class="k">52-Week Range</div><div class="v">$26.14 – $81.34</div></div>
+          <div class="stat-cell"><div class="k">Exchange</div><div class="v">CBOE</div></div>
+          <div class="stat-cell"><div class="k">Structure</div><div class="v">Active, non-diversified, ~9 names</div></div>
+        </div>
+
+        <p class="label returns-label">Trailing Returns</p>
+        <table class="returns">
+          <tr><th>YTD</th><th>1-Year</th><th>3-Year</th><th>Since Inception</th></tr>
+          <tr><td class="pos">+106.41%</td><td class="flat">n/a</td><td class="flat">n/a</td><td class="pos">+106.41%</td></tr>
+        </table>
+
+        <p class="holdings"><span class="label">Top Holdings: </span>Micron Technology (~25.8%), Samsung Electronics (~25%), SK Hynix (~23.7%) — these three names alone are ~74% of assets. Remainder spread across Kioxia, SanDisk, Western Digital, Seagate, Nanya, and Winbond in low single-digit weights.</p>
+
+        <div class="thesis-block">
+          <p class="label">Investment Thesis — How It Captures the Trend</p>
+          <p>DRAM is an active, highly concentrated bet on the memory-chip layer of the AI infrastructure buildout — effectively a three-stock basket (Micron, Samsung, SK Hynix) wrapped in an ETF, since neither Samsung nor SK Hynix offer easy direct access to U.S. investors (SK Hynix's ADRs only began trading July 10, 2026). The thesis: AI training and inference are increasingly memory-bandwidth-constrained, so as AI compute scales, memory demand and pricing power scale alongside it. This is a narrow, high-conviction play on one link in the AI supply chain, not a diversified fund with memory as a theme.</p>
+        </div>
+
+        <p class="risk-note">Launched April 2, 2026 at $28/share — the fastest ETF launch in history, reaching $1B in AUM in 10 trading days and ~$20B within roughly a month. Now down over 20% from its highs with single-day swings exceeding 14% in both directions. Roundhill has since launched a 2x daily-leveraged version (ticker RAM, June 24, 2026). ~74% of assets sit in three highly correlated, cyclical companies with overlapping China trade/export-control exposure.</p>
+      </div>
+    </details>
+
+    <!-- KOID -->
+    <details class="fund" id="fund-koid" data-role="satellite" data-risk="high" open>
+      <summary class="fund-summary">
+        <span class="summary-left">
+          <span class="ticker">KOID</span>
+          <span class="fund-name">KraneShares Global Humanoid Robotics &amp; Physical AI Index ETF</span>
+        </span>
+        <span class="summary-right">
+          <span class="risk-badge risk-high">High</span>
+          <span class="chevron"></span>
+        </span>
+      </summary>
+      <div class="fund-body">
+        <p class="tagline">Thematic / Satellite — Early-Stage Robotics Supply Chain</p>
+
+        <div class="stats-grid">
+          <div class="stat-cell"><div class="k">Expense Ratio</div><div class="v">0.69% net / 0.79% gross</div></div>
+          <div class="stat-cell"><div class="k">Beta (vs. Market)</div><div class="v">N/A — insufficient history</div></div>
+          <div class="stat-cell"><div class="k">AUM</div><div class="v">~$262M</div></div>
+          <div class="stat-cell"><div class="k">52-Week Range</div><div class="v">$26.07 – $43.32</div></div>
+          <div class="stat-cell"><div class="k">Exchange</div><div class="v">NASDAQ</div></div>
+          <div class="stat-cell"><div class="k">Structure</div><div class="v">Passive, equal-weighted, 58-59 holdings</div></div>
+        </div>
+
+        <p class="label returns-label">Trailing Returns</p>
+        <table class="returns">
+          <tr><th>YTD</th><th>1-Year</th><th>3-Year</th><th>Since Inception</th></tr>
+          <tr><td class="pos">+19.87%</td><td class="pos">+44.08%</td><td class="pos">+50.85%</td><td class="pos">+50.85%</td></tr>
+        </table>
+
+        <p class="holdings"><span class="label">Top Holdings: </span>Equal-weighted across Industrials (~38%), Technology (~38%), Consumer Cyclical (~17%), Basic Materials (~7%). Largest positions: Lynas Rare Earths (3.32%), Doosan (3.07%), Regal Rexnord (2.74%), STMicroelectronics (2.52%), RBC Bearings (2.48%) — top 10 holdings are ~26% of assets.</p>
+
+        <div class="thesis-block">
+          <p class="label">Investment Thesis — How It Captures the Trend</p>
+          <p>KOID tracks an equal-weighted basket spanning the entire emerging humanoid robotics and "physical AI" supply chain — from the chips powering robot cognition to the industrial manufacturers building the hardware. Equal-weighting spreads the bet across the full ecosystem rather than concentrating in one AI mega-cap. The thesis is that physical AI is the logical next phase after software-only AI — but most constituent companies derive only a fraction of current revenue from robotics today, meaning the fund is priced substantially on future potential.</p>
+        </div>
+
+        <p class="risk-note">Launched June 4, 2025 — just over a year of trading history, smallest AUM in the basket (~$262M vs. billions for the other four), and the highest fee. Non-diversified by design and priced substantially on future robotics adoption rather than current earnings.</p>
+      </div>
+    </details>
+
+    <hr class="divider">
+
+    <h2 class="section" id="construction-notes">Portfolio Construction Notes</h2>
+    <ul class="notes">
+      <li><span class="label">Core vs. Satellite:</span> QQQM, AVUV, and XBI function as the diversified core of this basket. DRAM and KOID are concentrated, thematic satellites and should be sized accordingly — typically a smaller allocation than the core holdings.</li>
+      <li><span class="label">Correlation Risk:</span> QQQM, DRAM, and KOID share meaningful overlap through common AI-infrastructure exposure (Micron Technology is a top-3 holding in both QQQM and DRAM). In an AI sentiment reversal, these three may decline together rather than diversifying one another.</li>
+      <li><span class="label">True Diversifiers:</span> AVUV and XBI carry the lowest correlation to the AI/tech theme within this basket and provide the most genuine ballast if sentiment turns.</li>
+      <li><span class="label">Suitability:</span> This basket is built for investors who can tolerate significant drawdowns in pursuit of long-run growth — not appropriate for capital that must be preserved or accessed in the near term.</li>
+    </ul>
+
+    <p class="disclaimer">DISCLAIMER: This document is for informational and educational purposes only and does not constitute investment, financial, or tax advice. Past performance is not indicative of future results. All figures sourced from Financial Modeling Prep and independent verification as of July 14, 2026, and are subject to change. Consult a licensed financial advisor before making investment decisions.</p>
+
+  </div>
+</div>
+
+<button class="backtotop" id="backtotop" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+</button>
+
+<script>
+  // Filter pills
+  var pills = document.querySelectorAll('.filter-pill');
+  var fundCards = document.querySelectorAll('details.fund');
+  pills.forEach(function(pill){
+    pill.addEventListener('click', function(){
+      pills.forEach(function(p){ p.classList.remove('active'); });
+      pill.classList.add('active');
+      var filter = pill.getAttribute('data-filter');
+      fundCards.forEach(function(card){
+        var role = card.getAttribute('data-role');
+        var risk = card.getAttribute('data-risk');
+        var show = filter === 'all'
+          || (filter === 'core' && role === 'core')
+          || (filter === 'satellite' && role === 'satellite')
+          || (filter === 'high' && risk === 'high');
+        card.classList.toggle('is-hidden', !show);
+      });
+    });
+  });
+
+  // Quick-nav active highlight on scroll
+  var navLinks = document.querySelectorAll('#quicknav a');
+  var sections = Array.prototype.map.call(navLinks, function(a){
+    return document.querySelector(a.getAttribute('href'));
+  });
+  function updateActiveNav(){
+    var scrollPos = window.scrollY + 90;
+    var activeIdx = 0;
+    sections.forEach(function(sec, i){
+      if(sec && sec.offsetTop <= scrollPos) activeIdx = i;
+    });
+    navLinks.forEach(function(a, i){
+      a.classList.toggle('active', i === activeIdx);
+    });
+  }
+  window.addEventListener('scroll', updateActiveNav, { passive:true });
+  updateActiveNav();
+
+  // Clicking a chart bar link should also expand that fund card
+  document.querySelectorAll('.chart-svg a').forEach(function(a){
+    a.addEventListener('click', function(e){
+      var id = a.getAttribute('href').slice(1);
+      var target = document.getElementById(id);
+      if(target && !target.open) target.open = true;
+    });
+  });
+
+  // Back to top button
+  var backBtn = document.getElementById('backtotop');
+  window.addEventListener('scroll', function(){
+    backBtn.classList.toggle('show', window.scrollY > 500);
+  }, { passive:true });
+  backBtn.addEventListener('click', function(){
+    window.scrollTo({ top:0, behavior:'smooth' });
+  });
+</script>
+
+</body>
+</html>
