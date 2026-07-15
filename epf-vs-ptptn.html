@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PTPTN vs EPF — A Ten-Year Ledger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root{
+    --ink:#182722;
+    --cover:#14241f;
+    --cover-deep:#0d1815;
+    --paper:#f4eedb;
+    --paper-dim:#ece3ca;
+    --brass:#b6893c;
+    --brass-light:#d9b878;
+    --green:#28503f;
+    --green-light:#3f6e56;
+    --rust:#a4402c;
+    --rule:#c9bd9a;
+    --muted:#6b6350;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--cover);
+    color:var(--ink);
+    font-family:'Public Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .page{
+    max-width:900px;
+    margin:0 auto;
+    background:var(--paper);
+    background-image:
+      repeating-linear-gradient(transparent, transparent 39px, rgba(107,99,80,0.07) 40px);
+    box-shadow:0 0 80px rgba(0,0,0,0.5);
+    position:relative;
+  }
+  .serif{ font-family:'Newsreader', serif; }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+
+  /* ---------- MASTHEAD ---------- */
+  .masthead{
+    padding:48px 48px 36px;
+    border-bottom:2px solid var(--ink);
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    font-size:11px;
+    color:var(--muted);
+    margin-bottom:16px;
+  }
+  .masthead h1{
+    font-family:'Newsreader', serif;
+    font-size:clamp(28px, 4.4vw, 42px);
+    line-height:1.18;
+    font-weight:600;
+    margin:0 0 16px;
+    color:var(--ink);
+    max-width:680px;
+  }
+  .masthead p.dek{
+    max-width:600px;
+    margin:0 0 22px;
+    font-size:16px;
+    line-height:1.65;
+    color:#3a3226;
+  }
+  .lede-stat{
+    max-width:600px;
+    margin:0 0 24px;
+    padding-left:16px;
+    border-left:3px solid var(--green);
+    font-size:15px;
+    line-height:1.6;
+    color:#3a3226;
+  }
+  .lede-stat .num{
+    font-family:'Newsreader', serif;
+    font-weight:700;
+    font-size:19px;
+    color:var(--green);
+  }
+  .byline-row{
+    display:flex; flex-wrap:wrap; gap:20px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.04em;
+    color:var(--muted);
+    text-transform:uppercase;
+  }
+
+  /* ---------- SECTIONS ---------- */
+  section{ padding:52px 48px; }
+  section.tight{padding-top:0;}
+  .rule{ border:none; border-top:1px solid var(--rule); margin:0; }
+  .rule-thick{ border:none; border-top:2px solid var(--ink); margin:0 0 32px; }
+
+  .kicker{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:var(--green);
+    margin-bottom:10px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .kicker::after{ content:''; flex:1; height:1px; background:var(--rule); }
+
+  h2.head{
+    font-family:'Newsreader', serif;
+    font-weight:600;
+    font-size:clamp(24px,3.4vw,32px);
+    margin:0 0 14px;
+    color:var(--ink);
+  }
+  p.lede{
+    font-size:16px;
+    line-height:1.7;
+    color:#372f22;
+    max-width:640px;
+  }
+  p.lede + p.lede{ margin-top:14px; }
+
+  /* ---------- FACT ROW (ledger entries) ---------- */
+  .ledger{
+    margin-top:30px;
+    border-top:2px solid var(--ink);
+  }
+  .ledger-row{
+    display:grid;
+    grid-template-columns:100px 1fr auto;
+    gap:18px;
+    align-items:baseline;
+    padding:16px 4px;
+    border-bottom:1px solid var(--rule);
+  }
+  .ledger-row .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+  }
+  .ledger-row .desc{ font-size:15px; color:var(--ink); }
+  .ledger-row .desc b{ font-weight:600; }
+  .ledger-row .figure{
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:600;
+    font-size:16px;
+    color:var(--green);
+    white-space:nowrap;
+  }
+
+  /* ---------- TWO PATHS ---------- */
+  .paths{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0;
+    margin-top:34px;
+    border:1px solid var(--ink);
+  }
+  .path{
+    padding:26px 26px 28px;
+    position:relative;
+  }
+  .path.a{ border-right:1px solid var(--ink); background:rgba(63,110,86,0.06); }
+  .path.b{ background:rgba(164,64,44,0.05); }
+  .path-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  .path.a .path-label{ color:var(--green); }
+  .path.b .path-label{ color:var(--rust); }
+  .path h3{
+    font-family:'Newsreader', serif;
+    font-size:21px;
+    font-weight:600;
+    margin:0 0 12px;
+    line-height:1.25;
+  }
+  .path p{ font-size:14.5px; line-height:1.65; color:#3a3226; margin:0 0 16px; }
+  .path .mini-table{ width:100%; border-collapse:collapse; margin-top:8px; }
+  .path .mini-table td{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    padding:7px 0;
+    border-top:1px dotted var(--rule);
+  }
+  .path .mini-table td:first-child{ color:var(--muted); }
+  .path .mini-table td:last-child{ text-align:right; font-weight:600; }
+  .path.a .mini-table td:last-child{ color:var(--green); }
+  .path.b .mini-table td:last-child{ color:var(--rust); }
+  .path .net-final{
+    margin-top:16px; padding-top:14px; border-top:2px solid var(--ink);
+    display:flex; justify-content:space-between; align-items:baseline;
+  }
+  .path .net-final .label{ font-size:12.5px; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); }
+  .path .net-final .val{ font-family:'Newsreader',serif; font-weight:700; font-size:24px; }
+  .path.a .net-final .val{ color:var(--green); }
+  .path.b .net-final .val{ color:var(--rust); }
+
+  /* ---------- CHART CARDS ---------- */
+  .chart-card{
+    margin-top:36px;
+    border:1px solid var(--ink);
+    background:var(--paper-dim);
+    padding:26px 26px 14px;
+  }
+  .chart-card .chart-title{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    color:var(--muted);
+    margin-bottom:18px;
+  }
+  .chart-wrap{ position:relative; height:320px; }
+  .chart-legend{
+    display:flex; gap:24px; margin-top:14px; padding-top:14px; border-top:1px dotted var(--rule);
+    flex-wrap:wrap;
+  }
+  .chart-legend .item{ display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--muted); font-family:'IBM Plex Mono', monospace;}
+  .chart-legend .swatch{ width:12px; height:12px; border-radius:2px; display:inline-block; }
+
+  /* ---------- STAT GRID ---------- */
+  .stat-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1px;
+    background:var(--ink);
+    margin-top:32px;
+    border:1px solid var(--ink);
+  }
+  .stat{
+    background:var(--paper);
+    padding:24px 20px;
+    text-align:center;
+  }
+  .stat .val{
+    font-family:'Newsreader', serif;
+    font-weight:700;
+    font-size:28px;
+    color:var(--green);
+  }
+  .stat .val.rust{ color:var(--rust); }
+  .stat .lbl{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-top:8px;
+    line-height:1.4;
+  }
+
+  /* ---------- VERDICT BAND ---------- */
+  .verdict{
+    background:var(--ink);
+    color:var(--paper);
+    padding:52px 48px;
+    text-align:center;
+  }
+  .verdict .kicker{ color:var(--brass-light); justify-content:center; }
+  .verdict .kicker::after{ display:none; }
+  .verdict h2{
+    font-family:'Newsreader', serif;
+    font-weight:600;
+    font-size:clamp(26px,4vw,38px);
+    margin:14px 0 20px;
+    line-height:1.2;
+  }
+  .verdict h2 .big{
+    display:block;
+    font-size:clamp(46px,7vw,72px);
+    color:var(--brass-light);
+    font-weight:700;
+    margin-top:6px;
+  }
+  .verdict p{
+    max-width:560px; margin:0 auto; font-size:15.5px; line-height:1.7; color:#cfc6ad;
+  }
+
+  /* ---------- RATE SPREAD VISUAL ---------- */
+  .spread{
+    margin-top:36px;
+    display:flex; flex-direction:column; gap:14px;
+  }
+  .spread-row{ display:grid; grid-template-columns:150px 1fr 90px; align-items:center; gap:14px; }
+  .spread-row .name{ font-family:'IBM Plex Mono', monospace; font-size:12.5px; text-transform:uppercase; letter-spacing:0.04em; color:var(--ink); }
+  .spread-track{ height:20px; background:var(--paper-dim); border:1px solid var(--rule); position:relative; }
+  .spread-fill{ height:100%; }
+  .spread-fill.rust{ background:var(--rust); }
+  .spread-fill.green{ background:var(--green); }
+  .spread-row .pct{ font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:14px; text-align:right; }
+
+  /* ---------- CALCULATOR ---------- */
+  .calc{
+    margin-top:30px;
+    border:1px solid var(--ink);
+    background:var(--paper-dim);
+    padding:28px;
+  }
+  .calc-inputs{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:20px 22px;
+  }
+  .calc-field{ display:flex; flex-direction:column; gap:7px; }
+  .calc-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--muted);
+  }
+  .calc-field input{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:15px;
+    padding:9px 10px;
+    border:1px solid var(--rule);
+    background:var(--paper);
+    color:var(--ink);
+    width:100%;
+  }
+  .calc-field input:focus{
+    outline:none;
+    border-color:var(--green);
+    box-shadow:0 0 0 1px var(--green);
+  }
+  .calc-btn{
+    margin-top:24px;
+    width:100%;
+    padding:13px;
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    font-size:12px;
+    border:none;
+    cursor:pointer;
+  }
+  .calc-btn:hover{ background:var(--green); }
+  .calc-output{
+    margin-top:24px;
+    border-top:2px solid var(--ink);
+  }
+  .calc-row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:14px 2px;
+    border-bottom:1px solid var(--rule);
+    font-size:14px;
+    color:#3a3226;
+  }
+  .calc-row.total{
+    border-bottom:none;
+    border-top:1px dashed var(--rule);
+    margin-top:2px;
+    padding-top:16px;
+    font-weight:600;
+    font-size:15px;
+    color:var(--ink);
+  }
+  .calc-row-val{ font-family:'IBM Plex Mono', monospace; font-weight:600; }
+  .calc-row-val.green{ color:var(--green); }
+  .calc-row-val.rust{ color:var(--rust); }
+
+  /* ---------- FINE PRINT ---------- */
+  .fine-print{
+    background:var(--paper-dim);
+    border:1px dashed var(--rule);
+    padding:26px 28px;
+    margin-top:16px;
+  }
+  .fine-print .title{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px; text-transform:uppercase; letter-spacing:0.12em;
+    color:var(--rust); margin-bottom:12px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .fine-print ul{ margin:0; padding-left:18px; }
+  .fine-print li{ font-size:13.5px; line-height:1.7; color:#4a4331; margin-bottom:8px; }
+  .fine-print li:last-child{ margin-bottom:0; }
+
+  footer{
+    padding:28px 48px 40px;
+    text-align:center;
+  }
+  footer p{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    color:var(--muted);
+    line-height:1.8;
+    max-width:560px;
+    margin:0 auto;
+  }
+
+  @media (max-width:640px){
+    section{ padding:40px 24px; }
+    .masthead{ padding:40px 24px 30px; }
+    .paths{ grid-template-columns:1fr; }
+    .path.a{ border-right:none; border-bottom:1px solid var(--ink); }
+    .stat-grid{ grid-template-columns:1fr; }
+    .ledger-row{ grid-template-columns:1fr; gap:4px; }
+    .ledger-row .figure{ font-size:15px; }
+    .spread-row{ grid-template-columns:100px 1fr 70px; }
+    .verdict{ padding-left:24px; padding-right:24px; }
+    .calc-inputs{ grid-template-columns:1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- MASTHEAD -->
+  <div class="masthead">
+    <div class="eyebrow">Household Ledger · No. 01 · Malaysia Edition</div>
+    <h1>PTPTN vs EPF: a ten-year ledger</h1>
+    <p class="dek">Everyone rushes to kill their PTPTN loan early. We ran the actual numbers — the real dividends, the real Ujrah, the real years — to see if that's actually the smart move.</p>
+    <p class="lede-stat"><span class="num">RM 7,996</span> — the ten-year net advantage of investing the surplus over rushing to clear the loan.</p>
+    <div class="byline-row">
+      <span>Verified calculations</span>
+      <span>2016–2025 data</span>
+      <span>RM30,000 loan scenario</span>
+    </div>
+  </div>
+
+  <!-- THE SETUP -->
+  <section>
+    <div class="kicker">The Setup</div>
+    <h2 class="head">Same money, two decisions</h2>
+    <p class="lede">A RM30,000 PTPTN loan, repaid over 15 years, carries a minimum payment of about RM179 a month. Say you have an extra RM300 a month sitting spare. Do you throw it at the loan, or let it grow in EPF while you pay the minimum? We tracked both paths for 10 years, using EPF's real declared dividends.</p>
+
+    <div class="ledger">
+      <div class="ledger-row">
+        <div class="tag">Balance</div>
+        <div class="desc">Starting <b>PTPTN</b> loan amount, a typical degree-level balance</div>
+        <div class="figure">RM 30,000.00</div>
+      </div>
+      <div class="ledger-row">
+        <div class="tag">Rate</div>
+        <div class="desc">PTPTN <b>Ujrah</b> — a flat annual service charge on the reducing balance</div>
+        <div class="figure">1.00% p.a.</div>
+      </div>
+      <div class="ledger-row">
+        <div class="tag">Payment</div>
+        <div class="desc">Minimum monthly repayment on the standard <b>15-year</b> schedule</div>
+        <div class="figure">RM 179.55</div>
+      </div>
+      <div class="ledger-row">
+        <div class="tag">Surplus</div>
+        <div class="desc">Extra monthly amount available to deploy, either way</div>
+        <div class="figure">RM 300.00</div>
+      </div>
+      <div class="ledger-row">
+        <div class="tag">Horizon</div>
+        <div class="desc">Time window measured — Jan 2016 through Dec 2025</div>
+        <div class="figure">10 years</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- TWO PATHS -->
+  <section>
+    <div class="kicker">Two Paths</div>
+    <h2 class="head">Option A vs Option B</h2>
+    <p class="lede">Both options spend the exact same RM479.55 a month in total — the only difference is where the surplus goes first. Option A invests it. Option B pays down debt with it. Once B's loan clears, its freed-up minimum joins the surplus too, so the comparison stays fair.</p>
+
+    <div class="paths">
+      <div class="path a">
+        <div class="path-label">Option A</div>
+        <h3>Pay the minimum,<br>invest the rest</h3>
+        <p>RM179.55 goes to PTPTN every month, on schedule, for the full 10 years. The RM300 surplus goes into EPF and compounds at real declared dividend rates.</p>
+        <table class="mini-table">
+          <tr><td>Contributed to EPF</td><td>RM 36,000</td></tr>
+          <tr><td>EPF balance, 2025</td><td>RM 48,755</td></tr>
+          <tr><td>PTPTN still owed</td><td>− RM 10,504</td></tr>
+        </table>
+        <div class="net-final">
+          <span class="label">Net position</span>
+          <span class="val">RM 38,251</span>
+        </div>
+      </div>
+      <div class="path b">
+        <div class="path-label">Option B</div>
+        <h3>Clear the loan fast,<br>invest what's left</h3>
+        <p>RM479.55 a month goes straight at PTPTN. The loan is fully cleared in 65 months — year 5.4. From there, the entire RM479.55 flows into EPF for the remaining 55 months.</p>
+        <table class="mini-table">
+          <tr><td>Loan cleared in</td><td>5.4 years</td></tr>
+          <tr><td>Months left to invest</td><td>55 of 120</td></tr>
+          <tr><td>PTPTN still owed</td><td>RM 0</td></tr>
+        </table>
+        <div class="net-final">
+          <span class="label">Net position</span>
+          <span class="val">RM 30,255</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">Net worth over time — EPF balance minus outstanding PTPTN debt</div>
+      <div class="chart-wrap"><canvas id="netChart"></canvas></div>
+      <div class="chart-legend">
+        <span class="item"><span class="swatch" style="background:#3f6e56"></span>Option A — invest the surplus</span>
+        <span class="item"><span class="swatch" style="background:#a4402c"></span>Option B — clear debt first</span>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- EPF DIVIDEND HISTORY -->
+  <section>
+    <div class="kicker">The Engine</div>
+    <h2 class="head">EPF's declared dividends, 2016 – 2025</h2>
+    <p class="lede">Every EPF balance above is built entirely from these real, publicly declared rates — nothing projected or assumed. Simpanan Konvensional has never posted a negative year across this period, and by law can't fall below 2.5%.</p>
+
+    <div class="chart-card">
+      <div class="chart-title">Simpanan Konvensional dividend rate, by year</div>
+      <div class="chart-wrap"><canvas id="epfChart"></canvas></div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat">
+        <div class="val">6.90%</div>
+        <div class="lbl">Highest year — 2017</div>
+      </div>
+      <div class="stat">
+        <div class="val">5.20%</div>
+        <div class="lbl">Lowest year — 2020, Covid disruption</div>
+      </div>
+      <div class="stat">
+        <div class="val">5.88%</div>
+        <div class="lbl">10-year average</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VERDICT -->
+  <div class="verdict">
+    <div class="kicker">The Verdict</div>
+    <h2>Investing the surplus wins by
+      <span class="big">RM 7,996</span>
+    </h2>
+    <p>Not the RM30,000 headline you'll see thrown around online — the honest number, once both paths spend the same money and Option A's leftover debt is fairly counted against it. Still a clear, repeatable edge for the same monthly effort.</p>
+  </div>
+
+  <!-- WHY THE GAP EXISTS -->
+  <section>
+    <div class="kicker">Why It Happens</div>
+    <h2 class="head">A 4.88-point rate spread, compounding</h2>
+    <p class="lede">PTPTN's Ujrah charge and EPF's average dividend aren't close. The whole edge comes from this gap, sustained every year for a decade.</p>
+
+    <div class="spread">
+      <div class="spread-row">
+        <span class="name">PTPTN Ujrah</span>
+        <div class="spread-track"><div class="spread-fill rust" style="width:17%"></div></div>
+        <span class="pct">1.00%</span>
+      </div>
+      <div class="spread-row">
+        <span class="name">EPF avg. 2016–25</span>
+        <div class="spread-track"><div class="spread-fill green" style="width:100%"></div></div>
+        <span class="pct">5.88%</span>
+      </div>
+    </div>
+
+    <p class="lede" style="margin-top:28px;">On a RM30,000 balance, that spread works out to roughly RM13 a month in Ujrah versus several hundred ringgit a month in EPF growth once the balance builds. You're not avoiding a big bill by rushing PTPTN — you're avoiding a small one, at the cost of the compounding you'd otherwise be capturing.</p>
+  </section>
+
+  <hr class="rule">
+
+  <!-- CALCULATOR -->
+  <section>
+    <div class="kicker">Your Turn</div>
+    <h2 class="head">Run it with your own numbers</h2>
+    <p class="lede">This example used a RM30,000 balance and a RM300 surplus. Your loan, your surplus, and your horizon will move the result — try it below.</p>
+
+    <div class="calc">
+      <div class="calc-inputs">
+        <label class="calc-field">
+          <span class="calc-label">PTPTN balance (RM)</span>
+          <input type="number" id="calcBalance" value="30000" min="0" step="500">
+        </label>
+        <label class="calc-field">
+          <span class="calc-label">Ujrah rate (% p.a.)</span>
+          <input type="number" id="calcUjrah" value="1.00" min="0" step="0.1">
+        </label>
+        <label class="calc-field">
+          <span class="calc-label">Loan term (years)</span>
+          <input type="number" id="calcTerm" value="15" min="1" step="1">
+        </label>
+        <label class="calc-field">
+          <span class="calc-label">Extra surplus / month (RM)</span>
+          <input type="number" id="calcExtra" value="300" min="0" step="50">
+        </label>
+        <label class="calc-field">
+          <span class="calc-label">Assumed EPF return (% p.a.)</span>
+          <input type="number" id="calcEpf" value="5.88" min="0" step="0.1">
+        </label>
+        <label class="calc-field">
+          <span class="calc-label">Years to project</span>
+          <input type="number" id="calcYears" value="10" min="1" step="1">
+        </label>
+      </div>
+      <button class="calc-btn" id="calcBtn">Calculate the difference</button>
+
+      <div class="calc-output">
+        <div class="calc-row">
+          <span class="calc-row-label">Option A — pay minimum, invest surplus</span>
+          <span class="calc-row-val green" id="outA">RM 38,251</span>
+        </div>
+        <div class="calc-row">
+          <span class="calc-row-label">Option B — clear debt first, invest after</span>
+          <span class="calc-row-val rust" id="outB">RM 30,255</span>
+        </div>
+        <div class="calc-row total">
+          <span class="calc-row-label">Net advantage, Option A</span>
+          <span class="calc-row-val" id="outDiff">RM 7,996</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">Net worth at your chosen horizon</div>
+      <div class="chart-wrap" style="height:200px;"><canvas id="calcChart"></canvas></div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- FINE PRINT -->
+  <section class="tight">
+    <div class="kicker">Read Before You Act</div>
+    <div class="fine-print">
+      <div class="title">✎ The honest caveats</div>
+      <ul>
+        <li>This only works if the surplus is <b>actually invested</b>, consistently, rather than spent. The debt payoff in Option B is guaranteed the moment you make it — the EPF growth in Option A is not.</li>
+        <li>EPF's past dividends are not a promise of future ones. Only Simpanan Konvensional carries a legal floor of <b>2.5% per year</b>; Simpanan Shariah has no such guarantee.</li>
+        <li>If you're also carrying high-interest debt — credit cards, personal loans — clear that first. PTPTN's 1% Ujrah is nowhere near the most expensive debt in the room.</li>
+        <li>This scenario uses a RM30,000 balance and RM300 surplus as a clean illustration. Your own numbers will move the exact gap — the mechanism, not the figure, is the takeaway.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <p>Figures are illustrative, based on a RM30,000 PTPTN balance at 1% Ujrah and EPF's declared Simpanan Konvensional dividend rates, 2016–2025. Not financial advice — EPF returns are not guaranteed beyond the 2.5% statutory floor. Model your own numbers before making a repayment decision.</p>
+  </footer>
+
+</div>
+
+<script>
+Chart.defaults.font.family = "'IBM Plex Mono', 'Courier New', monospace";
+Chart.defaults.color = '#6b6350';
+
+const years = [2016,2017,2018,2019,2020,2021,2022,2023,2024,2025];
+
+// Net worth (EPF balance minus outstanding PTPTN debt), year-end
+const netA = [-24441.34,-18580.25,-12490.75,-6216.67,273.21,7237.08,14318.17,21750.15,29828.94,38251.20];
+const netB = [-24520.35,-18985.65,-13395.35,-7748.89,-2045.71,3408.47,9493.16,15930.54,22887.34,30254.86];
+
+new Chart(document.getElementById('netChart'), {
+  type: 'line',
+  data: {
+    labels: years,
+    datasets: [
+      {
+        label: 'Option A — invest surplus',
+        data: netA,
+        borderColor: '#3f6e56',
+        backgroundColor: 'rgba(63,110,86,0.08)',
+        borderWidth: 2.5,
+        pointRadius: 3,
+        pointBackgroundColor: '#3f6e56',
+        fill: true,
+        tension: 0.25
+      },
+      {
+        label: 'Option B — clear debt first',
+        data: netB,
+        borderColor: '#a4402c',
+        backgroundColor: 'rgba(164,64,44,0.06)',
+        borderWidth: 2.5,
+        pointRadius: 3,
+        pointBackgroundColor: '#a4402c',
+        fill: true,
+        tension: 0.25
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: {
+        grid: { color: '#c9bd9a', lineWidth: 0.5 },
+        ticks: { callback: v => 'RM' + (v/1000) + 'k' }
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+const epfRates = [5.70,6.90,6.15,5.45,5.20,6.10,5.35,5.50,6.30,6.15];
+new Chart(document.getElementById('epfChart'), {
+  type: 'bar',
+  data: {
+    labels: years,
+    datasets: [{
+      label: 'EPF dividend rate',
+      data: epfRates,
+      backgroundColor: years.map(y => y === 2017 ? '#b6893c' : 'rgba(63,110,86,0.75)'),
+      borderRadius: 2,
+      maxBarThickness: 42
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.parsed.y.toFixed(2) + '%' } }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        max: 8,
+        grid: { color: '#c9bd9a', lineWidth: 0.5 },
+        ticks: { callback: v => v + '%' }
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// ---------- CALCULATOR ----------
+const fmtRM = v => 'RM ' + Math.round(v).toLocaleString('en-MY');
+
+function runCalc(){
+  const balance0 = parseFloat(document.getElementById('calcBalance').value) || 0;
+  const ujrahPct = parseFloat(document.getElementById('calcUjrah').value) || 0;
+  const termYears = parseFloat(document.getElementById('calcTerm').value) || 1;
+  const extra = parseFloat(document.getElementById('calcExtra').value) || 0;
+  const epfPct = parseFloat(document.getElementById('calcEpf').value) || 0;
+  const horizonYears = parseFloat(document.getElementById('calcYears').value) || 1;
+
+  const r = (ujrahPct/100)/12;
+  const termMonths = Math.round(termYears*12);
+  const horizonMonths = Math.round(horizonYears*12);
+  const epfMonthly = (epfPct/100)/12;
+
+  // Minimum monthly payment (amortising formula, handles r=0)
+  let minPay;
+  if (r === 0){ minPay = balance0/termMonths; }
+  else { minPay = balance0 * (r*Math.pow(1+r,termMonths)) / (Math.pow(1+r,termMonths)-1); }
+
+  const budget = minPay + extra;
+
+  // Option A: pay minimum on schedule, invest the surplus. Once the loan is
+  // fully repaid (only relevant if horizon > term), invest the freed minimum too.
+  let epfA = 0, balA = balance0;
+  for (let m=1; m<=horizonMonths; m++){
+    if (balA > 0.01){
+      const interest = balA*r;
+      balA = balA + interest - minPay;
+      if (balA < 0) balA = 0;
+      epfA = epfA*(1+epfMonthly) + extra;
+    } else {
+      epfA = epfA*(1+epfMonthly) + budget;
+    }
+  }
+  const netA = epfA - Math.max(balA,0);
+
+  // Option B: put minimum + surplus toward the loan until cleared, then invest
+  // the full budget for the rest of the horizon.
+  let epfB = 0, balB = balance0;
+  for (let m=1; m<=horizonMonths; m++){
+    if (balB > 0.01){
+      const interest = balB*r;
+      const pay = Math.min(budget, balB+interest);
+      balB = balB + interest - pay;
+      if (balB < 0) balB = 0;
+    } else {
+      epfB = epfB*(1+epfMonthly) + budget;
+    }
+  }
+  const netB = epfB;
+
+  document.getElementById('outA').textContent = fmtRM(netA);
+  document.getElementById('outB').textContent = fmtRM(netB);
+  const diff = netA - netB;
+  document.getElementById('outDiff').textContent = (diff>=0?'':'− ') + fmtRM(Math.abs(diff));
+
+  calcChart.data.datasets[0].data = [netA, netB];
+  calcChart.update();
+}
+
+const calcChart = new Chart(document.getElementById('calcChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Option A — invest surplus', 'Option B — clear debt first'],
+    datasets: [{
+      data: [38251.20, 30254.86],
+      backgroundColor: ['#3f6e56', '#a4402c'],
+      borderRadius: 2,
+      maxBarThickness: 90
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: {
+        beginAtZero: true,
+        grid: { color: '#c9bd9a', lineWidth: 0.5 },
+        ticks: { callback: v => 'RM' + (v/1000) + 'k' }
+      },
+      y: { grid: { display: false } }
+    }
+  }
+});
+
+document.getElementById('calcBtn').addEventListener('click', runCalc);
+</script>
+</body>
+</html>
