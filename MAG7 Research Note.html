@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Magnificent 7 — Valuation Note · InsightInvest Research</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --paper:#FBFAF8; --card:#FFFFFF;
+  --ink:#16191F; --ink-2:#454A54; --mute:#878C96; --mute-2:#B6BAC1;
+  --line:#E4E2DC; --line-2:#D2CFC7;
+  --steel:#2C5E8A; --steel-2:#1E4A72; --steel-soft:#EEF3F8;
+  --gain:#1F7A4D; --gain-soft:#EAF5EF;
+  --loss:#C13B2E; --loss-soft:#FBEFED;
+  --gold:#B0822A; --gold-soft:#FAF5E7;
+  --serif:"Source Serif 4",Georgia,serif;
+  --sans:"Inter",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:960px;margin:0 auto;padding:0 32px}
+h1,h2,h3,h4{font-family:var(--serif)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.pos{color:var(--gain)} .neg{color:var(--loss)} .neu{color:var(--gold)}
+
+/* ── masthead ── */
+.masthead{border-bottom:2.5px solid var(--ink);padding-top:40px;padding-bottom:16px}
+.mast-top{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.mast-brand{display:flex;align-items:center;gap:9px;color:var(--ink);font-weight:600}
+.mast-logo{width:20px;height:20px;background:var(--steel);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.masthead h1{font-size:40px;font-weight:600;letter-spacing:-.02em;line-height:1.08;margin:20px 0 10px;max-width:20ch}
+.mast-sub{font-size:15.5px;color:var(--ink-2);max-width:64ch;line-height:1.55}
+.mast-meta{display:flex;gap:28px;margin-top:20px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--mute);text-transform:uppercase;flex-wrap:wrap}
+.mast-meta b{color:var(--ink);font-weight:600}
+
+/* ── section frame ── */
+section{padding:44px 0;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:22px;height:1.5px;background:var(--steel)}
+section h2{font-size:27px;font-weight:600;letter-spacing:-.015em;margin-bottom:8px;line-height:1.15}
+.lede{font-size:15.5px;color:var(--ink-2);max-width:70ch;line-height:1.7;margin-bottom:26px}
+
+/* ── hero diverging chart ── */
+.gap-chart{margin-top:8px}
+.gap-row{display:grid;grid-template-columns:52px 1fr 74px;align-items:center;gap:14px;padding:9px 0;border-bottom:1px solid var(--line)}
+.gap-row:last-child{border-bottom:none}
+.gap-tkr{font-family:var(--mono);font-weight:700;font-size:14px;color:var(--ink)}
+.gap-bararea{position:relative;height:26px}
+.gap-axis{position:absolute;left:50%;top:-4px;bottom:-4px;width:1px;background:var(--line-2)}
+.gap-bar{position:absolute;top:50%;transform:translateY(-50%);height:15px;border-radius:2px;display:flex;align-items:center}
+.gap-bar.neg{right:50%;background:linear-gradient(90deg,var(--loss),#D8544A);justify-content:flex-start;flex-direction:row-reverse}
+.gap-bar.pos{left:50%;background:linear-gradient(90deg,#2A8D5C,var(--gain))}
+.gap-val{font-family:var(--mono);font-size:12.5px;font-weight:600;text-align:right}
+.gap-scale{display:grid;grid-template-columns:52px 1fr 74px;gap:14px;margin-top:10px;font-family:var(--mono);font-size:10px;letter-spacing:.05em;color:var(--mute-2)}
+.gap-scale-inner{display:flex;justify-content:space-between}
+.gap-scale-inner span:nth-child(2){color:var(--ink-2)}
+
+/* ── data table ── */
+.tbl-scroll{overflow-x:auto;margin:0 -32px;padding:0 32px}
+table.dt{width:100%;border-collapse:collapse;font-size:13.5px;min-width:640px}
+table.dt th{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);font-weight:500;text-align:right;padding:0 0 10px;border-bottom:1.5px solid var(--ink)}
+table.dt th:first-child{text-align:left}
+table.dt td{padding:11px 0;border-bottom:1px solid var(--line);text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+table.dt td:first-child{text-align:left;font-weight:700;font-size:14px}
+table.dt tr:last-child td{border-bottom:none}
+.co{font-family:var(--sans);font-size:11px;color:var(--mute);font-weight:400;margin-left:7px}
+.pill{display:inline-block;font-family:var(--mono);font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;letter-spacing:.03em}
+.pill.u{background:var(--gain-soft);color:var(--gain)}
+.pill.o{background:var(--loss-soft);color:var(--loss)}
+.pill.f{background:var(--gold-soft);color:var(--gold)}
+
+/* ── buckets ── */
+.buckets{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:6px}
+.bucket{border:1px solid var(--line-2);border-radius:10px;padding:20px;background:var(--card)}
+.bucket-tag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel);margin-bottom:10px}
+.bucket h4{font-size:16px;font-weight:600;margin-bottom:9px;line-height:1.25}
+.bucket p{font-size:13px;color:var(--ink-2);line-height:1.6}
+.bucket-names{margin-top:12px;display:flex;gap:6px;flex-wrap:wrap}
+.bucket-names span{font-family:var(--mono);font-size:11px;font-weight:600;background:var(--paper);border:1px solid var(--line-2);padding:2px 8px;border-radius:5px}
+
+/* ── name cards ── */
+.name-card{padding:26px 0;border-bottom:1px solid var(--line)}
+.name-card:last-child{border-bottom:none;padding-bottom:0}
+.nc-head{display:flex;align-items:baseline;gap:14px;margin-bottom:4px;flex-wrap:wrap}
+.nc-rank{font-family:var(--mono);font-size:12px;color:var(--mute-2);font-weight:600}
+.nc-tkr{font-family:var(--mono);font-size:22px;font-weight:700;letter-spacing:-.01em}
+.nc-name{font-size:13px;color:var(--mute)}
+.nc-verdict{margin-left:auto;font-family:var(--mono);font-size:13px;font-weight:700}
+.nc-tag{font-size:14px;font-weight:600;color:var(--steel);font-family:var(--serif);margin-bottom:12px}
+.nc-body{font-size:14.5px;color:var(--ink-2);line-height:1.72;max-width:74ch}
+.nc-body b{color:var(--ink);font-weight:600}
+.nc-metrics{display:flex;gap:22px;margin-top:14px;flex-wrap:wrap;padding-top:14px;border-top:1px dotted var(--line-2)}
+.nc-metric{display:flex;flex-direction:column;gap:2px}
+.nc-metric .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.nc-metric .v{font-family:var(--mono);font-size:15px;font-weight:600}
+/* dispersion strip */
+.disp{margin-top:16px}
+.disp-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-bottom:8px;display:flex;justify-content:space-between}
+.disp-track{position:relative;height:34px}
+.disp-axis{position:absolute;top:0;bottom:12px;width:1.5px;background:var(--ink);z-index:2}
+.disp-axis-lbl{position:absolute;bottom:-2px;transform:translateX(-50%);font-family:var(--mono);font-size:9px;color:var(--ink);white-space:nowrap}
+.disp-dot{position:absolute;top:4px;width:8px;height:8px;border-radius:50%;transform:translateX(-50%);border:1.5px solid var(--card)}
+.disp-fv{position:absolute;top:1px;width:3px;height:14px;background:var(--steel);transform:translateX(-50%);border-radius:1px;z-index:3}
+.disp-fv-lbl{position:absolute;top:18px;transform:translateX(-50%);font-family:var(--mono);font-size:9px;font-weight:600;color:var(--steel);white-space:nowrap}
+
+/* ── fact check ── */
+.fc-note{background:var(--steel-soft);border-left:3px solid var(--steel);padding:16px 18px;border-radius:0 8px 8px 0;margin-bottom:24px;font-size:14px;color:var(--ink-2);line-height:1.6}
+.fc-note b{color:var(--ink)}
+.fc-flag{background:var(--loss-soft);border-left:3px solid var(--loss)}
+.check{color:var(--gain);font-weight:700}
+.warn{color:var(--gold);font-weight:700}
+.bad{color:var(--loss);font-weight:700}
+
+/* ── footer ── */
+footer{padding:32px 0 56px}
+.disc{font-size:11.5px;color:var(--mute);line-height:1.65;max-width:80ch}
+.disc b{color:var(--ink-2)}
+.sig{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-bottom:16px;display:flex;gap:8px;align-items:center}
+.sig::before{content:"";width:30px;height:1.5px;background:var(--line-2)}
+
+@media(max-width:720px){
+  .wrap{padding:0 20px}
+  .tbl-scroll{margin:0 -20px;padding:0 20px}
+  .masthead h1{font-size:30px}
+  section h2{font-size:22px}
+  .buckets{grid-template-columns:1fr}
+  .nc-verdict{margin-left:0;width:100%;margin-top:4px}
+}
+@media(prefers-reduced-motion:no-preference){
+  .gap-bar{animation:grow .9s cubic-bezier(.22,1,.36,1) both}
+  @keyframes grow{from{transform:translateY(-50%) scaleX(0)}to{transform:translateY(-50%) scaleX(1)}}
+  .gap-bar.neg{transform-origin:right} .gap-bar.pos{transform-origin:left}
+}
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="wrap">
+    <div class="mast-top">
+      <div class="mast-brand">
+        <div class="mast-logo"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M3 20l5-7 5 3 7-9"/><circle cx="20" cy="7" r="2" fill="white" stroke="none"/></svg></div>
+        InsightInvest Research
+      </div>
+      <div>Equity Note · US Mega-Cap</div>
+    </div>
+    <h1>The Magnificent 7, ranked by what the price is really asking</h1>
+    <p class="mast-sub">A composite fair-value read across ten valuation methods — sorted from most expensive to cheapest, with the asymmetric reason each gap exists. One name screens cheap. The rest carry premiums that mean very different things.</p>
+    <div class="mast-meta">
+      <div>As of&nbsp; <b>Jul 16, 2026</b></div>
+      <div>Method&nbsp; <b>10-model trimmed mean</b></div>
+      <div>Metrics verified vs&nbsp; <b>FMP (TTM)</b></div>
+      <div>Coverage&nbsp; <b>AAPL·MSFT·GOOG·AMZN·NVDA·META·TSLA</b></div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO: VALUATION GAP -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Exhibit 1 · The ranking</div>
+    <h2>Price vs composite fair value</h2>
+    <p class="lede">Each bar is the gap between market price and the model's composite fair value. Left of the axis (red) = trading above fair value; right (green) = below. The order <em>is</em> the thesis: only Nvidia sits on the cheap side of the line.</p>
+    <div class="gap-chart" id="gapChart"></div>
+    <div class="gap-scale">
+      <div></div>
+      <div class="gap-scale-inner"><span>−80% (expensive)</span><span>fair value</span><span>+20% (cheap)</span></div>
+      <div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SUMMARY TABLE -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Exhibit 2 · Summary</div>
+    <h2>The numbers behind the ranking</h2>
+    <p class="lede">Composite fair value, implied gap, model quality score, and the growth the current price bakes in for the next decade versus what each business has actually delivered.</p>
+    <div class="tbl-scroll">
+      <table class="dt">
+        <thead>
+          <tr>
+            <th>Ticker</th><th>Price</th><th>Fair value</th><th>Gap</th><th>Quality</th><th>ROIC (TTM)</th><th>Implied vs delivered</th><th>Verdict</th>
+          </tr>
+        </thead>
+        <tbody id="sumBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- STRUCTURAL BUCKETS -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Exhibit 3 · The pattern</div>
+    <h2>Three kinds of premium</h2>
+    <p class="lede">The size of a gap matters less than its cause. Read together, the seven sort into three structural buckets — and the bucket tells you whether "overvalued" is a market call or a measurement artifact.</p>
+    <div class="buckets">
+      <div class="bucket">
+        <div class="bucket-tag">Type 01 · Optionality</div>
+        <h4>The price values a business that doesn't exist yet</h4>
+        <p>The model can only see the income statement; the price is underwriting robotaxi, robotics, energy. The gap is enormous because the two are answering different questions.</p>
+        <div class="bucket-names"><span>TSLA</span></div>
+      </div>
+      <div class="bucket">
+        <div class="bucket-tag">Type 02 · Reinvestment</div>
+        <h4>Cash is plowed into capex, so FCF methods break</h4>
+        <p>Operating-cash-flow models show upside; free-cash-flow models show discount. The "premium" is the model penalizing the very reinvestment that creates the value.</p>
+        <div class="bucket-names"><span>AMZN</span><span>GOOG</span><span>NVDA</span></div>
+      </div>
+      <div class="bucket">
+        <div class="bucket-tag">Type 03 · Honest premium</div>
+        <h4>A real statement about growth expectations</h4>
+        <p>Mature cash franchises. MSFT and META are asked merely to continue; AAPL is asked to accelerate in a way its revenue base structurally resists.</p>
+        <div class="bucket-names"><span>MSFT</span><span>META</span><span>AAPL</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NAME BY NAME -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Exhibit 4 · Company detail</div>
+    <h2>The asymmetric read, name by name</h2>
+    <p class="lede">Ordered most expensive to cheapest. For each: the one-line thesis, the method dispersion (how far the ten models disagree), and the metrics that anchor the call.</p>
+    <div id="cards"></div>
+  </div>
+</section>
+
+<!-- FACT CHECK -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Exhibit 5 · Data integrity</div>
+    <h2>Fact-check vs FMP</h2>
+    <p class="lede">Every headline metric cross-checked against Financial Modeling Prep TTM data. ROIC holds up across the board; two debt/equity figures diverge materially and are flagged.</p>
+
+    <div class="fc-note">
+      <b>ROIC — clean.</b> All seven within ~2.6 points of FMP. NVDA (62.9 vs 63.0), TSLA (3.0 vs 3.2), MSFT (21.6 vs 21.0) and AMZN (10.7 vs 9.6) essentially match; META, AAPL and GOOG run ~2 points high, consistent with different invested-capital definitions (lease treatment, cash netting). No red flags.
+    </div>
+    <div class="fc-note fc-flag">
+      <b>Debt/Equity — two divergences.</b> <span class="bad">AAPL prints 1.52× in-app vs 0.80× at FMP</span> — nearly double, because InsightInvest appears to fold in lease/total liabilities against Apple's very thin book equity, which makes the ratio hypersensitive. <span class="bad">AMZN shows 0.37× vs 0.47×</span>, the same lease-driven gap in miniature. Neither is "wrong," but they measure different things — treat the in-app AAPL leverage figure with caution.
+    </div>
+
+    <div class="tbl-scroll">
+      <table class="dt">
+        <thead>
+          <tr><th>Ticker</th><th>ROIC (app)</th><th>ROIC (FMP)</th><th>Δ</th><th>D/E (app)</th><th>D/E (FMP)</th><th>Check</th></tr>
+        </thead>
+        <tbody id="fcBody"></tbody>
+      </table>
+    </div>
+
+    <div class="fc-note" style="margin-top:24px">
+      <b>Thesis independently confirmed.</b> FMP verifies Amazon's trailing free cash flow is <b>negative</b> — FCF yield −0.09%, EV/FCF −1153×, P/FCF −1109× — which is exactly why the free-cash-flow methods (DFCF-20, H-Model, P/FCF) returned n/a in-app. The "AMZN looks expensive because cash is continuously redeployed into capex and new ventures" argument isn't narrative; it's in the statements. The same fingerprint appears, milder, in TSLA (EV/FCF 211×) and GOOG (EV/FCF 70×).
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="sig">End of note</div>
+    <p class="disc">
+      <b>Methodology.</b> Composite fair value is a trimmed-mean of ten methods (DCF-20 operating CF, DFCF-20 free CF, DNI-20 net income, H-Model DCF, EV/EBITDA, EV/Revenue, P/FCF, Revenue DCF, PEG-implied, Graham Revised) at a fixed 8% discount rate with method-level growth seeds. Per-stock CAPM-derived WACC differs materially (NVDA 16.6%, TSLA 14.3%, others ~10–11%) and would move several figures if applied. Quality score is a 0–100 six-dimension composite. Metrics cross-checked against Financial Modeling Prep trailing-twelve-month data on Jul 16, 2026.
+      <br/><br/>
+      <b>Disclaimer.</b> Model outputs are assumption-driven and rely on third-party data that may be incomplete or delayed. This note is a reading of what the model is saying and why the gaps exist — it is not investment advice, a recommendation, or an offer to buy or sell any security. Nothing here should be relied upon for a trading decision. Do your own research and consult a qualified financial adviser before acting.
+    </p>
+  </div>
+</footer>
+
+<script>
+const DATA = [
+  {t:"TSLA", name:"Tesla, Inc.", price:394.46, fv:95.63, gap:-75.8, q:39, moat:"Narrow · Bottom quartile",
+   roicApp:3.0, roicFmp:3.2, deApp:0.10, deFmp:0.11, impl:"+50.0% vs 18.0%", verdict:"o", vlabel:"Overvalued",
+   lo:43.65, hi:226.73, methods:[226.73,212.67,176.82,101.86,68.67,60.91,48.09,46.09,43.65],
+   check:"ok",
+   tag:"The premium is a bet, not a valuation.",
+   body:"Every one of the ten methods lands below spot, and the tightest — operating-cash-flow DCF — still says $227 against a $394 price. The asymmetry: <b>the model is valuing the car business; the price is valuing an option</b> on robotaxi, energy, humanoid robotics, FSD licensing. ROIC is 3.0% and quality sits bottom-quartile, so on cash actually delivered the discount is deserved. The price embeds 50% annual FCF growth against 18% delivered — a 32-point gap that only resolves if one optionality bet becomes a real cash engine. Downside is a re-rate toward fundamentals; upside requires a new business to arrive on schedule."},
+
+  {t:"AAPL", name:"Apple Inc.", price:327.50, fv:162.08, gap:-50.5, q:67, moat:"Wide · Top 25%",
+   roicApp:52.0, roicFmp:49.6, deApp:1.52, deFmp:0.80, impl:"+16.7% vs 8.7%", verdict:"o", vlabel:"Overvalued",
+   lo:124.63, hi:258.27, methods:[258.27,202.94,188.29,161.49,160.69,154.30,148.46,140.68,139.81,124.63],
+   check:"flag",
+   tag:"Expensive on growth it no longer produces.",
+   body:"Quality (67, Wide Moat) and the valuation gap (−50.5%) point in opposite directions — the model is flagging that <b>you're paying a growth multiple for a capital-return story</b>. The business is extraordinary (≈50% ROIC, relentless buybacks), but revenue compounds mid-single-digits while the price bakes in 16.7% FCF growth against 8.7% delivered. Every method prints below market — the premium is systemic, not one bad lens. Historically the premium was <em>paid for</em> by buyback-driven EPS growth and multiple stability, which works until the multiple stops expanding. Bull case: services mix-shift plus an AI replacement cycle. Bear case: the market keeps underwriting acceleration a mature hardware franchise can't structurally deliver."},
+
+  {t:"GOOG", name:"Alphabet Inc.", price:370.21, fv:258.88, gap:-30.1, q:78, moat:"Wide · Top 15%",
+   roicApp:21.8, roicFmp:19.2, deApp:0.14, deFmp:0.19, impl:"+27.1% vs 14.8%", verdict:"o", vlabel:"Overvalued",
+   lo:101.96, hi:426.90, methods:[426.90,392.71,269.14,187.17,161.23,115.90,101.96],
+   check:"ok",
+   tag:"Cheap-ish quality, expensive on the AI-capex bet.",
+   body:"Scores 78 (top-15% quality) yet trades 30% above fair value, and the tension is <b>whether the AI/cloud capex cycle converts into durable FCF or merely defends the core</b>. The methods split sharply: operating-CF DCF says +15% upside while the free-cash and multiples methods say deep discount — the classic fingerprint of a company routing operating cash into capex. If the TPU/Gemini/Cloud spend earns its return, the operating-CF valuation is right and the stock isn't expensive. If it's defensive spend to protect search, the FCF methods win. Same structural signature as Amazon, one notch milder."},
+
+  {t:"AMZN", name:"Amazon.com, Inc.", price:254.96, fv:214.97, gap:-15.7, q:65, moat:"Wide · Top 25%",
+   roicApp:10.7, roicFmp:9.6, deApp:0.37, deFmp:0.47, impl:"FCF methods n/a", verdict:"o", vlabel:"Overvalued",
+   lo:172.21, hi:344.25, methods:[344.25,315.96,199.94,192.07,190.55,176.32,172.21],
+   check:"flag",
+   tag:"The \u201cexpensive\u201d that is mostly an accounting artifact.",
+   body:"Reads −15.7% overvalued, but <b>three of the ten methods returned n/a</b> (DFCF-20, H-Model, P/FCF) — precisely the free-cash-flow lenses — because Amazon systematically routes operating cash into capex and new ventures (AWS, logistics, now AI infrastructure), leaving reported FCF thin or negative. FMP confirms it: trailing FCF is negative. So the composite runs on the 7 methods that see through the reinvestment, and even then operating-CF DCF says +24% upside. A −15.7% \u201cpremium\u201d on a business reinvesting at high incremental returns is a different animal from the same premium on a mature cash cow — the reinvestment <em>is</em> the value, and any harvested-cash model will chronically under-value it. Of the overvalued names, the label here is most likely a measurement problem."},
+
+  {t:"MSFT", name:"Microsoft Corp.", price:395.63, fv:365.65, gap:-7.6, q:79, moat:"Wide · Top 15%",
+   roicApp:21.6, roicFmp:21.0, deApp:0.33, deFmp:0.30, impl:"+17.5% vs 14.5%", verdict:"o", vlabel:"Overvalued",
+   lo:194.82, hi:572.01, methods:[572.01,471.68,446.27,420.35,413.66,409.68,293.03,243.79,226.73,194.82],
+   check:"ok",
+   tag:"Priced for near-perfection, but earning it.",
+   body:"The highest-quality \u201cexpensive\u201d name (79, Wide Moat) and only 7.6% above fair value — the most <em>defensible</em> premium in the group. Implied-vs-delivered growth is a narrow 17.5% vs 14.5%, meaning <b>the market isn't asking Microsoft to accelerate, just to keep compounding</b> — a lower bar than AAPL or GOOG face. Azure + Copilot monetization is the swing factor, and unlike Tesla's optionality it's an extension of an already cash-generative franchise, not a bet on a business that doesn't exist. Downside is a modest de-rate; upside is AI monetization pulling delivered growth up to meet the implied number."},
+
+  {t:"META", name:"Meta Platforms, Inc.", price:681.31, fv:668.73, gap:-1.8, q:80, moat:"Wide · Top 15%",
+   roicApp:18.0, roicFmp:20.0, deApp:0.39, deFmp:0.36, impl:"+16.9% vs 15.6%", verdict:"f", vlabel:"Near fair value",
+   lo:364.19, hi:1543.57, methods:[1543.57,878.29,855.47,847.70,697.19,600.11,580.97,477.67,412.42,364.19],
+   check:"ok",
+   tag:"Fairly valued; quality is doing the work.",
+   body:"The model's \u201cnear fair value\u201d case at −1.8%. The implied-vs-delivered gap is the tightest in the group — 16.9% vs 15.6% — so <b>the market is asking Meta to do almost exactly what it already does</b>, which is why there's no meaningful premium or discount. The methods range enormously ($364–$1,544), driven by an operating-CF DCF outlier at $1,544, but the trimmed mean correctly discards that tail. The real risk isn't valuation, it's capital allocation: the same operating-CF strength that produces the outlier is partly consumed by Reality Labs and AI capex. The \u201cfair\u201d verdict quietly assumes the ads engine keeps funding the moonshots without them ever needing to pay off."},
+
+  {t:"NVDA", name:"NVIDIA Corp.", price:212.50, fv:233.94, gap:10.1, q:83, moat:"Wide · Top 15%",
+   roicApp:62.9, roicFmp:63.0, deApp:0.07, deFmp:0.07, impl:"+30.7% vs 25.0%", verdict:"u", vlabel:"Undervalued",
+   lo:60.53, hi:415.42, methods:[415.42,358.89,327.46,310.44,268.52,245.06,145.72,110.23,105.17,60.53],
+   check:"ok",
+   tag:"The only one the model calls cheap — because it distrusts its own growth.",
+   body:"The sole undervalued name (+10.1%), which is counterintuitive for the cycle's most-hyped stock. The asymmetry: the +10.1% exists <b>only because trailing growth has been so violent that even a conservative forward seed lands above spot</b>. Net-income method says +95%, PEG +69% — the earnings lenses see profits compounding faster than the multiple. But the free-cash and H-Model methods say −50%, refusing to extrapolate hyperscaler capex forever. NVDA is \u201ccheap\u201d if AI infrastructure spend has a long runway, \u201cexpensive\u201d if it's a capex bubble that normalizes. With the widest internal disagreement of any name ($61–$243), this is the least stable verdict in the group: cheap-looking, highest-conviction-required."}
+];
+
+/* ---- Exhibit 1: diverging gap chart ---- */
+(function(){
+  const AX_MIN=-80, AX_MAX=20, span=AX_MAX-AX_MIN;
+  const zeroPct=(0-AX_MIN)/span*100; // position of fair-value axis within bararea (=80%)
+  const host=document.getElementById('gapChart');
+  DATA.forEach(d=>{
+    const row=document.createElement('div'); row.className='gap-row';
+    const neg=d.gap<0;
+    // width as % of half-track: negative side spans 0..80% of full track left of axis; positive 0..20% right
+    const fullPct=Math.abs(d.gap)/span*100;
+    row.innerHTML=`
+      <div class="gap-tkr">${d.t}</div>
+      <div class="gap-bararea">
+        <div class="gap-axis" style="left:${zeroPct}%"></div>
+        <div class="gap-bar ${neg?'neg':'pos'}" style="${neg?`right:${100-zeroPct}%`:`left:${zeroPct}%`};width:${fullPct}%"></div>
+      </div>
+      <div class="gap-val ${neg?'neg':'pos'}">${d.gap>0?'+':''}${d.gap.toFixed(1)}%</div>`;
+    host.appendChild(row);
+  });
+})();
+
+/* ---- Exhibit 2: summary table ---- */
+(function(){
+  const b=document.getElementById('sumBody');
+  DATA.forEach(d=>{
+    const tr=document.createElement('tr');
+    const gc=d.gap<0?'neg':'pos';
+    const pill=d.verdict==='u'?'u':d.verdict==='f'?'f':'o';
+    tr.innerHTML=`
+      <td>${d.t}<span class="co">${d.name}</span></td>
+      <td>$${d.price.toFixed(2)}</td>
+      <td>$${d.fv.toFixed(2)}</td>
+      <td class="${gc}">${d.gap>0?'+':''}${d.gap.toFixed(1)}%</td>
+      <td>${d.q}</td>
+      <td>${d.roicFmp.toFixed(1)}%</td>
+      <td style="font-size:12px">${d.impl}</td>
+      <td><span class="pill ${pill}">${d.vlabel}</span></td>`;
+    b.appendChild(tr);
+  });
+})();
+
+/* ---- Exhibit 4: name cards w/ dispersion ---- */
+(function(){
+  const host=document.getElementById('cards');
+  DATA.forEach((d,i)=>{
+    const gc=d.gap<0?'neg':'pos';
+    // dispersion scale across all method values + price
+    const vals=d.methods.concat([d.price,d.fv]);
+    const mn=Math.min(...vals), mx=Math.max(...vals), rng=(mx-mn)||1;
+    const pos=v=>((v-mn)/rng)*100;
+    const dots=d.methods.map(v=>{
+      const rel=(v-d.price)/d.price;
+      const col=rel>0.03?'var(--gain)':rel<-0.03?'var(--loss)':'var(--gold)';
+      return `<div class="disp-dot" style="left:${pos(v)}%;background:${col}"></div>`;
+    }).join('');
+    const card=document.createElement('div'); card.className='name-card';
+    card.innerHTML=`
+      <div class="nc-head">
+        <span class="nc-rank">${String(i+1).padStart(2,'0')}</span>
+        <span class="nc-tkr">${d.t}</span>
+        <span class="nc-name">${d.name}</span>
+        <span class="nc-verdict ${gc}">${d.gap>0?'+':''}${d.gap.toFixed(1)}% · ${d.vlabel}</span>
+      </div>
+      <div class="nc-tag">${d.tag}</div>
+      <div class="nc-body">${d.body}</div>
+      <div class="disp">
+        <div class="disp-label"><span>Method dispersion · ${d.methods.length} models</span><span>range $${d.lo.toFixed(0)}–$${d.hi.toFixed(0)}</span></div>
+        <div class="disp-track">
+          ${dots}
+          <div class="disp-axis" style="left:${pos(d.price)}%"></div>
+          <div class="disp-axis-lbl" style="left:${pos(d.price)}%">price $${d.price.toFixed(0)}</div>
+          <div class="disp-fv" style="left:${pos(d.fv)}%"></div>
+          <div class="disp-fv-lbl" style="left:${pos(d.fv)}%">FV $${d.fv.toFixed(0)}</div>
+        </div>
+      </div>
+      <div class="nc-metrics">
+        <div class="nc-metric"><span class="k">Quality</span><span class="v">${d.q}/100</span></div>
+        <div class="nc-metric"><span class="k">Moat</span><span class="v" style="font-size:12px">${d.moat}</span></div>
+        <div class="nc-metric"><span class="k">ROIC</span><span class="v">${d.roicFmp.toFixed(1)}%</span></div>
+        <div class="nc-metric"><span class="k">Implied vs delivered</span><span class="v" style="font-size:12px">${d.impl}</span></div>
+      </div>`;
+    host.appendChild(card);
+  });
+})();
+
+/* ---- Exhibit 5: fact-check table ---- */
+(function(){
+  const b=document.getElementById('fcBody');
+  DATA.slice().sort((a,c)=>a.gap-c.gap).forEach(d=>{
+    const dRoic=(d.roicApp-d.roicFmp);
+    const deDiff=Math.abs(d.deApp-d.deFmp);
+    const mark = deDiff>=0.10 ? `<span class="bad">flag</span>` : Math.abs(dRoic)<=1.2 ? `<span class="check">ok</span>` : `<span class="warn">minor</span>`;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td>${d.t}</td>
+      <td>${d.roicApp.toFixed(1)}%</td>
+      <td>${d.roicFmp.toFixed(1)}%</td>
+      <td>${dRoic>0?'+':''}${dRoic.toFixed(1)}</td>
+      <td>${d.deApp.toFixed(2)}×</td>
+      <td>${d.deFmp.toFixed(2)}×</td>
+      <td>${mark}</td>`;
+    b.appendChild(tr);
+  });
+})();
+</script>
+</body>
+</html>
