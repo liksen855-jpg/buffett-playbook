@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Markets Research — Malaysia Port Infrastructure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0B2545;
+    --navy-2:#13345C;
+    --ink:#1A1A1A;
+    --text-2:#54565A;
+    --rule:#DCDCD8;
+    --rule-strong:#B7B7B2;
+    --paper:#FFFFFF;
+    --tint:#F4F4F2;
+    --tint-2:#EBEEF1;
+    --burgundy:#7A1F2B;
+    --positive:#1E5631;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:#EDEDEA;
+    color:var(--ink);
+    font-family:'PT Serif',serif;
+    font-size:16px;
+    line-height:1.62;
+  }
+  .sans{font-family:'IBM Plex Sans',sans-serif;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+
+  .page{max-width:840px;margin:0 auto;background:var(--paper);box-shadow:0 0 0 1px var(--rule);}
+
+  /* ===== masthead ===== */
+  .masthead{background:var(--navy);color:#fff;padding:10px 32px;}
+  .masthead-row{
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;
+    font-family:'IBM Plex Sans',sans-serif;font-size:11px;letter-spacing:0.04em;
+  }
+  .masthead-row .tag{text-transform:uppercase;opacity:0.85;}
+  .rule-thick{height:3px;background:var(--navy);}
+
+  /* ===== title block ===== */
+  .titleblock{padding:34px 32px 26px;border-bottom:1px solid var(--rule);}
+  .titlegrid{display:grid;grid-template-columns:1fr 230px;gap:28px;align-items:start;}
+  .eyebrow-sans{
+    font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:11.5px;
+    letter-spacing:0.08em;text-transform:uppercase;color:var(--burgundy);margin:0 0 10px;
+  }
+  h1{
+    font-family:'PT Serif',serif;font-weight:700;font-size:clamp(24px,3.6vw,32px);
+    line-height:1.22;margin:0 0 12px;
+  }
+  .dek{font-size:15.5px;color:var(--text-2);margin:0;max-width:480px;}
+  .rating-box{border:1px solid var(--navy);}
+  .rating-row{
+    display:flex;justify-content:space-between;padding:9px 12px;
+    border-bottom:1px solid var(--rule);font-family:'IBM Plex Sans',sans-serif;font-size:12px;
+  }
+  .rating-row:last-child{border-bottom:none;}
+  .rating-row .k{color:var(--text-2);}
+  .rating-row .v{font-weight:600;text-align:right;}
+  .rating-head{
+    background:var(--navy);color:#fff;font-family:'IBM Plex Sans',sans-serif;
+    font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
+    padding:8px 12px;
+  }
+  .rating-view{color:var(--positive);}
+
+  /* ===== body ===== */
+  .body{padding:8px 32px 8px;}
+  .summary-box{
+    background:var(--tint);border:1px solid var(--rule);padding:20px 22px;margin:26px 0 8px;
+  }
+  .summary-box .eyebrow-sans{margin-bottom:12px;}
+  .summary-box ul{margin:0;padding-left:18px;}
+  .summary-box li{margin-bottom:9px;font-size:15px;}
+  .summary-box li:last-child{margin-bottom:0;}
+
+  .sect{padding:30px 0 6px;}
+  .sect-num{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--burgundy);
+    display:block;margin-bottom:4px;
+  }
+  h2{
+    font-family:'PT Serif',serif;font-weight:700;font-size:20px;margin:0 0 16px;
+    padding-bottom:10px;border-bottom:2px solid var(--navy);
+  }
+  h3{
+    font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:13.5px;
+    text-transform:uppercase;letter-spacing:0.04em;color:var(--navy);margin:26px 0 10px;
+  }
+  p{margin:0 0 15px;font-size:16px;}
+  strong{font-weight:700;}
+  .note{font-size:12.5px;color:var(--text-2);margin-top:-4px;}
+
+  /* ===== tables ===== */
+  table{width:100%;border-collapse:collapse;margin:16px 0 20px;font-size:14.5px;}
+  thead th{
+    font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:11px;
+    text-transform:uppercase;letter-spacing:0.03em;color:var(--text-2);
+    background:var(--tint);text-align:left;padding:9px 12px;border-bottom:1px solid var(--rule-strong);
+  }
+  thead th.num{text-align:right;}
+  tbody td{padding:10px 12px;border-bottom:1px solid var(--rule);vertical-align:top;}
+  tbody td.num{text-align:right;font-family:'IBM Plex Mono',monospace;font-size:13.5px;white-space:nowrap;}
+  tbody tr:last-child td{border-bottom:1px solid var(--rule-strong);}
+  .sub{display:block;font-family:'IBM Plex Sans',sans-serif;font-size:11.5px;color:var(--text-2);margin-top:2px;}
+  .delta-up{color:var(--positive);}
+  .delta-down{color:var(--burgundy);}
+  .tag-cell{
+    display:inline-block;font-family:'IBM Plex Sans',sans-serif;font-size:10.5px;font-weight:600;
+    letter-spacing:0.03em;text-transform:uppercase;padding:2px 7px;
+  }
+  .tag-direct{background:var(--tint-2);color:var(--navy-2);}
+  .tag-proxy{background:#F3E7E9;color:var(--burgundy);}
+  .tag-avoid{background:var(--tint);color:var(--text-2);}
+
+  /* ===== bar comparison, plain and thin ===== */
+  .barchart{margin:18px 0 22px;}
+  .barline{
+    display:grid;grid-template-columns:170px 1fr 90px;gap:12px;align-items:center;
+    padding:7px 0;font-family:'IBM Plex Sans',sans-serif;font-size:12.5px;
+  }
+  .barline .lbl{color:var(--ink);}
+  .barline .val{text-align:right;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-2);}
+  .btrack{height:14px;background:var(--tint);position:relative;}
+  .bfill{height:100%;}
+  .bfill.b23{background:var(--rule-strong);}
+  .bfill.up{background:var(--navy);}
+  .bfill.down{background:var(--burgundy);}
+  .bkey{display:flex;gap:18px;margin-top:6px;font-family:'IBM Plex Sans',sans-serif;font-size:11.5px;color:var(--text-2);}
+  .bkey span{display:inline-flex;align-items:center;gap:6px;}
+  .sw{width:9px;height:9px;display:inline-block;}
+
+  /* ===== callout ===== */
+  .callout{
+    border-left:3px solid var(--burgundy);background:var(--tint);padding:14px 18px;margin:20px 0;
+  }
+  .callout p{margin:0;font-size:15px;font-style:italic;}
+  .callout .eyebrow-sans{margin-bottom:6px;font-size:10.5px;}
+
+  .bonus-list{margin:14px 0 4px;padding:0;list-style:none;}
+  .bonus-row{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:9px 0;border-bottom:1px solid var(--rule);
+    font-family:'IBM Plex Sans',sans-serif;font-size:14px;
+  }
+  .bonus-row:last-child{border-bottom:none;}
+  .bonus-check{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:16px;height:16px;border:1.5px solid var(--positive);border-radius:3px;
+    margin-right:10px;flex:0 0 auto;
+  }
+  .bonus-check svg{width:10px;height:10px;}
+  .bonus-label{display:flex;align-items:center;color:var(--ink);}
+  .bonus-amt{font-family:'IBM Plex Mono',monospace;font-weight:500;color:var(--positive);white-space:nowrap;}
+
+  /* ===== risk table ===== */
+  .risk-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--rule);}
+  .risk-item:last-child{border-bottom:none;}
+  .risk-mark{
+    flex:0 0 auto;width:22px;height:22px;border:1.5px solid var(--burgundy);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--burgundy);font-weight:600;
+    margin-top:2px;
+  }
+  .risk-body p{margin:0;font-size:15px;}
+
+  /* ===== footer ===== */
+  .footer{
+    padding:26px 32px 32px;border-top:2px solid var(--navy);margin-top:24px;
+    font-family:'IBM Plex Sans',sans-serif;font-size:11px;color:var(--text-2);line-height:1.8;
+  }
+  .footer p{margin:0 0 10px;}
+
+  @media (max-width:640px){
+    .titlegrid{grid-template-columns:1fr;}
+    .masthead,.titleblock,.body,.footer{padding-left:18px;padding-right:18px;}
+    table{font-size:13px;}
+    .barline{grid-template-columns:110px 1fr 70px;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="masthead">
+    <div class="masthead-row">
+      <span class="tag">Global Markets Research — Maritime &amp; Infrastructure</span>
+      <span class="tag mono">17 Jul 2026</span>
+    </div>
+  </div>
+  <div class="rule-thick"></div>
+
+  <div class="titleblock">
+    <div class="titlegrid">
+      <div>
+        <p class="eyebrow-sans">Thematic note — Southeast Asia ports</p>
+        <h1>Two chokepoints, one war: the structural case for Malaysian container ports</h1>
+        <p class="dek">Iran's dual-front pressure on the Strait of Hormuz and the Red Sea has already redrawn Asia-Europe shipping networks once. We trace the mechanism, the chokepoint data, and the listed operator best positioned to capture it.</p>
+      </div>
+      <div class="rating-box">
+        <div class="rating-head">Coverage summary</div>
+        <div class="rating-row"><span class="k">Ticker</span><span class="v mono">WPRTS MK</span></div>
+        <div class="rating-row"><span class="k">Exchange</span><span class="v">Bursa Malaysia</span></div>
+        <div class="rating-row"><span class="k">Sector</span><span class="v">Marine ports &amp; logistics</span></div>
+        <div class="rating-row"><span class="k">Structural view</span><span class="v rating-view">Positive</span></div>
+        <div class="rating-row"><span class="k">Primary catalyst</span><span class="v">Red Sea / Hormuz disruption</span></div>
+        <div class="rating-row"><span class="k">Key risk</span><span class="v">Suez normalization</span></div>
+        <div class="rating-row" style="border-top:1.5px solid var(--navy);"><span class="k" style="font-style:italic;">Not a buy signal</span><span class="v" style="font-weight:400;font-style:italic;font-size:11px;">an idea to explore</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <div class="summary-box">
+      <p class="eyebrow-sans">Key takeaways</p>
+      <p style="font-size:14px;font-style:italic;color:var(--text-2);margin:-2px 0 14px;">This is not a buy signal. It's a structural idea worth exploring, with the mechanism, the data, and the risks laid out for you to judge.</p>
+      <ul>
+        <li><strong>Two chokepoints, one strategy.</strong> Iran fights directly at the Strait of Hormuz — its own coastline — while using the Houthis as a proxy to threaten the separate Bab el-Mandeb / Red Sea corridor.</li>
+        <li><strong>The reroute is structural, not cyclical.</strong> Cape of Good Hope oil traffic rose from 6.2 to 9.1 million barrels/day between 2023 and 1H 2025, a gain that has held for two years.</li>
+        <li><strong>Malaysia captured the overflow by default.</strong> Deep water and spare berth capacity — not policy — routed Singapore's 2024 congestion into Port Klang and Tanjung Pelepas.</li>
+        <li><strong>Westports Holdings (WPRTS MK)</strong> is the listed pure-play on Port Klang's largest terminal; analysts explicitly flag a Suez reopening as a risk to its own volume guidance.</li>
+        <li><strong>The thesis has a clear exit.</strong> Q1 2026 throughput at Westports actually declined 1.1% y/y; the war has not yet shown up as a volume tailwind.</li>
+      </ul>
+    </div>
+
+    <div class="sect">
+      <span class="sect-num">SECTION 1</span>
+      <h2>Situation overview — one war, two chokepoints</h2>
+      <p>Since the US-Iran war began on 28 February 2026, Iran has engaged directly at the <strong>Strait of Hormuz</strong> — a partial blockade and repeated strikes on shipping have disrupted the majority of Gulf oil and LNG exports through a waterway that normally carries approximately 20.9 million barrels per day, roughly a quarter of global seaborne oil trade.</p>
+      <p>A second, lower-cost lever exists. The Houthi movement in Yemen, armed and aligned with Iran through its "Axis of Resistance," controls territory overlooking <strong>Bab el-Mandeb</strong>, the entrance to the Red Sea. Iranian officials this week reportedly requested the Houthis close the strait in the event of US strikes on Iranian energy infrastructure, with Houthi forces already positioned to act.</p>
+
+      <h3>Chokepoint status</h3>
+      <table>
+        <thead><tr><th>Chokepoint</th><th>Mechanism</th><th class="num">Normal flow</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Strait of Hormuz</td><td><span class="tag-cell tag-direct">Direct</span></td><td class="num">20.9M bbl/d</td><td>Partial blockade, active</td></tr>
+          <tr><td>Bab el-Mandeb</td><td><span class="tag-cell tag-proxy">Proxy</span></td><td class="num">4.2M bbl/d<span class="sub">1H25, was 9.3M in 2023</span></td><td>Threatened, conditional</td></tr>
+          <tr><td>Suez Canal + SUMED</td><td><span class="tag-cell tag-avoid">Avoided</span></td><td class="num">4.9M bbl/d<span class="sub">1H25, was 8.8M in 2023</span></td><td>Shipper avoidance, 2 yrs</td></tr>
+        </tbody>
+      </table>
+      <p class="note">Source: EIA World Oil Transit Chokepoints, 1H 2025.</p>
+    </div>
+
+    <div class="sect">
+      <span class="sect-num">SECTION 2</span>
+      <h2>Transmission mechanism</h2>
+      <p>This is not a hypothetical chain — it already occurred once, independent of the current war. When Houthi attacks made the Red Sea unsafe from late 2023, container carriers abandoned the Suez Canal almost entirely; by Q4 2025 container transits sat 86% below 2023 levels. Vessels rerouted via the Cape of Good Hope, adding 10 to 14 days per voyage.</p>
+      <p>The schedule disruption broke Asia's hub network. Singapore, the region's default transshipment hub, saw berth waits extend to two to three days in 2024 as carriers skipped planned calls. Reuters and Linerlytica both identified the same overflow destinations at the time: Port Klang and Tanjung Pelepas, Malaysia.</p>
+
+      <div class="callout">
+        <p class="eyebrow-sans">Analyst note</p>
+        <p>The Red Sea crisis did not divert cargo to Malaysia directly. It broke the region's routing map, and Malaysia's spare capacity happened to sit where the redrawn lines landed.</p>
+      </div>
+    </div>
+
+    <div class="sect">
+      <span class="sect-num">SECTION 3</span>
+      <h2>Chokepoint volume data, 2023 vs. 1H 2025</h2>
+      <p>Official EIA chokepoint accounting shows the redirected volume cleanly: barrels that left Suez and Bab el-Mandeb reappear almost one-for-one on the Cape of Good Hope route.</p>
+
+      <div style="position:relative;width:100%;height:280px;margin:20px 0 4px;">
+        <canvas id="chokepointChart" role="img" aria-label="Line chart showing crude oil and petroleum liquid volumes in million barrels per day through the Suez Canal and SUMED pipeline, Bab el-Mandeb strait, and Cape of Good Hope, from 2020 through the first half of 2025">Suez and SUMED: 5.4 in 2020, 5.2 in 2021, 7.3 in 2022, 8.8 in 2023, 4.8 in 2024, 4.9 in 1H2025. Bab el-Mandeb: 5.7, 6.0, 8.0, 9.3, 4.1, 4.2 over the same period. Cape of Good Hope: 7.9, 7.2, 6.1, 6.2, 9.3, 9.1 over the same period.</canvas>
+      </div>
+      <div class="bkey" style="margin-bottom:4px;">
+        <span><span class="sw" style="background:#B7B7B2;"></span>Suez + SUMED</span>
+        <span><span class="sw" style="background:#7A1F2B;"></span>Bab el-Mandeb</span>
+        <span><span class="sw" style="background:#0B2545;"></span>Cape of Good Hope</span>
+      </div>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+      <script>
+      new Chart(document.getElementById('chokepointChart'), {
+        type: 'line',
+        data: {
+          labels: ['2020','2021','2022','2023','2024','1H 2025'],
+          datasets: [
+            { label: 'Suez + SUMED', data: [5.4,5.2,7.3,8.8,4.8,4.9], borderColor:'#B7B7B2', backgroundColor:'#B7B7B2', borderWidth:2, pointRadius:3, tension:0.15 },
+            { label: 'Bab el-Mandeb', data: [5.7,6.0,8.0,9.3,4.1,4.2], borderColor:'#7A1F2B', backgroundColor:'#7A1F2B', borderWidth:2, pointRadius:3, tension:0.15 },
+            { label: 'Cape of Good Hope', data: [7.9,7.2,6.1,6.2,9.3,9.1], borderColor:'#0B2545', backgroundColor:'#0B2545', borderWidth:2.5, pointRadius:3, tension:0.15 }
+          ]
+        },
+        options: {
+          responsive:true, maintainAspectRatio:false,
+          plugins:{ legend:{ display:false } },
+          scales:{
+            y:{ title:{ display:true, text:'Million barrels/day' }, grid:{ color:'#E5E5E2' } },
+            x:{ grid:{ display:false } }
+          }
+        }
+      });
+      </script>
+      <p class="note">Source: U.S. Energy Information Administration, World Oil Transit Chokepoints, updated March 2026.</p>
+      <p>The lines cross in 2023-2024: Suez and Bab el-Mandeb both peaked in 2023, then collapsed to roughly half their prior volume as Houthi attacks escalated — while the Cape of Good Hope, which had actually been drifting lower for three years before that (7.9 in 2020 down to 6.2 in 2023), reversed sharply to 9.3 million barrels/day in 2024 and has held near that level since. That inversion, not a single snapshot, is the cleanest evidence the diversion is structural rather than cyclical. Suez container traffic remained 60% below 2023 levels as of the first week of 2026, even after a temporary Houthi pause in late 2025.</p>
+    </div>
+
+    <div class="sect">
+      <span class="sect-num">SECTION 4</span>
+      <h2>Regional positioning — why Malaysia and not peers</h2>
+      <p>Capturing rerouted mega-vessel traffic requires three specific conditions: deep-water berths, uncommitted capacity, and an established transshipment network. Few Southeast Asian ports satisfy all three simultaneously.</p>
+      <table>
+        <thead><tr><th>Market</th><th>Assessment</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Malaysia</strong> — Port Klang / PTP</td><td>Deep water, established infrastructure, and spare berth capacity precisely when Singapore had none to offer.</td></tr>
+          <tr><td>Singapore</td><td>Default regional hub, but operating near capacity; the source of the 2024 congestion, not a release valve for it.</td></tr>
+          <tr><td>Indonesia</td><td>Shares the opposite shore of the Strait of Malacca but lacks a comparable deep-water transshipment terminal.</td></tr>
+          <tr><td>Vietnam / Thailand</td><td>Serve different trade-lane geometry — strong on intra-Asia flows, positioned off the direct Asia-Europe artery.</td></tr>
+        </tbody>
+      </table>
+      <p>With Hormuz under partial blockade and the Red Sea under renewed threat, the Strait of Malacca stands as one of the few major chokepoints not currently under direct military pressure — and Malaysia's terminals sit directly on it.</p>
+    </div>
+
+    <div class="sect">
+      <span class="sect-num">SECTION 5</span>
+      <h2>Port Klang — 2025 operating data</h2>
+      <table>
+        <thead><tr><th>Metric</th><th class="num">2025</th><th class="num">Y/Y</th></tr></thead>
+        <tbody>
+          <tr><td>Port Klang, total throughput<span class="sub">Westports + Northport combined</span></td><td class="num">15.14M TEU</td><td class="num delta-up">+3.4%</td></tr>
+          <tr><td>Transshipment volume<span class="sub">cargo not entering the domestic economy</span></td><td class="num">8.41M TEU</td><td class="num delta-up">+6.2%</td></tr>
+          <tr><td>Westports terminal<span class="sub">larger of Port Klang's two terminals</span></td><td class="num">11.33M TEU</td><td class="num delta-up">+3.2%</td></tr>
+          <tr><td>Westports transshipment ratio<span class="sub">vs. 55.3% in 2024</span></td><td class="num">57.6%</td><td class="num">—</td></tr>
+          <tr><td>Tanjung Pelepas<span class="sub">separate port, Gemini alliance hub</span></td><td class="num">14.03M TEU</td><td class="num delta-up">+13.8%</td></tr>
+        </tbody>
+      </table>
+      <h3>Capacity investment</h3>
+      <p>Port Klang Authority is implementing a phased tariff increase — 15% from July 2025, a further 10% from January 2026, and 5% in January 2027 — partly funding the Westports 2 expansion, expected to roughly double handling capacity toward 28 million TEU. The scale of investment implies management is underwriting this volume shift as durable rather than transitory.</p>
+    </div>
+
+    <div class="sect">
+      <span class="sect-num">PLATFORM NOTE</span>
+      <h2>We've partnered with Mitrade — up to $100 just for getting started</h2>
+      <p>WPRTS MK trades directly on Bursa Malaysia and is accessible through any broker with Malaysian market access. For readers exploring this theme through Mitrade specifically, new accounts can unlock a reward in three simple steps.</p>
+
+      <ul class="bonus-list">
+        <li class="bonus-row">
+          <span class="bonus-label"><span class="bonus-check"><svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2" stroke="#1E5631" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Complete your profile</span>
+          <span class="bonus-amt">+$20</span>
+        </li>
+        <li class="bonus-row">
+          <span class="bonus-label"><span class="bonus-check"><svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2" stroke="#1E5631" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Verify your identity</span>
+          <span class="bonus-amt">+$30</span>
+        </li>
+        <li class="bonus-row">
+          <span class="bonus-label"><span class="bonus-check"><svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2" stroke="#1E5631" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Make your first deposit</span>
+          <span class="bonus-amt">+$50</span>
+        </li>
+      </ul>
+      <p style="font-size:12.5px;color:var(--text-2);margin-top:10px;">A minimum trading activity requirement applies to unlock the full reward — check current terms at sign-up. Availability and terms vary by region and account type.</p>
+
+      <p style="margin-top:16px;"><a href="https://mytd.cc/APu5" style="color:var(--navy);font-weight:600;">Open an account via Mitrade →</a></p>
+
+      <p style="font-size:12px;color:var(--text-2);margin-top:8px;">CFDs are leveraged products and most retail accounts lose money trading them. Paid partnership — we may earn compensation if you sign up via this link.</p>
+    </div>
+
+    <div class="sect">
+      <span class="sect-num">SECTION 6</span>
+      <h2>Company profile — Westports Holdings Berhad</h2>
+      <p>Westports operates Port Klang's largest container terminal, listed on Bursa Malaysia's Main Market. Revenue is earned per container movement regardless of destination, making transshipment volume — cargo that never enters the Malaysian economy — the segment most directly levered to global rerouting.</p>
+
+      <h3>Ownership structure</h3>
+      <table>
+        <thead><tr><th>Holder</th><th class="num">Stake</th></tr></thead>
+        <tbody>
+          <tr><td>Gnanalingam estate (founder's family)</td><td class="num">≈42.4%</td></tr>
+          <tr><td>CK Hutchison Holdings (Hong Kong), via South Port Investment</td><td class="num">≈23.5%</td></tr>
+          <tr><td>Free float</td><td class="num">≈34.1%</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout">
+        <p class="eyebrow-sans">The tell</p>
+        <p>Sell-side coverage explicitly models a rapid return to normal Suez Canal transits as a congestion risk to Westports' own volume guidance. If normalization is treated as a headwind by the analysts covering the stock, the disruption itself has become embedded in the earnings base.</p>
+      </div>
+
+      <h3>Q1 2026 operating detail</h3>
+      <table>
+        <thead><tr><th>Metric</th><th class="num">1Q 2026</th></tr></thead>
+        <tbody>
+          <tr><td>Container throughput, y/y</td><td class="num delta-down">-1.1%</td></tr>
+          <tr><td>Transshipment volume, y/y</td><td class="num delta-up">+0.7%</td></tr>
+          <tr><td>Gateway cargo, y/y</td><td class="num delta-down">-3.4%</td></tr>
+          <tr><td>Throughput, April rebound<span class="sub">vs. weak 1Q, per HLIB Research</span></td><td class="num delta-up">+3.0%</td></tr>
+          <tr><td>Core profit vs. HLIB full-year estimate</td><td class="num delta-up">+28.4%</td></tr>
+          <tr><td>Core profit vs. consensus full-year estimate</td><td class="num delta-up">+29.7%</td></tr>
+          <tr><td>Fuel cost, y/y<span class="sub">Mean of Platts Singapore diesel price +33% to $121.7</span></td><td class="num delta-down">+17%</td></tr>
+          <tr><td>HLIB target price<span class="sub">raised from RM6.55</span></td><td class="num">RM7.15</td></tr>
+        </tbody>
+      </table>
+      <p>Management attributed the 1Q26 throughput softness to a shorter working month and the preliminary impact of the conflict, but told analysts it has observed no significant Iran-war impact beyond that. The earnings beat itself was driven almost entirely by the scheduled 10% tariff hike effective January 2026, layered on the 15% increase from July 2025 — not by incremental war-driven volume. Fuel is a live cost pressure: it made up 19% of operating expenditure in 1Q26, and Westports has ordered 60 electric trucks, roughly 10% of its fleet, to begin cutting diesel consumption from the third quarter of 2026.</p>
+
+      <div class="callout">
+        <p class="eyebrow-sans">The other side of the trade</p>
+        <p>RHB Research puts the stock at 15.9 times price-to-earnings and argues conflict-related risk is largely priced in already, with further upside contingent on Malaysia's Transport Ministry approving a diesel cost pass-through mechanism — a live but unresolved policy question, not a certainty.</p>
+      </div>
+    </div>
+
+    <div class="sect">
+      <span class="sect-num">SECTION 7</span>
+      <h2>Risks to thesis</h2>
+      <div class="risk-item">
+        <div class="risk-mark">01</div>
+        <div class="risk-body"><p><strong>Suez normalization.</strong> Maersk and CMA CGM have both made tentative moves back to Suez routings when security conditions permitted. A durable ceasefire reverses the entire mechanism described above.</p></div>
+      </div>
+      <div class="risk-item">
+        <div class="risk-mark">02</div>
+        <div class="risk-body"><p><strong>No confirmed war-driven volume yet.</strong> Westports' Q1 2026 throughput fell 1.1% y/y (transshipment +0.7%, gateway -3.4%), and management reported no material impact from the Iran war to date. The quarter's earnings beat — 28.4% above HLIB's full-year estimate — was driven by scheduled tariff increases, not incremental demand. Diesel costs, up 17% y/y, are a live headwind the port is only beginning to offset with its electric truck fleet.</p></div>
+      </div>
+      <div class="risk-item">
+        <div class="risk-mark">03</div>
+        <div class="risk-body"><p><strong>Tanjung Pelepas growth is alliance-driven.</strong> Management attributes the majority of its 13.8% throughput growth to becoming the Gemini Cooperation's Asia hub — a network decision independent of, and pre-dating, the current conflict.</p></div>
+      </div>
+      <div class="risk-item">
+        <div class="risk-mark">04</div>
+        <div class="risk-body"><p><strong>Ownership concentration.</strong> Roughly two-thirds of the register sits with a single family estate and one strategic institutional holder, a different governance and liquidity profile than a widely-held index constituent.</p></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <p><strong>Sources:</strong> U.S. Energy Information Administration (World Oil Transit Chokepoints) · Reuters · Bloomberg · Lloyd's List · BIMCO · S&amp;P Global Market Intelligence · Westports Holdings Berhad and Port Klang Authority disclosures · The Edge Malaysia, The Star, New Straits Times, reporting through July 2026.</p>
+    <p>This note is an independent, informational briefing. It is not produced by, or affiliated with, any bank, broker-dealer, or investment bank, and the "structural view" and "coverage summary" formatting above is presentational only — it does not constitute a research rating, recommendation, or investment advice under any regulatory framework. Past structural shifts are not a guarantee of future volumes or returns. The Mitrade section is a paid partnership; bonus terms are set by Mitrade and subject to change without notice.</p>
+  </div>
+
+</div>
+</body>
+</html>
