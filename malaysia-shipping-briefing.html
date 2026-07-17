@@ -22,13 +22,15 @@
     --positive:#1E5631;
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+  html,body{margin:0;padding:0;overflow-x:hidden;}
   body{
     background:#EDEDEA;
     color:var(--ink);
     font-family:'PT Serif',serif;
     font-size:16px;
     line-height:1.62;
+    width:100%;
   }
   .sans{font-family:'IBM Plex Sans',sans-serif;}
   .mono{font-family:'IBM Plex Mono',monospace;}
@@ -99,7 +101,13 @@
   .note{font-size:12.5px;color:var(--text-2);margin-top:-4px;}
 
   /* ===== tables ===== */
-  table{width:100%;border-collapse:collapse;margin:16px 0 20px;font-size:14.5px;}
+  .table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:16px 0 20px;}
+  table{width:100%;border-collapse:collapse;margin:0;font-size:14.5px;}
+  table.table-wide{min-width:520px;}
+  @media (max-width:640px){
+    table{font-size:13px;}
+    table.table-wide{min-width:480px;}
+  }
   thead th{
     font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:11px;
     text-transform:uppercase;letter-spacing:0.03em;color:var(--text-2);
@@ -178,11 +186,30 @@
   }
   .footer p{margin:0 0 10px;}
 
+  .chart-wrap{position:relative;width:100%;height:280px;margin:20px 0 4px;}
+
   @media (max-width:640px){
     .titlegrid{grid-template-columns:1fr;}
     .masthead,.titleblock,.body,.footer{padding-left:18px;padding-right:18px;}
-    table{font-size:13px;}
-    .barline{grid-template-columns:110px 1fr 70px;}
+    .titleblock{padding-top:26px;padding-bottom:20px;}
+    .barline{grid-template-columns:96px 1fr 62px;gap:8px;}
+    .barline .lbl{font-size:11.5px;}
+    .chart-wrap{height:230px;}
+    h1{font-size:24px;}
+    .dek{font-size:14.5px;}
+    body{font-size:15px;}
+    p{font-size:15px;}
+    .bonus-row{font-size:13.5px;}
+    .risk-body p{font-size:14px;}
+    .sect-num{font-size:11px;}
+  }
+
+  @media (max-width:400px){
+    .masthead,.titleblock,.body,.footer{padding-left:14px;padding-right:14px;}
+    .rating-row{font-size:11px;padding:8px 10px;}
+    .bonus-row{font-size:13px;}
+    .bonus-amt{font-size:12.5px;}
+    h1{font-size:21px;}
   }
 </style>
 </head>
@@ -238,7 +265,8 @@
       <p>A second, lower-cost lever exists. The Houthi movement in Yemen, armed and aligned with Iran through its "Axis of Resistance," controls territory overlooking <strong>Bab el-Mandeb</strong>, the entrance to the Red Sea. Iranian officials this week reportedly requested the Houthis close the strait in the event of US strikes on Iranian energy infrastructure, with Houthi forces already positioned to act.</p>
 
       <h3>Chokepoint status</h3>
-      <table>
+      <div class="table-wrap">
+      <table class="table-wide">
         <thead><tr><th>Chokepoint</th><th>Mechanism</th><th class="num">Normal flow</th><th>Status</th></tr></thead>
         <tbody>
           <tr><td>Strait of Hormuz</td><td><span class="tag-cell tag-direct">Direct</span></td><td class="num">20.9M bbl/d</td><td>Partial blockade, active</td></tr>
@@ -246,6 +274,7 @@
           <tr><td>Suez Canal + SUMED</td><td><span class="tag-cell tag-avoid">Avoided</span></td><td class="num">4.9M bbl/d<span class="sub">1H25, was 8.8M in 2023</span></td><td>Shipper avoidance, 2 yrs</td></tr>
         </tbody>
       </table>
+      </div>
       <p class="note">Source: EIA World Oil Transit Chokepoints, 1H 2025.</p>
     </div>
 
@@ -266,7 +295,7 @@
       <h2>Chokepoint volume data, 2023 vs. 1H 2025</h2>
       <p>Official EIA chokepoint accounting shows the redirected volume cleanly: barrels that left Suez and Bab el-Mandeb reappear almost one-for-one on the Cape of Good Hope route.</p>
 
-      <div style="position:relative;width:100%;height:280px;margin:20px 0 4px;">
+      <div class="chart-wrap">
         <canvas id="chokepointChart" role="img" aria-label="Line chart showing crude oil and petroleum liquid volumes in million barrels per day through the Suez Canal and SUMED pipeline, Bab el-Mandeb strait, and Cape of Good Hope, from 2020 through the first half of 2025">Suez and SUMED: 5.4 in 2020, 5.2 in 2021, 7.3 in 2022, 8.8 in 2023, 4.8 in 2024, 4.9 in 1H2025. Bab el-Mandeb: 5.7, 6.0, 8.0, 9.3, 4.1, 4.2 over the same period. Cape of Good Hope: 7.9, 7.2, 6.1, 6.2, 9.3, 9.1 over the same period.</canvas>
       </div>
       <div class="bkey" style="margin-bottom:4px;">
@@ -304,6 +333,7 @@
       <span class="sect-num">SECTION 4</span>
       <h2>Regional positioning — why Malaysia and not peers</h2>
       <p>Capturing rerouted mega-vessel traffic requires three specific conditions: deep-water berths, uncommitted capacity, and an established transshipment network. Few Southeast Asian ports satisfy all three simultaneously.</p>
+      <div class="table-wrap">
       <table>
         <thead><tr><th>Market</th><th>Assessment</th></tr></thead>
         <tbody>
@@ -313,12 +343,14 @@
           <tr><td>Vietnam / Thailand</td><td>Serve different trade-lane geometry — strong on intra-Asia flows, positioned off the direct Asia-Europe artery.</td></tr>
         </tbody>
       </table>
+      </div>
       <p>With Hormuz under partial blockade and the Red Sea under renewed threat, the Strait of Malacca stands as one of the few major chokepoints not currently under direct military pressure — and Malaysia's terminals sit directly on it.</p>
     </div>
 
     <div class="sect">
       <span class="sect-num">SECTION 5</span>
       <h2>Port Klang — 2025 operating data</h2>
+      <div class="table-wrap">
       <table>
         <thead><tr><th>Metric</th><th class="num">2025</th><th class="num">Y/Y</th></tr></thead>
         <tbody>
@@ -329,6 +361,7 @@
           <tr><td>Tanjung Pelepas<span class="sub">separate port, Gemini alliance hub</span></td><td class="num">14.03M TEU</td><td class="num delta-up">+13.8%</td></tr>
         </tbody>
       </table>
+      </div>
       <h3>Capacity investment</h3>
       <p>Port Klang Authority is implementing a phased tariff increase — 15% from July 2025, a further 10% from January 2026, and 5% in January 2027 — partly funding the Westports 2 expansion, expected to roughly double handling capacity toward 28 million TEU. The scale of investment implies management is underwriting this volume shift as durable rather than transitory.</p>
     </div>
@@ -365,6 +398,7 @@
       <p>Westports operates Port Klang's largest container terminal, listed on Bursa Malaysia's Main Market. Revenue is earned per container movement regardless of destination, making transshipment volume — cargo that never enters the Malaysian economy — the segment most directly levered to global rerouting.</p>
 
       <h3>Ownership structure</h3>
+      <div class="table-wrap">
       <table>
         <thead><tr><th>Holder</th><th class="num">Stake</th></tr></thead>
         <tbody>
@@ -373,6 +407,7 @@
           <tr><td>Free float</td><td class="num">≈34.1%</td></tr>
         </tbody>
       </table>
+      </div>
 
       <div class="callout">
         <p class="eyebrow-sans">The tell</p>
@@ -380,6 +415,7 @@
       </div>
 
       <h3>Q1 2026 operating detail</h3>
+      <div class="table-wrap">
       <table>
         <thead><tr><th>Metric</th><th class="num">1Q 2026</th></tr></thead>
         <tbody>
@@ -393,6 +429,7 @@
           <tr><td>HLIB target price<span class="sub">raised from RM6.55</span></td><td class="num">RM7.15</td></tr>
         </tbody>
       </table>
+      </div>
       <p>Management attributed the 1Q26 throughput softness to a shorter working month and the preliminary impact of the conflict, but told analysts it has observed no significant Iran-war impact beyond that. The earnings beat itself was driven almost entirely by the scheduled 10% tariff hike effective January 2026, layered on the 15% increase from July 2025 — not by incremental war-driven volume. Fuel is a live cost pressure: it made up 19% of operating expenditure in 1Q26, and Westports has ordered 60 electric trucks, roughly 10% of its fleet, to begin cutting diesel consumption from the third quarter of 2026.</p>
 
       <div class="callout">
