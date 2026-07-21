@@ -1,0 +1,735 @@
+<!-- 3 Accounts Before Age One — distinct material per account -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,450;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  .zz * { box-sizing: border-box; margin: 0; padding: 0; }
+  .zz {
+    --paper: #EDEEE8;
+    --ink: #14201B;
+    --ink-soft: #5B6B62;
+    --line: #C9CDBF;
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    font-size: 15.5px;
+    line-height: 1.62;
+  }
+  .zz .num { font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; }
+  .zz h1, .zz h2, .zz h3 { font-family: 'Fraunces', Georgia, serif; color: var(--ink); line-height: 1.08; }
+  .zz h1 { font-weight: 600; font-size: clamp(32px, 6vw, 56px); letter-spacing: -0.015em; }
+  .zz h2 { font-weight: 600; font-size: clamp(24px, 3.6vw, 32px); }
+  .zz p { margin-bottom: 13px; }
+  .zz strong { font-weight: 700; }
+  .zz em { font-style: italic; }
+  .zz .wrap { max-width: 760px; margin: 0 auto; padding: 0 22px; }
+  .zz .eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); }
+  .zz .lede { color: var(--ink-soft); font-size: 16.5px; max-width: 58ch; }
+
+  /* ---------- masthead ---------- */
+  .zz .mast { padding: 16px 0; }
+  .zz .mast .wrap { display: flex; justify-content: space-between; align-items: baseline; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .08em; color: var(--ink-soft); text-transform: uppercase; }
+
+  /* ---------- hero ---------- */
+  .zz .hero { padding: 26px 0 6px; }
+  .zz .hero h1 { margin: 14px 0 14px; }
+
+  /* ---------- table of contents, inline prose style ---------- */
+  .zz .toc { margin: 30px 0 4px; padding: 18px 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+  .zz .toc-items { display: flex; flex-wrap: wrap; gap: 6px 0; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; }
+  .zz .toc-items a { color: var(--ink); text-decoration: none; }
+  .zz .toc-items a:hover { color: #8E6A2E; }
+  .zz .toc-items .sep { color: var(--line); margin: 0 10px; }
+
+  /* ---------- hero chart panel ---------- */
+  .zz .heropanel { margin-top: 26px; border: 1px solid var(--ink); }
+  .zz .heropanel-hd { padding: 16px 20px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px; }
+  .zz .heropanel-hd h3 { font-size: 17px; }
+  .zz .heropanel-body { padding: 18px 20px 22px; }
+  .zz .heropanel svg { width: 100%; height: auto; display: block; }
+  .zz .legend-row { display: flex; gap: 18px; flex-wrap: wrap; margin: 8px 2px 0; font-size: 12px; color: var(--ink-soft); }
+  .zz .legend-row .sw { display: inline-block; width: 10px; height: 2px; margin-right: 6px; vertical-align: middle; }
+
+  .zz .ctrls { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 28px; margin: 20px 0 4px; }
+  @media (max-width: 640px) { .zz .ctrls { grid-template-columns: 1fr; } }
+  .zz .ctrl-hd { display: flex; justify-content: space-between; font-size: 12.5px; margin-bottom: 5px; }
+  .zz .ctrl-hd .num { color: #8E6A2E; font-weight: 600; }
+  .zz input[type=range] { width: 100%; -webkit-appearance: none; appearance: none; height: 1px; background: var(--ink-soft); outline: none; }
+  .zz input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 13px; height: 13px; background: #8E6A2E; border-radius: 50%; cursor: pointer; border: 2px solid var(--paper); }
+  .zz input[type=range]::-moz-range-thumb { width: 13px; height: 13px; background: #8E6A2E; border-radius: 50%; cursor: pointer; border: 2px solid var(--paper); }
+  .zz .ctrl-note { font-size: 10.5px; color: var(--ink-soft); margin-top: 3px; }
+
+  .zz .totals { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 20px; border-top: 1px solid var(--ink); padding-top: 16px; }
+  @media (max-width: 640px) { .zz .totals { grid-template-columns: 1fr; } }
+  .zz .tot .val { font-family: 'IBM Plex Mono', monospace; font-size: 20px; font-weight: 600; }
+  .zz .tot.loss .val { color: #9C3B2A; }
+  .zz .tot .lbl2 { font-size: 11px; color: var(--ink-soft); margin-top: 2px; }
+
+  /* ================= SECTION HEADERS (shared, plain) ================= */
+  .zz section { padding-top: 58px; scroll-margin-top: 16px; }
+  .zz .sec-eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--ink-soft); letter-spacing: .1em; margin-bottom: 6px; }
+  .zz .sec-sub { color: var(--ink-soft); font-size: 13.5px; margin-bottom: 4px; }
+  .zz .full { width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; }
+
+  /* ================= ACCOUNT 1 — CERTIFICATE ================= */
+  .zz .cert-wrap { background: #F6F3E7; padding: 46px 0; margin-top: 20px; }
+  .zz .cert { max-width: 716px; margin: 0 auto; padding: 0 22px; }
+  .zz .cert-frame { border: 3px double #1F4D3D; padding: 40px 36px; background: #FBF9F0; position: relative; }
+  .zz .cert-top { text-align: center; margin-bottom: 22px; }
+  .zz .seal { width: 84px; height: 84px; margin: 0 auto 14px; border-radius: 50%; border: 2px solid #B8912E; display: flex; align-items: center; justify-content: center; position: relative; }
+  .zz .seal::before { content: ''; position: absolute; inset: 6px; border: 1px solid #B8912E; border-radius: 50%; }
+  .zz .seal span { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .06em; color: #B8912E; font-weight: 700; text-align: center; line-height: 1.3; }
+  .zz .cert-title { font-family: 'Fraunces', serif; font-size: 28px; color: #1F4D3D; margin-bottom: 4px; }
+  .zz .cert-sub { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: #6B5B2E; }
+  .zz .cert-rule { border: none; border-top: 1px solid #B8912E; margin: 24px 0; }
+  .zz .cert h4 { font-family: 'IBM Plex Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: #1F4D3D; margin-bottom: 9px; }
+  .zz .cert .layer { margin-bottom: 20px; }
+  .zz .cert .layer:last-child { margin-bottom: 0; }
+  .zz .cert p, .zz .cert li { color: #2A2A20; }
+  .zz .cert ul.list { list-style: none; }
+  .zz .cert ul.list li { padding-left: 17px; position: relative; margin-bottom: 7px; }
+  .zz .cert ul.list li::before { content: '§'; position: absolute; left: 0; top: 0; color: #B8912E; font-size: 12px; }
+  .zz .cert table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .zz .cert th { text-align: left; font-family: 'IBM Plex Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: #6B5B2E; padding: 7px 8px; border-bottom: 1px solid #B8912E; }
+  .zz .cert td { padding: 8px; border-bottom: 1px solid #E3DABE; }
+  .zz .cert td.n { font-family: 'IBM Plex Mono', monospace; white-space: nowrap; }
+  .zz .cert-stamp-row { display: flex; gap: 10px; margin-top: 26px; flex-wrap: wrap; }
+  .zz .cert-caution { border: 1px solid #9C3B2A; padding: 10px 13px; font-size: 13.5px; flex: 1 1 260px; }
+  .zz .cert-caution b { color: #9C3B2A; font-family: 'IBM Plex Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 4px; }
+
+  /* ================= ACCOUNT 2 — PASSBOOK ================= */
+  .zz .book-wrap { background: #DCCFAE; padding: 44px 0; margin-top: 20px; position: relative; }
+  .zz .perf { height: 14px; background:
+      radial-gradient(circle, var(--paper) 3.5px, transparent 3.6px) repeat-x;
+    background-size: 22px 14px; }
+  .zz .perf.top { margin-bottom: 30px; }
+  .zz .perf.bottom { margin-top: 30px; }
+  .zz .book { max-width: 716px; margin: 0 auto; padding: 0 22px; }
+  .zz .book-hd { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #4A3C1E; padding-bottom: 12px; margin-bottom: 20px; font-family: 'Space Mono', monospace; }
+  .zz .book-hd h3 { font-family: 'Space Mono', monospace; font-size: 20px; color: #3A2E14; font-weight: 700; }
+  .zz .book-hd span { font-size: 11px; color: #6B5B2E; }
+  .zz .book, .zz .book p, .zz .book li { font-family: 'Space Mono', monospace; font-size: 13px; color: #2E2712; }
+  .zz .book h4 { font-family: 'Space Mono', monospace; font-size: 11.5px; text-transform: uppercase; letter-spacing: .04em; color: #4A3C1E; margin-bottom: 9px; border-bottom: 1px dashed #8A7644; padding-bottom: 5px; }
+  .zz .book .layer { margin-bottom: 20px; }
+  .zz .ledgerline { display: flex; justify-content: space-between; gap: 10px; padding: 6px 0; border-bottom: 1px dotted #8A7644; }
+  .zz .ledgerline b { white-space: nowrap; }
+  .zz .book ul.list { list-style: none; }
+  .zz .book ul.list li { padding-left: 16px; position: relative; margin-bottom: 7px; }
+  .zz .book ul.list li::before { content: '»'; position: absolute; left: 0; top: 0; color: #4A3C1E; }
+  .zz .book table { width: 100%; border-collapse: collapse; font-family: 'Space Mono', monospace; font-size: 12.5px; }
+  .zz .book th { text-align: left; font-size: 10px; text-transform: uppercase; color: #6B5B2E; padding: 6px 7px; border-bottom: 1px solid #4A3C1E; }
+  .zz .book td { padding: 7px; border-bottom: 1px dotted #8A7644; }
+  .zz .book-caution { border-left: 3px solid #9C3B2A; padding: 8px 12px; margin-bottom: 8px; font-size: 12.5px; }
+  .zz .book-caution b { display: block; color: #9C3B2A; font-size: 10px; text-transform: uppercase; margin-bottom: 3px; }
+
+  /* ================= ACCOUNT 3 — CONTRACT NOTE ================= */
+  .zz .slip-wrap { background: #D9E0E6; padding: 46px 0; margin-top: 20px; }
+  .zz .slip { max-width: 716px; margin: 0 auto; padding: 0 22px; }
+  .zz .slip-frame { background: #FBFBF8; border: 1px solid #1B3A5C; padding: 36px 34px; position: relative; overflow: hidden; }
+  .zz .slip-stamp { position: absolute; top: 30px; right: -46px; width: 210px; text-align: center; transform: rotate(17deg); border: 2px solid #9C3B2A; color: #9C3B2A; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; padding: 5px 0; opacity: .72; }
+  .zz .slip-hd { border-bottom: 2px solid #1B3A5C; padding-bottom: 14px; margin-bottom: 20px; padding-right: 120px; }
+  .zz .slip-hd h3 { font-family: 'Fraunces', serif; font-size: 25px; color: #1B3A5C; margin-bottom: 3px; }
+  .zz .slip-hd .subline { font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: #5B6B7E; }
+  .zz .slip-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 26px; margin-bottom: 24px; }
+  .zz .slip-field label { display: block; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em; color: #5B6B7E; margin-bottom: 3px; }
+  .zz .slip-field .fv { border-bottom: 1px dotted #9AA7B5; padding-bottom: 4px; color: #1B2A3D; font-weight: 500; font-size: 13.5px; }
+  .zz .slip .layer { margin-bottom: 20px; }
+  .zz .slip .layer:last-child { margin-bottom: 0; }
+  .zz .slip h4 { font-family: 'IBM Plex Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: #1B3A5C; margin-bottom: 9px; }
+  .zz .slip p, .zz .slip li { color: #24303F; }
+  .zz .slip ul.list { list-style: none; }
+  .zz .slip ul.list li { padding-left: 17px; position: relative; margin-bottom: 7px; }
+  .zz .slip ul.list li::before { content: '·'; position: absolute; left: 2px; top: -2px; color: #1B3A5C; font-size: 20px; }
+  .zz .slip table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .zz .slip th { text-align: left; font-family: 'IBM Plex Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: #5B6B7E; padding: 7px 8px; border-bottom: 1px solid #1B3A5C; }
+  .zz .slip td { padding: 8px; border-bottom: 1px solid #DCE2E8; }
+  .zz .slip td.n { font-family: 'IBM Plex Mono', monospace; white-space: nowrap; }
+  .zz .slip-note { border-left: 3px solid #8E6A2E; padding: 9px 13px; font-size: 13.5px; background: #F5EFDF; }
+  .zz .slip-note b { display: block; color: #8E6A2E; font-family: 'IBM Plex Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 3px; }
+  .zz .slip-caution-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+  .zz .slip-caution { border: 1px solid #9C3B2A; padding: 10px 13px; font-size: 13.5px; flex: 1 1 260px; }
+  .zz .slip-caution b { display: block; color: #9C3B2A; font-family: 'IBM Plex Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
+
+  /* ---------- back to plain paper sections ---------- */
+  .zz .plain { padding-top: 54px; }
+  .zz hr.rule { border: none; border-top: 1px solid var(--ink); margin-top: 54px; }
+  .zz .tbl-wrap { overflow-x: auto; margin-bottom: 14px; }
+  .zz .wrap table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 440px; }
+  .zz .wrap th { text-align: left; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-soft); padding: 9px 10px; border-bottom: 1px solid var(--ink); }
+  .zz .wrap td { padding: 9px 10px; border-bottom: 1px dotted var(--line); }
+  .zz .wrap td.n { font-family: 'IBM Plex Mono', monospace; white-space: nowrap; }
+  .zz ul.plainlist { list-style: none; }
+  .zz ul.plainlist li { padding-left: 17px; position: relative; margin-bottom: 8px; }
+  .zz ul.plainlist li::before { content: '—'; position: absolute; left: 0; top: 0; color: #8E6A2E; }
+  .zz .myth { border: 1px solid #9C3B2A; padding: 20px 22px; margin-top: 16px; }
+  .zz .bonus { border: 1px solid var(--ink); padding: 20px 22px; margin-top: 16px; }
+
+  /* ================= WAITLIST TICKET ================= */
+  .zz .ticket-wrap { margin-top: 22px; }
+  .zz .ticket { display: flex; border: 1px solid var(--ink); background: #FBFBF8; }
+  @media (max-width: 560px) { .zz .ticket { flex-direction: column; } }
+  .zz .ticket-left { flex: 1 1 42%; padding: 24px 22px; border-right: 1px dashed var(--ink); display: flex; flex-direction: column; justify-content: center; }
+  @media (max-width: 560px) { .zz .ticket-left { border-right: none; border-bottom: 1px dashed var(--ink); } }
+  .zz .ticket-eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #8E6A2E; margin-bottom: 8px; }
+  .zz .ticket-title { font-family: 'Fraunces', serif; font-size: 25px; color: var(--ink); line-height: 1.12; margin-bottom: 8px; }
+  .zz .ticket-sub { font-size: 13px; color: var(--ink-soft); }
+  .zz .ticket-right { flex: 1 1 58%; padding: 24px 22px; }
+  .zz .ticket-right form { display: flex; flex-direction: column; gap: 4px; }
+  .zz .ticket-right label { font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); margin-top: 10px; }
+  .zz .ticket-right label:first-child { margin-top: 0; }
+  .zz .ticket-right input[type=text], .zz .ticket-right input[type=email] { border: none; border-bottom: 1px solid var(--ink-soft); background: transparent; font-family: 'Inter', sans-serif; font-size: 15px; color: var(--ink); padding: 7px 2px; outline: none; }
+  .zz .ticket-right input[type=text]:focus, .zz .ticket-right input[type=email]:focus { border-bottom-color: #8E6A2E; }
+  .zz .ticket-right button { margin-top: 16px; background: var(--ink); color: var(--paper); border: none; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; text-transform: uppercase; letter-spacing: .08em; padding: 12px 18px; cursor: pointer; }
+  .zz .ticket-right button:hover { background: #8E6A2E; }
+  .zz .ticket-right button:disabled { opacity: .6; cursor: default; }
+  .zz #wl-status { font-size: 12.5px; margin-top: 10px; min-height: 16px; }
+  .zz #wl-status.ok { color: #2F5D3A; }
+  .zz #wl-status.err { color: #9C3B2A; }
+
+  @media (prefers-reduced-motion: reduce) { .zz * { animation: none !important; transition: none !important; } }
+
+  /* ================= MOBILE HARDENING ================= */
+  html, body { overflow-x: hidden; }
+  .zz { overflow-x: hidden; }
+  @media (max-width: 700px) {
+    .zz .full { width: 100%; left: 0; right: 0; margin-left: 0; margin-right: 0; }
+    .zz .cert-frame, .zz .book, .zz .slip-frame { padding: 26px 18px; }
+    .zz .cert, .zz .book, .zz .slip { padding: 0 14px; }
+    .zz .slip-hd { padding-right: 0; }
+    .zz .slip-stamp { position: static; transform: none; display: inline-block; margin-bottom: 12px; width: auto; padding: 4px 10px; }
+    .zz .book-hd { flex-wrap: wrap; gap: 4px; }
+    .zz .slip-fields { grid-template-columns: 1fr; }
+    .zz .cert-stamp-row, .zz .slip-caution-row { flex-direction: column; }
+    .zz .cert table, .zz .book table, .zz .slip table, .zz .wrap table { font-size: 12px; }
+    .zz .cert td, .zz .book td, .zz .slip td, .zz .wrap td { padding: 7px 5px; }
+    .zz .cert th, .zz .book th, .zz .slip th, .zz .wrap th { padding: 7px 5px; }
+    .zz .heropanel-body { padding: 16px 14px 18px; }
+    .zz .toc-items { font-size: 11.5px; }
+  }
+  @media (max-width: 420px) {
+    .zz .seal { width: 70px; height: 70px; }
+    .zz .cert-title { font-size: 23px; }
+  }
+</style>
+
+<div class="zz">
+
+  <div class="mast">
+    <div class="wrap"><span>Family Finance — Malaysia</span><span>Ref. 47bb936e · Jul 2026</span></div>
+  </div>
+
+  <div class="wrap">
+    <div class="hero">
+      <span class="eyebrow">Three accounts, one first year</span>
+      <h1>What to open before your child turns one</h1>
+      <p class="lede">Most Malaysian parents open none of them before their child starts school. The shortfall isn't the deposit — it's the years of compounding that don't come back once they've passed.</p>
+    </div>
+
+    <div class="toc">
+      <div class="toc-items">
+        <a href="#s-sspn">SSPN-i</a><span class="sep">/</span>
+        <a href="#s-asm">ASM</a><span class="sep">/</span>
+        <a href="#s-broker">Broker in trust</a><span class="sep">/</span>
+        <a href="#s-compare">Comparison</a><span class="sep">/</span>
+        <a href="#s-extra">Bonus &amp; myth</a><span class="sep">/</span>
+        <a href="#s-action">Action plan</a><span class="sep">/</span>
+        <a href="#s-class">Join the class</a>
+      </div>
+    </div>
+
+    <div class="heropanel">
+      <div class="heropanel-hd"><h3>Growth trajectory, age 0–18</h3><span class="eyebrow">Live model</span></div>
+      <div class="heropanel-body">
+        <svg id="growthChart" viewBox="0 0 700 280" preserveAspectRatio="none"></svg>
+        <div class="legend-row">
+          <span><i class="sw" style="background:#1F4D3D"></i>SSPN-i</span>
+          <span><i class="sw" style="background:#8E6A2E"></i>ASM</span>
+          <span><i class="sw" style="background:#3B5A82"></i>Broker in trust</span>
+        </div>
+
+        <div class="ctrls">
+          <div><div class="ctrl-hd"><label>SSPN-i monthly</label><span class="num" id="v-sspn">RM300</span></div><input type="range" id="c-sspn" min="0" max="1500" step="50" value="300"></div>
+          <div><div class="ctrl-hd"><label>SSPN-i rate</label><span class="num" id="v-rsspn">4.00%</span></div><input type="range" id="r-sspn" min="2" max="6" step="0.25" value="4"><div class="ctrl-note">Historic ~3–4.05%</div></div>
+          <div><div class="ctrl-hd"><label>ASM monthly</label><span class="num" id="v-asm">RM200</span></div><input type="range" id="c-asm" min="0" max="1500" step="50" value="200"></div>
+          <div><div class="ctrl-hd"><label>ASM rate</label><span class="num" id="v-rasm">4.75%</span></div><input type="range" id="r-asm" min="2" max="8" step="0.25" value="4.75"><div class="ctrl-note">10-yr range 4.00–6.30%</div></div>
+          <div><div class="ctrl-hd"><label>Broker monthly</label><span class="num" id="v-brk">RM150</span></div><input type="range" id="c-brk" min="0" max="1500" step="50" value="150"></div>
+          <div><div class="ctrl-hd"><label>Broker rate</label><span class="num" id="v-rbrk">10.00%</span></div><input type="range" id="r-brk" min="4" max="15" step="0.5" value="10"><div class="ctrl-note">Long-run equity avg ~8–10%</div></div>
+          <div style="grid-column:1/-1"><div class="ctrl-hd"><label>Age you start</label><span class="num" id="v-age">Birth</span></div><input type="range" id="c-age" min="0" max="12" step="1" value="0"></div>
+        </div>
+
+        <div class="totals">
+          <div class="tot"><div class="val num" id="o-total">RM0</div><div class="lbl2" id="o-contrib">Contributed RM0</div></div>
+          <div class="tot"><div class="val num" id="o-alloc" style="font-size:13px">—</div><div class="lbl2">Share of monthly RM650</div></div>
+          <div class="tot loss"><div class="val num" id="o-loss">RM0</div><div class="lbl2" id="o-losslbl">Lost by waiting</div></div>
+        </div>
+        <p style="font-size:12px;color:var(--ink-soft);margin:14px 0 0">Figures are the midpoint of two bounds — these accounts credit dividends once a year, not monthly, so results sit between year-end and year-start deposit timing. Nothing here is a guarantee.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ACCOUNT 1 — CERTIFICATE ============ -->
+  <section id="s-sspn" class="full cert-wrap">
+    <div class="cert">
+      <div class="cert-frame">
+        <div class="cert-top">
+          <div class="seal"><span>GOVT<br>GUARANTEED</span></div>
+          <div class="cert-title">Simpan SSPN Prime</div>
+          <div class="cert-sub">Issued by PTPTN · National Education Savings Scheme</div>
+        </div>
+        <hr class="cert-rule">
+
+        <div class="layer">
+          <h4>What it actually is</h4>
+          <p>You hand PTPTN the money and, under an Islamic contract called <em>Wakalah Bil Istithmar</em> (agency-for-investment), they invest it on your behalf — closer to a government-managed unit trust than a deposit account. The "i" stands for Islamic; Shariah-structured by design, open to every Malaysian regardless of religion.</p>
+        </div>
+
+        <div class="layer">
+          <h4>Who can open it</h4>
+          <ul class="list">
+            <li><strong>Child:</strong> Malaysian citizen, 1 day old up to 18.</li>
+            <li><strong>Depositor:</strong> biological parent, adoptive parent, or legal guardian only.</li>
+            <li>No income test on the depositor, no cap on accounts across multiple children.</li>
+          </ul>
+        </div>
+
+        <div class="layer">
+          <h4>Every benefit</h4>
+          <table>
+            <thead><tr><th>Benefit</th><th>Detail</th></tr></thead>
+            <tbody>
+              <tr><td>Tax relief</td><td>Up to RM8,000/yr on net savings, through YA2027</td></tr>
+              <tr><td>Matching grant</td><td>Up to RM10,000 — means-tested</td></tr>
+              <tr><td>Dividend</td><td>~3–4%, recent high 4.05%, tax-exempt</td></tr>
+              <tr><td>Free takaful</td><td>Above RM1,000 — covers the depositor, not the child</td></tr>
+              <tr><td>Probate shortcut</td><td>Nominate up to 2 people, bypasses Grant of Probate</td></tr>
+              <tr><td>Loan prerequisite</td><td>Required before a future PTPTN study loan</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="layer">
+          <h4>The relief, worked through</h4>
+          <table>
+            <tbody>
+              <tr><td>Chargeable income</td><td class="n">RM80,000</td></tr>
+              <tr><td>SSPN deposit this year</td><td class="n">RM8,000</td></tr>
+              <tr><td>Now taxed on</td><td class="n">RM72,000</td></tr>
+              <tr><td><strong>Tax actually saved (24% bracket)</strong></td><td class="n"><strong>RM1,920</strong></td></tr>
+            </tbody>
+          </table>
+          <p style="margin:10px 0 0">Not a rebate — RM8,000 relief means RM1,920 saved at this bracket, not RM8,000 back.</p>
+        </div>
+
+        <div class="layer">
+          <h4>Conditions of this guarantee</h4>
+          <div class="cert-stamp-row">
+            <div class="cert-caution"><b>Per household, not per parent</b>Pre-YA2025 allowed RM16,000 combined. From YA2025, one claim, RM8,000 cap for the family.</div>
+            <div class="cert-caution"><b>Grant is means-tested</b>≤RM4,000/mo household income → up to RM10,000. RM4–6k/mo → up to RM5,000. Above → none.</div>
+            <div class="cert-caution"><b>Net savings only</b>Deposit RM8,000, withdraw RM2,000 mid-year → only RM6,000 claimable.</div>
+            <div class="cert-caution"><b>Takaful covers you, not the child</b>Pays out on the depositor's death or disability.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ACCOUNT 2 — PASSBOOK ============ -->
+  <section id="s-asm" class="full book-wrap">
+    <div class="perf top"></div>
+    <div class="book">
+      <div class="book-hd"><h3>AMANAH SAHAM MALAYSIA</h3><span>ACCT TYPE: ASM · UNIT PRICE RM1.00</span></div>
+
+      <div class="layer">
+        <h4>What it actually is</h4>
+        <p>A government-linked unit trust from ASNB/PNB, priced flat at RM1.00 a unit. Balance doesn't swing — instead you receive one annual income distribution, declared in sen per unit.</p>
+      </div>
+
+      <div class="layer">
+        <h4>Who can open it</h4>
+        <ul class="list">
+          <li>Open to every Malaysian citizen, any ethnicity.</li>
+          <li>Guardian applies on behalf of a minor with a valid birth certificate — confirmed in ASNB's own product sheet. Works from birth.</li>
+          <li>RM10 minimum initial investment.</li>
+        </ul>
+      </div>
+
+      <div class="layer">
+        <h4>ASB vs ASM</h4>
+        <p>ASB isn't "Malay-only" — restricted to Bumiputera status, a broader category including Sabah/Sarawak native groups. ASM is the open-to-all equivalent.</p>
+        <table>
+          <thead><tr><th></th><th>ASB</th><th>ASM</th></tr></thead>
+          <tbody>
+            <tr><td>Who qualifies</td><td>Bumiputera only</td><td>All citizens</td></tr>
+            <tr><td>Latest distribution</td><td>5.75 sen/unit</td><td>4.75–5.00 sen/unit</td></tr>
+          </tbody>
+        </table>
+        <p style="margin-top:8px">If you qualify for ASB, use it — the ~1-point gap compounds meaningfully over 18 years.</p>
+      </div>
+
+      <div class="layer">
+        <h4>Ten-year passbook history</h4>
+        <div class="ledgerline"><span>2016</span><b>6.30%</b></div>
+        <div class="ledgerline"><span>2017</span><b>6.00%</b></div>
+        <div class="ledgerline"><span>2018</span><b>6.25%</b></div>
+        <div class="ledgerline"><span>2019</span><b>5.50%</b></div>
+        <div class="ledgerline"><span>2020</span><b>4.25%</b></div>
+        <div class="ledgerline"><span>2021</span><b>4.00%</b></div>
+        <div class="ledgerline"><span>2022</span><b>4.00%</b></div>
+        <div class="ledgerline"><span>2023</span><b>4.50%</b></div>
+        <div class="ledgerline"><span>2024</span><b>4.75%</b></div>
+        <div class="ledgerline"><span>2025</span><b>5.00%</b></div>
+        <p style="margin-top:8px">10-yr avg 5.06%. Peaked pre-pandemic, bottomed 2021–22, climbing since.</p>
+      </div>
+
+      <div class="layer">
+        <h4>Entries to note</h4>
+        <div class="book-caution"><b>Not guaranteed</b>Fixed RM1.00 price is management policy, not law.</div>
+        <div class="book-caution"><b>Declared after the fact</b>A 5% year isn't a contract for next year.</div>
+        <div class="book-caution"><b>Supply isn't unlimited</b>Popular ASNB funds can hit unit caps.</div>
+      </div>
+    </div>
+    <div class="perf bottom"></div>
+  </section>
+
+  <!-- ============ ACCOUNT 3 — CONTRACT NOTE ============ -->
+  <section id="s-broker" class="full slip-wrap">
+    <div class="slip">
+      <div class="slip-frame">
+        <div class="slip-stamp">For illustration</div>
+        <div class="slip-hd">
+          <h3>Trust / Nominee Account</h3>
+          <div class="subline">Opened by a parent on behalf of a minor</div>
+        </div>
+
+        <div class="slip-fields">
+          <div class="slip-field"><label>Account holder</label><div class="fv">Child (beneficiary)</div></div>
+          <div class="slip-field"><label>Operated by</label><div class="fv">Parent, as trustee</div></div>
+          <div class="slip-field"><label>Opens from</label><div class="fv">Birth</div></div>
+          <div class="slip-field"><label>Tax on gains (individual)</label><div class="fv">None</div></div>
+        </div>
+
+        <div class="layer">
+          <h4>Why it needs a trustee at all</h4>
+          <p>A minor can't legally enter a binding contract in Malaysia, so a one-year-old can't hold a brokerage account directly. A parent opens it instead, as trustee — the assets are the child's, the parent operates the account until they're grown. This is the one account here that isn't an off-the-shelf product with published rules, which is exactly why most parents never get round to it.</p>
+        </div>
+
+        <div class="layer">
+          <h4>Two real advantages</h4>
+          <ul class="list">
+            <li><strong>No capital gains tax on shares, for individuals.</strong> Malaysia's 2024 capital gains tax applies to companies, LLPs, and trust bodies disposing of unlisted shares. Individuals sit outside its scope, and shares listed on Bursa or a foreign exchange are exempt regardless. Growth compounds untouched for 18 years.</li>
+            <li><strong>No "kiddie tax" rule.</strong> Some countries, like Canada or Australia, tax a child's investment income back at the parent's rate on purpose. Malaysia has no equivalent rule — worth treating as general information rather than a guarantee for every account structure, since it can depend on exactly how the account is set up.</li>
+          </ul>
+        </div>
+
+        <div class="layer">
+          <h4>The advantage that isn't about tax</h4>
+          <p style="margin-bottom:0">The real reason an 18-year account works is that nobody's checking the price. Adult investors tend to sell during downturns — that's usually the single biggest reason real-world returns fall short of what the market actually delivered. A child's account, left alone, doesn't have that problem.</p>
+        </div>
+
+        <div class="layer">
+          <h4>What to put in it</h4>
+          <p>Look for durable, well-run businesses rather than speculative names — steady demand, strong market position, more than a decade of proven results. A few well-known examples that fit this profile: Visa and Mastercard (payments), Costco (membership retail) — each has compounded at roughly 20% a year over the past 15 years.</p>
+          <div class="slip-note"><b>Important</b>The figures used in the calculator above don't assume 20% — they use a more conservative 10%, because strong past performance from a handful of companies isn't something to plan a child's account around.</div>
+        </div>
+
+        <div class="layer">
+          <h4>Things to watch for</h4>
+          <div class="slip-caution-row">
+            <div class="slip-caution"><b>Concentration risk</b>A handful of individual stocks carries more risk than a broad index fund. If simplicity matters more than picking winners, a low-cost global index fund is the safer, more defensible choice.</div>
+            <div class="slip-caution"><b>US-listed shares</b>Needs a broker with US market access, not a standard local-only account — factor in currency conversion and US dividend withholding tax.</div>
+            <div class="slip-caution"><b>Regulation risk</b>Payment companies like Visa and Mastercard face ongoing regulatory scrutiny over the fees they charge merchants — a real, recurring risk to their business model.</div>
+            <div class="slip-caution"><b>Confirm before funding</b>Check the trust or nominee structure directly with the broker first — being legally possible and being something the broker actually processes smoothly aren't always the same thing.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BACK TO PLAIN PAPER ============ -->
+  <div class="wrap plain">
+
+    <section id="s-compare" style="padding-top:0">
+      <div class="sec-eyebrow">Comparison</div>
+      <h2>The three at a glance</h2>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th></th><th>SSPN-i</th><th>ASM</th><th>Broker in trust</th></tr></thead>
+          <tbody>
+            <tr><td>Open from</td><td>1 day old</td><td>Birth (guardian)</td><td>Birth (as trustee)</td></tr>
+            <tr><td>Minimum</td><td class="n">RM20</td><td class="n">RM10</td><td>Varies</td></tr>
+            <tr><td>Capital guaranteed</td><td><strong>Yes, government</strong></td><td>No</td><td>No</td></tr>
+            <tr><td>Typical return</td><td class="n">3–4%</td><td class="n">4–6.3%</td><td>Market-dependent</td></tr>
+            <tr><td>Tax relief</td><td><strong>Up to RM8,000/yr</strong></td><td>None</td><td>None</td></tr>
+            <tr><td>Volatility</td><td>None</td><td>None in practice</td><td><strong>High</strong></td></tr>
+            <tr><td>Its job</td><td>Guaranteed floor + tax break</td><td>Steady middle gear</td><td>Long-run growth engine</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <hr class="rule">
+
+    <section id="s-extra">
+      <div class="sec-eyebrow">Two things worth knowing</div>
+      <h2>One bonus, one myth</h2>
+
+      <div class="bonus">
+        <h3 style="margin-bottom:4px">Tabung Haji — if your family is Muslim</h3>
+        <p class="sec-sub" style="margin-bottom:12px">A fourth account most people never file under "wealth"</p>
+        <p>Filed mentally under "the Hajj fund" so it rarely appears in finance lists — but opens from birth with a birth certificate and MyKid, 100% government-guaranteed, tax-exempt hibah. Recent distribution 3.5%. Past RM1,300 saved, the child is auto-registered in the Hajj queue — one that can run 10–15+ years joining as an adult.</p>
+        <p style="margin-bottom:0"><strong>Depositors must be Muslim</strong> — not available to every family.</p>
+      </div>
+
+      <div class="myth">
+        <div class="eyebrow" style="color:#9C3B2A">Myth — "EPF for kids"</div>
+        <p style="margin:8px 0 0">KWSP registration opens at <strong>age 14</strong>, requires the child's own MyKad. No infant pathway; top-ups still need an already-registered member. If EPF belongs in the plan, it's opened <em>at 14</em>, not year one.</p>
+      </div>
+    </section>
+
+    <hr class="rule">
+
+    <section id="s-action">
+      <div class="sec-eyebrow">If you do nothing else</div>
+      <h2>The order to do this in</h2>
+      <ul class="plainlist" style="margin-top:10px">
+        <li><strong>Week one:</strong> open SSPN-i online. RM20, ~10 minutes, no documents. Guaranteed and tax-deductible.</li>
+        <li><strong>Week two:</strong> open ASM (or ASB if Bumiputera) with RM10. Set a standing instruction.</li>
+        <li><strong>Month one to three:</strong> the broker account. Confirm trust structure, pick a broker with US access, set a deadline.</li>
+        <li><strong>Every year after:</strong> claim the SSPN relief — it isn't automatic.</li>
+      </ul>
+    </section>
+
+    <hr class="rule">
+
+    <section id="s-class">
+      <div class="sec-eyebrow">In person · currently validating dates</div>
+      <h2>Want help actually doing this?</h2>
+      <p style="margin-top:10px;max-width:56ch">We're planning a small in-person class for parents who want to start investing for their child but don't know where to begin.</p>
+      <p style="margin-top:14px;color:var(--ink-soft);font-size:14px">We're still validating interest and finalising the date, location, and price. Nothing is confirmed yet — leave your email below and we'll write to you as soon as it is.</p>
+
+      <div class="ticket-wrap">
+        <div class="perf top" style="background-image:radial-gradient(circle, var(--paper) 3.5px, transparent 3.6px)"></div>
+        <div class="ticket">
+          <div class="ticket-left">
+            <div class="ticket-eyebrow">Admit one parent</div>
+            <div class="ticket-title">First-Time Investor Class</div>
+            <div class="ticket-sub">Date &amp; venue — to be confirmed</div>
+          </div>
+          <div class="ticket-right">
+            <form id="waitlist-form">
+              <label for="wl-name">Name <span style="color:var(--ink-soft);font-weight:400">(optional)</span></label>
+              <input type="text" id="wl-name" name="name" placeholder="Your name">
+              <label for="wl-email">Email</label>
+              <input type="email" id="wl-email" name="email" placeholder="you@email.com" required>
+              <input type="hidden" name="_subject" value="Waitlist — First-Time Investor Class">
+              <button type="submit" id="wl-submit">Join the waitlist</button>
+              <div id="wl-status" role="status"></div>
+            </form>
+          </div>
+        </div>
+        <div class="perf bottom" style="background-image:radial-gradient(circle, var(--paper) 3.5px, transparent 3.6px)"></div>
+      </div>
+    </section>
+
+    <hr class="rule">
+
+    <hr class="rule">
+
+    <section id="s-method">
+      <div class="sec-eyebrow">Sources &amp; method</div>
+      <h2>How this was fact-checked</h2>
+      <p style="margin-top:10px">Every figure below was checked against PTPTN, ASNB, or LHDN's own materials where possible, cross-checked against at least one independent source, and re-verified specifically for this report rather than carried over from general knowledge.</p>
+
+      <div class="layer" style="margin-top:6px">
+        <h4 style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);margin-bottom:8px">SSPN-i</h4>
+        <ul class="plainlist" style="font-size:14px">
+          <li><strong>RM8,000 relief, per household, through YA2027:</strong> confirmed on <a href="https://www.ptptn.gov.my/en/simpan-sspn/simpan-sspn-plus/" target="_blank" rel="noopener">PTPTN's Simpan SSPN Plus page</a>, which cites Budget 2025's three-year extension (YA2025–2027).</li>
+          <li><strong>Means-tested matching grant, up to RM10,000, income ≤RM4,000/month:</strong> confirmed on <a href="https://dollarsandsense.my/what-is-the-national-education-savings-scheme-sspn-in-malaysia/" target="_blank" rel="noopener">DollarsAndSense.my's SSPN breakdown</a>, cross-checked against PTPTN's own page.</li>
+          <li><strong>Free takaful above RM1,000 saved, covers the depositor not the child:</strong> confirmed directly on <a href="https://www.ptptn.gov.my/en/simpan-sspn/simpan-sspn-prime/" target="_blank" rel="noopener">PTPTN's Simpan SSPN Prime page</a> ("Ringgit to Ringgit coverage for general accounts") and independently in <a href="https://themalaysianreserve.com/2022/08/10/simpan-sspn-prime-comes-with-free-takaful-privileges/" target="_blank" rel="noopener">The Malaysian Reserve</a>, which reports a real payout case.</li>
+          <li><strong>Nomination bypasses Grant of Probate:</strong> confirmed on PTPTN's own page and independently in <a href="https://www.bernama.com/en/bfokus/news.php?current=&id=2312968" target="_blank" rel="noopener">Bernama's BFokus explainer</a>. One nuance not in earlier drafts of this report: for <em>Muslim</em> depositors the nominee receives the funds "for administration" (still subject to Islamic distribution rules), while non-Muslim nominees receive the funds outright.</li>
+          <li><strong>Required before a PTPTN study loan, since Jan 2012:</strong> confirmed independently across five sources, including <a href="https://ringgitplus.com/en/guides/ptptn-loan-eligibility-how-to-apply-repayment/" target="_blank" rel="noopener">RinggitPlus's 2026 PTPTN loan guide</a> and PTPTN's own loan info page.</li>
+          <li><strong>4% dividend assumption:</strong> SSPN's actual recent history ranges roughly 3–4.05%; 4% used as a conservative mid-range planning figure, not a promise.</li>
+        </ul>
+      </div>
+
+      <div class="layer">
+        <h4 style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);margin-bottom:8px">ASM / ASB</h4>
+        <ul class="plainlist" style="font-size:14px">
+          <li><strong>Guardian may open for a minor with a birth certificate:</strong> confirmed in ASNB's own ASM 3 product highlights sheet.</li>
+          <li><strong>Latest distributions (ASB 5.75 sen, ASM 4.75–5.00 sen):</strong> from ASNB/PNB's own annual distribution announcements.</li>
+          <li><strong>10-year distribution history (2016–2025):</strong> compiled from a third-party aggregator of PNB's announcements, not PNB's own historical archive directly — the individual years are internally consistent with known market conditions (pre-pandemic peak, 2021–22 trough), but exact figures should be checked at <a href="https://www.asnb.com.my" target="_blank" rel="noopener">asnb.com.my</a> before being treated as final.</li>
+          <li><strong>ASB restricted to Bumiputera, ASM open to all citizens:</strong> confirmed on ASNB's public fund pages.</li>
+        </ul>
+      </div>
+
+      <div class="layer">
+        <h4 style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);margin-bottom:8px">Broker / trust account</h4>
+        <ul class="plainlist" style="font-size:14px">
+          <li><strong>No individual capital gains tax on shares:</strong> checked against multiple independent Malaysian tax-practice summaries of the 2024 CGT regime; consistent finding that the tax applies to companies, LLPs, and trust bodies disposing of unlisted shares, not individuals, and that listed shares are exempt regardless.</li>
+          <li><strong>Minors cannot hold a binding contract, hence the trust structure:</strong> general Malaysian trust-law principle, consistent across sources; not tied to a single named statute in this report — worth confirming the specific mechanism with a broker or advisor before opening.</li>
+          <li><strong>Visa/Mastercard/Costco 15-year CAGR (~20–22%):</strong> independently re-verified this round against market-data sources; the range checked out closely, though Visa's 10-year figure in an earlier draft (17.2%) was found to be overstated against independent data (~15%) — the report now avoids citing that specific figure and uses a general "~20%" range instead.</li>
+          <li><strong>No "kiddie tax" attribution rule in Malaysia:</strong> general information based on comparison with Canada/Australia's specific attribution rules; Malaysia has no confirmed equivalent, but this is stated as general information, not a guarantee for every account structure — confirm with a tax advisor for significant sums.</li>
+        </ul>
+      </div>
+
+      <div class="layer">
+        <h4 style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);margin-bottom:8px">Calculator methodology</h4>
+        <ul class="plainlist" style="font-size:14px">
+          <li>Every projection uses the midpoint of two annual-compounding bounds (deposits credited at year-end vs. year-start), because SSPN and ASNB funds pay dividends once a year, not monthly.</li>
+          <li>At higher assumed rates, a simpler monthly-compounding calculation drifts toward the optimistic end of that range rather than the middle — this report deliberately uses the midpoint instead, which is why the broker account's projection is more conservative than a standard online calculator would show for the same inputs.</li>
+        </ul>
+      </div>
+
+      <div class="layer">
+        <h4 style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);margin-bottom:8px">What this is not</h4>
+        <p style="font-size:14px;margin-bottom:0">This is general information compiled and checked in July 2026, not personalised financial, tax, or legal advice. Rates, relief caps, and grant eligibility change — verify current figures directly with PTPTN, ASNB, and LHDN before acting on anything here.</p>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+(function () {
+  var form = document.getElementById('waitlist-form');
+  var status = document.getElementById('wl-status');
+  var btn = document.getElementById('wl-submit');
+  if (!form) return;
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    status.textContent = '';
+    status.className = '';
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    var data = new FormData(form);
+    fetch('https://formspree.io/f/xykrpjrj', {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    }).then(function (res) {
+      if (res.ok) {
+        form.reset();
+        status.textContent = "You're on the list — we'll email you once details are confirmed.";
+        status.className = 'ok';
+        btn.textContent = 'Joined ✓';
+      } else {
+        return res.json().then(function (data) {
+          throw new Error((data && data.errors && data.errors.map(function(er){return er.message;}).join(', ')) || 'Something went wrong');
+        });
+      }
+    }).catch(function (err) {
+      status.textContent = "Couldn't submit right now — please try again in a moment.";
+      status.className = 'err';
+      btn.disabled = false;
+      btn.textContent = 'Join the waitlist';
+    });
+  });
+})();
+</script>
+<script>
+(function () {
+  var el = function (id) { return document.getElementById(id); };
+  function money(n) { return 'RM' + Math.round(n).toLocaleString('en-MY'); }
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  function sv(tag, attrs) { var e = document.createElementNS(SVGNS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); return e; }
+
+  function fvAnnual(monthly, ratePct, years, atStart) {
+    var r = ratePct / 100;
+    if (years <= 0 || monthly <= 0) return 0;
+    var annual = monthly * 12;
+    var fv = r === 0 ? annual * years : annual * ((Math.pow(1 + r, years) - 1) / r);
+    return atStart ? fv * (1 + r) : fv;
+  }
+  function mid(monthly, ratePct, years) {
+    return (fvAnnual(monthly, ratePct, years, false) + fvAnnual(monthly, ratePct, years, true)) / 2;
+  }
+
+  var INK = '#14201B', SOFT = '#8A8570', LINE = '#D9D5C4';
+
+  function drawGrowth(svg, sS, sA, sB, labels) {
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    var W = 700, H = 280, ML = 46, MR = 10, MT = 12, MB = 26;
+    var pw = W - ML - MR, ph = H - MT - MB, n = labels.length;
+    var maxY = 0;
+    for (var i = 0; i < n; i++) { var s = sS[i] + sA[i] + sB[i]; if (s > maxY) maxY = s; }
+    var niceMax = Math.ceil(Math.max(maxY,1000) / 50000) * 50000 || 50000;
+    function X(i) { return ML + (pw * i / (n - 1)); }
+    function Y(v) { return MT + ph - (ph * v / niceMax); }
+
+    for (var g = 0; g <= 4; g++) {
+      var yv = niceMax * g / 4, yy = Y(yv);
+      svg.appendChild(sv('line', { x1: ML, x2: W - MR, y1: yy, y2: yy, stroke: LINE, 'stroke-width': 1 }));
+      var t = sv('text', { x: 4, y: yy + 3, 'font-family': 'IBM Plex Mono, monospace', 'font-size': 9, fill: SOFT });
+      t.textContent = yv >= 1000 ? Math.round(yv/1000) + 'k' : yv;
+      svg.appendChild(t);
+    }
+    for (var i2 = 0; i2 < n; i2++) {
+      if (i2 % 3 !== 0 && i2 !== n - 1) continue;
+      var xt = sv('text', { x: X(i2), y: H - 6, 'font-family': 'IBM Plex Mono, monospace', 'font-size': 9, fill: SOFT, 'text-anchor': 'middle' });
+      xt.textContent = labels[i2];
+      svg.appendChild(xt);
+    }
+
+    var cum0 = sS, cum1 = cum0.map(function (v, i) { return v + sA[i]; }), cum2 = cum1.map(function (v, i) { return v + sB[i]; });
+    var layers = [
+      { top: cum0, bottom: cum0.map(function () { return 0; }), color: '#1F4D3D' },
+      { top: cum1, bottom: cum0, color: '#8E6A2E' },
+      { top: cum2, bottom: cum1, color: '#3B5A82' }
+    ];
+    layers.forEach(function (layer) {
+      var d = 'M ' + X(0) + ' ' + Y(layer.bottom[0]);
+      for (var i3 = 0; i3 < n; i3++) d += ' L ' + X(i3) + ' ' + Y(layer.top[i3]);
+      for (var i4 = n - 1; i4 >= 0; i4--) d += ' L ' + X(i4) + ' ' + Y(layer.bottom[i4]);
+      d += ' Z';
+      svg.appendChild(sv('path', { d: d, fill: layer.color, 'fill-opacity': 0.26 }));
+      var dl = 'M ' + X(0) + ' ' + Y(layer.top[0]);
+      for (var i5 = 1; i5 < n; i5++) dl += ' L ' + X(i5) + ' ' + Y(layer.top[i5]);
+      svg.appendChild(sv('path', { d: dl, fill: 'none', stroke: layer.color, 'stroke-width': 1.7 }));
+    });
+    svg.appendChild(sv('line', { x1: ML, x2: W - MR, y1: MT + ph, y2: MT + ph, stroke: INK, 'stroke-width': 1 }));
+  }
+
+  function render() {
+    var mS = +el('c-sspn').value, mA = +el('c-asm').value, mB = +el('c-brk').value;
+    var rS = +el('r-sspn').value, rA = +el('r-asm').value, rB = +el('r-brk').value;
+    var age = +el('c-age').value, yrs = 18 - age;
+
+    el('v-sspn').textContent = money(mS);
+    el('v-asm').textContent  = money(mA);
+    el('v-brk').textContent  = money(mB);
+    el('v-rsspn').textContent = rS.toFixed(2) + '%';
+    el('v-rasm').textContent  = rA.toFixed(2) + '%';
+    el('v-rbrk').textContent  = rB.toFixed(2) + '%';
+    el('v-age').textContent   = age === 0 ? 'Birth' : 'Age ' + age;
+
+    var labels = [], sS = [], sA = [], sB = [];
+    for (var a = 0; a <= 18; a++) {
+      labels.push(a);
+      var k = Math.max(0, a - age);
+      sS.push(mid(mS, rS, k)); sA.push(mid(mA, rA, k)); sB.push(mid(mB, rB, k));
+    }
+    drawGrowth(el('growthChart'), sS, sA, sB, labels);
+
+    var vS = mid(mS, rS, yrs), vA = mid(mA, rA, yrs), vB = mid(mB, rB, yrs);
+    var total = vS + vA + vB;
+    var contrib = (mS + mA + mB) * yrs * 12;
+
+    el('o-total').textContent = money(total);
+    el('o-contrib').textContent = 'Contributed ' + money(contrib) + ' over ' + yrs + ' yrs';
+
+    var sumM = mS + mA + mB || 1;
+    el('o-alloc').textContent = 'SSPN ' + Math.round(mS/sumM*100) + '% · ASM ' + Math.round(mA/sumM*100) + '% · Broker ' + Math.round(mB/sumM*100) + '%';
+
+    var birth = mid(mS, rS, 18) + mid(mA, rA, 18) + mid(mB, rB, 18);
+    var loss = birth - total;
+    if (age === 0) { el('o-loss').textContent = money(0); el('o-losslbl').textContent = 'Nothing lost — starting on day one'; }
+    else { el('o-loss').textContent = '−' + money(loss); el('o-losslbl').textContent = 'Lost by starting at ' + age + ' vs. birth'; }
+  }
+
+  ['c-sspn','c-asm','c-brk','r-sspn','r-asm','r-brk','c-age'].forEach(function (id) {
+    el(id).addEventListener('input', render);
+  });
+  render();
+})();
+</script>
